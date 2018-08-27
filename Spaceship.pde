@@ -189,14 +189,20 @@ class Spaceship implements SpaceObject {
   /**
     Calculates influence of this Planet *from* another object in space.
   */
-  PVector getInfluenceVector(SpaceObject s) {
-    double r = PVector.dist(position, s.getPosition()) * SCALE;
-    if(r == 0) return new PVector(0,0); // If the planet being checked is itself (or directly on top), don't move
-    double force = G * ((mass * s.getMass()) / (r * r)); // G defined in orbit
-    PVector influence = new PVector(s.getPosition().x - position.x, s.getPosition().y - position.y).setMag((float)(force / mass));
+  PVector getInfluenceVector(ArrayList<SpaceObject> space) {
+    PVector influence = new PVector(0, 0);
+    for(int i = 0; i < space.size(); i++) {
+      SpaceObject s = space.get(i);
+      if(position.dist(s.getPosition()) < MAX_DISTANCE) {
+        double r = PVector.dist(position, s.getPosition()) * SCALE;
+        if(r == 0) return new PVector(0,0); // If the planet being checked is itself (or directly on top), don't move
+        double force = G * ((mass * s.getMass()) / (r * r)); // G defined in orbit
+        influence.add(new PVector(s.getPosition().x - position.x, s.getPosition().y - position.y).setMag((float)(force / mass)));
+      }
+    }
     stroke(255, 0, 0);
-    //line(Position.x, Position.y, PVector.add(Position, influence).x * 1.1, PVector.add(Position, influence).y * 1.1);
-    addVelocity(influence);
+    line(position.x, position.y, position.x + (influence.x * 100), position.y + (influence.y * 100));
+    velocity.add(influence);
     return influence;
   }  
   

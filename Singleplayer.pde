@@ -2,8 +2,6 @@ import java.util.*;
 
 class Singleplayer implements Gamemode {
   
-  final int MAX_DISTANCE = 2000; // Maximum distance for calculating influence vector
-  
   int planetCount = 0;
   boolean dead = false;
   PVector pos;
@@ -88,11 +86,11 @@ class Singleplayer implements Gamemode {
       if(objects.get(i).getPosition().dist(playerShip.getPosition()) < shortestDistance) {
         closestObject = objects.get(i);
         shortestDistance = (float)closestObject.getPosition().dist(playerShip.getPosition());
-      }  
-      for(SpaceObject p2 : objects) {
-        if(!paused && (p.getPosition().dist(p2.getPosition()) < MAX_DISTANCE)) {
-          p.getInfluenceVector(p2);
+      }
+      if(!paused) {
+          p.getInfluenceVector(objects);
         }
+      for(SpaceObject p2 : objects) {
         if(p.collidesWith(p2) && p != p2) {
           // System.out.println(p + " has collided with " + p2);
           if(p.getMass() > p2.getMass()) markedForDeath = p2;  
@@ -100,9 +98,6 @@ class Singleplayer implements Gamemode {
         };
       }
       for(Spaceship s : ships) {
-        if(!paused && (s.getPosition().dist(p.getPosition()) < MAX_DISTANCE)) {
-          s.getInfluenceVector(p);
-        }
         if(s.collidesWith(p)) {
           // System.out.println(s + " has collided with " + p);
           // Assumes ship explodes on contact with anything
@@ -110,7 +105,6 @@ class Singleplayer implements Gamemode {
         }
         for(Projectile projectile : s.getProjectiles()) {
             if(projectile != null) {
-              if(!paused) projectile.getInfluenceVector(p);
               if(projectile.collidesWith(p)) {
                 markedForDeath = p;
                 s.removeProjectile(projectile);
@@ -130,12 +124,18 @@ class Singleplayer implements Gamemode {
         planetCount++;
     }
     for(Spaceship s : ships) {
+      if(!paused) {
+          s.getInfluenceVector(objects);
+        }
       if(!paused) s.update();
       drawTrail(s);
       s.draw();
       for(Projectile projectile : s.getProjectiles()) {
         if(projectile != null) {
-          if(!paused) projectile.update();
+          if(!paused) {
+            projectile.getInfluenceVector(objects);
+            projectile.update();
+          }
            projectile.draw();
         }  
       }
@@ -182,7 +182,7 @@ class Singleplayer implements Gamemode {
       rect(-1, height - 130, width + 1, height + 1);
       fill(0, 255, 0);
       // Text - Far right
-      text("Speed = " + speed + "\nHealth = " + health + "\nAmmunition = " + ammunition + "\nPosition = " + position, width - 400, height - 100);
+      text("Health = " + health + "\nAmmunition = " + ammunition, width - 400, height - 100);
       // Text - left
       String closestObjectString;
       if(closestObject == null) {
@@ -193,10 +193,27 @@ class Singleplayer implements Gamemode {
         fill(closestObject.getColor());
         closestObjectString = "Closest Object: " + closestObject.getName() + " - " + shortDist + "AU";
       }  
-      text(closestObjectString, 400, height - 100);
+      text(closestObjectString, 50, height - 100);
       if(closestObject != null) {
-        text("Mass: " + (float)round((float)((closestObject.getMass() / (1.989 * Math.pow(10, 30)) * 1000))) / 1000  + " Suns", 400, height - 80);
+        stroke(closestObject.getColor());
+        text("Mass: " + (float)round((float)((closestObject.getMass() / (1.989 * Math.pow(10, 30)) * 1000))) / 1000  + " Suns", 50, height - 80);
+        // closest object arrow
+        PVector arrow = closestObject.getPosition().sub(pos);
+        arrow.normalize().mult(30);
+        line(width/2, height - 65, width/2 + arrow.x, height - 65 + arrow.y);
+        float angle = arrow.heading();
+        float x = cos(angle);
+        float y = sin(angle);
+        PVector endpoint = new PVector(x, y);
+        PVector arms = endpoint.copy();
+        endpoint.mult(30);
+        arms.mult(25); // scale the arms to a certain length
+        // draw the arms
+        line(width / 2 + endpoint.x, height - 65 + endpoint.y, width / 2 + cos(angle-.3) * 25, height - 65 + sin(angle-.3) * 25);
+        line(width / 2 + endpoint.x, height - 65 + endpoint.y, width / 2 + cos(angle+.3) * 25, height - 65 + sin(angle+.3) * 25);
+        
       }
+      
     }
     
     // Menus
@@ -225,8 +242,10 @@ class Singleplayer implements Gamemode {
   
   void drawTrail(SpaceObject p) {
     ArrayList<PVector> old = oldPositions.get(p.getID());
-    if(old.size() > TRAIL_LENGTH) old.remove(0);
-    old.add(new PVector(p.getPosition().x, p.getPosition().y));
+    if(!paused) {
+      if(old.size() > TRAIL_LENGTH) old.remove(0);
+      old.add(new PVector(p.getPosition().x, p.getPosition().y));
+    }  
     for(int i = 0; i < old.size() - 1; i++) {
       // Get two positions
       PVector oldPos = old.get(i);

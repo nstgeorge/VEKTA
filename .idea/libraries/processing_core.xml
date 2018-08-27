@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="processing-core">
+    <CLASSES>
+      <root url="file://$APPLICATION_PLUGINS_DIR$/ProcessingIntellijPlugin/dependencies/3.3.7" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$APPLICATION_PLUGINS_DIR$/ProcessingIntellijPlugin/dependencies/3.3.7" recursive="true" />
+  </library>
+</component>

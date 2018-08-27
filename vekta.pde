@@ -2,6 +2,7 @@ import java.util.*;
 import processing.sound.*;
 
 final String FONTNAME = "font/stm.ttf";
+final int MAX_DISTANCE = 2000; // Maximum distance for calculating influence vector
 Gamemode game;
 Menu menu;
 
@@ -92,7 +93,7 @@ void draw() {
     if(selectedMode == 2) exit();
     else if(!switchedToGame) {
       if(selectedMode == 0) game = new Singleplayer();
-      if(selectedMode == 1) game = new Multiplayer();
+      //if(selectedMode == 1) game = new Multiplayer();
       if(settings[SETTINGS_MUSIC] > 0) theme.stop();
       game.init();
       switchedToGame = true;

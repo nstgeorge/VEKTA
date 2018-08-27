@@ -43,7 +43,7 @@ interface SpaceObject {
   /**
     Returns and applies the influence vector of another object on this
   */
-  PVector getInfluenceVector(SpaceObject s);
+  PVector getInfluenceVector(ArrayList<SpaceObject> space);
   
   /**
     Does this collide with that?
