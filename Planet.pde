@@ -9,10 +9,10 @@ class Planet implements SpaceObject {
   private final PVector DEF_VELOCITY = new PVector(0,0);
   private final color DEF_COLOR = color(255, 255, 255);
   private String[] nameParts1 = {  // First parts of the name of a planet
-    "Giga", "Atla", "Exo", "Zori", "Era", "Volta", "Dene", "Julu", "Poke", "Sala", "Huno", "Yeba", "Satu", "Plu", "Mercu"
+    "Giga", "Atla", "Exo", "Zori", "Era", "Volta", "Dene", "Julu", "Poke", "Sala", "Huno", "Yeba", "Satu", "Plu", "Mercu", "Luki", "Pola", "Crato"
   };
   private String[] nameParts2 = {
-    "dan", "san", "jor", "zed", "ranth", "ka", "", "th", "rn", "to", "krith", "n", "s", "sol", "deth", "rat", "kor", "k", "shyyyk", 
+    "dan", "san", "jor", "zed", "ranth", "ka", "", "th", "rn", "to", "krith", "n", "s", "sol", "deth", "rat", "kor", "k", "shyyyk", "tron", "don", "saur", "ris"
   };
   
   private String name;
@@ -50,7 +50,7 @@ class Planet implements SpaceObject {
     stroke(this.c);
     fill(0);
     ellipseMode(RADIUS);
-    
+    if(id == 1) System.out.println(velocity);
     ellipse(position.x, position.y, radius, radius);
   }
   
@@ -62,18 +62,20 @@ class Planet implements SpaceObject {
     Calculates influence of this Planet *from* another object in space.
   */
   PVector getInfluenceVector(ArrayList<SpaceObject> space) {
-    PVector influence = new PVector(0, 0);
+    
     for(int i = 0; i < space.size(); i++) {
+      PVector influence = new PVector(0, 0);
       SpaceObject s = space.get(i);
-      if(position.dist(s.getPosition()) < MAX_DISTANCE) {
-        double r = PVector.dist(position, s.getPosition()) * SCALE;
+      float dist = position.dist(s.getPosition()); 
+      if(dist < MAX_DISTANCE) {
+        double r = dist * SCALE;
         if(r == 0) return new PVector(0,0); // If the planet being checked is itself (or directly on top), don't move
         double force = G * ((mass * s.getMass()) / (r * r)); // G defined in orbit
         influence.add(new PVector(s.getPosition().x - position.x, s.getPosition().y - position.y).setMag((float)(force / mass)));
       }
+      velocity.add(influence);
     }
-    velocity.add(influence);
-    return influence;
+    return new PVector();
   }  
   
   /**

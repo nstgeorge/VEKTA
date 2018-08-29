@@ -19,7 +19,7 @@ class Singleplayer implements Gamemode {
   
   UniverseGen generator = new UniverseGen(8000, 120);
   
-  ArrayList<SpaceObject> objects = new ArrayList<SpaceObject>();
+  ArrayList<Planet> planets = new ArrayList<Planet>();
   ArrayList<Spaceship> ships = new ArrayList<Spaceship>();
   ArrayList<ArrayList<PVector>> oldPositions;
   
@@ -29,7 +29,7 @@ class Singleplayer implements Gamemode {
   
   void init() {
     // Clear all previous data
-    objects.clear();
+    planets.clear();
     ships.clear();
     clearOverlay();
     
@@ -39,7 +39,7 @@ class Singleplayer implements Gamemode {
     dead = false;
     oldPositions = new ArrayList<ArrayList<PVector>>();
     generator = new UniverseGen(8000, 120);
-    objects = generator.generate();
+    planets = generator.generate();
     
     ships.add(new Spaceship(
       "VEKTA I",
@@ -88,12 +88,17 @@ class Singleplayer implements Gamemode {
         shortestDistance = (float)closestObject.getPosition().dist(playerShip.getPosition());
       }
       if(!paused) {
-          p.getInfluenceVector(objects);
-        }
+        p.getInfluenceVector(objects);
+      }
       for(SpaceObject p2 : objects) {
         if(p.collidesWith(p2) && p != p2) {
           // System.out.println(p + " has collided with " + p2);
-          if(p.getMass() > p2.getMass()) markedForDeath = p2;  
+          if(p.getMass() > p2.getMass()) {
+            if(p.getRadius() < 3) {
+              
+            }  
+            markedForDeath = p2; 
+          }   
           else markedForDeath = p;
         };
       }

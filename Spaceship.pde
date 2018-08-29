@@ -193,8 +193,9 @@ class Spaceship implements SpaceObject {
     PVector influence = new PVector(0, 0);
     for(int i = 0; i < space.size(); i++) {
       SpaceObject s = space.get(i);
-      if(position.dist(s.getPosition()) < MAX_DISTANCE) {
-        double r = PVector.dist(position, s.getPosition()) * SCALE;
+      float dist = position.dist(s.getPosition());
+      if(dist < MAX_DISTANCE) {
+        double r = dist * SCALE;
         if(r == 0) return new PVector(0,0); // If the planet being checked is itself (or directly on top), don't move
         double force = G * ((mass * s.getMass()) / (r * r)); // G defined in orbit
         influence.add(new PVector(s.getPosition().x - position.x, s.getPosition().y - position.y).setMag((float)(force / mass)));

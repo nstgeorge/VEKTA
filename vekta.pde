@@ -19,7 +19,7 @@ final int SETTINGS_MUSIC = 1;
 // Game-balancing variables and visual settings
 
 final double G = 6.674*Math.pow(10,-11);
-public final double SCALE = 3 * Math.pow(10, 8);
+public final double SCALE = 3 * Math.pow(10, 10);
 final float VECTOR_SCALE = 5;
 final int MAX_PLANETS = 100;
 final int TRAIL_LENGTH = 10;

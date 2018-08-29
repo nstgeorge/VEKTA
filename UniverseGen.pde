@@ -1,7 +1,7 @@
 class UniverseGen {
   int size;
   int density;
-  ArrayList<SpaceObject> space = new ArrayList<SpaceObject>();
+  ArrayList<Planet> space = new ArrayList<Planet>();
   
   int currentID;
   
@@ -11,7 +11,7 @@ class UniverseGen {
     currentID = 0;
   }
   
-  public ArrayList<SpaceObject> generate() {
+  public ArrayList<Planet> generate() {
     for(int i = 0; i < density; i++) {
       float[] coords = {0, 0};
       boolean unique = false;
@@ -19,13 +19,13 @@ class UniverseGen {
       while(!unique) {
         coords = generateCoordinates(size);
         unique = true;
-        for(SpaceObject s : space) {
+        for(Planet s : space) {
           if(s.getPosition().x == coords[0] && s.getPosition().y == coords[1]) {
             unique = false;
           }
         }
       }
-      ArrayList<SpaceObject> system = createSystem((int)coords[0], (int)coords[1]);
+      ArrayList<Planet> system = createSystem((int)coords[0], (int)coords[1]);
       for(int j = 0; j < system.size(); j++) {
         space.add(system.get(j));
       }
@@ -33,8 +33,8 @@ class UniverseGen {
     return space;
   }
   
-  private ArrayList<SpaceObject> createSystem(int x, int y) {
-    ArrayList<SpaceObject> system = new ArrayList<SpaceObject>();
+  private ArrayList<Planet> createSystem(int x, int y) {
+    ArrayList<Planet> system = new ArrayList<Planet>();
     // Create the center body
     double power = Math.pow(10, random(28, 31));
     double centerMass = random(0.8, 4) * power;
@@ -49,13 +49,14 @@ class UniverseGen {
     ));
     currentID++;
     
+    // Generate planets around body
     int planets = (int)random(1, 8);
     for(int i = 0; i <= planets; i++) {
       float radiusLoc = (float)(random(600, 2000) * SCALE);
       float velocity = sqrt((float)(G * centerMass / radiusLoc));
       double mass = random(0.8, 4) * power;
       float radiusSize = (float)(random(2, 5) * (mass / power));
-      
+      System.out.println(radiusSize);
       system.add(new Planet(
         currentID,
         mass, // Mass
