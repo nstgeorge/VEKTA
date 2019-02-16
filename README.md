@@ -11,7 +11,7 @@ VEKTA is a game created in Processing 3 to test the limits of Processing's capab
 
 All graphics (aside from the title in the main screen) are programmed as mathematical equations - the only saved image is the title.
 
-Overall, this is nearly the most it seems to be capable of handling - there are many calculations performed every single frame. Maybe I'll get around to optimizing them... Or maybe not.
+Overall, this is nearly the most Processing seems to be capable of handling - there are many calculations performed every single frame. Maybe I'll get around to optimizing them... Or maybe not.
 
 ## What did I learn from this?
 Don't write overly complex games in Processing. It's a bad time.
