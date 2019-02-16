@@ -39,7 +39,7 @@ class Singleplayer implements Gamemode {
     dead = false;
     oldPositions = new ArrayList<ArrayList<PVector>>();
     generator = new UniverseGen(8000, 120);
-    planets = generator.generate();
+    planets = generator.generate(); 
     
     ships.add(new Spaceship(
       "VEKTA I",
@@ -53,13 +53,13 @@ class Singleplayer implements Gamemode {
     ));
     
     // Initialize trails
-    for(SpaceObject p : objects) {
+    for(SpaceObject p : planets) {
       ArrayList<PVector> init = new ArrayList<PVector>();
       oldPositions.add(init);
       oldPositions.get(p.getID()).add(new PVector(p.getPosition().x, p.getPosition().y));
     }
     
-    ships.get(0).setID(objects.size());
+    ships.get(0).setID(planets.size());
     oldPositions.add(new ArrayList<PVector>());
     Spaceship s = ships.get(0);
     oldPositions.get(s.getID()).add(new PVector(s.getPosition().x, s.getPosition().y));
@@ -81,16 +81,17 @@ class Singleplayer implements Gamemode {
        0.0, 1.0, 0.0);
     }
     
-    for(int i = 0; i < objects.size(); i++) {
-      SpaceObject p = objects.get(i);
-      if(objects.get(i).getPosition().dist(playerShip.getPosition()) < shortestDistance) {
-        closestObject = objects.get(i);
+    for(int i = 0; i < planets.size(); i++) {
+      SpaceObject p = planets.get(i);
+      if(planets.get(i).getPosition().dist(playerShip.getPosition()) < shortestDistance) {
+        closestObject = planets.get(i);
         shortestDistance = (float)closestObject.getPosition().dist(playerShip.getPosition());
       }
       if(!paused) {
-        p.getInfluenceVector(objects);
+        ArrayList influencers = planets;
+        p.getInfluenceVector((ArrayList<SpaceObject>)influencers);
       }
-      for(SpaceObject p2 : objects) {
+      for(SpaceObject p2 : planets) {
         if(p.collidesWith(p2) && p != p2) {
           // System.out.println(p + " has collided with " + p2);
           if(p.getMass() > p2.getMass()) {
@@ -130,7 +131,8 @@ class Singleplayer implements Gamemode {
     }
     for(Spaceship s : ships) {
       if(!paused) {
-          s.getInfluenceVector(objects);
+          ArrayList influencers = planets;
+          s.getInfluenceVector((ArrayList<SpaceObject>)influencers);
         }
       if(!paused) s.update();
       drawTrail(s);
@@ -138,7 +140,8 @@ class Singleplayer implements Gamemode {
       for(Projectile projectile : s.getProjectiles()) {
         if(projectile != null) {
           if(!paused) {
-            projectile.getInfluenceVector(objects);
+            ArrayList influencers = planets;
+            projectile.getInfluenceVector((ArrayList<SpaceObject>)influencers);
             projectile.update();
           }
            projectile.draw();
@@ -158,7 +161,7 @@ class Singleplayer implements Gamemode {
           ships.remove(markedForDeath);
         }  
         // else oldPositions.remove(objects.indexOf(markedForDeath));
-        objects.remove(markedForDeath);
+        planets.remove(markedForDeath);
       }  
     planetCount = 0;
     

@@ -66,7 +66,7 @@ class Planet implements SpaceObject {
     for(int i = 0; i < space.size(); i++) {
       PVector influence = new PVector(0, 0);
       SpaceObject s = space.get(i);
-      float dist = position.dist(s.getPosition()); 
+      float dist = position.dist(s.getPosition());
       if(dist < MAX_DISTANCE) {
         double r = dist * SCALE;
         if(r == 0) return new PVector(0,0); // If the planet being checked is itself (or directly on top), don't move

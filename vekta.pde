@@ -13,13 +13,13 @@ int[] settings = {
 };
 
 // y u no enums
-final int SETTINGS_SOUND = 0;
+final int SETTINGS_SOUND = 1;
 final int SETTINGS_MUSIC = 1;
 
 // Game-balancing variables and visual settings
 
 final double G = 6.674*Math.pow(10,-11);
-public final double SCALE = 3 * Math.pow(10, 10);
+public final double SCALE = 3 * Math.pow(10, 8);
 final float VECTOR_SCALE = 5;
 final int MAX_PLANETS = 100;
 final int TRAIL_LENGTH = 10;
@@ -76,11 +76,11 @@ void setup() {
   //theme = new SoundFile(this, "main.wav");
   
   //// Sound (temporarily disabled)
-  //laser = new SoundFile(this, "laser.wav");
-  //death = new SoundFile(this, "death.wav");
-  //engine = new SoundFile(this, "engine.wav");
-  //change = new SoundFile(this, "change.wav");
-  //select = new SoundFile(this, "select.wav");
+  laser = new SoundFile(this, "laser.wav");
+  death = new SoundFile(this, "death.wav");
+  engine = new SoundFile(this, "engine.wav");
+  change = new SoundFile(this, "change.wav");
+  select = new SoundFile(this, "select.wav");
   
   playerWins[0] = 0;
   playerWins[1] = 0;
