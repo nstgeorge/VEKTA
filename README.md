@@ -14,8 +14,8 @@ Overall, this is nearly the most it seems to be capable of handling - there are 
 ## What did I learn from this?
 Don't write overly complex games in Processing. It's a bad time.
 
-Processing is great for really simple projects. It's designed for artists and people who are unfamiliar with programming, which is a cool idea. Unfortunately, as a result of the comprises made for the sake of usability, Processing loses out many of the organizational capabilities of its base language (Java).
-This makes it really hard to write anything involving anything more than a few files, because all files must be in the same directory. That makes it terrible to look at (as I'm sure you've noticed).
+Processing is great for really simple projects. It's designed for artists and people who are unfamiliar with programming, which is a cool idea. Unfortunately, as a result of the comprises made for the sake of usability, Processing loses out on many of the organizational capabilities of its base language (Java).
+This makes it really hard to write anything involving anything more than a few files, because all files must be in the same directory. That also makes it terrible to look at (as I'm sure you've noticed).
 
 If I could get Processing to run bits of code on the GPU (specifically the ones that calculate all the influence vectors of each planet), that would cause an enormous boost in performance. I'm not really sure how to do that, though.
 
