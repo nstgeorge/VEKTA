@@ -1,3 +1,6 @@
+
+// This file is no longer useful, but before it's deleted, take out the camera equation, it works very well
+
 /* import java.util.*;
 
 class Multiplayer implements Gamemode {
