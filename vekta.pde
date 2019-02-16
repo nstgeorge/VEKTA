@@ -201,6 +201,24 @@ void keyReleased () {
     game.keyReleased(key);
   }
 }  
+  
+void mousePressed() {
+  if(modePicked) {
+    game.keyPressed('x');
+  }
+}
+
+void mouseReleased() {
+  if(modePicked) {
+    game.keyReleased('x');
+  }
+}
+
+void mouseWheel(MouseEvent event) {
+  if(modePicked) {
+    game.mouseWheel(event.getCount());
+  }
+}
 
 void clearOverlay() {
   if(overlay.isLoaded()) {

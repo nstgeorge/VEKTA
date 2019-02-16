@@ -275,12 +275,12 @@ class Singleplayer implements Gamemode {
      if(key == 'k') {
        dead = true;  
      }
-     if(key == 'r' && zoom > 0.1) {
-       zoom -= 0.1;
+     if(key == 'r') {
+       mouseWheel(-1);
      }
      if(key == 'f') {
-       zoom += 0.1;
-     }  
+       mouseWheel(1);
+     }
      for(Spaceship s : ships) {
        s.keyPress(key);
      }
@@ -291,5 +291,9 @@ class Singleplayer implements Gamemode {
     for(Spaceship s : ships) {
       s.keyReleased(key);
     }
+  }
+  
+  void mouseWheel(float amount) {
+    zoom = max(.1, min(3, zoom * (1 + amount * .1)));
   }
 }

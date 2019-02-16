@@ -19,4 +19,9 @@ interface Gamemode {
     What to do when a key is released
   */
   void keyReleased(char key);
+  
+  /**
+    What to do when the mouse wheel is scrolled
+  */
+  void mouseWheel(float amount);
 }  
