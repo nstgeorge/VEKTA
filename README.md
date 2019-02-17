@@ -4,7 +4,7 @@
 ![Gameplay](info/gameplay.png)
 
 ## Downloads
-Visit the apps folder, find the executable you need. No guarantees that any will work. For the latest version, it is best to download the source and compile it yourself.
+Visit the [apps](https://github.com/StGerGer/vekta-processing/tree/master/apps) folder and find the executable you need. Not all of these versions are tested, so use at your own risk. For the latest version, it is best to download the source and compile it yourself.
 
 ## What is this?
 VEKTA is a game created in Processing 3 to test the limits of Processing's capabilities in interactive games and real-time physics calculations.
