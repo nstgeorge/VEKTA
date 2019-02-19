@@ -173,7 +173,7 @@ class Singleplayer implements Gamemode {
       if(frameCount % 10 == 0) {  //  Update values every 10 frames
         Spaceship main = ships.get(0);
         health = 100;
-        shortDist = shortestDistance;
+        shortDist = (float)round(shortestDistance * 100) / 100;
         speed = (float)round(spd * 100) / 100;
         ammunition = main.getProjectilesLeft();
         position = round(pos.x) + ", " + round(pos.y);
