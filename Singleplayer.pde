@@ -131,10 +131,13 @@ class Singleplayer implements Gamemode {
     }
     for(Spaceship s : ships) {
       if(!paused) {
-          ArrayList influencers = planets;
-          s.getInfluenceVector((ArrayList<SpaceObject>)influencers);
-        }
-      if(!paused) s.update();
+        ArrayList influencers = planets;
+        PVector influence = s.getInfluenceVector((ArrayList<SpaceObject>)influencers);
+        s.update();
+        // Draw influence vector on ship
+        stroke(255, 0, 0);
+        line(s.getPosition().x, s.getPosition().y, s.getPosition().x + (influence.x * 100), s.getPosition().y + (influence.y * 100));
+      }
       drawTrail(s);
       s.draw();
       for(Projectile projectile : s.getProjectiles()) {
