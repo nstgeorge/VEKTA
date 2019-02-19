@@ -4,7 +4,7 @@
 ![Gameplay](info/gameplay.png)
 
 ## Downloads
-Visit the [apps](https://github.com/StGerGer/vekta-processing/tree/master/apps) folder and find the executable you need. Not all of these versions are tested, so use at your own risk. For the latest version, it is best to download the source and compile it yourself.
+The compiled binaries are available at [natestgeorge.com/resources/vekta](https://natestgeorge.com/resources/vekta/). Not all of these versions are tested, so use at your own risk. For the latest version, it is best to download the source and compile it yourself.
 
 ## What is this?
 VEKTA is a game created in Processing 3 to test the limits of Processing's capabilities in interactive games and real-time physics calculations.
@@ -24,7 +24,7 @@ If I could get Processing to run bits of code on the GPU (specifically the ones 
 ## Is it any good?
 As simplistic as this game is, it's actually fun to catapult around the universe. The generated universes are fairly small, since I haven't written any sort of frustum culling functionality into the game - everything is rendered all the time, unless Processing handles that.
 
-I wrote some music for the game that I'm proud of too, although as of v2019.1.15 the sound is broken so you can't hear it. 🤷‍♀️
+I wrote some music for the game that I'm proud of too, although as of v2019.2.15 the sound is broken so you can't hear it. 🤷‍♀️
 
 If you want to make any changes, feel free to submit a pull request!
 
