@@ -187,7 +187,7 @@ class Spaceship implements SpaceObject {
   }  
   
   /**
-    Calculates influence of this Planet *from* another object in space.
+    Calculates influence of this ship *from* another object in space.
   */
   PVector getInfluenceVector(ArrayList<SpaceObject> space) {
     PVector influence = new PVector(0, 0);
@@ -201,8 +201,7 @@ class Spaceship implements SpaceObject {
         influence.add(new PVector(s.getPosition().x - position.x, s.getPosition().y - position.y).setMag((float)(force / mass)));
       }
     }
-    stroke(255, 0, 0);
-    line(position.x, position.y, position.x + (influence.x * 100), position.y + (influence.y * 100));
+    
     velocity.add(influence);
     return influence;
   }  
