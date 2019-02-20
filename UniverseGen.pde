@@ -56,7 +56,6 @@ class UniverseGen {
       float velocity = sqrt((float)(G * centerMass / radiusLoc));
       double mass = random(0.8, 4) * power;
       float radiusSize = (float)(random(2, 5) * (mass / power));
-      System.out.println(radiusSize);
       system.add(new Planet(
         currentID,
         mass, // Mass
