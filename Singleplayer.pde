@@ -69,7 +69,8 @@ class Singleplayer implements Gamemode {
   
   void render() {
     background(0);
-    SpaceObject markedForDeath = null;
+    SpaceObject[] markedForDeath = new SpaceObject[10000];
+    int destroyedObjects = 0;
     SpaceObject closestObject = null;
     shortestDistance = Integer.MAX_VALUE;
     
@@ -93,31 +94,43 @@ class Singleplayer implements Gamemode {
       }
       for(SpaceObject p2 : planets) {
         if(p.collidesWith(p2) && p != p2) {
-          // System.out.println(p + " has collided with " + p2);
           if(p.getMass() > p2.getMass()) {
-            if(p.getRadius() < 3) {
-              
-            }  
-            markedForDeath = p2; 
-          }   
-          else markedForDeath = p;
-        };
+            p2.onDestroy(p);
+            markedForDeath[destroyedObjects] = p2;
+            destroyedObjects++;
+          }
+          else {
+            p.onDestroy(p2);
+            markedForDeath[destroyedObjects] = p;
+            destroyedObjects++;
+          }
+        }
       }
       for(Spaceship s : ships) {
         if(s.collidesWith(p)) {
-          // System.out.println(s + " has collided with " + p);
           // Assumes ship explodes on contact with anything
-          markedForDeath = s;
+          s.onDestroy(p);
+          dead = true;
+          if(settings[SETTINGS_SOUND] > 0) { 
+            engine.stop();
+            death.play();
+          }
+          markedForDeath[destroyedObjects] = s;
+          destroyedObjects++;
         }
         for(Projectile projectile : s.getProjectiles()) {
             if(projectile != null) {
               if(projectile.collidesWith(p)) {
-                markedForDeath = p;
+                p.onDestroy(projectile);
+                markedForDeath[destroyedObjects] = p;
+                destroyedObjects++;
                 s.removeProjectile(projectile);
               }
               for(Spaceship s2 : ships) {
                 if(projectile.collidesWith(s2) && s != s2) {
-                  markedForDeath = s2;
+                  s2.onDestroy(projectile);
+                  markedForDeath[destroyedObjects] = s2;
+                  destroyedObjects++;
                 }  
               }  
             }  
@@ -126,8 +139,16 @@ class Singleplayer implements Gamemode {
         if(!paused) p.update();
         p.draw();
         drawTrail(p);
-        
         planetCount++;
+    }
+    destroyedObjects = 0;
+    for(SpaceObject s : markedForDeath) {
+      if(s instanceof Spaceship) {
+        ships.remove(s);
+      }
+      if(s instanceof Planet) {
+        planets.remove(s);
+      }  
     }
     for(Spaceship s : ships) {
       if(!paused) {
@@ -151,21 +172,6 @@ class Singleplayer implements Gamemode {
         }  
       }
     }
-      
-    if(markedForDeath != null) {
-        // I DIED!
-        if(markedForDeath instanceof Spaceship) {
-          dead = true;
-          if(settings[SETTINGS_SOUND] > 0) { 
-            engine.stop();
-            death.play();
-          }
-          // oldPositions.remove(ships.indexOf(markedForDeath) + objects.size());
-          ships.remove(markedForDeath);
-        }  
-        // else oldPositions.remove(objects.indexOf(markedForDeath));
-        planets.remove(markedForDeath);
-      }  
     planetCount = 0;
     
     // Info
@@ -202,12 +208,8 @@ class Singleplayer implements Gamemode {
         shortestDistance = Integer.MAX_VALUE;
       } else {
         fill(closestObject.getColor());
-        closestObjectString = "Closest Object: " + closestObject.getName() + " - " + shortDist + "AU";
-      }  
-      text(closestObjectString, 50, height - 100);
-      if(closestObject != null) {
+        closestObjectString = "Closest Object: " + closestObject.getName() + " - " + shortDist + "AU \nSpeed: "+ closestObject.getVelocity().mag() + "\nMass: " + (float)round((float)((closestObject.getMass() / (1.989 * Math.pow(10, 30)) * 1000))) / 1000  + " Suns";
         stroke(closestObject.getColor());
-        text("Mass: " + (float)round((float)((closestObject.getMass() / (1.989 * Math.pow(10, 30)) * 1000))) / 1000  + " Suns", 50, height - 80);
         // closest object arrow
         PVector arrow = closestObject.getPosition().sub(pos);
         arrow.normalize().mult(30);
@@ -222,9 +224,8 @@ class Singleplayer implements Gamemode {
         // draw the arms
         line(width / 2 + endpoint.x, height - 65 + endpoint.y, width / 2 + cos(angle-.3) * 25, height - 65 + sin(angle-.3) * 25);
         line(width / 2 + endpoint.x, height - 65 + endpoint.y, width / 2 + cos(angle+.3) * 25, height - 65 + sin(angle+.3) * 25);
-        
-      }
-      
+      }  
+      text(closestObjectString, 50, height - 100);
     }
     
     // Menus

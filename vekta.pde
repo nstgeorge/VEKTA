@@ -13,7 +13,7 @@ int[] settings = {
 };
 
 // y u no enums
-final int SETTINGS_SOUND = 1;
+final int SETTINGS_SOUND = 0;
 final int SETTINGS_MUSIC = 1;
 
 // Game-balancing variables and visual settings
@@ -87,7 +87,7 @@ void setup() {
 void draw() {
   // Menu / game render switch
   if(modePicked) {
-    if(selectedMode == 2) exit();
+    if(selectedMode == 1) exit();
     else if(!switchedToGame) {
       if(selectedMode == 0) game = new Singleplayer();
       //if(selectedMode == 1) game = new Multiplayer();
@@ -107,8 +107,9 @@ void draw() {
   camera();
   noLights();
   // FPS OVERLAY
+  color(255, 255, 255);
   textAlign(LEFT);
-  text("FPS = " + frameRate, 50, height - 50);
+  text("FPS = " + frameRate, 50, height - 20);
   if(paused) {
     hint(DISABLE_DEPTH_TEST);
     camera();
@@ -167,8 +168,8 @@ void keyPressed() {
           loop();
           break;
         case(1):
-          game.init();
           clearOverlay();
+          game.init();
           paused = false;
           break;
         case(2):

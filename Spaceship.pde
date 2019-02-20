@@ -213,7 +213,9 @@ class Spaceship implements SpaceObject {
     double r = PVector.dist(position, s.getPosition());
     if(r < (getRadius() + s.getRadius())) return true;
     return false;
-  }  
+  }
+  
+  void onDestroy(SpaceObject s) {}
   
   // GETTERS / SETTERS ---------------------------------------------------------------
   
@@ -250,11 +252,11 @@ class Spaceship implements SpaceObject {
       }
       i++;
     }  
-  }  
+  }
   
   int decrementProjectiles() {
     return numProjectiles--;
-  }  
+  }
   
   @Override
   double getMass() {
@@ -262,7 +264,7 @@ class Spaceship implements SpaceObject {
   }
   
   // Mass setter
-  void setMass(int mass) {
+  void setMass(double mass) {
     this.mass = mass;
   }
   
@@ -272,7 +274,7 @@ class Spaceship implements SpaceObject {
   }
   
   // Radius setter
-  void setRadius(int radius) {
+  void setRadius(float radius) {
     this.radius = radius;
   }
   

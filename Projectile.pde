@@ -64,6 +64,11 @@ class Projectile implements SpaceObject {
   PVector getPosition() { return position; }
   double getMass() { return mass; }
   
+  void setMass(double mass) { this.mass = mass; }
+  void setRadius(float radius) { this.radius = radius; }
+  
+  void onDestroy(SpaceObject s){}
+  
   PVector addVelocity(PVector add) {
     return velocity.add(add);
   }

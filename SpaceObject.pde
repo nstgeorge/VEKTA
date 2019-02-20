@@ -11,6 +11,11 @@ interface SpaceObject {
   String getName();
   
   /**
+    Sets the mass of the object
+  */
+  void setMass(double mass);
+  
+  /**
     Gets the mass of the object
   */
   double getMass();
@@ -31,6 +36,11 @@ interface SpaceObject {
   color getColor();
   
   /**
+    Set the radius of this object
+  */
+  void setRadius(float radius);
+  
+  /**
     Gets the radius of the object (for collision purposes, not all objects are circular)
   */
   float getRadius();
@@ -49,6 +59,11 @@ interface SpaceObject {
     Does this collide with that?
   */
   boolean collidesWith(SpaceObject s);
+  
+  /**
+    Do this when destroyed by SpaceObject s
+  */
+  void onDestroy(SpaceObject s);
   
   void draw();
   
