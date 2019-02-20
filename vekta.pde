@@ -8,8 +8,8 @@ Menu menu;
 
 // Settings
 int[] settings = {
-  0, // Sound (0 = off, 10 = full volume)
-  0  // Music (0 = off, 10 = full volume)
+  1, // Sound (0 = off, 10 = full volume)
+  1  // Music (0 = off, 10 = full volume)
 };
 
 // y u no enums
@@ -54,9 +54,6 @@ SoundFile engine;
 SoundFile change;
 SoundFile select;
 
-// ???
-BrownNoise noise;
-
 void setup() {
   // Important visual stuff
   fullScreen(P3D);
@@ -73,7 +70,7 @@ void setup() {
   logo = loadShape("VEKTA.svg");
   // All sounds and music. These must be instantiated in the main file
   // Music (temporarily disabled)
-  //theme = new SoundFile(this, "main.wav");
+  theme = new SoundFile(this, "main.wav");
   
   //// Sound (temporarily disabled)
   laser = new SoundFile(this, "laser.wav");
