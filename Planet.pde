@@ -62,7 +62,6 @@ class Planet implements SpaceObject {
     Calculates influence of this Planet *from* another object in space.
   */
   PVector getInfluenceVector(ArrayList<SpaceObject> space) {
-    
     for(int i = 0; i < space.size(); i++) {
       PVector influence = new PVector(0, 0);
       SpaceObject s = space.get(i);
@@ -76,6 +75,12 @@ class Planet implements SpaceObject {
       velocity.add(influence);
     }
     return new PVector();
+  }
+  
+  void onDestroy(SpaceObject s) {
+    // Add this object's mass and radius to the mass and radius of the destroying object
+    s.setMass(s.getMass() + mass);
+    s.setRadius(s.getRadius() + sqrt(radius));
   }  
   
   /**
@@ -99,7 +104,7 @@ class Planet implements SpaceObject {
   }  
   
   // Mass setter
-  void setMass(int mass) {
+  void setMass(double mass) {
     this.mass = mass;
   }
   
@@ -109,7 +114,7 @@ class Planet implements SpaceObject {
   }
   
   // Radius setter
-  void setRadius(int radius) {
+  void setRadius(float radius) {
     this.radius = radius;
   }
   

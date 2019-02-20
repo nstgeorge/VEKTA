@@ -1,5 +1,5 @@
 class Menu {
-  String[] modes = {"Singleplayer", "Multiplayer"};
+  String[] modes = {"Singleplayer"};
   Hyperspace hyperspace;
   
   public Menu() {
