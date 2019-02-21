@@ -28,6 +28,9 @@ I wrote some music for the game that I'm proud of too.
 
 If you want to make any changes, feel free to submit a pull request!
 
+## Other Info
+The font used in the most recent version of the game is [undefined-medium](https://github.com/andirueckel/undefined-medium/releases) by @andiruekel.
+
 ## License
 This software is subject to the MIT License.
 
