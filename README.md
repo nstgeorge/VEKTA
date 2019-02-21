@@ -4,7 +4,7 @@
 ![Gameplay](info/gameplay.png)
 
 ## Downloads
-The compiled binaries are available at [natestgeorge.com/resources/vekta](https://natestgeorge.com/resources/vekta/). Not all of these versions are tested, so use at your own risk. For the latest version, it is best to download the source and compile it yourself.
+The compiled binaries are available at [the releases page](https://github.com/StGerGer/vekta-processing/releases). Not all of these versions are tested, so use at your own risk. For the latest version, it is best to download the source and compile it yourself. I try to release a new version every week or so, depending on the progress made to the game in that time.
 
 ## What is this?
 VEKTA is a game created in Processing 3 to test the limits of Processing's capabilities in interactive games and real-time physics calculations.
