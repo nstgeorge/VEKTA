@@ -8,8 +8,8 @@ Menu menu;
 
 // Settings
 int[] settings = {
-  1, // Sound (0 = off, 10 = full volume)
-  1  // Music (0 = off, 10 = full volume)
+  0, // Sound (0 = off, 10 = full volume)
+  0  // Music (0 = off, 10 = full volume)
 };
 
 // y u no enums

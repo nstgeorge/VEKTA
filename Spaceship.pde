@@ -286,6 +286,10 @@ class Spaceship implements SpaceObject {
     this.c = c;
   }  
   
+  PVector getHeading() {
+    return heading;
+  }
+  
   @Override
   PVector getPosition() {
     return position;
