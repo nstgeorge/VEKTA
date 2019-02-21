@@ -1,7 +1,7 @@
 import java.util.*;
 import processing.sound.*;
 
-final String FONTNAME = "font/stm.ttf";
+final String FONTNAME = "font/undefined-medium.ttf";
 final int MAX_DISTANCE = 2000; // Maximum distance for calculating influence vector
 Gamemode game;
 Menu menu;
@@ -21,8 +21,8 @@ final int SETTINGS_MUSIC = 1;
 final double G = 6.674*Math.pow(10,-11);
 public final double SCALE = 3 * Math.pow(10, 8);
 final float VECTOR_SCALE = 5;
-final int MAX_PLANETS = 100;
-final int TRAIL_LENGTH = 10;
+final int MAX_PLANETS = 500;
+final int TRAIL_LENGTH = 15;
 final float DEF_ZOOM = (height/2.0) / tan(PI*30.0 / 180.0); // For some reason, this is the default eyeZ location for Processing
 
 // Pause menu options
