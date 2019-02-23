@@ -258,12 +258,12 @@ void createSettings() {
 }
 
 int getSetting(String key) {
-  try {
+  if(!settings.isNull(key)) {
     return settings.getInt(key);
-  } catch (Exception e) {
-    try {
-    return defaultSettings.getInt(key);
-    } catch (Exception e2) {
+  } else {
+    if(!defaultSettings.isNull(key)) {
+      return defaultSettings.getInt(key);
+    } else {
       return 0;
     }
   }
