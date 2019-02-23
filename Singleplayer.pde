@@ -35,6 +35,8 @@ class Singleplayer implements Gamemode {
     
     background(0);
     
+    if(getSetting("music") > 0 && !atmosphere.isPlaying()) atmosphere.loop();
+    
     frameCount = 0;
     dead = false;
     oldPositions = new ArrayList<ArrayList<PVector>>();
@@ -176,6 +178,7 @@ class Singleplayer implements Gamemode {
     
     // Info
     if(!dead) {
+      lowPass.stop();
       if(frameCount % 10 == 0) {  //  Update values every 10 frames
         updateUIInformation();
       }  
@@ -216,6 +219,7 @@ class Singleplayer implements Gamemode {
     
     // Menus
     else {
+      lowPass.process(atmosphere, 800);
       hint(DISABLE_DEPTH_TEST);
       camera();
       noLights();

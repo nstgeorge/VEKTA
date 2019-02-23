@@ -11,6 +11,7 @@ class Menu {
   final int  SETTINGS_SPACING = 50;
   
   public Menu() {
+    if(atmosphere.isPlaying()) atmosphere.stop();
     theme.amp(getSetting("music"));
     theme.play();
     hyperspace = new Hyperspace(new PVector(width/2, height/2 - 100), 0.1, 170);
