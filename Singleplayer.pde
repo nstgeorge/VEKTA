@@ -17,7 +17,7 @@ class Singleplayer implements Gamemode {
   int lastTrailDraw = -10; // For drawing trails
   float zoom = 1; // Camera zoom
   
-  UniverseGen generator = new UniverseGen(8000, 120);
+  UniverseGen generator = new UniverseGen(80000, 1200);
   
   ArrayList<Planet> planets = new ArrayList<Planet>();
   ArrayList<Spaceship> ships = new ArrayList<Spaceship>();
@@ -111,7 +111,7 @@ class Singleplayer implements Gamemode {
           // Assumes ship explodes on contact with anything
           s.onDestroy(p);
           dead = true;
-          if(settings[SETTINGS_SOUND] > 0) { 
+          if(getSetting("sound") > 0) { 
             engine.stop();
             death.play();
           }

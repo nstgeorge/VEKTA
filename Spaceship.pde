@@ -85,7 +85,7 @@ class Spaceship implements SpaceObject {
     if(controlScheme == 0) {   // WASD  
       switch(key) {
         case 'w':
-          if(settings[SETTINGS_SOUND] > 0) {
+          if(getSetting("sound") > 0) {
             engine.stop();
             engine.loop();
           }
@@ -97,7 +97,7 @@ class Spaceship implements SpaceObject {
           turn = -((float)handling / HANDLING_SCALE);
           break;
         case 's':
-          if(settings[SETTINGS_SOUND] > 0) {
+          if(getSetting("sound") > 0) {
             engine.stop();
             engine.loop();
           }
@@ -119,7 +119,7 @@ class Spaceship implements SpaceObject {
     if(controlScheme == 1) {   // IJKL  
       switch(key) {
         case 'i':
-          if(settings[SETTINGS_SOUND] > 0) {
+          if(getSetting("sound") > 0) {
             engine.stop();
             engine.loop();
           }
@@ -131,7 +131,7 @@ class Spaceship implements SpaceObject {
           turn = -((float)handling / HANDLING_SCALE);
           break;
         case 'k':
-          if(settings[SETTINGS_SOUND] > 0) {
+          if(getSetting("sound") > 0) {
             engine.stop();
             engine.loop();
           }
@@ -154,7 +154,7 @@ class Spaceship implements SpaceObject {
   
   void keyReleased(char key) {
     if((key == 'w' || key == 's') && controlScheme == 0) {
-      if(settings[SETTINGS_SOUND] > 0) engine.stop();
+      if(getSetting("sound") > 0) engine.stop();
       acceleration = DEF_ACCELERATION;
       accelerating = false;
       backwards = false;
@@ -164,7 +164,7 @@ class Spaceship implements SpaceObject {
     }
     
     if((key == 'i' || key == 'k') && controlScheme == 1) {
-      if(settings[SETTINGS_SOUND] > 0) engine.stop();
+      if(getSetting("sound") > 0) engine.stop();
       acceleration = DEF_ACCELERATION;
       accelerating = false;
       backwards = false;
@@ -180,7 +180,7 @@ class Spaceship implements SpaceObject {
   
   private void fireProjectile() {
     if(numProjectiles < MAX_PROJECTILES) {
-      if(settings[SETTINGS_SOUND] > 0) laser.play();
+      if(getSetting("sound") > 0) laser.play();
       projectiles[numProjectiles] = new Projectile(position.copy(), heading.copy(), velocity.copy(), c);
       numProjectiles++;
     }

@@ -3,7 +3,7 @@ class Menu {
   Hyperspace hyperspace;
   
   public Menu() {
-    if(settings[SETTINGS_MUSIC] > 0) theme.play();
+    if(getSetting("music") > 0) theme.play();
     hyperspace = new Hyperspace(new PVector(width/2, height/2 - 100), 0.1, 170);
     
   }  
@@ -67,19 +67,19 @@ class Menu {
   void keyPressed(char key) {
     if(key == 'w') {
       // Play the sound for changing menu selection
-      if(settings[SETTINGS_SOUND] > 0) change.play();
+      if(getSetting("sound") > 0) change.play();
       selectedMode = Math.max(selectedMode - 1, 0);
       redraw();
     } 
     if(key == 's') {
       // Play the sound for changing menu selection
-      if(settings[SETTINGS_SOUND] > 0) change.play();
+      if(getSetting("sound") > 0) change.play();
       selectedMode = Math.min(selectedMode + 1, modes.length);
       redraw();
     }
     if(key == 'x') {
       // Play the sound for selection
-      if(settings[SETTINGS_SOUND] > 0) select.play();
+      if(getSetting("sound") > 0) select.play();
       modePicked = true;
     }
   }  

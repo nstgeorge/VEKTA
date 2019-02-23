@@ -7,14 +7,10 @@ Gamemode game;
 Menu menu;
 
 // Settings
-int[] settings = {
-  0, // Sound (0 = off, 10 = full volume)
-  0  // Music (0 = off, 10 = full volume)
-};
+JSONObject defaultSettings;
+JSONObject  settings;
+  
 
-// y u no enums
-final int SETTINGS_SOUND = 0;
-final int SETTINGS_MUSIC = 1;
 
 // Game-balancing variables and visual settings
 
@@ -69,15 +65,18 @@ void setup() {
   // Images
   logo = loadShape("VEKTA.svg");
   // All sounds and music. These must be instantiated in the main file
-  // Music (temporarily disabled)
+  // Music
   theme = new SoundFile(this, "main.wav");
   
-  //// Sound (temporarily disabled)
+  // Sound
   laser = new SoundFile(this, "laser.wav");
   death = new SoundFile(this, "death.wav");
   engine = new SoundFile(this, "engine.wav");
   change = new SoundFile(this, "change.wav");
   select = new SoundFile(this, "select.wav");
+  
+  
+  createSettings();
   
   playerWins[0] = 0;
   playerWins[1] = 0;
@@ -91,7 +90,7 @@ void draw() {
     else if(!switchedToGame) {
       if(selectedMode == 0) game = new Singleplayer();
       //if(selectedMode == 1) game = new Multiplayer();
-      if(settings[SETTINGS_MUSIC] > 0) theme.stop();
+      if(getSetting("music") > 0) theme.stop();
       game.init();
       switchedToGame = true;
     }
@@ -149,18 +148,18 @@ void keyPressed() {
   else if(paused) {
     if(key == 'w') {
       // Play the sound for changing menu selection
-      if(settings[SETTINGS_SOUND] > 0) change.play();
+      if(getSetting("sound") > 0) change.play();
       pauseSelected = Math.max(pauseSelected - 1, 0);
     } 
     if(key == 's') {
       // Play the sound for changing menu selection
-      if(settings[SETTINGS_SOUND] > 0) change.play();
+      if(getSetting("sound") > 0) change.play();
       pauseSelected = Math.min(pauseSelected + 1, pauseMenu.length - 1);
     }
     if(key == 'x') {
-      if(settings[SETTINGS_MUSIC] > 0) theme.stop();
+      if(getSetting("music") > 0) theme.stop();
       // Play the sound for selection
-      if(settings[SETTINGS_SOUND] > 0) select.play();
+      if(getSetting("sound") > 0) select.play();
       switch(pauseSelected) {
         case(0):
           clearOverlay();
@@ -242,6 +241,33 @@ void drawOverlay() {
     //redraw();
   } 
 }  
+
+void createSettings() {
+  // Default settings
+  defaultSettings = new JSONObject();
+  defaultSettings.put("sound", 1);
+  defaultSettings.put("music", 1);
+  // Settings
+  try {
+    settings = loadJSONObject("settings.json");
+  } catch(NullPointerException e) {
+    System.out.println("settings.json not found. Using default settings.");
+    settings = defaultSettings;
+    saveJSONObject(settings, "settings.json");
+  }
+}
+
+int getSetting(String key) {
+  try {
+    return settings.getInt(key);
+  } catch (Exception e) {
+    try {
+    return defaultSettings.getInt(key);
+    } catch (Exception e2) {
+      return 0;
+    }
+  }
+}
 
   /**
     Draws an option of name "name" at yPos in the overlay
