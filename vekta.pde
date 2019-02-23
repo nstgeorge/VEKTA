@@ -9,8 +9,6 @@ Menu menu;
 // Settings
 JSONObject defaultSettings;
 JSONObject  settings;
-  
-
 
 // Game-balancing variables and visual settings
 
@@ -74,7 +72,6 @@ void setup() {
   engine = new SoundFile(this, "engine.wav");
   change = new SoundFile(this, "change.wav");
   select = new SoundFile(this, "select.wav");
-  
   
   createSettings();
   
@@ -141,8 +138,13 @@ void draw() {
 void keyPressed() {
   // Toggle pause
   if(key == ESC) {
-    key = 0;
-    paused = !paused;
+    key = 0; // Suppress default behavior (exit)
+    if(modePicked) {
+      clearOverlay();
+      paused = !paused;
+    } else {
+      menu.keyPressed(ESC);
+    }
   }
   // Pause controls 
   else if(paused) {
@@ -267,6 +269,14 @@ int getSetting(String key) {
       return 0;
     }
   }
+}
+
+void setSetting(String key, int value) {
+  settings.setInt(key, value);
+}
+
+void saveSettings() {
+  saveJSONObject(settings, "settings.json");
 }
 
   /**
