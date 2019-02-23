@@ -42,11 +42,16 @@ int[] playerWins = new int[2];
 
 // Sounds
 SoundFile theme;
+SoundFile atmosphere;
 SoundFile laser;
 SoundFile death;
 SoundFile engine;
 SoundFile change;
 SoundFile select;
+SoundFile chirp;
+
+// Low pass filter
+LowPass lowPass;
 
 void setup() {
   // Important visual stuff
@@ -62,9 +67,11 @@ void setup() {
   bodyFont = createFont(FONTNAME, 24);
   // Images
   logo = loadShape("VEKTA.svg");
+  
   // All sounds and music. These must be instantiated in the main file
   // Music
   theme = new SoundFile(this, "main.wav");
+  atmosphere = new SoundFile(this, "atmosphere.wav");
   
   // Sound
   laser = new SoundFile(this, "laser.wav");
@@ -72,6 +79,9 @@ void setup() {
   engine = new SoundFile(this, "engine.wav");
   change = new SoundFile(this, "change.wav");
   select = new SoundFile(this, "select.wav");
+  chirp = new SoundFile(this, "chirp.wav");
+  
+  lowPass = new LowPass(this);
   
   createSettings();
   
