@@ -2,3 +2,4 @@ src/*
 vekta.iml
 .DS_Store
 .idea
+settings.json
