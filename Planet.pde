@@ -9,10 +9,13 @@ class Planet implements SpaceObject {
   private final PVector DEF_VELOCITY = new PVector(0,0);
   private final color DEF_COLOR = color(255, 255, 255);
   private String[] nameParts1 = {  // First parts of the name of a planet
-    "Giga", "Atla", "Exo", "Zori", "Era", "Volta", "Dene", "Julu", "Poke", "Sala", "Huno", "Yeba", "Satu", "Plu", "Mercu", "Luki", "Pola", "Crato"
+    "Giga", "Atla", "Exo", "Zori", "Era", "Volta", "Dene", "Julu", "Poke", "Sala", "Huno",
+    "Yeba", "Satu", "Plu", "Mercu", "Luki", "Pola", "Crato", "Tesse", "Strato", "Zil", "Syn",
+    "Croi", "Jani", "Noctu", "Juno", "Dune", "Compu"
   };
   private String[] nameParts2 = {
-    "dan", "san", "jor", "zed", "ranth", "ka", "", "th", "rn", "to", "krith", "n", "s", "sol", "deth", "rat", "kor", "k", "shyyyk", "tron", "don", "saur", "ris"
+    "dan", "san", "jor", "zed", "ranth", "ka", "", "th", "rn", "to", "krith", "n", "s", "sol",
+    "deth", "rat", "kor", "k", "shyyyk", "tron", "don", "saur", "ris", "ract", "varius", "toid"
   };
   
   private String name;
