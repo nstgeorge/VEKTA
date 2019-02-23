@@ -215,7 +215,9 @@ class Spaceship implements SpaceObject {
     return false;
   }
   
-  void onDestroy(SpaceObject s) {}
+  void onDestroy(SpaceObject s) {
+    lowPass.process(atmosphere, 800);
+  }
   
   // GETTERS / SETTERS ---------------------------------------------------------------
   

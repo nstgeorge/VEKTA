@@ -178,7 +178,6 @@ class Singleplayer implements Gamemode {
     
     // Info
     if(!dead) {
-      lowPass.stop();
       if(frameCount % 10 == 0) {  //  Update values every 10 frames
         updateUIInformation();
       }  
@@ -219,7 +218,6 @@ class Singleplayer implements Gamemode {
     
     // Menus
     else {
-      lowPass.process(atmosphere, 800);
       hint(DISABLE_DEPTH_TEST);
       camera();
       noLights();
@@ -302,6 +300,7 @@ class Singleplayer implements Gamemode {
   void keyPressed(char key) {
     if(dead) {
       if(key == 'x') {
+        lowPass.stop();
         init();
       }
     } else {
