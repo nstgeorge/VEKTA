@@ -11,7 +11,8 @@ class Menu {
   final int  SETTINGS_SPACING = 50;
   
   public Menu() {
-    if(getSetting("music") > 0) theme.play();
+    theme.amp(getSetting("music"));
+    theme.play();
     hyperspace = new Hyperspace(new PVector(width/2, height/2 - 100), 0.1, 170);
     inSettings = false;
     settingsOptions = new StringDict();
@@ -111,6 +112,8 @@ class Menu {
   void updateSetting() {
     selectedOptions[selectedSetting] = (selectedOptions[selectedSetting] + 1) % settingsOptions.valueArray()[selectedSetting].split(",").length;
     setSetting(settingsOptions.keyArray()[selectedSetting].toLowerCase(), selectedOptions[selectedSetting]);
+    // Quick! Turn down the music if the player wants it gone!
+    theme.amp(getSetting("music"));
   }
   
   void keyPressed(char key) {
