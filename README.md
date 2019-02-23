@@ -1,7 +1,6 @@
 # VEKTA
 
-![Main menu screen](info/main.png)
-![Gameplay](info/gameplay.png)
+![Main menu screen](info/2019.2.23/menu.png)
 
 ## Downloads
 The compiled binaries are available at [the releases page](https://github.com/StGerGer/vekta-processing/releases). Not all of these versions are tested, so use at your own risk. For the latest version, it is best to download the source and compile it yourself. I try to release a new version every week or so, depending on the progress made to the game in that time.
@@ -30,6 +29,14 @@ If you want to make any changes, feel free to submit a pull request!
 
 ## Other Info
 The font used in the most recent version of the game is [undefined-medium](https://github.com/andirueckel/undefined-medium/releases) by @andirueckel.
+
+## Screenshots
+
+![Slingshotting around a huge planet](info/2019.2.23/slingshot.png)
+![Zoomed out gameplay](info/2019.2.23/zoomedout.png)
+![A busy universe](info/2019.2.23/busyuniverse.png)
+![Lots of tiny planets](info/2019.2.23/smallplanets.png)
+![Gigatron!](info/2019.2.23/gigatron.png)
 
 ## License
 This software is subject to the MIT License.
