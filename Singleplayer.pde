@@ -24,6 +24,7 @@ class Singleplayer implements Gamemode {
   ArrayList<ArrayList<PVector>> oldPositions;
   
   ArrayList<SpaceObject> markedForDeath = new ArrayList<SpaceObject>();
+  ArrayList<SpaceObject> markedForAddition = new ArrayList<SpaceObject>();
   
   // UI Variables (not real time updated)
   float shortDist;
@@ -83,7 +84,8 @@ class Singleplayer implements Gamemode {
        0.0, 1.0, 0.0);
     }
     
-    for(SpaceObject p : planets) {
+    // TODO: consolidate all collision logic to one DRY code block to prevent markedForDeath leaking
+    for(Planet p : planets) {
       if(p.getPosition().dist(playerShip.getPosition()) < shortestDistance) {
         shortestDistance = (float)p.getPosition().dist(playerShip.getPosition());
       }
@@ -91,16 +93,16 @@ class Singleplayer implements Gamemode {
         ArrayList influencers = planets;
         p.getInfluenceVector((ArrayList<SpaceObject>)influencers);
       }
-      for(SpaceObject p2 : planets) {
-        if(p.collidesWith(p2) && p != p2) {
+      for(Planet p2 : planets) {
+        if(!markedForDeath.contains(p2) && p.collidesWith(p2) && p != p2) {
           if(p.getMass() > p2.getMass()) {
-            // TODO: refactor onDestroy(..) and markedForDeath.add(..) logic to a separate method
+            // TODO: refactor onDestroy(..) and removeObject(..) logic to a separate method
             p2.onDestroy(p);
-            markedForDeath.add(p2);
+            removeObject(p2);
           }
           else {
             p.onDestroy(p2);
-            markedForDeath.add(p);
+            removeObject(p);
           }
         }
       }
@@ -113,19 +115,19 @@ class Singleplayer implements Gamemode {
             engine.stop();
             death.play();
           }
-          markedForDeath.add(s);
+          removeObject(s);
         }
         for(Projectile projectile : s.getProjectiles()) {
             if(projectile != null) {
               if(projectile.collidesWith(p)) {
                 p.onDestroy(projectile);
-                markedForDeath.add(p);
+                removeObject(p);
                 s.removeProjectile(projectile);
               }
               for(Spaceship s2 : ships) {
                 if(projectile.collidesWith(s2) && s != s2) {
                   s2.onDestroy(projectile);
-                  markedForDeath.add(s2);
+                  removeObject(s2);
                 }  
               }  
             }  
@@ -142,8 +144,18 @@ class Singleplayer implements Gamemode {
       }
       if(s instanceof Planet) {
         planets.remove(s);
-      }  
+      }
     }
+    for(SpaceObject s : markedForAddition) {
+      if(s instanceof Spaceship) {
+        ships.add((Spaceship)s);
+      }
+      if(s instanceof Planet) {
+        planets.add((Planet)s);
+      }
+    }
+    markedForDeath.clear();
+    markedForAddition.clear();
     for(Spaceship s : ships) {
       if(!paused) {
         ArrayList influencers = planets;
@@ -278,7 +290,7 @@ class Singleplayer implements Gamemode {
       // set oldPositions value
       oldPositions.set(p.getID(), old);
     }   
-  }  
+  }
   
   void updateUIInformation() {
     Spaceship main = ships.get(0);
@@ -319,5 +331,21 @@ class Singleplayer implements Gamemode {
   
   void mouseWheel(float amount) {
     zoom = max(.1, min(3, zoom * (1 + amount * .1)));
+  }
+  
+  @Override
+  boolean addObject(Object object) {
+    if(object instanceof SpaceObject) {
+      markedForAddition.add((SpaceObject)object);
+    }
+    return false;
+  }
+  
+  @Override
+  boolean removeObject(Object object) {
+    if(object instanceof SpaceObject) {
+      markedForDeath.add((SpaceObject)object);
+    }
+    return false;
   }
 }

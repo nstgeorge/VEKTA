@@ -8,6 +8,9 @@ class Planet implements SpaceObject {
   private final PVector DEF_POSITION = new PVector(100, 100);
   private final PVector DEF_VELOCITY = new PVector(0,0);
   private final color DEF_COLOR = color(255, 255, 255);
+  private final double SPLIT_MASS_DECAY = .2;
+  private final double MIN_SPLIT_RADIUS = 1;
+  private final float SPLIT_VELOCITY_SCALE = 2;
   private String[] nameParts1 = {  // First parts of the name of a planet
     "Giga", "Atla", "Exo", "Zori", "Era", "Volta", "Dene", "Julu", "Poke", "Sala", "Huno",
     "Yeba", "Satu", "Plu", "Mercu", "Luki", "Pola", "Crato", "Tesse", "Strato", "Zil", "Syn",
@@ -38,13 +41,17 @@ class Planet implements SpaceObject {
   }
   
   public Planet(int id, double mass, float radius, int x, int y, float xVelocity, float yVelocity, color c) {
+    this(id, mass, radius, new PVector(x, y), new PVector(xVelocity, yVelocity), c);
+  }
+  
+  public Planet(int id, double mass, float radius, PVector position, PVector velocity, color c) {
     
     this.name = nameParts1[(int)random(nameParts1.length)] + nameParts2[(int)random(nameParts2.length)];
     this.id = id;
     this.mass = mass;
     this.radius = radius;
-    position = new PVector(x, y);
-    velocity = new PVector(xVelocity, yVelocity);
+    this.position = position;
+    this.velocity = velocity;
     this.c = c;
   }
   
@@ -81,9 +88,28 @@ class Planet implements SpaceObject {
   }
   
   void onDestroy(SpaceObject s) {
+    println("Planet destroyed with radius: " + getRadius());
+    
     // Add this object's mass and radius to the mass and radius of the destroying object
     s.setMass(s.getMass() + mass);
     s.setRadius(s.getRadius() + sqrt(radius));
+    
+    if(getRadius() >= MIN_SPLIT_RADIUS) {
+      // Split large planet
+      double newMass = getMass() / 2;
+      float newRadius = getRadius() / sqrt(2);
+      PVector offset = PVector.random2D().normalize().mult(newRadius * 1.5);
+      PVector splitVelocity = PVector.random2D().mult(SPLIT_VELOCITY_SCALE);
+      // TODO: unique ids for each planet chunk via global nextID() method or something similar
+      Planet a = new Planet(id, newMass, newRadius, getPosition().copy().add(offset), getVelocity().copy().add(splitVelocity), getColor());
+      Planet b = new Planet(id, newMass, newRadius, getPosition().copy().sub(offset), getVelocity().copy().sub(splitVelocity), getColor());
+      if(!s.collidesWith(a)) {
+        addObject(a);
+      }
+      if(!s.collidesWith(b)) {
+        addObject(b);
+      }
+    }
   }  
   
   /**

@@ -24,4 +24,8 @@ interface Gamemode {
     What to do when the mouse wheel is scrolled
   */
   void mouseWheel(float amount);
+  
+  boolean addObject(Object object);
+  
+  boolean removeObject(Object object);
 }  

@@ -78,4 +78,6 @@ class Projectile implements SpaceObject {
     if(r < (getRadius() + s.getRadius())) return true;
     return false;
   }  
+  
+  
 }  
