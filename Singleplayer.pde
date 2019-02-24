@@ -85,6 +85,7 @@ class Singleplayer implements Gamemode {
     
     for(SpaceObject p : planets) {
       if(p.getPosition().dist(playerShip.getPosition()) < shortestDistance) {
+        closestObject = p;
         shortestDistance = (float)p.getPosition().dist(playerShip.getPosition());
       }
       if(!paused) {
