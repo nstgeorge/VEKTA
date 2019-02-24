@@ -91,7 +91,7 @@ class Singleplayer implements Gamemode {
       }
       if(!paused) {
         ArrayList influencers = planets;
-        p.getInfluenceVector((ArrayList<SpaceObject>)influencers);
+        p.applyInfluenceVector((ArrayList<SpaceObject>)influencers);
       }
       for(Planet p2 : planets) {
         if(!markedForDeath.contains(p2) && p.collidesWith(p2) && p != p2) {
@@ -159,7 +159,7 @@ class Singleplayer implements Gamemode {
     for(Spaceship s : ships) {
       if(!paused) {
         ArrayList influencers = planets;
-        PVector influence = s.getInfluenceVector((ArrayList<SpaceObject>)influencers);
+        PVector influence = s.applyInfluenceVector((ArrayList<SpaceObject>)influencers);
         s.update();
         // Draw influence vector on ship
         stroke(255, 0, 0);
@@ -171,7 +171,7 @@ class Singleplayer implements Gamemode {
         if(projectile != null) {
           if(!paused) {
             ArrayList influencers = planets;
-            projectile.getInfluenceVector((ArrayList<SpaceObject>)influencers);
+            projectile.applyInfluenceVector((ArrayList<SpaceObject>)influencers);
             projectile.update();
           }
            projectile.draw();

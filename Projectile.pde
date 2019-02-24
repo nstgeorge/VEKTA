@@ -37,7 +37,7 @@ class Projectile implements SpaceObject {
   }
   
   @Override
-  PVector getInfluenceVector(ArrayList<SpaceObject> space) {
+  PVector applyInfluenceVector(ArrayList<SpaceObject> space) {
     PVector influence = new PVector(0, 0);
     for(int i = 0; i < space.size(); i++) {
       SpaceObject s = space.get(i);

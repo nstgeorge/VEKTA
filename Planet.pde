@@ -12,6 +12,7 @@ class Planet implements SpaceObject {
   private final double MIN_SPLIT_RADIUS = 1;
   private final float SPLIT_DISTANCE_SCALE = 1.75;
   private final float SPLIT_VELOCITY_SCALE = 2;
+  private final float MAX_INFLUENCE_ACCEL = 10;
   private String[] nameParts1 = {  // First parts of the name of a planet
     "Giga", "Atla", "Exo", "Zori", "Era", "Volta", "Dene", "Julu", "Poke", "Sala", "Huno",
     "Yeba", "Satu", "Plu", "Mercu", "Luki", "Pola", "Crato", "Tesse", "Strato", "Zil", "Syn",
@@ -69,10 +70,11 @@ class Planet implements SpaceObject {
     position.add(velocity);
   }  
   
+  // TODO: move common SpaceObject logic to default interface methods or abstract parent class
   /**
     Calculates influence of this Planet *from* another object in space.
   */
-  PVector getInfluenceVector(ArrayList<SpaceObject> space) {
+  PVector applyInfluenceVector(ArrayList<SpaceObject> space) {
     for(int i = 0; i < space.size(); i++) {
       PVector influence = new PVector(0, 0);
       SpaceObject s = space.get(i);
@@ -83,8 +85,11 @@ class Planet implements SpaceObject {
         double force = G * ((mass * s.getMass()) / (r * r)); // G defined in orbit
         influence.add(new PVector(s.getPosition().x - position.x, s.getPosition().y - position.y).setMag((float)(force / mass)));
       }
+      // Prevent insane acceleration
+      influence.limit(MAX_INFLUENCE_ACCEL);
       velocity.add(influence);
     }
+    // TODO: is this supposed to be `return velocity;`?
     return new PVector();
   }
   
