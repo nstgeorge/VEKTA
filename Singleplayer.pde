@@ -87,7 +87,8 @@ class Singleplayer implements Gamemode {
     // TODO: consolidate all collision logic to one DRY code block to prevent markedForDeath leaking
     for(Planet p : planets) {
       if(p.getPosition().dist(playerShip.getPosition()) < shortestDistance) {
-        shortestDistance = (float)p.getPosition().dist(playerShip.getPosition());
+        closestObject = p;
+        shortestDistance = (float)closestObject.getPosition().dist(playerShip.getPosition());
       }
       if(!paused) {
         ArrayList influencers = planets;

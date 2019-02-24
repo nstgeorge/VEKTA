@@ -13,15 +13,8 @@ class Planet implements SpaceObject {
   private final float SPLIT_DISTANCE_SCALE = 1.75;
   private final float SPLIT_VELOCITY_SCALE = 2;
   private final float MAX_INFLUENCE_ACCEL = 10;
-  private String[] nameParts1 = {  // First parts of the name of a planet
-    "Giga", "Atla", "Exo", "Zori", "Era", "Volta", "Dene", "Julu", "Poke", "Sala", "Huno",
-    "Yeba", "Satu", "Plu", "Mercu", "Luki", "Pola", "Crato", "Tesse", "Strato", "Zil", "Syn",
-    "Croi", "Jani", "Noctu", "Juno", "Dune", "Compu"
-  };
-  private String[] nameParts2 = {
-    "dan", "san", "jor", "zed", "ranth", "ka", "", "th", "rn", "to", "krith", "n", "s", "sol",
-    "deth", "rat", "kor", "k", "shyyyk", "tron", "don", "saur", "ris", "ract", "varius", "toid"
-  };
+  private String[] nameParts1 = loadStrings("data/text/planet_prefixes.txt"); // Planet name prefixes
+  private String[] nameParts2 = concat(loadStrings("data/text/planet_suffixes.txt"), new String[] {""}); // Planet name suffixes
   
   private String name;
   private int id;
