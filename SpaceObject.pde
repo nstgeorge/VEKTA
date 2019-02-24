@@ -4,6 +4,11 @@ interface SpaceObject {
     Gets the unique ID of an object
   */
    int getID();
+   
+  /** 
+    Sets the unique ID of an object
+  */
+   void setID(int id);
   
   /**
    Gets the name of the object
@@ -53,7 +58,7 @@ interface SpaceObject {
   /**
     Returns and applies the influence vector of another object on this
   */
-  PVector getInfluenceVector(ArrayList<SpaceObject> space);
+  PVector applyInfluenceVector(ArrayList<SpaceObject> space);
   
   /**
     Does this collide with that?

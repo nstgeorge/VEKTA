@@ -37,7 +37,7 @@ class Projectile implements SpaceObject {
   }
   
   @Override
-  PVector getInfluenceVector(ArrayList<SpaceObject> space) {
+  PVector applyInfluenceVector(ArrayList<SpaceObject> space) {
     PVector influence = new PVector(0, 0);
     for(int i = 0; i < space.size(); i++) {
       SpaceObject s = space.get(i);
@@ -57,6 +57,7 @@ class Projectile implements SpaceObject {
   }  
   
   int getID() { return id; }
+  void setID(int id) { this.id = id; }
   String getName() { return name; }
   color getColor() { return c; }
   float getRadius() { return radius; }
@@ -78,4 +79,6 @@ class Projectile implements SpaceObject {
     if(r < (getRadius() + s.getRadius())) return true;
     return false;
   }  
+  
+  
 }  

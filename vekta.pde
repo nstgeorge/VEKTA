@@ -308,4 +308,12 @@ void saveSettings() {
   fill(0, 255, 0);
   textAlign(CENTER, CENTER);
   text(name, width / 8, yPos - 3);
-}  
+}
+
+boolean addObject(Object object) {
+  return game != null && game.addObject(object);
+}
+
+boolean removeObject(Object object) {
+  return game != null && game.removeObject(object);
+}
