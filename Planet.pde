@@ -8,8 +8,9 @@ class Planet implements SpaceObject {
   private final PVector DEF_POSITION = new PVector(100, 100);
   private final PVector DEF_VELOCITY = new PVector(0,0);
   private final color DEF_COLOR = color(255, 255, 255);
-  private final double SPLIT_MASS_DECAY = .2;
+  private final float SPLIT_MASS_DECAY = .2;
   private final double MIN_SPLIT_RADIUS = 1;
+  private final float SPLIT_DISTANCE_SCALE = 1.75;
   private final float SPLIT_VELOCITY_SCALE = 2;
   private String[] nameParts1 = {  // First parts of the name of a planet
     "Giga", "Atla", "Exo", "Zori", "Era", "Volta", "Dene", "Julu", "Poke", "Sala", "Huno",
@@ -91,16 +92,17 @@ class Planet implements SpaceObject {
     println("Planet destroyed with radius: " + getRadius());
     
     // Add this object's mass and radius to the mass and radius of the destroying object
-    s.setMass(s.getMass() + mass);
-    s.setRadius(s.getRadius() + sqrt(radius));
+    s.setMass(s.getMass() + mass * SPLIT_MASS_DECAY);
+    s.setRadius(sqrt(s.getRadius() * s.getRadius() + radius * radius * SPLIT_MASS_DECAY * SPLIT_MASS_DECAY));
     
     if(getRadius() >= MIN_SPLIT_RADIUS) {
       // Split large planet
       double newMass = getMass() / 2;
       float newRadius = getRadius() / sqrt(2);
-      PVector offset = PVector.random2D().normalize().mult(newRadius * 1.5);
-      PVector splitVelocity = PVector.random2D().mult(SPLIT_VELOCITY_SCALE);
+      PVector offset = PVector.random2D().normalize().mult(newRadius * SPLIT_DISTANCE_SCALE);
+      PVector splitVelocity = /*PVector.random2D()*/getPosition().copy().sub(s.getPosition()).normalize().mult(SPLIT_VELOCITY_SCALE);
       // Note that the planet ids are overwritten by addObject(..) logic
+      // TODO: remove id parameter from constructor and allow addObject(..) to configure this automatically
       Planet a = new Planet(id, newMass, newRadius, getPosition().copy().add(offset), getVelocity().copy().add(splitVelocity), getColor());
       Planet b = new Planet(id, newMass, newRadius, getPosition().copy().sub(offset), getVelocity().copy().sub(splitVelocity), getColor());
       if(!s.collidesWith(a)) {
