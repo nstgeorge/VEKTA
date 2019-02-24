@@ -100,7 +100,7 @@ class Planet implements SpaceObject {
       float newRadius = getRadius() / sqrt(2);
       PVector offset = PVector.random2D().normalize().mult(newRadius * 1.5);
       PVector splitVelocity = PVector.random2D().mult(SPLIT_VELOCITY_SCALE);
-      // TODO: unique ids for each planet chunk via global nextID() method or something similar
+      // Note that the planet ids are overwritten by addObject(..) logic
       Planet a = new Planet(id, newMass, newRadius, getPosition().copy().add(offset), getVelocity().copy().add(splitVelocity), getColor());
       Planet b = new Planet(id, newMass, newRadius, getPosition().copy().sub(offset), getVelocity().copy().sub(splitVelocity), getColor());
       if(!s.collidesWith(a)) {
@@ -127,6 +127,7 @@ class Planet implements SpaceObject {
   }
   
   int getID() { return id; }
+  void setID(int id) { this.id = id; }
   
   String getName() {
     return name;

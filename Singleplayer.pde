@@ -336,7 +336,10 @@ class Singleplayer implements Gamemode {
   @Override
   boolean addObject(Object object) {
     if(object instanceof SpaceObject) {
-      markedForAddition.add((SpaceObject)object);
+      SpaceObject s = (SpaceObject)object;
+      s.setID(oldPositions.size());
+      oldPositions.add(new ArrayList<PVector>());
+      markedForAddition.add(s);
     }
     return false;
   }

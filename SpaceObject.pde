@@ -4,6 +4,11 @@ interface SpaceObject {
     Gets the unique ID of an object
   */
    int getID();
+   
+  /** 
+    Sets the unique ID of an object
+  */
+   void setID(int id);
   
   /**
    Gets the name of the object

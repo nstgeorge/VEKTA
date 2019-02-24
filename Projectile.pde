@@ -57,6 +57,7 @@ class Projectile implements SpaceObject {
   }  
   
   int getID() { return id; }
+  void setID(int id) { this.id = id; }
   String getName() { return name; }
   color getColor() { return c; }
   float getRadius() { return radius; }
