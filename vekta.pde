@@ -3,7 +3,7 @@ import processing.sound.*;
 
 final String FONTNAME = "font/undefined-medium.ttf";
 final int MAX_DISTANCE = 500; // Maximum distance for updating objects
-final float DISTANCE_SCALE = 1e-9;
+final float DISTANCE_SCALE = 4e-9;
 Gamemode game;
 Menu menu;
 

@@ -116,7 +116,7 @@ class Planet extends SpaceObject {
   }
   
   void updateRadius() {
-    radiusCache = pow((float)getMass() * getDensity(), (float)1/3) * DISTANCE_SCALE;
+    radiusCache = pow((float)getMass() / getDensity(), (float)1/3) * DISTANCE_SCALE;
   }
   
   @Override
