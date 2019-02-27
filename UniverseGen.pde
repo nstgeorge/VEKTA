@@ -3,7 +3,6 @@ static final int MIN_SPAWN_DISTANCE = 500;
 class UniverseGen {
   int size;
   int density;
-  List<Planet> space = new ArrayList<Planet>();
   
   public UniverseGen(int size, int density) {
     this.size = size;
@@ -11,10 +10,11 @@ class UniverseGen {
   }
   
   public List<Planet> generate() {
+    List<Planet> objects = new ArrayList<Planet>();
     for(int i = 0; i < density; i++) {
-      space.addAll(createSystem(generateCoordinates(size)));
+      objects.addAll(createSystem(generateCoordinates(size)));
     }
-    return space;
+    return objects;
   }
   
   private List<Planet> createSystem(PVector pos) {
@@ -26,7 +26,7 @@ class UniverseGen {
     system.add(new Planet(
       centerMass, // Mass
       radius,   // Radius
-      pos,  // Coords
+      pos,  // Position
       new PVector(),  // Velocity
       color(random(100, 255), random(100, 255), random(100, 255))
     ));
@@ -37,10 +37,10 @@ class UniverseGen {
       float radiusLoc = (float)(random(600, 2000) * SCALE);
       float speed = sqrt((float)(G * centerMass / radiusLoc));
       double mass = random(0.8, 4) * power;
-      float radiusSize = (float)(random(2, 5) * (sqrt((float)mass) / power));
+      float density = random(.5, 1.5);
       system.add(new Planet(
         mass, // Mass
-        radiusSize,   // Radius
+        density,   // Density
         new PVector(pos.x + radiusLoc, pos.y),  // Coords
         new PVector(0, speed),  // Velocity
         color(random(100, 255), random(100, 255), random(100, 255))

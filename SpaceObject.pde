@@ -89,13 +89,13 @@ abstract class SpaceObject {
     double mass = getMass();
     PVector influence = new PVector();
     for(SpaceObject s : objects) {
-      float distSq = position.copy().sub(s.getPosition()).magSq();
-      if(distSq < MAX_DISTANCE * MAX_DISTANCE) {
+      float distSq = getDistSq(position, s.getPosition());
+      //if(distSq < MAX_DISTANCE * MAX_DISTANCE) {
         double rSq = distSq * SCALE * SCALE;
         if(rSq == 0) continue; // If the planet being checked is itself (or directly on top), don't move
         double force = G * mass * s.getMass() / rSq; // G defined in orbit
         influence.add(new PVector(s.getPosition().x - position.x, s.getPosition().y - position.y).setMag((float)(force / mass)));
-      }
+      //}
     }
     // Prevent insane acceleration
     influence.limit(MAX_INFLUENCE);

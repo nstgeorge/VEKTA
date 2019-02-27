@@ -19,7 +19,6 @@ class Spaceship extends SpaceObject {
   private float speed;  // Force of the vector added when engine is on
   private int handling; // Speed of turning
   private float turn; // Value used to turn the ship
-  //private Projectile[] projectiles = new Projectile[MAX_PROJECTILES];
   private int numProjectiles = 0;
   
   // Normal SpaceObject stuff
@@ -210,17 +209,9 @@ class Spaceship extends SpaceObject {
     return mass;
   }
   
-  void setMass(double mass) {
-    this.mass = mass;
-  }
-  
   @Override
   float getRadius() {
     return radius;
-  }
-  
-  void setRadius(float radius) {
-    this.radius = radius;
   }
   
   @Override

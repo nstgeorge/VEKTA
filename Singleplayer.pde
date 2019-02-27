@@ -12,7 +12,7 @@ class Singleplayer implements Gamemode {
   int ammunition = 100;
   String position;
   
-  float shortestDistance = Integer.MAX_VALUE;
+  float minDistSq = Float.POSITIVE_INFINITY;
   
   Spaceship playerShip;
   
@@ -38,7 +38,7 @@ class Singleplayer implements Gamemode {
     
     frameCount = 0;
     dead = false;
-    generator = new UniverseGen(8000, 120);
+    generator = new UniverseGen(8000, 50);
     
     // Add initial planets
     for(Planet p : generator.generate()) {
@@ -71,15 +71,16 @@ class Singleplayer implements Gamemode {
     }
     
     SpaceObject closestObject = null;
-    shortestDistance = Integer.MAX_VALUE;
+    minDistSq = Float.POSITIVE_INFINITY;
     planetCount = 0;
     for(SpaceObject s : objects) {
       if(!paused) {
         if(s instanceof Planet) {
           planetCount++;
-          if(s.getPosition().dist(playerShip.getPosition()) < shortestDistance) {
+          float distSq = getDistSq(s.getPosition(), playerShip.getPosition());
+          if(distSq < minDistSq * minDistSq) {
             closestObject = s;
-            shortestDistance = s.getPosition().dist(playerShip.getPosition());
+            minDistSq = distSq;
           }
         }
         s.update();
@@ -131,7 +132,7 @@ class Singleplayer implements Gamemode {
       if(closestObject == null) {
         fill(100, 100, 100);
         closestObjectString = "Closest Object: None in range";
-        shortestDistance = Integer.MAX_VALUE;
+        minDistSq = Integer.MAX_VALUE;
       } else {
         closestObjectString = "Closest Object: " + closestObject.getName() + " - " + shortDist + "AU \nSpeed: "+ (float)round(closestObject.getVelocity().mag() * 100) / 100 + "\nMass: " + (float)round((float)((closestObject.getMass() / (1.989 * Math.pow(10, 30)) * 1000))) / 1000  + " Suns";
         // Closest object arrow
@@ -197,7 +198,7 @@ class Singleplayer implements Gamemode {
   
   void updateUIInformation() {
     health = 100;
-    shortDist = (float)round(shortestDistance * 100) / 100;
+    shortDist = (float)round(sqrt(minDistSq) * 100) / 100;
     speed = (float)round(spd * 100) / 100;
     ammunition = playerShip.getProjectilesLeft();
     position = round(pos.x) + ", " + round(pos.y);
