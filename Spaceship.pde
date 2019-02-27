@@ -26,27 +26,23 @@ class Spaceship extends SpaceObject {
   private String name;
   private double mass;
   private float radius;
-  private PVector position;
-  private PVector velocity;
   private PVector heading;
   private PVector acceleration;
   private boolean accelerating;
   private boolean backwards;
   private color c;
   
-  public Spaceship(String name, double mass, float radius, PVector heading, int x, int y, float xVelocity, float yVelocity, color c, int ctrl, int speed, int handling) {
+  public Spaceship(String name, double mass, float radius, PVector heading, PVector position, PVector velocity, color c, int ctrl, int speed, int handling) {
+    super(position, velocity);
     this.name = name;
     this.mass = mass;
     this.radius = radius;
-    position = new PVector(x, y);
-    velocity = new PVector(xVelocity, yVelocity);
     this.heading = heading;
     this.c = c;
     controlScheme = ctrl;
     this.speed = speed;
     this.handling = handling;
-    acceleration = new PVector(0,0);
-    
+    acceleration = new PVector();
   }
   
   // Draws a nice triangle
@@ -179,7 +175,6 @@ class Spaceship extends SpaceObject {
   private void fireProjectile() {
     if(numProjectiles < MAX_PROJECTILES) {
       if(getSetting("sound") > 0) laser.play();
-      //projectiles[numProjectiles] = new Projectile(position.copy(), heading.copy(), velocity.copy(), c);
       addObject(new Projectile(this, position.copy(), heading.copy(), velocity.copy(), c));
       numProjectiles++;
     }
@@ -193,34 +188,11 @@ class Spaceship extends SpaceObject {
   
   String getName() {
     return name;
-  }  
-  
-  /*Projectile[] getProjectiles() {
-    return projectiles;
   }
-  
-  void setProjectiles(Projectile[] p) {
-    projectiles = p;
-  }*/
   
   int getProjectilesLeft() {
     return MAX_PROJECTILES - numProjectiles;
   }
-  
-  /*void removeProjectile(Projectile p) {
-    boolean found = false;
-    int i = 0;
-    while(!found) {
-      if(projectiles[i] == p) {
-        found = true;
-        projectiles[i] = null;
-        for(int j = projectiles.length - 1; j > i; j--) {
-          projectiles[j] = projectiles[j - 1];
-        }
-      }
-      i++;
-    }  
-  }*/
   
   int decrementProjectiles() {
     return numProjectiles--;
@@ -231,7 +203,6 @@ class Spaceship extends SpaceObject {
     return mass;
   }
   
-  // Mass setter
   void setMass(double mass) {
     this.mass = mass;
   }
@@ -241,36 +212,32 @@ class Spaceship extends SpaceObject {
     return radius;
   }
   
-  // Radius setter
   void setRadius(float radius) {
     this.radius = radius;
   }
   
+  @Override
   color getColor() {
     return c;
   }  
   
   void setColor(color c) {
     this.c = c;
-  }  
+  }
   
   PVector getHeading() {
     return heading;
   }
   
   @Override
-  PVector getPosition() {
-    return position;
-  }
-  
-  @Override
-  PVector getVelocity() {
-    return velocity;
-  }
-  
-  @Override
-  PVector addVelocity(PVector add) {
-    return velocity.add(add);
+  PVector applyInfluenceVector(List<SpaceObject> objects) {
+    PVector influence = super.applyInfluenceVector(objects);
+    
+    // Draw influence vector
+    stroke(255, 0, 0);
+    line(position.x, position.y, position.x + (influence.x * 100), position.y + (influence.y * 100));
+    
+    return influence;
   }
   
   @Override

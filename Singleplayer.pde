@@ -52,8 +52,8 @@ class Singleplayer implements Gamemode {
       5000,  // Mass
       5,     // Radius
       new PVector(1, 0), // Heading
-      100, 100, // Position
-      0, 0,    // Velocity
+      new PVector(), // Position
+      new PVector(),    // Velocity
       color(0, 255, 0),
       0, 50, 60  // Control scheme, Speed, and Handling
     );
@@ -85,12 +85,7 @@ class Singleplayer implements Gamemode {
       
       // TODO: should probably just skip this entire loop if paused
       if(!paused) {
-        PVector influence = s.applyInfluenceVector(objects);
-        if(s instanceof Spaceship) {
-          // TODO: eventually move to Spaceship::draw()
-          stroke(255, 0, 0);
-          line(s.getPosition().x, s.getPosition().y, s.getPosition().x + (influence.x * 100), s.getPosition().y + (influence.y * 100));
-        }
+        s.applyInfluenceVector(objects);
       }
       
       for(SpaceObject other : objects) {

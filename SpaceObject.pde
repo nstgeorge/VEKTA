@@ -3,6 +3,18 @@ private static final float MAX_INFLUENCE_ACCEL = 10;
 abstract class SpaceObject {
   private int id;
   
+  PVector position;
+  PVector velocity;
+  
+  SpaceObject() {
+    this(new PVector(), new PVector());
+  }
+  
+  SpaceObject(PVector position, PVector velocity) {
+    this.position = position;
+    this.velocity = velocity;
+  }
+  
   /** 
     Gets the unique ID of an object
   */
@@ -25,7 +37,7 @@ abstract class SpaceObject {
   /**
     Sets the mass of the object
   */
-  abstract void setMass(double mass);
+  //abstract void setMass(double mass);
   
   /**
     Gets the mass of the object
@@ -35,17 +47,23 @@ abstract class SpaceObject {
   /**
     Gets the position of the object
   */
-  abstract PVector getPosition();
+  final PVector getPosition() {
+    return position.copy(); // TODO: copy externally for performance
+  }
   
   /**
     Gets the velocity of the object
   */
-  abstract PVector getVelocity();
+  final PVector getVelocity() {
+    return velocity.copy(); // TODO: copy externally for performance
+  }
   
   /**
     Gets the velocity of the object
   */
-  abstract PVector addVelocity(PVector add);
+  final PVector addVelocity(PVector add) {
+    return velocity.add(add);
+  }
   
   /**
    Gets the color of the object
@@ -55,7 +73,7 @@ abstract class SpaceObject {
   /**
     Set the radius of this object
   */
-  abstract void setRadius(float radius);
+  //abstract void setRadius(float radius);
   
   /**
     Gets the radius of the object (for collision purposes, not all objects are circular)

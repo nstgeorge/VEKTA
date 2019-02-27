@@ -8,8 +8,6 @@ class Projectile extends SpaceObject {
   private String name;
   private double mass;
   private float radius;
-  private PVector position;
-  private PVector velocity;
   private color c;
 
   /**
@@ -43,9 +41,6 @@ class Projectile extends SpaceObject {
   String getName() { return name; }
   color getColor() { return c; }
   float getRadius() { return radius; }
-  PVector getVelocity() { return velocity; }
-  PVector addVelocity(PVector add) { return velocity.add(add); }
-  PVector getPosition() { return position; }
   double getMass() { return mass; }
   
   void setMass(double mass) { this.mass = mass; }
