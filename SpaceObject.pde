@@ -1,4 +1,4 @@
-private static final float MAX_INFLUENCE_ACCEL = 10;
+private static final float MAX_INFLUENCE = 10;
 
 abstract class SpaceObject {
   private int id;
@@ -85,26 +85,22 @@ abstract class SpaceObject {
   /**
     Returns and applies the influence vector of another object on this
   */
-  PVector applyInfluenceVector(List<SpaceObject> space) {
+  PVector applyInfluenceVector(List<SpaceObject> objects) {
     double mass = getMass();
-    PVector velocity = getVelocity();
-    PVector position = getPosition();
-    for(int i = 0; i < space.size(); i++) {
-      PVector influence = new PVector(0, 0);
-      SpaceObject s = space.get(i);
-      float dist = position.dist(s.getPosition());
-      if(dist < MAX_DISTANCE) {
-        double r = dist * SCALE;
-        if(r == 0) return new PVector(0,0); // If the planet being checked is itself (or directly on top), don't move
-        double force = G * ((mass * s.getMass()) / (r * r)); // G defined in orbit
+    PVector influence = new PVector();
+    for(SpaceObject s : objects) {
+      float distSq = position.copy().sub(s.getPosition()).magSq();
+      if(distSq < MAX_DISTANCE * MAX_DISTANCE) {
+        double rSq = distSq * SCALE * SCALE;
+        if(rSq == 0) continue; // If the planet being checked is itself (or directly on top), don't move
+        double force = G * mass * s.getMass() / rSq; // G defined in orbit
         influence.add(new PVector(s.getPosition().x - position.x, s.getPosition().y - position.y).setMag((float)(force / mass)));
       }
-      // Prevent insane acceleration
-      influence.limit(MAX_INFLUENCE_ACCEL);
-      velocity.add(influence);
     }
-    // TODO: is this supposed to be `return velocity;`?
-    return new PVector();
+    // Prevent insane acceleration
+    influence.limit(MAX_INFLUENCE);
+    addVelocity(influence);
+    return influence;
   }
   
   /**

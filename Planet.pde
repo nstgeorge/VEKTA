@@ -55,7 +55,7 @@ class Planet extends SpaceObject {
   }
   
   void onDestroy(SpaceObject s) {
-    //println("Planet destroyed with radius: " + getRadius());
+    println("Planet destroyed with radius: " + getRadius());
     
     // Add this object's mass and radius to the mass and radius of the destroying object
     if(s instanceof Planet) {

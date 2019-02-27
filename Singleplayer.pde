@@ -70,32 +70,29 @@ class Singleplayer implements Gamemode {
        0.0, 1.0, 0.0);
     }
     
-    if(paused) {
-      return;
-    }
-    
     SpaceObject closestObject = null;
     shortestDistance = Integer.MAX_VALUE;
+    planetCount = 0;
     for(SpaceObject s : objects) {
-      if(s instanceof Planet) {
-        planetCount++;
-        if(s.getPosition().dist(playerShip.getPosition()) < shortestDistance) {
-          closestObject = s;
-          shortestDistance = s.getPosition().dist(playerShip.getPosition());
+      if(!paused) {
+        if(s instanceof Planet) {
+          planetCount++;
+          if(s.getPosition().dist(playerShip.getPosition()) < shortestDistance) {
+            closestObject = s;
+            shortestDistance = s.getPosition().dist(playerShip.getPosition());
+          }
         }
-      }
-      
-      s.applyInfluenceVector(objects);
-      
-      for(SpaceObject other : objects) {
-        if(s != other && s.collidesWith(other)/* && !markedForDeath.contains(other)*/) {
-          if(other.shouldDestroy(s)) {
-            s.onDestroy(other);
-            removeObject(s);
+        s.update();
+        s.applyInfluenceVector(objects);
+        for(SpaceObject other : objects) {
+          if(s != other && s.collidesWith(other)) {
+            if(other.shouldDestroy(s)) {
+              s.onDestroy(other);
+              removeObject(s);
+            }
           }
         }
       }
-      s.update();
       s.draw();
       s.drawTrail();
     }
@@ -104,23 +101,6 @@ class Singleplayer implements Gamemode {
     objects.addAll(markedForAddition);
     markedForDeath.clear();
     markedForAddition.clear();
-    
-    /*for(Spaceship s : ships) {
-      
-      drawTrail(s);
-      s.draw();
-      for(Projectile projectile : s.getProjectiles()) {
-        if(projectile != null) {
-          if(!paused) {
-            List influencers = planets;
-            projectile.applyInfluenceVector((List<SpaceObject>)influencers);
-            projectile.update();
-          }
-           projectile.draw();
-        }  
-      }
-    }*/
-    planetCount = 0;
     
     // Info
     if(!dead) {
@@ -161,7 +141,6 @@ class Singleplayer implements Gamemode {
       }  
       text(closestObjectString, 50, height - 100);
     }
-    
     // Menus
     else {
       hint(DISABLE_DEPTH_TEST);
