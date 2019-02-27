@@ -95,10 +95,9 @@ void draw() {
   if(modePicked) {
     if(selectedMode == 1) exit();
     else if(!switchedToGame) {
-      if(selectedMode == 0) game = new Singleplayer();
+      if(selectedMode == 0) startGamemode(new Singleplayer());
       //if(selectedMode == 1) game = new Multiplayer();
       if(getSetting("music") > 0) theme.stop();
-      game.init();
       switchedToGame = true;
     }
   }
@@ -179,8 +178,7 @@ void keyPressed() {
           loop();
           break;
         case(1):
-          clearOverlay();
-          game.init();
+          game.restart();
           paused = false;
           break;
         case(2):
@@ -227,6 +225,12 @@ void mouseWheel(MouseEvent event) {
   if(modePicked) {
     game.mouseWheel(event.getCount());
   }
+}
+
+void startGamemode(Gamemode game) {
+  clearOverlay();
+  this.game = game;
+  game.init();
 }
 
 void clearOverlay() {

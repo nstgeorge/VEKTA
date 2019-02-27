@@ -19,34 +19,35 @@ class Singleplayer implements Gamemode {
   
   UniverseGen generator = new UniverseGen(80000, 1200);
   
-  ArrayList<Planet> planets = new ArrayList<Planet>();
-  ArrayList<Spaceship> ships = new ArrayList<Spaceship>();
-  ArrayList<ArrayList<PVector>> oldPositions;
+  List<SpaceObject> objects = new ArrayList<SpaceObject>();
+  // MAJOR TODO: optimize the heck out of this using List<PVector[TRAIL_LENGTH]> instead of List<List<PVector>>
+  List<List<PVector>> oldPositions;
+  Queue<Integer> positionsToReuse = new ArrayDeque<Integer>();
   
-  ArrayList<SpaceObject> markedForDeath = new ArrayList<SpaceObject>();
-  ArrayList<SpaceObject> markedForAddition = new ArrayList<SpaceObject>();
+  List<SpaceObject> markedForDeath = new ArrayList<SpaceObject>();
+  List<SpaceObject> markedForAddition = new ArrayList<SpaceObject>();
   
   // UI Variables (not real time updated)
   float shortDist;
   float speed;
   
+  @Override
   void init() {
-    // Clear all previous data
-    planets.clear();
-    ships.clear();
-    clearOverlay();
-    
     background(0);
     
     if(getSetting("music") > 0 && !atmosphere.isPlaying()) atmosphere.loop();
     
     frameCount = 0;
     dead = false;
-    oldPositions = new ArrayList<ArrayList<PVector>>();
+    oldPositions = new ArrayList<List<PVector>>();
     generator = new UniverseGen(8000, 120);
-    planets = generator.generate(); 
     
-    ships.add(new Spaceship(
+    // Add initial planets
+    for(Planet p : generator.generate()) {
+      addObject(p);
+    }
+    
+    playerShip = new Spaceship(
       "VEKTA I",
       5000,  // Mass
       5,     // Radius
@@ -55,26 +56,13 @@ class Singleplayer implements Gamemode {
       0, 0,    // Velocity
       color(0, 255, 0),
       0, 50, 60  // Control scheme, Speed, and Handling
-    ));
-    
-    // Initialize trails
-    for(SpaceObject p : planets) {
-      ArrayList<PVector> init = new ArrayList<PVector>();
-      oldPositions.add(init);
-      oldPositions.get(p.getID()).add(new PVector(p.getPosition().x, p.getPosition().y));
-    }
-    
-    playerShip = ships.get(0);
-    playerShip.setID(planets.size());
-    oldPositions.add(new ArrayList<PVector>());
-    Spaceship s = playerShip;
-    oldPositions.get(s.getID()).add(new PVector(s.getPosition().x, s.getPosition().y));
+    );
+    addObject(playerShip);
   }
   
+  @Override
   void render() {
     background(0);
-    SpaceObject closestObject = null;
-    shortestDistance = Integer.MAX_VALUE;
     
     if(!dead) {
       pos = playerShip.getPosition();
@@ -84,101 +72,78 @@ class Singleplayer implements Gamemode {
        0.0, 1.0, 0.0);
     }
     
-    // TODO: consolidate all collision logic to one DRY code block to prevent markedForDeath leaking
-    for(Planet p : planets) {
-      if(p.getPosition().dist(playerShip.getPosition()) < shortestDistance) {
-        closestObject = p;
-        shortestDistance = (float)p.getPosition().dist(playerShip.getPosition());
-      }
-      if(!paused) {
-        ArrayList influencers = planets;
-        p.applyInfluenceVector((ArrayList<SpaceObject>)influencers);
-      }
-      for(Planet p2 : planets) {
-        if(!markedForDeath.contains(p2) && p.collidesWith(p2) && p != p2) {
-          if(p.getMass() > p2.getMass()) {
-            // TODO: refactor onDestroy(..) and removeObject(..) logic to a separate method
-            p2.onDestroy(p);
-            removeObject(p2);
-          }
-          else {
-            p.onDestroy(p2);
-            removeObject(p);
-          }
-        }
-      }
-      for(Spaceship s : ships) {
-        if(s.collidesWith(p)) {
-          // Assumes ship explodes on contact with anything
-          s.onDestroy(p);
-          dead = true;
-          if(getSetting("sound") > 0) { 
-            engine.stop();
-            death.play();
-          }
-          removeObject(s);
-        }
-        for(Projectile projectile : s.getProjectiles()) {
-            if(projectile != null) {
-              if(projectile.collidesWith(p)) {
-                p.onDestroy(projectile);
-                removeObject(p);
-                s.removeProjectile(projectile);
-              }
-              for(Spaceship s2 : ships) {
-                if(projectile.collidesWith(s2) && s != s2) {
-                  s2.onDestroy(projectile);
-                  removeObject(s2);
-                }  
-              }  
-            }  
-          }
-        } 
-        if(!paused) p.update();
-        p.draw();
-        drawTrail(p);
-        planetCount++;
-    }
-    for(SpaceObject s : markedForDeath) {
-      if(s instanceof Spaceship) {
-        ships.remove(s);
-      }
+    SpaceObject closestObject = null;
+    shortestDistance = Integer.MAX_VALUE;
+    for(SpaceObject s : objects) {
       if(s instanceof Planet) {
-        planets.remove(s);
+        planetCount++;
+        if(s.getPosition().dist(playerShip.getPosition()) < shortestDistance) {
+          closestObject = s;
+          shortestDistance = s.getPosition().dist(playerShip.getPosition());
+        }
       }
+      
+      // TODO: should probably just skip this entire loop if paused
+      if(!paused) {
+        PVector influence = s.applyInfluenceVector(objects);
+        if(s instanceof Spaceship) {
+          // TODO: eventually move to Spaceship::draw()
+          stroke(255, 0, 0);
+          line(s.getPosition().x, s.getPosition().y, s.getPosition().x + (influence.x * 100), s.getPosition().y + (influence.y * 100));
+        }
+      }
+      
+      for(SpaceObject other : objects) {
+        if(s != other && s.collidesWith(other)/* && !markedForDeath.contains(other)*/) {
+          if(other.shouldDestroy(s)) {
+            s.onDestroy(other);
+            removeObject(s);
+          }
+          
+          // TODO: move this code to Spaceship::onDestroy(..)
+          if(s instanceof Spaceship) {
+            dead = true;
+            if(getSetting("sound") > 0) { 
+              engine.stop();
+              death.play();
+            }
+          }
+        }
+      }
+      if(!paused) s.update();
+      s.draw();
+      // TODO: move this rendering logic to SpaceObject
+      // this would allow specific classes like Projectile to override this functionality
+      drawTrail(s);
+    }
+    
+    for(SpaceObject s : markedForDeath) {
+      if(!positionsToReuse.contains(s.getID())) {
+        positionsToReuse.add(s.getID());
+      }
+      objects.remove(s);
     }
     for(SpaceObject s : markedForAddition) {
-      if(s instanceof Spaceship) {
-        ships.add((Spaceship)s);
-      }
-      if(s instanceof Planet) {
-        planets.add((Planet)s);
-      }
+      objects.add(s);
     }
     markedForDeath.clear();
     markedForAddition.clear();
-    for(Spaceship s : ships) {
-      if(!paused) {
-        ArrayList influencers = planets;
-        PVector influence = s.applyInfluenceVector((ArrayList<SpaceObject>)influencers);
-        s.update();
-        // Draw influence vector on ship
-        stroke(255, 0, 0);
-        line(s.getPosition().x, s.getPosition().y, s.getPosition().x + (influence.x * 100), s.getPosition().y + (influence.y * 100));
-      }
+    
+    /*for(Spaceship s : ships) {
+      
       drawTrail(s);
       s.draw();
       for(Projectile projectile : s.getProjectiles()) {
         if(projectile != null) {
           if(!paused) {
-            ArrayList influencers = planets;
-            projectile.applyInfluenceVector((ArrayList<SpaceObject>)influencers);
+            List influencers = planets;
+            projectile.applyInfluenceVector((List<SpaceObject>)influencers);
             projectile.update();
           }
            projectile.draw();
         }  
       }
-    }
+    }*/
     planetCount = 0;
     
     // Info
@@ -203,8 +168,8 @@ class Singleplayer implements Gamemode {
       // Text - Far right
       text("Health = " + health + "\nAmmunition = " + ammunition, width - 300, height - 100);
       // Ship heading indicator
-      drawDial("Heading", ships.get(0).getHeading(), width - 370, height - 65, 50, color(0, 255, 0));
-      drawDial("Velocity", ships.get(0).getVelocity().copy(), width - 500, height - 65, 50, color(0, 255, 0));
+      drawDial("Heading", playerShip.getHeading(), width - 370, height - 65, 50, color(0, 255, 0));
+      drawDial("Velocity", playerShip.getVelocity().copy(), width - 500, height - 65, 50, color(0, 255, 0));
       // Text - left
       String closestObjectString;
       if(closestObject == null) {
@@ -276,10 +241,10 @@ class Singleplayer implements Gamemode {
   }
   
   void drawTrail(SpaceObject p) {
-    ArrayList<PVector> old = oldPositions.get(p.getID());
+    List<PVector> old = oldPositions.get(p.getID());
     if(!paused) {
       if(old.size() > TRAIL_LENGTH) old.remove(0);
-      old.add(new PVector(p.getPosition().x, p.getPosition().y));
+      old.add(p.getPosition().copy());
     }  
     for(int i = 0; i < old.size() - 1; i++) {
       // Get two positions
@@ -294,19 +259,19 @@ class Singleplayer implements Gamemode {
   }
   
   void updateUIInformation() {
-    Spaceship main = ships.get(0);
     health = 100;
     shortDist = (float)round(shortestDistance * 100) / 100;
     speed = (float)round(spd * 100) / 100;
-    ammunition = main.getProjectilesLeft();
+    ammunition = playerShip.getProjectilesLeft();
     position = round(pos.x) + ", " + round(pos.y);
   }
   
+  @Override
   void keyPressed(char key) {
     if(dead) {
       if(key == 'x') {
         lowPass.stop();
-        init();
+        restart();
       }
     } else {
      if(key == 'k') {
@@ -318,29 +283,40 @@ class Singleplayer implements Gamemode {
      if(key == 'f') {
        mouseWheel(1);
      }
-     for(Spaceship s : ships) {
-       s.keyPress(key);
-     }
+     playerShip.keyPress(key);
     } 
   }
   
+  @Override
   void keyReleased(char key) {
-    for(Spaceship s : ships) {
-      s.keyReleased(key);
-    }
+    playerShip.keyReleased(key);
   }
   
+  @Override
   void mouseWheel(float amount) {
     zoom = max(.1, min(3, zoom * (1 + amount * .1)));
+  }
+  
+  @Override
+  void restart() {
+    startGamemode(new Singleplayer());
   }
   
   @Override
   boolean addObject(Object object) {
     if(object instanceof SpaceObject) {
       SpaceObject s = (SpaceObject)object;
-      s.setID(oldPositions.size());
-      oldPositions.add(new ArrayList<PVector>());
+      Integer id = positionsToReuse.poll();
+      if(id != null) {
+        oldPositions.get(id).clear();
+      }
+      else {
+        id = oldPositions.size();
+        oldPositions.add(new ArrayList<PVector>());
+      }
+      s.setID(id);
       markedForAddition.add(s);
+      return true;
     }
     return false;
   }
@@ -349,6 +325,7 @@ class Singleplayer implements Gamemode {
   boolean removeObject(Object object) {
     if(object instanceof SpaceObject) {
       markedForDeath.add((SpaceObject)object);
+      return true;
     }
     return false;
   }
