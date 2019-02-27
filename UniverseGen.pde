@@ -22,10 +22,10 @@ class UniverseGen {
     // Create the center body
     double power = Math.pow(10, random(28, 31));
     double centerMass = random(0.8, 4) * power;
-    float radius = (float)(random(3, 6) * (centerMass / power));
+    float centerDensity = random(1, 2);
     system.add(new Planet(
       centerMass, // Mass
-      radius,   // Radius
+      centerDensity,   // Radius
       pos,  // Position
       new PVector(),  // Velocity
       color(random(100, 255), random(100, 255), random(100, 255))
@@ -34,10 +34,11 @@ class UniverseGen {
     // Generate planets around body
     int planets = (int)random(1, 8);
     for(int i = 0; i <= planets; i++) {
-      float radiusLoc = (float)(random(600, 2000) * SCALE);
+      float radiusLoc = random(100, 2000);
       float speed = sqrt((float)(G * centerMass / radiusLoc));
       double mass = random(0.8, 4) * power;
-      float density = random(.5, 1.5);
+      float density = random((float)4, 8);
+      println(speed);//////
       system.add(new Planet(
         mass, // Mass
         density,   // Density

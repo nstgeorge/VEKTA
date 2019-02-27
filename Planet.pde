@@ -3,7 +3,7 @@
 */
 class Planet extends SpaceObject {
   // Default Planet settings
-  private final double DEF_MASS = 1.989 * Math.pow(10, 30);
+  private final double DEF_MASS = 1.989e30;
   private final PVector DEF_POSITION = new PVector(100, 100);
   private final PVector DEF_VELOCITY = new PVector(0,0);
   private final color DEF_COLOR = color(255, 255, 255);
@@ -116,7 +116,7 @@ class Planet extends SpaceObject {
   }
   
   void updateRadius() {
-    radiusCache = pow((float)getMass() * getDensity(), (float)1/3) * DISTANCE_SCALE;
+    radiusCache = pow((float)getMass() / getDensity(), (float)1/3) / (float)SCALE;
   }
   
   @Override
