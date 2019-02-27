@@ -6,6 +6,8 @@ abstract class SpaceObject {
   PVector position;
   PVector velocity;
   
+  PVector[] trail = new PVector[TRAIL_LENGTH];
+  
   SpaceObject() {
     this(new PVector(), new PVector());
   }
@@ -126,10 +128,29 @@ abstract class SpaceObject {
   */
   void onDestroy(SpaceObject s) {}
   
-  void draw() {}
+  abstract void draw();
+  
+  void drawTrail() {
+    // Update trail vectors
+    for(int i = trail.length - 1; i > 0; i--) {
+      trail[i] = trail[i - 1];
+    }
+    trail[0] = position.copy();
+    
+    for(int i = 1; i < trail.length; i++) {
+      PVector oldPos = trail[i - 1];
+      PVector newPos = trail[i];
+      if(newPos == null) {
+        break;
+      }
+      // Set the color and draw the line segment
+      stroke(lerpColor(getColor(), color(0), (float)i / trail.length));
+      line(oldPos.x, oldPos.y,  newPos.x, newPos.y);
+    }
+  }
   
   /**
-    Update the position of this Object.
+    Update the position of this SpaceObject.
   */
   void update() {}
 }  
