@@ -97,6 +97,13 @@ abstract class SpaceObject {
   }
   
   /**
+    When colliding, does this object destroy the other?
+  */
+  boolean shouldDestroy(SpaceObject other) {
+    return getMass() >= other.getMass();
+  }
+  
+  /**
     Do this when destroyed by SpaceObject s
   */
   void onDestroy(SpaceObject s) {}

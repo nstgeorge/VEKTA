@@ -54,4 +54,8 @@ class Projectile extends SpaceObject {
   boolean collidesWith(SpaceObject s) {
     return s != getParent() && super.collidesWith(s);
   }
+  
+  boolean shouldDestroy(SpaceObject other) {
+    return true;
+  }
 }  

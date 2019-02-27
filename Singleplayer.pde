@@ -94,8 +94,8 @@ class Singleplayer implements Gamemode {
       }
       
       for(SpaceObject other : objects) {
-        if(s != other && s.collidesWith(other) && !markedForDeath.contains(s)) {
-          if(s.getMass() < other.getMass()) {
+        if(s != other && s.collidesWith(other)/* && !markedForDeath.contains(other)*/) {
+          if(other.shouldDestroy(s)) {
             s.onDestroy(other);
             removeObject(s);
           }
@@ -110,32 +110,11 @@ class Singleplayer implements Gamemode {
           }
         }
       }
-      /*for(Spaceship s : ships) {
-        if(s.collidesWith(p)) {
-          // Assumes ship explodes on contact with anything
-          s.onDestroy(p);
-          
-          
-        }
-        for(Projectile projectile : s.getProjectiles()) {
-            if(projectile != null) {
-              if(projectile.collidesWith(p)) {
-                p.onDestroy(projectile);
-                removeObject(p);
-                s.removeProjectile(projectile);
-              }
-              for(Spaceship s2 : ships) {
-                if(projectile.collidesWith(s2) && s != s2) {
-                  s2.onDestroy(projectile);
-                  removeObject(s2);
-                }  
-              }  
-            }  
-          }
-        }*/
-        if(!paused) s.update();
-        s.draw();
-        drawTrail(s);
+      if(!paused) s.update();
+      s.draw();
+      // TODO: move this rendering logic to SpaceObject
+      // this would allow specific classes like Projectile to override this functionality
+      drawTrail(s);
     }
     
     for(SpaceObject s : markedForDeath) {
