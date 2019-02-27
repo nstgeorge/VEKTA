@@ -301,7 +301,8 @@ class Singleplayer implements Gamemode {
     if(dead) {
       if(key == 'x') {
         lowPass.stop();
-        init();
+        //init();
+        startGamemode(new Singleplayer());
       }
     } else {
      if(key == 'k') {
@@ -333,14 +334,13 @@ class Singleplayer implements Gamemode {
   boolean addObject(Object object) {
     if(object instanceof SpaceObject) {
       SpaceObject s = (SpaceObject)object;
-      int id;
-      if(positionsToReuse.isEmpty()) {
-        id = oldPositions.size();
-        oldPositions.add(new ArrayList<PVector>());
+      Integer id = positionsToReuse.poll();
+      if(id != null) {
+        oldPositions.get(id).clear();
       }
       else {
-        id = positionsToReuse.remove();
-        oldPositions.get(id).clear();
+        id = oldPositions.size();
+        oldPositions.add(new ArrayList<PVector>());
       }
       s.setID(id);
       markedForAddition.add(s);

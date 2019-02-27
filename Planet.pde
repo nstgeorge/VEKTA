@@ -33,10 +33,6 @@ class Planet extends SpaceObject {
     c = DEF_COLOR;
   }
   
-  public Planet(double mass, float radius, int x, int y, float xVelocity, float yVelocity, color c) {
-    this(mass, radius, new PVector(x, y), new PVector(xVelocity, yVelocity), c);
-  }
-  
   public Planet(double mass, float radius, PVector position, PVector velocity, color c) {
     
     this.name = nameParts1[(int)random(nameParts1.length)] + nameParts2[(int)random(nameParts2.length)];
@@ -72,7 +68,7 @@ class Planet extends SpaceObject {
         // Split large planet
         double newMass = getMass() / 2;
         float newRadius = getRadius() / sqrt(2);
-        PVector offset = PVector.random2D().normalize().mult(newRadius * SPLIT_DISTANCE_SCALE);
+        PVector offset = PVector.random2D().mult(newRadius * SPLIT_DISTANCE_SCALE);
         PVector splitVelocity = /*PVector.random2D()*/getPosition().copy().sub(s.getPosition()).rotate(90).normalize().mult(SPLIT_VELOCITY_SCALE);
         // Note that the planet ids are overwritten by addObject(..) logic
         Planet a = new Planet(newMass, newRadius, getPosition().copy().add(offset), getVelocity().copy().add(splitVelocity), getColor());

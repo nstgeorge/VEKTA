@@ -10,25 +10,12 @@ class UniverseGen {
   
   public List<Planet> generate() {
     for(int i = 0; i < density; i++) {
-      float[] coords = {0, 0};
-      boolean unique = false;
-      
-      while(!unique) {
-        coords = generateCoordinates(size);
-        unique = true;
-        for(Planet s : space) {
-          if(s.getPosition().x == coords[0] && s.getPosition().y == coords[1]) {
-            unique = false;
-          }
-        }
-      }
-      List<Planet> system = createSystem((int)coords[0], (int)coords[1]);
-      space.addAll(system);
+      space.addAll(createSystem(generateCoordinates(size)));
     }
     return space;
   }
   
-  private List<Planet> createSystem(int x, int y) {
+  private List<Planet> createSystem(PVector pos) {
     List<Planet> system = new ArrayList<Planet>();
     // Create the center body
     double power = Math.pow(10, random(28, 31));
@@ -37,8 +24,8 @@ class UniverseGen {
     system.add(new Planet(
       centerMass, // Mass
       radius,   // Radius
-      x, y,  // Coords
-      0, 0,  // Velocity
+      pos,  // Coords
+      new PVector(),  // Velocity
       color(random(100, 255), random(100, 255), random(100, 255))
     ));
     
@@ -52,16 +39,15 @@ class UniverseGen {
       system.add(new Planet(
         mass, // Mass
         radiusSize,   // Radius
-        (int)(x + radiusLoc), y,  // Coords
-        0, (float)(velocity),  // Velocity
+        new PVector(pos.x + radiusLoc, pos.y),  // Coords
+        new PVector(0, velocity),  // Velocity
         color(random(100, 255), random(100, 255), random(100, 255))
       ));
     }  
     return system;
   }
   
-  private float[] generateCoordinates(float max) {
-    float[] retVal = {random(max) - max / 2, random(max) - max / 2};
-    return retVal;
+  private PVector generateCoordinates(float max) {
+    return PVector.random2D().mult(random(max));
   }  
 }  
