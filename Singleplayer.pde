@@ -22,6 +22,7 @@ class Singleplayer implements Gamemode {
   List<Planet> planets = new ArrayList<Planet>();
   List<Spaceship> ships = new ArrayList<Spaceship>();
   List<List<PVector>> oldPositions;
+  Queue<Integer> positionsToReuse = new ArrayDeque<Integer>();
   
   List<SpaceObject> markedForDeath = new ArrayList<SpaceObject>();
   List<SpaceObject> markedForAddition = new ArrayList<SpaceObject>();
@@ -45,14 +46,8 @@ class Singleplayer implements Gamemode {
     oldPositions = new ArrayList<List<PVector>>();
     generator = new UniverseGen(8000, 120);
     
-    //ships.add();
-    
-    // Initialize trails
+    // Add initial planets
     for(Planet p : generator.generate()) {
-      //p.setID(oldPositions.size());
-      //List<PVector> init = new ArrayList<PVector>();
-      //oldPositions.add(init);
-      //oldPositions.get(p.getID()).add(p.getPosition().copy());
       addObject(p);
     }
     
@@ -67,9 +62,6 @@ class Singleplayer implements Gamemode {
       0, 50, 60  // Control scheme, Speed, and Handling
     );
     addObject(playerShip);
-    //playerShip.setID(planets.size());
-    //oldPositions.add(new ArrayList<PVector>());
-    //oldPositions.get(playerShip.getID()).add(playerShip.getPosition().copy());
   }
   
   void render() {
@@ -141,6 +133,7 @@ class Singleplayer implements Gamemode {
         planetCount++;
     }
     for(SpaceObject s : markedForDeath) {
+      positionsToReuse.add(s.getID());
       if(s instanceof Spaceship) {
         ships.remove(s);
       }
@@ -339,9 +332,16 @@ class Singleplayer implements Gamemode {
   boolean addObject(Object object) {
     if(object instanceof SpaceObject) {
       SpaceObject s = (SpaceObject)object;
-      println(oldPositions.size());///
-      s.setID(oldPositions.size());
-      oldPositions.add(new ArrayList<PVector>());
+      int id;
+      if(positionsToReuse.isEmpty()) {
+        id = oldPositions.size();
+        oldPositions.add(new ArrayList<PVector>());
+      }
+      else {
+        id = positionsToReuse.remove();
+        oldPositions.get(id).clear();
+      }
+      s.setID(id);
       markedForAddition.add(s);
       return true;
     }

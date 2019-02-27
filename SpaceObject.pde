@@ -1,7 +1,7 @@
 private static final float MAX_INFLUENCE_ACCEL = 10;
 
 abstract class SpaceObject {
-  int id;
+  private int id;
   
   /** 
     Gets the unique ID of an object
