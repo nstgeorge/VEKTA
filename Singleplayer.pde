@@ -21,6 +21,7 @@ class Singleplayer implements Gamemode {
   
   List<Planet> planets = new ArrayList<Planet>();
   List<Spaceship> ships = new ArrayList<Spaceship>();
+  // MAJOR TODO: optimize the heck out of this using List<PVector[TRAIL_LENGTH]> instead of List<List<PVector>>
   List<List<PVector>> oldPositions;
   Queue<Integer> positionsToReuse = new ArrayDeque<Integer>();
   
@@ -273,7 +274,7 @@ class Singleplayer implements Gamemode {
     List<PVector> old = oldPositions.get(p.getID());
     if(!paused) {
       if(old.size() > TRAIL_LENGTH) old.remove(0);
-      old.add(new PVector(p.getPosition().x, p.getPosition().y));
+      old.add(p.getPosition().copy());
     }  
     for(int i = 0; i < old.size() - 1; i++) {
       // Get two positions
