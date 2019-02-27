@@ -1,3 +1,5 @@
+static final int MIN_SPAWN_DISTANCE = 500;
+
 class UniverseGen {
   int size;
   int density;
@@ -48,6 +50,6 @@ class UniverseGen {
   }
   
   private PVector generateCoordinates(float max) {
-    return PVector.random2D().mult(random(max));
+    return PVector.random2D().mult(MIN_SPAWN_DISTANCE + random(max - MIN_SPAWN_DISTANCE));
   }  
 }  
