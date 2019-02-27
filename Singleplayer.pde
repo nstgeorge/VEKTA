@@ -1,5 +1,7 @@
 import java.util.*;
 
+private static int nextID = 0;
+
 class Singleplayer implements Gamemode {
   
   int planetCount = 0;
@@ -20,9 +22,6 @@ class Singleplayer implements Gamemode {
   UniverseGen generator = new UniverseGen(80000, 1200);
   
   List<SpaceObject> objects = new ArrayList<SpaceObject>();
-  // MAJOR TODO: optimize the heck out of this using List<PVector[TRAIL_LENGTH]> instead of List<List<PVector>>
-  List<List<PVector>> oldPositions;
-  Queue<Integer> positionsToReuse = new ArrayDeque<Integer>();
   
   List<SpaceObject> markedForDeath = new ArrayList<SpaceObject>();
   List<SpaceObject> markedForAddition = new ArrayList<SpaceObject>();
@@ -39,7 +38,6 @@ class Singleplayer implements Gamemode {
     
     frameCount = 0;
     dead = false;
-    oldPositions = new ArrayList<List<PVector>>();
     generator = new UniverseGen(8000, 120);
     
     // Add initial planets
@@ -52,8 +50,8 @@ class Singleplayer implements Gamemode {
       5000,  // Mass
       5,     // Radius
       new PVector(1, 0), // Heading
-      100, 100, // Position
-      0, 0,    // Velocity
+      new PVector(), // Position
+      new PVector(),    // Velocity
       color(0, 255, 0),
       0, 50, 60  // Control scheme, Speed, and Handling
     );
@@ -74,77 +72,35 @@ class Singleplayer implements Gamemode {
     
     SpaceObject closestObject = null;
     shortestDistance = Integer.MAX_VALUE;
+    planetCount = 0;
     for(SpaceObject s : objects) {
-      if(s instanceof Planet) {
-        planetCount++;
-        if(s.getPosition().dist(playerShip.getPosition()) < shortestDistance) {
-          closestObject = s;
-          shortestDistance = s.getPosition().dist(playerShip.getPosition());
-        }
-      }
-      
-      // TODO: should probably just skip this entire loop if paused
       if(!paused) {
-        PVector influence = s.applyInfluenceVector(objects);
-        if(s instanceof Spaceship) {
-          // TODO: eventually move to Spaceship::draw()
-          stroke(255, 0, 0);
-          line(s.getPosition().x, s.getPosition().y, s.getPosition().x + (influence.x * 100), s.getPosition().y + (influence.y * 100));
-        }
-      }
-      
-      for(SpaceObject other : objects) {
-        if(s != other && s.collidesWith(other)/* && !markedForDeath.contains(other)*/) {
-          if(other.shouldDestroy(s)) {
-            s.onDestroy(other);
-            removeObject(s);
+        if(s instanceof Planet) {
+          planetCount++;
+          if(s.getPosition().dist(playerShip.getPosition()) < shortestDistance) {
+            closestObject = s;
+            shortestDistance = s.getPosition().dist(playerShip.getPosition());
           }
-          
-          // TODO: move this code to Spaceship::onDestroy(..)
-          if(s instanceof Spaceship) {
-            dead = true;
-            if(getSetting("sound") > 0) { 
-              engine.stop();
-              death.play();
+        }
+        s.update();
+        s.applyInfluenceVector(objects);
+        for(SpaceObject other : objects) {
+          if(s != other && s.collidesWith(other)) {
+            if(other.shouldDestroy(s)) {
+              s.onDestroy(other);
+              removeObject(s);
             }
           }
         }
       }
-      if(!paused) s.update();
       s.draw();
-      // TODO: move this rendering logic to SpaceObject
-      // this would allow specific classes like Projectile to override this functionality
-      drawTrail(s);
+      s.drawTrail();
     }
     
-    for(SpaceObject s : markedForDeath) {
-      if(!positionsToReuse.contains(s.getID())) {
-        positionsToReuse.add(s.getID());
-      }
-      objects.remove(s);
-    }
-    for(SpaceObject s : markedForAddition) {
-      objects.add(s);
-    }
+    objects.removeAll(markedForDeath);
+    objects.addAll(markedForAddition);
     markedForDeath.clear();
     markedForAddition.clear();
-    
-    /*for(Spaceship s : ships) {
-      
-      drawTrail(s);
-      s.draw();
-      for(Projectile projectile : s.getProjectiles()) {
-        if(projectile != null) {
-          if(!paused) {
-            List influencers = planets;
-            projectile.applyInfluenceVector((List<SpaceObject>)influencers);
-            projectile.update();
-          }
-           projectile.draw();
-        }  
-      }
-    }*/
-    planetCount = 0;
     
     // Info
     if(!dead) {
@@ -185,7 +141,6 @@ class Singleplayer implements Gamemode {
       }  
       text(closestObjectString, 50, height - 100);
     }
-    
     // Menus
     else {
       hint(DISABLE_DEPTH_TEST);
@@ -240,24 +195,6 @@ class Singleplayer implements Gamemode {
     line(locX + endpoint.x, locY + endpoint.y, locX + cos(angle+.3) * (length *.8), locY + sin(angle+.3) * (length *.8));
   }
   
-  void drawTrail(SpaceObject p) {
-    List<PVector> old = oldPositions.get(p.getID());
-    if(!paused) {
-      if(old.size() > TRAIL_LENGTH) old.remove(0);
-      old.add(p.getPosition().copy());
-    }  
-    for(int i = 0; i < old.size() - 1; i++) {
-      // Get two positions
-      PVector oldPos = old.get(i);
-      PVector newPos = old.get(i + 1);
-      // Set the color and draw the line
-      stroke(lerpColor(p.getColor(), color(0), (float)(old.size() - i) / old.size()));
-      line(oldPos.x, oldPos.y,  newPos.x, newPos.y);
-      // set oldPositions value
-      oldPositions.set(p.getID(), old);
-    }   
-  }
-  
   void updateUIInformation() {
     health = 100;
     shortDist = (float)round(shortestDistance * 100) / 100;
@@ -306,15 +243,7 @@ class Singleplayer implements Gamemode {
   boolean addObject(Object object) {
     if(object instanceof SpaceObject) {
       SpaceObject s = (SpaceObject)object;
-      Integer id = positionsToReuse.poll();
-      if(id != null) {
-        oldPositions.get(id).clear();
-      }
-      else {
-        id = oldPositions.size();
-        oldPositions.add(new ArrayList<PVector>());
-      }
-      s.setID(id);
+      s.setID(nextID++);
       markedForAddition.add(s);
       return true;
     }

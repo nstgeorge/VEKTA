@@ -18,8 +18,6 @@ class Planet extends SpaceObject {
   private String name;
   private double mass;
   private float radius;
-  private PVector position;
-  private PVector velocity;
   private color c;
 
   /**
@@ -57,13 +55,14 @@ class Planet extends SpaceObject {
   }
   
   void onDestroy(SpaceObject s) {
-    //println("Planet destroyed with radius: " + getRadius());
+    println("Planet destroyed with radius: " + getRadius());
     
     // Add this object's mass and radius to the mass and radius of the destroying object
-    if(!(s instanceof Projectile)) {
-      s.setMass(s.getMass() + mass * SPLIT_MASS_DECAY);
-      s.setRadius(sqrt(s.getRadius() * s.getRadius() + radius * radius * SPLIT_MASS_DECAY * SPLIT_MASS_DECAY));
-    } else {
+    if(s instanceof Planet) {
+      Planet p = (Planet)s;
+      p.setMass(p.getMass() + mass * SPLIT_MASS_DECAY);
+      p.setRadius(sqrt(s.getRadius() * s.getRadius() + radius * radius * SPLIT_MASS_DECAY * SPLIT_MASS_DECAY));
+    } else if(s instanceof Projectile) {
       if(getRadius() >= MIN_SPLIT_RADIUS) {
         // Split large planet
         double newMass = getMass() / 2;
@@ -113,21 +112,6 @@ class Planet extends SpaceObject {
   
   void setColor(color c) {
     this.c = c;
-  }  
-  
-  @Override
-  PVector getPosition() {
-    return position.copy();
-  }
-  
-  @Override
-  PVector getVelocity() {
-    return velocity.copy();
-  }
-  
-  @Override
-  PVector addVelocity(PVector add) {
-    return velocity.add(add);
   }
   
   /**
