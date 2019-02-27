@@ -19,12 +19,12 @@ class Singleplayer implements Gamemode {
   
   UniverseGen generator = new UniverseGen(80000, 1200);
   
-  ArrayList<Planet> planets = new ArrayList<Planet>();
-  ArrayList<Spaceship> ships = new ArrayList<Spaceship>();
-  ArrayList<ArrayList<PVector>> oldPositions;
+  List<Planet> planets = new ArrayList<Planet>();
+  List<Spaceship> ships = new ArrayList<Spaceship>();
+  List<List<PVector>> oldPositions;
   
-  ArrayList<SpaceObject> markedForDeath = new ArrayList<SpaceObject>();
-  ArrayList<SpaceObject> markedForAddition = new ArrayList<SpaceObject>();
+  List<SpaceObject> markedForDeath = new ArrayList<SpaceObject>();
+  List<SpaceObject> markedForAddition = new ArrayList<SpaceObject>();
   
   // UI Variables (not real time updated)
   float shortDist;
@@ -42,7 +42,7 @@ class Singleplayer implements Gamemode {
     
     frameCount = 0;
     dead = false;
-    oldPositions = new ArrayList<ArrayList<PVector>>();
+    oldPositions = new ArrayList<List<PVector>>();
     generator = new UniverseGen(8000, 120);
     planets = generator.generate(); 
     
@@ -59,9 +59,10 @@ class Singleplayer implements Gamemode {
     
     // Initialize trails
     for(SpaceObject p : planets) {
-      ArrayList<PVector> init = new ArrayList<PVector>();
-      oldPositions.add(init);
-      oldPositions.get(p.getID()).add(new PVector(p.getPosition().x, p.getPosition().y));
+      //List<PVector> init = new ArrayList<PVector>();
+      //oldPositions.add(init);
+      //oldPositions.get(p.getID()).add(new PVector(p.getPosition().x, p.getPosition().y));
+      addObject(p);
     }
     
     playerShip = ships.get(0);
@@ -91,8 +92,8 @@ class Singleplayer implements Gamemode {
         shortestDistance = (float)p.getPosition().dist(playerShip.getPosition());
       }
       if(!paused) {
-        ArrayList influencers = planets;
-        p.applyInfluenceVector((ArrayList<SpaceObject>)influencers);
+        List influencers = planets;
+        p.applyInfluenceVector((List<SpaceObject>)influencers);
       }
       for(Planet p2 : planets) {
         if(!markedForDeath.contains(p2) && p.collidesWith(p2) && p != p2) {
@@ -159,8 +160,8 @@ class Singleplayer implements Gamemode {
     markedForAddition.clear();
     for(Spaceship s : ships) {
       if(!paused) {
-        ArrayList influencers = planets;
-        PVector influence = s.applyInfluenceVector((ArrayList<SpaceObject>)influencers);
+        List influencers = planets;
+        PVector influence = s.applyInfluenceVector((List<SpaceObject>)influencers);
         s.update();
         // Draw influence vector on ship
         stroke(255, 0, 0);
@@ -171,8 +172,8 @@ class Singleplayer implements Gamemode {
       for(Projectile projectile : s.getProjectiles()) {
         if(projectile != null) {
           if(!paused) {
-            ArrayList influencers = planets;
-            projectile.applyInfluenceVector((ArrayList<SpaceObject>)influencers);
+            List influencers = planets;
+            projectile.applyInfluenceVector((List<SpaceObject>)influencers);
             projectile.update();
           }
            projectile.draw();
@@ -276,7 +277,7 @@ class Singleplayer implements Gamemode {
   }
   
   void drawTrail(SpaceObject p) {
-    ArrayList<PVector> old = oldPositions.get(p.getID());
+    List<PVector> old = oldPositions.get(p.getID());
     if(!paused) {
       if(old.size() > TRAIL_LENGTH) old.remove(0);
       old.add(new PVector(p.getPosition().x, p.getPosition().y));

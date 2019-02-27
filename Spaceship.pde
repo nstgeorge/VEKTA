@@ -1,4 +1,4 @@
-class Spaceship implements SpaceObject {
+class Spaceship extends SpaceObject {
   // Default Shapeship settings
   private final double DEF_MASS = 1000;
   private final int DEF_RADIUS = 5;
@@ -184,35 +184,6 @@ class Spaceship implements SpaceObject {
       projectiles[numProjectiles] = new Projectile(position.copy(), heading.copy(), velocity.copy(), c);
       numProjectiles++;
     }
-  }  
-  
-  /**
-    Calculates influence of this ship *from* another object in space.
-  */
-  PVector applyInfluenceVector(ArrayList<SpaceObject> space) {
-    PVector influence = new PVector(0, 0);
-    for(int i = 0; i < space.size(); i++) {
-      SpaceObject s = space.get(i);
-      float dist = position.dist(s.getPosition());
-      if(dist < MAX_DISTANCE) {
-        double r = dist * SCALE;
-        if(r == 0) return new PVector(0,0); // If the planet being checked is itself (or directly on top), don't move
-        double force = G * ((mass * s.getMass()) / (r * r)); // G defined in orbit
-        influence.add(new PVector(s.getPosition().x - position.x, s.getPosition().y - position.y).setMag((float)(force / mass)));
-      }
-    }
-    
-    velocity.add(influence);
-    return influence;
-  }  
-  
-  /**
-    Checks if this planet collides with another planet
-  */
-  boolean collidesWith(SpaceObject s) {
-    double r = PVector.dist(position, s.getPosition());
-    if(r < (getRadius() + s.getRadius())) return true;
-    return false;
   }
   
   void onDestroy(SpaceObject s) {
@@ -220,10 +191,6 @@ class Spaceship implements SpaceObject {
   }
   
   // GETTERS / SETTERS ---------------------------------------------------------------
-  
-  int getID() { return id; }
-  
-  void setID(int id) { this.id = id; }
   
   String getName() {
     return name;

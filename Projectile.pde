@@ -1,4 +1,4 @@
-class Projectile implements SpaceObject {
+class Projectile extends SpaceObject {
   // Default settings
   private final double DEF_MASS = 1000;
   private final int DEF_RADIUS = 2;
@@ -36,28 +36,10 @@ class Projectile implements SpaceObject {
     ellipse(position.x, position.y, radius, radius);
   }
   
-  @Override
-  PVector applyInfluenceVector(ArrayList<SpaceObject> space) {
-    PVector influence = new PVector(0, 0);
-    for(int i = 0; i < space.size(); i++) {
-      SpaceObject s = space.get(i);
-      if(position.dist(s.getPosition()) < MAX_DISTANCE) {
-        double r = PVector.dist(position, s.getPosition()) * SCALE;
-        if(r == 0) return new PVector(0,0); // If the planet being checked is itself (or directly on top), don't move
-        double force = G * ((mass * s.getMass()) / (r * r)); // G defined in orbit
-        influence.add(new PVector(s.getPosition().x - position.x, s.getPosition().y - position.y).setMag((float)(force / mass)));
-      }
-    }
-    velocity.add(influence);
-    return influence;
-  }  
-  
   void update() {
     position.add(velocity);
   }  
   
-  int getID() { return id; }
-  void setID(int id) { this.id = id; }
   String getName() { return name; }
   color getColor() { return c; }
   float getRadius() { return radius; }
@@ -73,12 +55,4 @@ class Projectile implements SpaceObject {
   PVector addVelocity(PVector add) {
     return velocity.add(add);
   }
-  
-  boolean collidesWith(SpaceObject s) {
-    double r = PVector.dist(position, s.getPosition());
-    if(r < (getRadius() + s.getRadius())) return true;
-    return false;
-  }  
-  
-  
 }  
