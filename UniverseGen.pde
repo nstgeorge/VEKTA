@@ -34,11 +34,11 @@ class UniverseGen {
     // Generate planets around body
     int planets = (int)random(1, 8);
     for(int i = 0; i <= planets; i++) {
-      float radiusLoc = (float)(random(600, 2000) * SCALE);
-      float speed = sqrt((float)(G * centerMass / (radiusLoc * SCALE)));
+      float radiusLoc = random(100, 2000);
+      float speed = sqrt((float)(G * centerMass / radiusLoc));
       double mass = random(0.8, 4) * power;
       float density = random((float)4, 8);
-      println(speed);
+      println(speed);//////
       system.add(new Planet(
         mass, // Mass
         density,   // Density

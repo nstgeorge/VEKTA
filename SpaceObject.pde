@@ -1,4 +1,4 @@
-private static final float MAX_INFLUENCE = 10;
+private static final float MAX_INFLUENCE = 2;
 
 abstract class SpaceObject {
   private int id;
@@ -97,7 +97,7 @@ abstract class SpaceObject {
     }
     // Prevent insane acceleration
     influence.limit(MAX_INFLUENCE);
-    if(Float.isFinite(influence.x) && Float.isFinite(influence.y)) {
+    if(!Float.isFinite(influence.x) || !Float.isFinite(influence.y)) {
       // This helps prevent the random blank screen of doom (NaN propagation)
       return new PVector();
     }
