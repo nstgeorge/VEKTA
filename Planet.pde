@@ -8,9 +8,9 @@ class Planet extends SpaceObject {
   private final PVector DEF_VELOCITY = new PVector(0,0);
   private final color DEF_COLOR = color(255, 255, 255);
   private final double MIN_SPLIT_RADIUS = 6;
-  private final float SPLIT_DISTANCE_SCALE = 3;
-  private final float SPLIT_VELOCITY_SCALE = 5;
-  private final float SPLIT_MASS_DECAY = .5;
+  private final float SPLIT_DISTANCE_SCALE = 1;
+  private final float SPLIT_VELOCITY_SCALE = 3;
+  private final float SPLIT_MASS_ABSORB = .5; // Below 1.0 to prevent supermassive planets taking over the map
   private String[] nameParts1 = loadStrings("data/text/planet_prefixes.txt"); // Planet name prefixes
   private String[] nameParts2 = concat(loadStrings("data/text/planet_suffixes.txt"), new String[] {""}); // Planet name suffixes
   
@@ -54,17 +54,30 @@ class Planet extends SpaceObject {
   }
   
   @Override
+  boolean collidesWith(SpaceObject s) {
+    // TODO: check getParent() once added to SpaceObject
+    return getColor() != s.getColor() && super.collidesWith(s);
+  }
+  
+  @Override
   void onDestroy(SpaceObject s) {
     println("Planet destroyed with radius: " + getRadius());
     
     // If sufficiently large, split planet in half
     if(getRadius() >= MIN_SPLIT_RADIUS) {
       double newMass = getMass() / 2;
-      float newRadius = getRadius() / sqrt(2);
+      float newRadius = getRadius() / pow(2, 1/3);
+      
+      // Use mass-weighted collision velocity for base debris velocity
+      double xWeight = getVelocity().x * getMass() + s.getVelocity().x * s.getMass();
+      double yWeight = getVelocity().y * getMass() + s.getVelocity().y * s.getMass();
+      double massSum = getMass() + s.getMass();
+      PVector newVelocity = new PVector((float)(xWeight / massSum), (float)(yWeight / massSum));
+      
       PVector offset = PVector.random2D().mult(newRadius * SPLIT_DISTANCE_SCALE);
-      PVector splitVelocity = /*PVector.random2D()*/getPosition().copy().sub(s.getPosition()).rotate(90).normalize().mult(SPLIT_VELOCITY_SCALE);
-      Planet a = new Planet(newMass, getDensity(), getPosition().copy().add(offset), getVelocity().copy().add(splitVelocity), getColor());
-      Planet b = new Planet(newMass, getDensity(), getPosition().copy().sub(offset), getVelocity().copy().sub(splitVelocity), getColor());
+      PVector splitVelocity = getPosition().copy().sub(s.getPosition()).rotate(90).normalize().mult(SPLIT_VELOCITY_SCALE);
+      Planet a = new Planet(newMass, getDensity(), getPosition().copy().add(offset), newVelocity.copy().add(splitVelocity), getColor());
+      Planet b = new Planet(newMass, getDensity(), getPosition().copy().sub(offset), newVelocity.copy().sub(splitVelocity), getColor());
       if(!s.collidesWith(a)) {
         mass -= a.mass;
         addObject(a);
@@ -78,7 +91,7 @@ class Planet extends SpaceObject {
     // If this is a planetary collision, add some additional mass to the other planet
     if(mass > 0 && s instanceof Planet) {
       Planet p = (Planet)s;
-      p.setMass(p.getMass() + mass * SPLIT_MASS_DECAY);
+      p.setMass(p.getMass() + mass * SPLIT_MASS_ABSORB);
     }
   }
   
@@ -103,7 +116,7 @@ class Planet extends SpaceObject {
   }
   
   void updateRadius() {
-    radiusCache = pow((float)getMass(), (float)1/3) * DISTANCE_SCALE;
+    radiusCache = pow((float)getMass() * getDensity(), (float)1/3) * DISTANCE_SCALE;
   }
   
   @Override

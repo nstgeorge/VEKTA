@@ -4,11 +4,11 @@ private static int nextID = 0;
 
 class Singleplayer implements Gamemode {
   
-  int planetCount = 0;
-  boolean dead = false;
+  int planetCount;
+  boolean dead;
   PVector pos;
   float spd;
-  int health = 0;
+  int health;
   int ammunition = 100;
   String position;
   
@@ -16,7 +16,6 @@ class Singleplayer implements Gamemode {
   
   Spaceship playerShip;
   
-  int lastTrailDraw = -10; // For drawing trails
   float zoom = 1; // Camera zoom
   
   UniverseGen generator = new UniverseGen(80000, 1200);
@@ -74,6 +73,10 @@ class Singleplayer implements Gamemode {
     minDistSq = Float.POSITIVE_INFINITY;
     planetCount = 0;
     for(SpaceObject s : objects) {
+      if(markedForDeath.contains(s)) {
+        continue;
+      }
+      
       if(!paused) {
         if(s instanceof Planet) {
           planetCount++;
@@ -86,11 +89,9 @@ class Singleplayer implements Gamemode {
         s.update();
         s.applyInfluenceVector(objects);
         for(SpaceObject other : objects) {
-          if(s != other && s.collidesWith(other)) {
-            if(other.shouldDestroy(s)) {
-              s.onDestroy(other);
-              removeObject(s);
-            }
+          if(s != other) {
+            checkCollision(s, other);
+            checkCollision(other, s);
           }
         }
       }
@@ -162,7 +163,16 @@ class Singleplayer implements Gamemode {
       text("X TO RETRY", width / 2, (height / 2) + 97);
     }
     hint(ENABLE_DEPTH_TEST); 
-  }  
+  }
+  
+  void checkCollision(SpaceObject a, SpaceObject b) {
+    if(a.collidesWith(b)) {
+      if(b.shouldDestroy(a)) {
+        a.onDestroy(b);
+        removeObject(a);
+      }
+    }
+  }
   
   void drawDial(String name, PVector info, int locX, int locY, int radius, color c) {
       fill(0);

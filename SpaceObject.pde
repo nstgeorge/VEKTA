@@ -90,12 +90,10 @@ abstract class SpaceObject {
     PVector influence = new PVector();
     for(SpaceObject s : objects) {
       float distSq = getDistSq(position, s.getPosition());
-      //if(distSq < MAX_DISTANCE * MAX_DISTANCE) {
-        double rSq = distSq * SCALE * SCALE;
-        if(rSq == 0) continue; // If the planet being checked is itself (or directly on top), don't move
-        double force = G * mass * s.getMass() / rSq; // G defined in orbit
-        influence.add(new PVector(s.getPosition().x - position.x, s.getPosition().y - position.y).setMag((float)(force / mass)));
-      //}
+      if(distSq == 0) continue; // If the planet being checked is itself (or directly on top), don't move
+      double rSq = distSq * SCALE * SCALE;
+      double force = G * mass * s.getMass() / rSq; // G defined in orbit
+      influence.add(new PVector(s.getPosition().x - position.x, s.getPosition().y - position.y).setMag((float)(force / mass)));
     }
     // Prevent insane acceleration
     influence.limit(MAX_INFLUENCE);
@@ -114,13 +112,14 @@ abstract class SpaceObject {
   
   /**
     When colliding, does this object destroy the other?
+    By default, the other object will be destroyed if this mass is at least 2x their mass. 
   */
   boolean shouldDestroy(SpaceObject other) {
-    return getMass() >= other.getMass();
+    return getMass() * 2 >= other.getMass();
   }
   
   /**
-    Do this when destroyed by SpaceObject s
+    Do this when destroyed by SpaceObject `s`
   */
   void onDestroy(SpaceObject s) {}
   
