@@ -38,7 +38,6 @@ class UniverseGen {
       float speed = sqrt((float)(G * centerMass / radiusLoc));
       double mass = random(0.8, 4) * power;
       float density = random((float)4, 8);
-      println(speed);//////
       system.add(new Planet(
         mass, // Mass
         density,   // Density
