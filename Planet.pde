@@ -52,7 +52,7 @@ class Planet extends SpaceObject {
     stroke(this.c);
     fill(0);
     ellipseMode(RADIUS);
-    if(id == 1) System.out.println(velocity);
+    //if(id == 1) System.out.println(velocity);
     ellipse(position.x, position.y, radius, radius);
   }
   
