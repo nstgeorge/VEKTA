@@ -6,7 +6,6 @@ class UniverseGen {
   public UniverseGen(int size, int density) {
     this.size = size;
     this.density = density;
-    //currentID = 0;
   }
   
   public List<Planet> generate() {
@@ -51,20 +50,18 @@ class UniverseGen {
       double mass = random(0.8, 4) * power;
       float radiusSize = (float)(random(2, 5) * (sqrt((float)mass) / power));
       system.add(new Planet(
-        //currentID,
         mass, // Mass
         radiusSize,   // Radius
         (int)(x + radiusLoc), y,  // Coords
         0, (float)(velocity),  // Velocity
         color(random(100, 255), random(100, 255), random(100, 255))
       ));
-      //currentID++;
     }  
     return system;
   }
   
   private float[] generateCoordinates(float max) {
-    float[] retVal = {random(max), random(max)};
+    float[] retVal = {random(max) - max / 2, random(max) - max / 2};
     return retVal;
   }  
 }  
