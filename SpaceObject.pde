@@ -97,6 +97,10 @@ abstract class SpaceObject {
     }
     // Prevent insane acceleration
     influence.limit(MAX_INFLUENCE);
+    if(Float.isFinite(influence.x) && Float.isFinite(influence.y)) {
+      // This helps prevent the random blank screen of doom (NaN propagation)
+      return new PVector();
+    }
     addVelocity(influence);
     return influence;
   }
@@ -112,7 +116,7 @@ abstract class SpaceObject {
   
   /**
     When colliding, does this object destroy the other?
-    By default, the other object will be destroyed if this mass is at least 2x their mass. 
+    By default, the other object will be destroyed if this mass is at least half of their mass. 
   */
   boolean shouldDestroy(SpaceObject other) {
     return getMass() * 2 >= other.getMass();
