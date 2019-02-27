@@ -3,8 +3,6 @@ class UniverseGen {
   int density;
   List<Planet> space = new ArrayList<Planet>();
   
-  //int currentID;
-  
   public UniverseGen(int size, int density) {
     this.size = size;
     this.density = density;
@@ -38,14 +36,12 @@ class UniverseGen {
     double centerMass = random(0.8, 4) * power;
     float radius = (float)(random(3, 6) * (centerMass / power));
     system.add(new Planet(
-      //currentID,
       centerMass, // Mass
       radius,   // Radius
       x, y,  // Coords
       0, 0,  // Velocity
       color(random(100, 255), random(100, 255), random(100, 255))
     ));
-    //currentID++;
     
     // Generate planets around body
     int planets = (int)random(1, 8);

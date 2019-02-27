@@ -44,9 +44,19 @@ class Singleplayer implements Gamemode {
     dead = false;
     oldPositions = new ArrayList<List<PVector>>();
     generator = new UniverseGen(8000, 120);
-    planets = generator.generate(); 
     
-    ships.add(new Spaceship(
+    //ships.add();
+    
+    // Initialize trails
+    for(Planet p : generator.generate()) {
+      //p.setID(oldPositions.size());
+      //List<PVector> init = new ArrayList<PVector>();
+      //oldPositions.add(init);
+      //oldPositions.get(p.getID()).add(p.getPosition().copy());
+      addObject(p);
+    }
+    
+    playerShip = new Spaceship(
       "VEKTA I",
       5000,  // Mass
       5,     // Radius
@@ -55,21 +65,11 @@ class Singleplayer implements Gamemode {
       0, 0,    // Velocity
       color(0, 255, 0),
       0, 50, 60  // Control scheme, Speed, and Handling
-    ));
-    
-    // Initialize trails
-    for(SpaceObject p : planets) {
-      //List<PVector> init = new ArrayList<PVector>();
-      //oldPositions.add(init);
-      //oldPositions.get(p.getID()).add(new PVector(p.getPosition().x, p.getPosition().y));
-      addObject(p);
-    }
-    
-    playerShip = ships.get(0);
-    playerShip.setID(planets.size());
-    oldPositions.add(new ArrayList<PVector>());
-    Spaceship s = playerShip;
-    oldPositions.get(s.getID()).add(new PVector(s.getPosition().x, s.getPosition().y));
+    );
+    addObject(playerShip);
+    //playerShip.setID(planets.size());
+    //oldPositions.add(new ArrayList<PVector>());
+    //oldPositions.get(playerShip.getID()).add(playerShip.getPosition().copy());
   }
   
   void render() {
@@ -339,9 +339,11 @@ class Singleplayer implements Gamemode {
   boolean addObject(Object object) {
     if(object instanceof SpaceObject) {
       SpaceObject s = (SpaceObject)object;
+      println(oldPositions.size());///
       s.setID(oldPositions.size());
       oldPositions.add(new ArrayList<PVector>());
       markedForAddition.add(s);
+      return true;
     }
     return false;
   }
@@ -350,6 +352,7 @@ class Singleplayer implements Gamemode {
   boolean removeObject(Object object) {
     if(object instanceof SpaceObject) {
       markedForDeath.add((SpaceObject)object);
+      return true;
     }
     return false;
   }
