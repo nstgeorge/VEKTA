@@ -9,14 +9,10 @@ class Projectile extends SpaceObject {
   private double mass;
   private float radius;
   private color c;
-
-  /**
-  *  Default constructor for planets
-  */
   
   public Projectile(SpaceObject parent, PVector position, PVector heading, PVector velocity, color c) {
     this.parent = parent;
-    this.name = "";
+    this.name = "Projectile";
     this.mass = DEF_MASS;
     this.radius = DEF_RADIUS;
     this.position = position;
@@ -24,7 +20,7 @@ class Projectile extends SpaceObject {
     this.c = c;
   }
   
-  // Draws the projectile
+  @Override
   void draw() {
     stroke(this.c);
     fill(0);
@@ -32,24 +28,30 @@ class Projectile extends SpaceObject {
     ellipse(position.x, position.y, radius, radius);
   }
   
+  @Override
   void update() {
     position.add(velocity);
   }
   
-  SpaceObject getParent() {return parent;}
+  SpaceObject getParent() {
+    return parent;
+  }
   
+  @Override
   String getName() { return name; }
+  @Override
   color getColor() { return c; }
+  @Override
   float getRadius() { return radius; }
+  @Override
   double getMass() { return mass; }
   
-  void setMass(double mass) { this.mass = mass; }
-  void setRadius(float radius) { this.radius = radius; }
-  
+  @Override
   boolean collidesWith(SpaceObject s) {
     return s != getParent() && super.collidesWith(s);
   }
   
+  @Override
   boolean shouldDestroy(SpaceObject other) {
     return true;
   }

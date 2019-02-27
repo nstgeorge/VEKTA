@@ -4,19 +4,18 @@ private static int nextID = 0;
 
 class Singleplayer implements Gamemode {
   
-  int planetCount = 0;
-  boolean dead = false;
+  int planetCount;
+  boolean dead;
   PVector pos;
   float spd;
-  int health = 0;
+  int health;
   int ammunition = 100;
   String position;
   
-  float shortestDistance = Integer.MAX_VALUE;
+  float minDistSq = Float.POSITIVE_INFINITY;
   
   Spaceship playerShip;
   
-  int lastTrailDraw = -10; // For drawing trails
   float zoom = 1; // Camera zoom
   
   UniverseGen generator = new UniverseGen(80000, 1200);
@@ -38,7 +37,7 @@ class Singleplayer implements Gamemode {
     
     frameCount = 0;
     dead = false;
-    generator = new UniverseGen(8000, 120);
+    generator = new UniverseGen(8000, 50);
     
     // Add initial planets
     for(Planet p : generator.generate()) {
@@ -71,25 +70,28 @@ class Singleplayer implements Gamemode {
     }
     
     SpaceObject closestObject = null;
-    shortestDistance = Integer.MAX_VALUE;
+    minDistSq = Float.POSITIVE_INFINITY;
     planetCount = 0;
     for(SpaceObject s : objects) {
+      if(markedForDeath.contains(s)) {
+        continue;
+      }
+      
       if(!paused) {
         if(s instanceof Planet) {
           planetCount++;
-          if(s.getPosition().dist(playerShip.getPosition()) < shortestDistance) {
+          float distSq = getDistSq(s.getPosition(), playerShip.getPosition());
+          if(distSq < minDistSq * minDistSq) {
             closestObject = s;
-            shortestDistance = s.getPosition().dist(playerShip.getPosition());
+            minDistSq = distSq;
           }
         }
         s.update();
         s.applyInfluenceVector(objects);
         for(SpaceObject other : objects) {
-          if(s != other && s.collidesWith(other)) {
-            if(other.shouldDestroy(s)) {
-              s.onDestroy(other);
-              removeObject(s);
-            }
+          if(s != other) {
+            checkCollision(s, other);
+            checkCollision(other, s);
           }
         }
       }
@@ -131,7 +133,7 @@ class Singleplayer implements Gamemode {
       if(closestObject == null) {
         fill(100, 100, 100);
         closestObjectString = "Closest Object: None in range";
-        shortestDistance = Integer.MAX_VALUE;
+        minDistSq = Integer.MAX_VALUE;
       } else {
         closestObjectString = "Closest Object: " + closestObject.getName() + " - " + shortDist + "AU \nSpeed: "+ (float)round(closestObject.getVelocity().mag() * 100) / 100 + "\nMass: " + (float)round((float)((closestObject.getMass() / (1.989 * Math.pow(10, 30)) * 1000))) / 1000  + " Suns";
         // Closest object arrow
@@ -161,7 +163,16 @@ class Singleplayer implements Gamemode {
       text("X TO RETRY", width / 2, (height / 2) + 97);
     }
     hint(ENABLE_DEPTH_TEST); 
-  }  
+  }
+  
+  void checkCollision(SpaceObject a, SpaceObject b) {
+    if(a.collidesWith(b)) {
+      if(b.shouldDestroy(a)) {
+        a.onDestroy(b);
+        removeObject(a);
+      }
+    }
+  }
   
   void drawDial(String name, PVector info, int locX, int locY, int radius, color c) {
       fill(0);
@@ -197,7 +208,7 @@ class Singleplayer implements Gamemode {
   
   void updateUIInformation() {
     health = 100;
-    shortDist = (float)round(shortestDistance * 100) / 100;
+    shortDist = (float)round(sqrt(minDistSq) * 100) / 100;
     speed = (float)round(spd * 100) / 100;
     ammunition = playerShip.getProjectilesLeft();
     position = round(pos.x) + ", " + round(pos.y);

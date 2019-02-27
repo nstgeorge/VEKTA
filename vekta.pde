@@ -2,7 +2,8 @@ import java.util.*;
 import processing.sound.*;
 
 final String FONTNAME = "font/undefined-medium.ttf";
-final int MAX_DISTANCE = 2000; // Maximum distance for calculating influence vector
+final int MAX_DISTANCE = 500; // Maximum distance for updating objects
+final float DISTANCE_SCALE = 1e-9;
 Gamemode game;
 Menu menu;
 
@@ -12,8 +13,8 @@ JSONObject  settings;
 
 // Game-balancing variables and visual settings
 
-final double G = 6.674*Math.pow(10,-11);
-public final double SCALE = 3 * Math.pow(10, 8);
+final double G = 6.674e-11;
+public final double SCALE = 3e8;
 final float VECTOR_SCALE = 5;
 final int MAX_PLANETS = 500;
 final int TRAIL_LENGTH = 15;
@@ -204,25 +205,25 @@ void keyPressed() {
 }
 
 void keyReleased () {
-  if(modePicked) {
+  if(game != null) {
     game.keyReleased(key);
   }
 }  
   
 void mousePressed() {
-  if(modePicked) {
+  if(game != null) {
     game.keyPressed('x');
   }
 }
 
 void mouseReleased() {
-  if(modePicked) {
+  if(game != null) {
     game.keyReleased('x');
   }
 }
 
 void mouseWheel(MouseEvent event) {
-  if(modePicked) {
+  if(game != null) {
     game.mouseWheel(event.getCount());
   }
 }
@@ -320,4 +321,12 @@ boolean addObject(Object object) {
 
 boolean removeObject(Object object) {
   return game != null && game.removeObject(object);
+}
+
+//// Global utility methods ////
+
+float getDistSq(PVector a, PVector b) {
+  float x = a.x - b.x;
+  float y = a.y - b.y;
+  return x * x + y * y;
 }
