@@ -43,6 +43,11 @@ abstract class SpaceObject {
   abstract PVector getVelocity();
   
   /**
+    Gets the velocity of the object
+  */
+  abstract PVector addVelocity(PVector add);
+  
+  /**
    Gets the color of the object
   */
   abstract color getColor();
@@ -56,11 +61,6 @@ abstract class SpaceObject {
     Gets the radius of the object (for collision purposes, not all objects are circular)
   */
   abstract float getRadius();
-  
-  /**
-    Adds a vector to the velocity vector; returns new velocity
-  */
-  abstract PVector addVelocity(PVector add);
   
   /**
     Returns and applies the influence vector of another object on this
@@ -99,12 +99,12 @@ abstract class SpaceObject {
   /**
     Do this when destroyed by SpaceObject s
   */
-  abstract void onDestroy(SpaceObject s);
+  void onDestroy(SpaceObject s) {}
   
-  abstract void draw();
+  void draw() {}
   
   /**
     Update the position of this Object.
   */
-  abstract void update();
+  void update() {}
 }  

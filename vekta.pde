@@ -178,8 +178,7 @@ void keyPressed() {
           loop();
           break;
         case(1):
-          clearOverlay();
-          game.init();
+          game.restart();
           paused = false;
           break;
         case(2):
@@ -229,6 +228,7 @@ void mouseWheel(MouseEvent event) {
 }
 
 void startGamemode(Gamemode game) {
+  clearOverlay();
   this.game = game;
   game.init();
 }

@@ -35,14 +35,14 @@ class UniverseGen {
     int planets = (int)random(1, 8);
     for(int i = 0; i <= planets; i++) {
       float radiusLoc = (float)(random(600, 2000) * SCALE);
-      float velocity = sqrt((float)(G * centerMass / radiusLoc));
+      float speed = sqrt((float)(G * centerMass / radiusLoc));
       double mass = random(0.8, 4) * power;
       float radiusSize = (float)(random(2, 5) * (sqrt((float)mass) / power));
       system.add(new Planet(
         mass, // Mass
         radiusSize,   // Radius
         new PVector(pos.x + radiusLoc, pos.y),  // Coords
-        new PVector(0, velocity),  // Velocity
+        new PVector(0, speed),  // Velocity
         color(random(100, 255), random(100, 255), random(100, 255))
       ));
     }  

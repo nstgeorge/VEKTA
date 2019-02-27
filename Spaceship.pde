@@ -19,11 +19,10 @@ class Spaceship extends SpaceObject {
   private float speed;  // Force of the vector added when engine is on
   private int handling; // Speed of turning
   private float turn; // Value used to turn the ship
-  private Projectile[] projectiles = new Projectile[MAX_PROJECTILES];
+  //private Projectile[] projectiles = new Projectile[MAX_PROJECTILES];
   private int numProjectiles = 0;
   
   // Normal SpaceObject stuff
-  private int id;
   private String name;
   private double mass;
   private float radius;
@@ -36,7 +35,6 @@ class Spaceship extends SpaceObject {
   private color c;
   
   public Spaceship(String name, double mass, float radius, PVector heading, int x, int y, float xVelocity, float yVelocity, color c, int ctrl, int speed, int handling) {
-    this.id = (int)random(4000, 10000);
     this.name = name;
     this.mass = mass;
     this.radius = radius;
@@ -181,7 +179,8 @@ class Spaceship extends SpaceObject {
   private void fireProjectile() {
     if(numProjectiles < MAX_PROJECTILES) {
       if(getSetting("sound") > 0) laser.play();
-      projectiles[numProjectiles] = new Projectile(position.copy(), heading.copy(), velocity.copy(), c);
+      //projectiles[numProjectiles] = new Projectile(position.copy(), heading.copy(), velocity.copy(), c);
+      addObject(new Projectile(this, position.copy(), heading.copy(), velocity.copy(), c));
       numProjectiles++;
     }
   }
@@ -196,19 +195,19 @@ class Spaceship extends SpaceObject {
     return name;
   }  
   
-  Projectile[] getProjectiles() {
+  /*Projectile[] getProjectiles() {
     return projectiles;
   }
   
   void setProjectiles(Projectile[] p) {
     projectiles = p;
-  }
+  }*/
   
   int getProjectilesLeft() {
     return MAX_PROJECTILES - numProjectiles;
   }
   
-  void removeProjectile(Projectile p) {
+  /*void removeProjectile(Projectile p) {
     boolean found = false;
     int i = 0;
     while(!found) {
@@ -221,7 +220,7 @@ class Spaceship extends SpaceObject {
       }
       i++;
     }  
-  }
+  }*/
   
   int decrementProjectiles() {
     return numProjectiles--;
@@ -272,5 +271,11 @@ class Spaceship extends SpaceObject {
   @Override
   PVector addVelocity(PVector add) {
     return velocity.add(add);
+  }
+  
+  @Override
+  boolean collidesWith(SpaceObject s) {
+    // TODO: generalize, perhaps by adding SpaceObject::getParent(..) and handling this case in SpaceObject
+    return !(s instanceof Projectile && ((Projectile)s).getParent() == this) && super.collidesWith(s);
   }
 }  

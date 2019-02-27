@@ -25,6 +25,8 @@ interface Gamemode {
   */
   void mouseWheel(float amount);
   
+  void restart();
+  
   boolean addObject(Object object);
   
   boolean removeObject(Object object);
