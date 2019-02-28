@@ -19,9 +19,10 @@ class UniverseGen {
   
   private List<Planet> createSystem(PVector pos) {
     List<Planet> system = new ArrayList<Planet>();
+    float order = random(29, 32);
     // Create the center body
-    float power = (float)Math.pow(10, random(28, 31));
-    float centerMass = random(0.8, 4) * power;
+    float centerPower = (float)pow(10, order);
+    float centerMass = random(0.8, 4) * centerPower;
     float centerDensity = random(1, 2);
     system.add(new Planet(
       centerMass, // Mass
@@ -34,15 +35,17 @@ class UniverseGen {
     // Generate planets around body
     int planets = (int)random(1, 8);
     for(int i = 0; i <= planets; i++) {
+      float power = (float)Math.pow(10, order - 1);
       float radiusLoc = random(100, 2000);
       float speed = sqrt(G * centerMass / radiusLoc) / SCALE;
-      float mass = random(0.8, 4) * power;
+      float mass = random(0.05, 0.5) * power;
       float density = random(4, 8);
+      float angle = random(360);
       system.add(new Planet(
         mass, // Mass
         density,   // Density
-        new PVector(pos.x + radiusLoc, pos.y),  // Coords
-        new PVector(0, speed),  // Velocity
+        new PVector(radiusLoc, 0).rotate(angle).add(pos),  // Coords
+        new PVector(0, speed).rotate(angle),  // Velocity
         color(random(100, 255), random(100, 255), random(100, 255))
       ));
     }  
