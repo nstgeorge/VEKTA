@@ -4,7 +4,7 @@ import processing.sound.*;
 final String FONTNAME = "font/undefined-medium.ttf";
 final int MAX_DISTANCE = 10000; // Maximum distance for updating objects
 Gamemode game;
-Menu menu;
+MainMenu menu;
 
 // Settings
 JSONObject defaultSettings;
@@ -100,7 +100,7 @@ void setup() {
   
   playerWins[0] = 0;
   playerWins[1] = 0;
-  menu = new Menu();
+  menu = new MainMenu();
 }  
 
 void draw() {

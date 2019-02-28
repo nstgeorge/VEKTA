@@ -1,4 +1,4 @@
-class Menu {
+class MainMenu {
   String[] modes = {"Singleplayer"};
   Hyperspace hyperspace;
   // Settings
@@ -10,7 +10,7 @@ class Menu {
   
   final int  SETTINGS_SPACING = 50;
   
-  public Menu() {
+  public MainMenu() {
     if(atmosphere.isPlaying()) atmosphere.stop();
     theme.amp(getSetting("music"));
     theme.play();
