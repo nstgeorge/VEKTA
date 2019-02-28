@@ -2,9 +2,10 @@ import java.util.*;
 import processing.sound.*;
 
 final String FONTNAME = "font/undefined-medium.ttf";
-final int MAX_DISTANCE = 10000; // Maximum distance for updating objects
+final int MAX_DISTANCE = 10000; // Maximum distance for updating objects (currently unimplemented)
 Gamemode game;
-MainMenu menu;
+MainMenu mainMenu;
+LandingMenu menu; // TODO: this will eventually become a stack generalizing LandingMenu, MainMenu, and PausedMenu
 
 // Settings
 JSONObject defaultSettings;
@@ -100,7 +101,7 @@ void setup() {
   
   playerWins[0] = 0;
   playerWins[1] = 0;
-  menu = new MainMenu();
+  mainMenu = new MainMenu();
 }  
 
 void draw() {
@@ -114,10 +115,13 @@ void draw() {
       switchedToGame = true;
     }
   }
-  if(modePicked && switchedToGame) {
+  if(menu != null) {
+    menu.render();
+  }
+  else if(modePicked && switchedToGame) {
     game.render();
   } else {
-    menu.render();
+    mainMenu.render();
   }
   
   // Pause menu overlay
@@ -158,6 +162,11 @@ void draw() {
 }
 
 void keyPressed() {
+  if(menu != null) {
+    menu.keyPressed(key);
+    return;
+  }
+  
   // Toggle pause
   if(key == ESC) {
     key = 0; // Suppress default behavior (exit)
@@ -165,7 +174,7 @@ void keyPressed() {
       clearOverlay();
       paused = !paused;
     } else {
-      menu.keyPressed(ESC);
+      mainMenu.keyPressed(ESC);
     }
   }
   // Pause controls 
@@ -212,7 +221,7 @@ void keyPressed() {
   }
   // Send event to menu
   else {
-    menu.keyPressed(key);
+    mainMenu.keyPressed(key);
   }
 }
 
@@ -333,6 +342,18 @@ boolean addObject(Object object) {
 
 boolean removeObject(Object object) {
   return game != null && game.removeObject(object);
+}
+
+void openMenu(LandingMenu menu) {
+  this.menu = menu;
+}
+
+boolean closeMenu(LandingMenu menu) {
+  if(this.menu == menu) {
+    this.menu = null;
+    return true;
+  }
+  return false;
 }
 
 //// Global utility methods ////

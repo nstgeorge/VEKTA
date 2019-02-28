@@ -18,15 +18,14 @@ class Planet extends SpaceObject {
   private final LandingSite site;
   
   public Planet(float mass, float density, PVector position, PVector velocity, color c) {
+    super(position, velocity);
     this.name = planetNamePrefixes[(int)random(planetNamePrefixes.length)] + planetNameSuffixes[(int)random(planetNameSuffixes.length)];
     this.mass = mass;
     this.density = density;
-    this.position = position;
-    this.velocity = velocity;
     this.c = c;
-    this.updateRadius();
     
-    site = new LandingSite();
+    site = new LandingSite(this);
+    updateRadius();
   }
   
   @Override
@@ -36,11 +35,6 @@ class Planet extends SpaceObject {
     ellipseMode(RADIUS);
     float radius = getRadius();
     ellipse(position.x, position.y, radius, radius);
-  }
-  
-  @Override
-  void update() {
-    position.add(velocity);
   }
   
   @Override
@@ -57,7 +51,6 @@ class Planet extends SpaceObject {
       if(ship.isLanding()) {
         float magSq = velocity.copy().sub(s.getVelocity()).magSq();
         if(magSq > MIN_LANDING_SPEED * MIN_LANDING_SPEED && site.land(ship)) {
-          println("Landed at site: " + site);
           return;
         }
       }
@@ -100,6 +93,13 @@ class Planet extends SpaceObject {
     if(mass > 0 && s instanceof Planet) {
       Planet p = (Planet)s;
       p.setMass(p.getMass() + mass * SPLIT_MASS_ABSORB);
+    }
+    
+    // TODO: move this eventually
+    // If something landed on this planet, destroy it as well
+    SpaceObject landed = site.landed;
+    if(landed != null) {
+      landed.onDestroy(s);
     }
   }
   

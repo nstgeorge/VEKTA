@@ -3,10 +3,10 @@ private static final float MAX_INFLUENCE = 2;
 abstract class SpaceObject {
   private int id;
   
-  PVector position;
-  PVector velocity;
+  final PVector position;
+  final PVector velocity;
   
-  PVector[] trail = new PVector[TRAIL_LENGTH];
+  private final PVector[] trail = new PVector[TRAIL_LENGTH];
   
   SpaceObject() {
     this(new PVector(), new PVector());
@@ -51,6 +51,13 @@ abstract class SpaceObject {
   */
   final PVector getPosition() {
     return position.copy(); // TODO: copy externally for performance
+  }
+  
+  /**
+    Sets the position of the object
+  */
+  final void setPosition(PVector position) {
+    position.set(position);
   }
   
   /**
@@ -167,5 +174,10 @@ abstract class SpaceObject {
   /**
     Update the position of this SpaceObject.
   */
-  void update() {}
+  final void update() {
+    onUpdate();
+    position.add(velocity);
+  }
+  
+  void onUpdate() {}
 }  

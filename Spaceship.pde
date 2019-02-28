@@ -34,7 +34,6 @@ class Spaceship extends SpaceObject {
   private final color c;
   
   // Landing doodads
-  private boolean manualEngines;
   private boolean landing;
   private final PVector influence = new PVector();
   
@@ -75,36 +74,34 @@ class Spaceship extends SpaceObject {
   }
   
   @Override
-  void update() {
+  void onUpdate() {
     if(thrust != 0) {
       addVelocity(heading.copy().setMag(thrust * speed));
     }
-    position.add(velocity);
     turnBy(turn);
     
     if(landing && world.closestObject != null) {
       SpaceObject target = world.closestObject;
-      PVector relative = target.getVelocity().copy().sub(velocity);
+      PVector relative = velocity.copy().sub(target.getVelocity());
       float mag = relative.mag();
-      if(mag > 0 && !manualEngines) {
+      if(mag > 0) {
         heading.set(relative).normalize();
         float approachFactor = min(1, 5 * target.getRadius() / target.getPosition().sub(position).mag());
-        thrust = max(-1, min(1, (mag - LANDING_SPEED) * approachFactor / speed));
+        thrust = max(-1, min(1, (LANDING_SPEED - mag) * approachFactor / speed));
         //thrust = (mag - LANDING_SPEED) / speed;
       }
     }
   }
   
   public void keyPress(char key) {
-    heading.setMag(speed);
-    if(controlScheme == 0) {   // WASD  
+    landing = false;
+    if(controlScheme == 0) {   // WASD
       switch(key) {
         case 'w':
           if(getSetting("sound") > 0) {
             engine.stop();
             engine.loop();
           }
-          manualEngines = true;
           thrust = 1;
           break;
         case 'a':
@@ -115,7 +112,6 @@ class Spaceship extends SpaceObject {
             engine.stop();
             engine.loop();
           }
-          manualEngines = true;
           thrust = -1;
           break;
         case 'd':
@@ -128,19 +124,18 @@ class Spaceship extends SpaceObject {
           fireProjectile();
           break;
         case '\t':
-          landing = !landing;
+          landing = true;
           break;
-      }  
+      }
     }
     // TODO: map these keys using a config object rather than as switch statements
-    if(controlScheme == 1) {   // IJKL  
+    if(controlScheme == 1) {   // IJKL
       switch(key) {
         case 'i':
           if(getSetting("sound") > 0) {
             engine.stop();
             engine.loop();
           }
-          manualEngines = true;
           thrust = 1;
           break;
         case 'j':
@@ -151,7 +146,6 @@ class Spaceship extends SpaceObject {
             engine.stop();
             engine.loop();
           }
-          manualEngines = true;
           thrust = -1;
           break;
         case 'l':
@@ -164,16 +158,15 @@ class Spaceship extends SpaceObject {
           fireProjectile();
           break;
         case '\\':
-          landing = !landing;
+          landing = true;
           break;
-      }  
+      }
     } 
   }
   
   void keyReleased(char key) {
     if((key == 'w' || key == 's') && controlScheme == 0) {
       if(getSetting("sound") > 0) engine.stop();
-      manualEngines = false;
       thrust = 0;
     }
     if(( key == 'a' || key == 'd') && controlScheme == 0) {
@@ -182,7 +175,6 @@ class Spaceship extends SpaceObject {
     
     if((key == 'i' || key == 'k') && controlScheme == 1) {
       if(getSetting("sound") > 0) engine.stop();
-      manualEngines = false;
       thrust = 0;
     }
     if((key == 'j' || key == 'l') && controlScheme == 1) {
@@ -197,7 +189,7 @@ class Spaceship extends SpaceObject {
   private void fireProjectile() {
     if(numProjectiles < MAX_PROJECTILES) {
       if(getSetting("sound") > 0) laser.play();
-      addObject(new Projectile(this, position.copy(), heading.copy(), velocity.copy(), c));
+      addObject(new Projectile(this, position.copy(), velocity.copy(), heading.copy(), c));
       numProjectiles++;
     }
   }
@@ -220,10 +212,6 @@ class Spaceship extends SpaceObject {
   
   boolean isLanding() {
     return landing;
-  }
-  
-  void setLanding(boolean landing) {
-    this.landing = landing;
   }
   
   @Override
@@ -268,5 +256,9 @@ class Spaceship extends SpaceObject {
   boolean collidesWith(SpaceObject s) {
     // TODO: generalize, perhaps by adding SpaceObject::getParent(..) and handling this case in SpaceObject
     return !(s instanceof Projectile && ((Projectile)s).getParent() == this) && super.collidesWith(s);
+  }
+  
+  void onTakeoff() {
+    landing = false;
   }
 }  

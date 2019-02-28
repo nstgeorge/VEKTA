@@ -5,10 +5,14 @@
 class LandingSite {
   // TODO: convert this to an interface or abstract class if necessary
   
-  public SpaceObject landed;
+  private final SpaceObject launchObject;
   
-  public LandingSite() {
-    
+  private Spaceship landed;
+  
+  private LandingMenu menu;
+  
+  public LandingSite(SpaceObject launchObject) {
+    this.launchObject = launchObject;
   }
   
   public boolean land(Spaceship ship) {
@@ -18,15 +22,25 @@ class LandingSite {
     
     landed = ship;
     removeObject(ship);
+    menu = new LandingMenu(this);
+    openMenu(menu); // Push landing menu to global menu stack
     return true;
   }
   
-  public boolean launch() {
+  public boolean takeoff() {
     if(landed == null) {
       return false;
     }
     
-    //TODO implement
+    closeMenu(menu);
+    menu = null;
+    
+    PVector offset = landed.getPosition().copy().sub(launchObject.getPosition());
+    landed.setVelocity(offset.setMag(1 + launchObject.getRadius()).add(launchObject.getVelocity()));
+    landed.onTakeoff();
+    landed.update();
+    addObject(landed);
+    landed = null;
     return true;
   }
 }
