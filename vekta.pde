@@ -14,6 +14,7 @@ JSONObject  settings;
 
 final float G = 6.674e-11;
 final float SCALE = 3e8;
+final color UI_COLOR = color(0, 255, 0);
 final float VECTOR_SCALE = 5;
 final int MAX_PLANETS = 500;
 final int TRAIL_LENGTH = 15;
@@ -54,8 +55,10 @@ SoundFile chirp;
 LowPass lowPass;
 
 void setup() {
+  createSettings();
   // Important visual stuff
   fullScreen(P3D);
+  pixelDensity(displayDensity());
   background(0);
   frameRate(60);
   noCursor();
@@ -82,8 +85,6 @@ void setup() {
   chirp = new SoundFile(this, "chirp.wav");
   
   lowPass = new LowPass(this);
-  
-  createSettings();
   
   playerWins[0] = 0;
   playerWins[1] = 0;
@@ -121,7 +122,7 @@ void draw() {
     noLights();
     // Border box
     rectMode(CORNER);
-    stroke(0, 255, 0);
+    stroke(UI_COLOR);
     fill(0);
     rect(-1, -1, width / 4, height + 2);
     // Logo
@@ -302,14 +303,14 @@ void saveSettings() {
   camera();
   noLights();
   if(selected) stroke(255);
-  else stroke(0, 255, 0);
+  else stroke(UI_COLOR);
   fill(1);
   rectMode(CENTER);
   rect(width / 8, yPos, 200, 50);
   // Text ----------------------
   textFont(bodyFont);
   stroke(0);
-  fill(0, 255, 0);
+  fill(UI_COLOR);
   textAlign(CENTER, CENTER);
   text(name, width / 8, yPos - 3);
 }

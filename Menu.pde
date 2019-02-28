@@ -77,7 +77,7 @@ class Menu {
     int optionIndex = 0;
     for(String key : settingsOptions.keyArray()) {
       String[] options = settingsOptions.get(key).split(",");
-      if(selectedSetting == optionIndex) fill(0, 255, 0);
+      if(selectedSetting == optionIndex) fill(UI_COLOR);
       text(key, 500, 200 + (optionIndex * SETTINGS_SPACING));
       for(String option : options) {
         if(getSetting(key.toLowerCase()) == settingsDefinitions.get(option)) {
@@ -98,14 +98,14 @@ class Menu {
   
   private void drawButton(String name, int yPos, boolean selected) {
     if(selected) stroke(255);
-    else stroke(0, 255, 0);
+    else stroke(UI_COLOR);
     fill(1);
     rectMode(CENTER);
     rect(width / 2, yPos, 200, 50);
     // Text ----------------------
     textFont(bodyFont);
     stroke(0);
-    fill(0, 255, 0);
+    fill(UI_COLOR);
     textAlign(CENTER, CENTER);
     text(name, width / 2, yPos - 3);
   }  
