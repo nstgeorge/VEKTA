@@ -10,8 +10,9 @@ import java.util.Map;
  * State management for landing sites should be handled or proxied through this class.
  */
 class LandingSite {
-	private static final float ITEM_MARKUP = 1.5; // Markup after buying/selling to a landing site
-
+	private static final float ITEM_MARKUP = 1.5F; // Markup after buying/selling to a landing site
+	// TODO::::::fix so bought items divide by this instead of multiply
+	
 	private final Inventory inventory = new Inventory();
 	private final Map<Item, Integer> offers = new HashMap<>();
 	private final Map<Item, Integer> shipOffers = new HashMap<>();

@@ -109,7 +109,7 @@ class InfoOption implements MenuOption {
 	}
 
 	@Override
-	void select(Menu menu) {
+	public void select(Menu menu) {
 		// TODO: implement
 	}
 }
@@ -203,7 +203,7 @@ class MenuHandle {
 		//textFont(bodyFont);
 		v.stroke(0);
 		v.fill(UI_COLOR);
-		text(name, width / 2, yPos - 3);
+		v.text(name, v.width / 2, yPos - 3);
 	}
 
 	public void keyPressed(Menu menu, char key) {
@@ -286,10 +286,6 @@ class Menu implements Context {
 	private final List<MenuOption> items = new ArrayList<MenuOption>();
 
 	private int index = 0;
-
-	public Menu() {
-		this(new MenuHandle());
-	}
 
 	public Menu(MenuHandle handle) {
 		this.handle = handle;

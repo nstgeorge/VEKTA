@@ -2,11 +2,11 @@ package vekta;
 
 import processing.core.PVector;
 
-import static vekta.Vekta.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static vekta.Vekta.*;
 
 public class UniverseGen {
 	private static final int MIN_SPAWN_DISTANCE = 500;
@@ -82,6 +82,6 @@ public class UniverseGen {
 	}
 
 	private PVector generateCoordinates(float max) {
-		return PVector.random2D().mult(MIN_SPAWN_DISTANCE + random(max - MIN_SPAWN_DISTANCE));
+		return PVector.random2D().mult(MIN_SPAWN_DISTANCE + getInstance().random(max - MIN_SPAWN_DISTANCE));
 	}
 }  

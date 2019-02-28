@@ -1,192 +1,221 @@
 package vekta;
 
+import processing.core.PVector;
+import processing.data.IntDict;
+import processing.data.StringDict;
+
+import static vekta.Vekta.*;
+
 class MainMenu implements Context {
-  String[] modes = {"Singleplayer"};
-  int selectedMode;
-  Hyperspace hyperspace;
-  // Settings
-  boolean    inSettings;
-  StringDict settingsOptions;
-  IntDict    settingsDefinitions;
-  int[]      selectedOptions;
-  int        selectedSetting;
-  
-  final int  SETTINGS_SPACING = 50;
-  
-  public MainMenu() {
-    if(atmosphere.isPlaying()) atmosphere.stop();
-    theme.amp(getSetting("music"));
-    theme.play();
-    hyperspace = new Hyperspace(new PVector(width/2, height/2 - 100), 0.1, 170);
-    inSettings = false;
-    settingsOptions = new StringDict();
-    settingsOptions.set("Music", "On,Off");
-    settingsOptions.set("Sound", "On,Off");
-    settingsDefinitions = new IntDict();
-    settingsDefinitions.set("On", 1);
-    settingsDefinitions.set("Off", 0);
-    selectedOptions = new int[settingsOptions.size()];
-  }  
-  
-  @Override
-  void render() {
-    // hyperspace background
-    camera(width/2, height/2, (height/2.0) / tan(PI*30.0 / 180.0), width/2, height/2, 0.0, 
-         0.0, 1.0, 0.0);
-    background(0);
-    hyperspace.render();
-    
-    if(!inSettings) {
-      drawMain();
-    } else {
-      drawSettings();
-    }
-  }
-  
-  private void drawMain() {
-    hint(DISABLE_DEPTH_TEST);
-    camera();
-    noLights();
-    shapeMode(CENTER);
-    shape(logo, width/2, height/4, 339.26, 100);
-    for(int i = 0; i < modes.length; i++) {
-      drawButton(modes[i], (height / 2) + (i * 100), i == selectedMode);
-    }
-    drawButton("Settings", (height / 2) + (modes.length * 100), selectedMode == modes.length);
-    drawButton("Quit", (height / 2) + (modes.length * 100) + 100, selectedMode == modes.length + 1);
-    
-    textFont(bodyFont);
-    stroke(0);
-    fill(255);
-    textAlign(CENTER);
-    text("X to select", width / 2, (height / 2) + (modes.length * 100) + 200);
-    
-    textSize(14);
-    text("Created by Nate St. George", width / 2, (height / 2) + (modes.length * 100) + 300);
-    hint(ENABLE_DEPTH_TEST);
-  }
-  
-  private void drawSettings() {
-    hint(DISABLE_DEPTH_TEST);
-    camera();
-    noLights();
-    textFont(bodyFont);
-    stroke(0);
-    fill(255);
-    textAlign(CENTER);
-    textSize(30);
-    text("Settings", width / 2, 100);
-    textFont(bodyFont);
-    // Draw each option
-    int optionIndex = 0;
-    for(String key : settingsOptions.keyArray()) {
-      String[] options = settingsOptions.get(key).split(",");
-      if(selectedSetting == optionIndex) fill(UI_COLOR);
-      text(key, 500, 200 + (optionIndex * SETTINGS_SPACING));
-      for(String option : options) {
-        if(getSetting(key.toLowerCase()) == settingsDefinitions.get(option)) {
-          text(option, width - 500, 200 + (optionIndex * SETTINGS_SPACING));
-          selectedOptions[optionIndex] = settingsDefinitions.get(option);
-        }
-      }
-      fill(255, 255, 255);
-      optionIndex++;
-    }
-    drawButton("Save", 200 + ((optionIndex + 1) * SETTINGS_SPACING), selectedSetting == settingsOptions.size());
-    textSize(16);
-    fill(255, 255, 255);
-    text("X to cycle options, ESC to go back", width / 2, 200 + ((optionIndex + 2) * SETTINGS_SPACING));
-    textFont(bodyFont);
-    hint(ENABLE_DEPTH_TEST);
-  }
-  
-  private void drawButton(String name, int yPos, boolean selected) {
-    if(selected) stroke(255);
-    else stroke(UI_COLOR);
-    fill(1);
-    rectMode(CENTER);
-    rect(width / 2, yPos, 200, 50);
-    // Text ----------------------
-    textFont(bodyFont);
-    stroke(0);
-    fill(UI_COLOR);
-    textAlign(CENTER, CENTER);
-    text(name, width / 2, yPos - 3);
-  }  
-  
-  void updateSetting() {
-    selectedOptions[selectedSetting] = (selectedOptions[selectedSetting] + 1) % settingsOptions.valueArray()[selectedSetting].split(",").length;
-    setSetting(settingsOptions.keyArray()[selectedSetting].toLowerCase(), selectedOptions[selectedSetting]);
-    // Quick! Turn down the music if the player wants it gone!
-    theme.amp(getSetting("music"));
-  }
-  
-  @Override
-  public void keyPressed(char key) {
-    if (key == ESC) {
-      inSettings = false;
-    }
-    if(key == 'w') {
-      // Play the sound for changing menu selection
-      if(getSetting("sound") > 0) change.play();
-      if(!inSettings) {
-        selectedMode = Math.max(selectedMode - 1, 0);
-        redraw();
-      } else {
-        selectedSetting = Math.max(selectedSetting - 1, 0);
-        redraw();
-      }
-    } 
-    if(key == 's') {
-      // Play the sound for changing menu selection
-      if(getSetting("sound") > 0) change.play();
-      if(!inSettings) {
-        selectedMode = Math.min(selectedMode + 1, modes.length + 1);
-        redraw();
-      } else {
-        selectedSetting = Math.min(selectedSetting + 1, settingsOptions.size());
-        redraw();
-      }
-    }
-    if(key == 'x') {
-      // Play the sound for selection
-      if(getSetting("sound") > 0) select.play();
-      if(!inSettings) {
-        // Just selected a game mode
-        if(selectedMode < modes.length) {
-          selectMode();
-        } else {
-          // Just selected settings
-          if(selectedMode == modes.length) {
-            inSettings = true;
-          }
-          //Just selected quit
-          if(selectedMode == modes.length + 1) {
-            exit();
-          }
-        }
-      } else {
-        if(selectedSetting == settingsOptions.size()) {
-          // Save the settings
-          saveSettings();
-          inSettings = false;
-        } else {
-          // Update settings
-          updateSetting();
-        }
-      }
-    }
-  }
-  
-  private void selectMode() {
-    if(selectedMode == 0) startGamemode(new Singleplayer());
-    //if(selectedMode == 1) startGamemode(new Multiplayer());
-    if(getSetting("music") > 0) theme.stop();
-  }
-  
-  @Override
-  public void keyReleased(char key) {}
-  
-  @Override
-  public void mouseWheel(int amount) {}
+	String[] modes = {"Singleplayer"};
+	int selectedMode;
+	Hyperspace hyperspace;
+	// Settings
+	boolean inSettings;
+	StringDict settingsOptions;
+	IntDict settingsDefinitions;
+	int[] selectedOptions;
+	int selectedSetting;
+
+	final int SETTINGS_SPACING = 50;
+
+	public MainMenu() {
+		Vekta v = getInstance();
+		if(atmosphere.isPlaying())
+			atmosphere.stop();
+		theme.amp(getSetting("music"));
+		theme.play();
+		hyperspace = new Hyperspace(new PVector(v.width / 2F, v.height / 2F - 100), 0.1F, 170);
+		inSettings = false;
+		settingsOptions = new StringDict();
+		settingsOptions.set("Music", "On,Off");
+		settingsOptions.set("Sound", "On,Off");
+		settingsDefinitions = new IntDict();
+		settingsDefinitions.set("On", 1);
+		settingsDefinitions.set("Off", 0);
+		selectedOptions = new int[settingsOptions.size()];
+	}
+
+	@Override
+	public void render() {
+		Vekta v = getInstance();
+		// hyperspace background
+		v.camera(v.width / 2F, v.height / 2F, (v.height / 2F) / tan(PI * 30F / 180F), v.width / 2F, v.height / 2F, 0F,
+				0F, 1F, 0F);
+		v.background(0);
+		hyperspace.render();
+
+		if(!inSettings) {
+			drawMain();
+		}
+		else {
+			drawSettings();
+		}
+	}
+
+	private void drawMain() {
+		Vekta v = getInstance();
+		v.hint(DISABLE_DEPTH_TEST);
+		v.camera();
+		v.noLights();
+		v.shapeMode(CENTER);
+		v.shape(logo, v.width / 2F, v.height / 4F, 339.26F, 100);
+		for(int i = 0; i < modes.length; i++) {
+			drawButton(modes[i], (v.height / 2) + (i * 100), i == selectedMode);
+		}
+		drawButton("Settings", (v.height / 2) + (modes.length * 100), selectedMode == modes.length);
+		drawButton("Quit", (v.height / 2) + (modes.length * 100) + 100, selectedMode == modes.length + 1);
+
+		v.textFont(bodyFont);
+		v.stroke(0);
+		v.fill(255);
+		v.textAlign(CENTER);
+		v.text("X to select", v.width / 2F, (v.height / 2) + (modes.length * 100) + 200);
+
+		v.textSize(14);
+		v.text("Created by Nate St. George", v.width / 2F, (v.height / 2) + (modes.length * 100) + 300);
+		v.hint(ENABLE_DEPTH_TEST);
+	}
+
+	private void drawSettings() {
+		Vekta v = getInstance();
+		v.hint(DISABLE_DEPTH_TEST);
+		v.camera();
+		v.noLights();
+		v.textFont(bodyFont);
+		v.stroke(0);
+		v.fill(255);
+		v.textAlign(CENTER);
+		v.textSize(30);
+		v.text("Settings", v.width / 2F, 100);
+		v.textFont(bodyFont);
+		// Draw each option
+		int optionIndex = 0;
+		for(String key : settingsOptions.keyArray()) {
+			String[] options = settingsOptions.get(key).split(",");
+			if(selectedSetting == optionIndex)
+				v.fill(UI_COLOR);
+			v.text(key, 500, 200 + (optionIndex * SETTINGS_SPACING));
+			for(String option : options) {
+				if(getSetting(key.toLowerCase()) == settingsDefinitions.get(option)) {
+					v.text(option, v.width - 500, 200 + (optionIndex * SETTINGS_SPACING));
+					selectedOptions[optionIndex] = settingsDefinitions.get(option);
+				}
+			}
+			v.fill(255, 255, 255);
+			optionIndex++;
+		}
+		drawButton("Save", 200 + ((optionIndex + 1) * SETTINGS_SPACING), selectedSetting == settingsOptions.size());
+		v.textSize(16);
+		v.fill(255, 255, 255);
+		v.text("X to cycle options, ESC to go back", v.width / 2F, 200 + ((optionIndex + 2) * SETTINGS_SPACING));
+		v.textFont(bodyFont);
+		v.hint(ENABLE_DEPTH_TEST);
+	}
+
+	private void drawButton(String name, int yPos, boolean selected) {
+		Vekta v = getInstance();
+		if(selected)
+			v.stroke(255);
+		else
+			v.stroke(UI_COLOR);
+		v.fill(1);
+		v.rectMode(CENTER);
+		v.rect(v.width / 2F, yPos, 200, 50);
+		// Text ----------------------
+		v.textFont(bodyFont);
+		v.stroke(0);
+		v.fill(UI_COLOR);
+		v.textAlign(CENTER, CENTER);
+		v.text(name, v.width / 2F, yPos - 3);
+	}
+
+	void updateSetting() {
+		selectedOptions[selectedSetting] = (selectedOptions[selectedSetting] + 1) % settingsOptions.valueArray()[selectedSetting].split(",").length;
+		setSetting(settingsOptions.keyArray()[selectedSetting].toLowerCase(), selectedOptions[selectedSetting]);
+		// Quick! Turn down the music if the player wants it gone!
+		theme.amp(getSetting("music"));
+	}
+
+	@Override
+	public void keyPressed(char key) {
+		Vekta v = getInstance();
+		if(key == ESC) {
+			inSettings = false;
+		}
+		if(key == 'w') {
+			// Play the sound for changing menu selection
+			if(getSetting("sound") > 0)
+				change.play();
+			if(!inSettings) {
+				selectedMode = Math.max(selectedMode - 1, 0);
+				v.redraw();
+			}
+			else {
+				selectedSetting = Math.max(selectedSetting - 1, 0);
+				v.redraw();
+			}
+		}
+		if(key == 's') {
+			// Play the sound for changing menu selection
+			if(getSetting("sound") > 0)
+				change.play();
+			if(!inSettings) {
+				selectedMode = Math.min(selectedMode + 1, modes.length + 1);
+				v.redraw();
+			}
+			else {
+				selectedSetting = Math.min(selectedSetting + 1, settingsOptions.size());
+				v.redraw();
+			}
+		}
+		if(key == 'x') {
+			// Play the sound for selection
+			if(getSetting("sound") > 0)
+				select.play();
+			if(!inSettings) {
+				// Just selected a game mode
+				if(selectedMode < modes.length) {
+					selectMode();
+				}
+				else {
+					// Just selected settings
+					if(selectedMode == modes.length) {
+						inSettings = true;
+					}
+					//Just selected quit
+					if(selectedMode == modes.length + 1) {
+						v.exit();
+					}
+				}
+			}
+			else {
+				if(selectedSetting == settingsOptions.size()) {
+					// Save the settings
+					saveSettings();
+					inSettings = false;
+				}
+				else {
+					// Update settings
+					updateSetting();
+				}
+			}
+		}
+	}
+
+	private void selectMode() {
+		if(selectedMode == 0)
+			startWorld(new Singleplayer());
+		//if(selectedMode == 1) startGamemode(new Multiplayer());
+		if(getSetting("music") > 0)
+			theme.stop();
+	}
+
+	@Override
+	public void keyReleased(char key) {
+	}
+
+	@Override
+	public void mouseWheel(int amount) {
+	}
 }  

@@ -8,286 +8,292 @@ import java.util.List;
 import static vekta.Vekta.*;
 
 class Singleplayer implements World {
-  private static int nextID = 0;
-  
-  int planetCount;
-  boolean dead;
-  PVector pos;
-  float spd;
-  int health;
-  int ammunition = 100;
-  String position;
-  
-  float minDistSq = Float.POSITIVE_INFINITY;
-  
-  Spaceship playerShip;
-  SpaceObject closestObject; // TODO: move this logic into Spaceship instances
-  
-  float zoom = 1; // Camera zoom
-  
-  UniverseGen generator = new UniverseGen(20000, 10);
-  
-  List<SpaceObject> objects = new ArrayList<SpaceObject>();
-  
-  List<SpaceObject> markedForDeath = new ArrayList<SpaceObject>();
-  List<SpaceObject> markedForAddition = new ArrayList<SpaceObject>();
-  
-  // UI Variables (not real time updated)
-  float shortDist;
-  float speed;
-  float closestMass;
-  String closestMassUnit;
-  
-  @Override
-  public void init() {
-    Vekta v = getInstance();
-    v.background(0);
-    
-    if(getSetting("music") > 0 && !atmosphere.isPlaying()) atmosphere.loop();
+	private static int nextID = 0;
 
-    v.frameCount = 0;
-    
-    // Add initial planets
-    for(Planet p : generator.generate()) {
-      addObject(p);
-    }
-    
-    playerShip = new Spaceship(
-      this,
-      "VEKTA I",
-      5000,  // Mass
-      5,     // Radius
-      new PVector(1, 0), // Heading
-      new PVector(), // Position
-      new PVector(),    // Velocity
-      v.color(0, 255, 0),
-      0, .1, 60,  // Control scheme, Speed, and Handling
-      100 // Starting money
-    );
-    addObject(playerShip);
-  }
-  
-  @Override
-  public void render() {
-    background(0);
-    
-    if(!dead) {
-      pos = playerShip.getPosition();
-      spd = playerShip.getVelocity().mag();
-      // Camera follow
-      camera(pos.x, pos.y, (.07*spd + .7) * (height/2.0) / tan(PI*30.0 / 180.0) * zoom, pos.x, pos.y, 0.0, 
-       0.0, 1.0, 0.0);
-    }
-    
-    closestObject = null;
-    minDistSq = Float.POSITIVE_INFINITY;
-    planetCount = 0;
-    for(SpaceObject s : objects) {
-      if(markedForDeath.contains(s)) {
-        continue;
-      }
-      
-      if(s instanceof Planet) {
-        planetCount++;
-        float distSq = getDistSq(s.getPosition(), playerShip.getPosition());
-        if(distSq < minDistSq) {
-          closestObject = s;
-          minDistSq = distSq;
-        }
-      }
-      s.update();
-      s.applyInfluenceVector(objects);
-      for(SpaceObject other : objects) {
-        if(s != other) {
-          checkCollision(s, other);
-          checkCollision(other, s);
-        }
-      }
-      s.draw();
-      s.drawTrail();
-    }
-    
-    objects.removeAll(markedForDeath);
-    objects.addAll(markedForAddition);
-    markedForDeath.clear();
-    markedForAddition.clear();
-    
-    // Info
-    if(!dead) {
-      if(frameCount % 10 == 0) {  //  Update values every 10 frames
-        updateUIInformation();
-      }  
-      // GUI setup
-      hint(DISABLE_DEPTH_TEST);
-      camera();
-      noLights();
-      
-      // Set text stuff
-      textFont(bodyFont);
-      textAlign(LEFT);
-      textSize(16);
-      // Draw a rectangle in the bottom
-      fill(0);
-      stroke(UI_COLOR);
-      rectMode(CORNERS);
-      rect(-1, height - 130, width + 1, height + 1);
-      fill(UI_COLOR);
-      // Text - Far right
-      text("Health = " + health + "\nAmmunition = " + ammunition, width - 300, height - 100);
-      // Ship heading indicator
-      drawDial("Heading", playerShip.getHeading(), width - 370, height - 65, 50, color(0, 255, 0));
-      drawDial("Velocity", playerShip.getVelocity().copy(), width - 500, height - 65, 50, color(0, 255, 0));
-      // Text - left
-      String closestObjectString;
-      if(closestObject == null) {
-        fill(100, 100, 100);
-        closestObjectString = "Closest Object: None in range";
-        minDistSq = Integer.MAX_VALUE;
-      } else {
-        if(closestObject.getMass() / 1.989e30 < .1) {
-          closestMass = (float)round(closestObject.getMass() / 5.9736e24 * 1000) / 1000;
-          closestMassUnit = "Earths";
-        } else {
-          closestMass = (float)round(closestObject.getMass() / 1.989e30 * 1000) / 1000;
-          closestMassUnit = "Suns";
-        }
-        closestObjectString = "Closest Object: " + closestObject.getName() + " - " + shortDist + "AU \nSpeed: "+ (float)round(closestObject.getVelocity().mag() * 100) / 100 + "\nMass: " + closestMass  + " " + closestMassUnit;
-        // Closest object arrow
-        drawDial("Direction", closestObject.getPosition().sub(pos), 450, height - 65, 50, closestObject.getColor());
-        stroke(closestObject.getColor());
-        fill(closestObject.getColor());
-      }
-      text(closestObjectString, 50, height - 100);
-      if(playerShip.isLanding()) {
-        //textSize(24);
-        text(":: Landing Autopilot ::", 50, height - 150);
-      }
-    }
-    // Menus
-    else {
-      hint(DISABLE_DEPTH_TEST);
-      camera();
-      noLights();
-      textFont(headerFont);
-      textAlign(CENTER, CENTER);
-      
-      // Header text
-      stroke(0);
-      fill(255, 0, 0);
-      text("You died.", width / 2, (height / 2) - 100);
-      
-      // Body text
-      stroke(0);
-      fill(255);
-      textFont(bodyFont);
-      text("X TO RETRY", width / 2, (height / 2) + 97);
-    }
-    hint(ENABLE_DEPTH_TEST); 
-  }
-  
-  private void checkCollision(SpaceObject a, SpaceObject b) {
-    if(a.collidesWith(b)) {
-      a.onCollide(b);
-    }
-  }
-  
-  private void drawDial(String name, PVector info, int locX, int locY, int radius, color c) {
-      fill(0);
-      stroke(c);
-      ellipse(locX, locY, radius, radius);
-      fill(100, 100, 100);
-      textAlign(CENTER);
-      textSize(14);
-      text(name, locX, locY + 25);
-      textAlign(LEFT);
-      textSize(16);
-      stroke(c);
-      drawArrow(info, (int)(radius * .8), locX, locY);
-      // Reset colors
-      fill(0);
-      stroke(UI_COLOR);
-  }
-  
-  private void drawArrow(PVector heading, int length, int locX, int locY) {
-    Vekta v = Vekta.getInstance();
-    heading.normalize().mult(length);
-    v.line(locX,  locY, locX + heading.x, locY + heading.y);
-    float angle = heading.heading();
-    float x = cos(angle);
-    float y = sin(angle);
-    PVector endpoint = new PVector(x, y);
-    PVector arms = endpoint.copy();
-    endpoint.mult(length);
-    arms.mult(length *.8); // scale the arms to a certain length
-    // draw the arms
-    v.line(locX + endpoint.x, locY + endpoint.y, locX + cos(angle-.3) * (length *.8), locY + sin(angle-.3) * (length *.8));
-    v.line(locX + endpoint.x, locY + endpoint.y, locX + cos(angle+.3) * (length *.8), locY + sin(angle+.3) * (length *.8));
-  }
-  
-  private void updateUIInformation() {
-    health = 100;
-    shortDist = (float)round(sqrt(minDistSq) * 100) / 100;
-    speed = (float)round(spd * 100) / 100;
-    ammunition = playerShip.getProjectilesLeft();
-    position = round(pos.x) + ", " + round(pos.y);
-  }
-  
-  @Override
-  public void keyPressed(char key) {
-    if(dead) {
-      if(key == 'x') {
-        lowPass.stop();
-        restart();
-      }
-    } else {
-     if(key == ESC) {
-       openContext(new PauseMenu(this));
-     }
-     if(key == 'k') {
-       dead = true;  
-     }
-     if(key == 'r') {
-       mouseWheel(-1);
-     }
-     if(key == 'f') {
-       mouseWheel(1);
-     }
-     playerShip.keyPress(key);
-    } 
-  }
-  
-  @Override
-  public void keyReleased(char key) {
-    playerShip.keyReleased(key);
-  }
-  
-  @Override
-  public void mouseWheel(int amount) {
-    zoom = Vekta.max(.1F, Vekta.min(3, zoom * (1 + amount * .1F)));
-  }
-  
-  @Override
-  public void restart() {
-    Vekta.startWorld(new Singleplayer());
-  }
-  
-  @Override
-  public boolean addObject(Object object) {
-    if(object instanceof SpaceObject) {
-      SpaceObject s = (SpaceObject)object;
-      s.setID(nextID++);
-      markedForAddition.add(s);
-      return true;
-    }
-    return false;
-  }
-  
-  @Override
-  public boolean removeObject(Object object) {
-    if(object instanceof SpaceObject) {
-      markedForDeath.add((SpaceObject)object);
-      return true;
-    }
-    return false;
-  }
+	int planetCount;
+	boolean dead;
+	PVector pos;
+	float spd;
+	int health;
+	int ammunition = 100;
+	String position;
+
+	float minDistSq = Float.POSITIVE_INFINITY;
+
+	Spaceship playerShip;
+	SpaceObject closestObject; // TODO: move this logic into Spaceship instances
+
+	float zoom = 1; // Camera zoom
+
+	UniverseGen generator = new UniverseGen(20000, 10);
+
+	List<SpaceObject> objects = new ArrayList<SpaceObject>();
+
+	List<SpaceObject> markedForDeath = new ArrayList<SpaceObject>();
+	List<SpaceObject> markedForAddition = new ArrayList<SpaceObject>();
+
+	// UI Variables (not real time updated)
+	float shortDist;
+	float speed;
+	float closestMass;
+	String closestMassUnit;
+
+	@Override
+	public void init() {
+		Vekta v = getInstance();
+		v.background(0);
+
+		if(getSetting("music") > 0 && !atmosphere.isPlaying())
+			atmosphere.loop();
+
+		v.frameCount = 0;
+
+		// Add initial planets
+		for(Planet p : generator.generate()) {
+			addObject(p);
+		}
+
+		playerShip = new Spaceship(
+				this,
+				"VEKTA I",
+				5000,  // Mass
+				5,     // Radius
+				new PVector(1, 0), // Heading
+				new PVector(), // Position
+				new PVector(),    // Velocity
+				v.color(0, 255, 0),
+				0, .1F, 60,  // Control scheme, Speed, and Handling
+				100 // Starting money
+		);
+		addObject(playerShip);
+	}
+
+	@Override
+	public void render() {
+		Vekta v = getInstance();
+		v.background(0);
+
+		if(!dead) {
+			pos = playerShip.getPosition();
+			spd = playerShip.getVelocity().mag();
+			// Camera follow
+			v.camera(pos.x, pos.y, (.07F * spd + .7F) * (v.height / 2F) / tan(PI * 30 / 180) * zoom, pos.x, pos.y, 0F,
+					0F, 1F, 0F);
+		}
+
+		closestObject = null;
+		minDistSq = Float.POSITIVE_INFINITY;
+		planetCount = 0;
+		for(SpaceObject s : objects) {
+			if(markedForDeath.contains(s)) {
+				continue;
+			}
+
+			if(s instanceof Planet) {
+				planetCount++;
+				float distSq = getDistSq(s.getPosition(), playerShip.getPosition());
+				if(distSq < minDistSq) {
+					closestObject = s;
+					minDistSq = distSq;
+				}
+			}
+			s.update();
+			s.applyInfluenceVector(objects);
+			for(SpaceObject other : objects) {
+				if(s != other) {
+					checkCollision(s, other);
+					checkCollision(other, s);
+				}
+			}
+			s.draw();
+			s.drawTrail();
+		}
+
+		objects.removeAll(markedForDeath);
+		objects.addAll(markedForAddition);
+		markedForDeath.clear();
+		markedForAddition.clear();
+
+		// Info
+		if(!dead) {
+			if(v.frameCount % 10 == 0) {  //  Update values every 10 frames
+				updateUIInformation();
+			}
+			// GUI setup
+			v.hint(DISABLE_DEPTH_TEST);
+			v.camera();
+			v.noLights();
+
+			// Set text stuff
+			v.textFont(bodyFont);
+			v.textAlign(LEFT);
+			v.textSize(16);
+			// Draw a rectangle in the bottom
+			v.fill(0);
+			v.stroke(UI_COLOR);
+			v.rectMode(CORNERS);
+			v.rect(-1, v.height - 130, v.width + 1, v.height + 1);
+			v.fill(UI_COLOR);
+			// Text - Far right
+			v.text("Health = " + health + "\nAmmunition = " + ammunition, v.width - 300, v.height - 100);
+			// Ship heading indicator
+			drawDial("Heading", playerShip.getHeading(), v.width - 370, v.height - 65, 50, v.color(0, 255, 0));
+			drawDial("Velocity", playerShip.getVelocity().copy(), v.width - 500, v.height - 65, 50, v.color(0, 255, 0));
+			// Text - left
+			String closestObjectString;
+			if(closestObject == null) {
+				v.fill(100, 100, 100);
+				closestObjectString = "Closest Object: None in range";
+				minDistSq = Integer.MAX_VALUE;
+			}
+			else {
+				if(closestObject.getMass() / 1.989e30 < .1) {
+					closestMass = (float)round(closestObject.getMass() / 5.9736e24F * 1000) / 1000;
+					closestMassUnit = "Earths";
+				}
+				else {
+					closestMass = (float)round(closestObject.getMass() / 1.989e30F * 1000) / 1000;
+					closestMassUnit = "Suns";
+				}
+				closestObjectString = "Closest Object: " + closestObject.getName() + " - " + shortDist + "AU \nSpeed: " + (float)round(closestObject.getVelocity().mag() * 100) / 100 + "\nMass: " + closestMass + " " + closestMassUnit;
+				// Closest object arrow
+				drawDial("Direction", closestObject.getPosition().sub(pos), 450, v.height - 65, 50, closestObject.getColor());
+				v.stroke(closestObject.getColor());
+				v.fill(closestObject.getColor());
+			}
+			v.text(closestObjectString, 50, v.height - 100);
+			if(playerShip.isLanding()) {
+				//textSize(24);
+				v.text(":: Landing Autopilot ::", 50, v.height - 150);
+			}
+		}
+		// Menus
+		else {
+			v.hint(DISABLE_DEPTH_TEST);
+			v.camera();
+			v.noLights();
+			v.textFont(headerFont);
+			v.textAlign(CENTER, CENTER);
+
+			// Header text
+			v.stroke(0);
+			v.fill(255, 0, 0);
+			v.text("You died.", v.width / 2F, (v.height / 2F) - 100);
+
+			// Body text
+			v.stroke(0);
+			v.fill(255);
+			v.textFont(bodyFont);
+			v.text("X TO RETRY", v.width / 2F, (v.height / 2F) + 97);
+		}
+		v.hint(ENABLE_DEPTH_TEST);
+	}
+
+	private void checkCollision(SpaceObject a, SpaceObject b) {
+		if(a.collidesWith(b)) {
+			a.onCollide(b);
+		}
+	}
+
+	private void drawDial(String name, PVector info, int locX, int locY, int radius, int c) {
+		Vekta v = getInstance();
+		v.fill(0);
+		v.stroke(c);
+		v.ellipse(locX, locY, radius, radius);
+		v.fill(100, 100, 100);
+		v.textAlign(CENTER);
+		v.textSize(14);
+		v.text(name, locX, locY + 25);
+		v.textAlign(LEFT);
+		v.textSize(16);
+		v.stroke(c);
+		drawArrow(info, (int)(radius * .8), locX, locY);
+		// Reset colors
+		v.fill(0);
+		v.stroke(UI_COLOR);
+	}
+
+	private void drawArrow(PVector heading, int length, int locX, int locY) {
+		Vekta v = Vekta.getInstance();
+		heading.normalize().mult(length);
+		v.line(locX, locY, locX + heading.x, locY + heading.y);
+		float angle = heading.heading();
+		float x = cos(angle);
+		float y = sin(angle);
+		PVector endpoint = new PVector(x, y);
+		PVector arms = endpoint.copy();
+		endpoint.mult(length);
+		arms.mult(length * .8F); // scale the arms to a certain length
+		// draw the arms
+		v.line(locX + endpoint.x, locY + endpoint.y, locX + cos(angle - .3F) * (length * .8F), locY + sin(angle - .3F) * (length * .8F));
+		v.line(locX + endpoint.x, locY + endpoint.y, locX + cos(angle + .3F) * (length * .8F), locY + sin(angle + .3F) * (length * .8F));
+	}
+
+	private void updateUIInformation() {
+		health = 100;
+		shortDist = (float)round(sqrt(minDistSq) * 100) / 100;
+		speed = (float)round(spd * 100) / 100;
+		ammunition = playerShip.getProjectilesLeft();
+		position = round(pos.x) + ", " + round(pos.y);
+	}
+
+	@Override
+	public void keyPressed(char key) {
+		if(dead) {
+			if(key == 'x') {
+				lowPass.stop();
+				restart();
+			}
+		}
+		else {
+			if(key == ESC) {
+				setContext(new PauseMenu(this));
+			}
+			if(key == 'k') {
+				dead = true;
+			}
+			if(key == 'r') {
+				mouseWheel(-1);
+			}
+			if(key == 'f') {
+				mouseWheel(1);
+			}
+			playerShip.keyPress(key);
+		}
+	}
+
+	@Override
+	public void keyReleased(char key) {
+		playerShip.keyReleased(key);
+	}
+
+	@Override
+	public void mouseWheel(int amount) {
+		zoom = Vekta.max(.1F, Vekta.min(3, zoom * (1 + amount * .1F)));
+	}
+
+	@Override
+	public void restart() {
+		Vekta.startWorld(new Singleplayer());
+	}
+
+	@Override
+	public boolean addObject(Object object) {
+		if(object instanceof SpaceObject) {
+			SpaceObject s = (SpaceObject)object;
+			s.setID(nextID++);
+			markedForAddition.add(s);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean removeObject(Object object) {
+		if(object instanceof SpaceObject) {
+			markedForDeath.add((SpaceObject)object);
+			return true;
+		}
+		return false;
+	}
 }

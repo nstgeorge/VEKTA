@@ -10,300 +10,282 @@ import java.awt.event.MouseEvent;
 /**
  * Core class for all of Vekta.
  */
-public class Vekta extends PApplet
-{
-    private static Vekta instance;
+public class Vekta extends PApplet {
+	private static Vekta instance;
 
-    public static Vekta getInstance() {
-        return instance;
-    }
+	public static Vekta getInstance() {
+		return instance;
+	}
 
-    static final String FONTNAME = "font/undefined-medium.ttf";
-    static final int MAX_DISTANCE = 10000; // Maximum distance for updating objects (currently unimplemented)
+	static final String FONTNAME = "font/undefined-medium.ttf";
+	static final int MAX_DISTANCE = 10000; // Maximum distance for updating objects (currently unimplemented)
 
-    static Context mainMenu;
+	static Context mainMenu;
 
-    static Context context; // TODO: convert to stack if necessary
+	static Context context; // TODO: convert to stack if necessary
 
-    // Settings
-    private static JSONObject defaultSettings;
-    private static JSONObject  settings;
+	// Settings
+	private static JSONObject defaultSettings;
+	private static JSONObject settings;
 
-// Game-balancing variables and visual settings
+	// Game-balancing variables and visual settings
 
-    final static float G = 6.674e-11F;
-    final static float SCALE = 3e8F;
-    final static int UI_COLOR = new Color(0, 255, 0).getIntValue();
-    final static float VECTOR_SCALE = 5;
-    final static int MAX_PLANETS = 500;
-    final static int TRAIL_LENGTH = 100;
-    final float DEF_ZOOM = (height/2.0F) / tan((PI*30.0F / 180.0F)); // For some reason, this is the default eyeZ location for Processing
-    
-    // Fonts
-    static PFont headerFont;
-    static PFont bodyFont;
+	final static float G = 6.674e-11F;
+	final static float SCALE = 3e8F;
+	final static int UI_COLOR = new Color(0, 255, 0).getIntValue();
+	final static float VECTOR_SCALE = 5;
+	final static int MAX_PLANETS = 500;
+	final static int TRAIL_LENGTH = 100;
+	final float DEF_ZOOM = (height / 2.0F) / tan((PI * 30.0F / 180.0F)); // For some reason, this is the default eyeZ location for Processing
 
-    // HUD/Menu overlay
-    static PGraphics overlay;
+	// Fonts
+	static PFont headerFont;
+	static PFont bodyFont;
 
-    // A sick logo
-    static PShape logo;
+	// HUD/Menu overlay
+	static PGraphics overlay;
 
-// TODO: move all these references to a designated `Resources` class
+	// A sick logo
+	static PShape logo;
 
-    // Sounds
-    static SoundFile theme;
-    static SoundFile atmosphere;
-    static SoundFile laser;
-    static SoundFile death;
-    static SoundFile engine;
-    static SoundFile change;
-    static SoundFile select;
-    static SoundFile chirp;
+	// TODO: move all these references to a designated `Resources` class
 
-    // Name components
-    private static String[] planetNamePrefixes;
-    private static String[] planetNameSuffixes;
-    private static String[] itemNameAdjectives;
-    private static String[] itemNameNouns;
-    private static String[] itemNameModifiers;
+	// Sounds
+	static SoundFile theme;
+	static SoundFile atmosphere;
+	static SoundFile laser;
+	static SoundFile death;
+	static SoundFile engine;
+	static SoundFile change;
+	static SoundFile select;
+	static SoundFile chirp;
 
-    // Low pass filter
-    static LowPass lowPass;
-    
-    public void settings() {
-        fullScreen(P3D);
-        pixelDensity(displayDensity());
-        background(0);
-        frameRate(60);
-        noCursor();
-    }
+	// Name components
+	private static String[] planetNamePrefixes;
+	private static String[] planetNameSuffixes;
+	private static String[] itemNameAdjectives;
+	private static String[] itemNameNouns;
+	private static String[] itemNameModifiers;
 
-    public void setup() {
-        instance = this;
-        
-        createSettings();
+	// Low pass filter
+	static LowPass lowPass;
 
-        textMode(SHAPE);
+	public void settings() {
+		fullScreen(P3D);
+		pixelDensity(displayDensity());
+		background(0);
+		frameRate(60);
+		noCursor();
+	}
 
-        // Overlay initialization
-        overlay = createGraphics(width, height);
-        // Fonts
-        headerFont = createFont(FONTNAME, 72);
-        bodyFont = createFont(FONTNAME, 24);
-        // Images
-        logo = loadShape("VEKTA.svg");
+	public void setup() {
+		instance = this;
 
-        // All sounds and music. These must be instantiated in the main file
-        // Music
-        theme = new SoundFile(this, "main.wav");
-        atmosphere = new SoundFile(this, "atmosphere.wav");
+		createSettings();
 
-        // Sound
-        laser = new SoundFile(this, "laser.wav");
-        death = new SoundFile(this, "death.wav");
-        engine = new SoundFile(this, "engine.wav");
-        change = new SoundFile(this, "change.wav");
-        select = new SoundFile(this, "select.wav");
-        chirp = new SoundFile(this, "chirp.wav");
+		textMode(SHAPE);
 
-        planetNamePrefixes = loadStrings("text/planet_prefixes.txt");
-        planetNameSuffixes = concat(loadStrings("text/planet_suffixes.txt"), new String[] {""});
-        itemNameAdjectives = loadStrings("text/item_adjectives.txt");
-        itemNameNouns = loadStrings("text/item_nouns.txt");
-        itemNameModifiers = loadStrings("text/item_modifiers.txt");
+		// Overlay initialization
+		overlay = createGraphics(width, height);
+		// Fonts
+		headerFont = createFont(FONTNAME, 72);
+		bodyFont = createFont(FONTNAME, 24);
+		// Images
+		logo = loadShape("VEKTA.svg");
 
-        lowPass = new LowPass(this);
+		// All sounds and music. These must be instantiated in the main file
+		// Music
+		theme = new SoundFile(this, "main.wav");
+		atmosphere = new SoundFile(this, "atmosphere.wav");
 
-        mainMenu = new MainMenu();
-        setContext(mainMenu);
-    }
+		// Sound
+		laser = new SoundFile(this, "laser.wav");
+		death = new SoundFile(this, "death.wav");
+		engine = new SoundFile(this, "engine.wav");
+		change = new SoundFile(this, "change.wav");
+		select = new SoundFile(this, "select.wav");
+		chirp = new SoundFile(this, "chirp.wav");
 
-    public void draw() {
-        if(context != null) {
-            context.render();
-        }
+		planetNamePrefixes = loadStrings("text/planet_prefixes.txt");
+		planetNameSuffixes = concat(loadStrings("text/planet_suffixes.txt"), new String[] {""});
+		itemNameAdjectives = loadStrings("text/item_adjectives.txt");
+		itemNameNouns = loadStrings("text/item_nouns.txt");
+		itemNameModifiers = loadStrings("text/item_modifiers.txt");
 
-        hint(DISABLE_DEPTH_TEST);
-        camera();
-        noLights();
+		lowPass = new LowPass(this);
 
-        // FPS OVERLAY
-        fill(255);
-        textAlign(LEFT);
-        textSize(16);
-        text("FPS = " + frameRate, 50, height - 20);
-        //loop();
-    }
+		mainMenu = new MainMenu();
+		setContext(mainMenu);
+	}
 
-    public void keyPressed() {
-        if(context != null) {
-            context.keyPressed(key);
-            if(key == ESC) {
-                key = 0; // Suppress default behavior (exit)
-            }
-        }
-    }
+	public void draw() {
+		if(context != null) {
+			context.render();
+		}
 
-    public void keyReleased() {
-        if(context != null) {
-            context.keyReleased(key);
-        }
-    }
+		hint(DISABLE_DEPTH_TEST);
+		camera();
+		noLights();
 
-    public void mousePressed() {
-        if(context != null) {
-            context.keyPressed('x');
-        }
-    }
+		// FPS OVERLAY
+		fill(255);
+		textAlign(LEFT);
+		textSize(16);
+		text("FPS = " + frameRate, 50, height - 20);
+		//loop();
+	}
 
-    public void mouseReleased() {
-        if(context != null) {
-            context.keyReleased('x');
-        }
-    }
-    
-    public void mouseWheel(MouseEvent event) {
-        if(context != null) {
-            context.mouseWheel(event.getClickCount());
-        }
-    }
+	public void keyPressed() {
+		if(context != null) {
+			context.keyPressed(key);
+			if(key == ESC) {
+				key = 0; // Suppress default behavior (exit)
+			}
+		}
+	}
 
-    public static void startWorld(World world) {
-        Vekta.clearOverlay();
-        Vekta.setContext(world);
-        world.init();
-    }
+	public void keyReleased() {
+		if(context != null) {
+			context.keyReleased(key);
+		}
+	}
 
-    static void clearOverlay() {
-        if(overlay.isLoaded()) {
-            overlay.clear();
-            overlay.beginDraw();
-            overlay.background(0, 0);
-            overlay.endDraw();
-            overlay.setLoaded(false);
-        }
-    }
+	public void mousePressed() {
+		if(context != null) {
+			context.keyPressed('x');
+		}
+	}
 
-    static void drawOverlay() {
-        // Overlay the overlay
-        // NOTE: THIS IS VERY SLOW. Use only for menus, not gameplay!
-        if(overlay.isLoaded()) {
-            Vekta v = getInstance();
-            overlay.loadPixels();
-            v.loadPixels();
-            for(int i = 0; i < v.pixels.length; i++)
-                if(overlay.pixels[i] != 0) v.pixels[i] = overlay.pixels[i];
-           v.updatePixels();
-            overlay.updatePixels();
-            //image(overlay, 0, 0);
-            //redraw();
-        }
-    }
+	public void mouseReleased() {
+		if(context != null) {
+			context.keyReleased('x');
+		}
+	}
 
-    void createSettings() {
-        // Default settings
-        defaultSettings = new JSONObject();
-        defaultSettings.put("sound", 1);
-        defaultSettings.put("music", 1);
-        // Settings
-        try {
-            settings = loadJSONObject("settings.json");
-        } catch(NullPointerException e) {
-            System.out.println("settings.json not found. Using default settings.");
-            settings = defaultSettings;
-            saveJSONObject(settings, "settings.json");
-        }
-    }
+	public void mouseWheel(MouseEvent event) {
+		if(context != null) {
+			context.mouseWheel(event.getClickCount());
+		}
+	}
 
-    static int getSetting(String key) {
-        if(!settings.isNull(key)) {
-            return settings.getInt(key);
-        } else {
-            if(!defaultSettings.isNull(key)) {
-                return defaultSettings.getInt(key);
-            } else {
-                return 0;
-            }
-        }
-    }
+	public static void startWorld(World world) {
+		Vekta.clearOverlay();
+		Vekta.setContext(world);
+		world.init();
+	}
 
-    static void setSetting(String key, int value) {
-        settings.setInt(key, value);
-    }
+	static void clearOverlay() {
+		if(overlay.isLoaded()) {
+			overlay.clear();
+			overlay.beginDraw();
+			overlay.background(0, 0);
+			overlay.endDraw();
+			overlay.setLoaded(false);
+		}
+	}
 
-    static void saveSettings() {
-        getInstance().saveJSONObject(settings, "settings.json");
-    }
+	static void drawOverlay() {
+		// Overlay the overlay
+		// NOTE: THIS IS VERY SLOW. Use only for menus, not gameplay!
+		if(overlay.isLoaded()) {
+			Vekta v = getInstance();
+			overlay.loadPixels();
+			v.loadPixels();
+			for(int i = 0; i < v.pixels.length; i++)
+				if(overlay.pixels[i] != 0)
+					v.pixels[i] = overlay.pixels[i];
+			v.updatePixels();
+			overlay.updatePixels();
+			//image(overlay, 0, 0);
+			//redraw();
+		}
+	}
 
-    /**
-     Draws an option of name "name" at yPos in the overlay
-     */
-    private void drawOption(String name, int yPos, boolean selected) {
-        // Shape ---------------------
-        hint(DISABLE_DEPTH_TEST);
-        camera();
-        noLights();
-        if(selected) stroke(255);
-        else stroke(UI_COLOR);
-        fill(1);
-        rectMode(CENTER);
-        rect(width / 8, yPos, 200, 50);
-        // Text ----------------------
-        textFont(bodyFont);
-        stroke(0);
-        fill(UI_COLOR);
-        textAlign(CENTER, CENTER);
-        text(name, width / 8, yPos - 3);
-    }
+	void createSettings() {
+		// Default settings
+		defaultSettings = new JSONObject();
+		defaultSettings.put("sound", 1);
+		defaultSettings.put("music", 1);
+		// Settings
+		try {
+			settings = loadJSONObject("settings.json");
+		}
+		catch(NullPointerException e) {
+			System.out.println("settings.json not found. Using default settings.");
+			settings = defaultSettings;
+			saveJSONObject(settings, "settings.json");
+		}
+	}
 
-    public static boolean addObject(Object object) {
-        return ((World)context).addObject(object);
-    }
+	static int getSetting(String key) {
+		if(!settings.isNull(key)) {
+			return settings.getInt(key);
+		}
+		else {
+			if(!defaultSettings.isNull(key)) {
+				return defaultSettings.getInt(key);
+			}
+			else {
+				return 0;
+			}
+		}
+	}
 
-    public static boolean removeObject(Object object) {
-        return ((World)context).removeObject(object);
-    }
+	static void setSetting(String key, int value) {
+		settings.setInt(key, value);
+	}
 
-    public static void setContext(Context context) {
-        if(context == null) {
-            throw new RuntimeException("Context cannot be set to null");
-        }
-        Vekta.context = context;
-    }
+	static void saveSettings() {
+		getInstance().saveJSONObject(settings, "settings.json");
+	}
 
-//// Generator methods (will move to another class) ////
+	public static boolean addObject(Object object) {
+		return ((World)context).addObject(object);
+	}
 
-    public static String generatePlanetName() {
-        Vekta v = getInstance();
-        return v.random(planetNamePrefixes) + v.random(planetNameSuffixes);
-    }
+	public static boolean removeObject(Object object) {
+		return ((World)context).removeObject(object);
+	}
 
-    public static String generateItemName() {
-        Vekta v = getInstance();
-        String name = v.random(itemNameNouns);
-        if (v.random(1) > .5) {
-            name = v.random(itemNameAdjectives) + " " + name;
-        }
-        if (v.random(1) > .5) {
-            name = name + " " + v.random(itemNameModifiers);
-        }
-        return name;
-    }
+	public static void setContext(Context context) {
+		if(context == null) {
+			throw new RuntimeException("Context cannot be set to null");
+		}
+		Vekta.context = context;
+	}
 
-    <T> T random(T[] array) {
-        return array[(int)random(array.length)];
-    }
+	//// Generator methods (will move to another class) ////
 
-    public static float getDistSq(PVector a, PVector b) {
-        float x = a.x - b.x;
-        float y = a.y - b.y;
-        return x * x + y * y;
-    }
-    
-    //// Main method ////
-    
-    public static void main(String[] argv) {
-        PApplet.main(Vekta.class.getName(), argv);
-    }
+	public static String generatePlanetName() {
+		Vekta v = getInstance();
+		return v.random(planetNamePrefixes) + v.random(planetNameSuffixes);
+	}
+
+	public static String generateItemName() {
+		Vekta v = getInstance();
+		String name = v.random(itemNameNouns);
+		if(v.random(1) > .5) {
+			name = v.random(itemNameAdjectives) + " " + name;
+		}
+		if(v.random(1) > .5) {
+			name = name + " " + v.random(itemNameModifiers);
+		}
+		return name;
+	}
+
+	<T> T random(T[] array) {
+		return array[(int)random(array.length)];
+	}
+
+	public static float getDistSq(PVector a, PVector b) {
+		float x = a.x - b.x;
+		float y = a.y - b.y;
+		return x * x + y * y;
+	}
+
+	//// Main method ////
+
+	public static void main(String[] argv) {
+		PApplet.main(Vekta.class, argv);
+	}
 };

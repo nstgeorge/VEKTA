@@ -6,32 +6,32 @@ package vekta;
  */
 
 public class Color {
-    int color; // Used to store the 32 bits of color information: AAAAAAAARRRRRRRRGGGGGGGGBBBBBBBB
-    
-    public Color(int r, int g, int b) {
+	int color; // Used to store the 32 bits of color information: AAAAAAAARRRRRRRRGGGGGGGGBBBBBBBB
 
-        color = convertRGB((byte)(r % 256), (byte)(g % 256), (byte)(b & 256));
-    }
+	public Color(int r, int g, int b) {
 
-    public Color(int[] rgb) {
-        color = convertRGBFromIntArray(rgb);
-    }
+		color = convertRGB((byte)(r % 256), (byte)(g % 256), (byte)(b & 256));
+	}
 
-    public int getIntValue() {
-        return color;
-    }
+	public Color(int[] rgb) {
+		color = convertRGBFromIntArray(rgb);
+	}
 
-    public void setColor(int r, int g, int b) {
-        color = convertRGB((byte)(r % 256), (byte)(g % 256), (byte)(b & 256));
-    }
+	public int getIntValue() {
+		return color;
+	}
 
-    // Conversion functions (I normally don't like bit-twiddling but this is the best way to do it here)
+	public void setColor(int r, int g, int b) {
+		color = convertRGB((byte)(r % 256), (byte)(g % 256), (byte)(b & 256));
+	}
 
-    private int convertRGB(byte r, byte g, byte b) {
-        return (byte)(255) << 24 | r << 16 | g << 8 | b;
-    }
+	// Conversion functions (I normally don't like bit-twiddling but this is the best way to do it here)
 
-    private int convertRGBFromIntArray(int[] rgb) {
-        return (255) << 24 | (rgb[0] % 256) << 16 | (rgb[1] % 256) << 8 | (rgb[2] % 256);
-    }
+	private int convertRGB(byte r, byte g, byte b) {
+		return (byte)(255) << 24 | r << 16 | g << 8 | b;
+	}
+
+	private int convertRGBFromIntArray(int[] rgb) {
+		return (255) << 24 | (rgb[0] % 256) << 16 | (rgb[1] % 256) << 8 | (rgb[2] % 256);
+	}
 }
