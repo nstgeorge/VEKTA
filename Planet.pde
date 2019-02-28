@@ -9,7 +9,7 @@ class Planet extends SpaceObject {
   private final color DEF_COLOR = color(255, 255, 255);
   private final double MIN_SPLIT_RADIUS = 6;
   private final float SPLIT_DISTANCE_SCALE = 1;
-  private final float SPLIT_VELOCITY_SCALE = 3;
+  private final float SPLIT_VELOCITY_SCALE = 1;
   private final float SPLIT_MASS_ABSORB = .5; // Below 1.0 to prevent supermassive planets taking over the map
   private String[] nameParts1 = loadStrings("data/text/planet_prefixes.txt"); // Planet name prefixes
   private String[] nameParts2 = concat(loadStrings("data/text/planet_suffixes.txt"), new String[] {""}); // Planet name suffixes
@@ -74,8 +74,9 @@ class Planet extends SpaceObject {
       float massSum = getMass() + s.getMass();
       PVector newVelocity = new PVector(xWeight / massSum, yWeight / massSum);
       
-      PVector offset = PVector.random2D().mult(newRadius * SPLIT_DISTANCE_SCALE);
-      PVector splitVelocity = getPosition().copy().sub(s.getPosition()).rotate(90).normalize().mult(SPLIT_VELOCITY_SCALE);
+      PVector base = getPosition().copy().sub(s.getPosition()).normalize().rotate(90);
+      PVector offset = base.copy().mult(newRadius * SPLIT_DISTANCE_SCALE);
+      PVector splitVelocity = base.copy().mult(SPLIT_VELOCITY_SCALE);
       Planet a = new Planet(newMass, getDensity(), getPosition().copy().add(offset), newVelocity.copy().add(splitVelocity), getColor());
       Planet b = new Planet(newMass, getDensity(), getPosition().copy().sub(offset), newVelocity.copy().sub(splitVelocity), getColor());
       if(!s.collidesWith(a)) {
