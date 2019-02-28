@@ -61,7 +61,7 @@ class Planet extends SpaceObject {
   
   @Override
   void onDestroy(SpaceObject s) {
-    println("Planet destroyed with radius: " + getRadius());
+    //println("Planet destroyed with radius: " + getRadius());
     
     // If sufficiently large, split planet in half
     if(getRadius() >= MIN_SPLIT_RADIUS) {
