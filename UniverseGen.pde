@@ -22,7 +22,7 @@ class UniverseGen {
     // Create the center body
     double power = Math.pow(10, random(28, 31));
     double centerMass = random(0.8, 4) * power;
-    float centerDensity = random(1, 2);
+    float centerDensity = random(1.0, 2);
     system.add(new Planet(
       centerMass, // Mass
       centerDensity,   // Radius
@@ -32,7 +32,7 @@ class UniverseGen {
     ));
     
     // Generate planets around body
-    int planets = (int)random(1, 8);
+    int planets = (int)random(1.0, 8);
     for(int i = 0; i <= planets; i++) {
       float radiusLoc = random(100, 2000);
       float speed = sqrt((float)(G * centerMass / radiusLoc)) / (float)SCALE;

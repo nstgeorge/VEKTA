@@ -79,7 +79,7 @@ class Singleplayer implements Gamemode {
         if(s instanceof Planet) {
           planetCount++;
           float distSq = getDistSq(s.getPosition(), playerShip.getPosition());
-          if(distSq < minDistSq * minDistSq) {
+          if(distSq < minDistSq) {
             closestObject = s;
             minDistSq = distSq;
           }
