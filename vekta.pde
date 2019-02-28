@@ -56,8 +56,10 @@ SoundFile chirp;
 LowPass lowPass;
 
 void setup() {
+  createSettings();
   // Important visual stuff
   fullScreen(P3D);
+  pixelDensity(displayDensity());
   background(0);
   frameRate(60);
   noCursor();
@@ -84,8 +86,6 @@ void setup() {
   chirp = new SoundFile(this, "chirp.wav");
   
   lowPass = new LowPass(this);
-  
-  createSettings();
   
   playerWins[0] = 0;
   playerWins[1] = 0;
