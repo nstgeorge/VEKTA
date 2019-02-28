@@ -1,11 +1,11 @@
 package vekta;
 
-import processing.core.*;
+import processing.core.PApplet;
+import processing.core.PFont;
+import processing.core.PGraphics;
+import processing.core.PVector;
 import processing.data.JSONObject;
-import processing.sound.LowPass;
-import processing.sound.SoundFile;
-
-import java.awt.event.MouseEvent;
+import processing.event.MouseEvent;
 
 /**
  * Core class for all of Vekta.
@@ -16,7 +16,7 @@ public class Vekta extends PApplet {
 	public static Vekta getInstance() {
 		return instance;
 	}
-	
+
 	private static final String SETTINGS_PATH = System.getProperty("user.dir") + "/settings.json";
 
 	static final String FONTNAME = "font/undefined-medium.ttf";
@@ -45,33 +45,9 @@ public class Vekta extends PApplet {
 	static PFont bodyFont;
 
 	// HUD/Menu overlay
-	static PGraphics overlay;
+	private static PGraphics overlay;
 
-	// A sick logo
-	static PShape logo;
-
-	// TODO: move all these references to a designated `Resources` class
-
-	// Sounds
-	static SoundFile theme;
-	static SoundFile atmosphere;
-	static SoundFile laser;
-	static SoundFile death;
-	static SoundFile engine;
-	static SoundFile change;
-	static SoundFile select;
-	static SoundFile chirp;
-
-	// Name components
-	private static String[] planetNamePrefixes;
-	private static String[] planetNameSuffixes;
-	private static String[] itemNameAdjectives;
-	private static String[] itemNameNouns;
-	private static String[] itemNameModifiers;
-
-	// Low pass filter
-	static LowPass lowPass;
-
+	@Override
 	public void settings() {
 		fullScreen(P3D);
 		pixelDensity(displayDensity());
@@ -79,6 +55,8 @@ public class Vekta extends PApplet {
 
 	public void setup() {
 		instance = this;
+
+		Resources.init();
 
 		background(color(0));
 		frameRate(60);
@@ -93,34 +71,12 @@ public class Vekta extends PApplet {
 		// Fonts
 		headerFont = createFont(FONTNAME, 72);
 		bodyFont = createFont(FONTNAME, 24);
-		// Images
-		logo = loadShape("VEKTA.svg");
-
-		// All sounds and music. These must be instantiated in the main file
-		// Music
-		theme = new SoundFile(this, "main.wav");
-		atmosphere = new SoundFile(this, "atmosphere.wav");
-
-		// Sound
-		laser = new SoundFile(this, "laser.wav");
-		death = new SoundFile(this, "death.wav");
-		engine = new SoundFile(this, "engine.wav");
-		change = new SoundFile(this, "change.wav");
-		select = new SoundFile(this, "select.wav");
-		chirp = new SoundFile(this, "chirp.wav");
-
-		planetNamePrefixes = loadStrings("text/planet_prefixes.txt");
-		planetNameSuffixes = concat(loadStrings("text/planet_suffixes.txt"), new String[] {""});
-		itemNameAdjectives = loadStrings("text/item_adjectives.txt");
-		itemNameNouns = loadStrings("text/item_nouns.txt");
-		itemNameModifiers = loadStrings("text/item_modifiers.txt");
-
-		lowPass = new LowPass(this);
 
 		mainMenu = new MainMenu();
 		setContext(mainMenu);
 	}
-
+	
+	@Override
 	public void draw() {
 		if(context != null) {
 			context.render();
@@ -138,6 +94,7 @@ public class Vekta extends PApplet {
 		//loop();
 	}
 
+	@Override
 	public void keyPressed() {
 		if(context != null) {
 			context.keyPressed(key);
@@ -147,27 +104,31 @@ public class Vekta extends PApplet {
 		}
 	}
 
+	@Override
 	public void keyReleased() {
 		if(context != null) {
 			context.keyReleased(key);
 		}
 	}
 
+	@Override
 	public void mousePressed() {
 		if(context != null) {
 			context.keyPressed('x');
 		}
 	}
 
+	@Override
 	public void mouseReleased() {
 		if(context != null) {
 			context.keyReleased('x');
 		}
 	}
 
+	@Override
 	public void mouseWheel(MouseEvent event) {
 		if(context != null) {
-			context.mouseWheel(event.getClickCount());
+			context.mouseWheel(event.getCount());
 		}
 	}
 
@@ -242,12 +203,12 @@ public class Vekta extends PApplet {
 		getInstance().saveJSONObject(settings, SETTINGS_PATH);
 	}
 
-	public static boolean addObject(Object object) {
-		return getWorld().addObject(object);
+	public static void addObject(Object object) {
+		getWorld().addObject(object);
 	}
 
-	public static boolean removeObject(Object object) {
-		return getWorld().removeObject(object);
+	public static void removeObject(Object object) {
+		getWorld().removeObject(object);
 	}
 
 	public static Context getContext() {
@@ -272,17 +233,24 @@ public class Vekta extends PApplet {
 
 	public static String generatePlanetName() {
 		Vekta v = getInstance();
-		return v.random(planetNamePrefixes) + v.random(planetNameSuffixes);
+		return v.random(Resources.getStrings("planet_prefixes")) + v.random(Resources.getStrings("planet_suffixes", ""));
 	}
 
-	public static String generateItemName() {
+	public static String generateItemName(ItemType type) {
 		Vekta v = getInstance();
-		String name = v.random(itemNameNouns);
+		String name = v.random(Resources.getStrings("item_nouns"));
 		if(v.random(1) > .5) {
-			name = v.random(itemNameAdjectives) + " " + name;
+			name += " " +  v.random(Resources.getStrings("item_modifiers"));
 		}
-		if(v.random(1) > .5) {
-			name = name + " " + v.random(itemNameModifiers);
+
+		if(type == ItemType.LEGENDARY) {
+			name += " of " + generatePlanetName();
+		}
+		else {
+			if(v.random(1) > .5) {
+				String adj = v.random(Resources.getStrings(type == ItemType.COMMON ? "item_adj_common" : "item_adj_rare"));
+				name = adj + " " + name;
+			}
 		}
 		return name;
 	}

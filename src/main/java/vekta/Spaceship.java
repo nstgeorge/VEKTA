@@ -95,20 +95,14 @@ class Spaceship extends SpaceObject {
 		if(controlScheme == 0) {   // WASD
 			switch(key) {
 			case 'w':
-				if(getSetting("sound") > 0) {
-					engine.stop();
-					engine.loop();
-				}
+				Resources.loopSound("engine");
 				thrust = 1;
 				break;
 			case 'a':
 				turn = -((float)handling / HANDLING_SCALE);
 				break;
 			case 's':
-				if(getSetting("sound") > 0) {
-					engine.stop();
-					engine.loop();
-				}
+				Resources.loopSound("engine");
 				thrust = -1;
 				break;
 			case 'd':
@@ -129,20 +123,14 @@ class Spaceship extends SpaceObject {
 		if(controlScheme == 1) {   // IJKL
 			switch(key) {
 			case 'i':
-				if(getSetting("sound") > 0) {
-					engine.stop();
-					engine.loop();
-				}
+				Resources.stopSound("engine");
 				thrust = 1;
 				break;
 			case 'j':
 				turn = -((float)handling / HANDLING_SCALE);
 				break;
 			case 'k':
-				if(getSetting("sound") > 0) {
-					engine.stop();
-					engine.loop();
-				}
+				Resources.stopSound("engine");
 				thrust = -1;
 				break;
 			case 'l':
@@ -163,8 +151,7 @@ class Spaceship extends SpaceObject {
 
 	void keyReleased(char key) {
 		if((key == 'w' || key == 's') && controlScheme == 0) {
-			if(getSetting("sound") > 0)
-				engine.stop();
+			Resources.stopSound("engine");
 			thrust = 0;
 		}
 		if((key == 'a' || key == 'd') && controlScheme == 0) {
@@ -172,8 +159,7 @@ class Spaceship extends SpaceObject {
 		}
 
 		if((key == 'i' || key == 'k') && controlScheme == 1) {
-			if(getSetting("sound") > 0)
-				engine.stop();
+			Resources.stopSound("engine");
 			thrust = 0;
 		}
 		if((key == 'j' || key == 'l') && controlScheme == 1) {
@@ -187,8 +173,7 @@ class Spaceship extends SpaceObject {
 
 	private void fireProjectile() {
 		if(numProjectiles < MAX_PROJECTILES) {
-			if(getSetting("sound") > 0)
-				laser.play();
+			Resources.playSound("laser");
 			addObject(new Projectile(this, position.copy(), velocity.copy(), heading.copy(), c));
 			numProjectiles++;
 		}
@@ -196,7 +181,6 @@ class Spaceship extends SpaceObject {
 
 	@Override
 	void onDestroy(SpaceObject s) {
-		lowPass.process(atmosphere, 800);
 		getWorld().setDead();
 	}
 

@@ -5,10 +5,10 @@ interface World extends Context {
 	 * Initializes all required variables
 	 */
 	void init();
-	
+
 	/**
 	 * Called when player dies
-	 * */
+	 */
 	void setDead();
 	
 	/**
@@ -16,7 +16,7 @@ interface World extends Context {
 	 */
 	void restart();
 
-	boolean addObject(Object object);
+	void addObject(Object object);
 
-	boolean removeObject(Object object);
+	void removeObject(Object object);
 }  

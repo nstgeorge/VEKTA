@@ -80,17 +80,27 @@ class Item implements Comparable<Item> {
 }
 
 enum ItemType {
-	COMMON(0xFFFFFF88),
-	RARE(0xFF88FF88),
-	LEGENDARY(0xFFFF88FF);
+	COMMON(0xFFCCCCCC, 1),
+	RARE(0xFFFFAA88, 2),
+	LEGENDARY(0xFFAA88FF, 10);
 
 	private final int color;
+	private final float priceModifier;
 
-	private ItemType(int color) {
+	ItemType(int color, float priceModifier) {
 		this.color = color;
+		this.priceModifier = priceModifier;
 	}
 
 	public int getColor() {
 		return color;
+	}
+
+	public float getPriceModifier() {
+		return priceModifier;
+	}
+	
+	public int randomPrice() {
+		return (int)(Vekta.getInstance().random(1, 10) * priceModifier);
 	}
 }

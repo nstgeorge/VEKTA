@@ -27,7 +27,7 @@ class PauseMenu implements Context {
 		v.rect(-1, -1, v.width / 4F, v.height + 2);
 		// Logo
 		v.shapeMode(CENTER);
-		v.shape(logo, v.width / 8F, 100, (v.width / 4F) - 100, ((v.width / 4F) - 100) / 3.392F);
+		v.shape(Resources.logo, v.width / 8F, 100, (v.width / 4F) - 100, ((v.width / 4F) - 100) / 3.392F);
 		// Options
 		for(int i = 0; i < pauseMenu.length; i++) {
 			drawOption(pauseMenu[i], (v.height / 2) + (i * 100), i == selected);
@@ -73,22 +73,17 @@ class PauseMenu implements Context {
 		}
 		else if(key == 'w') {
 			// Play the sound for changing menu selection
-			if(getSetting("sound") > 0)
-				change.play();
+			Resources.playSound("change");
 			selected = Math.max(selected - 1, 0);
 		}
 		else if(key == 's') {
 			// Play the sound for changing menu selection
-			if(getSetting("sound") > 0)
-				change.play();
+			Resources.playSound("change");
 			selected = Math.min(selected + 1, pauseMenu.length - 1);
 		}
 		else if(key == 'x') {
-			if(getSetting("music") > 0)
-				theme.stop();
-			// Play the sound for selection
-			if(getSetting("sound") > 0)
-				select.play();
+//			Resources.stopMusic("theme");
+			Resources.playSound("select");
 			clearOverlay();
 			switch(selected) {
 			case (0):

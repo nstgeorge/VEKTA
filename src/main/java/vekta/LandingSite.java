@@ -52,8 +52,8 @@ class LandingSite {
 
 		landed = ship;
 		Vekta.removeObject(ship);
-		computeOffers(ship.getInventory(), shipOffers, offers, ITEM_MARKUP);
-		computeOffers(getInventory(), offers, shipOffers, 1 / ITEM_MARKUP);
+		computeOffers(ship.getInventory(), shipOffers, offers, 1 / ITEM_MARKUP);
+		computeOffers(getInventory(), offers, shipOffers, ITEM_MARKUP);
 		MenuHandle handle = new LandingMenuHandle(this, getWorld());
 		Menu menu = new Menu(handle);
 		menu.add(new TradeMenuOption(true, ship.getInventory(), getInventory(), offers));
@@ -86,7 +86,7 @@ class LandingSite {
 				thisSide.put(item, price);
 			}
 			else if(!thisSide.containsKey(item)) {
-				int price = (int)Vekta.getInstance().random(1, 30);
+				int price = item.getType().randomPrice();
 				thisSide.put(item, price);
 			}
 		}

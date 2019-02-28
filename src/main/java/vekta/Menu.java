@@ -88,6 +88,10 @@ class TradeOption implements MenuOption {
 		return item.getName() + " [" + price + " G]";
 	}
 
+	public Item getItem() {
+		return item;
+	}
+
 	@Override
 	public void select(Menu menu) {
 		if(to.has(price) && from.has(item)) {
@@ -180,17 +184,17 @@ class MenuHandle {
 		v.textAlign(CENTER, CENTER);
 		v.textSize(24);
 		for(int i = 0; i < menu.size(); i++) {
-			drawButton(menu.get(i).getName(), (v.height / 2) + (i * spacing), menu.getIndex() == i);
+			drawButton(menu.get(i), (v.height / 2) + (i * spacing), menu.getIndex() == i);
 		}
 
 		//textFont(bodyFont);
 		v.stroke(0);
 		v.fill(255);
 		v.textAlign(CENTER);
-		v.text("X to select", v.width / 2, (v.height / 2) + (menu.size() * 100) + 200);
+		v.text("X to select", v.width / 2F, (v.height / 2F) + (menu.size() * 100) + 200);
 	}
 
-	private void drawButton(String name, int yPos, boolean selected) {
+	void drawButton(MenuOption opt, int yPos, boolean selected) {
 		Vekta v = getInstance();
 		if(selected)
 			v.stroke(255);
@@ -198,12 +202,16 @@ class MenuHandle {
 			v.stroke(UI_COLOR);
 		v.fill(1);
 		v.rectMode(CENTER);
-		v.rect(v.width / 2, yPos, buttonWidth, 50);
+		v.rect(v.width / 2F, yPos, buttonWidth, 50);
 		// Text ----------------------
 		//textFont(bodyFont);
 		v.stroke(0);
-		v.fill(UI_COLOR);
-		v.text(name, v.width / 2, yPos - 3);
+		v.fill(getButtonColor(opt));
+		v.text(opt.getName(), v.width / 2F, yPos - 3);
+	}
+
+	int getButtonColor(MenuOption opt) {
+		return UI_COLOR;
 	}
 
 	public void keyPressed(Menu menu, char key) {
@@ -213,18 +221,15 @@ class MenuHandle {
 			}
 		}
 		else if(key == 'w') {
-			if(getSetting("sound") > 0)
-				change.play();
+			Resources.playSound("change");
 			menu.scroll(-1);
 		}
 		else if(key == 's') {
-			if(getSetting("sound") > 0)
-				change.play();
+			Resources.playSound("change");
 			menu.scroll(1);
 		}
 		else if(key == 'x') {
-			if(getSetting("sound") > 0)
-				select.play();
+			Resources.playSound("change");
 			menu.getCursor().select(menu);
 		}
 	}
@@ -249,10 +254,10 @@ class LandingMenuHandle extends MenuHandle {
 		SpaceObject s = site.getParent();
 		v.textSize(32);
 		v.fill(100);
-		v.text("Welcome to", v.width / 2, v.height / 4);
+		v.text("Welcome to", v.width / 2F, v.height / 4F);
 		v.textSize(48);
 		v.fill(s.getColor());
-		v.text(s.getName(), v.width / 2, v.height / 4 + 64);
+		v.text(s.getName(), v.width / 2F, v.height / 4F + 64);
 	}
 }
 
@@ -275,15 +280,23 @@ class TradeMenuHandle extends MenuHandle {
 		Vekta v = getInstance();
 		v.textSize(32);
 		v.fill(100);
-		v.text("You have: [" + you.getMoney() + "G]", v.width / 2, v.height / 4);
-		v.text("They have: [" + them.getMoney() + "G]", v.width / 2, v.height / 4 + 48);
+		v.text("You have: [" + you.getMoney() + "G]", v.width / 2F, v.height / 4F);
+		v.text("They have: [" + them.getMoney() + "G]", v.width / 2F, v.height / 4F + 48);
+	}
+
+	@Override
+	int getButtonColor(MenuOption opt) {
+		if(opt instanceof TradeOption) {
+			return ((TradeOption)opt).getItem().getType().getColor();
+		}
+		return super.getButtonColor(opt);
 	}
 }
 
 class Menu implements Context {
 	private final MenuHandle handle;
 
-	private final List<MenuOption> items = new ArrayList<MenuOption>();
+	private final List<MenuOption> items = new ArrayList<>();
 
 	private int index = 0;
 
@@ -316,8 +329,7 @@ class Menu implements Context {
 	}
 
 	public void scroll(int n) {
-		if(getSetting("sound") > 0)
-			change.play();
+		Resources.stopSound("change");
 		index += n;
 		int len = items.size();
 		while(index < 0) {

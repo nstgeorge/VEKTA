@@ -72,13 +72,27 @@ public class UniverseGen {
 		inv.add((int)v.random(10, 500));
 		int itemCt = (int)v.random(1, 4);
 		for(int i = 0; i < itemCt; i++) {
-			Item item = new Item(Vekta.generateItemName(), ItemType.COMMON);
+			ItemType type = randomItemType();
+			Item item = new Item(Vekta.generateItemName(type), type);
 			inv.add(item);
-			int price = (int)v.random(1, 20);
+			int price = type.randomPrice();
 			offers.put(item, price);
 		}
 
 		return planet;
+	}
+
+	private ItemType randomItemType() {
+		float n = getInstance().random(1);
+		if(n > .3) {
+			return ItemType.COMMON;
+		}
+		else if(n > .05) {
+			return ItemType.RARE;
+		}
+		else {
+			return ItemType.LEGENDARY;
+		}
 	}
 
 	private PVector generateCoordinates(float max) {

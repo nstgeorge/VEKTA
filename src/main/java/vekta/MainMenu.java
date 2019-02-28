@@ -21,10 +21,7 @@ class MainMenu implements Context {
 
 	public MainMenu() {
 		Vekta v = getInstance();
-		if(atmosphere.isPlaying())
-			atmosphere.stop();
-		theme.amp(getSetting("music"));
-		theme.play();
+		Resources.setMusic("theme");
 		hyperspace = new Hyperspace(new PVector(v.width / 2F, v.height / 2F - 100), 0.1F, 170);
 		inSettings = false;
 		settingsOptions = new StringDict();
@@ -59,7 +56,7 @@ class MainMenu implements Context {
 		v.camera();
 		v.noLights();
 		v.shapeMode(CENTER);
-		v.shape(logo, v.width / 2F, v.height / 4F, 339.26F, 100);
+		v.shape(Resources.logo, v.width / 2F, v.height / 4F, 339.26F, 100);
 		for(int i = 0; i < modes.length; i++) {
 			drawButton(modes[i], (v.height / 2) + (i * 100), i == selectedMode);
 		}
@@ -134,7 +131,7 @@ class MainMenu implements Context {
 		selectedOptions[selectedSetting] = (selectedOptions[selectedSetting] + 1) % settingsOptions.valueArray()[selectedSetting].split(",").length;
 		setSetting(settingsOptions.keyArray()[selectedSetting].toLowerCase(), selectedOptions[selectedSetting]);
 		// Quick! Turn down the music if the player wants it gone!
-		theme.amp(getSetting("music"));
+		Resources.updateMusicVolume();
 	}
 
 	@Override
@@ -145,8 +142,7 @@ class MainMenu implements Context {
 		}
 		if(key == 'w') {
 			// Play the sound for changing menu selection
-			if(getSetting("sound") > 0)
-				change.play();
+			Resources.playSound("change");
 			if(!inSettings) {
 				selectedMode = Math.max(selectedMode - 1, 0);
 				v.redraw();
@@ -158,8 +154,7 @@ class MainMenu implements Context {
 		}
 		if(key == 's') {
 			// Play the sound for changing menu selection
-			if(getSetting("sound") > 0)
-				change.play();
+			Resources.playSound("change");
 			if(!inSettings) {
 				selectedMode = Math.min(selectedMode + 1, modes.length + 1);
 				v.redraw();
@@ -171,8 +166,7 @@ class MainMenu implements Context {
 		}
 		if(key == 'x') {
 			// Play the sound for selection
-			if(getSetting("sound") > 0)
-				select.play();
+			Resources.playSound("change");
 			if(!inSettings) {
 				// Just selected a game mode
 				if(selectedMode < modes.length) {
@@ -207,8 +201,8 @@ class MainMenu implements Context {
 		if(selectedMode == 0)
 			startWorld(new Singleplayer());
 		//if(selectedMode == 1) startGamemode(new Multiplayer());
-		if(getSetting("music") > 0)
-			theme.stop();
+//		if(getSetting("music") > 0)
+//			theme.stop();
 	}
 
 	@Override

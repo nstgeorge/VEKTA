@@ -1,6 +1,7 @@
 package vekta;
 
 import processing.core.PVector;
+import processing.sound.LowPass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,9 @@ import static vekta.Vekta.*;
 
 class Singleplayer implements World {
 	private static int nextID = 0;
+
+	// Low pass filter
+	private LowPass lowPass;
 
 	int planetCount;
 	boolean dead;
@@ -42,9 +46,12 @@ class Singleplayer implements World {
 	public void init() {
 		Vekta v = getInstance();
 		v.background(0);
+		
+		lowPass = lowPass = new LowPass(v);
 
-		if(getSetting("music") > 0 && !atmosphere.isPlaying())
-			atmosphere.loop();
+//		if(getSetting("music") > 0 && !atmosphere.isPlaying())
+//			atmosphere.loop();
+		Resources.setMusic("atmosphere");
 
 		v.frameCount = 0;
 
@@ -273,10 +280,9 @@ class Singleplayer implements World {
 
 	public void setDead() {
 		dead = true;
-		if(getSetting("sound") > 0) {
-			engine.stop();
-			death.play();
-		}
+		lowPass.process(Resources.getMusic(), 800);
+		Resources.stopSound("engine");
+		Resources.playSound("death");
 	}
 
 	@Override
@@ -285,22 +291,24 @@ class Singleplayer implements World {
 	}
 
 	@Override
-	public boolean addObject(Object object) {
+	public void addObject(Object object) {
 		if(object instanceof SpaceObject) {
 			SpaceObject s = (SpaceObject)object;
 			s.setID(nextID++);
 			markedForAddition.add(s);
-			return true;
 		}
-		return false;
+		else {
+			throw new RuntimeException("Cannot add object: " + object);
+		}
 	}
 
 	@Override
-	public boolean removeObject(Object object) {
+	public void removeObject(Object object) {
 		if(object instanceof SpaceObject) {
 			markedForDeath.add((SpaceObject)object);
-			return true;
 		}
-		return false;
+		else {
+			throw new RuntimeException("Cannot remove object: " + object);
+		}
 	}
 }
