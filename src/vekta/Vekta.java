@@ -73,7 +73,7 @@ public class Vekta extends PApplet {
 	public void settings() {
 		fullScreen(P3D);
 		pixelDensity(displayDensity());
-		background(0);
+		background(color(0));
 		frameRate(60);
 		noCursor();
 	}

@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="processing">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/src/lib/processing/core.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/processing/sound/library/javamp3-1.0.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/processing/sound/library/jsyn-20171016.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/processing/sound/library/sound.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
