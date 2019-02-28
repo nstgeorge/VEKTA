@@ -1,8 +1,8 @@
 class Projectile extends SpaceObject {
   // Default settings
-  private final float DEF_MASS = 1000;
-  private final int DEF_RADIUS = 2;
-  private final int DEF_SPEED = 7;
+  private static final float DEF_MASS = 1000;
+  private static final int DEF_RADIUS = 2;
+  private static final int DEF_SPEED = 7;
 
   private SpaceObject parent;
   private String name;
@@ -10,13 +10,12 @@ class Projectile extends SpaceObject {
   private float radius;
   private color c;
   
-  public Projectile(SpaceObject parent, PVector position, PVector heading, PVector velocity, color c) {
+  public Projectile(SpaceObject parent, PVector position, PVector velocity, PVector heading, color c) {
+    super(position, heading.setMag(DEF_SPEED).add(velocity));
     this.parent = parent;
     this.name = "Projectile";
     this.mass = DEF_MASS;
     this.radius = DEF_RADIUS;
-    this.position = position;
-    this.velocity = heading.setMag(DEF_SPEED).add(velocity);
     this.c = c;
   }
   
@@ -26,11 +25,6 @@ class Projectile extends SpaceObject {
     fill(0);
     ellipseMode(RADIUS);
     ellipse(position.x, position.y, radius, radius);
-  }
-  
-  @Override
-  void update() {
-    position.add(velocity);
   }
   
   SpaceObject getParent() {
@@ -54,5 +48,14 @@ class Projectile extends SpaceObject {
   @Override
   boolean shouldDestroy(SpaceObject other) {
     return true;
+  }
+  
+  /**
+    Override to always destroy projectiles on impact
+  */
+  @Override
+  void onCollide(SpaceObject s) {
+    super.onCollide(s);
+    removeObject(this);
   }
 }  

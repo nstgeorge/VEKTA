@@ -1,99 +1,203 @@
-class Menu {
-  String[] modes = {"Singleplayer"};
-  Hyperspace hyperspace;
-  // Settings
-  boolean    inSettings;
-  StringDict settingsOptions;
-  IntDict    settingsDefinitions;
-  int[]      selectedOptions;
-  int        selectedSetting;
+// These will move into their own files once we migrate to Maven
+
+interface MenuOption {
+  String getName();
+  void select(Menu menu);
+}
+
+class BackOption implements MenuOption {
+  private final Context parent;
   
-  final int  SETTINGS_SPACING = 50;
-  
-  public Menu() {
-    if(atmosphere.isPlaying()) atmosphere.stop();
-    theme.amp(getSetting("music"));
-    theme.play();
-    hyperspace = new Hyperspace(new PVector(width/2, height/2 - 100), 0.1, 170);
-    inSettings = false;
-    settingsOptions = new StringDict();
-    settingsOptions.set("Music", "On,Off");
-    settingsOptions.set("Sound", "On,Off");
-    settingsDefinitions = new IntDict();
-    settingsDefinitions.set("On", 1);
-    settingsDefinitions.set("Off", 0);
-    selectedOptions = new int[settingsOptions.size()];
-  }  
-  
-  void render() {
-    // hyperspace background
-    camera(width/2, height/2, (height/2.0) / tan(PI*30.0 / 180.0), width/2, height/2, 0.0, 
-         0.0, 1.0, 0.0);
-    background(0);
-    hyperspace.render();
-    
-    if(!inSettings) {
-      drawMain();
-    } else {
-      drawSettings();
-    }
+  public BackOption(Context parent) {
+    this.parent = parent;
   }
   
-  private void drawMain() {
-    hint(DISABLE_DEPTH_TEST);
-    camera();
-    noLights();
-    shapeMode(CENTER);
-    shape(logo, width/2, height/4, 339.26, 100);
-    for(int i = 0; i < modes.length; i++) {
-      drawButton(modes[i], (height / 2) + (i * 100), i == selectedMode);
-    }
-    drawButton("Settings", (height / 2) + (modes.length * 100), selectedMode == modes.length);
-    drawButton("Quit", (height / 2) + (modes.length * 100) + 100, selectedMode == modes.length + 1);
-    
-    textFont(bodyFont);
-    stroke(0);
-    fill(255);
-    textAlign(CENTER);
-    text("X to select", width / 2, (height / 2) + (modes.length * 100) + 200);
-    
-    textSize(14);
-    text("Created by Nate St. George", width / 2, (height / 2) + (modes.length * 100) + 300);
-    hint(ENABLE_DEPTH_TEST);
+  @Override
+  public String getName() {
+    return "Back";
   }
   
-  private void drawSettings() {
-    hint(DISABLE_DEPTH_TEST);
-    camera();
-    noLights();
-    textFont(bodyFont);
-    stroke(0);
-    fill(255);
-    textAlign(CENTER);
-    textSize(30);
-    text("Settings", width / 2, 100);
-    textFont(bodyFont);
-    // Draw each option
-    int optionIndex = 0;
-    for(String key : settingsOptions.keyArray()) {
-      String[] options = settingsOptions.get(key).split(",");
-      if(selectedSetting == optionIndex) fill(UI_COLOR);
-      text(key, 500, 200 + (optionIndex * SETTINGS_SPACING));
-      for(String option : options) {
-        if(getSetting(key.toLowerCase()) == settingsDefinitions.get(option)) {
-          text(option, width - 500, 200 + (optionIndex * SETTINGS_SPACING));
-          selectedOptions[optionIndex] = settingsDefinitions.get(option);
-        }
+  @Override
+  void select(Menu menu) {
+    closeContext(menu);
+    openContext(parent);
+  }
+}
+
+class CloseOption implements MenuOption {
+  @Override
+  public String getName() {
+    return "Close";
+  }
+  
+  @Override
+  void select(Menu menu) {
+    closeContext(menu);
+  }
+}
+
+class TradeMenuOption implements MenuOption {
+  private final boolean buying;
+  private final Inventory you, them;
+  private final Map<Item, Integer> offers;
+  
+  public TradeMenuOption(boolean buying, Inventory you, Inventory them, Map<Item, Integer> offers) {
+    this.buying = buying;
+    this.you = you;
+    this.them = them;
+    this.offers = offers;
+  }
+  
+  @Override
+  public String getName() {
+    return (buying ? "Buy" : "Sell") + " Goods";
+  }
+  
+  public Inventory getFrom() {
+    return buying ? them : you;
+  }
+  
+  public Inventory getTo() {
+    return buying ? you : them;
+  }
+  
+  @Override
+  void select(Menu menu) {
+    MenuOption def = new BackOption(menu);
+    Menu sub = new Menu(new TradeMenuHandle(def, you, them));
+    for(Item item : offers.keySet()) {
+      if(getFrom().has(item)) {
+        sub.add(new TradeOption(getFrom(), getTo(), item, offers.get(item), true));
       }
-      fill(255, 255, 255);
-      optionIndex++;
     }
-    drawButton("Save", 200 + ((optionIndex + 1) * SETTINGS_SPACING), selectedSetting == settingsOptions.size());
-    textSize(16);
-    fill(255, 255, 255);
-    text("X to cycle options, ESC to go back", width / 2, 200 + ((optionIndex + 2) * SETTINGS_SPACING));
+    sub.add(def);
+    openContext(sub);
+  }
+}
+
+class TradeOption implements MenuOption {
+  private final Inventory from, to;
+  private final Item item;
+  private final int price;
+  private final boolean transfer;
+  
+  public TradeOption(Inventory from, Inventory to, Item item, int price, boolean transfer) {
+    this.from = from;
+    this.to = to;
+    this.item = item;
+    this.price = price;
+    this.transfer = transfer;
+  }
+  
+  @Override
+  public String getName() {
+    return item.getName() + " [" + price + " G]";
+  }
+  
+  @Override
+  void select(Menu menu) {
+    if(to.has(price) && from.has(item)) {
+      to.remove(price);
+      from.remove(item);
+      from.add(price);
+      if(transfer) {
+        to.add(item);
+      }
+      menu.remove(this);
+    }
+  }
+}
+
+class InfoOption implements MenuOption {
+  @Override
+  public String getName() {
+    return "Info";
+  }
+  
+  @Override
+  void select(Menu menu) {
+    // TODO: implement
+  }
+}
+
+class TakeoffOption implements MenuOption {
+  private final LandingSite site;
+  private final World world;
+  
+  public TakeoffOption(LandingSite site, World world) {
+    this.site = site;
+    this.world = world;
+  }
+  
+  @Override
+  public String getName() {
+    return "Take Off";
+  }
+  
+  @Override
+  void select(Menu menu) {
+    closeContext(menu);
+    openContext(world);
+    site.takeoff();
+  }
+}
+
+/**
+  Default menu renderer implementation; draws buttons and select text
+*/
+class MenuHandle {
+  // Default parameters
+  private static final int DEF_SPACING = 100;
+  private static final int DEF_WIDTH = 200;
+  
+  private final MenuOption defaultOption;
+  private final int spacing;
+  private final int buttonWidth;
+  
+  public MenuHandle() {
+    this(new CloseOption());
+  }
+  
+  public MenuHandle(Menu parent) {
+    this(new BackOption(parent));
+  }
+  
+  public MenuHandle(MenuOption defaultOption) {
+    this(defaultOption, DEF_SPACING, DEF_WIDTH);
+  }
+  
+  public MenuHandle(MenuOption defaultOption, int spacing, int buttonWidth) {
+    this.defaultOption = defaultOption;
+    this.spacing = spacing;
+    this.buttonWidth = buttonWidth;
+  }
+  
+  public MenuOption getDefault() {
+    return defaultOption;
+  }
+  
+  public void render(Menu menu) {
+    clear(); // TODO: find a way to avoid clearing without creating weird artifacts
+    hint(DISABLE_DEPTH_TEST);
+    camera();
+    noLights();
+    //shapeMode(CENTER);
+    //shape(logo, width/2, height/4, 339.26, 100);
     textFont(bodyFont);
-    hint(ENABLE_DEPTH_TEST);
+    
+    stroke(0);
+    fill(255);
+    textAlign(CENTER, CENTER);
+    textSize(24);
+    for(int i = 0; i < menu.size(); i++) {
+      drawButton(menu.get(i).getName(), (height / 2) + (i * spacing), menu.getIndex() == i);
+    }
+    
+    //textFont(bodyFont);
+    stroke(0);
+    fill(255);
+    textAlign(CENTER);
+    text("X to select", width / 2, (height / 2) + (menu.size() * 100) + 200);
   }
   
   private void drawButton(String name, int yPos, boolean selected) {
@@ -101,74 +205,147 @@ class Menu {
     else stroke(UI_COLOR);
     fill(1);
     rectMode(CENTER);
-    rect(width / 2, yPos, 200, 50);
+    rect(width / 2, yPos, buttonWidth, 50);
     // Text ----------------------
-    textFont(bodyFont);
+    //textFont(bodyFont);
     stroke(0);
     fill(UI_COLOR);
-    textAlign(CENTER, CENTER);
     text(name, width / 2, yPos - 3);
-  }  
-  
-  void updateSetting() {
-    selectedOptions[selectedSetting] = (selectedOptions[selectedSetting] + 1) % settingsOptions.valueArray()[selectedSetting].split(",").length;
-    setSetting(settingsOptions.keyArray()[selectedSetting].toLowerCase(), selectedOptions[selectedSetting]);
-    // Quick! Turn down the music if the player wants it gone!
-    theme.amp(getSetting("music"));
   }
   
-  void keyPressed(char key) {
-    if (key == ESC) {
-      inSettings = false;
-    }
-    if(key == 'w') {
-      // Play the sound for changing menu selection
-      if(getSetting("sound") > 0) change.play();
-      if(!inSettings) {
-        selectedMode = Math.max(selectedMode - 1, 0);
-        redraw();
-      } else {
-        selectedSetting = Math.max(selectedSetting - 1, 0);
-        redraw();
+  public void keyPressed(Menu menu, char key) {
+    if(key == ESC) {
+      if(defaultOption != null) {
+        defaultOption.select(menu);
       }
+    }
+    else if(key == 'w') {
+      if(getSetting("sound") > 0) change.play();
+      menu.scroll(-1);
     } 
-    if(key == 's') {
-      // Play the sound for changing menu selection
+    else if(key == 's') {
       if(getSetting("sound") > 0) change.play();
-      if(!inSettings) {
-        selectedMode = Math.min(selectedMode + 1, modes.length + 1);
-        redraw();
-      } else {
-        selectedSetting = Math.min(selectedSetting + 1, settingsOptions.size());
-        redraw();
-      }
+      menu.scroll(1);
     }
-    if(key == 'x') {
-      // Play the sound for selection
+    else if(key == 'x') {
       if(getSetting("sound") > 0) select.play();
-      if(!inSettings) {
-        // Just selected a game mode
-        if(selectedMode < modes.length) {
-          modePicked = true;
-        } else {
-          // Just selected settings
-          if(selectedMode == modes.length) {
-            inSettings = true;
-          }
-          //Just selected quit
-          if(selectedMode == modes.length + 1) {
-            exit();
-          }
-        }
-      } else {
-        if(selectedSetting == settingsOptions.size()) {
-          // Save the settings
-          saveSettings();
-        } else {
-          // Update settings
-          updateSetting();
-        }
-      }
+      menu.getCursor().select(menu);
     }
-  }  
-}  
+  }
+}
+
+/**
+  Menu renderer for landing on planets
+*/
+class LandingMenuHandle extends MenuHandle {
+  private final LandingSite site;
+  
+  public LandingMenuHandle(LandingSite site, World world) {
+    super(new TakeoffOption(site, world));
+    
+    this.site = site;
+  }
+  
+  public void render(Menu menu) {
+    super.render(menu);
+    
+    SpaceObject s = site.getParent();
+    textSize(32);
+    fill(100);
+    text("Welcome to", width/2, height/4);
+    textSize(48);
+    fill(s.getColor());
+    text(s.getName(), width/2, height/4 + 64);
+  }
+}
+
+/**
+  Menu renderer for trading
+*/
+class TradeMenuHandle extends MenuHandle {
+  private final Inventory you, them;
+  
+  public TradeMenuHandle(MenuOption defaultOption, Inventory you, Inventory them) {
+    super(defaultOption, 60, width * 2 / 3);
+    
+    this.you = you;
+    this.them = them;
+  }
+  
+  public void render(Menu menu) {
+    super.render(menu);
+    
+    textSize(32);
+    fill(100);
+    text("You have: [" + you.getMoney() + "G]", width/2, height/4);
+    text("They have: [" + them.getMoney() + "G]", width/2, height/4 + 48);
+  }
+}
+
+class Menu implements Context {
+  private final MenuHandle handle;
+  
+  private final List<MenuOption> items = new ArrayList<MenuOption>();
+  
+  private int index = 0;
+  
+  public Menu() {
+    this(new MenuHandle());
+  }
+  
+  public Menu(MenuHandle handle) {
+    this.handle = handle;
+  }
+  
+  public MenuOption getCursor() {
+    return items.get(index);
+  }
+  
+  public int getIndex() {
+    return index;
+  }
+  
+  public int size() {
+    return items.size();
+  }
+  
+  public MenuOption get(int i) {
+    return items.get(i);
+  }
+  
+  public void add(MenuOption item) {
+    items.add(item);
+  }
+  
+  public boolean remove(MenuOption item) {
+    return items.remove(item);
+  }
+  
+  public void scroll(int n) {
+    if(getSetting("sound") > 0) change.play();
+    index += n;
+    int len = items.size();
+    while(index < 0) {
+      index += len;
+    }
+    index %= len;
+  }
+  
+  @Override
+  public void render() {
+    handle.render(this);
+  }
+  
+  @Override
+  public void keyPressed(char key) {
+    handle.keyPressed(this, key);
+  }
+  
+  @Override
+  public void keyReleased(char key) {}
+  
+  @Override
+  public void mouseWheel(int amount) {
+    scroll(amount);
+  }
+}

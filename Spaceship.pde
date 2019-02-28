@@ -9,43 +9,53 @@ class Spaceship extends SpaceObject {
   private final color DEF_COLOR = color(255, 255, 255);
   // Other default Spaceship stuff
   private final int DEF_SPEED = 100;
-  private final int SPEED_SCALE = 500;
   private final int DEF_HANDLING = 50;
   private final int HANDLING_SCALE = 1000;
   private final int MAX_PROJECTILES = 100;
-
+  private final float LANDING_SPEED = .5;
+  
+  // Backreference to world (exclusive to spaceships for now)
+  // At some point, the `Singleplayer` class will be split into world and control containers, or something similar
+  private final Singleplayer world;
+  
   // Exclusive Spaceship things
   private int controlScheme; // Defined by CONTROL_DEF: 0 = WASD, 1 = IJKL
   private float speed;  // Force of the vector added when engine is on
   private int handling; // Speed of turning
-  private float turn; // Value used to turn the ship
   private int numProjectiles = 0;
+  private float thrust;
+  private float turn;
   
   // Normal SpaceObject stuff
-  private String name;
-  private float mass;
-  private float radius;
-  private PVector heading;
-  private PVector acceleration;
-  private boolean accelerating;
-  private boolean backwards;
-  private color c;
+  private final String name;
+  private final float mass;
+  private final float radius;
+  private final PVector heading;
+  private final color c;
   
-  public Spaceship(String name, float mass, float radius, PVector heading, PVector position, PVector velocity, color c, int ctrl, int speed, int handling) {
+  // Landing doodads
+  private boolean landing;
+  private final PVector influence = new PVector();
+  
+  private final Inventory inventory = new Inventory();
+  
+  public Spaceship(Singleplayer world, String name, float mass, float radius, PVector heading, PVector position, PVector velocity, color c, int ctrl, float speed, int handling, int money) {
     super(position, velocity);
+    this.world = world;
     this.name = name;
     this.mass = mass;
     this.radius = radius;
     this.heading = heading;
     this.c = c;
-    controlScheme = ctrl;
+    this.controlScheme = ctrl;
     this.speed = speed;
     this.handling = handling;
-    acceleration = new PVector();
+    this.inventory.add(money);
   }
   
   // Draws a nice triangle
   // Shamelessly stolen from https://processing.org/examples/flocking.html
+  @Override
   void draw() {
     // Draw a triangle rotated in the direction of ship
     float theta = heading.heading() + radians(90);
@@ -60,31 +70,41 @@ class Spaceship extends SpaceObject {
     vertex(radius, radius*2);
     endShape();
     popMatrix();
+    
+    // Draw influence vector
+    stroke(255, 0, 0);
+    line(position.x, position.y, position.x + (influence.x * 100), position.y + (influence.y * 100));
   }
   
-  // Update position
-  void update() {
-    if(accelerating) {
-      if(backwards) acceleration = heading.copy().setMag(-(float)speed / SPEED_SCALE);
-      else          acceleration = heading.copy().setMag((float)speed / SPEED_SCALE);
+  @Override
+  void onUpdate() {
+    if(thrust != 0) {
+      addVelocity(heading.copy().setMag(thrust * speed));
     }
-    velocity.add(acceleration);
-    position.add(velocity);
     turnBy(turn);
-  }  
+    
+    if(landing && world.closestObject != null) {
+      SpaceObject target = world.closestObject;
+      PVector relative = velocity.copy().sub(target.getVelocity());
+      float mag = relative.mag();
+      if(mag > 0) {
+        heading.set(relative).normalize();
+        float approachFactor = min(1, 5 * target.getRadius() / target.getPosition().sub(position).mag());
+        thrust = max(-1, min(1, (LANDING_SPEED * (1 - approachFactor / 2) - mag) * approachFactor / speed));
+      }
+    }
+  }
   
   public void keyPress(char key) {
-    heading.setMag(speed);
-    if(controlScheme == 0) {   // WASD  
+    landing = false;
+    if(controlScheme == 0) {   // WASD
       switch(key) {
         case 'w':
           if(getSetting("sound") > 0) {
             engine.stop();
             engine.loop();
           }
-          accelerating = true;
-          backwards = false;
-          acceleration = heading.copy().setMag((float)speed / SPEED_SCALE);
+          thrust = 1;
           break;
         case 'a':
           turn = -((float)handling / HANDLING_SCALE);
@@ -94,9 +114,7 @@ class Spaceship extends SpaceObject {
             engine.stop();
             engine.loop();
           }
-          accelerating = true;
-          backwards = true;
-          acceleration = heading.copy().setMag(-(float)speed / SPEED_SCALE);
+          thrust = -1;
           break;
         case 'd':
           turn = ((float)handling / HANDLING_SCALE);
@@ -107,18 +125,20 @@ class Spaceship extends SpaceObject {
         case 'z':
           fireProjectile();
           break;
-      }  
+        case '\t':
+          landing = true;
+          break;
+      }
     }
-    if(controlScheme == 1) {   // IJKL  
+    // TODO: map these keys using a config object rather than as switch statements
+    if(controlScheme == 1) {   // IJKL
       switch(key) {
         case 'i':
           if(getSetting("sound") > 0) {
             engine.stop();
             engine.loop();
           }
-          accelerating = true;
-          backwards = false;
-          acceleration = heading.copy().setMag((float)speed / SPEED_SCALE);
+          thrust = 1;
           break;
         case 'j':
           turn = -((float)handling / HANDLING_SCALE);
@@ -128,9 +148,7 @@ class Spaceship extends SpaceObject {
             engine.stop();
             engine.loop();
           }
-          accelerating = true;
-          backwards = true;
-          acceleration = heading.copy().setMag(-(float)speed / SPEED_SCALE);
+          thrust = -1;
           break;
         case 'l':
           turn = ((float)handling / HANDLING_SCALE);
@@ -141,16 +159,17 @@ class Spaceship extends SpaceObject {
         case ',':
           fireProjectile();
           break;
-      }  
+        case '\\':
+          landing = true;
+          break;
+      }
     } 
   }
   
   void keyReleased(char key) {
     if((key == 'w' || key == 's') && controlScheme == 0) {
       if(getSetting("sound") > 0) engine.stop();
-      acceleration = DEF_ACCELERATION;
-      accelerating = false;
-      backwards = false;
+      thrust = 0;
     }
     if(( key == 'a' || key == 'd') && controlScheme == 0) {
       turn = 0;
@@ -158,13 +177,11 @@ class Spaceship extends SpaceObject {
     
     if((key == 'i' || key == 'k') && controlScheme == 1) {
       if(getSetting("sound") > 0) engine.stop();
-      acceleration = DEF_ACCELERATION;
-      accelerating = false;
-      backwards = false;
+      thrust = 0;
     }
-    if(( key == 'j' || key == 'l') && controlScheme == 1) {
+    if((key == 'j' || key == 'l') && controlScheme == 1) {
       turn = 0;
-    }  
+    }
   }  
   
   private void turnBy(float turnBy) {
@@ -174,24 +191,35 @@ class Spaceship extends SpaceObject {
   private void fireProjectile() {
     if(numProjectiles < MAX_PROJECTILES) {
       if(getSetting("sound") > 0) laser.play();
-      addObject(new Projectile(this, position.copy(), heading.copy(), velocity.copy(), c));
+      addObject(new Projectile(this, position.copy(), velocity.copy(), heading.copy(), c));
       numProjectiles++;
     }
   }
   
+  @Override
   void onDestroy(SpaceObject s) {
     lowPass.process(atmosphere, 800);
     
-    // TODO: avoid cast
-    ((Singleplayer)game).dead = true;
+    getWorld().dead = true;
     if(getSetting("sound") > 0) { 
       engine.stop();
       death.play();
     }
   }
   
-  // GETTERS / SETTERS ---------------------------------------------------------------
+  Singleplayer getWorld() {
+    return world;
+  }
   
+  Inventory getInventory() {
+    return inventory;
+  }
+  
+  boolean isLanding() {
+    return landing;
+  }
+  
+  @Override
   String getName() {
     return name;
   }
@@ -217,10 +245,6 @@ class Spaceship extends SpaceObject {
   @Override
   color getColor() {
     return c;
-  }  
-  
-  void setColor(color c) {
-    this.c = c;
   }
   
   PVector getHeading() {
@@ -229,18 +253,17 @@ class Spaceship extends SpaceObject {
   
   @Override
   PVector applyInfluenceVector(List<SpaceObject> objects) {
-    PVector influence = super.applyInfluenceVector(objects);
-    
-    // Draw influence vector
-    stroke(255, 0, 0);
-    line(position.x, position.y, position.x + (influence.x * 100), position.y + (influence.y * 100));
-    
-    return influence;
+    this.influence.set(super.applyInfluenceVector(objects));
+    return this.influence;
   }
   
   @Override
   boolean collidesWith(SpaceObject s) {
     // TODO: generalize, perhaps by adding SpaceObject::getParent(..) and handling this case in SpaceObject
     return !(s instanceof Projectile && ((Projectile)s).getParent() == this) && super.collidesWith(s);
+  }
+  
+  void onTakeoff() {
+    
   }
 }  

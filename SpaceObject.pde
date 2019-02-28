@@ -3,10 +3,10 @@ private static final float MAX_INFLUENCE = 2;
 abstract class SpaceObject {
   private int id;
   
-  PVector position;
-  PVector velocity;
+  final PVector position;
+  final PVector velocity;
   
-  PVector[] trail = new PVector[TRAIL_LENGTH];
+  private final PVector[] trail = new PVector[TRAIL_LENGTH];
   
   SpaceObject() {
     this(new PVector(), new PVector());
@@ -54,6 +54,13 @@ abstract class SpaceObject {
   }
   
   /**
+    Sets the position of the object
+  */
+  final void setPosition(PVector position) {
+    position.set(position);
+  }
+  
+  /**
     Gets the velocity of the object
   */
   final PVector getVelocity() {
@@ -61,10 +68,17 @@ abstract class SpaceObject {
   }
   
   /**
-    Gets the velocity of the object
+    Sets the velocity of the object
   */
-  final PVector addVelocity(PVector add) {
-    return velocity.add(add);
+  final PVector setVelocity(PVector velocity) {
+    return this.velocity.set(velocity);
+  }
+  
+  /**
+    Adds velocity to the object
+  */
+  final PVector addVelocity(PVector delta) {
+    return this.velocity.add(delta);
   }
   
   /**
@@ -122,7 +136,17 @@ abstract class SpaceObject {
   }
   
   /**
-    Do this when destroyed by SpaceObject `s`
+    Invoked when colliding with SpaceObject `s`
+  */
+  void onCollide(SpaceObject s) {
+    if(shouldDestroy(s)) {
+      s.onDestroy(this);
+      removeObject(s);
+    }
+  }
+  
+  /**
+    Invoked when destroyed by SpaceObject `s`
   */
   void onDestroy(SpaceObject s) {}
   
@@ -150,5 +174,10 @@ abstract class SpaceObject {
   /**
     Update the position of this SpaceObject.
   */
-  void update() {}
+  final void update() {
+    onUpdate();
+    position.add(velocity);
+  }
+  
+  void onUpdate() {}
 }  

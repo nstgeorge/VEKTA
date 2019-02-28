@@ -2,7 +2,7 @@ import java.util.*;
 
 private static int nextID = 0;
 
-class Singleplayer implements Gamemode {
+class Singleplayer implements World {
   
   int planetCount;
   boolean dead;
@@ -15,6 +15,7 @@ class Singleplayer implements Gamemode {
   float minDistSq = Float.POSITIVE_INFINITY;
   
   Spaceship playerShip;
+  SpaceObject closestObject; // TODO: move this logic into Spaceship instances
   
   float zoom = 1; // Camera zoom
   
@@ -45,6 +46,7 @@ class Singleplayer implements Gamemode {
     }
     
     playerShip = new Spaceship(
+      this,
       "VEKTA I",
       5000,  // Mass
       5,     // Radius
@@ -52,7 +54,8 @@ class Singleplayer implements Gamemode {
       new PVector(), // Position
       new PVector(),    // Velocity
       color(0, 255, 0),
-      0, 50, 60  // Control scheme, Speed, and Handling
+      0, .1, 60,  // Control scheme, Speed, and Handling
+      100 // Starting money
     );
     addObject(playerShip);
   }
@@ -69,7 +72,7 @@ class Singleplayer implements Gamemode {
        0.0, 1.0, 0.0);
     }
     
-    SpaceObject closestObject = null;
+    closestObject = null;
     minDistSq = Float.POSITIVE_INFINITY;
     planetCount = 0;
     for(SpaceObject s : objects) {
@@ -77,22 +80,20 @@ class Singleplayer implements Gamemode {
         continue;
       }
       
-      if(!paused) {
-        if(s instanceof Planet) {
-          planetCount++;
-          float distSq = getDistSq(s.getPosition(), playerShip.getPosition());
-          if(distSq < minDistSq) {
-            closestObject = s;
-            minDistSq = distSq;
-          }
+      if(s instanceof Planet) {
+        planetCount++;
+        float distSq = getDistSq(s.getPosition(), playerShip.getPosition());
+        if(distSq < minDistSq) {
+          closestObject = s;
+          minDistSq = distSq;
         }
-        s.update();
-        s.applyInfluenceVector(objects);
-        for(SpaceObject other : objects) {
-          if(s != other) {
-            checkCollision(s, other);
-            checkCollision(other, s);
-          }
+      }
+      s.update();
+      s.applyInfluenceVector(objects);
+      for(SpaceObject other : objects) {
+        if(s != other) {
+          checkCollision(s, other);
+          checkCollision(other, s);
         }
       }
       s.draw();
@@ -148,8 +149,12 @@ class Singleplayer implements Gamemode {
         drawDial("Direction", closestObject.getPosition().sub(pos), 450, height - 65, 50, closestObject.getColor());
         stroke(closestObject.getColor());
         fill(closestObject.getColor());
-      }  
+      }
       text(closestObjectString, 50, height - 100);
+      if(playerShip.isLanding()) {
+        //textSize(24);
+        text(":: Landing Autopilot ::", 50, height - 150);
+      }
     }
     // Menus
     else {
@@ -175,10 +180,7 @@ class Singleplayer implements Gamemode {
   
   void checkCollision(SpaceObject a, SpaceObject b) {
     if(a.collidesWith(b)) {
-      if(b.shouldDestroy(a)) {
-        a.onDestroy(b);
-        removeObject(a);
-      }
+      a.onCollide(b);
     }
   }
   
@@ -230,6 +232,9 @@ class Singleplayer implements Gamemode {
         restart();
       }
     } else {
+     if(key == ESC) {
+       openContext(new PauseMenu(this));
+     }
      if(key == 'k') {
        dead = true;  
      }
@@ -249,7 +254,7 @@ class Singleplayer implements Gamemode {
   }
   
   @Override
-  void mouseWheel(float amount) {
+  void mouseWheel(int amount) {
     zoom = max(.1, min(3, zoom * (1 + amount * .1)));
   }
   
