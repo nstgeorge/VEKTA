@@ -13,10 +13,6 @@ class Inventory implements Iterable<Item> {
 
 	}
 
-	public Inventory(int money) {
-		add(money);
-	}
-
 	public int getMoney() {
 		return money;
 	}

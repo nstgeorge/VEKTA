@@ -8,24 +8,10 @@ import static processing.core.PConstants.TRIANGLES;
 import static vekta.Vekta.*;
 
 class Spaceship extends SpaceObject {
-	// Default Shapeship settings
-	private final double DEF_MASS = 1000;
-	private final int DEF_RADIUS = 5;
-	private final PVector DEF_POSITION = new PVector(100, 100);
-	private final PVector DEF_VELOCITY = new PVector(0, 0);
-	private final PVector DEF_ACCELERATION = new PVector(0, 0);
-	private final PVector DEF_HEADING = new PVector(1, 0, 0);
-	private final Color DEF_COLOR = new Color(255, 255, 255);
-	// Other default Spaceship stuff
-	private final int DEF_SPEED = 100;
-	private final int DEF_HANDLING = 50;
-	private final int HANDLING_SCALE = 1000;
-	private final int MAX_PROJECTILES = 100;
-	private final float LANDING_SPEED = .5F;
-
-	// Backreference to world (exclusive to spaceships for now)
-	// At some point, the `Singleplayer` class will be split into world and control containers, or something similar
-	private final Singleplayer world;
+	// Default Spaceship stuff
+	private static final int HANDLING_SCALE = 1000;
+	private static final int MAX_PROJECTILES = 100;
+	private static final float LANDING_SPEED = 1F;
 
 	// Exclusive Spaceship things
 	private int controlScheme; // Defined by CONTROL_DEF: 0 = WASD, 1 = IJKL
@@ -48,9 +34,8 @@ class Spaceship extends SpaceObject {
 
 	private final Inventory inventory = new Inventory();
 
-	public Spaceship(Singleplayer world, String name, float mass, float radius, PVector heading, PVector position, PVector velocity, int c, int ctrl, float speed, int handling, int money) {
+	public Spaceship(String name, float mass, float radius, PVector heading, PVector position, PVector velocity, int c, int ctrl, float speed, int handling, int money) {
 		super(position, velocity);
-		this.world = world;
 		this.name = name;
 		this.mass = mass;
 		this.radius = radius;
@@ -93,8 +78,8 @@ class Spaceship extends SpaceObject {
 		}
 		turnBy(turn);
 
-		if(landing && world.closestObject != null) {
-			SpaceObject target = world.closestObject;
+		SpaceObject target = ((Singleplayer)getWorld()).closestObject;
+		if(landing && target != null) {
 			PVector relative = velocity.copy().sub(target.getVelocity());
 			float mag = relative.mag();
 			if(mag > 0) {
@@ -212,16 +197,7 @@ class Spaceship extends SpaceObject {
 	@Override
 	void onDestroy(SpaceObject s) {
 		lowPass.process(atmosphere, 800);
-
-		getWorld().dead = true;
-		if(getSetting("sound") > 0) {
-			engine.stop();
-			death.play();
-		}
-	}
-
-	Singleplayer getWorld() {
-		return world;
+		getWorld().setDead();
 	}
 
 	Inventory getInventory() {

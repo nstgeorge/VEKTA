@@ -4,6 +4,7 @@ import processing.core.PVector;
 
 import java.util.HashMap;
 import java.util.Map;
+import static vekta.Vekta.*;
 
 /**
  * A landing site for one spacecraft-like object.
@@ -11,8 +12,7 @@ import java.util.Map;
  */
 class LandingSite {
 	private static final float ITEM_MARKUP = 1.5F; // Markup after buying/selling to a landing site
-	// TODO::::::fix so bought items divide by this instead of multiply
-	
+
 	private final Inventory inventory = new Inventory();
 	private final Map<Item, Integer> offers = new HashMap<>();
 	private final Map<Item, Integer> shipOffers = new HashMap<>();
@@ -52,15 +52,15 @@ class LandingSite {
 
 		landed = ship;
 		Vekta.removeObject(ship);
-		computeOffers(ship.getInventory(), shipOffers, offers);
-		computeOffers(getInventory(), offers, shipOffers);
-		MenuHandle handle = new LandingMenuHandle(this, ship.getWorld());
+		computeOffers(ship.getInventory(), shipOffers, offers, ITEM_MARKUP);
+		computeOffers(getInventory(), offers, shipOffers, 1 / ITEM_MARKUP);
+		MenuHandle handle = new LandingMenuHandle(this, getWorld());
 		Menu menu = new Menu(handle);
 		menu.add(new TradeMenuOption(true, ship.getInventory(), getInventory(), offers));
 		menu.add(new TradeMenuOption(false, ship.getInventory(), getInventory(), shipOffers));
 		menu.add(new InfoOption());
 		menu.add(handle.getDefault());
-		Vekta.setContext(menu); // Push to global menu stack
+		Vekta.setContext(menu);
 		return true;
 	}
 
@@ -78,11 +78,11 @@ class LandingSite {
 		return true;
 	}
 
-	private void computeOffers(Inventory inv, Map<Item, Integer> thisSide, Map<Item, Integer> otherSide) {
+	private void computeOffers(Inventory inv, Map<Item, Integer> thisSide, Map<Item, Integer> otherSide, float markup) {
 		// TODO: adjust based on economic system
 		for(Item item : inv) {
 			if(otherSide.containsKey(item)) {
-				int price = (int)(otherSide.get(item) * ITEM_MARKUP);
+				int price = (int)(otherSide.get(item) * markup);
 				thisSide.put(item, price);
 			}
 			else if(!thisSide.containsKey(item)) {

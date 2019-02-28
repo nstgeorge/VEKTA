@@ -54,7 +54,6 @@ class Singleplayer implements World {
 		}
 
 		playerShip = new Spaceship(
-				this,
 				"VEKTA I",
 				5000,  // Mass
 				5,     // Radius
@@ -270,6 +269,14 @@ class Singleplayer implements World {
 	@Override
 	public void mouseWheel(int amount) {
 		zoom = Vekta.max(.1F, Vekta.min(3, zoom * (1 + amount * .1F)));
+	}
+
+	public void setDead() {
+		dead = true;
+		if(getSetting("sound") > 0) {
+			engine.stop();
+			death.play();
+		}
 	}
 
 	@Override

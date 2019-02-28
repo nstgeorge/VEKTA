@@ -16,6 +16,8 @@ public class Vekta extends PApplet {
 	public static Vekta getInstance() {
 		return instance;
 	}
+	
+	private static final String SETTINGS_PATH = System.getProperty("user.dir") + "/settings.json";
 
 	static final String FONTNAME = "font/undefined-medium.ttf";
 	static final int MAX_DISTANCE = 10000; // Maximum distance for updating objects (currently unimplemented)
@@ -209,12 +211,12 @@ public class Vekta extends PApplet {
 		defaultSettings.put("music", 1);
 		// Settings
 		try {
-			settings = loadJSONObject("settings.json");
+			settings = loadJSONObject(SETTINGS_PATH);
 		}
 		catch(NullPointerException e) {
 			System.out.println("settings.json not found. Using default settings.");
 			settings = defaultSettings;
-			saveJSONObject(settings, "settings.json");
+			saveJSONObject(settings, SETTINGS_PATH);
 		}
 	}
 
@@ -237,7 +239,7 @@ public class Vekta extends PApplet {
 	}
 
 	static void saveSettings() {
-		getInstance().saveJSONObject(settings, "settings.json");
+		getInstance().saveJSONObject(settings, SETTINGS_PATH);
 	}
 
 	public static boolean addObject(Object object) {
@@ -247,7 +249,7 @@ public class Vekta extends PApplet {
 	public static boolean removeObject(Object object) {
 		return getWorld().removeObject(object);
 	}
-	
+
 	public static Context getContext() {
 		return context;
 	}
