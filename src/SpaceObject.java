@@ -1,18 +1,26 @@
-private static final float MAX_INFLUENCE = 2;
+import processing.core.*;
+
+import java.util.List;
 
 abstract class SpaceObject {
+
+  private static final float MAX_INFLUENCE = 2F;
+
   private int id;
   
-  final PVector position;
-  final PVector velocity;
+  PVector position;
+  PVector velocity;
+
+  PApplet parent;
   
-  private final PVector[] trail = new PVector[TRAIL_LENGTH];
+  private final PVector[] trail = new PVector[Vekta.TRAIL_LENGTH];
   
-  SpaceObject() {
-    this(new PVector(), new PVector());
+  SpaceObject(PApplet parent) {
+    this(parent, new PVector(), new PVector());
   }
   
-  SpaceObject(PVector position, PVector velocity) {
+  SpaceObject(PApplet parent, PVector position, PVector velocity) {
+    this.parent = parent;
     this.position = position;
     this.velocity = velocity;
   }
@@ -84,7 +92,7 @@ abstract class SpaceObject {
   /**
    Gets the color of the object
   */
-  abstract color getColor();
+  abstract Color getColor();
   
   /**
     Set the radius of this object
@@ -103,9 +111,9 @@ abstract class SpaceObject {
     float mass = getMass();
     PVector influence = new PVector();
     for(SpaceObject s : objects) {
-      float distSq = getDistSq(position, s.getPosition());
+      float distSq = Vekta.getDistSq(position, s.getPosition());
       if(distSq == 0) continue; // If the planet being checked is itself (or directly on top), don't move
-      float force = G * mass * s.getMass() / (distSq * SCALE * SCALE); // G defined in orbit
+      float force = Vekta.G * mass * s.getMass() / (distSq * Vekta.SCALE * Vekta.SCALE); // G defined in orbit
       influence.add(new PVector(s.getPosition().x - position.x, s.getPosition().y - position.y).setMag(force / mass));
     }
     // Prevent insane acceleration
@@ -141,7 +149,7 @@ abstract class SpaceObject {
   void onCollide(SpaceObject s) {
     if(shouldDestroy(s)) {
       s.onDestroy(this);
-      removeObject(s);
+      Vekta.getInstance().removeObject(s);
     }
   }
   
@@ -166,8 +174,8 @@ abstract class SpaceObject {
         break;
       }
       // Set the color and draw the line segment
-      stroke(lerpColor(getColor(), color(0), (float)i / trail.length));
-      line(oldPos.x, oldPos.y,  newPos.x, newPos.y);
+      parent.stroke(parent.lerpColor(getColor().getIntValue(), parent.color(0), (float)i / trail.length));
+      parent.line(oldPos.x, oldPos.y,  newPos.x, newPos.y);
     }
   }
   

@@ -13,6 +13,7 @@ public class Vekta extends PApplet {
     final int MAX_DISTANCE = 10000; // Maximum distance for updating objects (currently unimplemented)
 
     private Context mainMenu;
+    private static Vekta vekta;
 
     Context context; // TODO: convert to stack if necessary
 
@@ -22,12 +23,12 @@ public class Vekta extends PApplet {
 
 // Game-balancing variables and visual settings
 
-    final float G = 6.674e-11F;
-    final float SCALE = 3e8F;
-    final Color UI_COLOR = new Color(0, 255, 0);
-    final float VECTOR_SCALE = 5;
-    final int MAX_PLANETS = 500;
-    final int TRAIL_LENGTH = 100;
+    final static float G = 6.674e-11F;
+    final static float SCALE = 3e8F;
+    final static Color UI_COLOR = new Color(0, 255, 0);
+    final static float VECTOR_SCALE = 5;
+    final static int MAX_PLANETS = 500;
+    final static int TRAIL_LENGTH = 100;
     final float DEF_ZOOM = (height/2.0F) / tan((PI*30.0F / 180.0F)); // For some reason, this is the default eyeZ location for Processing
 
     //TEMP
@@ -65,6 +66,10 @@ public class Vekta extends PApplet {
     // Low pass filter
     LowPass lowPass;
 
+    public static void main(String[] args) {
+        PApplet.main("Vekta");
+    }
+
     public void settings() {
         fullScreen(P3D);
         pixelDensity(displayDensity());
@@ -77,6 +82,8 @@ public class Vekta extends PApplet {
         createSettings();
 
         textMode(SHAPE);
+
+        vekta = this;
 
         // Overlay initialization
         overlay = createGraphics(width, height);
@@ -238,14 +245,14 @@ public class Vekta extends PApplet {
         camera();
         noLights();
         if(selected) stroke(255);
-        else stroke(UI_COLOR.getColor());
+        else stroke(UI_COLOR.getIntValue());
         fill(1);
         rectMode(CENTER);
         rect(width / 8, yPos, 200, 50);
         // Text ----------------------
         textFont(bodyFont);
         stroke(0);
-        fill(UI_COLOR.getColor());
+        fill(UI_COLOR.getIntValue());
         textAlign(CENTER, CENTER);
         text(name, width / 8, yPos - 3);
     }
@@ -272,6 +279,10 @@ public class Vekta extends PApplet {
 
     void clearContexts() {
         this.context = null;
+    }
+
+    static Vekta getInstance() {
+        return vekta;
     }
 
 //// Generator methods (will move to another class) ////
