@@ -37,7 +37,9 @@ class Spaceship extends SpaceObject {
   private boolean landing;
   private final PVector influence = new PVector();
   
-  public Spaceship(Singleplayer world, String name, float mass, float radius, PVector heading, PVector position, PVector velocity, color c, int ctrl, float speed, int handling) {
+  private final Inventory inventory = new Inventory();
+  
+  public Spaceship(Singleplayer world, String name, float mass, float radius, PVector heading, PVector position, PVector velocity, color c, int ctrl, float speed, int handling, int money) {
     super(position, velocity);
     this.world = world;
     this.name = name;
@@ -48,6 +50,7 @@ class Spaceship extends SpaceObject {
     this.controlScheme = ctrl;
     this.speed = speed;
     this.handling = handling;
+    this.inventory.add(money);
   }
   
   // Draws a nice triangle
@@ -208,6 +211,10 @@ class Spaceship extends SpaceObject {
   
   Singleplayer getWorld() {
     return world;
+  }
+  
+  Inventory getInventory() {
+    return inventory;
   }
   
   boolean isLanding() {

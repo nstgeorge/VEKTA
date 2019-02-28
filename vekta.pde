@@ -60,6 +60,9 @@ SoundFile chirp;
 // Name components
 private String[] planetNamePrefixes;
 private String[] planetNameSuffixes;
+private String[] itemNameAdjectives;
+private String[] itemNameNouns;
+private String[] itemNameModifiers;
 
 // Low pass filter
 LowPass lowPass;
@@ -96,6 +99,9 @@ void setup() {
   
   planetNamePrefixes = loadStrings("data/text/planet_prefixes.txt");
   planetNameSuffixes = concat(loadStrings("data/text/planet_suffixes.txt"), new String[] {""});
+  itemNameAdjectives = loadStrings("data/text/item_adjectives.txt");
+  itemNameNouns = loadStrings("data/text/item_nouns.txt");
+  itemNameModifiers = loadStrings("data/text/item_modifiers.txt");
   
   lowPass = new LowPass(this);
   
@@ -129,7 +135,7 @@ void draw() {
   camera();
   noLights();
   // FPS OVERLAY
-  color(255, 255, 255);
+  fill(255);
   textAlign(LEFT);
   textSize(16);
   text("FPS = " + frameRate, 50, height - 20);
@@ -366,7 +372,28 @@ boolean closeMenu(Menu menu) {
   return false;
 }
 
+//// Generator methods (will move to another class) ////
+
+public String generatePlanetName() {
+  return random(planetNamePrefixes) + random(planetNameSuffixes);
+}
+
+public String generateItemName() {
+  String name = random(itemNameNouns);
+  if(random(1) > .5) {
+    name = random(itemNameAdjectives) + " " + name;
+  }
+  if(random(1) > .5) {
+    name = name + " " + random(itemNameModifiers);
+  }
+  return name;
+}
+
 //// Global utility methods ////
+
+<T> T random(T[] array) {
+  return array[(int)random(array.length)];
+}
 
 float getDistSq(PVector a, PVector b) {
   float x = a.x - b.x;

@@ -1,11 +1,30 @@
 // These will move into their own files once we migrate to Maven
 
-interface MenuItem {
+interface MenuOption {
   String getName();
   void select(Menu menu);
 }
 
-class CloseItem implements MenuItem {
+class BackOption implements MenuOption {
+  private final Menu parent;
+  
+  public BackOption(Menu parent) {
+    this.parent = parent;
+  }
+  
+  @Override
+  public String getName() {
+    return "Back";
+  }
+  
+  @Override
+  void select(Menu menu) {
+    closeMenu(menu);
+    openMenu(parent);
+  }
+}
+
+class CloseOption implements MenuOption {
   @Override
   public String getName() {
     return "Close";
@@ -17,31 +36,79 @@ class CloseItem implements MenuItem {
   }
 }
 
-class BuyItem implements MenuItem {
+class TradeMenuOption implements MenuOption {
+  private final boolean buying;
+  private final Inventory you, them;
+  private final Map<Item, Integer> offers;
+  
+  public TradeMenuOption(boolean buying, Inventory you, Inventory them, Map<Item, Integer> offers) {
+    this.buying = buying;
+    this.you = you;
+    this.them = them;
+    this.offers = offers;
+  }
+  
   @Override
   public String getName() {
-    return "Buy Goods";
+    return (buying ? "Buy" : "Sell") + " Goods";
+  }
+  
+  public Inventory getFrom() {
+    return buying ? them : you;
+  }
+  
+  public Inventory getTo() {
+    return buying ? you : them;
   }
   
   @Override
   void select(Menu menu) {
-    // TODO: implement
+    MenuOption def = new BackOption(menu);
+    Menu sub = new Menu(new TradeMenuHandle(def, you, them));
+    for(Item item : offers.keySet()) {
+      if(getFrom().has(item)) {
+        sub.add(new TradeOption(getFrom(), getTo(), item, offers.get(item), true));
+      }
+    }
+    sub.add(def);
+    openMenu(sub);
   }
 }
 
-class SellItem implements MenuItem {
+class TradeOption implements MenuOption {
+  private final Inventory from, to;
+  private final Item item;
+  private final int price;
+  private final boolean transfer;
+  
+  public TradeOption(Inventory from, Inventory to, Item item, int price, boolean transfer) {
+    this.from = from;
+    this.to = to;
+    this.item = item;
+    this.price = price;
+    this.transfer = transfer;
+  }
+  
   @Override
   public String getName() {
-    return "Sell Goods";
+    return item.getName() + " [" + price + " G]";
   }
   
   @Override
   void select(Menu menu) {
-    // TODO: implement
+    if(to.has(price) && from.has(item)) {
+      to.remove(price);
+      from.remove(item);
+      from.add(price);
+      if(transfer) {
+        to.add(item);
+      }
+      menu.remove(this);
+    }
   }
 }
 
-class InfoItem implements MenuItem {
+class InfoOption implements MenuOption {
   @Override
   public String getName() {
     return "Info";
@@ -53,10 +120,10 @@ class InfoItem implements MenuItem {
   }
 }
 
-class TakeoffItem implements MenuItem {
+class TakeoffOption implements MenuOption {
   private final LandingSite site;
   
-  public TakeoffItem(LandingSite site) {
+  public TakeoffOption(LandingSite site) {
     this.site = site;
   }
   
@@ -77,21 +144,28 @@ class TakeoffItem implements MenuItem {
 class MenuHandle {
   // Default parameters
   private static final int DEF_SPACING = 100;
+  private static final int DEF_WIDTH = 200;
   
-  private final MenuItem defaultItem;
+  private final MenuOption defaultOption;
   private final int spacing;
+  private final int buttonWidth;
   
   public MenuHandle() {
-    this(new CloseItem());
+    this(new CloseOption());
   }
   
-  public MenuHandle(MenuItem defaultItem) {
-    this(defaultItem, DEF_SPACING);
+  public MenuHandle(Menu parent) {
+    this(new BackOption(parent));
   }
   
-  public MenuHandle(MenuItem defaultItem, int spacing) {
-    this.defaultItem = defaultItem;
+  public MenuHandle(MenuOption defaultOption) {
+    this(defaultOption, DEF_SPACING, DEF_WIDTH);
+  }
+  
+  public MenuHandle(MenuOption defaultOption, int spacing, int buttonWidth) {
+    this.defaultOption = defaultOption;
     this.spacing = spacing;
+    this.buttonWidth = buttonWidth;
   }
   
   public void render(Menu menu) {
@@ -108,7 +182,7 @@ class MenuHandle {
     textAlign(CENTER, CENTER);
     textSize(24);
     for(int i = 0; i < menu.size(); i++) {
-      drawButton(menu.getItem(i).getName(), (height / 2) + (i * spacing), menu.getIndex() == i);
+      drawButton(menu.get(i).getName(), (height / 2) + (i * spacing), menu.getIndex() == i);
     }
     
     //textFont(bodyFont);
@@ -123,7 +197,7 @@ class MenuHandle {
     else stroke(UI_COLOR);
     fill(1);
     rectMode(CENTER);
-    rect(width / 2, yPos, 200, 50);
+    rect(width / 2, yPos, buttonWidth, 50);
     // Text ----------------------
     //textFont(bodyFont);
     stroke(0);
@@ -133,8 +207,8 @@ class MenuHandle {
   
   public void keyPressed(Menu menu, char key) {
     if(key == ESC) {
-      if(defaultItem != null) {
-        defaultItem.select(menu);
+      if(defaultOption != null) {
+        defaultOption.select(menu);
       }
     }
     else if(key == 'w') {
@@ -158,7 +232,7 @@ class LandingMenuHandle extends MenuHandle {
   private final LandingSite site;
   
   public LandingMenuHandle(LandingSite site) {
-    super(new TakeoffItem(site));
+    super(new TakeoffOption(site));
     
     this.site = site;
   }
@@ -173,14 +247,36 @@ class LandingMenuHandle extends MenuHandle {
     textSize(48);
     fill(s.getColor());
     text(s.getName(), width/2, height/4 + 64);
-    fill(255);
+  }
+}
+
+/**
+  Menu renderer for trading
+*/
+class TradeMenuHandle extends MenuHandle {
+  private final Inventory you, them;
+  
+  public TradeMenuHandle(MenuOption defaultOption, Inventory you, Inventory them) {
+    super(defaultOption, 60, width * 2 / 3);
+    
+    this.you = you;
+    this.them = them;
+  }
+  
+  public void render(Menu menu) {
+    super.render(menu);
+    
+    textSize(32);
+    fill(100);
+    text("You have: [" + you.getMoney() + "G]", width/2, height/4);
+    text("They have: [" + them.getMoney() + "G]", width/2, height/4 + 48);
   }
 }
 
 class Menu {
   private final MenuHandle handle;
   
-  private final List<MenuItem> items = new ArrayList<MenuItem>();
+  private final List<MenuOption> items = new ArrayList<MenuOption>();
   
   private int index = 0;
   
@@ -192,7 +288,7 @@ class Menu {
     this.handle = handle;
   }
   
-  public MenuItem getCursor() {
+  public MenuOption getCursor() {
     return items.get(index);
   }
   
@@ -204,12 +300,16 @@ class Menu {
     return items.size();
   }
   
-  public MenuItem getItem(int i) {
+  public MenuOption get(int i) {
     return items.get(i);
   }
   
-  public void addItem(MenuItem item) {
+  public void add(MenuOption item) {
     items.add(item);
+  }
+  
+  public boolean remove(MenuOption item) {
+    return items.remove(item);
   }
   
   public void scroll(int n) {

@@ -6,7 +6,6 @@ class Planet extends SpaceObject {
   private final float SPLIT_DISTANCE_SCALE = 1;
   private final float SPLIT_VELOCITY_SCALE = 1;
   private final float SPLIT_MASS_ABSORB = .5; // Below 1.0 to prevent supermassive planets taking over the map
-  private final float MIN_LANDING_SPEED = .2;
   
   private final String name;
   private float mass;
@@ -19,7 +18,7 @@ class Planet extends SpaceObject {
   
   public Planet(float mass, float density, PVector position, PVector velocity, color c) {
     super(position, velocity);
-    this.name = planetNamePrefixes[(int)random(planetNamePrefixes.length)] + planetNameSuffixes[(int)random(planetNameSuffixes.length)];
+    this.name = generatePlanetName();
     this.mass = mass;
     this.density = density;
     this.c = c;
@@ -50,7 +49,7 @@ class Planet extends SpaceObject {
       Spaceship ship = (Spaceship)s;
       if(ship.isLanding()) {
         float magSq = velocity.copy().sub(s.getVelocity()).magSq();
-        if(magSq > MIN_LANDING_SPEED * MIN_LANDING_SPEED && site.land(ship)) {
+        if(site.land(ship)) {
           return;
         }
       }
@@ -134,6 +133,10 @@ class Planet extends SpaceObject {
   
   float getDensity() {
     return density;
+  }
+  
+  public LandingSite getLandingSite() {
+    return site;
   }
   
   // Deprecated: not being used currently

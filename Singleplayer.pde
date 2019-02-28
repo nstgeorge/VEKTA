@@ -52,7 +52,8 @@ class Singleplayer implements Gamemode {
       new PVector(), // Position
       new PVector(),    // Velocity
       color(0, 255, 0),
-      0, .1, 60  // Control scheme, Speed, and Handling
+      0, .1, 60,  // Control scheme, Speed, and Handling
+      100 // Starting money
     );
     addObject(playerShip);
   }

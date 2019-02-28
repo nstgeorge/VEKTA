@@ -3,7 +3,11 @@
   State management for landing sites should be handled or proxied through this class.
 */
 class LandingSite {
-  // TODO: convert this to an interface or abstract class if necessary
+  private static final float ITEM_MARKUP = 1.5; // Markup after buying/selling to a landing site
+  
+  private final Inventory inventory = new Inventory();
+  private final Map<Item, Integer> offers = new HashMap();
+  private final Map<Item, Integer> shipOffers = new HashMap();
   
   private final SpaceObject parent;
   
@@ -13,6 +17,18 @@ class LandingSite {
   
   public LandingSite(SpaceObject parent) {
     this.parent = parent;
+  }
+  
+  public Inventory getInventory() {
+    return inventory;
+  }
+  
+  public Map<Item, Integer> getOffers() {
+    return offers;
+  }
+  
+  public Map<Item, Integer> getShipOffers() {
+    return shipOffers;
   }
   
   public SpaceObject getParent() {
@@ -26,11 +42,13 @@ class LandingSite {
     
     landed = ship;
     removeObject(ship);
+    computeOffers(ship.getInventory(), shipOffers, offers);
+    computeOffers(getInventory(), offers, shipOffers);
     menu = new Menu(new LandingMenuHandle(this));
-    menu.addItem(new BuyItem());
-    menu.addItem(new SellItem());
-    menu.addItem(new InfoItem());
-    menu.addItem(new TakeoffItem(this));
+    menu.add(new TradeMenuOption(true, ship.getInventory(), getInventory(), offers));
+    menu.add(new TradeMenuOption(false, ship.getInventory(), getInventory(), shipOffers));
+    menu.add(new InfoOption());
+    menu.add(new TakeoffOption(this));
     openMenu(menu); // Push to global menu stack
     return true;
   }
@@ -52,10 +70,24 @@ class LandingSite {
     return true;
   }
   
+  private void computeOffers(Inventory inv, Map<Item, Integer> thisSide, Map<Item, Integer> otherSide) {
+    // TODO: adjust based on economic system
+    for(Item item : inv) {
+      if(otherSide.containsKey(item)) {
+        int price = (int)(otherSide.get(item) * ITEM_MARKUP);
+        thisSide.put(item, price);
+      }
+      else if(!thisSide.containsKey(item)) {
+        int price = (int)random(1, 30);
+        thisSide.put(item, price);
+      }
+    }
+  }
+  
   /**
   Compute the launch speed (subject to rebalancing)
   */
-  float getLaunchSpeed() {
+  private float getLaunchSpeed() {
     return 1 + parent.getRadius() / 2;
   }
 }
