@@ -90,7 +90,7 @@ class Spaceship extends SpaceObject {
       if(mag > 0) {
         heading.set(relative).normalize();
         float approachFactor = min(1, 5 * target.getRadius() / target.getPosition().sub(position).mag());
-        thrust = max(-1, min(1, (LANDING_SPEED - mag) * approachFactor / speed));
+        thrust = max(-1, min(1, (LANDING_SPEED * approachFactor * approachFactor - mag) / speed));
         //thrust = (mag - LANDING_SPEED) / speed;
       }
     }

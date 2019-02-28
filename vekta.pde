@@ -18,7 +18,7 @@ final float SCALE = 3e8;
 final color UI_COLOR = color(0, 255, 0);
 final float VECTOR_SCALE = 5;
 final int MAX_PLANETS = 500;
-final int TRAIL_LENGTH = 15;
+final int TRAIL_LENGTH = 100;
 final float DEF_ZOOM = (height/2.0) / tan(PI*30.0 / 180.0); // For some reason, this is the default eyeZ location for Processing
 
 //TEMP
