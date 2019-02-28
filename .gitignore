@@ -1,0 +1,6 @@
+.DS_Store
+*/.DS_Store
+src/settings.json
+vekta.iml
+.idea/
+.gitignore~
