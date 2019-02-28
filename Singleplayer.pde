@@ -18,7 +18,7 @@ class Singleplayer implements Gamemode {
   
   float zoom = 1; // Camera zoom
   
-  UniverseGen generator = new UniverseGen(8000, 10);
+  UniverseGen generator = new UniverseGen(20000, 10);
   
   List<SpaceObject> objects = new ArrayList<SpaceObject>();
   
