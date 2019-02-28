@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>vekta</groupId>
+    <artifactId>vekta</artifactId>
+    <version>1.0.0</version>
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+    <dependencies>
+        <!--<dependency>-->
+            <!--<groupId>org.processing</groupId>-->
+            <!--<artifactId>core</artifactId>-->
+            <!--<version>3.3.6</version>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>org.jogamp.jogl</groupId>
+            <artifactId>jogl-all-main</artifactId>
+            <version>2.3.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jogamp.gluegen</groupId>
+            <artifactId>gluegen-rt-main</artifactId>
+            <version>2.3.2</version>
+        </dependency>
+        
+        <!-- Processing dependencies from lib folder -->
+        <dependency>
+            <groupId>org.processing</groupId>
+            <artifactId>core</artifactId>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/processing/core.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.processing</groupId>
+            <artifactId>sound</artifactId>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/processing/sound/library/sound.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>jsyn</groupId>
+            <artifactId>jsyn</artifactId>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/processing/sound/library/jsyn-20171016.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>javamp3</groupId>
+            <artifactId>javamp3</artifactId>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/processing/sound/library/javamp3-1.0.3.jar</systemPath>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

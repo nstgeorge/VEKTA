@@ -22,7 +22,7 @@ public class Vekta extends PApplet {
 
 	static Context mainMenu;
 
-	static Context context; // TODO: convert to stack if necessary
+	private static Context context;
 
 	// Settings
 	private static JSONObject defaultSettings;
@@ -73,13 +73,14 @@ public class Vekta extends PApplet {
 	public void settings() {
 		fullScreen(P3D);
 		pixelDensity(displayDensity());
-		background(color(0));
-		frameRate(60);
-		noCursor();
 	}
 
 	public void setup() {
 		instance = this;
+
+		background(color(0));
+		frameRate(60);
+		noCursor();
 
 		createSettings();
 
@@ -240,11 +241,22 @@ public class Vekta extends PApplet {
 	}
 
 	public static boolean addObject(Object object) {
-		return ((World)context).addObject(object);
+		return getWorld().addObject(object);
 	}
 
 	public static boolean removeObject(Object object) {
-		return ((World)context).removeObject(object);
+		return getWorld().removeObject(object);
+	}
+	
+	public static Context getContext() {
+		return context;
+	}
+
+	public static World getWorld() {
+		if(!(context instanceof World)) {
+			throw new RuntimeException("Current context is not a World");
+		}
+		return (World)context;
 	}
 
 	public static void setContext(Context context) {
