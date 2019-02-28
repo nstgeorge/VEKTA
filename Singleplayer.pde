@@ -78,22 +78,20 @@ class Singleplayer implements Gamemode {
         continue;
       }
       
-      if(!paused) {
-        if(s instanceof Planet) {
-          planetCount++;
-          float distSq = getDistSq(s.getPosition(), playerShip.getPosition());
-          if(distSq < minDistSq) {
-            closestObject = s;
-            minDistSq = distSq;
-          }
+      if(s instanceof Planet) {
+        planetCount++;
+        float distSq = getDistSq(s.getPosition(), playerShip.getPosition());
+        if(distSq < minDistSq) {
+          closestObject = s;
+          minDistSq = distSq;
         }
-        s.update();
-        s.applyInfluenceVector(objects);
-        for(SpaceObject other : objects) {
-          if(s != other) {
-            checkCollision(s, other);
-            checkCollision(other, s);
-          }
+      }
+      s.update();
+      s.applyInfluenceVector(objects);
+      for(SpaceObject other : objects) {
+        if(s != other) {
+          checkCollision(s, other);
+          checkCollision(other, s);
         }
       }
       s.draw();
@@ -226,7 +224,7 @@ class Singleplayer implements Gamemode {
       }
     } else {
      if(key == ESC) {
-       openContext(new PausedContext(this));
+       openContext(new PauseMenu(this));
      }
      if(key == 'k') {
        dead = true;  

@@ -94,7 +94,6 @@ class Planet extends SpaceObject {
       p.setMass(p.getMass() + mass * SPLIT_MASS_ABSORB);
     }
     
-    // TODO: move this eventually
     // If something landed on this planet, destroy it as well
     SpaceObject landed = site.landed;
     if(landed != null) {

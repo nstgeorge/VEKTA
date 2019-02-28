@@ -23,24 +23,21 @@ interface Context {
 /**
   Pause menu implementation as a context. Eventually this can be converted over to use a Menu for additional flexibility.
 */
-class PausedContext implements Context {
-  private final Context parent;
+class PauseMenu implements Context {
+  private final Gamemode game;
   
   // Pause menu options
   String[] pauseMenu = {"Continue" , "Restart", "Quit to Menu"};
-  int pauseSelected = 0;
+  int selected = 0;
   
-  public PausedContext(Context parent) {
-    this.parent = parent;
+  public PauseMenu(Gamemode game) {
+    this.game = game;
   }
   
   @Override
   void render() {
     // TODO: render parent context below
     
-    /*hint(DISABLE_DEPTH_TEST);
-    camera();
-    noLights();*/
     // Border box
     rectMode(CORNER);
     stroke(UI_COLOR);
@@ -51,7 +48,7 @@ class PausedContext implements Context {
     shape(logo, width / 8, 100, (width / 4) - 100, ((width / 4) - 100) / 3.392);
     // Options
     for(int i = 0; i < pauseMenu.length; i++) {
-      drawOption(pauseMenu[i], (height / 2) + (i * 100), i == pauseSelected);
+      drawOption(pauseMenu[i], (height / 2) + (i * 100), i == selected);
     }
     textFont(bodyFont);
     stroke(0);
@@ -59,7 +56,7 @@ class PausedContext implements Context {
     textAlign(CENTER);
     text("X to select", width / 8, (height / 2) + (pauseMenu.length * 100) + 100);
     hint(ENABLE_DEPTH_TEST);
-    noLoop();
+    //noLoop();
   }
   
   @Override
@@ -67,37 +64,32 @@ class PausedContext implements Context {
     if(key == ESC) {
       unpause();
     }
-    if(key == 'w') {
+    else if(key == 'w') {
       // Play the sound for changing menu selection
       if(getSetting("sound") > 0) change.play();
-      pauseSelected = Math.max(pauseSelected - 1, 0);
+      selected = Math.max(selected - 1, 0);
     } 
-    if(key == 's') {
+    else if(key == 's') {
       // Play the sound for changing menu selection
       if(getSetting("sound") > 0) change.play();
-      pauseSelected = Math.min(pauseSelected + 1, pauseMenu.length - 1);
+      selected = Math.min(selected + 1, pauseMenu.length - 1);
     }
-    if(key == 'x') {
+    else if(key == 'x') {
       if(getSetting("music") > 0) theme.stop();
       // Play the sound for selection
       if(getSetting("sound") > 0) select.play();
-      switch(pauseSelected) {
+      switch(selected) {
         case(0):
-          clearOverlay();
-          loop();
+          unpause();
           break;
         case(1):
           game.restart();
           break;
         case(2):
-          clearOverlay();
-          modePicked = false;
-          switchedToGame = false;
-          break;
-        default:
+          clearContexts();
+          openContext(mainMenu);
           break;
       }
-      unpause();
     }
   }
   
@@ -108,7 +100,8 @@ class PausedContext implements Context {
   public void mouseWheel(int amount) {}
   
   private void unpause() {
-    paused = false;
+    clearOverlay();
     closeContext(this);
+    openContext(game);
   }
 }

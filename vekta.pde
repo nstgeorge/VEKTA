@@ -3,9 +3,10 @@ import processing.sound.*;
 
 final String FONTNAME = "font/undefined-medium.ttf";
 final int MAX_DISTANCE = 10000; // Maximum distance for updating objects (currently unimplemented)
-Gamemode game;
-MainMenu mainMenu;
-Context context; // TODO: this will eventually become a stack generalizing menus, worlds, etc.
+
+private Context mainMenu;
+
+Context context; // TODO: convert to stack if necessary
 
 // Settings
 JSONObject defaultSettings;
@@ -33,13 +34,6 @@ PGraphics overlay;
 
 // A sick logo
 PShape logo;
-
-// Menu variables + multiplayer scorekeeping
-boolean modePicked = false;
-boolean switchedToGame = false;
-boolean paused = false;
-int selectedMode = 0;
-int[] playerWins = new int[2];
 
 // TODO: move all these references to a designated `Resources` class
 
@@ -101,29 +95,13 @@ void setup() {
   
   lowPass = new LowPass(this);
   
-  playerWins[0] = 0;
-  playerWins[1] = 0;
   mainMenu = new MainMenu();
+  openContext(mainMenu);
 }  
 
 void draw() {
-  // Menu / game render switch
-  if(modePicked) {
-    if(selectedMode == 1) exit();
-    else if(!switchedToGame) {
-      if(selectedMode == 0) startGamemode(new Singleplayer());
-      //if(selectedMode == 1) game = new Multiplayer();
-      if(getSetting("music") > 0) theme.stop();
-      switchedToGame = true;
-    }
-  }
   if(context != null) {
     context.render();
-  }
-  else if(modePicked && switchedToGame) {
-    game.render();
-  } else {
-    mainMenu.render();
   }
   
   hint(DISABLE_DEPTH_TEST);
@@ -135,12 +113,7 @@ void draw() {
   textAlign(LEFT);
   textSize(16);
   text("FPS = " + frameRate, 50, height - 20);
-  if(paused) {
-    
-    //redraw();
-  } else {
-    loop();
-  }
+  //loop();
 }
 
 void keyPressed() {
@@ -151,38 +124,23 @@ void keyPressed() {
     }
     return;
   }
-  else if(modePicked) {
-    game.keyPressed(key);
-    if(key == ESC) {
-      key = 0; // Suppress default behavior (exit)
-    }
-  }
-  else {
-    mainMenu.keyPressed(key);
-  }
 }
 
 void keyReleased () {
-  if(game != null) {
-    game.keyReleased(key);
+  if(context != null) {
+    context.keyReleased(key);
   }
 }  
-  
+
 void mousePressed() {
   if(context != null) {
     context.keyPressed('x');
   }
-  else if(game != null) {
-    game.keyPressed('x');
-  }
-  else {
-    mainMenu.keyPressed('x');
-  }
 }
 
 void mouseReleased() {
-  if(game != null) {
-    game.keyReleased('x');
+  if(context != null) {
+    context.keyReleased('x');
   }
 }
 
@@ -190,14 +148,12 @@ void mouseWheel(MouseEvent event) {
   if(context != null) {
     context.mouseWheel(event.getCount());
   }
-  else if(game != null) {
-    game.mouseWheel(event.getCount());
-  }
 }
 
 void startGamemode(Gamemode game) {
   clearOverlay();
-  this.game = game;
+  clearContexts();
+  openContext(game);
   game.init();
 }
 
@@ -283,11 +239,11 @@ void saveSettings() {
 }
 
 boolean addObject(Object object) {
-  return game != null && game.addObject(object);
+  return ((Gamemode)context).addObject(object);
 }
 
 boolean removeObject(Object object) {
-  return game != null && game.removeObject(object);
+  return ((Gamemode)context).removeObject(object);
 }
 
 void openContext(Context context) {
@@ -300,6 +256,10 @@ boolean closeContext(Context context) {
     return true;
   }
   return false;
+}
+
+void clearContexts() {
+  this.context = null;
 }
 
 //// Generator methods (will move to another class) ////

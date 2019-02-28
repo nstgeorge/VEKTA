@@ -122,9 +122,11 @@ class InfoOption implements MenuOption {
 
 class TakeoffOption implements MenuOption {
   private final LandingSite site;
+  private final Gamemode world;
   
-  public TakeoffOption(LandingSite site) {
+  public TakeoffOption(LandingSite site, Gamemode world) {
     this.site = site;
+    this.world = world;
   }
   
   @Override
@@ -134,6 +136,8 @@ class TakeoffOption implements MenuOption {
   
   @Override
   void select(Menu menu) {
+    closeContext(menu);
+    openContext(world);
     site.takeoff();
   }
 }
@@ -166,6 +170,10 @@ class MenuHandle {
     this.defaultOption = defaultOption;
     this.spacing = spacing;
     this.buttonWidth = buttonWidth;
+  }
+  
+  public MenuOption getDefault() {
+    return defaultOption;
   }
   
   public void render(Menu menu) {
@@ -212,14 +220,15 @@ class MenuHandle {
       }
     }
     else if(key == 'w') {
-      if(getSetting("sound") > 0) change.play(); // Play the sound for changing menu selection
+      if(getSetting("sound") > 0) change.play();
       menu.scroll(-1);
     } 
     else if(key == 's') {
-      if(getSetting("sound") > 0) change.play(); // Play the sound for changing menu selection
+      if(getSetting("sound") > 0) change.play();
       menu.scroll(1);
     }
     else if(key == 'x') {
+      if(getSetting("sound") > 0) select.play();
       menu.getCursor().select(menu);
     }
   }
@@ -231,8 +240,8 @@ class MenuHandle {
 class LandingMenuHandle extends MenuHandle {
   private final LandingSite site;
   
-  public LandingMenuHandle(LandingSite site) {
-    super(new TakeoffOption(site));
+  public LandingMenuHandle(LandingSite site, Gamemode world) {
+    super(new TakeoffOption(site, world));
     
     this.site = site;
   }
@@ -313,6 +322,7 @@ class Menu implements Context {
   }
   
   public void scroll(int n) {
+    if(getSetting("sound") > 0) change.play();
     index += n;
     int len = items.size();
     while(index < 0) {

@@ -200,8 +200,7 @@ class Spaceship extends SpaceObject {
   void onDestroy(SpaceObject s) {
     lowPass.process(atmosphere, 800);
     
-    // TODO: avoid cast
-    ((Singleplayer)game).dead = true;
+    getWorld().dead = true;
     if(getSetting("sound") > 0) { 
       engine.stop();
       death.play();

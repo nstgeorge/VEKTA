@@ -1,5 +1,6 @@
-class MainMenu {
+class MainMenu implements Context {
   String[] modes = {"Singleplayer"};
+  int selectedMode;
   Hyperspace hyperspace;
   // Settings
   boolean    inSettings;
@@ -25,6 +26,7 @@ class MainMenu {
     selectedOptions = new int[settingsOptions.size()];
   }  
   
+  @Override
   void render() {
     // hyperspace background
     camera(width/2, height/2, (height/2.0) / tan(PI*30.0 / 180.0), width/2, height/2, 0.0, 
@@ -117,7 +119,8 @@ class MainMenu {
     theme.amp(getSetting("music"));
   }
   
-  void keyPressed(char key) {
+  @Override
+  public void keyPressed(char key) {
     if (key == ESC) {
       inSettings = false;
     }
@@ -149,7 +152,7 @@ class MainMenu {
       if(!inSettings) {
         // Just selected a game mode
         if(selectedMode < modes.length) {
-          modePicked = true;
+          selectMode();
         } else {
           // Just selected settings
           if(selectedMode == modes.length) {
@@ -171,5 +174,17 @@ class MainMenu {
         }
       }
     }
-  }  
+  }
+  
+  private void selectMode() {
+    if(selectedMode == 0) startGamemode(new Singleplayer());
+    //if(selectedMode == 1) startGamemode(new Multiplayer());
+    if(getSetting("music") > 0) theme.stop();
+  }
+  
+  @Override
+  public void keyReleased(char key) {}
+  
+  @Override
+  public void mouseWheel(int amount) {}
 }  

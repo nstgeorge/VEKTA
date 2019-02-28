@@ -44,11 +44,12 @@ class LandingSite {
     removeObject(ship);
     computeOffers(ship.getInventory(), shipOffers, offers);
     computeOffers(getInventory(), offers, shipOffers);
-    menu = new Menu(new LandingMenuHandle(this));
+    MenuHandle handle = new LandingMenuHandle(this, ship.getWorld());
+    menu = new Menu(handle);
     menu.add(new TradeMenuOption(true, ship.getInventory(), getInventory(), offers));
     menu.add(new TradeMenuOption(false, ship.getInventory(), getInventory(), shipOffers));
     menu.add(new InfoOption());
-    menu.add(new TakeoffOption(this));
+    menu.add(handle.getDefault());
     openContext(menu); // Push to global menu stack
     return true;
   }
@@ -58,7 +59,6 @@ class LandingSite {
       return false;
     }
     
-    closeContext(menu); // Close menu associated with this landing site
     menu = null;
     
     PVector offset = landed.getPosition().copy().sub(getParent().getPosition());

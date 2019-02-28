@@ -49,4 +49,13 @@ class Projectile extends SpaceObject {
   boolean shouldDestroy(SpaceObject other) {
     return true;
   }
+  
+  /**
+    Override to always destroy projectiles on impact
+  */
+  @Override
+  void onCollide(SpaceObject s) {
+    super.onCollide(s);
+    removeObject(this);
+  }
 }  
