@@ -18,7 +18,7 @@ class Singleplayer implements Gamemode {
   
   float zoom = 1; // Camera zoom
   
-  UniverseGen generator = new UniverseGen(8000, 50);
+  UniverseGen generator = new UniverseGen(8000, 10);
   
   List<SpaceObject> objects = new ArrayList<SpaceObject>();
   
@@ -79,7 +79,7 @@ class Singleplayer implements Gamemode {
         if(s instanceof Planet) {
           planetCount++;
           float distSq = getDistSq(s.getPosition(), playerShip.getPosition());
-          if(distSq < minDistSq * minDistSq) {
+          if(distSq < minDistSq) {
             closestObject = s;
             minDistSq = distSq;
           }

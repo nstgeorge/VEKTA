@@ -44,7 +44,7 @@ abstract class SpaceObject {
   /**
     Gets the mass of the object
   */
-  abstract double getMass();
+  abstract float getMass();
   
   /**
     Gets the position of the object
@@ -86,14 +86,13 @@ abstract class SpaceObject {
     Returns and applies the influence vector of another object on this
   */
   PVector applyInfluenceVector(List<SpaceObject> objects) {
-    double mass = getMass();
+    float mass = getMass();
     PVector influence = new PVector();
     for(SpaceObject s : objects) {
       float distSq = getDistSq(position, s.getPosition());
       if(distSq == 0) continue; // If the planet being checked is itself (or directly on top), don't move
-      double rSq = distSq * SCALE * SCALE;
-      double force = G * mass * s.getMass() / rSq; // G defined in orbit
-      influence.add(new PVector(s.getPosition().x - position.x, s.getPosition().y - position.y).setMag((float)(force / mass)));
+      float force = G * mass * s.getMass() / (distSq * SCALE * SCALE); // G defined in orbit
+      influence.add(new PVector(s.getPosition().x - position.x, s.getPosition().y - position.y).setMag(force / mass));
     }
     // Prevent insane acceleration
     influence.limit(MAX_INFLUENCE);

@@ -1,12 +1,12 @@
 class Projectile extends SpaceObject {
   // Default settings
-  private final double DEF_MASS = 1000;
+  private final float DEF_MASS = 1000;
   private final int DEF_RADIUS = 2;
   private final int DEF_SPEED = 7;
 
   private SpaceObject parent;
   private String name;
-  private double mass;
+  private float mass;
   private float radius;
   private color c;
   
@@ -44,7 +44,7 @@ class Projectile extends SpaceObject {
   @Override
   float getRadius() { return radius; }
   @Override
-  double getMass() { return mass; }
+  float getMass() { return mass; }
   
   @Override
   boolean collidesWith(SpaceObject s) {

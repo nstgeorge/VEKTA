@@ -23,7 +23,7 @@ class Spaceship extends SpaceObject {
   
   // Normal SpaceObject stuff
   private String name;
-  private double mass;
+  private float mass;
   private float radius;
   private PVector heading;
   private PVector acceleration;
@@ -31,7 +31,7 @@ class Spaceship extends SpaceObject {
   private boolean backwards;
   private color c;
   
-  public Spaceship(String name, double mass, float radius, PVector heading, PVector position, PVector velocity, color c, int ctrl, int speed, int handling) {
+  public Spaceship(String name, float mass, float radius, PVector heading, PVector position, PVector velocity, color c, int ctrl, int speed, int handling) {
     super(position, velocity);
     this.name = name;
     this.mass = mass;
@@ -205,7 +205,7 @@ class Spaceship extends SpaceObject {
   }
   
   @Override
-  double getMass() {
+  float getMass() {
     return mass;
   }
   
