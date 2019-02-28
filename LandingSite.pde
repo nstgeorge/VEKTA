@@ -5,14 +5,18 @@
 class LandingSite {
   // TODO: convert this to an interface or abstract class if necessary
   
-  private final SpaceObject launchObject;
+  private final SpaceObject parent;
   
   private Spaceship landed;
   
-  private LandingMenu menu;
+  private Menu menu;
   
-  public LandingSite(SpaceObject launchObject) {
-    this.launchObject = launchObject;
+  public LandingSite(SpaceObject parent) {
+    this.parent = parent;
+  }
+  
+  public SpaceObject getParent() {
+    return parent;
   }
   
   public boolean land(Spaceship ship) {
@@ -22,8 +26,12 @@ class LandingSite {
     
     landed = ship;
     removeObject(ship);
-    menu = new LandingMenu(this);
-    openMenu(menu); // Push landing menu to global menu stack
+    menu = new Menu(new LandingMenuHandle(this));
+    menu.addItem(new BuyItem());
+    menu.addItem(new SellItem());
+    menu.addItem(new InfoItem());
+    menu.addItem(new TakeoffItem(this));
+    openMenu(menu); // Push to global menu stack
     return true;
   }
   
@@ -32,15 +40,22 @@ class LandingSite {
       return false;
     }
     
-    closeMenu(menu);
+    closeMenu(menu); // Close menu associated with this landing site
     menu = null;
     
-    PVector offset = landed.getPosition().copy().sub(launchObject.getPosition());
-    landed.setVelocity(offset.setMag(1 + launchObject.getRadius()).add(launchObject.getVelocity()));
+    PVector offset = landed.getPosition().copy().sub(getParent().getPosition());
+    landed.setVelocity(offset.setMag(getLaunchSpeed()).add(getParent().getVelocity()));
     landed.onTakeoff();
     landed.update();
     addObject(landed);
     landed = null;
     return true;
+  }
+  
+  /**
+  Compute the launch speed (subject to rebalancing)
+  */
+  float getLaunchSpeed() {
+    return 1 + parent.getRadius() / 2;
   }
 }

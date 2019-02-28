@@ -259,6 +259,6 @@ class Spaceship extends SpaceObject {
   }
   
   void onTakeoff() {
-    landing = false;
+    
   }
 }  

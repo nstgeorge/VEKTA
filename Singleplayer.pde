@@ -141,8 +141,12 @@ class Singleplayer implements Gamemode {
         drawDial("Direction", closestObject.getPosition().sub(pos), 450, height - 65, 50, closestObject.getColor());
         stroke(closestObject.getColor());
         fill(closestObject.getColor());
-      }  
+      }
       text(closestObjectString, 50, height - 100);
+      if(playerShip.isLanding()) {
+        //textSize(24);
+        text(":: Landing Autopilot ::", 50, height - 150);
+      }
     }
     // Menus
     else {

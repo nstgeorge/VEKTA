@@ -5,7 +5,7 @@ final String FONTNAME = "font/undefined-medium.ttf";
 final int MAX_DISTANCE = 10000; // Maximum distance for updating objects (currently unimplemented)
 Gamemode game;
 MainMenu mainMenu;
-LandingMenu menu; // TODO: this will eventually become a stack generalizing LandingMenu, MainMenu, and PausedMenu
+Menu menu; // TODO: this will eventually become a stack generalizing LandingMenu, MainMenu, and PausedMenu
 
 // Settings
 JSONObject defaultSettings;
@@ -131,6 +131,7 @@ void draw() {
   // FPS OVERLAY
   color(255, 255, 255);
   textAlign(LEFT);
+  textSize(16);
   text("FPS = " + frameRate, 50, height - 20);
   if(paused) {
     hint(DISABLE_DEPTH_TEST);
@@ -232,8 +233,14 @@ void keyReleased () {
 }  
   
 void mousePressed() {
-  if(game != null) {
+  if(menu != null) {
+    menu.keyPressed('x');
+  }
+  else if(game != null) {
     game.keyPressed('x');
+  }
+  else {
+    mainMenu.keyPressed('x');
   }
 }
 
@@ -244,7 +251,10 @@ void mouseReleased() {
 }
 
 void mouseWheel(MouseEvent event) {
-  if(game != null) {
+  if(menu != null) {
+    menu.scroll(event.getCount());
+  }
+  else if(game != null) {
     game.mouseWheel(event.getCount());
   }
 }
@@ -344,11 +354,11 @@ boolean removeObject(Object object) {
   return game != null && game.removeObject(object);
 }
 
-void openMenu(LandingMenu menu) {
+void openMenu(Menu menu) {
   this.menu = menu;
 }
 
-boolean closeMenu(LandingMenu menu) {
+boolean closeMenu(Menu menu) {
   if(this.menu == menu) {
     this.menu = null;
     return true;
