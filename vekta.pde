@@ -5,7 +5,7 @@ final String FONTNAME = "font/undefined-medium.ttf";
 final int MAX_DISTANCE = 10000; // Maximum distance for updating objects (currently unimplemented)
 Gamemode game;
 MainMenu mainMenu;
-Menu menu; // TODO: this will eventually become a stack generalizing LandingMenu, MainMenu, and PausedMenu
+Context context; // TODO: this will eventually become a stack generalizing menus, worlds, etc.
 
 // Settings
 JSONObject defaultSettings;
@@ -121,8 +121,8 @@ void draw() {
       switchedToGame = true;
     }
   }
-  if(menu != null) {
-    menu.render();
+  if(context != null) {
+    context.render();
   }
   else if(modePicked && switchedToGame) {
     game.render();
@@ -169,8 +169,11 @@ void draw() {
 }
 
 void keyPressed() {
-  if(menu != null) {
-    menu.keyPressed(key);
+  if(context != null) {
+    context.keyPressed(key);
+    if(key == ESC) {
+      key = 0; // Suppress default behavior (exit)
+    }
     return;
   }
   
@@ -239,8 +242,8 @@ void keyReleased () {
 }  
   
 void mousePressed() {
-  if(menu != null) {
-    menu.keyPressed('x');
+  if(context != null) {
+    context.keyPressed('x');
   }
   else if(game != null) {
     game.keyPressed('x');
@@ -257,8 +260,8 @@ void mouseReleased() {
 }
 
 void mouseWheel(MouseEvent event) {
-  if(menu != null) {
-    menu.scroll(event.getCount());
+  if(context != null) {
+    context.mouseWheel(event.getCount());
   }
   else if(game != null) {
     game.mouseWheel(event.getCount());
@@ -360,13 +363,13 @@ boolean removeObject(Object object) {
   return game != null && game.removeObject(object);
 }
 
-void openMenu(Menu menu) {
-  this.menu = menu;
+void openContext(Context context) {
+  this.context = context;
 }
 
-boolean closeMenu(Menu menu) {
-  if(this.menu == menu) {
-    this.menu = null;
+boolean closeContext(Context context) {
+  if(this.context == context) {
+    this.context = null;
     return true;
   }
   return false;

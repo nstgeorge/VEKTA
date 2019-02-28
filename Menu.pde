@@ -19,8 +19,8 @@ class BackOption implements MenuOption {
   
   @Override
   void select(Menu menu) {
-    closeMenu(menu);
-    openMenu(parent);
+    closeContext(menu);
+    openContext(parent);
   }
 }
 
@@ -32,7 +32,7 @@ class CloseOption implements MenuOption {
   
   @Override
   void select(Menu menu) {
-    closeMenu(menu);
+    closeContext(menu);
   }
 }
 
@@ -71,7 +71,7 @@ class TradeMenuOption implements MenuOption {
       }
     }
     sub.add(def);
-    openMenu(sub);
+    openContext(sub);
   }
 }
 
@@ -273,7 +273,7 @@ class TradeMenuHandle extends MenuHandle {
   }
 }
 
-class Menu {
+class Menu implements Context {
   private final MenuHandle handle;
   
   private final List<MenuOption> items = new ArrayList<MenuOption>();
@@ -321,11 +321,21 @@ class Menu {
     index %= len;
   }
   
+  @Override
   public void render() {
     handle.render(this);
   }
   
+  @Override
   public void keyPressed(char key) {
     handle.keyPressed(this, key);
-  }  
+  }
+  
+  @Override
+  public void keyReleased(char key) {}
+  
+  @Override
+  public void mouseWheel(int amount) {
+    scroll(amount);
+  }
 }

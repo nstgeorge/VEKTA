@@ -244,7 +244,7 @@ class Singleplayer implements Gamemode {
   }
   
   @Override
-  void mouseWheel(float amount) {
+  void mouseWheel(int amount) {
     zoom = max(.1, min(3, zoom * (1 + amount * .1)));
   }
   

@@ -49,7 +49,7 @@ class LandingSite {
     menu.add(new TradeMenuOption(false, ship.getInventory(), getInventory(), shipOffers));
     menu.add(new InfoOption());
     menu.add(new TakeoffOption(this));
-    openMenu(menu); // Push to global menu stack
+    openContext(menu); // Push to global menu stack
     return true;
   }
   
@@ -58,7 +58,7 @@ class LandingSite {
       return false;
     }
     
-    closeMenu(menu); // Close menu associated with this landing site
+    closeContext(menu); // Close menu associated with this landing site
     menu = null;
     
     PVector offset = landed.getPosition().copy().sub(getParent().getPosition());

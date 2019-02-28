@@ -1,30 +1,13 @@
 
-interface Gamemode {
+interface Gamemode extends Context {
   /**
     Initializes all required variables
   */
   void init();
   
   /**
-    Draws all the things
+    Called when the gamemode restarts
   */
-  void render();
-  
-  /**
-    What to do when a key is pressed
-  */
-  void keyPressed(char key);
-  
-  /**
-    What to do when a key is released
-  */
-  void keyReleased(char key);
-  
-  /**
-    What to do when the mouse wheel is scrolled
-  */
-  void mouseWheel(float amount);
-  
   void restart();
   
   boolean addObject(Object object);
