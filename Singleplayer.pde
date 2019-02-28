@@ -118,9 +118,10 @@ class Singleplayer implements Gamemode {
       textSize(16);
       // Draw a rectangle in the bottom
       fill(0);
+      stroke(UI_COLOR);
       rectMode(CORNERS);
       rect(-1, height - 130, width + 1, height + 1);
-      fill(0, 255, 0);
+      fill(UI_COLOR);
       // Text - Far right
       text("Health = " + health + "\nAmmunition = " + ammunition, width - 300, height - 100);
       // Ship heading indicator
@@ -186,7 +187,7 @@ class Singleplayer implements Gamemode {
       drawArrow(info, (int)(radius * .8), locX, locY);
       // Reset colors
       fill(0);
-      stroke(0, 255, 0);
+      stroke(UI_COLOR);
   }
   
   void drawArrow(PVector heading, int length, int locX, int locY) {

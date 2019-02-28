@@ -14,7 +14,8 @@ JSONObject  settings;
 // Game-balancing variables and visual settings
 
 final double G = 6.674e-11;
-public final double SCALE = 3e8;
+final color UI_COLOR = color(0, 255, 0);
+final double SCALE = 3e8;
 final float VECTOR_SCALE = 5;
 final int MAX_PLANETS = 500;
 final int TRAIL_LENGTH = 15;
@@ -122,7 +123,7 @@ void draw() {
     noLights();
     // Border box
     rectMode(CORNER);
-    stroke(0, 255, 0);
+    stroke(UI_COLOR);
     fill(0);
     rect(-1, -1, width / 4, height + 2);
     // Logo
@@ -303,14 +304,14 @@ void saveSettings() {
   camera();
   noLights();
   if(selected) stroke(255);
-  else stroke(0, 255, 0);
+  else stroke(UI_COLOR);
   fill(1);
   rectMode(CENTER);
   rect(width / 8, yPos, 200, 50);
   // Text ----------------------
   textFont(bodyFont);
   stroke(0);
-  fill(0, 255, 0);
+  fill(UI_COLOR);
   textAlign(CENTER, CENTER);
   text(name, width / 8, yPos - 3);
 }
