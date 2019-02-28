@@ -28,6 +28,8 @@ class Singleplayer implements Gamemode {
   // UI Variables (not real time updated)
   float shortDist;
   float speed;
+  float closestMass;
+  String closestMassUnit;
   
   @Override
   void init() {
@@ -134,7 +136,14 @@ class Singleplayer implements Gamemode {
         closestObjectString = "Closest Object: None in range";
         minDistSq = Integer.MAX_VALUE;
       } else {
-        closestObjectString = "Closest Object: " + closestObject.getName() + " - " + shortDist + "AU \nSpeed: "+ (float)round(closestObject.getVelocity().mag() * 100) / 100 + "\nMass: " + (float)round((float)((closestObject.getMass() / (1.989 * Math.pow(10, 30)) * 1000))) / 1000  + " Suns";
+        if(closestObject.getMass() / 1.989e30 < .1) {
+          closestMass = (float)round(closestObject.getMass() / 5.9736e24 * 1000) / 1000;
+          closestMassUnit = "Earths";
+        } else {
+          closestMass = (float)round(closestObject.getMass() / 1.989e30 * 1000) / 1000;
+          closestMassUnit = "Suns";
+        }
+        closestObjectString = "Closest Object: " + closestObject.getName() + " - " + shortDist + "AU \nSpeed: "+ (float)round(closestObject.getVelocity().mag() * 100) / 100 + "\nMass: " + closestMass  + " " + closestMassUnit;
         // Closest object arrow
         drawDial("Direction", closestObject.getPosition().sub(pos), 450, height - 65, 50, closestObject.getColor());
         stroke(closestObject.getColor());
