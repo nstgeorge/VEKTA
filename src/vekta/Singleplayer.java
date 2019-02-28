@@ -1,8 +1,14 @@
-import java.util.*;
+package vekta;
 
-private static int nextID = 0;
+import processing.core.PVector;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static vekta.Vekta.*;
 
 class Singleplayer implements World {
+  private static int nextID = 0;
   
   int planetCount;
   boolean dead;
@@ -33,12 +39,13 @@ class Singleplayer implements World {
   String closestMassUnit;
   
   @Override
-  void init() {
-    background(0);
+  public void init() {
+    Vekta v = getInstance();
+    v.background(0);
     
     if(getSetting("music") > 0 && !atmosphere.isPlaying()) atmosphere.loop();
-    
-    frameCount = 0;
+
+    v.frameCount = 0;
     
     // Add initial planets
     for(Planet p : generator.generate()) {
@@ -53,7 +60,7 @@ class Singleplayer implements World {
       new PVector(1, 0), // Heading
       new PVector(), // Position
       new PVector(),    // Velocity
-      color(0, 255, 0),
+      v.color(0, 255, 0),
       0, .1, 60,  // Control scheme, Speed, and Handling
       100 // Starting money
     );
@@ -61,7 +68,7 @@ class Singleplayer implements World {
   }
   
   @Override
-  void render() {
+  public void render() {
     background(0);
     
     if(!dead) {
@@ -178,13 +185,13 @@ class Singleplayer implements World {
     hint(ENABLE_DEPTH_TEST); 
   }
   
-  void checkCollision(SpaceObject a, SpaceObject b) {
+  private void checkCollision(SpaceObject a, SpaceObject b) {
     if(a.collidesWith(b)) {
       a.onCollide(b);
     }
   }
   
-  void drawDial(String name, PVector info, int locX, int locY, int radius, color c) {
+  private void drawDial(String name, PVector info, int locX, int locY, int radius, color c) {
       fill(0);
       stroke(c);
       ellipse(locX, locY, radius, radius);
@@ -201,9 +208,10 @@ class Singleplayer implements World {
       stroke(UI_COLOR);
   }
   
-  void drawArrow(PVector heading, int length, int locX, int locY) {
+  private void drawArrow(PVector heading, int length, int locX, int locY) {
+    Vekta v = Vekta.getInstance();
     heading.normalize().mult(length);
-    line(locX,  locY, locX + heading.x, locY + heading.y);
+    v.line(locX,  locY, locX + heading.x, locY + heading.y);
     float angle = heading.heading();
     float x = cos(angle);
     float y = sin(angle);
@@ -212,11 +220,11 @@ class Singleplayer implements World {
     endpoint.mult(length);
     arms.mult(length *.8); // scale the arms to a certain length
     // draw the arms
-    line(locX + endpoint.x, locY + endpoint.y, locX + cos(angle-.3) * (length *.8), locY + sin(angle-.3) * (length *.8));
-    line(locX + endpoint.x, locY + endpoint.y, locX + cos(angle+.3) * (length *.8), locY + sin(angle+.3) * (length *.8));
+    v.line(locX + endpoint.x, locY + endpoint.y, locX + cos(angle-.3) * (length *.8), locY + sin(angle-.3) * (length *.8));
+    v.line(locX + endpoint.x, locY + endpoint.y, locX + cos(angle+.3) * (length *.8), locY + sin(angle+.3) * (length *.8));
   }
   
-  void updateUIInformation() {
+  private void updateUIInformation() {
     health = 100;
     shortDist = (float)round(sqrt(minDistSq) * 100) / 100;
     speed = (float)round(spd * 100) / 100;
@@ -225,7 +233,7 @@ class Singleplayer implements World {
   }
   
   @Override
-  void keyPressed(char key) {
+  public void keyPressed(char key) {
     if(dead) {
       if(key == 'x') {
         lowPass.stop();
@@ -249,22 +257,22 @@ class Singleplayer implements World {
   }
   
   @Override
-  void keyReleased(char key) {
+  public void keyReleased(char key) {
     playerShip.keyReleased(key);
   }
   
   @Override
-  void mouseWheel(int amount) {
-    zoom = max(.1, min(3, zoom * (1 + amount * .1)));
+  public void mouseWheel(int amount) {
+    zoom = Vekta.max(.1F, Vekta.min(3, zoom * (1 + amount * .1F)));
   }
   
   @Override
-  void restart() {
-    startGamemode(new Singleplayer());
+  public void restart() {
+    Vekta.startWorld(new Singleplayer());
   }
   
   @Override
-  boolean addObject(Object object) {
+  public boolean addObject(Object object) {
     if(object instanceof SpaceObject) {
       SpaceObject s = (SpaceObject)object;
       s.setID(nextID++);
@@ -275,7 +283,7 @@ class Singleplayer implements World {
   }
   
   @Override
-  boolean removeObject(Object object) {
+  public boolean removeObject(Object object) {
     if(object instanceof SpaceObject) {
       markedForDeath.add((SpaceObject)object);
       return true;

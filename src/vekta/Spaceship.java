@@ -1,8 +1,11 @@
+package vekta;
+
 import processing.core.*;
 
 import java.util.List;
 
 import static processing.core.PConstants.TRIANGLES;
+import static vekta.Vekta.*;
 
 class Spaceship extends SpaceObject {
   // Default Shapeship settings
@@ -37,7 +40,7 @@ class Spaceship extends SpaceObject {
   private final float mass;
   private final float radius;
   private final PVector heading;
-  private final Color c;
+  private final int c;
   
   // Landing doodads
   private boolean landing;
@@ -45,7 +48,7 @@ class Spaceship extends SpaceObject {
   
   private final Inventory inventory = new Inventory();
   
-  public Spaceship(Singleplayer world, PApplet parent, String name, float mass, float radius, PVector heading, PVector position, PVector velocity, Color c, int ctrl, float speed, int handling, int money) {
+  public Spaceship(Singleplayer world, PApplet parent, String name, float mass, float radius, PVector heading, PVector position, PVector velocity, int c, int ctrl, float speed, int handling, int money) {
     super(parent, position, velocity);
     this.world = world;
     this.name = name;
@@ -66,7 +69,7 @@ class Spaceship extends SpaceObject {
     // Draw a triangle rotated in the direction of ship
     float theta = heading.heading() + processing.core.PApplet.radians(90);
     super.parent.fill(1);
-    super.parent.stroke(c.getIntValue());
+    super.parent.stroke(c);
     super.parent.pushMatrix();
     super.parent.translate(position.x, position.y);
     super.parent.rotate(theta);
@@ -106,7 +109,7 @@ class Spaceship extends SpaceObject {
     if(controlScheme == 0) {   // WASD
       switch(key) {
         case 'w':
-          if(Vekta.getInstance().getSetting("sound") > 0) {
+          if(getSetting("sound") > 0) {
             engine.stop();
             engine.loop();
           }
@@ -116,7 +119,7 @@ class Spaceship extends SpaceObject {
           turn = -((float)handling / HANDLING_SCALE);
           break;
         case 's':
-          if(Vekta.getInstance().getSetting("sound") > 0) {
+          if(getSetting("sound") > 0) {
             engine.stop();
             engine.loop();
           }
@@ -140,7 +143,7 @@ class Spaceship extends SpaceObject {
     if(controlScheme == 1) {   // IJKL
       switch(key) {
         case 'i':
-          if(Vekta.getInstance().getSetting("sound") > 0) {
+          if(getSetting("sound") > 0) {
             engine.stop();
             engine.loop();
           }
@@ -150,7 +153,7 @@ class Spaceship extends SpaceObject {
           turn = -((float)handling / HANDLING_SCALE);
           break;
         case 'k':
-          if(Vekta.getInstance().getSetting("sound") > 0) {
+          if(getSetting("sound") > 0) {
             engine.stop();
             engine.loop();
           }
@@ -174,7 +177,7 @@ class Spaceship extends SpaceObject {
   
   void keyReleased(char key) {
     if((key == 'w' || key == 's') && controlScheme == 0) {
-      if(Vekta.getInstance().getSetting("sound") > 0) engine.stop();
+      if(getSetting("sound") > 0) engine.stop();
       thrust = 0;
     }
     if(( key == 'a' || key == 'd') && controlScheme == 0) {
@@ -182,7 +185,7 @@ class Spaceship extends SpaceObject {
     }
     
     if((key == 'i' || key == 'k') && controlScheme == 1) {
-      if(Vekta.getInstance().getSetting("sound") > 0) engine.stop();
+      if(getSetting("sound") > 0) engine.stop();
       thrust = 0;
     }
     if((key == 'j' || key == 'l') && controlScheme == 1) {
@@ -196,8 +199,8 @@ class Spaceship extends SpaceObject {
   
   private void fireProjectile() {
     if(numProjectiles < MAX_PROJECTILES) {
-      if(Vekta.getInstance().getSetting("sound") > 0) laser.play();
-      Vekta.getInstance().addObject(new Projectile(this, position.copy(), velocity.copy(), heading.copy(), c));
+      if(getSetting("sound") > 0) laser.play();
+      addObject(new Projectile(this, position.copy(), velocity.copy(), heading.copy(), c));
       numProjectiles++;
     }
   }
@@ -207,7 +210,7 @@ class Spaceship extends SpaceObject {
     lowPass.process(atmosphere, 800);
     
     getWorld().dead = true;
-    if(Vekta.getInstance().getSetting("sound") > 0) {
+    if(getSetting("sound") > 0) {
       engine.stop();
       death.play();
     }
@@ -234,10 +237,6 @@ class Spaceship extends SpaceObject {
     return MAX_PROJECTILES - numProjectiles;
   }
   
-  int decrementProjectiles() {
-    return numProjectiles--;
-  }
-  
   @Override
   float getMass() {
     return mass;
@@ -249,7 +248,7 @@ class Spaceship extends SpaceObject {
   }
   
   @Override
-  Color getColor() {
+  int getColor() {
     return c;
   }
   

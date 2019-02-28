@@ -1,3 +1,5 @@
+package vekta;
+
 /**
  * Used for storing colors in the format expected by fill() and stroke().
  * https://processing.org/reference/color_datatype.html
@@ -5,6 +7,7 @@
 
 public class Color {
     int color; // Used to store the 32 bits of color information: AAAAAAAARRRRRRRRGGGGGGGGBBBBBBBB
+    
     public Color(int r, int g, int b) {
 
         color = convertRGB((byte)(r % 256), (byte)(g % 256), (byte)(b & 256));

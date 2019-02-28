@@ -1,75 +1,76 @@
+package vekta;
+
 import processing.core.*;
-import processing.sound.*;
-import processing.data.*;
+import processing.data.JSONObject;
+import processing.sound.LowPass;
+import processing.sound.SoundFile;
 
 import java.awt.event.MouseEvent;
 
 /**
  * Core class for all of Vekta.
  */
-public class Vekta extends PApplet {
+public class Vekta extends PApplet
+{
+    private static Vekta instance;
 
-    final String FONTNAME = "font/undefined-medium.ttf";
-    final int MAX_DISTANCE = 10000; // Maximum distance for updating objects (currently unimplemented)
+    public static Vekta getInstance() {
+        return instance;
+    }
 
-    private Context mainMenu;
-    private static Vekta vekta;
+    static final String FONTNAME = "font/undefined-medium.ttf";
+    static final int MAX_DISTANCE = 10000; // Maximum distance for updating objects (currently unimplemented)
 
-    Context context; // TODO: convert to stack if necessary
+    static Context mainMenu;
+
+    static Context context; // TODO: convert to stack if necessary
 
     // Settings
-    private JSONObject defaultSettings;
-    private JSONObject  settings;
+    private static JSONObject defaultSettings;
+    private static JSONObject  settings;
 
 // Game-balancing variables and visual settings
 
     final static float G = 6.674e-11F;
     final static float SCALE = 3e8F;
-    final static Color UI_COLOR = new Color(0, 255, 0);
+    final static int UI_COLOR = new Color(0, 255, 0).getIntValue();
     final static float VECTOR_SCALE = 5;
     final static int MAX_PLANETS = 500;
     final static int TRAIL_LENGTH = 100;
     final float DEF_ZOOM = (height/2.0F) / tan((PI*30.0F / 180.0F)); // For some reason, this is the default eyeZ location for Processing
-
-    //TEMP
-    float timeScale = 1;
-
+    
     // Fonts
-    PFont headerFont;
-    PFont bodyFont;
+    static PFont headerFont;
+    static PFont bodyFont;
 
     // HUD/Menu overlay
-    PGraphics overlay;
+    static PGraphics overlay;
 
     // A sick logo
-    PShape logo;
+    static PShape logo;
 
 // TODO: move all these references to a designated `Resources` class
 
     // Sounds
-    SoundFile theme;
-    SoundFile atmosphere;
-    SoundFile laser;
-    SoundFile death;
-    SoundFile engine;
-    SoundFile change;
-    SoundFile select;
-    SoundFile chirp;
+    static SoundFile theme;
+    static SoundFile atmosphere;
+    static SoundFile laser;
+    static SoundFile death;
+    static SoundFile engine;
+    static SoundFile change;
+    static SoundFile select;
+    static SoundFile chirp;
 
     // Name components
-    private String[] planetNamePrefixes;
-    private String[] planetNameSuffixes;
-    private String[] itemNameAdjectives;
-    private String[] itemNameNouns;
-    private String[] itemNameModifiers;
+    private static String[] planetNamePrefixes;
+    private static String[] planetNameSuffixes;
+    private static String[] itemNameAdjectives;
+    private static String[] itemNameNouns;
+    private static String[] itemNameModifiers;
 
     // Low pass filter
-    LowPass lowPass;
-
-    public static void main(String[] args) {
-        PApplet.main("Vekta");
-    }
-
+    static LowPass lowPass;
+    
     public void settings() {
         fullScreen(P3D);
         pixelDensity(displayDensity());
@@ -79,11 +80,11 @@ public class Vekta extends PApplet {
     }
 
     public void setup() {
+        instance = this;
+        
         createSettings();
 
         textMode(SHAPE);
-
-        vekta = this;
 
         // Overlay initialization
         overlay = createGraphics(width, height);
@@ -106,16 +107,16 @@ public class Vekta extends PApplet {
         select = new SoundFile(this, "select.wav");
         chirp = new SoundFile(this, "chirp.wav");
 
-        planetNamePrefixes = loadStrings("data/text/planet_prefixes.txt");
-        planetNameSuffixes = concat(loadStrings("data/text/planet_suffixes.txt"), new String[] {""});
-        itemNameAdjectives = loadStrings("data/text/item_adjectives.txt");
-        itemNameNouns = loadStrings("data/text/item_nouns.txt");
-        itemNameModifiers = loadStrings("data/text/item_modifiers.txt");
+        planetNamePrefixes = loadStrings("text/planet_prefixes.txt");
+        planetNameSuffixes = concat(loadStrings("text/planet_suffixes.txt"), new String[] {""});
+        itemNameAdjectives = loadStrings("text/item_adjectives.txt");
+        itemNameNouns = loadStrings("text/item_nouns.txt");
+        itemNameModifiers = loadStrings("text/item_modifiers.txt");
 
         lowPass = new LowPass(this);
 
         mainMenu = new MainMenu();
-        openContext(mainMenu);
+        setContext(mainMenu);
     }
 
     public void draw() {
@@ -141,7 +142,6 @@ public class Vekta extends PApplet {
             if(key == ESC) {
                 key = 0; // Suppress default behavior (exit)
             }
-            return;
         }
     }
 
@@ -162,21 +162,20 @@ public class Vekta extends PApplet {
             context.keyReleased('x');
         }
     }
-
+    
     public void mouseWheel(MouseEvent event) {
         if(context != null) {
             context.mouseWheel(event.getClickCount());
         }
     }
 
-    void startGamemode(World world) {
-        clearOverlay();
-        clearContexts();
-        openContext(world);
+    public static void startWorld(World world) {
+        Vekta.clearOverlay();
+        Vekta.setContext(world);
         world.init();
     }
 
-    void clearOverlay() {
+    static void clearOverlay() {
         if(overlay.isLoaded()) {
             overlay.clear();
             overlay.beginDraw();
@@ -186,15 +185,16 @@ public class Vekta extends PApplet {
         }
     }
 
-    void drawOverlay() {
+    static void drawOverlay() {
         // Overlay the overlay
         // NOTE: THIS IS VERY SLOW. Use only for menus, not gameplay!
         if(overlay.isLoaded()) {
+            Vekta v = getInstance();
             overlay.loadPixels();
-            loadPixels();
-            for(int i = 0; i < pixels.length; i++)
-                if(overlay.pixels[i] != color(0)) pixels[i] = overlay.pixels[i];
-            updatePixels();
+            v.loadPixels();
+            for(int i = 0; i < v.pixels.length; i++)
+                if(overlay.pixels[i] != 0) v.pixels[i] = overlay.pixels[i];
+           v.updatePixels();
             overlay.updatePixels();
             //image(overlay, 0, 0);
             //redraw();
@@ -216,7 +216,7 @@ public class Vekta extends PApplet {
         }
     }
 
-    int getSetting(String key) {
+    static int getSetting(String key) {
         if(!settings.isNull(key)) {
             return settings.getInt(key);
         } else {
@@ -228,12 +228,12 @@ public class Vekta extends PApplet {
         }
     }
 
-    void setSetting(String key, int value) {
+    static void setSetting(String key, int value) {
         settings.setInt(key, value);
     }
 
-    void saveSettings() {
-        saveJSONObject(settings, "settings.json");
+    static void saveSettings() {
+        getInstance().saveJSONObject(settings, "settings.json");
     }
 
     /**
@@ -245,59 +245,48 @@ public class Vekta extends PApplet {
         camera();
         noLights();
         if(selected) stroke(255);
-        else stroke(UI_COLOR.getIntValue());
+        else stroke(UI_COLOR);
         fill(1);
         rectMode(CENTER);
         rect(width / 8, yPos, 200, 50);
         // Text ----------------------
         textFont(bodyFont);
         stroke(0);
-        fill(UI_COLOR.getIntValue());
+        fill(UI_COLOR);
         textAlign(CENTER, CENTER);
         text(name, width / 8, yPos - 3);
     }
 
-    boolean addObject(Object object) {
+    public static boolean addObject(Object object) {
         return ((World)context).addObject(object);
     }
 
-    boolean removeObject(Object object) {
+    public static boolean removeObject(Object object) {
         return ((World)context).removeObject(object);
     }
 
-    void openContext(Context context) {
-        this.context = context;
-    }
-
-    boolean closeContext(Context context) {
-        if(this.context == context) {
-            this.context = null;
-            return true;
+    public static void setContext(Context context) {
+        if(context == null) {
+            throw new RuntimeException("Context cannot be set to null");
         }
-        return false;
-    }
-
-    void clearContexts() {
-        this.context = null;
-    }
-
-    static Vekta getInstance() {
-        return vekta;
+        Vekta.context = context;
     }
 
 //// Generator methods (will move to another class) ////
 
-    public String generatePlanetName() {
-        return random(planetNamePrefixes) + random(planetNameSuffixes);
+    public static String generatePlanetName() {
+        Vekta v = getInstance();
+        return v.random(planetNamePrefixes) + v.random(planetNameSuffixes);
     }
 
-    public String generateItemName() {
-        String name = random(itemNameNouns);
-        if (random(1) > .5) {
-            name = random(itemNameAdjectives) + " " + name;
+    public static String generateItemName() {
+        Vekta v = getInstance();
+        String name = v.random(itemNameNouns);
+        if (v.random(1) > .5) {
+            name = v.random(itemNameAdjectives) + " " + name;
         }
-        if (random(1) > .5) {
-            name = name + " " + random(itemNameModifiers);
+        if (v.random(1) > .5) {
+            name = name + " " + v.random(itemNameModifiers);
         }
         return name;
     }
@@ -311,7 +300,10 @@ public class Vekta extends PApplet {
         float y = a.y - b.y;
         return x * x + y * y;
     }
-
+    
+    //// Main method ////
+    
+    public static void main(String[] argv) {
+        PApplet.main(Vekta.class.getName(), argv);
+    }
 };
-
-

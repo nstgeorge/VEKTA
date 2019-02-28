@@ -1,8 +1,10 @@
+package vekta;
+
 import processing.core.*;
 
 import java.util.List;
 
-abstract class SpaceObject {
+public abstract class SpaceObject {
 
   private static final float MAX_INFLUENCE = 2F;
 
@@ -11,15 +13,15 @@ abstract class SpaceObject {
   PVector position;
   PVector velocity;
 
-  PApplet parent;
+  Singleplayer parent;
   
   private final PVector[] trail = new PVector[Vekta.TRAIL_LENGTH];
   
-  SpaceObject(PApplet parent) {
+  public SpaceObject(Singleplayer parent) {
     this(parent, new PVector(), new PVector());
   }
-  
-  SpaceObject(PApplet parent, PVector position, PVector velocity) {
+
+  public SpaceObject(Singleplayer parent, PVector position, PVector velocity) {
     this.parent = parent;
     this.position = position;
     this.velocity = velocity;
@@ -62,13 +64,6 @@ abstract class SpaceObject {
   }
   
   /**
-    Sets the position of the object
-  */
-  final void setPosition(PVector position) {
-    position.set(position);
-  }
-  
-  /**
     Gets the velocity of the object
   */
   final PVector getVelocity() {
@@ -92,12 +87,7 @@ abstract class SpaceObject {
   /**
    Gets the color of the object
   */
-  abstract Color getColor();
-  
-  /**
-    Set the radius of this object
-  */
-  //abstract void setRadius(float radius);
+  abstract int getColor();
   
   /**
     Gets the radius of the object (for collision purposes, not all objects are circular)
@@ -131,8 +121,7 @@ abstract class SpaceObject {
   */
   boolean collidesWith(SpaceObject s) {
     double r = PVector.dist(getPosition(), s.getPosition());
-    if(r < (getRadius() + s.getRadius())) return true;
-    return false;
+    return r < (getRadius() + s.getRadius());
   }
   
   /**
@@ -149,7 +138,7 @@ abstract class SpaceObject {
   void onCollide(SpaceObject s) {
     if(shouldDestroy(s)) {
       s.onDestroy(this);
-      Vekta.getInstance().removeObject(s);
+      Vekta.removeObject(s);
     }
   }
   
@@ -161,6 +150,7 @@ abstract class SpaceObject {
   abstract void draw();
   
   void drawTrail() {
+    Vekta v = Vekta.getInstance();
     // Update trail vectors
     for(int i = trail.length - 1; i > 0; i--) {
       trail[i] = trail[i - 1];
@@ -174,8 +164,8 @@ abstract class SpaceObject {
         break;
       }
       // Set the color and draw the line segment
-      parent.stroke(parent.lerpColor(getColor().getIntValue(), parent.color(0), (float)i / trail.length));
-      parent.line(oldPos.x, oldPos.y,  newPos.x, newPos.y);
+      v.stroke(v.lerpColor(getColor(), v.color(0), (float)i / trail.length));
+      v.line(oldPos.x, oldPos.y,  newPos.x, newPos.y);
     }
   }
   

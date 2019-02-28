@@ -1,3 +1,8 @@
+package vekta;
+
+import processing.core.PVector;
+import static vekta.Vekta.*;
+
 /**
 *  Model for a planet.
 */
@@ -5,23 +10,23 @@ class Planet extends SpaceObject {
   private final double MIN_SPLIT_RADIUS = 6;
   private final float SPLIT_DISTANCE_SCALE = 1;
   private final float SPLIT_VELOCITY_SCALE = 1;
-  private final float SPLIT_MASS_ABSORB = .5; // Below 1.0 to prevent supermassive planets taking over the map
+  private final float SPLIT_MASS_ABSORB = .5F; // Below 1.0 to prevent supermassive planets taking over the map
   
   private final String name;
   private float mass;
   private final float density;
-  private final color c;
+  private final int color;
   
   private float radiusCache;
   
   private final LandingSite site;
   
-  public Planet(float mass, float density, PVector position, PVector velocity, color c) {
+  public Planet(float mass, float density, PVector position, PVector velocity, int color) {
     super(position, velocity);
     this.name = generatePlanetName();
     this.mass = mass;
     this.density = density;
-    this.c = c;
+    this.color = color;
     
     site = new LandingSite(this);
     updateRadius();
@@ -29,11 +34,12 @@ class Planet extends SpaceObject {
   
   @Override
   void draw() {
-    stroke(this.c);
-    fill(0);
-    ellipseMode(RADIUS);
+    Vekta v = Vekta.getInstance();
+    v.stroke(color);
+    v.fill(0);
+    v.ellipseMode(RADIUS);
     float radius = getRadius();
-    ellipse(position.x, position.y, radius, radius);
+    v.ellipse(position.x, position.y, radius, radius);
   }
   
   @Override
@@ -95,7 +101,7 @@ class Planet extends SpaceObject {
     }
     
     // If something landed on this planet, destroy it as well
-    SpaceObject landed = site.landed;
+    SpaceObject landed = site.getLanded();
     if(landed != null) {
       landed.onDestroy(s);
     }
@@ -121,13 +127,13 @@ class Planet extends SpaceObject {
     return radiusCache;
   }
   
-  void updateRadius() {
+  private void updateRadius() {
     radiusCache = pow(getMass() / getDensity(), (float)1/3) / SCALE;
   }
   
   @Override
-  color getColor() {
-    return c;
+  int getColor() {
+    return color;
   }
   
   float getDensity() {

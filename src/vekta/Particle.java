@@ -1,3 +1,5 @@
+package vekta;
+
 class Particle {
   private PVector loc;
   private PVector accel;

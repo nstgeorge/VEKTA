@@ -1,3 +1,5 @@
+package vekta;
+
 class Hyperspace {
   private PVector origin;
   private float accel;

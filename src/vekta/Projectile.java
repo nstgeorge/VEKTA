@@ -1,3 +1,5 @@
+package vekta;
+
 class Projectile extends SpaceObject {
   // Default settings
   private static final float DEF_MASS = 1000;

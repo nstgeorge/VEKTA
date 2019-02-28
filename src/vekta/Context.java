@@ -1,3 +1,5 @@
+package vekta;
+
 interface Context {
   /**
     Draws the context each loop

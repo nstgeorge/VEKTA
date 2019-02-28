@@ -1,3 +1,5 @@
+package vekta;
+
 class Inventory implements Iterable<Item> {
   private final List<Item> items = new ArrayList<Item>();
   private int money;

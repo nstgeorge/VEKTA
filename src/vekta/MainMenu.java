@@ -1,3 +1,5 @@
+package vekta;
+
 class MainMenu implements Context {
   String[] modes = {"Singleplayer"};
   int selectedMode;
