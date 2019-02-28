@@ -24,10 +24,6 @@ final float DEF_ZOOM = (height/2.0) / tan(PI*30.0 / 180.0); // For some reason, 
 //TEMP
 float timeScale = 1;
 
-// Pause menu options
-String[] pauseMenu = {"Continue" , "Restart", "Quit to Menu"};
-int pauseSelected = 0;
-
 // Fonts
 PFont headerFont;
 PFont bodyFont;
@@ -130,38 +126,17 @@ void draw() {
     mainMenu.render();
   }
   
-  // Pause menu overlay
   hint(DISABLE_DEPTH_TEST);
   camera();
   noLights();
+  
   // FPS OVERLAY
   fill(255);
   textAlign(LEFT);
   textSize(16);
   text("FPS = " + frameRate, 50, height - 20);
   if(paused) {
-    hint(DISABLE_DEPTH_TEST);
-    camera();
-    noLights();
-    // Border box
-    rectMode(CORNER);
-    stroke(UI_COLOR);
-    fill(0);
-    rect(-1, -1, width / 4, height + 2);
-    // Logo
-    shapeMode(CENTER);
-    shape(logo, width / 8, 100, (width / 4) - 100, ((width / 4) - 100) / 3.392);
-    // Options
-    for(int i = 0; i < pauseMenu.length; i++) {
-      drawOption(pauseMenu[i], (height / 2) + (i * 100), i == pauseSelected);
-    }
-    textFont(bodyFont);
-    stroke(0);
-    fill(255);
-    textAlign(CENTER);
-    text("X to select", width / 8, (height / 2) + (pauseMenu.length * 100) + 100);
-    hint(ENABLE_DEPTH_TEST);
-    noLoop();
+    
     //redraw();
   } else {
     loop();
@@ -176,60 +151,12 @@ void keyPressed() {
     }
     return;
   }
-  
-  // Toggle pause
-  if(key == ESC) {
-    key = 0; // Suppress default behavior (exit)
-    if(modePicked) {
-      clearOverlay();
-      paused = !paused;
-    } else {
-      mainMenu.keyPressed(ESC);
-    }
-  }
-  // Pause controls 
-  else if(paused) {
-    if(key == 'w') {
-      // Play the sound for changing menu selection
-      if(getSetting("sound") > 0) change.play();
-      pauseSelected = Math.max(pauseSelected - 1, 0);
-    } 
-    if(key == 's') {
-      // Play the sound for changing menu selection
-      if(getSetting("sound") > 0) change.play();
-      pauseSelected = Math.min(pauseSelected + 1, pauseMenu.length - 1);
-    }
-    if(key == 'x') {
-      if(getSetting("music") > 0) theme.stop();
-      // Play the sound for selection
-      if(getSetting("sound") > 0) select.play();
-      switch(pauseSelected) {
-        case(0):
-          clearOverlay();
-          paused = false;
-          loop();
-          break;
-        case(1):
-          game.restart();
-          paused = false;
-          break;
-        case(2):
-          clearOverlay();
-          modePicked = false;
-          switchedToGame = false;
-          paused = false;
-          break;
-        default:
-          break;
-      }
-    }
-    redraw();
-  } 
-  // Send event to game
   else if(modePicked) {
     game.keyPressed(key);
+    if(key == ESC) {
+      key = 0; // Suppress default behavior (exit)
+    }
   }
-  // Send event to menu
   else {
     mainMenu.keyPressed(key);
   }

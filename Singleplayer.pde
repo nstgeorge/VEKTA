@@ -225,6 +225,9 @@ class Singleplayer implements Gamemode {
         restart();
       }
     } else {
+     if(key == ESC) {
+       openContext(new PausedContext(this));
+     }
      if(key == 'k') {
        dead = true;  
      }

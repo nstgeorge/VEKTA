@@ -6,9 +6,9 @@ interface MenuOption {
 }
 
 class BackOption implements MenuOption {
-  private final Menu parent;
+  private final Context parent;
   
-  public BackOption(Menu parent) {
+  public BackOption(Context parent) {
     this.parent = parent;
   }
   

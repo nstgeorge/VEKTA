@@ -164,6 +164,7 @@ class MainMenu {
         if(selectedSetting == settingsOptions.size()) {
           // Save the settings
           saveSettings();
+          inSettings = false;
         } else {
           // Update settings
           updateSetting();
