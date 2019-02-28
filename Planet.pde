@@ -1,42 +1,32 @@
- /**
+/**
 *  Model for a planet.
 */
 class Planet extends SpaceObject {
-  // Default Planet settings
-  private final float DEF_MASS = 1.989e30;
-  private final PVector DEF_POSITION = new PVector(100, 100);
-  private final PVector DEF_VELOCITY = new PVector(0,0);
-  private final color DEF_COLOR = color(255, 255, 255);
   private final double MIN_SPLIT_RADIUS = 6;
   private final float SPLIT_DISTANCE_SCALE = 1;
   private final float SPLIT_VELOCITY_SCALE = 1;
   private final float SPLIT_MASS_ABSORB = .5; // Below 1.0 to prevent supermassive planets taking over the map
-  private String[] nameParts1 = loadStrings("data/text/planet_prefixes.txt"); // Planet name prefixes
-  private String[] nameParts2 = concat(loadStrings("data/text/planet_suffixes.txt"), new String[] {""}); // Planet name suffixes
+  private final float MIN_LANDING_SPEED = .2;
   
-  private String name;
+  private final String name;
   private float mass;
-  private float density;
-  private color c;
+  private final float density;
+  private final color c;
   
   private float radiusCache;
   
-  public Planet() {
-    mass     = DEF_MASS;
-    //radius   = DEF_RADIUS;
-    position = DEF_POSITION;
-    velocity = DEF_VELOCITY;
-    c = DEF_COLOR;
-  }
+  private final LandingSite site;
   
   public Planet(float mass, float density, PVector position, PVector velocity, color c) {
-    this.name = nameParts1[(int)random(nameParts1.length)] + nameParts2[(int)random(nameParts2.length)];
+    this.name = planetNamePrefixes[(int)random(planetNamePrefixes.length)] + planetNameSuffixes[(int)random(planetNameSuffixes.length)];
     this.mass = mass;
     this.density = density;
     this.position = position;
     this.velocity = velocity;
     this.c = c;
     this.updateRadius();
+    
+    site = new LandingSite();
   }
   
   @Override
@@ -57,6 +47,23 @@ class Planet extends SpaceObject {
   boolean collidesWith(SpaceObject s) {
     // TODO: check getParent() once added to SpaceObject
     return getColor() != s.getColor() && super.collidesWith(s);
+  }
+  
+  @Override
+  void onCollide(SpaceObject s) {
+    // Attempt landing
+    if(s instanceof Spaceship) { // TODO: create `Lander` interface for event handling
+      Spaceship ship = (Spaceship)s;
+      if(ship.isLanding()) {
+        float magSq = velocity.copy().sub(s.getVelocity()).magSq();
+        if(magSq > MIN_LANDING_SPEED * MIN_LANDING_SPEED && site.land(ship)) {
+          println("Landed at site: " + site);
+          return;
+        }
+      }
+    }
+    // Oof
+    super.onCollide(s);
   }
   
   @Override

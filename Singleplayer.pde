@@ -15,6 +15,7 @@ class Singleplayer implements Gamemode {
   float minDistSq = Float.POSITIVE_INFINITY;
   
   Spaceship playerShip;
+  SpaceObject closestObject; // TODO: move this logic into Spaceship instances
   
   float zoom = 1; // Camera zoom
   
@@ -43,6 +44,7 @@ class Singleplayer implements Gamemode {
     }
     
     playerShip = new Spaceship(
+      this,
       "VEKTA I",
       5000,  // Mass
       5,     // Radius
@@ -50,7 +52,7 @@ class Singleplayer implements Gamemode {
       new PVector(), // Position
       new PVector(),    // Velocity
       color(0, 255, 0),
-      0, 50, 60  // Control scheme, Speed, and Handling
+      0, .1, 60  // Control scheme, Speed, and Handling
     );
     addObject(playerShip);
   }
@@ -67,7 +69,7 @@ class Singleplayer implements Gamemode {
        0.0, 1.0, 0.0);
     }
     
-    SpaceObject closestObject = null;
+    closestObject = null;
     minDistSq = Float.POSITIVE_INFINITY;
     planetCount = 0;
     for(SpaceObject s : objects) {
@@ -166,10 +168,7 @@ class Singleplayer implements Gamemode {
   
   void checkCollision(SpaceObject a, SpaceObject b) {
     if(a.collidesWith(b)) {
-      if(b.shouldDestroy(a)) {
-        a.onDestroy(b);
-        removeObject(a);
-      }
+      a.onCollide(b);
     }
   }
   

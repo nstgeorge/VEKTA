@@ -61,10 +61,17 @@ abstract class SpaceObject {
   }
   
   /**
-    Gets the velocity of the object
+    Sets the velocity of the object
   */
-  final PVector addVelocity(PVector add) {
-    return velocity.add(add);
+  final PVector setVelocity(PVector velocity) {
+    return this.velocity.set(velocity);
+  }
+  
+  /**
+    Adds velocity to the object
+  */
+  final PVector addVelocity(PVector delta) {
+    return this.velocity.add(delta);
   }
   
   /**
@@ -122,7 +129,17 @@ abstract class SpaceObject {
   }
   
   /**
-    Do this when destroyed by SpaceObject `s`
+    Invoked when colliding with SpaceObject `s`
+  */
+  void onCollide(SpaceObject s) {
+    if(shouldDestroy(s)) {
+      s.onDestroy(this);
+      removeObject(s);
+    }
+  }
+  
+  /**
+    Invoked when destroyed by SpaceObject `s`
   */
   void onDestroy(SpaceObject s) {}
   

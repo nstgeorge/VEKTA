@@ -20,6 +20,9 @@ final int MAX_PLANETS = 500;
 final int TRAIL_LENGTH = 15;
 final float DEF_ZOOM = (height/2.0) / tan(PI*30.0 / 180.0); // For some reason, this is the default eyeZ location for Processing
 
+//TEMP
+float timeScale = 1;
+
 // Pause menu options
 String[] pauseMenu = {"Continue" , "Restart", "Quit to Menu"};
 int pauseSelected = 0;
@@ -41,6 +44,8 @@ boolean paused = false;
 int selectedMode = 0;
 int[] playerWins = new int[2];
 
+// TODO: move all these references to a designated `Resources` class
+
 // Sounds
 SoundFile theme;
 SoundFile atmosphere;
@@ -50,6 +55,10 @@ SoundFile engine;
 SoundFile change;
 SoundFile select;
 SoundFile chirp;
+
+// Name components
+private String[] planetNamePrefixes;
+private String[] planetNameSuffixes;
 
 // Low pass filter
 LowPass lowPass;
@@ -83,6 +92,9 @@ void setup() {
   change = new SoundFile(this, "change.wav");
   select = new SoundFile(this, "select.wav");
   chirp = new SoundFile(this, "chirp.wav");
+  
+  planetNamePrefixes = loadStrings("data/text/planet_prefixes.txt");
+  planetNameSuffixes = concat(loadStrings("data/text/planet_suffixes.txt"), new String[] {""});
   
   lowPass = new LowPass(this);
   
