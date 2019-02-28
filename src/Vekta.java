@@ -1,77 +1,83 @@
-import java.util.*;
+import processing.core.*;
 import processing.sound.*;
+import processing.data.*;
 
-final String FONTNAME = "font/undefined-medium.ttf";
-final int MAX_DISTANCE = 10000; // Maximum distance for updating objects (currently unimplemented)
+import java.awt.event.MouseEvent;
 
-private Context mainMenu;
+/**
+ * Core class for all of Vekta.
+ */
+public class Vekta extends PApplet {
 
-Context context; // TODO: convert to stack if necessary
+    final String FONTNAME = "font/undefined-medium.ttf";
+    final int MAX_DISTANCE = 10000; // Maximum distance for updating objects (currently unimplemented)
 
-// Settings
-JSONObject defaultSettings;
-JSONObject  settings;
+    private Context mainMenu;
+
+    Context context; // TODO: convert to stack if necessary
+
+    // Settings
+    private JSONObject defaultSettings;
+    private JSONObject  settings;
 
 // Game-balancing variables and visual settings
 
-final float G = 6.674e-11;
-final float SCALE = 3e8;
-final color UI_COLOR = color(0, 255, 0);
-final float VECTOR_SCALE = 5;
-final int MAX_PLANETS = 500;
-final int TRAIL_LENGTH = 100;
-final float DEF_ZOOM = (height/2.0) / tan(PI*30.0 / 180.0); // For some reason, this is the default eyeZ location for Processing
+    final float G = 6.674e-11F;
+    final float SCALE = 3e8F;
+    final Color UI_COLOR = new Color(0, 255, 0);
+    final float VECTOR_SCALE = 5;
+    final int MAX_PLANETS = 500;
+    final int TRAIL_LENGTH = 100;
+    final float DEF_ZOOM = (height/2.0F) / tan((PI*30.0F / 180.0F)); // For some reason, this is the default eyeZ location for Processing
 
-//TEMP
-float timeScale = 1;
+    //TEMP
+    float timeScale = 1;
 
-// Fonts
-PFont headerFont;
-PFont bodyFont;
+    // Fonts
+    PFont headerFont;
+    PFont bodyFont;
 
-// HUD/Menu overlay
-PGraphics overlay;
+    // HUD/Menu overlay
+    PGraphics overlay;
 
-// A sick logo
-PShape logo;
+    // A sick logo
+    PShape logo;
 
 // TODO: move all these references to a designated `Resources` class
 
-// Sounds
-SoundFile theme;
-SoundFile atmosphere;
-SoundFile laser;
-SoundFile death;
-SoundFile engine;
-SoundFile change;
-SoundFile select;
-SoundFile chirp;
+    // Sounds
+    SoundFile theme;
+    SoundFile atmosphere;
+    SoundFile laser;
+    SoundFile death;
+    SoundFile engine;
+    SoundFile change;
+    SoundFile select;
+    SoundFile chirp;
 
-// Name components
-private String[] planetNamePrefixes;
-private String[] planetNameSuffixes;
-private String[] itemNameAdjectives;
-private String[] itemNameNouns;
-private String[] itemNameModifiers;
+    // Name components
+    private String[] planetNamePrefixes;
+    private String[] planetNameSuffixes;
+    private String[] itemNameAdjectives;
+    private String[] itemNameNouns;
+    private String[] itemNameModifiers;
 
-// Low pass filter
-LowPass lowPass;
+    // Low pass filter
+    LowPass lowPass;
 
-public class Vekta extends PApplet {
-    
     public void settings() {
-
-    }
-
-    public void setup() {
-        createSettings();
-        // Important visual stuff
         fullScreen(P3D);
         pixelDensity(displayDensity());
         background(0);
         frameRate(60);
         noCursor();
+    }
+
+    public void setup() {
+        createSettings();
+
         textMode(SHAPE);
+
         // Overlay initialization
         overlay = createGraphics(width, height);
         // Fonts
@@ -152,7 +158,7 @@ public class Vekta extends PApplet {
 
     public void mouseWheel(MouseEvent event) {
         if(context != null) {
-            context.mouseWheel(event.getCount());
+            context.mouseWheel(event.getClickCount());
         }
     }
 
@@ -232,14 +238,14 @@ public class Vekta extends PApplet {
         camera();
         noLights();
         if(selected) stroke(255);
-        else stroke(UI_COLOR);
+        else stroke(UI_COLOR.getColor());
         fill(1);
         rectMode(CENTER);
         rect(width / 8, yPos, 200, 50);
         // Text ----------------------
         textFont(bodyFont);
         stroke(0);
-        fill(UI_COLOR);
+        fill(UI_COLOR.getColor());
         textAlign(CENTER, CENTER);
         text(name, width / 8, yPos - 3);
     }
@@ -276,27 +282,25 @@ public class Vekta extends PApplet {
 
     public String generateItemName() {
         String name = random(itemNameNouns);
-        if(random(1) > .5) {
+        if (random(1) > .5) {
             name = random(itemNameAdjectives) + " " + name;
         }
-        if(random(1) > .5) {
+        if (random(1) > .5) {
             name = name + " " + random(itemNameModifiers);
         }
         return name;
     }
 
-//// Global utility methods ////
-
     <T> T random(T[] array) {
         return array[(int)random(array.length)];
     }
 
-    float getDistSq(PVector a, PVector b) {
+    public static float getDistSq(PVector a, PVector b) {
         float x = a.x - b.x;
         float y = a.y - b.y;
         return x * x + y * y;
     }
 
-}
+};
 
 
