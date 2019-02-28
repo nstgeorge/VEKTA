@@ -1,3 +1,9 @@
+import processing.core.*;
+
+import java.util.List;
+
+import static processing.core.PConstants.TRIANGLES;
+
 class Spaceship extends SpaceObject {
   // Default Shapeship settings
   private final double DEF_MASS = 1000;
@@ -6,13 +12,13 @@ class Spaceship extends SpaceObject {
   private final PVector DEF_VELOCITY = new PVector(0,0);
   private final PVector DEF_ACCELERATION = new PVector(0,0);
   private final PVector DEF_HEADING = new PVector(1,0,0);
-  private final color DEF_COLOR = color(255, 255, 255);
+  private final Color DEF_COLOR = new Color(255, 255, 255);
   // Other default Spaceship stuff
   private final int DEF_SPEED = 100;
   private final int DEF_HANDLING = 50;
   private final int HANDLING_SCALE = 1000;
   private final int MAX_PROJECTILES = 100;
-  private final float LANDING_SPEED = .5;
+  private final float LANDING_SPEED = .5F;
   
   // Backreference to world (exclusive to spaceships for now)
   // At some point, the `Singleplayer` class will be split into world and control containers, or something similar
@@ -31,7 +37,7 @@ class Spaceship extends SpaceObject {
   private final float mass;
   private final float radius;
   private final PVector heading;
-  private final color c;
+  private final Color c;
   
   // Landing doodads
   private boolean landing;
@@ -39,8 +45,8 @@ class Spaceship extends SpaceObject {
   
   private final Inventory inventory = new Inventory();
   
-  public Spaceship(Singleplayer world, String name, float mass, float radius, PVector heading, PVector position, PVector velocity, color c, int ctrl, float speed, int handling, int money) {
-    super(position, velocity);
+  public Spaceship(Singleplayer world, PApplet parent, String name, float mass, float radius, PVector heading, PVector position, PVector velocity, Color c, int ctrl, float speed, int handling, int money) {
+    super(parent, position, velocity);
     this.world = world;
     this.name = name;
     this.mass = mass;
@@ -58,22 +64,22 @@ class Spaceship extends SpaceObject {
   @Override
   void draw() {
     // Draw a triangle rotated in the direction of ship
-    float theta = heading.heading() + radians(90);
-    fill(1);
-    stroke(c);
-    pushMatrix();
-    translate(position.x, position.y);
-    rotate(theta);
-    beginShape(TRIANGLES);
-    vertex(0, -radius*2);
-    vertex(-radius, radius*2);
-    vertex(radius, radius*2);
-    endShape();
-    popMatrix();
+    float theta = heading.heading() + processing.core.PApplet.radians(90);
+    super.parent.fill(1);
+    super.parent.stroke(c.getIntValue());
+    super.parent.pushMatrix();
+    super.parent.translate(position.x, position.y);
+    super.parent.rotate(theta);
+    super.parent.beginShape(TRIANGLES);
+    super.parent.vertex(0, -radius*2);
+    super.parent.vertex(-radius, radius*2);
+    super.parent.vertex(radius, radius*2);
+    super.parent.endShape();
+    super.parent.popMatrix();
     
     // Draw influence vector
-    stroke(255, 0, 0);
-    line(position.x, position.y, position.x + (influence.x * 100), position.y + (influence.y * 100));
+    super.parent.stroke(255, 0, 0);
+    super.parent.line(position.x, position.y, position.x + (influence.x * 100), position.y + (influence.y * 100));
   }
   
   @Override
@@ -89,8 +95,8 @@ class Spaceship extends SpaceObject {
       float mag = relative.mag();
       if(mag > 0) {
         heading.set(relative).normalize();
-        float approachFactor = min(1, 5 * target.getRadius() / target.getPosition().sub(position).mag());
-        thrust = max(-1, min(1, (LANDING_SPEED * (1 - approachFactor / 2) - mag) * approachFactor / speed));
+        float approachFactor = Math.min(1, 5 * target.getRadius() / target.getPosition().sub(position).mag());
+        thrust = Math.max(-1, Math.min(1, (LANDING_SPEED * (1 - approachFactor / 2) - mag) * approachFactor / speed));
       }
     }
   }
@@ -100,7 +106,7 @@ class Spaceship extends SpaceObject {
     if(controlScheme == 0) {   // WASD
       switch(key) {
         case 'w':
-          if(getSetting("sound") > 0) {
+          if(Vekta.getInstance().getSetting("sound") > 0) {
             engine.stop();
             engine.loop();
           }
@@ -110,7 +116,7 @@ class Spaceship extends SpaceObject {
           turn = -((float)handling / HANDLING_SCALE);
           break;
         case 's':
-          if(getSetting("sound") > 0) {
+          if(Vekta.getInstance().getSetting("sound") > 0) {
             engine.stop();
             engine.loop();
           }
@@ -134,7 +140,7 @@ class Spaceship extends SpaceObject {
     if(controlScheme == 1) {   // IJKL
       switch(key) {
         case 'i':
-          if(getSetting("sound") > 0) {
+          if(Vekta.getInstance().getSetting("sound") > 0) {
             engine.stop();
             engine.loop();
           }
@@ -144,7 +150,7 @@ class Spaceship extends SpaceObject {
           turn = -((float)handling / HANDLING_SCALE);
           break;
         case 'k':
-          if(getSetting("sound") > 0) {
+          if(Vekta.getInstance().getSetting("sound") > 0) {
             engine.stop();
             engine.loop();
           }
@@ -168,7 +174,7 @@ class Spaceship extends SpaceObject {
   
   void keyReleased(char key) {
     if((key == 'w' || key == 's') && controlScheme == 0) {
-      if(getSetting("sound") > 0) engine.stop();
+      if(Vekta.getInstance().getSetting("sound") > 0) engine.stop();
       thrust = 0;
     }
     if(( key == 'a' || key == 'd') && controlScheme == 0) {
@@ -176,7 +182,7 @@ class Spaceship extends SpaceObject {
     }
     
     if((key == 'i' || key == 'k') && controlScheme == 1) {
-      if(getSetting("sound") > 0) engine.stop();
+      if(Vekta.getInstance().getSetting("sound") > 0) engine.stop();
       thrust = 0;
     }
     if((key == 'j' || key == 'l') && controlScheme == 1) {
@@ -190,8 +196,8 @@ class Spaceship extends SpaceObject {
   
   private void fireProjectile() {
     if(numProjectiles < MAX_PROJECTILES) {
-      if(getSetting("sound") > 0) laser.play();
-      addObject(new Projectile(this, position.copy(), velocity.copy(), heading.copy(), c));
+      if(Vekta.getInstance().getSetting("sound") > 0) laser.play();
+      Vekta.getInstance().addObject(new Projectile(this, position.copy(), velocity.copy(), heading.copy(), c));
       numProjectiles++;
     }
   }
@@ -201,7 +207,7 @@ class Spaceship extends SpaceObject {
     lowPass.process(atmosphere, 800);
     
     getWorld().dead = true;
-    if(getSetting("sound") > 0) { 
+    if(Vekta.getInstance().getSetting("sound") > 0) {
       engine.stop();
       death.play();
     }
@@ -243,7 +249,7 @@ class Spaceship extends SpaceObject {
   }
   
   @Override
-  color getColor() {
+  Color getColor() {
     return c;
   }
   
