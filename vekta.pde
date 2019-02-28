@@ -150,11 +150,11 @@ void mouseWheel(MouseEvent event) {
   }
 }
 
-void startGamemode(Gamemode game) {
+void startGamemode(World world) {
   clearOverlay();
   clearContexts();
-  openContext(game);
-  game.init();
+  openContext(world);
+  world.init();
 }
 
 void clearOverlay() {
@@ -239,11 +239,11 @@ void saveSettings() {
 }
 
 boolean addObject(Object object) {
-  return ((Gamemode)context).addObject(object);
+  return ((World)context).addObject(object);
 }
 
 boolean removeObject(Object object) {
-  return ((Gamemode)context).removeObject(object);
+  return ((World)context).removeObject(object);
 }
 
 void openContext(Context context) {

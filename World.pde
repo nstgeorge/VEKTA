@@ -1,5 +1,5 @@
 
-interface Gamemode extends Context {
+interface World extends Context {
   /**
     Initializes all required variables
   */

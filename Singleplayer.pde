@@ -2,7 +2,7 @@ import java.util.*;
 
 private static int nextID = 0;
 
-class Singleplayer implements Gamemode {
+class Singleplayer implements World {
   
   int planetCount;
   boolean dead;

@@ -15,7 +15,7 @@ class Spaceship extends SpaceObject {
   private final float LANDING_SPEED = .5;
   
   // Backreference to world (exclusive to spaceships for now)
-  // At some point, the `Singleplayer` class will be split into `World` and `Controls` classes, or something similar
+  // At some point, the `Singleplayer` class will be split into world and control containers, or something similar
   private final Singleplayer world;
   
   // Exclusive Spaceship things

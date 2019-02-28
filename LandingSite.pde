@@ -88,6 +88,6 @@ class LandingSite {
   Compute the launch speed (subject to rebalancing)
   */
   private float getLaunchSpeed() {
-    return 1 + parent.getRadius() / 2;
+    return 2 + parent.getRadius() / 4;
   }
 }

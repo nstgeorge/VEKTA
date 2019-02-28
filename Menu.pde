@@ -122,9 +122,9 @@ class InfoOption implements MenuOption {
 
 class TakeoffOption implements MenuOption {
   private final LandingSite site;
-  private final Gamemode world;
+  private final World world;
   
-  public TakeoffOption(LandingSite site, Gamemode world) {
+  public TakeoffOption(LandingSite site, World world) {
     this.site = site;
     this.world = world;
   }
@@ -240,7 +240,7 @@ class MenuHandle {
 class LandingMenuHandle extends MenuHandle {
   private final LandingSite site;
   
-  public LandingMenuHandle(LandingSite site, Gamemode world) {
+  public LandingMenuHandle(LandingSite site, World world) {
     super(new TakeoffOption(site, world));
     
     this.site = site;
