@@ -13,8 +13,8 @@ JSONObject  settings;
 
 // Game-balancing variables and visual settings
 
-final double G = 6.674e-11;
-public final double SCALE = 3e8;
+final float G = 6.674e-11;
+final float SCALE = 3e8;
 final float VECTOR_SCALE = 5;
 final int MAX_PLANETS = 500;
 final int TRAIL_LENGTH = 15;

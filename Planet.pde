@@ -3,7 +3,7 @@
 */
 class Planet extends SpaceObject {
   // Default Planet settings
-  private final double DEF_MASS = 1.989e30;
+  private final float DEF_MASS = 1.989e30;
   private final PVector DEF_POSITION = new PVector(100, 100);
   private final PVector DEF_VELOCITY = new PVector(0,0);
   private final color DEF_COLOR = color(255, 255, 255);
@@ -15,7 +15,7 @@ class Planet extends SpaceObject {
   private String[] nameParts2 = concat(loadStrings("data/text/planet_suffixes.txt"), new String[] {""}); // Planet name suffixes
   
   private String name;
-  private double mass;
+  private float mass;
   private float density;
   private color c;
   
@@ -29,7 +29,7 @@ class Planet extends SpaceObject {
     c = DEF_COLOR;
   }
   
-  public Planet(double mass, float density, PVector position, PVector velocity, color c) {
+  public Planet(float mass, float density, PVector position, PVector velocity, color c) {
     this.name = nameParts1[(int)random(nameParts1.length)] + nameParts2[(int)random(nameParts2.length)];
     this.mass = mass;
     this.density = density;
@@ -65,14 +65,14 @@ class Planet extends SpaceObject {
     
     // If sufficiently large, split planet in half
     if(getRadius() >= MIN_SPLIT_RADIUS) {
-      double newMass = getMass() / 2;
+      float newMass = getMass() / 2;
       float newRadius = getRadius() / pow(2, 1/3);
       
       // Use mass-weighted collision velocity for base debris velocity
-      double xWeight = getVelocity().x * getMass() + s.getVelocity().x * s.getMass();
-      double yWeight = getVelocity().y * getMass() + s.getVelocity().y * s.getMass();
-      double massSum = getMass() + s.getMass();
-      PVector newVelocity = new PVector((float)(xWeight / massSum), (float)(yWeight / massSum));
+      float xWeight = getVelocity().x * getMass() + s.getVelocity().x * s.getMass();
+      float yWeight = getVelocity().y * getMass() + s.getVelocity().y * s.getMass();
+      float massSum = getMass() + s.getMass();
+      PVector newVelocity = new PVector(xWeight / massSum, yWeight / massSum);
       
       PVector offset = PVector.random2D().mult(newRadius * SPLIT_DISTANCE_SCALE);
       PVector splitVelocity = getPosition().copy().sub(s.getPosition()).rotate(90).normalize().mult(SPLIT_VELOCITY_SCALE);
@@ -96,7 +96,7 @@ class Planet extends SpaceObject {
   }
   
   @Override
-  double getMass() {
+  float getMass() {
     return mass;
   }
   
@@ -105,7 +105,7 @@ class Planet extends SpaceObject {
     return name;
   }  
   
-  void setMass(double mass) {
+  void setMass(float mass) {
     this.mass = mass;
     updateRadius();
   }
@@ -116,7 +116,7 @@ class Planet extends SpaceObject {
   }
   
   void updateRadius() {
-    radiusCache = pow((float)getMass() / getDensity(), (float)1/3) / (float)SCALE;
+    radiusCache = pow(getMass() / getDensity(), (float)1/3) / SCALE;
   }
   
   @Override
