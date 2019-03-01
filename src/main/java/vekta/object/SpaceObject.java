@@ -10,6 +10,9 @@ import static vekta.Vekta.*;
 public abstract class SpaceObject {
 	private static final int TRAIL_LENGTH = 100;
 	private static final float MAX_INFLUENCE = 2F;
+	
+	// Convenient reference to Vekta instance
+	protected static final Vekta v = getInstance();
 
 	private int id;
 
@@ -152,7 +155,6 @@ public abstract class SpaceObject {
 	public abstract void draw();
 
 	public void drawTrail() {
-		Vekta v = getInstance();
 		// Update trail vectors
 		for(int i = trail.length - 1; i > 0; i--) {
 			trail[i] = trail[i - 1];

@@ -3,7 +3,6 @@ package vekta.object;
 import processing.core.PApplet;
 import processing.core.PVector;
 import vekta.Resources;
-import vekta.Vekta;
 import vekta.item.Inventory;
 import vekta.item.Item;
 
@@ -14,10 +13,6 @@ import static vekta.Vekta.getInstance;
 public abstract class Ship extends SpaceObject {
 	private static final float CRATE_SPEED = 1;
 
-	protected enum SHIP_SHAPE {
-		DEFAULT, CARGO_SHIP, FIGHTER
-	}
-	
 	private final String name;
 	private final float mass;
 	private final float radius;
@@ -106,7 +101,6 @@ public abstract class Ship extends SpaceObject {
 
 	protected void drawShip(SHIP_SHAPE shape) {
 		float theta = heading.heading() + PApplet.radians(90);
-		Vekta v = getInstance();
 		v.fill(0);
 		v.stroke(getColor());
 		v.pushMatrix();
@@ -141,4 +135,10 @@ public abstract class Ship extends SpaceObject {
 		v.endShape(CLOSE);
 		v.popMatrix();
 	}
-}  
+
+	protected enum SHIP_SHAPE {
+		DEFAULT,
+		CARGO_SHIP,
+		FIGHTER,
+	}
+}

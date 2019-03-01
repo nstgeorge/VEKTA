@@ -13,7 +13,7 @@ public class UniverseGen {
 	private static final int MIN_POPULATE_DISTANCE = 1000; // Min initial object spawn distance
 
 	private final float radius; // Max persistent object distance
-	private final int density;
+	private final int density; // Initial spawn density
 
 	public UniverseGen(int size, int density) {
 		this.radius = size;
@@ -34,18 +34,18 @@ public class UniverseGen {
 		Vekta v = getInstance();
 		PVector pos = randomPos(getRadius() / 2, getRadius()).add(around);
 		float r = v.random(1);
-		if(r < .4F) {
-			Ship s = new PirateShip("YARRYACHT", PVector.random2D(), pos, new PVector(), v.color(220, 100, 0));
-			addItems(s.getInventory(), 1);
-			addObject(s);
+		if(r > .5F) {
+			createSystem(pos);
 		}
-		else if(r < .7F) {
+		else if(r > .8F) {
 			Ship s = new CargoShip("TRAWLX", PVector.random2D(), pos, new PVector(), v.color(0, 100, 255));
 			addItems(s.getInventory(), 3);
 			addObject(s);
 		}
 		else {
-			createSystem(pos);
+			Ship s = new PirateShip("YARRYACHT", PVector.random2D(), pos, new PVector(), v.color(220, 100, 0));
+			addItems(s.getInventory(), 1);
+			addObject(s);
 		}
 	}
 

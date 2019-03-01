@@ -1,7 +1,6 @@
 package vekta.object;
 
 import processing.core.PVector;
-import vekta.Vekta;
 import vekta.terrain.MoltenTerrain;
 import vekta.terrain.Terrain;
 
@@ -33,7 +32,6 @@ public abstract class Planet extends SpaceObject {
 
 	@Override
 	public void draw() {
-		Vekta v = Vekta.getInstance();
 		v.stroke(getColor());
 		v.fill(0);
 		v.ellipseMode(RADIUS);
@@ -67,6 +65,7 @@ public abstract class Planet extends SpaceObject {
 			Terrain terrain = new MoltenTerrain();
 			Planet a = new TerrestrialPlanet(newMass, getDensity(), terrain, getPosition().copy().add(offset), newVelocity.copy().add(splitVelocity), getColor());
 			Planet b = new TerrestrialPlanet(newMass, getDensity(), terrain, getPosition().copy().sub(offset), newVelocity.copy().sub(splitVelocity), getColor());
+			// TODO: fix breaking when landing on newly created planet
 			if(!s.collidesWith(a)) {
 				mass -= a.mass;
 				addObject(a);

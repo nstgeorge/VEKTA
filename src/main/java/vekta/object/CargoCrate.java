@@ -1,7 +1,6 @@
 package vekta.object;
 
 import processing.core.PVector;
-import vekta.Vekta;
 import vekta.item.Item;
 
 import static vekta.Vekta.*;
@@ -48,7 +47,6 @@ public class CargoCrate extends SpaceObject {
 
 	@Override
 	public void draw() {
-		Vekta v = getInstance();
 		v.stroke(getColor());
 		v.fill(0);
 		v.pushMatrix();
@@ -68,6 +66,6 @@ public class CargoCrate extends SpaceObject {
 	@Override
 	public void onCollide(SpaceObject s) {
 		super.onCollide(s);
-		removeObject(this);
+//		removeObject(this);
 	}
 }  

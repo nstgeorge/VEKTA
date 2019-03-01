@@ -17,6 +17,7 @@ public class PirateShip extends Ship implements Targeter {
 	private static final float MIN_ATTACK = 10;
 	private static final float MAX_ATTACK = 100;
 	private static final float ATTACK_SPREAD = 10;
+	private static final float SPEED_DAMPEN = .98F;
 
 	private SpaceObject target;
 	private final Counter attackCt = new Counter();
@@ -46,7 +47,7 @@ public class PirateShip extends Ship implements Targeter {
 			PVector pos = target.getPosition().copy()
 					.add(target.getVelocity().sub(velocity).div(PROJECTILE_SPEED / 2));
 			PVector offset = pos.sub(position);
-
+			
 			heading.set(offset.copy().normalize());
 			float rangeFactor = ATTACK_DIST * ATTACK_DIST - offset.magSq();
 			accelerate(max(-.5F, min(1F, -rangeFactor)));
@@ -55,6 +56,7 @@ public class PirateShip extends Ship implements Targeter {
 				attackCt.delay((int)getInstance().random(MIN_ATTACK, MAX_ATTACK));
 			}
 		}
+		velocity.mult(SPEED_DAMPEN);
 	}
 
 	@Override

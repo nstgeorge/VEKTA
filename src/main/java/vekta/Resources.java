@@ -32,10 +32,15 @@ public class Resources {
 		// Name strings
 		addStrings("planet_prefixes");
 		addStrings("planet_suffixes");
+		
 		addStrings("item_adj_common");
 		addStrings("item_adj_rare");
 		addStrings("item_nouns");
 		addStrings("item_modifiers");
+
+		// Overview strings
+		addStrings("overview_urban");
+		addStrings("overview_rural");
 
 		logo = getInstance().loadShape("VEKTA.svg");
 	}
