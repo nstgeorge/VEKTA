@@ -7,18 +7,28 @@ import static vekta.Vekta.*;
 
 public class Projectile extends SpaceObject {
 	// Default settings
+	private static final float LIFETIME = 1000;
 	private static final float DEF_MASS = 1000;
 	private static final int DEF_RADIUS = 2;
 
 	private SpaceObject parent;
 	private float mass;
 	private float radius;
+	
+	private int aliveTime = 0;
 
 	public Projectile(SpaceObject parent, PVector position, PVector velocity, int color) {
 		super(position, velocity, color);
 		this.parent = parent;
 		this.mass = DEF_MASS;
 		this.radius = DEF_RADIUS;
+	}
+
+	@Override
+	public void onUpdate() {
+		if(++aliveTime >= LIFETIME) {
+			removeObject(this);
+		}
 	}
 
 	@Override

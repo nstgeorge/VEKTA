@@ -6,4 +6,9 @@ public interface Targeter {
 	void setTarget(SpaceObject target);
 
 	boolean isValidTarget(SpaceObject obj);
+	
+	default boolean shouldResetTarget() {
+		SpaceObject t = getTarget();
+		return t == null || !isValidTarget(t);
+	}
 }

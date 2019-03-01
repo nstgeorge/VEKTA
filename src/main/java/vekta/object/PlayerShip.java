@@ -48,6 +48,10 @@ public class PlayerShip extends Ship implements Targeter {
 		return obj instanceof Planet;
 	}
 
+	@Override public boolean shouldResetTarget() {
+		return true;
+	}
+
 	@Override
 	public void draw() {
 		super.draw();

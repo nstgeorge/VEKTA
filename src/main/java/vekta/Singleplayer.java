@@ -137,16 +137,16 @@ public class Singleplayer implements World {
 				if(s instanceof Targeter) {
 					Targeter t = (Targeter)s;
 					SpaceObject target = t.getTarget();
-					if(!t.isValidTarget(target)) {
-						// Clear invalid target
-						target = null;
-					}
-					if(target == null) {
+					if(t.shouldResetTarget()) {
+						float minDistSq = Float.POSITIVE_INFINITY;
 						// Search for new targets
 						for(SpaceObject other : objects) {
 							if(other != t && t.isValidTarget(other)) {
-								target = other;
-								break;
+								float distSq = s.getPosition().sub(other.getPosition()).magSq();
+								if(distSq < minDistSq) {
+									minDistSq = distSq;
+									target = other;
+								}
 							}
 						}
 					}
