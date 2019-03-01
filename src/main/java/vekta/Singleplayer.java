@@ -4,10 +4,7 @@ import processing.core.PVector;
 import processing.sound.LowPass;
 import vekta.context.PauseMenuContext;
 import vekta.context.World;
-import vekta.object.PirateShip;
-import vekta.object.Planet;
-import vekta.object.PlayerShip;
-import vekta.object.SpaceObject;
+import vekta.object.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,16 +28,17 @@ public class Singleplayer implements World {
 	float minDistSq = Float.POSITIVE_INFINITY;
 
 	PlayerShip playerShip;
-	public SpaceObject closestObject; // TODO: move this logic into PlayerShip instances
 
-	float zoom = 1; // Camera zoom
+	private float zoom = 1; // Camera zoom
+
+	private Counter targetCt = new Counter(30); // Counter for periodically updating Targeter instances
 
 	UniverseGen generator = new UniverseGen(20000, 10);
 
-	List<SpaceObject> objects = new ArrayList<SpaceObject>();
+	List<SpaceObject> objects = new ArrayList<>();
 
-	List<SpaceObject> markedForDeath = new ArrayList<SpaceObject>();
-	List<SpaceObject> markedForAddition = new ArrayList<SpaceObject>();
+	List<SpaceObject> markedForDeath = new ArrayList<>();
+	List<SpaceObject> markedForAddition = new ArrayList<>();
 
 	// UI Variables (not real time updated)
 	float shortDist;
@@ -53,7 +51,7 @@ public class Singleplayer implements World {
 		Vekta v = getInstance();
 		v.background(0);
 
-		lowPass = lowPass = new LowPass(v);
+		lowPass = new LowPass(v);
 
 		//		if(getSetting("music") > 0 && !atmosphere.isPlaying())
 		//			atmosphere.loop();
@@ -77,17 +75,15 @@ public class Singleplayer implements World {
 		);
 		playerShip.getInventory().add(50); // Starting money
 		addObject(playerShip);
-		
-		PirateShip enemy = new PirateShip(
+
+		// TEMP
+		addObject(new PirateShip(
 				"YARYACHT",
 				new PVector(1, 0), // Heading
-				new PVector(1000, 100), // Position
+				new PVector(5000, 100), // Position
 				new PVector(),    // Velocity
 				v.color(220, 100, 0)
-		);
-		enemy.setTarget(playerShip);
-		// TEMP
-		addObject(enemy);
+		));
 	}
 
 	@Override
@@ -103,7 +99,7 @@ public class Singleplayer implements World {
 					0F, 1F, 0F);
 		}
 
-		closestObject = null;
+//		closestObject = null;
 		minDistSq = Float.POSITIVE_INFINITY;
 		planetCount = 0;
 		for(SpaceObject s : objects) {
@@ -113,11 +109,11 @@ public class Singleplayer implements World {
 
 			if(s instanceof Planet) {
 				planetCount++;
-				float distSq = getDistSq(s.getPosition(), playerShip.getPosition());
-				if(distSq < minDistSq) {
-					closestObject = s;
-					minDistSq = distSq;
-				}
+//				float distSq = getDistSq(s.getPosition(), playerShip.getPosition());
+//				if(distSq < minDistSq) {
+//					closestObject = s;
+//					minDistSq = distSq;
+//				}
 			}
 			s.update();
 			s.applyInfluenceVector(objects);
@@ -135,6 +131,29 @@ public class Singleplayer implements World {
 		objects.addAll(markedForAddition);
 		markedForDeath.clear();
 		markedForAddition.clear();
+
+		if(targetCt.cycle()) {
+			for(SpaceObject s : objects) {
+				if(s instanceof Targeter) {
+					Targeter t = (Targeter)s;
+					SpaceObject target = t.getTarget();
+					if(!t.isValidTarget(target)) {
+						// Clear invalid target
+						target = null;
+					}
+					if(target == null) {
+						// Search for new targets
+						for(SpaceObject other : objects) {
+							if(other != t && t.isValidTarget(other)) {
+								target = other;
+								break;
+							}
+						}
+					}
+					t.setTarget(target);
+				}
+			}
+		}
 
 		// Info
 		if(!dead) {
@@ -162,6 +181,7 @@ public class Singleplayer implements World {
 			drawDial("Heading", playerShip.getHeading(), v.width - 370, v.height - 65, 50, v.color(0, 255, 0));
 			drawDial("Velocity", playerShip.getVelocity().copy(), v.width - 500, v.height - 65, 50, v.color(0, 255, 0));
 			// Text - left
+			SpaceObject closestObject = playerShip.getTarget();
 			String closestObjectString;
 			if(closestObject == null) {
 				v.fill(100, 100, 100);

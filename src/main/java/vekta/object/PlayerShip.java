@@ -2,14 +2,13 @@ package vekta.object;
 
 import processing.core.PVector;
 import vekta.Resources;
-import vekta.Singleplayer;
 import vekta.Vekta;
 
 import java.util.List;
 
 import static vekta.Vekta.*;
 
-public class PlayerShip extends Ship {
+public class PlayerShip extends Ship implements Targeter {
 	// Default PlayerShip stuff
 	private static final float DEF_MASS = 5000;
 	private static final float DEF_RADIUS = 5;
@@ -26,16 +25,34 @@ public class PlayerShip extends Ship {
 	private boolean landing;
 	private final PVector influence = new PVector();
 
+	private SpaceObject target;
+
 	public PlayerShip(String name, PVector heading, PVector position, PVector velocity, int color, int ctrl, float speed, int turnSpeed, int ammo) {
 		super(name, DEF_MASS, DEF_RADIUS, heading, position, velocity, color, speed, turnSpeed);
 		this.controlScheme = ctrl;
 		this.ammo = ammo;
 	}
 
-	@Override public void draw() {
+	@Override
+	public SpaceObject getTarget() {
+		return target;
+	}
+
+	@Override
+	public void setTarget(SpaceObject target) {
+		this.target = target;
+	}
+
+	@Override
+	public boolean isValidTarget(SpaceObject obj) {
+		return obj instanceof Planet;
+	}
+
+	@Override
+	public void draw() {
 		super.draw();
 		Vekta v = getInstance();
-		
+
 		// Draw influence vector
 		v.stroke(255, 0, 0);
 		v.line(position.x, position.y, position.x + (influence.x * 100), position.y + (influence.y * 100));
@@ -46,13 +63,12 @@ public class PlayerShip extends Ship {
 		accelerate(thrust);
 		turn(turn);
 
-		SpaceObject target = ((Singleplayer)getWorld()).closestObject;
-		if(landing && target != null) {
-			PVector relative = velocity.copy().sub(target.getVelocity());
+		if(landing && getTarget() != null) {
+			PVector relative = velocity.copy().sub(getTarget().getVelocity());
 			float mag = relative.mag();
 			if(mag > 0) {
 				heading.set(relative).normalize();
-				float approachFactor = Math.min(1, 5 * target.getRadius() / target.getPosition().sub(position).mag());
+				float approachFactor = Math.min(1, 5 * getTarget().getRadius() / getTarget().getPosition().sub(position).mag());
 				thrust = Math.max(-1, Math.min(1, (LANDING_SPEED * (1 - approachFactor / 2) - mag) * approachFactor / getSpeed()));
 			}
 		}
@@ -134,7 +150,7 @@ public class PlayerShip extends Ship {
 			turn = 0;
 		}
 	}
-	
+
 	private void fireProjectile() {
 		if(ammo > 0) {
 			Resources.playSound("laser");

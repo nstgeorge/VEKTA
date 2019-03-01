@@ -7,7 +7,7 @@ import vekta.Vekta;
 
 import static vekta.Vekta.*;
 
-public class PirateShip extends Ship {
+public class PirateShip extends Ship implements Targeter {
 	// 'Ere be PirateShip defaults
 	private static final float DEF_MASS = 1000;
 	private static final float DEF_RADIUS = 3;
@@ -26,15 +26,23 @@ public class PirateShip extends Ship {
 		super(name, DEF_MASS, DEF_RADIUS, heading, position, velocity, color, DEF_SPEED, DEF_TURN);
 	}
 
+	@Override
 	public SpaceObject getTarget() {
 		return target;
 	}
 
+	@Override
 	public void setTarget(SpaceObject target) {
 		this.target = target;
 	}
 
-	@Override public void draw() {
+	@Override
+	public boolean isValidTarget(SpaceObject obj) {
+		return obj instanceof Ship && !(obj instanceof PirateShip);
+	}
+
+	@Override
+	public void draw() {
 		super.draw();
 		Vekta v = getInstance();
 
