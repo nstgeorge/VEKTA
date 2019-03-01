@@ -9,7 +9,8 @@ import static vekta.Vekta.*;
 
 public abstract class SpaceObject {
 	private static final int TRAIL_LENGTH = 100;
-	private static final float MAX_INFLUENCE = 2F;
+	private static final float MAX_G_DISTANCE = 2000;
+	private static final float MAX_G_FORCE = 2F;
 	
 	// Convenient reference to Vekta instance
 	protected static final Vekta v = getInstance();
@@ -104,13 +105,13 @@ public abstract class SpaceObject {
 		PVector influence = new PVector();
 		for(SpaceObject s : objects) {
 			float distSq = getDistSq(position, s.getPosition());
-			if(distSq == 0)
+			if(distSq == 0 || distSq > MAX_G_DISTANCE * MAX_G_DISTANCE)
 				continue; // If the planet being checked is itself (or directly on top), don't move
 			float force = (G * (mass/SCALE) * (s.getMass()/SCALE)) / (distSq); // G defined in orbit
 			influence.add(new PVector(s.getPosition().x - position.x, s.getPosition().y - position.y).setMag(force / mass));
 		}
 		// Prevent insane acceleration
-		influence.limit(MAX_INFLUENCE);
+		influence.limit(MAX_G_FORCE);
 		if(!Float.isFinite(influence.x) || !Float.isFinite(influence.y)) {
 			// This helps prevent the random blank screen of doom (NaN propagation)
 			return new PVector();
