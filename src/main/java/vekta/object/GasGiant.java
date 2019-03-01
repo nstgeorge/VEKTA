@@ -15,10 +15,10 @@ public class GasGiant extends Planet {
 	private final float[] ringDistances;
 
 	public GasGiant(float mass, float density, PVector position, PVector velocity, int color) {
-		super(mass, density, false, position, velocity, color);
+		super(mass, density, position, velocity, color);
 		Vekta v = getInstance();
 		ringAngle = v.random(360);
-		ringRatio = v.random(.1F, .5F);
+		ringRatio = v.random(.1F, 1);
 		ringDistances = new float[(int)v.random(2, 7)];
 		float d = v.random(1.5F, 3);
 		for(int i = 0; i < ringDistances.length; i++) {
@@ -27,11 +27,16 @@ public class GasGiant extends Planet {
 	}
 
 	@Override
+	public boolean isHabitable() {
+		return false;
+	}
+
+	@Override
 	public void draw() {
 		super.draw();
 
 		Vekta v = getInstance();
-		v.stroke(v.color(100));
+		v.stroke(v.color(50));
 		v.noFill();
 		v.pushMatrix();
 		v.translate(position.x, position.y);

@@ -1,20 +1,23 @@
 package vekta.object;
 
-import processing.core.*;
+import processing.core.PVector;
 import vekta.Vekta;
 
 import java.util.List;
 
+import static vekta.Vekta.*;
+
 public abstract class SpaceObject {
+	private static final int TRAIL_LENGTH = 100;
 	private static final float MAX_INFLUENCE = 2F;
 
 	private int id;
 
-	final PVector position;
-	final PVector velocity;
+	protected final PVector position;
+	protected final PVector velocity;
 	private final int color;
 
-	private final PVector[] trail = new PVector[Vekta.TRAIL_LENGTH];
+	private final PVector[] trail = new PVector[TRAIL_LENGTH];
 
 	public SpaceObject(int color) {
 		this(new PVector(), new PVector(), color);
@@ -54,14 +57,14 @@ public abstract class SpaceObject {
 	 * Gets the position of the object
 	 */
 	public final PVector getPosition() {
-		return position.copy(); // TODO: copy externally for performance
+		return position.copy();
 	}
 
 	/**
 	 * Gets the velocity of the object
 	 */
 	public final PVector getVelocity() {
-		return velocity.copy(); // TODO: copy externally for performance
+		return velocity.copy();
 	}
 
 	/**
@@ -97,10 +100,10 @@ public abstract class SpaceObject {
 		float mass = getMass();
 		PVector influence = new PVector();
 		for(SpaceObject s : objects) {
-			float distSq = Vekta.getDistSq(position, s.getPosition());
+			float distSq = getDistSq(position, s.getPosition());
 			if(distSq == 0)
 				continue; // If the planet being checked is itself (or directly on top), don't move
-			float force = Vekta.G * mass * s.getMass() / (distSq * Vekta.SCALE * Vekta.SCALE); // G defined in orbit
+			float force = G * mass * s.getMass() / (distSq * SCALE * SCALE); // G defined in orbit
 			influence.add(new PVector(s.getPosition().x - position.x, s.getPosition().y - position.y).setMag(force / mass));
 		}
 		// Prevent insane acceleration
@@ -135,7 +138,7 @@ public abstract class SpaceObject {
 	public void onCollide(SpaceObject s) {
 		if(shouldDestroy(s)) {
 			s.onDestroy(this);
-			Vekta.removeObject(s);
+			removeObject(s);
 		}
 	}
 
@@ -148,7 +151,7 @@ public abstract class SpaceObject {
 	public abstract void draw();
 
 	public void drawTrail() {
-		Vekta v = Vekta.getInstance();
+		Vekta v = getInstance();
 		// Update trail vectors
 		for(int i = trail.length - 1; i > 0; i--) {
 			trail[i] = trail[i - 1];

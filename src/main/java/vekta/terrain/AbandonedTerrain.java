@@ -1,0 +1,30 @@
+package vekta.terrain;
+
+import vekta.item.Inventory;
+import vekta.menu.Menu;
+import vekta.menu.option.ScavengeMenuOption;
+import vekta.object.Ship;
+
+public class AbandonedTerrain extends Terrain {
+	private final Inventory inventory = new Inventory();
+	
+	public AbandonedTerrain() {
+		if(chance(.5)) {
+			add("Habitable");
+		}
+	}
+
+	public Inventory getInventory() {
+		return inventory;
+	}
+
+	@Override
+	public String getOverview() {
+		return "You find the crumbling remains of an abandoned civilization.";
+	}
+
+	@Override
+	public void setupLandingMenu(Ship ship, Menu menu) {
+		menu.add(new ScavengeMenuOption(ship.getInventory(), getInventory()));
+	}
+}

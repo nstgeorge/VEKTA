@@ -2,6 +2,8 @@ package vekta.object;
 
 import processing.core.PVector;
 import vekta.Vekta;
+import vekta.terrain.MoltenTerrain;
+import vekta.terrain.Terrain;
 
 import static vekta.Vekta.*;
 
@@ -17,17 +19,15 @@ public abstract class Planet extends SpaceObject {
 	private final String name;
 	private float mass;
 	private final float density;
-	private final boolean habitable;
 
 	private float radiusCache;
 
-	public Planet(float mass, float density, boolean habitable, PVector position, PVector velocity, int color) {
+	public Planet(float mass, float density, PVector position, PVector velocity, int color) {
 		super(position, velocity, color);
 		this.name = generatePlanetName();
 		this.mass = mass;
 		this.density = density;
-		this.habitable = habitable;
-		
+
 		updateRadius();
 	}
 
@@ -46,7 +46,7 @@ public abstract class Planet extends SpaceObject {
 		// TODO: check getParent() once added to SpaceObject
 		return getColor() != s.getColor() && super.collidesWith(s);
 	}
-	
+
 	@Override
 	public void onDestroy(SpaceObject s) {
 		//println("Planet destroyed with radius: " + getRadius());
@@ -61,12 +61,12 @@ public abstract class Planet extends SpaceObject {
 			float massSum = getMass() + s.getMass();
 			PVector newVelocity = new PVector(xWeight / massSum, yWeight / massSum);
 
-			PVector base = getPosition().copy().sub(s.getPosition()).normalize().rotate(90);
+			PVector base = getPosition().copy().sub(s.getPosition()).normalize().rotate(PI / 2);
 			PVector offset = base.copy().mult(getRadius() * SPLIT_OFFSET_SCALE);
 			PVector splitVelocity = base.copy().mult(SPLIT_VELOCITY_SCALE);
-			// TODO: change depending on type of planet
-			Planet a = new TerrestrialPlanet(newMass, getDensity(), getPosition().copy().add(offset), newVelocity.copy().add(splitVelocity), getColor());
-			Planet b = new TerrestrialPlanet(newMass, getDensity(), getPosition().copy().sub(offset), newVelocity.copy().sub(splitVelocity), getColor());
+			Terrain terrain = new MoltenTerrain();
+			Planet a = new TerrestrialPlanet(newMass, getDensity(), terrain, getPosition().copy().add(offset), newVelocity.copy().add(splitVelocity), getColor());
+			Planet b = new TerrestrialPlanet(newMass, getDensity(), terrain, getPosition().copy().sub(offset), newVelocity.copy().sub(splitVelocity), getColor());
 			if(!s.collidesWith(a)) {
 				mass -= a.mass;
 				addObject(a);
@@ -111,6 +111,6 @@ public abstract class Planet extends SpaceObject {
 	public float getDensity() {
 		return density;
 	}
-	
-	public boolean isHabitable() { return habitable; }
+
+	public abstract boolean isHabitable();
 }

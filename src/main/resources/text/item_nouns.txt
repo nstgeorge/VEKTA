@@ -48,4 +48,4 @@ Razor
 Graphics Card
 CPU
 Motherboard
-N-body Simulation
+N-Body Simulation

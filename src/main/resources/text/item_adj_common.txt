@@ -30,5 +30,5 @@ Pokey
 Sticky
 Unpleasant
 Overcooked
-Rat-infested
+Rat-Infested
 Barely Usable

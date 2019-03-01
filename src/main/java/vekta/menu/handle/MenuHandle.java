@@ -1,11 +1,12 @@
 package vekta.menu.handle;
 
-import vekta.context.Context;
 import vekta.Resources;
 import vekta.Vekta;
-import vekta.menu.BackOption;
+import vekta.context.Context;
+import vekta.menu.option.BackOption;
 import vekta.menu.Menu;
-import vekta.menu.MenuOption;
+import vekta.menu.option.MenuOption;
+import vekta.menu.option.TradeOption;
 
 import static processing.core.PConstants.*;
 import static vekta.Vekta.*;
@@ -42,7 +43,7 @@ public class MenuHandle {
 
 	public void render(Menu menu) {
 		Vekta v = getInstance();
-		v.clear(); // TODO: find a way to avoid clearing without creating weird artifacts
+		v.clear(); // TODO: find a way to avoid clearing without creating artifacts
 		v.hint(DISABLE_DEPTH_TEST);
 		v.camera();
 		v.noLights();
@@ -79,7 +80,11 @@ public class MenuHandle {
 		v.text(opt.getName(), v.width / 2F, yPos - 3);
 	}
 
-	int getButtonColor(MenuOption opt) {
+	private int getButtonColor(MenuOption opt) {
+		// TODO: define special cases in their own classes
+		if(opt instanceof TradeOption) {
+			return ((TradeOption)opt).getItem().getType().getColor();
+		}
 		return UI_COLOR;
 	}
 

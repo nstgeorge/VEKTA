@@ -1,6 +1,7 @@
-package vekta.menu;
+package vekta.menu.option;
 
 import vekta.context.Context;
+import vekta.menu.Menu;
 
 import static vekta.Vekta.setContext;
 

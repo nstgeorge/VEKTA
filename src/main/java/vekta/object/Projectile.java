@@ -7,21 +7,28 @@ import static vekta.Vekta.*;
 
 public class Projectile extends SpaceObject {
 	// Default settings
+	private static final float DESPAWN_TIME = 1000;
 	private static final float DEF_MASS = 1000;
 	private static final int DEF_RADIUS = 2;
-	private static final int DEF_SPEED = 7;
 
 	private SpaceObject parent;
-	private String name;
 	private float mass;
 	private float radius;
+	
+	private int aliveTime = 0;
 
-	public Projectile(SpaceObject parent, PVector position, PVector velocity, PVector heading, int color) {
-		super(position, heading.setMag(DEF_SPEED).add(velocity), color);
+	public Projectile(SpaceObject parent, PVector position, PVector velocity, int color) {
+		super(position, velocity, color);
 		this.parent = parent;
-		this.name = "Projectile";
 		this.mass = DEF_MASS;
 		this.radius = DEF_RADIUS;
+	}
+
+	@Override
+	public void onUpdate() {
+		if(++aliveTime >= DESPAWN_TIME) {
+			removeObject(this);
+		}
 	}
 
 	@Override
@@ -39,7 +46,7 @@ public class Projectile extends SpaceObject {
 
 	@Override
 	public String getName() {
-		return name;
+		return "Projectile";
 	}
 
 	@Override

@@ -5,7 +5,8 @@ import vekta.Vekta;
 public enum ItemType {
 	COMMON(0xFFCCCCCC, 1),
 	RARE(0xFFFFAA88, 5),
-	LEGENDARY(0xFFAA88FF, 20);
+	LEGENDARY(0xFFAA88FF, 20),
+	SPECIAL(0xFFAAFF88, 10);
 
 	private final int color;
 	private final float priceModifier;
@@ -24,6 +25,6 @@ public enum ItemType {
 	}
 	
 	public int randomPrice() {
-		return (int)(Vekta.getInstance().random(1, 10) * priceModifier);
+		return (int)(Vekta.getInstance().random(1, 10) * getPriceModifier());
 	}
 }
