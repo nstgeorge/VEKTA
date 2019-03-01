@@ -29,7 +29,7 @@ public class EngineModule implements Module {
 	}
 
 	@Override
-	public void update(Ship ship) {
+	public void onUpdate(Ship ship) {
 		ship.accelerate(ship.getThrustControl() * getSpeed());
 	}
 }

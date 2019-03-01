@@ -19,6 +19,11 @@ public class CargoShip extends Ship {
 		super(name, DEF_MASS, DEF_RADIUS, heading, position, velocity, color, DEF_SPEED, DEF_TURN);
 	}
 
+	@Override 
+	public boolean isLanding() {
+		return true;
+	}
+	
 	@Override
 	public float getThrustControl() {
 		return thrust;
@@ -42,6 +47,6 @@ public class CargoShip extends Ship {
 
 	@Override
 	public void draw() {
-		drawShip(SHIP_SHAPE.CARGO_SHIP);
+		drawShip(ShipModelType.CARGO_SHIP);
 	}
 }  

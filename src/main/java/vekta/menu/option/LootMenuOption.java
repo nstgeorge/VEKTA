@@ -3,26 +3,28 @@ package vekta.menu.option;
 import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;
-import vekta.menu.handle.ScavengeMenuHandle;
+import vekta.menu.handle.LootMenuHandle;
 
 import static vekta.Vekta.setContext;
 
-public class ScavengeMenuOption implements MenuOption {
+public class LootMenuOption implements MenuOption {
+	private final String name;
 	private final Inventory you, them;
 
-	public ScavengeMenuOption(Inventory you, Inventory them) {
+	public LootMenuOption(String name, Inventory you, Inventory them) {
+		this.name = name;
 		this.you = you;
 		this.them = them;
 	}
 
 	@Override
 	public String getName() {
-		return "Scavenge";
+		return name;
 	}
 
 	@Override
 	public void select(Menu menu) {
-		Menu sub = new Menu(new ScavengeMenuHandle(new BackOption(menu), them));
+		Menu sub = new Menu(new LootMenuHandle(new BackOption(menu), them));
 		for(Item item : them) {
 			sub.add(new TradeOption(true, you, them, item));
 		}

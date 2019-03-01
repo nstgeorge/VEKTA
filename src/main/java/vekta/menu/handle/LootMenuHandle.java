@@ -11,10 +11,10 @@ import static vekta.Vekta.getInstance;
 /**
  * Menu renderer for scavenging
  */
-public class ScavengeMenuHandle extends MenuHandle {
+public class LootMenuHandle extends MenuHandle {
 	private final Inventory inv;
 
-	public ScavengeMenuHandle(MenuOption defaultOption, Inventory inv) {
+	public LootMenuHandle(MenuOption defaultOption, Inventory inv) {
 		super(defaultOption);
 
 		this.inv = inv;
