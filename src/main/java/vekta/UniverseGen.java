@@ -25,19 +25,19 @@ public class UniverseGen {
 	}
 
 	public void populate() {
-		for(int i = 0; i < density; i++) {
-			createSystem(randomPos(MIN_POPULATE_DISTANCE, getRadius()));
-		}
+//		for(int i = 0; i < density; i++) {
+//			createSystem(randomPos(MIN_POPULATE_DISTANCE, getRadius()));
+//		}
 	}
 
 	public void spawnOccasional(PVector around) {
 		Vekta v = getInstance();
 		PVector pos = randomPos(getRadius() / 2, getRadius()).add(around);
 		float r = v.random(1);
-		if(r > .5F) {
+		if(r > .4F) {
 			createSystem(pos);
 		}
-		else if(r > .8F) {
+		else if(r > .2F) {
 			Ship s = new CargoShip("TRAWLX", PVector.random2D(), pos, new PVector(), v.color(0, 100, 255));
 			addItems(s.getInventory(), 3);
 			addObject(s);

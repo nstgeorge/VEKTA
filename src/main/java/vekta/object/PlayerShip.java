@@ -49,10 +49,12 @@ public class PlayerShip extends Ship implements Targeter, Upgradeable {
 		addModule(new RCSModule(1));
 	}
 
+	@Override
 	public float getThrustControl() {
 		return thrust;
 	}
 
+	@Override
 	public float getTurnControl() {
 		return turn;
 	}
@@ -143,8 +145,7 @@ public class PlayerShip extends Ship implements Targeter, Upgradeable {
 	@Override
 	public void onUpdate() {
 		for(Module module : getModules()) {
-			module.accelerate(this, thrust);
-			module.turn(this, turn);
+			module.update(this);
 		}
 
 		if(landing && getTarget() != null) {

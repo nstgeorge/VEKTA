@@ -6,6 +6,7 @@ public enum ModuleType {
 	RCS,
 	LANDER,
 	WEAPON,
-	TARGETING_COMPUTER
+	TARGETING_COMPUTER,
+	UTILITY
 	// TODO: implement modules
 }

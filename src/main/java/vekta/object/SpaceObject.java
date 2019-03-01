@@ -9,8 +9,6 @@ import static vekta.Vekta.*;
 
 public abstract class SpaceObject {
 	private static final int TRAIL_LENGTH = 100;
-	private static final float MAX_G_DISTANCE = 2000;
-	private static final float MAX_G_FORCE = 2F;
 	
 	// Convenient reference to Vekta instance
 	protected static final Vekta v = getInstance();

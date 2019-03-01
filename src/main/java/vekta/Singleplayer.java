@@ -18,8 +18,6 @@ import java.util.List;
 import static vekta.Vekta.*;
 
 public class Singleplayer implements World {
-	private static final int MAX_PLANETS = 60;
-
 	private static int nextID = 0;
 
 	// Low pass filter
@@ -41,7 +39,7 @@ public class Singleplayer implements World {
 	private Counter targetCt = new Counter(30); // Counter for periodically updating Targeter instances
 	private Counter spawnCt = new Counter(100); // Counter for periodically cleaning/spawning objects
 
-	UniverseGen generator = new UniverseGen(20000, 10);
+	UniverseGen generator = new UniverseGen(10000, 10);
 
 	List<SpaceObject> objects = new ArrayList<>();
 
