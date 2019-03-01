@@ -10,8 +10,8 @@ public abstract class SpaceObject {
 
 	private int id;
 
-	final PVector position;
-	final PVector velocity;
+	protected final PVector position;
+	protected final PVector velocity;
 	private final int color;
 
 	private final PVector[] trail = new PVector[Vekta.TRAIL_LENGTH];

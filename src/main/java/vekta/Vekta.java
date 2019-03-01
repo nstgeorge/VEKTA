@@ -178,7 +178,7 @@ public class Vekta extends PApplet {
 
 	public static World getWorld() {
 		if(!(context instanceof World)) {
-			throw new RuntimeException("Current context is not a World");
+			throw new RuntimeException("Current context is not a World (" + context.getClass().getName() + ")");
 		}
 		return (World)context;
 	}

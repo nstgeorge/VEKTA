@@ -59,7 +59,7 @@ public abstract class Planet extends SpaceObject {
 			float massSum = getMass() + s.getMass();
 			PVector newVelocity = new PVector(xWeight / massSum, yWeight / massSum);
 
-			PVector base = getPosition().copy().sub(s.getPosition()).normalize().rotate(90);
+			PVector base = getPosition().copy().sub(s.getPosition()).normalize().rotate(PI / 2);
 			PVector offset = base.copy().mult(getRadius() * SPLIT_OFFSET_SCALE);
 			PVector splitVelocity = base.copy().mult(SPLIT_VELOCITY_SCALE);
 			// TODO: change depending on type of planet

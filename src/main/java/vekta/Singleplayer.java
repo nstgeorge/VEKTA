@@ -4,9 +4,10 @@ import processing.core.PVector;
 import processing.sound.LowPass;
 import vekta.context.PauseMenuContext;
 import vekta.context.World;
+import vekta.object.PirateShip;
 import vekta.object.Planet;
+import vekta.object.PlayerShip;
 import vekta.object.SpaceObject;
-import vekta.object.Spaceship;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +30,8 @@ public class Singleplayer implements World {
 
 	float minDistSq = Float.POSITIVE_INFINITY;
 
-	Spaceship playerShip;
-	public SpaceObject closestObject; // TODO: move this logic into Spaceship instances
+	PlayerShip playerShip;
+	public SpaceObject closestObject; // TODO: move this logic into PlayerShip instances
 
 	float zoom = 1; // Camera zoom
 
@@ -51,11 +52,11 @@ public class Singleplayer implements World {
 	public void init() {
 		Vekta v = getInstance();
 		v.background(0);
-		
+
 		lowPass = lowPass = new LowPass(v);
 
-//		if(getSetting("music") > 0 && !atmosphere.isPlaying())
-//			atmosphere.loop();
+		//		if(getSetting("music") > 0 && !atmosphere.isPlaying())
+		//			atmosphere.loop();
 		Resources.setMusic("atmosphere");
 
 		v.frameCount = 0;
@@ -65,19 +66,28 @@ public class Singleplayer implements World {
 			addObject(p);
 		}
 
-		playerShip = new Spaceship(
+		playerShip = new PlayerShip(
 				"VEKTA I",
-				5000,  // Mass
-				5,     // Radius
 				new PVector(1, 0), // Heading
 				new PVector(), // Position
 				new PVector(),    // Velocity
 				v.color(0, 255, 0),
-				0, .1F, 60,  // Control scheme, Speed, and Handling
-				100, // Starting ammo
-				50 // Starting money
+				0, .1F, 20,  // Control scheme, Speed, and Handling
+				100 // Starting ammo
 		);
+		playerShip.getInventory().add(50); // Starting money
 		addObject(playerShip);
+		
+		PirateShip enemy = new PirateShip(
+				"YARYACHT",
+				new PVector(1, 0), // Heading
+				new PVector(1000, 100), // Position
+				new PVector(),    // Velocity
+				v.color(220, 100, 0)
+		);
+		enemy.setTarget(playerShip);
+		// TEMP
+		addObject(enemy);
 	}
 
 	@Override
@@ -92,7 +102,7 @@ public class Singleplayer implements World {
 			v.camera(pos.x, pos.y, (.07F * spd + .7F) * (v.height / 2F) / tan(PI * 30 / 180) * zoom, pos.x, pos.y, 0F,
 					0F, 1F, 0F);
 		}
-		
+
 		closestObject = null;
 		minDistSq = Float.POSITIVE_INFINITY;
 		planetCount = 0;

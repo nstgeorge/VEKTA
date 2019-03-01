@@ -8,8 +8,8 @@ import vekta.menu.Menu;
 import vekta.menu.handle.LandingMenuHandle;
 import vekta.menu.handle.MenuHandle;
 import vekta.menu.TradeMenuOption;
+import vekta.object.PlayerShip;
 import vekta.object.SpaceObject;
-import vekta.object.Spaceship;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,13 +29,13 @@ public class LandingSite {
 
 	private final SpaceObject parent;
 
-	private Spaceship landed;
+	private PlayerShip landed;
 
 	public LandingSite(SpaceObject parent) {
 		this.parent = parent;
 	}
 
-	public Spaceship getLanded() {
+	public PlayerShip getLanded() {
 		return landed;
 	}
 
@@ -55,7 +55,7 @@ public class LandingSite {
 		return parent;
 	}
 
-	public boolean land(Spaceship ship) {
+	public boolean land(PlayerShip ship) {
 		if(landed != null) {
 			return false;
 		}

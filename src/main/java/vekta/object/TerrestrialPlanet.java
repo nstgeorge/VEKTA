@@ -22,8 +22,8 @@ public class TerrestrialPlanet extends Planet {
 	@Override
 	public void onCollide(SpaceObject s) {
 		// Check if landing
-		if(s instanceof Spaceship) { // TODO: create `Lander` interface for event handling
-			Spaceship ship = (Spaceship)s;
+		if(s instanceof PlayerShip) { // TODO: create `Lander` interface for event handling
+			PlayerShip ship = (PlayerShip)s;
 			if(ship.isLanding()) {
 				if(site.land(ship)) {
 					return;

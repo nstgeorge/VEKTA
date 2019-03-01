@@ -1,71 +1,41 @@
 package vekta.object;
 
-import processing.core.*;
-import vekta.*;
-import vekta.item.Inventory;
+import processing.core.PVector;
+import vekta.Resources;
+import vekta.Singleplayer;
+import vekta.Vekta;
 
 import java.util.List;
 
-import static processing.core.PConstants.TRIANGLES;
 import static vekta.Vekta.*;
 
-public class Spaceship extends SpaceObject {
-	// Default Spaceship stuff
-	private static final int HANDLING_SCALE = 1000;
+public class PlayerShip extends Ship {
+	// Default PlayerShip stuff
+	private static final float DEF_MASS = 5000;
+	private static final float DEF_RADIUS = 5;
 	private static final float LANDING_SPEED = 1F;
+	private static final float PROJECTILE_SPEED = 7;
 
-	// Exclusive Spaceship things
-	private int controlScheme; // Defined by CONTROL_DEF: 0 = WASD, 1 = IJKL
-	private float speed;  // Force of the vector added when engine is on
-	private int handling; // Speed of turning
+	// Exclusive PlayerShip things
+	private final int controlScheme; // Defined by CONTROL_DEF: 0 = WASD, 1 = IJKL
 	private int ammo;
 	private float thrust;
 	private float turn;
-
-	// Normal SpaceObject stuff
-	private final String name;
-	private final float mass;
-	private final float radius;
-	private final PVector heading;
 
 	// Landing doodads
 	private boolean landing;
 	private final PVector influence = new PVector();
 
-	private final Inventory inventory = new Inventory();
-
-	public Spaceship(String name, float mass, float radius, PVector heading, PVector position, PVector velocity, int color, int ctrl, float speed, int handling, int ammo, int money) {
-		super(position, velocity, color);
-		this.name = name;
-		this.mass = mass;
-		this.radius = radius;
-		this.heading = heading;
+	public PlayerShip(String name, PVector heading, PVector position, PVector velocity, int color, int ctrl, float speed, int turnSpeed, int ammo) {
+		super(name, DEF_MASS, DEF_RADIUS, heading, position, velocity, color, speed, turnSpeed);
 		this.controlScheme = ctrl;
-		this.speed = speed;
-		this.handling = handling;
-		this.inventory.add(money);
 		this.ammo = ammo;
 	}
 
-	// Draws a nice triangle
-	// Shamelessly stolen from https://processing.org/examples/flocking.html
-	@Override
-	public void draw() {
-		// Draw a triangle rotated in the direction of ship
-		float theta = heading.heading() + processing.core.PApplet.radians(90);
+	@Override public void draw() {
+		super.draw();
 		Vekta v = getInstance();
-		v.fill(1);
-		v.stroke(getColor());
-		v.pushMatrix();
-		v.translate(position.x, position.y);
-		v.rotate(theta);
-		v.beginShape(TRIANGLES);
-		v.vertex(0, -radius * 2);
-		v.vertex(-radius, radius * 2);
-		v.vertex(radius, radius * 2);
-		v.endShape();
-		v.popMatrix();
-
+		
 		// Draw influence vector
 		v.stroke(255, 0, 0);
 		v.line(position.x, position.y, position.x + (influence.x * 100), position.y + (influence.y * 100));
@@ -73,10 +43,8 @@ public class Spaceship extends SpaceObject {
 
 	@Override
 	public void onUpdate() {
-		if(thrust != 0) {
-			addVelocity(heading.copy().setMag(thrust * speed));
-		}
-		turnBy(turn);
+		accelerate(thrust);
+		turn(turn);
 
 		SpaceObject target = ((Singleplayer)getWorld()).closestObject;
 		if(landing && target != null) {
@@ -85,7 +53,7 @@ public class Spaceship extends SpaceObject {
 			if(mag > 0) {
 				heading.set(relative).normalize();
 				float approachFactor = Math.min(1, 5 * target.getRadius() / target.getPosition().sub(position).mag());
-				thrust = Math.max(-1, Math.min(1, (LANDING_SPEED * (1 - approachFactor / 2) - mag) * approachFactor / speed));
+				thrust = Math.max(-1, Math.min(1, (LANDING_SPEED * (1 - approachFactor / 2) - mag) * approachFactor / getSpeed()));
 			}
 		}
 	}
@@ -99,14 +67,14 @@ public class Spaceship extends SpaceObject {
 				thrust = 1;
 				break;
 			case 'a':
-				turn = -((float)handling / HANDLING_SCALE);
+				turn = -1;
 				break;
 			case 's':
 				Resources.loopSound("engine");
 				thrust = -1;
 				break;
 			case 'd':
-				turn = ((float)handling / HANDLING_SCALE);
+				turn = 1;
 				break;
 			case 'x':
 				fireProjectile();
@@ -127,14 +95,14 @@ public class Spaceship extends SpaceObject {
 				thrust = 1;
 				break;
 			case 'j':
-				turn = -((float)handling / HANDLING_SCALE);
+				turn = -1;
 				break;
 			case 'k':
 				Resources.stopSound("engine");
 				thrust = -1;
 				break;
 			case 'l':
-				turn = ((float)handling / HANDLING_SCALE);
+				turn = 1;
 				break;
 			case 'm':
 				fireProjectile();
@@ -166,15 +134,11 @@ public class Spaceship extends SpaceObject {
 			turn = 0;
 		}
 	}
-
-	private void turnBy(float turnBy) {
-		heading.rotate(turnBy);
-	}
-
+	
 	private void fireProjectile() {
 		if(ammo > 0) {
 			Resources.playSound("laser");
-			addObject(new Projectile(this, position.copy(), velocity.copy(), heading.copy(), getColor()));
+			addObject(new Projectile(this, position.copy(), heading.copy().setMag(PROJECTILE_SPEED).add(velocity), getColor()));
 			ammo--;
 		}
 	}
@@ -184,17 +148,8 @@ public class Spaceship extends SpaceObject {
 		getWorld().setDead();
 	}
 
-	public Inventory getInventory() {
-		return inventory;
-	}
-
 	public boolean isLanding() {
 		return landing;
-	}
-
-	@Override
-	public String getName() {
-		return name;
 	}
 
 	public int getAmmo() {
@@ -202,28 +157,8 @@ public class Spaceship extends SpaceObject {
 	}
 
 	@Override
-	public float getMass() {
-		return mass;
-	}
-
-	@Override
-	public float getRadius() {
-		return radius;
-	}
-
-	public PVector getHeading() {
-		return heading;
-	}
-
-	@Override
 	public PVector applyInfluenceVector(List<SpaceObject> objects) {
 		this.influence.set(super.applyInfluenceVector(objects));
 		return this.influence;
-	}
-
-	@Override
-	public boolean collidesWith(SpaceObject s) {
-		// TODO: generalize, perhaps by adding SpaceObject::getParent(..) and handling this case in SpaceObject
-		return !(s instanceof Projectile && ((Projectile)s).getParent() == this) && super.collidesWith(s);
 	}
 }  
