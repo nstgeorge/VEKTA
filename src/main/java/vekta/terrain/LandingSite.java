@@ -2,21 +2,17 @@ package vekta.terrain;
 
 import processing.core.PVector;
 import vekta.Vekta;
-import vekta.menu.option.InfoOption;
-import vekta.menu.Menu;
-import vekta.menu.handle.LandingMenuHandle;
-import vekta.menu.handle.MenuHandle;
 import vekta.object.Ship;
 import vekta.object.SpaceObject;
 
-import static vekta.Vekta.*;
+import static vekta.Vekta.G;
+import static vekta.Vekta.SCALE;
 
 /**
  * A landing terrain for one spacecraft-like object.
  * State management for landing sites should be handled or proxied through this class.
  */
 public class LandingSite {
-
 	private final SpaceObject parent;
 	private final Terrain terrain;
 
@@ -47,12 +43,7 @@ public class LandingSite {
 		landed = ship;
 		Vekta.removeObject(ship);
 		
-		MenuHandle handle = new LandingMenuHandle(this, getWorld());
-		Menu menu = new Menu(handle);
-		getTerrain().setupLandingMenu(ship, menu);
-		menu.add(new InfoOption(getTerrain()));
-		menu.add(handle.getDefault());
-		Vekta.setContext(menu);
+		ship.onLand(this);
 		return true;
 	}
 

@@ -80,15 +80,15 @@ public class Singleplayer implements World {
 		playerShip.getInventory().add(50); // Starting money
 		addObject(playerShip);
 		
-//		Ship ship = new CargoShip(
-//				"Test",
-//				new PVector(1, 0), // Heading
-//				new PVector(500, 500), // Position
-//				new PVector(),    // Velocity
-//				v.color(255, 255, 255)
-//		);
-//		ship.getInventory().add(new ModuleItem(new HyperdriveModule(1)));
-//		addObject(ship);
+		Ship ship = new CargoShip(
+				"Test Ship",
+				new PVector(1, 0), // Heading
+				new PVector(500, 500), // Position
+				new PVector(),    // Velocity
+				v.color(255, 255, 255)
+		);
+		ship.getInventory().add(new ModuleItem(new HyperdriveModule(1)));
+		addObject(ship);
 
 		// TEMP
 		playerShip.getInventory().add(new ModuleItem(new HyperdriveModule(1))); // Hyperdrive upgrade for testing
@@ -164,8 +164,15 @@ public class Singleplayer implements World {
 			s.applyInfluenceVector(objects);
 			for(SpaceObject other : objects) {
 				if(s != other) {
-					checkCollision(s, other);
-					checkCollision(other, s);
+					// Check both collisions before firing events (prevents race condition)
+					boolean collides1 = s.collidesWith(other);
+					boolean collides2 = other.collidesWith(s);
+					if(collides1) {
+						s.onCollide(other);
+					}
+					if(collides2) {
+						other.onCollide(s);
+					}
 				}
 			}
 			s.draw();
@@ -259,12 +266,6 @@ public class Singleplayer implements World {
 			v.text("X TO RETRY", v.width / 2F, (v.height / 2F) + 97);
 		}
 		v.hint(ENABLE_DEPTH_TEST);
-	}
-
-	private void checkCollision(SpaceObject a, SpaceObject b) {
-		if(a.collidesWith(b)) {
-			a.onCollide(b);
-		}
 	}
 
 	private void drawDial(String name, PVector info, int locX, int locY, int radius, int c) {

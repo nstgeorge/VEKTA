@@ -17,6 +17,4 @@ public interface Module {
 	default void onUpdate(Ship ship) {}
 	
 	default void onKeyPress(Ship ship, char key) {}
-	
-	// TODO: add additional module hooks here
 }

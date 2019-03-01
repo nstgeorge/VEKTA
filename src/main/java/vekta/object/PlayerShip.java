@@ -2,13 +2,16 @@ package vekta.object;
 
 import processing.core.PVector;
 import vekta.Resources;
+import vekta.Vekta;
+import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.item.ModuleItem;
 import vekta.menu.Menu;
+import vekta.menu.handle.LandingMenuHandle;
 import vekta.menu.handle.ObjectMenuHandle;
-import vekta.menu.option.BackOption;
-import vekta.menu.option.UpgradeMenuOption;
+import vekta.menu.option.*;
 import vekta.object.module.*;
+import vekta.terrain.LandingSite;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,6 +51,32 @@ public class PlayerShip extends Ship implements Upgradeable {
 		addModule(new EngineModule(1));
 		addModule(new RCSModule(1));
 		addModule(new TargetingModule());
+	}
+
+	@Override
+	public boolean isLanding() {
+		return landing;
+	}
+
+	@Override
+	public void onLand(LandingSite site) {
+		Menu menu = new Menu(new LandingMenuHandle(site, getWorld()));
+		site.getTerrain().setupLandingMenu(this, menu);
+		menu.add(new InfoOption(site.getTerrain()));
+		menu.addDefault();
+		Vekta.setContext(menu);
+	}
+
+	@Override
+	public void onDock(SpaceObject s) {
+		if(s instanceof CargoShip) {
+			Inventory inv = ((CargoShip)s).getInventory();
+			Menu menu = new Menu(new ObjectMenuHandle(new UndockOption(this, getWorld()), s));
+			menu.add(new LootMenuOption("Loot", getInventory(), inv));
+			menu.addDefault();
+			setContext(menu);
+		}
+//		super.onDock(s);
 	}
 
 	@Override
@@ -262,10 +291,6 @@ public class PlayerShip extends Ship implements Upgradeable {
 	@Override
 	public void onDestroy(SpaceObject s) {
 		getWorld().setDead();
-	}
-
-	public boolean isLanding() {
-		return landing;
 	}
 
 	public int getAmmo() {

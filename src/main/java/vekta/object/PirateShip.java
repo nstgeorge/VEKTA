@@ -52,6 +52,10 @@ public class PirateShip extends Ship implements Targeter {
 		return obj instanceof PlayerShip;
 	}
 
+	@Override public boolean isLanding() {
+		return false;
+	}
+
 	@Override
 	public float getThrustControl() {
 		return 0; // Not using standard ship controls
