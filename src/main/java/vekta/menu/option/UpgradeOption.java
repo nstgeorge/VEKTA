@@ -21,7 +21,7 @@ public class UpgradeOption implements MenuOption {
 	@Override
 	public void select(Menu menu) {
 		upgradeable.upgrade(module);
-		menu.remove(this);
-		menu.scroll(-1);
+//		menu.remove(this);
+		menu.close();
 	}
 }

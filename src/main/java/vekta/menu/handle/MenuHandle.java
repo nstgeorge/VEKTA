@@ -95,9 +95,7 @@ public class MenuHandle {
 
 	public void keyPressed(Menu menu, char key) {
 		if(key == ESC) {
-			if(defaultOption != null) {
-				defaultOption.select(menu);
-			}
+			menu.close();
 		}
 		else if(key == 'w') {
 			Resources.playSound("change");

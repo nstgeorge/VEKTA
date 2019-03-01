@@ -39,6 +39,10 @@ public class Menu implements Context {
 		items.add(item);
 	}
 
+	public void addDefault() {
+		add(handle.getDefault());
+	}
+
 	public boolean remove(MenuOption item) {
 		return items.remove(item);
 	}
@@ -70,5 +74,11 @@ public class Menu implements Context {
 	@Override
 	public void mouseWheel(int amount) {
 		scroll(amount);
+	}
+
+	public void close() {
+		if(handle.getDefault() != null) {
+			handle.getDefault().select(this);
+		}
 	}
 }

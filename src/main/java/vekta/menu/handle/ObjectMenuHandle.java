@@ -1,9 +1,8 @@
 package vekta.menu.handle;
 
 import vekta.Vekta;
-import vekta.context.World;
 import vekta.menu.Menu;
-import vekta.menu.option.BackOption;
+import vekta.menu.option.MenuOption;
 import vekta.object.SpaceObject;
 
 import static vekta.Vekta.getInstance;
@@ -14,8 +13,8 @@ import static vekta.Vekta.getInstance;
 public class ObjectMenuHandle extends MenuHandle {
 	private final SpaceObject target;
 
-	public ObjectMenuHandle(SpaceObject target, World world) {
-		super(new BackOption(world));
+	public ObjectMenuHandle(MenuOption def, SpaceObject target) {
+		super(def);
 
 		this.target = target;
 	}
