@@ -71,8 +71,7 @@ class LandingSite {
 
 		PVector offset = landed.getPosition().copy().sub(getParent().getPosition());
 		landed.setVelocity(offset.setMag(getLaunchSpeed()).add(getParent().getVelocity()));
-		landed.onTakeoff();
-		landed.update();
+		landed.update(); // Boost the ship away from the planet
 		Vekta.addObject(landed);
 		landed = null;
 		return true;

@@ -69,7 +69,8 @@ class Singleplayer implements World {
 				new PVector(),    // Velocity
 				v.color(0, 255, 0),
 				0, .1F, 60,  // Control scheme, Speed, and Handling
-				100 // Starting money
+				100, // Starting ammo
+				50 // Starting money
 		);
 		addObject(playerShip);
 	}
@@ -239,7 +240,7 @@ class Singleplayer implements World {
 		health = 100;
 		shortDist = (float)round(sqrt(minDistSq) * 100) / 100;
 		speed = (float)round(spd * 100) / 100;
-		ammunition = playerShip.getProjectilesLeft();
+		ammunition = playerShip.getAmmo();
 		position = round(pos.x) + ", " + round(pos.y);
 	}
 

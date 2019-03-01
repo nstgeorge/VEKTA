@@ -34,11 +34,11 @@ public class Vekta extends PApplet {
 
 	final static float G = 6.674e-11F;
 	final static float SCALE = 3e8F;
-	final static int UI_COLOR = new Color(0, 255, 0).getIntValue();
 	final static float VECTOR_SCALE = 5;
 	final static int MAX_PLANETS = 500;
 	final static int TRAIL_LENGTH = 100;
 	final float DEF_ZOOM = (height / 2.0F) / tan((PI * 30.0F / 180.0F)); // For some reason, this is the default eyeZ location for Processing
+	static int UI_COLOR;
 
 	// Fonts
 	static PFont headerFont;
@@ -55,7 +55,9 @@ public class Vekta extends PApplet {
 
 	public void setup() {
 		instance = this;
-
+		
+		UI_COLOR = color(0, 255, 0);
+		
 		Resources.init();
 
 		background(color(0));

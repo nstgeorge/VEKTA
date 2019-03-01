@@ -1,8 +1,8 @@
 package vekta;
 
-import static vekta.Vekta.*;
-
 import processing.core.PVector;
+
+import static vekta.Vekta.*;
 
 class Projectile extends SpaceObject {
 	// Default settings
@@ -14,57 +14,50 @@ class Projectile extends SpaceObject {
 	private String name;
 	private float mass;
 	private float radius;
-	private int c;
 
-	public Projectile(SpaceObject parent, PVector position, PVector velocity, PVector heading, int c) {
-		super(position, heading.setMag(DEF_SPEED).add(velocity));
+	public Projectile(SpaceObject parent, PVector position, PVector velocity, PVector heading, int color) {
+		super(position, heading.setMag(DEF_SPEED).add(velocity), color);
 		this.parent = parent;
 		this.name = "Projectile";
 		this.mass = DEF_MASS;
 		this.radius = DEF_RADIUS;
-		this.c = c;
 	}
 
 	@Override
-	void draw() {
+	public void draw() {
 		Vekta v = getInstance();
-		v.stroke(this.c);
+		v.stroke(getColor());
 		v.fill(0);
 		v.ellipseMode(RADIUS);
 		v.ellipse(position.x, position.y, radius, radius);
 	}
 
-	SpaceObject getParent() {
+	public SpaceObject getParent() {
 		return parent;
 	}
 
 	@Override
-	String getName() {
+	public String getName() {
 		return name;
 	}
 
 	@Override
-	int getColor() {
-		return c;
-	}
-
-	@Override
-	float getRadius() {
+	public float getRadius() {
 		return radius;
 	}
 
 	@Override
-	float getMass() {
+	public float getMass() {
 		return mass;
 	}
 
 	@Override
-	boolean collidesWith(SpaceObject s) {
+	public boolean collidesWith(SpaceObject s) {
 		return s != getParent() && super.collidesWith(s);
 	}
 
 	@Override
-	boolean shouldDestroy(SpaceObject other) {
+	public boolean shouldDestroy(SpaceObject other) {
 		return true;
 	}
 
@@ -72,7 +65,7 @@ class Projectile extends SpaceObject {
 	 * Override to always destroy projectiles on impact
 	 */
 	@Override
-	void onCollide(SpaceObject s) {
+	public void onCollide(SpaceObject s) {
 		super.onCollide(s);
 		removeObject(this);
 	}

@@ -202,7 +202,7 @@ class MenuHandle {
 			v.stroke(UI_COLOR);
 		v.fill(1);
 		v.rectMode(CENTER);
-		v.rect(v.width / 2F, yPos, buttonWidth, 50);
+		v.rect(v.width / 2F, yPos, buttonWidth + (selected ? 10 : 0), 50);
 		// Text ----------------------
 		//textFont(bodyFont);
 		v.stroke(0);
@@ -268,7 +268,7 @@ class TradeMenuHandle extends MenuHandle {
 	private final Inventory you, them;
 
 	public TradeMenuHandle(MenuOption defaultOption, Inventory you, Inventory them) {
-		super(defaultOption, 60, Vekta.getInstance().width * 2 / 3);
+		super(defaultOption, 70, Vekta.getInstance().width * 2 / 3);
 
 		this.you = you;
 		this.them = them;
@@ -279,9 +279,10 @@ class TradeMenuHandle extends MenuHandle {
 
 		Vekta v = getInstance();
 		v.textSize(32);
+		v.fill(UI_COLOR);
+		v.text("You have: [" + you.getMoney() + " G]", v.width / 2F, v.height / 4F);
 		v.fill(100);
-		v.text("You have: [" + you.getMoney() + "G]", v.width / 2F, v.height / 4F);
-		v.text("They have: [" + them.getMoney() + "G]", v.width / 2F, v.height / 4F + 48);
+		v.text("They have: [" + them.getMoney() + " G]", v.width / 2F, v.height / 4F + 48);
 	}
 
 	@Override

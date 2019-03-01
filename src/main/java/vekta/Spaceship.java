@@ -10,14 +10,13 @@ import static vekta.Vekta.*;
 class Spaceship extends SpaceObject {
 	// Default Spaceship stuff
 	private static final int HANDLING_SCALE = 1000;
-	private static final int MAX_PROJECTILES = 100;
 	private static final float LANDING_SPEED = 1F;
 
 	// Exclusive Spaceship things
 	private int controlScheme; // Defined by CONTROL_DEF: 0 = WASD, 1 = IJKL
 	private float speed;  // Force of the vector added when engine is on
 	private int handling; // Speed of turning
-	private int numProjectiles = 0;
+	private int ammo;
 	private float thrust;
 	private float turn;
 
@@ -26,7 +25,6 @@ class Spaceship extends SpaceObject {
 	private final float mass;
 	private final float radius;
 	private final PVector heading;
-	private final int c;
 
 	// Landing doodads
 	private boolean landing;
@@ -34,28 +32,28 @@ class Spaceship extends SpaceObject {
 
 	private final Inventory inventory = new Inventory();
 
-	public Spaceship(String name, float mass, float radius, PVector heading, PVector position, PVector velocity, int c, int ctrl, float speed, int handling, int money) {
-		super(position, velocity);
+	public Spaceship(String name, float mass, float radius, PVector heading, PVector position, PVector velocity, int color, int ctrl, float speed, int handling, int ammo, int money) {
+		super(position, velocity, color);
 		this.name = name;
 		this.mass = mass;
 		this.radius = radius;
 		this.heading = heading;
-		this.c = c;
 		this.controlScheme = ctrl;
 		this.speed = speed;
 		this.handling = handling;
 		this.inventory.add(money);
+		this.ammo = ammo;
 	}
 
 	// Draws a nice triangle
 	// Shamelessly stolen from https://processing.org/examples/flocking.html
 	@Override
-	void draw() {
+	public void draw() {
 		// Draw a triangle rotated in the direction of ship
 		float theta = heading.heading() + processing.core.PApplet.radians(90);
 		Vekta v = getInstance();
 		v.fill(1);
-		v.stroke(c);
+		v.stroke(getColor());
 		v.pushMatrix();
 		v.translate(position.x, position.y);
 		v.rotate(theta);
@@ -72,7 +70,7 @@ class Spaceship extends SpaceObject {
 	}
 
 	@Override
-	void onUpdate() {
+	public void onUpdate() {
 		if(thrust != 0) {
 			addVelocity(heading.copy().setMag(thrust * speed));
 		}
@@ -172,67 +170,58 @@ class Spaceship extends SpaceObject {
 	}
 
 	private void fireProjectile() {
-		if(numProjectiles < MAX_PROJECTILES) {
+		if(ammo > 0) {
 			Resources.playSound("laser");
-			addObject(new Projectile(this, position.copy(), velocity.copy(), heading.copy(), c));
-			numProjectiles++;
+			addObject(new Projectile(this, position.copy(), velocity.copy(), heading.copy(), getColor()));
+			ammo--;
 		}
 	}
 
 	@Override
-	void onDestroy(SpaceObject s) {
+	public void onDestroy(SpaceObject s) {
 		getWorld().setDead();
 	}
 
-	Inventory getInventory() {
+	public Inventory getInventory() {
 		return inventory;
 	}
 
-	boolean isLanding() {
+	public boolean isLanding() {
 		return landing;
 	}
 
 	@Override
-	String getName() {
+	public String getName() {
 		return name;
 	}
 
-	int getProjectilesLeft() {
-		return MAX_PROJECTILES - numProjectiles;
+	public int getAmmo() {
+		return ammo;
 	}
 
 	@Override
-	float getMass() {
+	public float getMass() {
 		return mass;
 	}
 
 	@Override
-	float getRadius() {
+	public float getRadius() {
 		return radius;
 	}
 
-	@Override
-	int getColor() {
-		return c;
-	}
-
-	PVector getHeading() {
+	public PVector getHeading() {
 		return heading;
 	}
 
 	@Override
-	PVector applyInfluenceVector(List<SpaceObject> objects) {
+	public PVector applyInfluenceVector(List<SpaceObject> objects) {
 		this.influence.set(super.applyInfluenceVector(objects));
 		return this.influence;
 	}
 
 	@Override
-	boolean collidesWith(SpaceObject s) {
+	public boolean collidesWith(SpaceObject s) {
 		// TODO: generalize, perhaps by adding SpaceObject::getParent(..) and handling this case in SpaceObject
 		return !(s instanceof Projectile && ((Projectile)s).getParent() == this) && super.collidesWith(s);
-	}
-
-	void onTakeoff() {
-
 	}
 }  
