@@ -3,7 +3,6 @@ package vekta.object;
 import processing.core.PApplet;
 import processing.core.PVector;
 import vekta.Resources;
-import vekta.Vekta;
 import vekta.item.Inventory;
 import vekta.item.Item;
 
@@ -14,10 +13,6 @@ import static vekta.Vekta.getInstance;
 public abstract class Ship extends SpaceObject {
 	private static final float CRATE_SPEED = 1;
 
-	protected enum SHIP_SHAPE {
-		DEFAULT, CARGO_SHIP, FIGHTER
-	}
-	
 	private final String name;
 	private final float mass;
 	private final float radius;
@@ -106,39 +101,44 @@ public abstract class Ship extends SpaceObject {
 
 	protected void drawShip(SHIP_SHAPE shape) {
 		float theta = heading.heading() + PApplet.radians(90);
-		Vekta v = getInstance();
 		v.fill(0);
 		v.stroke(getColor());
 		v.pushMatrix();
 		v.translate(position.x, position.y);
 		v.rotate(theta);
 		v.beginShape();
-		switch (shape) {
-			case CARGO_SHIP:
-				v.vertex(0, -radius * 2 - 5);
-				v.vertex(-radius, -radius * 2);
-				v.vertex(-radius, radius * 2);
-				v.vertex(radius, radius * 2);
-				v.vertex(radius, -radius * 2);
-				break;
-			case FIGHTER:
-				v.vertex(0, -radius * 2);
-				// Draw left spike
-				v.vertex(-radius, radius * 2);
-				v.vertex(-radius, -radius / 3.0F);
-				v.vertex(-radius, radius * 2);
-				// Draw right spike
-				v.vertex(radius, radius * 2);
-				v.vertex(radius, -radius / 3.0F);
-				v.vertex(radius, radius * 2);
-				break;
-			default:
-				v.vertex(0, -radius * 2);
-				v.vertex(-radius, radius * 2);
-				v.vertex(radius, radius * 2);
-				break;
+		switch(shape) {
+		case CARGO_SHIP:
+			v.vertex(0, -radius * 2 - 5);
+			v.vertex(-radius, -radius * 2);
+			v.vertex(-radius, radius * 2);
+			v.vertex(radius, radius * 2);
+			v.vertex(radius, -radius * 2);
+			break;
+		case FIGHTER:
+			v.vertex(0, -radius * 2);
+			// Draw left spike
+			v.vertex(-radius, radius * 2);
+			v.vertex(-radius, -radius / 3.0F);
+			v.vertex(-radius, radius * 2);
+			// Draw right spike
+			v.vertex(radius, radius * 2);
+			v.vertex(radius, -radius / 3.0F);
+			v.vertex(radius, radius * 2);
+			break;
+		default:
+			v.vertex(0, -radius * 2);
+			v.vertex(-radius, radius * 2);
+			v.vertex(radius, radius * 2);
+			break;
 		}
 		v.endShape(CLOSE);
 		v.popMatrix();
+	}
+
+	protected enum SHIP_SHAPE {
+		DEFAULT,
+		CARGO_SHIP,
+		FIGHTER,
 	}
 }  

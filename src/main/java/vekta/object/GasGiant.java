@@ -16,7 +16,6 @@ public class GasGiant extends Planet {
 
 	public GasGiant(float mass, float density, PVector position, PVector velocity, int color) {
 		super(mass, density, position, velocity, color);
-		Vekta v = getInstance();
 		ringAngle = v.random(360);
 		ringRatio = v.random(.1F, 1);
 		ringDistances = new float[(int)v.random(2, 7)];

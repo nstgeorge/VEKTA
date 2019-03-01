@@ -1,9 +1,9 @@
 package vekta.object;
 
 import processing.core.PVector;
-import vekta.Vekta;
 
-import static vekta.Vekta.*;
+import static vekta.Vekta.RADIUS;
+import static vekta.Vekta.removeObject;
 
 public class Projectile extends SpaceObject {
 	// Default settings
@@ -33,7 +33,6 @@ public class Projectile extends SpaceObject {
 
 	@Override
 	public void draw() {
-		Vekta v = getInstance();
 		v.stroke(getColor());
 		v.fill(0);
 		v.ellipseMode(RADIUS);

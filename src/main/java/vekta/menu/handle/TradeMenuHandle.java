@@ -12,13 +12,14 @@ import static vekta.Vekta.getInstance;
  * Menu renderer for trading
  */
 public class TradeMenuHandle extends MenuHandle {
-	private final Inventory you, them;
+	private boolean buying;
+	private final Inventory from;
 
-	public TradeMenuHandle(MenuOption defaultOption, Inventory you, Inventory them) {
+	public TradeMenuHandle(MenuOption defaultOption, boolean buying, Inventory from) {
 		super(defaultOption, 70, Vekta.getInstance().width * 2 / 3);
 
-		this.you = you;
-		this.them = them;
+		this.buying = buying;
+		this.from = from;
 	}
 
 	public void render(Menu menu) {
@@ -26,9 +27,7 @@ public class TradeMenuHandle extends MenuHandle {
 
 		Vekta v = getInstance();
 		v.textSize(32);
-		v.fill(UI_COLOR);
-		v.text("You have: [" + you.getMoney() + " G]", v.width / 2F, v.height / 4F);
-		v.fill(100);
-		v.text("They have: [" + them.getMoney() + " G]", v.width / 2F, v.height / 4F + 48);
+		v.fill(buying ? UI_COLOR : 100);
+		v.text((buying ? "You" : "They") + " have: [" + from.getMoney() + " G]", v.width / 2F, v.height / 4F + 48);
 	}
 }

@@ -2,7 +2,6 @@ package vekta.object;
 
 import processing.core.PVector;
 import vekta.Resources;
-import vekta.Vekta;
 import vekta.item.Item;
 import vekta.item.ModuleItem;
 import vekta.menu.Menu;
@@ -47,10 +46,18 @@ public class PlayerShip extends Ship implements Targeter, Upgradeable {
 		super(name, DEF_MASS, DEF_RADIUS, heading, position, velocity, color, DEF_SPEED, DEF_TURN);
 		this.controlScheme = ctrl;
 		this.ammo = ammo;
-		
+
 		// Default modules
 		addModule(new EngineModule(1));
 		addModule(new RCSModule(1));
+	}
+
+	public float getThrustControl() {
+		return thrust;
+	}
+
+	public float getTurnControl() {
+		return turn;
 	}
 
 	@Override
@@ -99,7 +106,7 @@ public class PlayerShip extends Ship implements Targeter, Upgradeable {
 			}
 		}
 	}
-	
+
 	public void addModule(Module module) {
 		// TODO: more control over module exclusivity
 		for(Module m : new ArrayList<>(modules)) {
@@ -119,7 +126,6 @@ public class PlayerShip extends Ship implements Targeter, Upgradeable {
 	@Override
 	public void draw() {
 		drawShip(SHIP_SHAPE.DEFAULT);
-		Vekta v = getInstance();
 
 		// Draw influence vector
 		v.stroke(255, 0, 0);

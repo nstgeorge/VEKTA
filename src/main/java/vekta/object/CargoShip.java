@@ -1,12 +1,7 @@
 package vekta.object;
 
-import processing.core.PApplet;
 import processing.core.PVector;
 import vekta.Counter;
-import vekta.Vekta;
-
-import static processing.core.PConstants.CLOSE;
-import static vekta.Vekta.getInstance;
 
 public class CargoShip extends Ship {
 	// CargoShip defaults
@@ -27,7 +22,6 @@ public class CargoShip extends Ship {
 	@Override
 	public void onUpdate() {
 		if(steerCt.cycle()) {
-			Vekta v = getInstance();
 			steerCt.delay((int)v.random(10, 500));
 			thrust = v.random(-1, 1);
 			turn = v.random(-1, 1);

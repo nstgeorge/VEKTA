@@ -26,7 +26,7 @@ public class TradeOption implements MenuOption {
 
 	@Override
 	public String getName() {
-		String tag = price > 0 ? " [" + (buying ? "" : "+") + price + " G]" : "";
+		String tag = price > 0 ? " [" + price + " G]" : "";
 		return item.getName() + tag;
 	}
 
