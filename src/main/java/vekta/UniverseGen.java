@@ -35,8 +35,9 @@ public class UniverseGen {
 
 	private List<Planet> createSystem(PVector pos) {
 		Vekta v = Vekta.getInstance();
-		List<Planet> system = new ArrayList<Planet>();
+		List<Planet> system = new ArrayList<>();
 		float order = v.random(29, 32);
+		
 		// Create the center body
 		float centerPower = (float)Math.pow(10, order);
 		float centerMass = v.random(0.8F, 4) * centerPower;
@@ -46,7 +47,7 @@ public class UniverseGen {
 				centerDensity,   // Radius
 				pos,  // Position
 				new PVector(),  // Velocity
-				Vekta.getInstance().color(Vekta.getInstance().random(100, 255), Vekta.getInstance().random(100, 255), Vekta.getInstance().random(100, 255))
+				v.color(v.random(100, 255), v.random(100, 255), v.random(100, 255))
 		)));
 
 		// Generate planets around body
@@ -54,7 +55,7 @@ public class UniverseGen {
 		for(int i = 0; i <= planets; i++) {
 			float power = (float)Math.pow(10, order - 1);
 			float radiusLoc = v.random(100, 2000);
-			float speed = Vekta.sqrt(G * centerMass / radiusLoc) / SCALE;
+			float speed = sqrt(G * centerMass / radiusLoc) / SCALE;
 			float mass = v.random(0.05F, 0.5F) * power;
 			float density = v.random(4, 8);
 			float angle = v.random(360);
@@ -74,16 +75,16 @@ public class UniverseGen {
 	}
 	
 	private Planet setupPlanet(TerrestrialPlanet planet) {
-		Vekta v = Vekta.getInstance();
+		Vekta v = getInstance();
 		LandingSite site = planet.getLandingSite();
 		Inventory inv = site.getInventory();
 		Map<Item, Integer> offers = site.getOffers();
 
 		inv.add((int)v.random(10, 500));
-		int itemCt = (int)v.random(1, 4);
+		int itemCt = round(v.random(1, 4));
 		for(int i = 0; i < itemCt; i++) {
 			ItemType type = randomItemType();
-			Item item = new Item(Vekta.generateItemName(type), type);
+			Item item = new Item(generateItemName(type), type);
 			inv.add(item);
 			int price = type.randomPrice();
 			offers.put(item, price);

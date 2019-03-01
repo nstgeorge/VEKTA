@@ -46,13 +46,11 @@ public class MenuHandle {
 		v.hint(DISABLE_DEPTH_TEST);
 		v.camera();
 		v.noLights();
-		//shapeMode(CENTER);
-		//shape(logo, width/2, height/4, 339.26, 100);
-		v.textFont(bodyFont);
 
 		v.stroke(0);
 		v.fill(255);
 		v.textAlign(CENTER, CENTER);
+		v.textFont(bodyFont);
 		v.textSize(24);
 		for(int i = 0; i < menu.size(); i++) {
 			drawButton(menu.get(i), (v.height / 2) + (i * spacing), menu.getIndex() == i);

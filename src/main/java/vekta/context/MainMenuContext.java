@@ -119,7 +119,7 @@ public class MainMenuContext implements Context {
 			v.stroke(UI_COLOR);
 		v.fill(1);
 		v.rectMode(CENTER);
-		v.rect(v.width / 2F, yPos, 200, 50);
+		v.rect(v.width / 2F, yPos, 200 + (selected ? 10 : 0), 50);
 		// Text ----------------------
 		v.textFont(bodyFont);
 		v.stroke(0);
@@ -131,7 +131,6 @@ public class MainMenuContext implements Context {
 	void updateSetting() {
 		selectedOptions[selectedSetting] = (selectedOptions[selectedSetting] + 1) % settingsOptions.valueArray()[selectedSetting].split(",").length;
 		Settings.set(settingsOptions.keyArray()[selectedSetting].toLowerCase(), selectedOptions[selectedSetting]);
-		// Quick! Turn down the music if the player wants it gone!
 		Resources.updateMusicVolume();
 	}
 
