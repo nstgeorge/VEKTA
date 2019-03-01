@@ -63,8 +63,8 @@ public abstract class Planet extends SpaceObject {
 			PVector offset = base.copy().mult(getRadius() * SPLIT_OFFSET_SCALE);
 			PVector splitVelocity = base.copy().mult(SPLIT_VELOCITY_SCALE);
 			// TODO: change depending on type of planet
-			Planet a = new TerrestrialPlanet(newMass, getDensity(), getPosition().copy().add(offset), newVelocity.copy().add(splitVelocity), getColor());
-			Planet b = new TerrestrialPlanet(newMass, getDensity(), getPosition().copy().sub(offset), newVelocity.copy().sub(splitVelocity), getColor());
+			Planet a = new TerrestrialPlanet(newMass, getDensity(), false, getPosition().copy().add(offset), newVelocity.copy().add(splitVelocity), getColor());
+			Planet b = new TerrestrialPlanet(newMass, getDensity(), false, getPosition().copy().sub(offset), newVelocity.copy().sub(splitVelocity), getColor());
 			if(!s.collidesWith(a)) {
 				mass -= a.mass;
 				addObject(a);

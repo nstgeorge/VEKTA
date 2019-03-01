@@ -88,6 +88,7 @@ public class UniverseGen {
 			TerrestrialPlanet planet = new TerrestrialPlanet(
 					mass, // Mass
 					density,   // Density
+					true, // Habitable
 					new PVector(radiusLoc, 0).rotate(angle).add(pos),  // Coords
 					new PVector(0, speed).rotate(angle),  // Velocity
 					v.color(v.random(100, 255), v.random(100, 255), v.random(100, 255))
