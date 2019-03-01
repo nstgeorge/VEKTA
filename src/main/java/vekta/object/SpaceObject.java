@@ -3,6 +3,7 @@ package vekta.object;
 import processing.core.PVector;
 import vekta.Vekta;
 
+import java.util.Collection;
 import java.util.List;
 
 import static vekta.Vekta.*;
@@ -181,5 +182,9 @@ public abstract class SpaceObject {
 	}
 
 	public void onUpdate() {
+	}
+	
+	public Collection<Targeter> getTargeters() {
+		return null;
 	}
 }  

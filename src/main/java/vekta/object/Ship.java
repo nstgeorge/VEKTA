@@ -103,7 +103,7 @@ public abstract class Ship extends SpaceObject {
 		super.onDestroy(s);
 	}
 
-	protected void drawShip(SHIP_SHAPE shape) {
+	protected void drawShip(ShipModelType shape) {
 		float theta = heading.heading() + PApplet.radians(90);
 		v.fill(0);
 		v.stroke(getColor());
@@ -140,7 +140,7 @@ public abstract class Ship extends SpaceObject {
 		v.popMatrix();
 	}
 
-	protected enum SHIP_SHAPE {
+	protected enum ShipModelType {
 		DEFAULT,
 		CARGO_SHIP,
 		FIGHTER,

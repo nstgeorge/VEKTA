@@ -4,6 +4,9 @@ import processing.core.PVector;
 import vekta.Counter;
 import vekta.Resources;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import static vekta.Vekta.*;
 
 public class PirateShip extends Ship implements Targeter {
@@ -24,6 +27,11 @@ public class PirateShip extends Ship implements Targeter {
 
 	public PirateShip(String name, PVector heading, PVector position, PVector velocity, int color) {
 		super(name, DEF_MASS, DEF_RADIUS, heading, position, velocity, color, DEF_SPEED, DEF_TURN);
+	}
+
+	@Override
+	public Collection<Targeter> getTargeters() {
+		return Collections.singleton(this);
 	}
 
 	@Override
@@ -74,7 +82,7 @@ public class PirateShip extends Ship implements Targeter {
 
 	@Override
 	public void draw() {
-		drawShip(SHIP_SHAPE.FIGHTER);
+		drawShip(ShipModelType.FIGHTER);
 	}
 
 	private void fireProjectile() {

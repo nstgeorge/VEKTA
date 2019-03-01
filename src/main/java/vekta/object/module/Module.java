@@ -9,10 +9,14 @@ public interface Module {
 	
 	// TODO: show in UI
 	boolean isBetter(Module other);
+
+	default void onInstall(Ship ship) {}
+
+	default void onUninstall() {}
 	
-	default void update(Ship ship) {}
+	default void onUpdate(Ship ship) {}
 	
-	default void keyPress(Ship ship, char key) {}
+	default void onKeyPress(Ship ship, char key) {}
 	
 	// TODO: add additional module hooks here
 }

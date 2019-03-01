@@ -21,7 +21,8 @@ public class HyperdriveModule extends EngineModule {
 		return boost;
 	}
 
-	@Override public float getSpeed() {
+	@Override 
+	public float getSpeed() {
 		return super.getSpeed() + currentBoost;
 	}
 
@@ -40,9 +41,14 @@ public class HyperdriveModule extends EngineModule {
 		return other instanceof HyperdriveModule && getSpeed() > ((HyperdriveModule)other).getSpeed();
 	}
 
+	@Override 
+	public void onUninstall() {
+		currentBoost = 0;
+	}
+
 	@Override
-	public void update(Ship ship) {
+	public void onUpdate(Ship ship) {
 		currentBoost = max(0, ship.getVelocity().mag() * getBoost() - MIN_SPEED);
-		super.update(ship);
+		super.onUpdate(ship);
 	}
 }

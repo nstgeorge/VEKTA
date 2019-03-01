@@ -29,7 +29,7 @@ public class RCSModule implements Module {
 	}
 
 	@Override
-	public void update(Ship ship) {
+	public void onUpdate(Ship ship) {
 		ship.turn(ship.getTurnControl() * getTurnSpeed());
 	}
 }

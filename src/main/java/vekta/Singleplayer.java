@@ -5,14 +5,13 @@ import processing.sound.LowPass;
 import vekta.context.PauseMenuContext;
 import vekta.context.World;
 import vekta.item.ModuleItem;
-import vekta.object.Planet;
-import vekta.object.PlayerShip;
-import vekta.object.SpaceObject;
-import vekta.object.Targeter;
+import vekta.object.*;
 import vekta.object.module.HyperdriveModule;
-import vekta.object.module.RCSModule;
+import vekta.object.module.TargetingModule;
+import vekta.object.module.TractorBeamModule;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static vekta.Vekta.*;
@@ -80,10 +79,20 @@ public class Singleplayer implements World {
 		);
 		playerShip.getInventory().add(50); // Starting money
 		addObject(playerShip);
+		
+//		Ship ship = new CargoShip(
+//				"Test",
+//				new PVector(1, 0), // Heading
+//				new PVector(500, 500), // Position
+//				new PVector(),    // Velocity
+//				v.color(255, 255, 255)
+//		);
+//		ship.getInventory().add(new ModuleItem(new HyperdriveModule(1)));
+//		addObject(ship);
 
 		// TEMP
 		playerShip.getInventory().add(new ModuleItem(new HyperdriveModule(1))); // Hyperdrive upgrade for testing
-		playerShip.getInventory().add(new ModuleItem(new RCSModule(2))); // RCS upgrade for testing
+		playerShip.getInventory().add(new ModuleItem(new TractorBeamModule(1))); // Tractor beam upgrade for testing
 	}
 
 	@Override
@@ -116,23 +125,27 @@ public class Singleplayer implements World {
 			}
 
 			// Run on targeting loop
-			if(targeting && s instanceof Targeter) {
-				Targeter t = (Targeter)s;
-				SpaceObject target = t.getTarget();
-				if(t.shouldResetTarget()) {
-					float minDistSq = Float.POSITIVE_INFINITY;
-					// Search for new targets
-					for(SpaceObject other : objects) {
-						if(other != t && t.isValidTarget(other)) {
-							float distSq = s.getPosition().sub(other.getPosition()).magSq();
-							if(distSq < minDistSq) {
-								minDistSq = distSq;
-								target = other;
+			if(targeting) {
+				Collection<Targeter> ts = s.getTargeters();
+				if(ts != null) {
+					for(Targeter t : ts) {
+						SpaceObject target = t.getTarget();
+						if(t.shouldResetTarget()) {
+							float minDistSq = Float.POSITIVE_INFINITY;
+							// Search for new targets
+							for(SpaceObject other : objects) {
+								if(other != t && t.isValidTarget(other)) {
+									float distSq = s.getPosition().sub(other.getPosition()).magSq();
+									if(distSq < minDistSq) {
+										minDistSq = distSq;
+										target = other;
+									}
+								}
 							}
 						}
+						t.setTarget(target);
 					}
 				}
-				t.setTarget(target);
 			}
 
 			// Run on spawning loop
@@ -222,7 +235,7 @@ public class Singleplayer implements World {
 			if(playerShip.isLanding()) {
 				//textSize(24);
 				v.text(":: Landing Autopilot ::", 50, v.height - 150);
-			} else if(playerShip.isUsingTargeter()) {
+			} else if(TargetingModule.isUsingTargeter()) {
 				v.text(":: Targeting Computer: Nearest (p)lanet, nearest s(h)ip? ::", 50, v.height - 150);
 			}
 		}

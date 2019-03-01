@@ -11,11 +11,12 @@ import vekta.menu.option.UpgradeMenuOption;
 import vekta.object.module.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static vekta.Vekta.*;
 
-public class PlayerShip extends Ship implements Targeter, Upgradeable {
+public class PlayerShip extends Ship implements Upgradeable {
 	// Default PlayerShip stuff
 	private static final float DEF_MASS = 5000;
 	private static final float DEF_RADIUS = 5;
@@ -30,7 +31,6 @@ public class PlayerShip extends Ship implements Targeter, Upgradeable {
 	private float thrust;
 	private float turn;
 	private boolean usingTargeter;
-	private TargetingModule targeter;
 
 	// Landing doodads
 	private boolean landing;
@@ -39,19 +39,15 @@ public class PlayerShip extends Ship implements Targeter, Upgradeable {
 	// Upgradeable modules
 	private final List<Module> modules = new ArrayList<>();
 
-	private SpaceObject target;
-
 	public PlayerShip(String name, PVector heading, PVector position, PVector velocity, int color, int ctrl, int ammo) {
 		super(name, DEF_MASS, DEF_RADIUS, heading, position, velocity, color, DEF_SPEED, DEF_TURN);
 		this.controlScheme = ctrl;
 		this.ammo = ammo;
 
-		targeter = new TargetingModule(TargetingModule.TARGETING_MODE.NEAREST_PLANET, this);
-
 		// Default modules
 		addModule(new EngineModule(1));
 		addModule(new RCSModule(1));
-		addModule(targeter);
+		addModule(new TargetingModule());
 	}
 
 	@Override
@@ -65,26 +61,20 @@ public class PlayerShip extends Ship implements Targeter, Upgradeable {
 	}
 
 	@Override
+	public Collection<Targeter> getTargeters() {
+		ArrayList<Targeter> list = new ArrayList<>(); // TODO cache
+		for(Module m : getModules()) {
+			if(m instanceof Targeter) {
+				list.add((Targeter)m);
+			}
+		}
+		return list;
+	}
+
 	public SpaceObject getTarget() {
-		return targeter.getTarget();
+		Targeter m = ((Targeter)getBestModule(ModuleType.TARGETING_COMPUTER));
+		return m != null ? m.getTarget() : null;
 	}
-
-	@Override
-	public void setTarget(SpaceObject target) {
-		targeter.setTarget(target);
-	}
-
-	@Override
-	public boolean isValidTarget(SpaceObject obj) {
-		return targeter.isValidTarget(obj);
-	}
-
-	@Override
-	public boolean shouldResetTarget() {
-		return true;
-	}
-
-	public boolean isUsingTargeter() { return usingTargeter; }
 
 	@Override
 	public List<Module> getModules() {
@@ -95,7 +85,7 @@ public class PlayerShip extends Ship implements Targeter, Upgradeable {
 	public Module getBestModule(ModuleType type) {
 		Module module = null;
 		for(Module m : getModules()) {
-			if(m.getType() == type && m.isBetter(module)) {
+			if(m.getType() == type && (module == null || m.isBetter(module))) {
 				module = m;
 			}
 		}
@@ -132,17 +122,19 @@ public class PlayerShip extends Ship implements Targeter, Upgradeable {
 			}
 		}
 		modules.add(module);
+		module.onInstall(this);
 	}
 
 	public void removeModule(Module module) {
 		if(modules.remove(module)) {
 			getInventory().add(new ModuleItem(module));
 		}
+		module.onUninstall();
 	}
 
 	@Override
 	public void draw() {
-		drawShip(SHIP_SHAPE.DEFAULT);
+		drawShip(ShipModelType.DEFAULT);
 
 		// Draw influence vector
 		v.stroke(255, 0, 0);
@@ -152,7 +144,7 @@ public class PlayerShip extends Ship implements Targeter, Upgradeable {
 	@Override
 	public void onUpdate() {
 		for(Module module : getModules()) {
-			module.update(this);
+			module.onUpdate(this);
 		}
 
 		if(landing && getTarget() != null) {
@@ -168,22 +160,9 @@ public class PlayerShip extends Ship implements Targeter, Upgradeable {
 
 	public void keyPress(char key) {
 		for(Module module : getModules()) {
-			module.keyPress(this, key);
+			module.onKeyPress(this, key);
 		}
 		landing = false;
-		if(usingTargeter) {
-			switch(key) {
-				case 'p':
-					targeter.setMode(TargetingModule.TARGETING_MODE.NEAREST_PLANET);
-					usingTargeter = false;
-					break;
-				case 'h':
-					targeter.setMode(TargetingModule.TARGETING_MODE.NEAREST_SHIP);
-					usingTargeter = false;
-					break;
-			}
-
-		}
 		if(controlScheme == 0) {   // WASD
 			switch(key) {
 			case 'w':
