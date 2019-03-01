@@ -29,6 +29,8 @@ public class PlayerShip extends Ship implements Targeter, Upgradeable {
 	private int ammo;
 	private float thrust;
 	private float turn;
+	private boolean usingTargeter;
+	private TargetingModule targeter;
 
 	// Landing doodads
 	private boolean landing;
@@ -44,9 +46,12 @@ public class PlayerShip extends Ship implements Targeter, Upgradeable {
 		this.controlScheme = ctrl;
 		this.ammo = ammo;
 
+		targeter = new TargetingModule(TargetingModule.TARGETING_MODE.NEAREST_PLANET, this);
+
 		// Default modules
 		addModule(new EngineModule(1));
 		addModule(new RCSModule(1));
+		addModule(targeter);
 	}
 
 	@Override
@@ -61,23 +66,25 @@ public class PlayerShip extends Ship implements Targeter, Upgradeable {
 
 	@Override
 	public SpaceObject getTarget() {
-		return target;
+		return targeter.getTarget();
 	}
 
 	@Override
 	public void setTarget(SpaceObject target) {
-		this.target = target;
+		targeter.setTarget(target);
 	}
 
 	@Override
 	public boolean isValidTarget(SpaceObject obj) {
-		return obj instanceof Planet;
+		return targeter.isValidTarget(obj);
 	}
 
 	@Override
 	public boolean shouldResetTarget() {
 		return true;
 	}
+
+	public boolean isUsingTargeter() { return usingTargeter; }
 
 	@Override
 	public List<Module> getModules() {
@@ -164,6 +171,19 @@ public class PlayerShip extends Ship implements Targeter, Upgradeable {
 			module.keyPress(this, key);
 		}
 		landing = false;
+		if(usingTargeter) {
+			switch(key) {
+				case 'p':
+					targeter.setMode(TargetingModule.TARGETING_MODE.NEAREST_PLANET);
+					usingTargeter = false;
+					break;
+				case 'h':
+					targeter.setMode(TargetingModule.TARGETING_MODE.NEAREST_SHIP);
+					usingTargeter = false;
+					break;
+			}
+
+		}
 		if(controlScheme == 0) {   // WASD
 			switch(key) {
 			case 'w':
@@ -191,6 +211,9 @@ public class PlayerShip extends Ship implements Targeter, Upgradeable {
 				break;
 			case 'e':
 				openMenu();
+				break;
+			case 't':
+				usingTargeter = !usingTargeter;
 				break;
 			}
 		}

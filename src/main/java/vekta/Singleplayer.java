@@ -222,6 +222,8 @@ public class Singleplayer implements World {
 			if(playerShip.isLanding()) {
 				//textSize(24);
 				v.text(":: Landing Autopilot ::", 50, v.height - 150);
+			} else if(playerShip.isUsingTargeter()) {
+				v.text(":: Targeting Computer: Nearest (p)lanet, nearest s(h)ip? ::", 50, v.height - 150);
 			}
 		}
 		// Menus
