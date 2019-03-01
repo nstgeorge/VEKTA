@@ -25,3 +25,4 @@ Spiked
 Slippery
 Unlucky
 Toxic
+Secondhand
