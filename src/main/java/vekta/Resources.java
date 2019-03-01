@@ -76,6 +76,7 @@ public class Resources {
 		if(Settings.get("sound") > 0) {
 			SoundFile sound = getSound(key);
 			if(sound != null) {
+				sound.stop(); // TODO: confirm whether this is needed
 				sound.play();
 			}
 		}

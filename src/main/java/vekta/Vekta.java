@@ -21,7 +21,6 @@ public class Vekta extends PApplet {
 	}
 
 	public static final String FONTNAME = "font/undefined-medium.ttf";
-	public static final int MAX_DISTANCE = 10000; // Maximum distance for updating objects (currently unimplemented)
 
 	public static Context mainMenu;
 
@@ -31,9 +30,6 @@ public class Vekta extends PApplet {
 
 	public static final float G = 6.674e-11F;
 	public static final  float SCALE = 3e8F;
-	public static final float VECTOR_SCALE = 5;
-	public static final  int MAX_PLANETS = 500;
-	public static final  int TRAIL_LENGTH = 100;
 	public static float DEF_ZOOM;
 	public static int UI_COLOR;
 

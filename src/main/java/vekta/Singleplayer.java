@@ -4,6 +4,8 @@ import processing.core.PVector;
 import processing.sound.LowPass;
 import vekta.context.PauseMenuContext;
 import vekta.context.World;
+import vekta.item.Item;
+import vekta.item.ItemType;
 import vekta.object.*;
 
 import java.util.ArrayList;
@@ -12,6 +14,8 @@ import java.util.List;
 import static vekta.Vekta.*;
 
 public class Singleplayer implements World {
+	private static final int MAX_PLANETS = 60;
+
 	private static int nextID = 0;
 
 	// Low pass filter
@@ -25,13 +29,12 @@ public class Singleplayer implements World {
 	int ammunition = 100;
 	String position;
 
-	float minDistSq = Float.POSITIVE_INFINITY;
-
 	PlayerShip playerShip;
 
 	private float zoom = 1; // Camera zoom
 
 	private Counter targetCt = new Counter(30); // Counter for periodically updating Targeter instances
+	private Counter spawnCt = new Counter(100); // Counter for periodically cleaning/spawning objects
 
 	UniverseGen generator = new UniverseGen(20000, 10);
 
@@ -53,16 +56,12 @@ public class Singleplayer implements World {
 
 		lowPass = new LowPass(v);
 
-		//		if(getSetting("music") > 0 && !atmosphere.isPlaying())
-		//			atmosphere.loop();
 		Resources.setMusic("atmosphere");
 
 		v.frameCount = 0;
 
 		// Add initial planets
-		for(Planet p : generator.generate()) {
-			addObject(p);
-		}
+		generator.populate();
 
 		playerShip = new PlayerShip(
 				"VEKTA I",
@@ -75,15 +74,16 @@ public class Singleplayer implements World {
 		);
 		playerShip.getInventory().add(50); // Starting money
 		addObject(playerShip);
-
-		// TEMP
-		addObject(new PirateShip(
-				"YARYACHT",
+		
+		Ship s = new CargoShip(
+				"CARGO",
 				new PVector(1, 0), // Heading
-				new PVector(5000, 100), // Position
+				new PVector(100, 100), // Position
 				new PVector(),    // Velocity
-				v.color(220, 100, 0)
-		));
+				v.color(0, 255, 0)
+		);
+		s.getInventory().add(new Item("Test", ItemType.COMMON));
+		addObject(s);
 	}
 
 	@Override
@@ -99,22 +99,50 @@ public class Singleplayer implements World {
 					0F, 1F, 0F);
 		}
 
-//		closestObject = null;
-		minDistSq = Float.POSITIVE_INFINITY;
+		boolean targeting = targetCt.cycle();
+		boolean spawning = spawnCt.cycle();
+
+		objects.addAll(markedForAddition);
+		markedForAddition.clear();
+
 		planetCount = 0;
 		for(SpaceObject s : objects) {
 			if(markedForDeath.contains(s)) {
 				continue;
 			}
 
+			// Run on targeting loop
+			if(targeting && s instanceof Targeter) {
+				Targeter t = (Targeter)s;
+				SpaceObject target = t.getTarget();
+				if(t.shouldResetTarget()) {
+					float minDistSq = Float.POSITIVE_INFINITY;
+					// Search for new targets
+					for(SpaceObject other : objects) {
+						if(other != t && t.isValidTarget(other)) {
+							float distSq = s.getPosition().sub(other.getPosition()).magSq();
+							if(distSq < minDistSq) {
+								minDistSq = distSq;
+								target = other;
+							}
+						}
+					}
+				}
+				t.setTarget(target);
+			}
+
+			// Run on spawning loop
+			if(spawning) {
+				if(playerShip.getPosition().sub(s.getPosition()).magSq() > generator.getRadius() * generator.getRadius()) {
+					removeObject(s);
+					continue;
+				}
+			}
+
 			if(s instanceof Planet) {
 				planetCount++;
-//				float distSq = getDistSq(s.getPosition(), playerShip.getPosition());
-//				if(distSq < minDistSq) {
-//					closestObject = s;
-//					minDistSq = distSq;
-//				}
 			}
+
 			s.update();
 			s.applyInfluenceVector(objects);
 			for(SpaceObject other : objects) {
@@ -128,31 +156,10 @@ public class Singleplayer implements World {
 		}
 
 		objects.removeAll(markedForDeath);
-		objects.addAll(markedForAddition);
 		markedForDeath.clear();
-		markedForAddition.clear();
 
-		if(targetCt.cycle()) {
-			for(SpaceObject s : objects) {
-				if(s instanceof Targeter) {
-					Targeter t = (Targeter)s;
-					SpaceObject target = t.getTarget();
-					if(t.shouldResetTarget()) {
-						float minDistSq = Float.POSITIVE_INFINITY;
-						// Search for new targets
-						for(SpaceObject other : objects) {
-							if(other != t && t.isValidTarget(other)) {
-								float distSq = s.getPosition().sub(other.getPosition()).magSq();
-								if(distSq < minDistSq) {
-									minDistSq = distSq;
-									target = other;
-								}
-							}
-						}
-					}
-					t.setTarget(target);
-				}
-			}
+		if(planetCount < MAX_PLANETS) {
+			generator.spawnOccasional(playerShip.getPosition());
 		}
 
 		// Info
@@ -186,7 +193,6 @@ public class Singleplayer implements World {
 			if(closestObject == null) {
 				v.fill(100, 100, 100);
 				closestObjectString = "Closest Object: None in range";
-				minDistSq = Integer.MAX_VALUE;
 			}
 			else {
 				if(closestObject.getMass() / 1.989e30 < .1) {
@@ -273,7 +279,9 @@ public class Singleplayer implements World {
 
 	private void updateUIInformation() {
 		health = 100;
-		shortDist = (float)round(sqrt(minDistSq) * 100) / 100;
+		shortDist = playerShip.getTarget() != null
+				? (float)round(playerShip.getPosition().dist(playerShip.getTarget().getPosition()) * 100) / 100
+				: 0;
 		speed = (float)round(spd * 100) / 100;
 		ammunition = playerShip.getAmmo();
 		position = round(pos.x) + ", " + round(pos.y);

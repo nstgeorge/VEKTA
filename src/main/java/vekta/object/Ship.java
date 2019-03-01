@@ -2,13 +2,18 @@ package vekta.object;
 
 import processing.core.PApplet;
 import processing.core.PVector;
+import vekta.Resources;
 import vekta.Vekta;
 import vekta.item.Inventory;
+import vekta.item.Item;
 
 import static processing.core.PConstants.TRIANGLES;
+import static vekta.Vekta.addObject;
 import static vekta.Vekta.getInstance;
 
 public abstract class Ship extends SpaceObject {
+	private static final float CRATE_SPEED = 1;
+	
 	private final String name;
 	private final float mass;
 	private final float radius;
@@ -93,5 +98,23 @@ public abstract class Ship extends SpaceObject {
 	public boolean collidesWith(SpaceObject s) {
 		// TODO: generalize, perhaps by adding SpaceObject::getParent(..) and turnSpeed this case in SpaceObject
 		return !(s instanceof Projectile && ((Projectile)s).getParent() == this) && super.collidesWith(s);
+	}
+
+	@Override
+	public void onCollide(SpaceObject s) {
+		if(s instanceof CargoCrate) {
+			// Add item to ship's inventory
+			getInventory().add(((CargoCrate)s).getItem());
+			Resources.playSound("change"); // TODO: custom pickup sound
+		}
+		super.onCollide(s);
+	}
+
+	@Override
+	public void onDestroy(SpaceObject s) {
+		for(Item item : getInventory()) {
+			addObject(new CargoCrate(item, getPosition(), PVector.random2D().setMag(getInstance().random(CRATE_SPEED))));
+		}
+		super.onDestroy(s);
 	}
 }  

@@ -31,7 +31,7 @@ public class GasGiant extends Planet {
 		super.draw();
 
 		Vekta v = getInstance();
-		v.stroke(v.color(100));
+		v.stroke(v.color(50));
 		v.noFill();
 		v.pushMatrix();
 		v.translate(position.x, position.y);

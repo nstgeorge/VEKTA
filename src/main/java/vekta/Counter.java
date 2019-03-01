@@ -24,6 +24,11 @@ public final class Counter {
 		this.ct = ct;
 	}
 
+	public Counter ready() {
+		ct = frames;
+		return this;
+	}
+
 	public Counter randomize() {
 		ct = (int)Vekta.getInstance().random(frames);
 		return this;

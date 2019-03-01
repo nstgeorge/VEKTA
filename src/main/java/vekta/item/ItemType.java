@@ -24,6 +24,6 @@ public enum ItemType {
 	}
 	
 	public int randomPrice() {
-		return (int)(Vekta.getInstance().random(1, 10) * priceModifier);
+		return (int)(Vekta.getInstance().random(1, 10) * getPriceModifier());
 	}
 }

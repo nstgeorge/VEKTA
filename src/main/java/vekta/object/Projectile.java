@@ -7,7 +7,7 @@ import static vekta.Vekta.*;
 
 public class Projectile extends SpaceObject {
 	// Default settings
-	private static final float LIFETIME = 1000;
+	private static final float DESPAWN_TIME = 1000;
 	private static final float DEF_MASS = 1000;
 	private static final int DEF_RADIUS = 2;
 
@@ -26,7 +26,7 @@ public class Projectile extends SpaceObject {
 
 	@Override
 	public void onUpdate() {
-		if(++aliveTime >= LIFETIME) {
+		if(++aliveTime >= DESPAWN_TIME) {
 			removeObject(this);
 		}
 	}

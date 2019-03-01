@@ -3,7 +3,6 @@ package vekta.object;
 import processing.core.PVector;
 import vekta.Counter;
 import vekta.Resources;
-import vekta.Vekta;
 
 import static vekta.Vekta.*;
 
@@ -39,13 +38,6 @@ public class PirateShip extends Ship implements Targeter {
 	@Override
 	public boolean isValidTarget(SpaceObject obj) {
 		return obj instanceof Ship && !(obj instanceof PirateShip);
-	}
-
-	@Override
-	public void draw() {
-		super.draw();
-		Vekta v = getInstance();
-
 	}
 
 	@Override
