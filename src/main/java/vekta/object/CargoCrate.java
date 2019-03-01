@@ -66,6 +66,6 @@ public class CargoCrate extends SpaceObject {
 	@Override
 	public void onCollide(SpaceObject s) {
 		super.onCollide(s);
-		removeObject(this);
+//		removeObject(this);
 	}
 }  

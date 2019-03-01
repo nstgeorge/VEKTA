@@ -8,10 +8,7 @@ import vekta.menu.Menu;
 import vekta.menu.handle.MenuHandle;
 import vekta.menu.handle.ObjectMenuHandle;
 import vekta.menu.option.UpgradeMenuOption;
-import vekta.object.module.EngineModule;
-import vekta.object.module.Module;
-import vekta.object.module.RCSModule;
-import vekta.object.module.Upgradeable;
+import vekta.object.module.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,6 +80,17 @@ public class PlayerShip extends Ship implements Targeter, Upgradeable {
 	@Override
 	public List<Module> getModules() {
 		return modules;
+	}
+
+	@Override
+	public Module getBestModule(ModuleType type) {
+		Module module = null;
+		for(Module m : getModules()) {
+			if(m.getType() == type && m.isBetter(module)) {
+				module = m;
+			}
+		}
+		return module;
 	}
 
 	@Override
