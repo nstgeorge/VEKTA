@@ -15,9 +15,19 @@ public class ScavengeMenuHandle extends MenuHandle {
 	private final Inventory inv;
 
 	public ScavengeMenuHandle(MenuOption defaultOption, Inventory inv) {
-		super(defaultOption, 70, Vekta.getInstance().width * 2 / 3);
+		super(defaultOption);
 
 		this.inv = inv;
+	}
+
+	@Override
+	public int getSpacing() {
+		return 70;
+	}
+
+	@Override
+	public int getButtonWidth() {
+		return v.width * 2 / 3;
 	}
 
 	public void render(Menu menu) {

@@ -15,51 +15,48 @@ import static vekta.Vekta.*;
  * Default menu renderer implementation; draws buttons and select text
  */
 public class MenuHandle {
-	// Default parameters
-	private static final int DEF_SPACING = 100;
-	private static final int DEF_WIDTH = 200;
+	protected static final Vekta v = getInstance();
 
 	private final MenuOption defaultOption;
-	private final int spacing;
-	private final int buttonWidth;
 
 	public MenuHandle(Context parent) {
 		this(new BackOption(parent));
 	}
 
 	public MenuHandle(MenuOption defaultOption) {
-		this(defaultOption, DEF_SPACING, DEF_WIDTH);
-	}
-
-	public MenuHandle(MenuOption defaultOption, int spacing, int buttonWidth) {
 		this.defaultOption = defaultOption;
-		this.spacing = spacing;
-		this.buttonWidth = buttonWidth;
 	}
 
 	public MenuOption getDefault() {
 		return defaultOption;
 	}
 
+	public int getSpacing() {
+		return 100;
+	}
+
+	public int getButtonWidth() {
+		return 200;
+	}
+
 	public void render(Menu menu) {
-		Vekta v = getInstance();
 		v.clear();
 		v.hint(DISABLE_DEPTH_TEST);
 		v.camera();
 		v.noLights();
-		
+
 		// TODO
-//		// Partially fill in background
-//		v.fill(v.color(100));
-//		v.rect((v.width - buttonWidth) / 2F, (v.width + buttonWidth) / 2F, 0, v.height);
-		
+		//		// Partially fill in background
+		//		v.fill(v.color(100));
+		//		v.rect((v.width - buttonWidth) / 2F, (v.width + buttonWidth) / 2F, 0, v.height);
+
 		v.stroke(0);
 		v.fill(255);
 		v.textAlign(CENTER, CENTER);
 		v.textFont(bodyFont);
 		v.textSize(24);
 		for(int i = 0; i < menu.size(); i++) {
-			drawButton(menu.get(i), (v.height / 2) + (i * spacing), menu.getIndex() == i);
+			drawButton(menu.get(i), (v.height / 2) + (i * getSpacing()), menu.getIndex() == i);
 		}
 
 		//textFont(bodyFont);
@@ -70,14 +67,13 @@ public class MenuHandle {
 	}
 
 	void drawButton(MenuOption opt, int yPos, boolean selected) {
-		Vekta v = getInstance();
 		if(selected)
 			v.stroke(255);
 		else
 			v.stroke(UI_COLOR);
 		v.fill(1);
 		v.rectMode(CENTER);
-		v.rect(v.width / 2F, yPos, buttonWidth + (selected ? 10 : 0), 50);
+		v.rect(v.width / 2F, yPos, getButtonWidth() + (selected ? 10 : 0), 50);
 		// Text ----------------------
 		//textFont(bodyFont);
 		v.stroke(0);

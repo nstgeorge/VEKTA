@@ -10,9 +10,7 @@ public interface Module {
 	// TODO: show in UI
 	boolean isBetter(Module other);
 	
-	default void accelerate(Ship ship, float amount) {}
-
-	default void turn(Ship ship, float amount) {}
+	default void update(Ship ship) {}
 	
 	default void keyPress(Ship ship, char key) {}
 	

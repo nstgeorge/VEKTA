@@ -65,6 +65,10 @@ public abstract class Ship extends SpaceObject {
 		return turnSpeed;
 	}
 
+	public abstract float getThrustControl();
+	
+	public abstract float getTurnControl();
+
 	public void accelerate(float amount) {
 		if(amount != 0) {
 			addVelocity(getHeading().copy().setMag(amount * getSpeed()));

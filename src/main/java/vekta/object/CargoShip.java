@@ -12,11 +12,21 @@ public class CargoShip extends Ship {
 
 	private float thrust;
 	private float turn;
-	
+
 	private final Counter steerCt = new Counter();
 
 	public CargoShip(String name, PVector heading, PVector position, PVector velocity, int color) {
 		super(name, DEF_MASS, DEF_RADIUS, heading, position, velocity, color, DEF_SPEED, DEF_TURN);
+	}
+
+	@Override
+	public float getThrustControl() {
+		return thrust;
+	}
+
+	@Override
+	public float getTurnControl() {
+		return turn;
 	}
 
 	@Override

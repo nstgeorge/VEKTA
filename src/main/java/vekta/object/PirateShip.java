@@ -38,7 +38,20 @@ public class PirateShip extends Ship implements Targeter {
 
 	@Override
 	public boolean isValidTarget(SpaceObject obj) {
-		return obj instanceof Ship && !(obj instanceof PirateShip);
+		// return obj instanceof Ship && !(obj instanceof PirateShip);
+
+		// TEMP: prevent random off-screen shooting noises until we have a clean way to ignore distant sounds
+		return obj instanceof PlayerShip;
+	}
+
+	@Override
+	public float getThrustControl() {
+		return 0; // Not using standard ship controls
+	}
+
+	@Override
+	public float getTurnControl() {
+		return 0;// Not using standard ship controls
 	}
 
 	@Override
@@ -47,7 +60,7 @@ public class PirateShip extends Ship implements Targeter {
 			PVector pos = target.getPosition().copy()
 					.add(target.getVelocity().sub(velocity).div(PROJECTILE_SPEED / 2));
 			PVector offset = pos.sub(position);
-			
+
 			heading.set(offset.copy().normalize());
 			float rangeFactor = ATTACK_DIST * ATTACK_DIST - offset.magSq();
 			accelerate(max(-.5F, min(1F, -rangeFactor)));

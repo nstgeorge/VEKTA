@@ -8,7 +8,7 @@ import static vekta.Vekta.*;
 public class CargoCrate extends SpaceObject {
 	// Default settings
 	private static final float DEF_MASS = 50;
-	private static final int DEF_RADIUS = 3;
+	private static final int DEF_RADIUS = 4;
 	private static final float SPIN_SCALE = .1F;
 
 	private final Item item;

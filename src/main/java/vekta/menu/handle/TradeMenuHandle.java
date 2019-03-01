@@ -16,10 +16,20 @@ public class TradeMenuHandle extends MenuHandle {
 	private final Inventory to;
 
 	public TradeMenuHandle(MenuOption defaultOption, boolean buying, Inventory to) {
-		super(defaultOption, 70, Vekta.getInstance().width * 2 / 3);
+		super(defaultOption);
 
 		this.buying = buying;
 		this.to = to;
+	}
+
+	@Override
+	public int getSpacing() {
+		return 70;
+	}
+
+	@Override
+	public int getButtonWidth() {
+		return v.width * 2 / 3;
 	}
 
 	public void render(Menu menu) {
