@@ -10,7 +10,7 @@ public class TerrestrialPlanet extends Planet {
 	private final LandingSite site;
 
 	public TerrestrialPlanet(float mass, float density, PVector position, PVector velocity, int color) {
-		super(mass, density, position, velocity, color);
+		super(mass, density, true, position, velocity, color);
 
 		site = new LandingSite(this);
 	}

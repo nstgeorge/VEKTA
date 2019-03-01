@@ -6,6 +6,7 @@ import vekta.item.Item;
 import vekta.item.ItemType;
 import vekta.object.GasGiant;
 import vekta.object.Planet;
+import vekta.object.Star;
 import vekta.object.TerrestrialPlanet;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import static vekta.Vekta.*;
 
 public class UniverseGen {
 	private static final int MIN_SPAWN_DISTANCE = 500;
+	private static final float STAR_LIKELIHOOD = .7F;
 
 	int size;
 	int density;
@@ -42,13 +44,24 @@ public class UniverseGen {
 		float centerPower = (float)Math.pow(10, order);
 		float centerMass = v.random(0.8F, 4) * centerPower;
 		float centerDensity = v.random(1, 2);
-		system.add(setupPlanet(new GasGiant(
-				centerMass, // Mass
-				centerDensity,   // Radius
-				pos,  // Position
-				new PVector(),  // Velocity
-				v.color(v.random(100, 255), v.random(100, 255), v.random(100, 255))
-		)));
+
+		if(v.random(0, 1) < STAR_LIKELIHOOD) {
+			system.add(setupPlanet(new Star(
+					centerMass, // Mass
+					centerDensity, // Radius
+					pos,
+					new PVector(),
+					v.color(v.random(100, 255), v.random(150, 255), v.random(100, 255))
+			)));
+		} else {
+			system.add(setupPlanet(new GasGiant(
+					centerMass, // Mass
+					centerDensity,   // Radius
+					pos,  // Position
+					new PVector(),  // Velocity
+					v.color(v.random(100, 255), v.random(100, 255), v.random(100, 255))
+			)));
+		}
 
 		// Generate planets around body
 		int planets = (int)v.random(1, 8);
@@ -69,6 +82,8 @@ public class UniverseGen {
 		}
 		return system;
 	}
+
+	private Planet setupPlanet(Star planet) {  return planet; }
 
 	private Planet setupPlanet(GasGiant planet) {
 		return planet;

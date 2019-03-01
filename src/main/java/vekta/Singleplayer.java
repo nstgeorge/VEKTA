@@ -22,10 +22,12 @@ public class Singleplayer implements World {
 	int planetCount;
 	boolean dead;
 	PVector pos;
+
+	PVector lastKnownPosition;
+
 	float spd;
 	int health;
 	int ammunition = 100;
-	String position;
 
 	float minDistSq = Float.POSITIVE_INFINITY;
 
@@ -45,6 +47,7 @@ public class Singleplayer implements World {
 	float shortDist;
 	float speed;
 	float closestMass;
+	String position;
 	String closestMassUnit;
 
 	@Override
@@ -90,6 +93,9 @@ public class Singleplayer implements World {
 			spd = playerShip.getVelocity().mag();
 			// Camera follow
 			v.camera(pos.x, pos.y, (.07F * spd + .7F) * (v.height / 2F) / tan(PI * 30 / 180) * zoom, pos.x, pos.y, 0F,
+					0F, 1F, 0F);
+		} else {
+			v.camera(lastKnownPosition.x, lastKnownPosition.y, .7F * (v.height / 2F) / tan(PI * 30 / 180) * zoom, lastKnownPosition.x, lastKnownPosition.y, 0F,
 					0F, 1F, 0F);
 		}
 		
@@ -167,7 +173,12 @@ public class Singleplayer implements World {
 					closestMass = (float)round(closestObject.getMass() / 1.989e30F * 1000) / 1000;
 					closestMassUnit = "Suns";
 				}
-				closestObjectString = "Closest Object: " + closestObject.getName() + " - " + shortDist + "AU \nSpeed: " + (float)round(closestObject.getVelocity().mag() * 100) / 100 + "\nMass: " + closestMass + " " + closestMassUnit;
+				if(closestObject instanceof Planet) {
+					Planet closestPlanet = (Planet)closestObject;
+					closestObjectString = "Closest Object: " + closestObject.getName() + " - " + shortDist + "AU \nHabitable: " + (closestPlanet.isHabitable() ? "YES" : "NO") + "\nMass: " + closestMass + " " + closestMassUnit;
+				} else {
+					closestObjectString = "Closest Object: " + closestObject.getName() + " - " + shortDist + "AU \nSpeed: " + (float)round(closestObject.getVelocity().mag() * 100) / 100 + "\nMass: " + closestMass + " " + closestMassUnit;
+				}
 				// Closest object arrow
 				drawDial("Direction", closestObject.getPosition().sub(pos), 450, v.height - 65, 50, closestObject.getColor());
 				v.stroke(closestObject.getColor());
@@ -286,7 +297,8 @@ public class Singleplayer implements World {
 
 	public void setDead() {
 		dead = true;
-		lowPass.process(Resources.getMusic(), 800);
+		lastKnownPosition = playerShip.getPosition();
+		if(Resources.getMusic() != null) lowPass.process(Resources.getMusic(), 800);
 		Resources.stopSound("engine");
 		Resources.playSound("death");
 	}

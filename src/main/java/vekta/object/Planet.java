@@ -17,14 +17,16 @@ public abstract class Planet extends SpaceObject {
 	private final String name;
 	private float mass;
 	private final float density;
+	private final boolean habitable;
 
 	private float radiusCache;
 
-	public Planet(float mass, float density, PVector position, PVector velocity, int color) {
+	public Planet(float mass, float density, boolean habitable, PVector position, PVector velocity, int color) {
 		super(position, velocity, color);
 		this.name = generatePlanetName();
 		this.mass = mass;
 		this.density = density;
+		this.habitable = habitable;
 		
 		updateRadius();
 	}
@@ -109,4 +111,6 @@ public abstract class Planet extends SpaceObject {
 	public float getDensity() {
 		return density;
 	}
+	
+	public boolean isHabitable() { return habitable; }
 }
