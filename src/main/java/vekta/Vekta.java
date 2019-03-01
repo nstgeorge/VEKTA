@@ -32,12 +32,12 @@ public class Vekta extends PApplet {
 
 	// Game-balancing variables and visual settings
 
-	final static float G = 6.674e-11F;
-	final static float SCALE = 3e8F;
-	final static float VECTOR_SCALE = 5;
-	final static int MAX_PLANETS = 500;
-	final static int TRAIL_LENGTH = 100;
-	final float DEF_ZOOM = (height / 2.0F) / tan((PI * 30.0F / 180.0F)); // For some reason, this is the default eyeZ location for Processing
+	static final float G = 6.674e-11F;
+	static final  float SCALE = 3e8F;
+	static final float VECTOR_SCALE = 5;
+	static final  int MAX_PLANETS = 500;
+	static final  int TRAIL_LENGTH = 100;
+	static float DEF_ZOOM;
 	static int UI_COLOR;
 
 	// Fonts
@@ -56,6 +56,7 @@ public class Vekta extends PApplet {
 	public void setup() {
 		instance = this;
 		
+		DEF_ZOOM = (height / 2.0F) / tan((PI * 30.0F / 180.0F)); // For some reason, this is the default eyeZ location for Processing
 		UI_COLOR = color(0, 255, 0);
 		
 		Resources.init();
