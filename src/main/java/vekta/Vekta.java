@@ -212,7 +212,7 @@ public class Vekta extends PApplet {
 		return name;
 	}
 
-	<T> T random(T[] array) {
+	public <T> T random(T[] array) {
 		return array[(int)random(array.length)];
 	}
 
