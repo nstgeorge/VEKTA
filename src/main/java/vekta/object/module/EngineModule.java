@@ -13,16 +13,22 @@ public class EngineModule implements Module {
 		return speed;
 	}
 
-	@Override 
+	@Override
 	public String getName() {
 		return "Engine v" + getSpeed();
 	}
 
-	@Override public ModuleType getType() {
+	@Override
+	public ModuleType getType() {
 		return ModuleType.ENGINE;
 	}
 
-	@Override 
+	@Override
+	public boolean isBetter(Module other) {
+		return other instanceof EngineModule && getSpeed() > ((EngineModule)other).getSpeed();
+	}
+
+	@Override
 	public void accelerate(Ship ship, float amount) {
 		ship.accelerate(getSpeed() * amount);
 	}

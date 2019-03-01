@@ -18,8 +18,14 @@ public class RCSModule implements Module {
 		return "RCS v" + getTurnSpeed();
 	}
 
-	@Override public ModuleType getType() {
+	@Override 
+	public ModuleType getType() {
 		return ModuleType.RCS;
+	}
+
+	@Override 
+	public boolean isBetter(Module other) {
+		return other instanceof RCSModule && getTurnSpeed() > ((RCSModule)other).getTurnSpeed();
 	}
 
 	@Override

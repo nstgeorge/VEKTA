@@ -24,7 +24,7 @@ public class ObjectMenuHandle extends MenuHandle {
 		super.render(menu);
 
 		Vekta v = getInstance();
-		v.textSize(48);
+		v.textSize(64);
 		v.fill(target.getColor());
 		v.text(target.getName(), v.width / 2F, v.height / 4F);
 	}

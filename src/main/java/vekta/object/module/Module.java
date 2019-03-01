@@ -6,7 +6,10 @@ public interface Module {
 	String getName();
 	
 	ModuleType getType();
-
+	
+	// TODO: show in UI
+	boolean isBetter(Module other);
+	
 	default void accelerate(Ship ship, float amount) {}
 
 	default void turn(Ship ship, float amount) {}
