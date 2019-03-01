@@ -3,16 +3,29 @@ package vekta.object;
 import processing.core.PVector;
 import vekta.Resources;
 import vekta.Vekta;
+import vekta.item.Item;
+import vekta.item.ModuleItem;
+import vekta.menu.Menu;
+import vekta.menu.handle.MenuHandle;
+import vekta.menu.handle.ObjectMenuHandle;
+import vekta.menu.option.UpgradeMenuOption;
+import vekta.object.module.EngineModule;
+import vekta.object.module.Module;
+import vekta.object.module.RCSModule;
+import vekta.object.module.Upgradeable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static vekta.Vekta.*;
 
-public class PlayerShip extends Ship implements Targeter {
+public class PlayerShip extends Ship implements Targeter, Upgradeable {
 	// Default PlayerShip stuff
 	private static final float DEF_MASS = 5000;
 	private static final float DEF_RADIUS = 5;
-	private static final float LANDING_SPEED = 1F;
+	private static final float DEF_SPEED = .1F; // Base speed (engine speed = 1)
+	private static final float DEF_TURN = 20; // Base turn speed (RCS turnSpeed = 1)
+	private static final float APPROACH_SPEED = 1F;
 	private static final float PROJECTILE_SPEED = 7;
 
 	// Exclusive PlayerShip things
@@ -25,12 +38,19 @@ public class PlayerShip extends Ship implements Targeter {
 	private boolean landing;
 	private final PVector influence = new PVector();
 
+	// Upgradeable modules
+	private final List<Module> modules = new ArrayList<>();
+
 	private SpaceObject target;
 
-	public PlayerShip(String name, PVector heading, PVector position, PVector velocity, int color, int ctrl, float speed, int turnSpeed, int ammo) {
-		super(name, DEF_MASS, DEF_RADIUS, heading, position, velocity, color, speed, turnSpeed);
+	public PlayerShip(String name, PVector heading, PVector position, PVector velocity, int color, int ctrl, int ammo) {
+		super(name, DEF_MASS, DEF_RADIUS, heading, position, velocity, color, DEF_SPEED, DEF_TURN);
 		this.controlScheme = ctrl;
 		this.ammo = ammo;
+		
+		// Default modules
+		addModule(new EngineModule(1));
+		addModule(new RCSModule(1));
 	}
 
 	@Override
@@ -48,8 +68,50 @@ public class PlayerShip extends Ship implements Targeter {
 		return obj instanceof Planet;
 	}
 
-	@Override public boolean shouldResetTarget() {
+	@Override
+	public boolean shouldResetTarget() {
 		return true;
+	}
+
+	public List<Module> getModules() {
+		return modules;
+	}
+
+	public List<Module> findUpgrades() {
+		List<Module> list = new ArrayList<>();
+		for(Item item : getInventory()) {
+			if(item instanceof ModuleItem) {
+				list.add(((ModuleItem)item).getModule());
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public void upgrade(Module module) {
+		addModule(module);
+		for(Item item : new ArrayList<>(getInventory().getItems())) {
+			if(item instanceof ModuleItem && ((ModuleItem)item).getModule() == module) {
+				getInventory().remove(item);
+				break;
+			}
+		}
+	}
+	
+	public void addModule(Module module) {
+		// TODO: more control over module exclusivity
+		for(Module m : new ArrayList<>(modules)) {
+			if(m.getType() == module.getType()) {
+				removeModule(m);
+			}
+		}
+		modules.add(module);
+	}
+
+	public void removeModule(Module module) {
+		if(modules.remove(module)) {
+			getInventory().add(new ModuleItem(module));
+		}
 	}
 
 	@Override
@@ -64,8 +126,12 @@ public class PlayerShip extends Ship implements Targeter {
 
 	@Override
 	public void onUpdate() {
-		accelerate(thrust);
-		turn(turn);
+		//		accelerate(thrust);
+		//		turn(turn);
+		for(Module module : getModules()) {
+			module.accelerate(this, thrust);
+			module.turn(this, turn);
+		}
 
 		if(landing && getTarget() != null) {
 			PVector relative = velocity.copy().sub(getTarget().getVelocity());
@@ -73,12 +139,15 @@ public class PlayerShip extends Ship implements Targeter {
 			if(mag > 0) {
 				heading.set(relative).normalize();
 				float approachFactor = Math.min(1, 5 * getTarget().getRadius() / getTarget().getPosition().sub(position).mag());
-				thrust = Math.max(-1, Math.min(1, (LANDING_SPEED * (1 - approachFactor / 2) - mag) * approachFactor / getSpeed()));
+				thrust = Math.max(-1, Math.min(1, (APPROACH_SPEED * (1 - approachFactor / 2) - mag) * approachFactor / getSpeed()));
 			}
 		}
 	}
 
 	public void keyPress(char key) {
+		for(Module module : getModules()) {
+			module.keyPress(this, key);
+		}
 		landing = false;
 		if(controlScheme == 0) {   // WASD
 			switch(key) {
@@ -104,6 +173,9 @@ public class PlayerShip extends Ship implements Targeter {
 				break;
 			case '\t':
 				landing = true;
+				break;
+			case 'e':
+				openMenu();
 				break;
 			}
 		}
@@ -153,6 +225,14 @@ public class PlayerShip extends Ship implements Targeter {
 		if((key == 'j' || key == 'l') && controlScheme == 1) {
 			turn = 0;
 		}
+	}
+
+	public void openMenu() {
+		MenuHandle handle = new ObjectMenuHandle(this, getWorld());
+		Menu menu = new Menu(handle);
+		menu.add(new UpgradeMenuOption(this, findUpgrades()));
+		menu.add(handle.getDefault());
+		setContext(menu);
 	}
 
 	private void fireProjectile() {

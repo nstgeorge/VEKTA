@@ -1,4 +1,6 @@
-package vekta.menu;
+package vekta.menu.option;
+
+import vekta.menu.Menu;
 
 public interface MenuOption {
 	String getName();

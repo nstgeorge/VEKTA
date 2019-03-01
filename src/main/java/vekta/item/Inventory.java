@@ -5,12 +5,16 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public class Inventory implements Iterable<Item> {
+public final class Inventory implements Iterable<Item> {
 	private final List<Item> items = new ArrayList<>();
 	private int money;
 
 	public Inventory() {
 
+	}
+	
+	public int size() {
+		return getItems().size();
 	}
 
 	public int getMoney() {

@@ -1,20 +1,21 @@
 package vekta.object;
 
 import processing.core.PVector;
-import vekta.LandingSite;
+import vekta.terrain.LandingSite;
+import vekta.terrain.Terrain;
 
 /**
  * Terrestrial (landable) planet
  */
 public class TerrestrialPlanet extends Planet {
 	private final LandingSite site;
-	private final boolean habitable;
+	private final Terrain terrain;
 
-	public TerrestrialPlanet(float mass, float density, boolean habitable, PVector position, PVector velocity, int color) {
+	public TerrestrialPlanet(float mass, float density, Terrain terrain, PVector position, PVector velocity, int color) {
 		super(mass, density, position, velocity, color);
 
-		this.habitable = habitable;
-		this.site = new LandingSite(this);
+		this.terrain = terrain;
+		this.site = new LandingSite(this, terrain);
 	}
 
 	public LandingSite getLandingSite() {
@@ -23,13 +24,13 @@ public class TerrestrialPlanet extends Planet {
 
 	@Override
 	public boolean isHabitable() {
-		return habitable;
+		return terrain.has("Habitable");
 	}
 
 	@Override
 	public void onCollide(SpaceObject s) {
 		// Check if landing
-		if(isHabitable()/*TODO: custom menu for uninhabitable planets*/ && s instanceof PlayerShip) { // TODO: create `Lander` interface for event handling
+		if(s instanceof PlayerShip) {
 			PlayerShip ship = (PlayerShip)s;
 			if(ship.isLanding()) {
 				if(site.land(ship)) {

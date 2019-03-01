@@ -1,7 +1,8 @@
-package vekta.menu;
+package vekta.menu.option;
 
 import vekta.item.Inventory;
 import vekta.item.Item;
+import vekta.menu.Menu;
 import vekta.menu.handle.TradeMenuHandle;
 
 import java.util.Map;
@@ -39,7 +40,7 @@ public class TradeMenuOption implements MenuOption {
 		Menu sub = new Menu(new TradeMenuHandle(def, you, them));
 		for(Item item : offers.keySet()) {
 			if(getFrom().has(item)) {
-				sub.add(new TradeOption(getFrom(), getTo(), item, offers.get(item), true));
+				sub.add(new TradeOption(buying, you, them, item, offers.get(item), true));
 			}
 		}
 		sub.add(def);

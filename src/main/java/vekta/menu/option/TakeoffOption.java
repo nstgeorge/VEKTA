@@ -1,6 +1,7 @@
-package vekta.menu;
+package vekta.menu.option;
 
-import vekta.LandingSite;
+import vekta.menu.Menu;
+import vekta.terrain.LandingSite;
 import vekta.context.World;
 
 import static vekta.Vekta.setContext;

@@ -2,6 +2,8 @@ package vekta.object;
 
 import processing.core.PVector;
 import vekta.Vekta;
+import vekta.terrain.MoltenTerrain;
+import vekta.terrain.Terrain;
 
 import static vekta.Vekta.*;
 
@@ -62,9 +64,9 @@ public abstract class Planet extends SpaceObject {
 			PVector base = getPosition().copy().sub(s.getPosition()).normalize().rotate(PI / 2);
 			PVector offset = base.copy().mult(getRadius() * SPLIT_OFFSET_SCALE);
 			PVector splitVelocity = base.copy().mult(SPLIT_VELOCITY_SCALE);
-			// TODO: change depending on type of planet
-			Planet a = new TerrestrialPlanet(newMass, getDensity(), false, getPosition().copy().add(offset), newVelocity.copy().add(splitVelocity), getColor());
-			Planet b = new TerrestrialPlanet(newMass, getDensity(), false, getPosition().copy().sub(offset), newVelocity.copy().sub(splitVelocity), getColor());
+			Terrain terrain = new MoltenTerrain();
+			Planet a = new TerrestrialPlanet(newMass, getDensity(), terrain, getPosition().copy().add(offset), newVelocity.copy().add(splitVelocity), getColor());
+			Planet b = new TerrestrialPlanet(newMass, getDensity(), terrain, getPosition().copy().sub(offset), newVelocity.copy().sub(splitVelocity), getColor());
 			if(!s.collidesWith(a)) {
 				mass -= a.mass;
 				addObject(a);

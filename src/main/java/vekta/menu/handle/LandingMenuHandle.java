@@ -1,11 +1,11 @@
 package vekta.menu.handle;
 
-import vekta.LandingSite;
+import vekta.terrain.LandingSite;
 import vekta.object.SpaceObject;
 import vekta.Vekta;
 import vekta.context.World;
 import vekta.menu.Menu;
-import vekta.menu.TakeoffOption;
+import vekta.menu.option.TakeoffOption;
 
 import static vekta.Vekta.getInstance;
 
@@ -28,9 +28,12 @@ public class LandingMenuHandle extends MenuHandle {
 		SpaceObject s = site.getParent();
 		v.textSize(32);
 		v.fill(100);
-		v.text("Welcome to", v.width / 2F, v.height / 4F);
+		v.text("Welcome to", v.width / 2F, v.height / 4F - 32);
 		v.textSize(48);
 		v.fill(s.getColor());
-		v.text(s.getName(), v.width / 2F, v.height / 4F + 64);
+		v.text(s.getName(), v.width / 2F, v.height / 4F + 32);
+		v.textSize(20);
+		v.fill(100);
+		v.text(site.getTerrain().getOverview(), v.width / 2F, v.height / 4F + 128);
 	}
 }

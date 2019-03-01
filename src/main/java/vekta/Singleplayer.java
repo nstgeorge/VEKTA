@@ -4,10 +4,13 @@ import processing.core.PVector;
 import processing.sound.LowPass;
 import vekta.context.PauseMenuContext;
 import vekta.context.World;
+import vekta.item.ModuleItem;
 import vekta.object.Planet;
 import vekta.object.PlayerShip;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
+import vekta.object.module.EngineModule;
+import vekta.object.module.RCSModule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,11 +75,15 @@ public class Singleplayer implements World {
 				new PVector(), // Position
 				new PVector(),    // Velocity
 				v.color(0, 255, 0),
-				0, .1F, 20,  // Control scheme, Speed, and Handling
+				0,  // Control scheme, Speed, and Handling
 				100 // Starting ammo
 		);
 		playerShip.getInventory().add(50); // Starting money
 		addObject(playerShip);
+
+		// TEMP
+		playerShip.getInventory().add(new ModuleItem(new EngineModule(5))); // Module upgrade for testing
+		playerShip.getInventory().add(new ModuleItem(new RCSModule(5))); // Module upgrade for testing
 	}
 
 	@Override
