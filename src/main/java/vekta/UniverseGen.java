@@ -9,7 +9,8 @@ import vekta.object.*;
 import static vekta.Vekta.*;
 
 public class UniverseGen {
-	private static final int MIN_SPAWN_DISTANCE = 5000; // Min passive spawn distance
+	private static final int MIN_POPULATE_DISTANCE = 1000; // Min initial object spawn distance
+	private static final float STAR_LIKELIHOOD = .7F;
 
 	private final float radius; // Max persistent object distance
 	private final int density;
@@ -25,13 +26,13 @@ public class UniverseGen {
 
 	public void populate() {
 		for(int i = 0; i < density; i++) {
-			createSystem(randomPos(getRadius() / 2, getRadius()));
+			createSystem(randomPos(MIN_POPULATE_DISTANCE, getRadius()));
 		}
 	}
 
 	public void spawnOccasional(PVector around) {
 		Vekta v = getInstance();
-		PVector pos = randomPos(MIN_SPAWN_DISTANCE, radius).add(around);
+		PVector pos = randomPos(getRadius() / 2, getRadius()).add(around);
 		float r = v.random(1);
 		if(r < .4F) {
 			Ship s = new PirateShip("YARRYACHT", PVector.random2D(), pos, new PVector(), v.color(220, 100, 0));
@@ -56,13 +57,24 @@ public class UniverseGen {
 		float centerPower = (float)Math.pow(10, order);
 		float centerMass = v.random(0.8F, 4) * centerPower;
 		float centerDensity = v.random(1, 2);
-		addObject(new GasGiant(
-				centerMass, // Mass
-				centerDensity,   // Radius
-				pos,  // Position
-				new PVector(),  // Velocity
-				v.color(v.random(100, 255), v.random(100, 255), v.random(100, 255))
-		));
+		if(v.random(0, 1) < STAR_LIKELIHOOD) {
+			addObject(new Star(
+					centerMass, // Mass
+					centerDensity, // Radius
+					pos,
+					new PVector(),
+					v.color(v.random(100, 255), v.random(150, 255), v.random(100, 255))
+			));
+		}
+		else {
+			addObject(new GasGiant(
+					centerMass, // Mass
+					centerDensity,   // Radius
+					pos,  // Position
+					new PVector(),  // Velocity
+					v.color(v.random(100, 255), v.random(100, 255), v.random(100, 255))
+			));
+		}
 
 		// Generate planets around body
 		int planets = (int)v.random(1, 8);
@@ -120,6 +132,6 @@ public class UniverseGen {
 	}
 
 	private PVector randomPos(float min, float max) {
-		return PVector.random2D().mult(getInstance().random(MIN_SPAWN_DISTANCE, max));
+		return PVector.random2D().mult(getInstance().random(min, max));
 	}
 }  

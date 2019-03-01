@@ -4,9 +4,10 @@ import processing.core.PVector;
 import processing.sound.LowPass;
 import vekta.context.PauseMenuContext;
 import vekta.context.World;
-import vekta.item.Item;
-import vekta.item.ItemType;
-import vekta.object.*;
+import vekta.object.Planet;
+import vekta.object.PlayerShip;
+import vekta.object.SpaceObject;
+import vekta.object.Targeter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +24,12 @@ public class Singleplayer implements World {
 
 	int planetCount;
 	boolean dead;
-	PVector pos;
-	float spd;
+	
+	PVector cameraPos;
+	float cameraSpd;
+	
 	int health;
 	int ammunition = 100;
-	String position;
 
 	PlayerShip playerShip;
 
@@ -47,6 +49,7 @@ public class Singleplayer implements World {
 	float shortDist;
 	float speed;
 	float closestMass;
+	String position;
 	String closestMassUnit;
 
 	@Override
@@ -74,16 +77,6 @@ public class Singleplayer implements World {
 		);
 		playerShip.getInventory().add(50); // Starting money
 		addObject(playerShip);
-		
-		Ship s = new CargoShip(
-				"CARGO",
-				new PVector(1, 0), // Heading
-				new PVector(100, 100), // Position
-				new PVector(),    // Velocity
-				v.color(0, 255, 0)
-		);
-		s.getInventory().add(new Item("Test", ItemType.COMMON));
-		addObject(s);
 	}
 
 	@Override
@@ -92,12 +85,16 @@ public class Singleplayer implements World {
 		v.background(0);
 
 		if(!dead) {
-			pos = playerShip.getPosition();
-			spd = playerShip.getVelocity().mag();
+			cameraPos = playerShip.getPosition();
+			cameraSpd = playerShip.getVelocity().mag();
 			// Camera follow
-			v.camera(pos.x, pos.y, (.07F * spd + .7F) * (v.height / 2F) / tan(PI * 30 / 180) * zoom, pos.x, pos.y, 0F,
-					0F, 1F, 0F);
+		} else {
+			cameraSpd = 0;
 		}
+		v.camera(cameraPos.x, cameraPos.y, (.07F * cameraSpd + .7F) * (v.height / 2F) / tan(PI * 30 / 180) * zoom, cameraPos.x, cameraPos.y, 0F,
+				0F, 1F, 0F);
+		
+		cameraPos = playerShip.getPosition();
 
 		boolean targeting = targetCt.cycle();
 		boolean spawning = spawnCt.cycle();
@@ -203,9 +200,14 @@ public class Singleplayer implements World {
 					closestMass = (float)round(closestObject.getMass() / 1.989e30F * 1000) / 1000;
 					closestMassUnit = "Suns";
 				}
-				closestObjectString = "Closest Object: " + closestObject.getName() + " - " + shortDist + "AU \nSpeed: " + (float)round(closestObject.getVelocity().mag() * 100) / 100 + "\nMass: " + closestMass + " " + closestMassUnit;
+				if(closestObject instanceof Planet) {
+					Planet closestPlanet = (Planet)closestObject;
+					closestObjectString = "Closest Object: " + closestObject.getName() + " - " + shortDist + "AU \nHabitable: " + (closestPlanet.isHabitable() ? "YES" : "NO") + "\nMass: " + closestMass + " " + closestMassUnit;
+				} else {
+					closestObjectString = "Closest Object: " + closestObject.getName() + " - " + shortDist + "AU \nSpeed: " + (float)round(closestObject.getVelocity().mag() * 100) / 100 + "\nMass: " + closestMass + " " + closestMassUnit;
+				}
 				// Closest object arrow
-				drawDial("Direction", closestObject.getPosition().sub(pos), 450, v.height - 65, 50, closestObject.getColor());
+				drawDial("Direction", closestObject.getPosition().sub(cameraPos), 450, v.height - 65, 50, closestObject.getColor());
 				v.stroke(closestObject.getColor());
 				v.fill(closestObject.getColor());
 			}
@@ -282,9 +284,9 @@ public class Singleplayer implements World {
 		shortDist = playerShip.getTarget() != null
 				? (float)round(playerShip.getPosition().dist(playerShip.getTarget().getPosition()) * 100) / 100
 				: 0;
-		speed = (float)round(spd * 100) / 100;
+		speed = (float)round(cameraSpd * 100) / 100;
 		ammunition = playerShip.getAmmo();
-		position = round(pos.x) + ", " + round(pos.y);
+		position = round(cameraPos.x) + ", " + round(cameraPos.y);
 	}
 
 	@Override
@@ -324,7 +326,7 @@ public class Singleplayer implements World {
 
 	public void setDead() {
 		dead = true;
-		lowPass.process(Resources.getMusic(), 800);
+		if(Resources.getMusic() != null) lowPass.process(Resources.getMusic(), 800);
 		Resources.stopSound("engine");
 		Resources.playSound("death");
 	}

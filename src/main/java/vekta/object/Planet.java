@@ -25,7 +25,7 @@ public abstract class Planet extends SpaceObject {
 		this.name = generatePlanetName();
 		this.mass = mass;
 		this.density = density;
-		
+
 		updateRadius();
 	}
 
@@ -44,7 +44,7 @@ public abstract class Planet extends SpaceObject {
 		// TODO: check getParent() once added to SpaceObject
 		return getColor() != s.getColor() && super.collidesWith(s);
 	}
-	
+
 	@Override
 	public void onDestroy(SpaceObject s) {
 		//println("Planet destroyed with radius: " + getRadius());
@@ -109,4 +109,6 @@ public abstract class Planet extends SpaceObject {
 	public float getDensity() {
 		return density;
 	}
+
+	public abstract boolean isHabitable();
 }

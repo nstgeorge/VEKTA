@@ -8,11 +8,13 @@ import vekta.LandingSite;
  */
 public class TerrestrialPlanet extends Planet {
 	private final LandingSite site;
+	private final boolean habitable;
 
-	public TerrestrialPlanet(float mass, float density, PVector position, PVector velocity, int color) {
+	public TerrestrialPlanet(float mass, float density, boolean habitable, PVector position, PVector velocity, int color) {
 		super(mass, density, position, velocity, color);
 
-		site = new LandingSite(this);
+		this.habitable = habitable;
+		this.site = new LandingSite(this);
 	}
 
 	public LandingSite getLandingSite() {
@@ -20,9 +22,14 @@ public class TerrestrialPlanet extends Planet {
 	}
 
 	@Override
+	public boolean isHabitable() {
+		return habitable;
+	}
+
+	@Override
 	public void onCollide(SpaceObject s) {
 		// Check if landing
-		if(s instanceof PlayerShip) { // TODO: create `Lander` interface for event handling
+		if(isHabitable()/*TODO: custom menu for uninhabitable planets*/ && s instanceof PlayerShip) { // TODO: create `Lander` interface for event handling
 			PlayerShip ship = (PlayerShip)s;
 			if(ship.isLanding()) {
 				if(site.land(ship)) {
@@ -34,7 +41,8 @@ public class TerrestrialPlanet extends Planet {
 		super.onCollide(s);
 	}
 
-	@Override public void onDestroy(SpaceObject s) {
+	@Override
+	public void onDestroy(SpaceObject s) {
 		super.onDestroy(s);
 
 		// If something landed on this planet, destroy it as well
