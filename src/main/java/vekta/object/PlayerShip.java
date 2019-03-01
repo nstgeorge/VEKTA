@@ -118,7 +118,7 @@ public class PlayerShip extends Ship implements Targeter, Upgradeable {
 
 	@Override
 	public void draw() {
-		super.draw();
+		drawShip(SHIP_SHAPE.DEFAULT);
 		Vekta v = getInstance();
 
 		// Draw influence vector

@@ -1,9 +1,11 @@
 package vekta.object;
 
+import processing.core.PApplet;
 import processing.core.PVector;
 import vekta.Counter;
 import vekta.Vekta;
 
+import static processing.core.PConstants.CLOSE;
 import static vekta.Vekta.getInstance;
 
 public class CargoShip extends Ship {
@@ -32,5 +34,10 @@ public class CargoShip extends Ship {
 		}
 		accelerate(thrust);
 		turn(turn);
+	}
+
+	@Override
+	public void draw() {
+		drawShip(SHIP_SHAPE.CARGO_SHIP);
 	}
 }  
