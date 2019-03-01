@@ -4,8 +4,8 @@ import vekta.Vekta;
 
 public enum ItemType {
 	COMMON(0xFFCCCCCC, 1),
-	RARE(0xFFFFAA88, 2),
-	LEGENDARY(0xFFAA88FF, 10);
+	RARE(0xFFFFAA88, 5),
+	LEGENDARY(0xFFAA88FF, 20);
 
 	private final int color;
 	private final float priceModifier;

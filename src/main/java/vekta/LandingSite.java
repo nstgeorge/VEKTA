@@ -13,6 +13,7 @@ import vekta.object.Spaceship;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import static vekta.Vekta.*;
 
 /**
@@ -104,6 +105,6 @@ public class LandingSite {
 	 * Compute the launch speed (subject to rebalancing)
 	 */
 	private float getLaunchSpeed() {
-		return (float)Math.sqrt((2*Vekta.G * (parent.getMass() / SCALE)) / (parent.getRadius() * SCALE));
+		return (float)Math.sqrt((2 * G * (parent.getMass() / SCALE)) / (parent.getRadius() * SCALE));
 	}
 }

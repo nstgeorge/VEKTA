@@ -4,7 +4,9 @@ import processing.core.PVector;
 import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.item.ItemType;
+import vekta.object.GasGiant;
 import vekta.object.Planet;
+import vekta.object.TerrestrialPlanet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +41,7 @@ public class UniverseGen {
 		float centerPower = (float)Math.pow(10, order);
 		float centerMass = v.random(0.8F, 4) * centerPower;
 		float centerDensity = v.random(1, 2);
-		system.add(setupPlanet(new Planet(
+		system.add(setupPlanet(new GasGiant(
 				centerMass, // Mass
 				centerDensity,   // Radius
 				pos,  // Position
@@ -56,7 +58,7 @@ public class UniverseGen {
 			float mass = v.random(0.05F, 0.5F) * power;
 			float density = v.random(4, 8);
 			float angle = v.random(360);
-			system.add(setupPlanet(new Planet(
+			system.add(setupPlanet(new TerrestrialPlanet(
 					mass, // Mass
 					density,   // Density
 					new PVector(radiusLoc, 0).rotate(angle).add(pos),  // Coords
@@ -67,7 +69,11 @@ public class UniverseGen {
 		return system;
 	}
 
-	private Planet setupPlanet(Planet planet) {
+	private Planet setupPlanet(GasGiant planet) {
+		return planet;
+	}
+	
+	private Planet setupPlanet(TerrestrialPlanet planet) {
 		Vekta v = Vekta.getInstance();
 		LandingSite site = planet.getLandingSite();
 		Inventory inv = site.getInventory();
