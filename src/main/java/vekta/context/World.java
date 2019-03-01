@@ -24,6 +24,6 @@ public interface World extends Context {
 	void addObject(Object object);
 
 	void removeObject(Object object);
-
+	
 	void playSoundAt(String sound, PVector location);
 }  

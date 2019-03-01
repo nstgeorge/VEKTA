@@ -19,7 +19,7 @@ import static vekta.Vekta.*;
 public class Singleplayer implements World {
 
 	private static final float MAX_CAMERA_Y = 5000;
-	
+
 	private static int nextID = 0;
 
 	// Low pass filter
@@ -27,10 +27,10 @@ public class Singleplayer implements World {
 
 	int planetCount;
 	boolean dead;
-	
+
 	PVector cameraPos;
 	float cameraSpd;
-	
+
 	int health;
 	int ammunition = 100;
 
@@ -80,7 +80,7 @@ public class Singleplayer implements World {
 		);
 		playerShip.getInventory().add(50); // Starting money
 		addObject(playerShip);
-		
+
 		Ship ship = new CargoShip(
 				"Test Ship",
 				new PVector(1, 0), // Heading
@@ -105,12 +105,13 @@ public class Singleplayer implements World {
 			cameraPos = playerShip.getPosition();
 			cameraSpd = playerShip.getVelocity().mag();
 			// Camera follow
-		} else {
+		}
+		else {
 			cameraSpd = 0;
 		}
 		v.camera(cameraPos.x, cameraPos.y, min(MAX_CAMERA_Y, (.07F * cameraSpd + .7F) * (v.height / 2F) / tan(PI * 30 / 180) * zoom), cameraPos.x, cameraPos.y, 0F,
 				0F, 1F, 0F);
-		
+
 		cameraPos = playerShip.getPosition();
 
 		boolean targeting = targetCt.cycle();
@@ -231,7 +232,8 @@ public class Singleplayer implements World {
 				if(closestObject instanceof Planet) {
 					Planet closestPlanet = (Planet)closestObject;
 					closestObjectString = "Closest Object: " + closestObject.getName() + " - " + shortDist + "AU \nHabitable: " + (closestPlanet.isHabitable() ? "YES" : "NO") + "\nMass: " + closestMass + " " + closestMassUnit;
-				} else {
+				}
+				else {
 					closestObjectString = "Closest Object: " + closestObject.getName() + " - " + shortDist + "AU \nSpeed: " + (float)round(closestObject.getVelocity().mag() * 100) / 100 + "\nMass: " + closestMass + " " + closestMassUnit;
 				}
 				// Closest object arrow
@@ -243,7 +245,8 @@ public class Singleplayer implements World {
 			if(playerShip.isLanding()) {
 				//textSize(24);
 				v.text(":: Landing Autopilot ::", 50, v.height - 150);
-			} else if(TargetingModule.isUsingTargeter()) {
+			}
+			else if(TargetingModule.isUsingTargeter()) {
 				v.text(":: Targeting Computer: planet [1], ship [2] ::", 50, v.height - 150);
 			}
 		}
@@ -350,7 +353,8 @@ public class Singleplayer implements World {
 
 	public void setDead() {
 		dead = true;
-		if(Resources.getMusic() != null) lowPass.process(Resources.getMusic(), 800);
+		if(Resources.getMusic() != null)
+			lowPass.process(Resources.getMusic(), 800);
 		Resources.stopSound("engine");
 		Resources.playSound("death");
 	}
@@ -360,7 +364,9 @@ public class Singleplayer implements World {
 		Vekta.startWorld(new Singleplayer());
 	}
 
-	public PlayerShip getPlayerShip() { return playerShip; }
+	public PlayerShip getPlayerShip() {
+		return playerShip;
+	}
 
 	@Override
 	public void addObject(Object object) {
@@ -390,13 +396,17 @@ public class Singleplayer implements World {
 
 		// Pan
 		float pan = (MAX_PAN_DISTANCE - distanceX) / MAX_PAN_DISTANCE;
-		if(pan < -1) pan = -1;
-		if(pan >  1) pan =  1;
+		if(pan < -1)
+			pan = -1;
+		if(pan > 1)
+			pan = 1;
 
 		// Volume
 		float volume = (MAX_AUDITORY_DISTANCE - distance) / MAX_AUDITORY_DISTANCE;
-		if(volume < 0) volume = 0;
-		if(volume > 1) volume = 1;
+		if(volume < 0)
+			volume = 0;
+		if(volume > 1)
+			volume = 1;
 
 		System.out.println("Pan: " + pan);
 		System.out.println("Volume: " + volume);
@@ -404,5 +414,6 @@ public class Singleplayer implements World {
 		Resources.setSoundVolume(sound, volume);
 		Resources.setSoundPan(sound, pan);
 		Resources.playSound(sound);
+		Resources.resetSoundVolumeAndPan(sound);
 	}
 }
