@@ -124,6 +124,22 @@ public class Resources {
 		}
 	}
 
+	public static void setSoundVolume(String key, float volume) {
+		SoundFile sound = getSound(key);
+		if(sound != null) {
+			sound.amp(volume);
+		} else {
+			System.out.println("Sound dont exist");
+		}
+	}
+
+	public static void setSoundPan(String key, float pan) {
+		SoundFile sound = getSound(key);
+		if(sound != null) {
+			sound.pan(pan);
+		}
+	}
+
 	public static void updateMusicVolume() {
 		if(currentMusic != null) {
 			currentMusic.amp(Settings.get("music"));

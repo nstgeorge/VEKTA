@@ -18,6 +18,7 @@ import java.util.List;
 import static vekta.Vekta.*;
 
 public class Singleplayer implements World {
+
 	private static int nextID = 0;
 
 	// Low pass filter
@@ -342,6 +343,8 @@ public class Singleplayer implements World {
 	public void restart() {
 		Vekta.startWorld(new Singleplayer());
 	}
+
+	public PlayerShip getPlayerShip() { return playerShip; }
 
 	@Override
 	public void addObject(Object object) {
