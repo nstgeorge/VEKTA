@@ -73,10 +73,12 @@ public class PlayerShip extends Ship implements Targeter, Upgradeable {
 		return true;
 	}
 
+	@Override
 	public List<Module> getModules() {
 		return modules;
 	}
 
+	@Override
 	public List<Module> findUpgrades() {
 		List<Module> list = new ArrayList<>();
 		for(Item item : getInventory()) {
@@ -126,8 +128,6 @@ public class PlayerShip extends Ship implements Targeter, Upgradeable {
 
 	@Override
 	public void onUpdate() {
-		//		accelerate(thrust);
-		//		turn(turn);
 		for(Module module : getModules()) {
 			module.accelerate(this, thrust);
 			module.turn(this, turn);
@@ -230,7 +230,7 @@ public class PlayerShip extends Ship implements Targeter, Upgradeable {
 	public void openMenu() {
 		MenuHandle handle = new ObjectMenuHandle(this, getWorld());
 		Menu menu = new Menu(handle);
-		menu.add(new UpgradeMenuOption(this, findUpgrades()));
+		menu.add(new UpgradeMenuOption(this));
 		menu.add(handle.getDefault());
 		setContext(menu);
 	}

@@ -43,11 +43,16 @@ public class MenuHandle {
 
 	public void render(Menu menu) {
 		Vekta v = getInstance();
-		v.clear(); // TODO: find a way to avoid clearing without creating artifacts
+		v.clear();
 		v.hint(DISABLE_DEPTH_TEST);
 		v.camera();
 		v.noLights();
-
+		
+		// TODO
+//		// Partially fill in background
+//		v.fill(v.color(100));
+//		v.rect((v.width - buttonWidth) / 2F, (v.width + buttonWidth) / 2F, 0, v.height);
+		
 		v.stroke(0);
 		v.fill(255);
 		v.textAlign(CENTER, CENTER);
