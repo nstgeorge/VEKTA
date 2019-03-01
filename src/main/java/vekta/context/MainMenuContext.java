@@ -1,12 +1,13 @@
-package vekta;
+package vekta.context;
 
 import processing.core.PVector;
 import processing.data.IntDict;
 import processing.data.StringDict;
+import vekta.*;
 
 import static vekta.Vekta.*;
 
-class MainMenu implements Context {
+public class MainMenuContext implements Context {
 	String[] modes = {"Singleplayer"};
 	int selectedMode;
 	Hyperspace hyperspace;
@@ -19,7 +20,7 @@ class MainMenu implements Context {
 
 	final int SETTINGS_SPACING = 50;
 
-	public MainMenu() {
+	public MainMenuContext() {
 		Vekta v = getInstance();
 		Resources.setMusic("theme");
 		hyperspace = new Hyperspace(new PVector(v.width / 2F, v.height / 2F - 100), 0.1F, 170);
@@ -94,7 +95,7 @@ class MainMenu implements Context {
 				v.fill(UI_COLOR);
 			v.text(key, 500, 200 + (optionIndex * SETTINGS_SPACING));
 			for(String option : options) {
-				if(getSetting(key.toLowerCase()) == settingsDefinitions.get(option)) {
+				if(Settings.get(key.toLowerCase()) == settingsDefinitions.get(option)) {
 					v.text(option, v.width - 500, 200 + (optionIndex * SETTINGS_SPACING));
 					selectedOptions[optionIndex] = settingsDefinitions.get(option);
 				}
@@ -102,7 +103,7 @@ class MainMenu implements Context {
 			v.fill(255, 255, 255);
 			optionIndex++;
 		}
-		drawButton("Save", 200 + ((optionIndex + 1) * SETTINGS_SPACING), selectedSetting == settingsOptions.size());
+		drawButton("Back", 200 + ((optionIndex + 1) * SETTINGS_SPACING), selectedSetting == settingsOptions.size());
 		v.textSize(16);
 		v.fill(255, 255, 255);
 		v.text("X to cycle options, ESC to go back", v.width / 2F, 200 + ((optionIndex + 2) * SETTINGS_SPACING));
@@ -118,7 +119,7 @@ class MainMenu implements Context {
 			v.stroke(UI_COLOR);
 		v.fill(1);
 		v.rectMode(CENTER);
-		v.rect(v.width / 2F, yPos, 200, 50);
+		v.rect(v.width / 2F, yPos, 200 + (selected ? 10 : 0), 50);
 		// Text ----------------------
 		v.textFont(bodyFont);
 		v.stroke(0);
@@ -129,8 +130,7 @@ class MainMenu implements Context {
 
 	void updateSetting() {
 		selectedOptions[selectedSetting] = (selectedOptions[selectedSetting] + 1) % settingsOptions.valueArray()[selectedSetting].split(",").length;
-		setSetting(settingsOptions.keyArray()[selectedSetting].toLowerCase(), selectedOptions[selectedSetting]);
-		// Quick! Turn down the music if the player wants it gone!
+		Settings.set(settingsOptions.keyArray()[selectedSetting].toLowerCase(), selectedOptions[selectedSetting]);
 		Resources.updateMusicVolume();
 	}
 
@@ -185,8 +185,7 @@ class MainMenu implements Context {
 			}
 			else {
 				if(selectedSetting == settingsOptions.size()) {
-					// Save the settings
-					saveSettings();
+					// Settings autosave
 					inSettings = false;
 				}
 				else {

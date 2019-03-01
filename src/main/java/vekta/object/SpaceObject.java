@@ -1,11 +1,11 @@
-package vekta;
+package vekta.object;
 
 import processing.core.*;
+import vekta.Vekta;
 
 import java.util.List;
 
 public abstract class SpaceObject {
-
 	private static final float MAX_INFLUENCE = 2F;
 
 	private int id;

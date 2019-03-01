@@ -1,13 +1,14 @@
-package vekta;
+package vekta.object;
 
 import processing.core.PVector;
+import vekta.Vekta;
 
 import static vekta.Vekta.*;
 
 /**
  * Model for a planet.
  */
-class Planet extends SpaceObject {
+public abstract class Planet extends SpaceObject {
 	private static final float MIN_SPLIT_RADIUS = 6;
 	private static final float SPLIT_OFFSET_SCALE = .25F;
 	private static final float SPLIT_VELOCITY_SCALE = 1;
@@ -19,15 +20,12 @@ class Planet extends SpaceObject {
 
 	private float radiusCache;
 
-	private final LandingSite site;
-
 	public Planet(float mass, float density, PVector position, PVector velocity, int color) {
 		super(position, velocity, color);
 		this.name = generatePlanetName();
 		this.mass = mass;
 		this.density = density;
-
-		site = new LandingSite(this);
+		
 		updateRadius();
 	}
 
@@ -46,22 +44,7 @@ class Planet extends SpaceObject {
 		// TODO: check getParent() once added to SpaceObject
 		return getColor() != s.getColor() && super.collidesWith(s);
 	}
-
-	@Override
-	public void onCollide(SpaceObject s) {
-		// Attempt landing
-		if(s instanceof Spaceship) { // TODO: create `Lander` interface for event handling
-			Spaceship ship = (Spaceship)s;
-			if(ship.isLanding()) {
-				if(site.land(ship)) {
-					return;
-				}
-			}
-		}
-		// Oof
-		super.onCollide(s);
-	}
-
+	
 	@Override
 	public void onDestroy(SpaceObject s) {
 		//println("Planet destroyed with radius: " + getRadius());
@@ -79,8 +62,9 @@ class Planet extends SpaceObject {
 			PVector base = getPosition().copy().sub(s.getPosition()).normalize().rotate(90);
 			PVector offset = base.copy().mult(getRadius() * SPLIT_OFFSET_SCALE);
 			PVector splitVelocity = base.copy().mult(SPLIT_VELOCITY_SCALE);
-			Planet a = new Planet(newMass, getDensity(), getPosition().copy().add(offset), newVelocity.copy().add(splitVelocity), getColor());
-			Planet b = new Planet(newMass, getDensity(), getPosition().copy().sub(offset), newVelocity.copy().sub(splitVelocity), getColor());
+			// TODO: change depending on type of planet
+			Planet a = new TerrestrialPlanet(newMass, getDensity(), getPosition().copy().add(offset), newVelocity.copy().add(splitVelocity), getColor());
+			Planet b = new TerrestrialPlanet(newMass, getDensity(), getPosition().copy().sub(offset), newVelocity.copy().sub(splitVelocity), getColor());
 			if(!s.collidesWith(a)) {
 				mass -= a.mass;
 				addObject(a);
@@ -95,12 +79,6 @@ class Planet extends SpaceObject {
 		if(mass > 0 && s instanceof Planet) {
 			Planet p = (Planet)s;
 			p.setMass(p.getMass() + mass * SPLIT_MASS_ABSORB);
-		}
-
-		// If something landed on this planet, destroy it as well
-		SpaceObject landed = site.getLanded();
-		if(landed != null) {
-			landed.onDestroy(s);
 		}
 	}
 
@@ -130,9 +108,5 @@ class Planet extends SpaceObject {
 
 	public float getDensity() {
 		return density;
-	}
-
-	public LandingSite getLandingSite() {
-		return site;
 	}
 }

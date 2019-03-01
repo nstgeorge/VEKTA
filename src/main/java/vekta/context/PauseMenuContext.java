@@ -1,18 +1,21 @@
-package vekta;
+package vekta.context;
+
+import vekta.Resources;
+import vekta.Vekta;
 
 import static vekta.Vekta.*;
 
 /**
  * Pause menu implementation as a Context. Eventually this can be converted over to use a Menu for additional flexibility.
  */
-class PauseMenu implements Context {
+public class PauseMenuContext implements Context {
 	private final World world;
 
 	// Pause menu options
 	private final String[] pauseMenu = {"Continue", "Restart", "Quit to Menu"};
 	private int selected = 0;
 
-	public PauseMenu(World world) {
+	public PauseMenuContext(World world) {
 		this.world = world;
 	}
 
@@ -56,7 +59,7 @@ class PauseMenu implements Context {
 			v.stroke(UI_COLOR);
 		v.fill(1);
 		v.rectMode(CENTER);
-		v.rect(v.width / 8F, yPos, 200, 50);
+		v.rect(v.width / 8F, yPos, 200 + (selected ? 10 : 0), 50);
 		// Text ----------------------
 		v.textFont(bodyFont);
 		v.stroke(0);

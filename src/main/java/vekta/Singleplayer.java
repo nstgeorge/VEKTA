@@ -2,13 +2,18 @@ package vekta;
 
 import processing.core.PVector;
 import processing.sound.LowPass;
+import vekta.context.PauseMenuContext;
+import vekta.context.World;
+import vekta.object.Planet;
+import vekta.object.SpaceObject;
+import vekta.object.Spaceship;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static vekta.Vekta.*;
 
-class Singleplayer implements World {
+public class Singleplayer implements World {
 	private static int nextID = 0;
 
 	// Low pass filter
@@ -25,7 +30,7 @@ class Singleplayer implements World {
 	float minDistSq = Float.POSITIVE_INFINITY;
 
 	Spaceship playerShip;
-	SpaceObject closestObject; // TODO: move this logic into Spaceship instances
+	public SpaceObject closestObject; // TODO: move this logic into Spaceship instances
 
 	float zoom = 1; // Camera zoom
 
@@ -87,7 +92,7 @@ class Singleplayer implements World {
 			v.camera(pos.x, pos.y, (.07F * spd + .7F) * (v.height / 2F) / tan(PI * 30 / 180) * zoom, pos.x, pos.y, 0F,
 					0F, 1F, 0F);
 		}
-
+		
 		closestObject = null;
 		minDistSq = Float.POSITIVE_INFINITY;
 		planetCount = 0;
@@ -142,7 +147,7 @@ class Singleplayer implements World {
 			v.rect(-1, v.height - 130, v.width + 1, v.height + 1);
 			v.fill(UI_COLOR);
 			// Text - Far right
-			v.text("Health = " + health + "\nAmmunition = " + ammunition, v.width - 300, v.height - 100);
+			v.text("Health = " + health + "\nAmmunition = " + ammunition + "\nGold = " + playerShip.getInventory().getMoney(), v.width - 300, v.height - 100);
 			// Ship heading indicator
 			drawDial("Heading", playerShip.getHeading(), v.width - 370, v.height - 65, 50, v.color(0, 255, 0));
 			drawDial("Velocity", playerShip.getVelocity().copy(), v.width - 500, v.height - 65, 50, v.color(0, 255, 0));
@@ -254,7 +259,7 @@ class Singleplayer implements World {
 		}
 		else {
 			if(key == ESC) {
-				setContext(new PauseMenu(this));
+				setContext(new PauseMenuContext(this));
 			}
 			if(key == 'k') {
 				dead = true;

@@ -1,6 +1,6 @@
-package vekta;
+package vekta.context;
 
-interface World extends Context {
+public interface World extends Context {
 	/**
 	 * Initializes all required variables
 	 */

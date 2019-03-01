@@ -1,13 +1,15 @@
-package vekta;
+package vekta.object;
 
 import processing.core.*;
+import vekta.*;
+import vekta.item.Inventory;
 
 import java.util.List;
 
 import static processing.core.PConstants.TRIANGLES;
 import static vekta.Vekta.*;
 
-class Spaceship extends SpaceObject {
+public class Spaceship extends SpaceObject {
 	// Default Spaceship stuff
 	private static final int HANDLING_SCALE = 1000;
 	private static final float LANDING_SPEED = 1F;
@@ -147,7 +149,7 @@ class Spaceship extends SpaceObject {
 		}
 	}
 
-	void keyReleased(char key) {
+	public void keyReleased(char key) {
 		if((key == 'w' || key == 's') && controlScheme == 0) {
 			Resources.stopSound("engine");
 			thrust = 0;

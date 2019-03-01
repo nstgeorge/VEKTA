@@ -1,16 +1,26 @@
 package vekta;
 
 import processing.core.PVector;
+import vekta.item.Inventory;
+import vekta.item.Item;
+import vekta.menu.InfoOption;
+import vekta.menu.Menu;
+import vekta.menu.handle.LandingMenuHandle;
+import vekta.menu.handle.MenuHandle;
+import vekta.menu.TradeMenuOption;
+import vekta.object.SpaceObject;
+import vekta.object.Spaceship;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import static vekta.Vekta.*;
 
 /**
  * A landing site for one spacecraft-like object.
  * State management for landing sites should be handled or proxied through this class.
  */
-class LandingSite {
+public class LandingSite {
 	private static final float ITEM_MARKUP = 1.5F; // Markup after buying/selling to a landing site
 
 	private final Inventory inventory = new Inventory();
@@ -95,6 +105,6 @@ class LandingSite {
 	 * Compute the launch speed (subject to rebalancing)
 	 */
 	private float getLaunchSpeed() {
-		return (float)Math.sqrt((2*Vekta.G * (parent.getMass() / SCALE)) / (parent.getRadius() * SCALE));
+		return (float)Math.sqrt((2 * G * (parent.getMass() / SCALE)) / (parent.getRadius() * SCALE));
 	}
 }
