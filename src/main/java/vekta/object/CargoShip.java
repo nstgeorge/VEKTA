@@ -6,7 +6,7 @@ import vekta.Counter;
 public class CargoShip extends Ship {
 	// CargoShip defaults
 	private static final float DEF_MASS = 25000;
-	private static final float DEF_RADIUS = 8;
+	private static final float DEF_RADIUS = 15;
 	private static final float DEF_SPEED = .01F;
 	private static final float DEF_TURN = 1;
 

@@ -111,30 +111,30 @@ public abstract class Ship extends SpaceObject {
 		v.translate(position.x, position.y);
 		v.rotate(theta);
 		v.beginShape();
-		switch(shape) {
-		case CARGO_SHIP:
-			v.vertex(0, -radius * 2 - 5);
-			v.vertex(-radius, -radius * 2);
-			v.vertex(-radius, radius * 2);
-			v.vertex(radius, radius * 2);
-			v.vertex(radius, -radius * 2);
-			break;
-		case FIGHTER:
-			v.vertex(0, -radius * 2);
-			// Draw left spike
-			v.vertex(-radius, radius * 2);
-			v.vertex(-radius, -radius / 3.0F);
-			v.vertex(-radius, radius * 2);
-			// Draw right spike
-			v.vertex(radius, radius * 2);
-			v.vertex(radius, -radius / 3.0F);
-			v.vertex(radius, radius * 2);
-			break;
-		default:
-			v.vertex(0, -radius * 2);
-			v.vertex(-radius, radius * 2);
-			v.vertex(radius, radius * 2);
-			break;
+		switch (shape) {
+			case CARGO_SHIP:
+				v.vertex(0, -radius * 2 - (radius * .7F));
+				v.vertex(-radius, -radius * 2);
+				v.vertex(-radius, radius * 2);
+				v.vertex(radius, radius * 2);
+				v.vertex(radius, -radius * 2);
+				break;
+			case FIGHTER:
+				v.vertex(0, -radius * 2);
+				// Draw left spike
+				v.vertex(-radius, radius * 2);
+				v.vertex(-radius, -radius / 3.0F);
+				v.vertex(-radius, radius * 2);
+				// Draw right spike
+				v.vertex(radius, radius * 2);
+				v.vertex(radius, -radius / 3.0F);
+				v.vertex(radius, radius * 2);
+				break;
+			default:
+				v.vertex(0, -radius * 2);
+				v.vertex(-radius, radius * 2);
+				v.vertex(radius, radius * 2);
+				break;
 		}
 		v.endShape(CLOSE);
 		v.popMatrix();
@@ -145,4 +145,4 @@ public abstract class Ship extends SpaceObject {
 		CARGO_SHIP,
 		FIGHTER,
 	}
-}  
+}
