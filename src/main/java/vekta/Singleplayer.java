@@ -5,20 +5,21 @@ import processing.sound.LowPass;
 import vekta.context.PauseMenuContext;
 import vekta.context.World;
 import vekta.item.ModuleItem;
-import vekta.object.Planet;
-import vekta.object.PlayerShip;
-import vekta.object.SpaceObject;
-import vekta.object.Targeter;
-import vekta.object.module.EngineModule;
-import vekta.object.module.RCSModule;
+import vekta.object.*;
+import vekta.object.module.HyperdriveModule;
+import vekta.object.module.TargetingModule;
+import vekta.object.module.TractorBeamModule;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static vekta.Vekta.*;
 
 public class Singleplayer implements World {
 
+	private static final float MAX_CAMERA_Y = 5000;
+	
 	private static int nextID = 0;
 
 	// Low pass filter
@@ -79,10 +80,20 @@ public class Singleplayer implements World {
 		);
 		playerShip.getInventory().add(50); // Starting money
 		addObject(playerShip);
+		
+		Ship ship = new CargoShip(
+				"Test Ship",
+				new PVector(1, 0), // Heading
+				new PVector(500, 500), // Position
+				new PVector(),    // Velocity
+				v.color(255, 255, 255)
+		);
+		ship.getInventory().add(new ModuleItem(new HyperdriveModule(1)));
+		addObject(ship);
 
 		// TEMP
-		playerShip.getInventory().add(new ModuleItem(new EngineModule(5))); // Module upgrade for testing
-		playerShip.getInventory().add(new ModuleItem(new RCSModule(5))); // Module upgrade for testing
+		playerShip.getInventory().add(new ModuleItem(new HyperdriveModule(1))); // Hyperdrive upgrade for testing
+		playerShip.getInventory().add(new ModuleItem(new TractorBeamModule(1))); // Tractor beam upgrade for testing
 	}
 
 	@Override
@@ -97,7 +108,7 @@ public class Singleplayer implements World {
 		} else {
 			cameraSpd = 0;
 		}
-		v.camera(cameraPos.x, cameraPos.y, (.07F * cameraSpd + .7F) * (v.height / 2F) / tan(PI * 30 / 180) * zoom, cameraPos.x, cameraPos.y, 0F,
+		v.camera(cameraPos.x, cameraPos.y, min(MAX_CAMERA_Y, (.07F * cameraSpd + .7F) * (v.height / 2F) / tan(PI * 30 / 180) * zoom), cameraPos.x, cameraPos.y, 0F,
 				0F, 1F, 0F);
 		
 		cameraPos = playerShip.getPosition();
@@ -115,23 +126,27 @@ public class Singleplayer implements World {
 			}
 
 			// Run on targeting loop
-			if(targeting && s instanceof Targeter) {
-				Targeter t = (Targeter)s;
-				SpaceObject target = t.getTarget();
-				if(t.shouldResetTarget()) {
-					float minDistSq = Float.POSITIVE_INFINITY;
-					// Search for new targets
-					for(SpaceObject other : objects) {
-						if(other != t && t.isValidTarget(other)) {
-							float distSq = s.getPosition().sub(other.getPosition()).magSq();
-							if(distSq < minDistSq) {
-								minDistSq = distSq;
-								target = other;
+			if(targeting) {
+				Collection<Targeter> ts = s.getTargeters();
+				if(ts != null) {
+					for(Targeter t : ts) {
+						SpaceObject target = t.getTarget();
+						if(t.shouldResetTarget()) {
+							float minDistSq = Float.POSITIVE_INFINITY;
+							// Search for new targets
+							for(SpaceObject other : objects) {
+								if(other != t && t.isValidTarget(other)) {
+									float distSq = s.getPosition().sub(other.getPosition()).magSq();
+									if(distSq < minDistSq) {
+										minDistSq = distSq;
+										target = other;
+									}
+								}
 							}
 						}
+						t.setTarget(target);
 					}
 				}
-				t.setTarget(target);
 			}
 
 			// Run on spawning loop
@@ -150,8 +165,15 @@ public class Singleplayer implements World {
 			s.applyInfluenceVector(objects);
 			for(SpaceObject other : objects) {
 				if(s != other) {
-					checkCollision(s, other);
-					checkCollision(other, s);
+					// Check both collisions before firing events (prevents race condition)
+					boolean collides1 = s.collidesWith(other);
+					boolean collides2 = other.collidesWith(s);
+					if(collides1) {
+						s.onCollide(other);
+					}
+					if(collides2) {
+						other.onCollide(s);
+					}
 				}
 			}
 			s.draw();
@@ -221,7 +243,7 @@ public class Singleplayer implements World {
 			if(playerShip.isLanding()) {
 				//textSize(24);
 				v.text(":: Landing Autopilot ::", 50, v.height - 150);
-			} else if(playerShip.isUsingTargeter()) {
+			} else if(TargetingModule.isUsingTargeter()) {
 				v.text(":: Targeting Computer: Nearest (p)lanet, nearest s(h)ip? ::", 50, v.height - 150);
 			}
 		}
@@ -245,12 +267,6 @@ public class Singleplayer implements World {
 			v.text("X TO RETRY", v.width / 2F, (v.height / 2F) + 97);
 		}
 		v.hint(ENABLE_DEPTH_TEST);
-	}
-
-	private void checkCollision(SpaceObject a, SpaceObject b) {
-		if(a.collidesWith(b)) {
-			a.onCollide(b);
-		}
 	}
 
 	private void drawDial(String name, PVector info, int locX, int locY, int radius, int c) {
@@ -329,7 +345,7 @@ public class Singleplayer implements World {
 
 	@Override
 	public void mouseWheel(int amount) {
-		zoom = Vekta.max(.1F, Vekta.min(3, zoom * (1 + amount * .1F)));
+		zoom = max(.1F, min(3, zoom * (1 + amount * .1F)));
 	}
 
 	public void setDead() {

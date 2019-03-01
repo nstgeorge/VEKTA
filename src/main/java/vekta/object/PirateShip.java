@@ -4,6 +4,9 @@ import processing.core.PVector;
 import vekta.Counter;
 import vekta.Resources;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import static vekta.Vekta.*;
 
 public class PirateShip extends Ship implements Targeter {
@@ -27,6 +30,11 @@ public class PirateShip extends Ship implements Targeter {
 	}
 
 	@Override
+	public Collection<Targeter> getTargeters() {
+		return Collections.singleton(this);
+	}
+
+	@Override
 	public SpaceObject getTarget() {
 		return target;
 	}
@@ -42,6 +50,10 @@ public class PirateShip extends Ship implements Targeter {
 
 		// TEMP: prevent random off-screen shooting noises until we have a clean way to ignore distant sounds
 		return obj instanceof PlayerShip;
+	}
+
+	@Override public boolean isLanding() {
+		return false;
 	}
 
 	@Override
@@ -74,7 +86,7 @@ public class PirateShip extends Ship implements Targeter {
 
 	@Override
 	public void draw() {
-		drawShip(SHIP_SHAPE.FIGHTER);
+		drawShip(ShipModelType.FIGHTER);
 	}
 
 	private void fireProjectile() {

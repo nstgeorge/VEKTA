@@ -25,10 +25,11 @@ public class Vekta extends PApplet {
 	public static Context mainMenu;
 
 	private static Context context;
+	private static Context nextContext;
 
 	// Game-balancing variables and visual settings
 	public static final float G = 6.674e-11F;
-	public static final  float SCALE = 3e8F;
+	public static final float SCALE = 3e8F;
 	public static final float MAX_G_DISTANCE = 2000;
 	public static final float MAX_G_FORCE = 2F;
 	public static final int MAX_PLANETS = 40;
@@ -50,7 +51,7 @@ public class Vekta extends PApplet {
 
 	public void setup() {
 		instance = this;
-		
+
 		DEF_ZOOM = (height / 2.0F) / tan((PI * 30.0F / 180.0F)); // For some reason, this is the default eyeZ location for Processing
 		UI_COLOR = color(0, 255, 0);
 
@@ -70,11 +71,18 @@ public class Vekta extends PApplet {
 		bodyFont = createFont(FONTNAME, 24);
 
 		mainMenu = new MainMenuContext();
+		//		mainMenu = new Menu(new MainMenuHandle(new ExitGameOption("Quit")));
+		//		mainMenu.addDefault();
 		setContext(mainMenu);
 	}
-	
+
 	@Override
 	public void draw() {
+		if(nextContext != null) {
+			context = nextContext;
+			nextContext = null;
+		}
+		
 		if(context != null) {
 			context.render();
 		}
@@ -135,6 +143,8 @@ public class Vekta extends PApplet {
 		world.init();
 	}
 
+	// TODO: is this being used?
+	
 	public static void clearOverlay() {
 		if(overlay.isLoaded()) {
 			overlay.clear();
@@ -161,7 +171,7 @@ public class Vekta extends PApplet {
 			//redraw();
 		}
 	}
-	
+
 	public static void addObject(Object object) {
 		getWorld().addObject(object);
 	}
@@ -185,7 +195,7 @@ public class Vekta extends PApplet {
 		if(context == null) {
 			throw new RuntimeException("Context cannot be set to null");
 		}
-		Vekta.context = context;
+		nextContext = context;
 	}
 
 	//// Generator methods (will move to another class) ////
@@ -199,7 +209,7 @@ public class Vekta extends PApplet {
 		Vekta v = getInstance();
 		String name = v.random(Resources.getStrings("item_nouns"));
 		if(v.random(1) > .5) {
-			name += " " +  v.random(Resources.getStrings("item_modifiers"));
+			name += " " + v.random(Resources.getStrings("item_modifiers"));
 		}
 
 		if(type == ItemType.LEGENDARY) {

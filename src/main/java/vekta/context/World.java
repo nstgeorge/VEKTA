@@ -51,5 +51,6 @@ public interface World extends Context {
 		Resources.setSoundVolume(sound, volume);
 		Resources.setSoundPan(sound, pan);
 		Resources.playSound(sound);
+		Resources.resetSoundVolumeAndPan(sound);
 	}
 }  

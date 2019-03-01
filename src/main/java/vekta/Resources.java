@@ -140,6 +140,14 @@ public class Resources {
 		}
 	}
 
+	public static void resetSoundVolumeAndPan(String key) {
+		SoundFile sound = getSound(key);
+		if(sound != null) {
+			sound.pan(0);
+			sound.amp(1);
+		}
+	}
+
 	public static void updateMusicVolume() {
 		if(currentMusic != null) {
 			currentMusic.amp(Settings.get("music"));
