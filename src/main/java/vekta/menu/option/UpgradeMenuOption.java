@@ -21,12 +21,11 @@ public class UpgradeMenuOption implements MenuOption {
 
 	@Override
 	public void select(Menu menu) {
-		MenuOption def = new BackOption(menu);
-		Menu sub = new Menu(new MenuHandle(def));
+		Menu sub = new Menu(new MenuHandle(new BackOption(menu)));
 		for(Module module : upgradeable.findUpgrades()) {
 			sub.add(new UpgradeOption(upgradeable, module));
 		}
-		sub.add(def);
+		sub.addDefault();
 		setContext(sub);
 	}
 }

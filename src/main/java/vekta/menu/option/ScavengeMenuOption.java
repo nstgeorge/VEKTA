@@ -22,12 +22,11 @@ public class ScavengeMenuOption implements MenuOption {
 
 	@Override
 	public void select(Menu menu) {
-		MenuOption def = new BackOption(menu);
-		Menu sub = new Menu(new ScavengeMenuHandle(def, them));
+		Menu sub = new Menu(new ScavengeMenuHandle(new BackOption(menu), them));
 		for(Item item : them) {
 			sub.add(new TradeOption(true, you, them, item));
 		}
-		sub.add(def);
+		sub.addDefault();
 		setContext(sub);
 	}
 }

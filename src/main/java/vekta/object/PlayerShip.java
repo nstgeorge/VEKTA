@@ -5,8 +5,8 @@ import vekta.Resources;
 import vekta.item.Item;
 import vekta.item.ModuleItem;
 import vekta.menu.Menu;
-import vekta.menu.handle.MenuHandle;
 import vekta.menu.handle.ObjectMenuHandle;
+import vekta.menu.option.BackOption;
 import vekta.menu.option.UpgradeMenuOption;
 import vekta.object.module.*;
 
@@ -242,10 +242,9 @@ public class PlayerShip extends Ship implements Targeter, Upgradeable {
 	}
 
 	public void openMenu() {
-		MenuHandle handle = new ObjectMenuHandle(this, getWorld());
-		Menu menu = new Menu(handle);
+		Menu menu = new Menu(new ObjectMenuHandle(new BackOption(getWorld()), this));
 		menu.add(new UpgradeMenuOption(this));
-		menu.add(handle.getDefault());
+		menu.addDefault();
 		setContext(menu);
 	}
 
