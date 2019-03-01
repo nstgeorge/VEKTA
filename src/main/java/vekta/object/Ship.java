@@ -115,7 +115,7 @@ public abstract class Ship extends SpaceObject {
 		v.beginShape();
 		switch (shape) {
 			case CARGO_SHIP:
-				v.vertex(0, -radius * 2 - 5);
+				v.vertex(0, -radius * 2 - (radius * .7F));
 				v.vertex(-radius, -radius * 2);
 				v.vertex(-radius, radius * 2);
 				v.vertex(radius, radius * 2);

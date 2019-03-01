@@ -140,6 +140,7 @@ public abstract class SpaceObject {
 			s.onDestroy(this);
 			removeObject(s);
 		}
+
 	}
 
 	/**
