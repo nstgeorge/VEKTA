@@ -9,7 +9,7 @@ import static vekta.Vekta.*;
 public class PirateShip extends Ship implements Targeter {
 	// 'Ere be PirateShip defaults
 	private static final float DEF_MASS = 1000;
-	private static final float DEF_RADIUS = 3;
+	private static final float DEF_RADIUS = 5;
 	private static final float DEF_SPEED = .1F;
 	private static final float DEF_TURN = 20;
 	private static final float ATTACK_DIST = 1000;
@@ -55,6 +55,11 @@ public class PirateShip extends Ship implements Targeter {
 				attackCt.delay((int)getInstance().random(MIN_ATTACK, MAX_ATTACK));
 			}
 		}
+	}
+
+	@Override
+	public void draw() {
+		drawShip(SHIP_SHAPE.FIGHTER);
 	}
 
 	private void fireProjectile() {

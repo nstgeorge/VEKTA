@@ -56,7 +56,7 @@ public class UniverseGen {
 		// Create the center body
 		float centerPower = (float)Math.pow(10, order);
 		float centerMass = v.random(0.8F, 4) * centerPower;
-		float centerDensity = v.random(1, 2);
+		float centerDensity = v.random(.7F, 2);
 		if(order >= 30) {
 			addObject(new Star(
 					centerMass, // Mass

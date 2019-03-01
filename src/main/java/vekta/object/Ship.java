@@ -7,19 +7,23 @@ import vekta.Vekta;
 import vekta.item.Inventory;
 import vekta.item.Item;
 
-import static processing.core.PConstants.TRIANGLES;
+import static processing.core.PConstants.CLOSE;
 import static vekta.Vekta.addObject;
 import static vekta.Vekta.getInstance;
 
 public abstract class Ship extends SpaceObject {
 	private static final float CRATE_SPEED = 1;
+
+	protected enum SHIP_SHAPE {
+		DEFAULT, CARGO_SHIP, FIGHTER
+	}
 	
 	private final String name;
 	private final float mass;
 	private final float radius;
 	protected final PVector heading;
 	private final float speed;  // Force of the vector added when engine is on
-	private final float turnSpeed; // Speed of turning
+	private final float turnSpeed; // angular speed when turning
 
 	private final Inventory inventory = new Inventory();
 
@@ -33,25 +37,7 @@ public abstract class Ship extends SpaceObject {
 		this.turnSpeed = turnSpeed;
 	}
 
-	// Draws a nice triangle
-	// Shamelessly stolen from https://processing.org/examples/flocking.html
-	@Override
-	public void draw() {
-		// Draw a triangle rotated in the direction of ship
-		float theta = heading.heading() + PApplet.radians(90);
-		Vekta v = getInstance();
-		v.fill(1);
-		v.stroke(getColor());
-		v.pushMatrix();
-		v.translate(position.x, position.y);
-		v.rotate(theta);
-		v.beginShape(TRIANGLES);
-		v.vertex(0, -radius * 2);
-		v.vertex(-radius, radius * 2);
-		v.vertex(radius, radius * 2);
-		v.endShape();
-		v.popMatrix();
-	}
+	public abstract void draw();
 
 	public Inventory getInventory() {
 		return inventory;
@@ -116,5 +102,43 @@ public abstract class Ship extends SpaceObject {
 			addObject(new CargoCrate(item, getPosition(), PVector.random2D().setMag(getInstance().random(CRATE_SPEED))));
 		}
 		super.onDestroy(s);
+	}
+
+	protected void drawShip(SHIP_SHAPE shape) {
+		float theta = heading.heading() + PApplet.radians(90);
+		Vekta v = getInstance();
+		v.fill(0);
+		v.stroke(getColor());
+		v.pushMatrix();
+		v.translate(position.x, position.y);
+		v.rotate(theta);
+		v.beginShape();
+		switch (shape) {
+			case CARGO_SHIP:
+				v.vertex(0, -radius * 2 - 5);
+				v.vertex(-radius, -radius * 2);
+				v.vertex(-radius, radius * 2);
+				v.vertex(radius, radius * 2);
+				v.vertex(radius, -radius * 2);
+				break;
+			case FIGHTER:
+				v.vertex(0, -radius * 2);
+				// Draw left spike
+				v.vertex(-radius, radius * 2);
+				v.vertex(-radius, -radius / 3.0F);
+				v.vertex(-radius, radius * 2);
+				// Draw right spike
+				v.vertex(radius, radius * 2);
+				v.vertex(radius, -radius / 3.0F);
+				v.vertex(radius, radius * 2);
+				break;
+			default:
+				v.vertex(0, -radius * 2);
+				v.vertex(-radius, radius * 2);
+				v.vertex(radius, radius * 2);
+				break;
+		}
+		v.endShape(CLOSE);
+		v.popMatrix();
 	}
 }  
