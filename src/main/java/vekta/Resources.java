@@ -14,7 +14,7 @@ public class Resources {
 
 	private static SoundFile currentMusic;
 
-	static PShape logo; // TODO: generalize SVG loading
+	public static PShape logo; // TODO: generalize SVG loading
 
 	public static void init() {
 		// Music
@@ -73,7 +73,7 @@ public class Resources {
 	// TODO: DRY up these sound methods a bit
 
 	public static void playSound(String key) {
-		if(getSetting("sound") > 0) {
+		if(Settings.get("sound") > 0) {
 			SoundFile sound = getSound(key);
 			if(sound != null) {
 				sound.play();
@@ -89,7 +89,7 @@ public class Resources {
 	}
 
 	public static void loopSound(String key) {
-		if(getSetting("sound") > 0) {
+		if(Settings.get("sound") > 0) {
 			SoundFile sound = getSound(key);
 			if(sound != null) {
 				sound.stop();
@@ -99,7 +99,7 @@ public class Resources {
 	}
 
 	public static void setMusic(String key) {
-		float volume = getSetting("music");
+		float volume = Settings.get("music");
 		if(volume > 0) {
 			SoundFile sound = getSound(key);
 			if(sound != currentMusic) {
@@ -120,7 +120,7 @@ public class Resources {
 
 	public static void updateMusicVolume() {
 		if(currentMusic != null) {
-			currentMusic.amp(getSetting("music"));
+			currentMusic.amp(Settings.get("music"));
 		}
 	}
 }

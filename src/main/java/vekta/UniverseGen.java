@@ -1,6 +1,10 @@
 package vekta;
 
 import processing.core.PVector;
+import vekta.item.Inventory;
+import vekta.item.Item;
+import vekta.item.ItemType;
+import vekta.object.Planet;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,13 +1,15 @@
-package vekta;
+package vekta.object;
 
 import processing.core.PVector;
+import vekta.LandingSite;
+import vekta.Vekta;
 
 import static vekta.Vekta.*;
 
 /**
  * Model for a planet.
  */
-class Planet extends SpaceObject {
+public class Planet extends SpaceObject {
 	private static final float MIN_SPLIT_RADIUS = 6;
 	private static final float SPLIT_OFFSET_SCALE = .25F;
 	private static final float SPLIT_VELOCITY_SCALE = 1;
@@ -49,7 +51,7 @@ class Planet extends SpaceObject {
 
 	@Override
 	public void onCollide(SpaceObject s) {
-		// Attempt landing
+		// Check if landing
 		if(s instanceof Spaceship) { // TODO: create `Lander` interface for event handling
 			Spaceship ship = (Spaceship)s;
 			if(ship.isLanding()) {

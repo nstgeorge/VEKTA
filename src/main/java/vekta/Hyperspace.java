@@ -1,10 +1,11 @@
 package vekta;
 
 import processing.core.PVector;
+import vekta.object.Particle;
 
 import static vekta.Vekta.getInstance;
 
-class Hyperspace {
+public class Hyperspace {
 	private PVector origin;
 	private float accel;
 	private Particle[] particles;
@@ -23,33 +24,33 @@ class Hyperspace {
 		}
 	}
 
-	Particle newParticle(PVector loc) {
+	public Particle newParticle(PVector loc) {
 		// Create a new random PVector
 		PVector accelVector = loc.copy().sub(origin);
 		accelVector.setMag(accel);
 		return new Particle(loc.copy(), accelVector.copy().setMag(INIT_VELOCITY), accelVector.copy());
 	}
 
-	Particle newParticle() {
+	public Particle newParticle() {
 		// Create a new random PVector
 		PVector accelVector = PVector.random2D();
 		accelVector.setMag(accel);
 		return new Particle(origin.copy(), accelVector.copy().setMag(INIT_VELOCITY), accelVector.copy());
 	}
 
-	void render() {
+	public void render() {
 		update();
 		for(Particle p : particles) {
 			p.render();
 		}
 	}
 
-	void update() {
+	public void update() {
 		Vekta v = getInstance();
 		for(int i = 0; i < particles.length; i++) {
 			Particle p = particles[i];
 			particles[i].update();
-			if(p.getLoc().x > v.width + 300 || p.getLoc().y > v.height + 200 || p.getLoc().x < -300 || p.getLoc().y < -200) {
+			if(p.getPosition().x > v.width + 300 || p.getPosition().y > v.height + 200 || p.getPosition().x < -300 || p.getPosition().y < -200) {
 				particles[i] = newParticle();
 			}
 		}

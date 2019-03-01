@@ -4,8 +4,11 @@ import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import processing.data.JSONObject;
 import processing.event.MouseEvent;
+import vekta.context.Context;
+import vekta.context.MainMenuContext;
+import vekta.context.World;
+import vekta.item.ItemType;
 
 /**
  * Core class for all of Vekta.
@@ -17,32 +20,26 @@ public class Vekta extends PApplet {
 		return instance;
 	}
 
-	private static final String SETTINGS_PATH = System.getProperty("user.dir") + "/settings.json";
+	public static final String FONTNAME = "font/undefined-medium.ttf";
+	public static final int MAX_DISTANCE = 10000; // Maximum distance for updating objects (currently unimplemented)
 
-	static final String FONTNAME = "font/undefined-medium.ttf";
-	static final int MAX_DISTANCE = 10000; // Maximum distance for updating objects (currently unimplemented)
-
-	static Context mainMenu;
+	public static Context mainMenu;
 
 	private static Context context;
 
-	// Settings
-	private static JSONObject defaultSettings;
-	private static JSONObject settings;
-
 	// Game-balancing variables and visual settings
 
-	static final float G = 6.674e-11F;
-	static final  float SCALE = 3e8F;
-	static final float VECTOR_SCALE = 5;
-	static final  int MAX_PLANETS = 500;
-	static final  int TRAIL_LENGTH = 100;
-	static float DEF_ZOOM;
-	static int UI_COLOR;
+	public static final float G = 6.674e-11F;
+	public static final  float SCALE = 3e8F;
+	public static final float VECTOR_SCALE = 5;
+	public static final  int MAX_PLANETS = 500;
+	public static final  int TRAIL_LENGTH = 100;
+	public static float DEF_ZOOM;
+	public static int UI_COLOR;
 
 	// Fonts
-	static PFont headerFont;
-	static PFont bodyFont;
+	public static PFont headerFont;
+	public static PFont bodyFont;
 
 	// HUD/Menu overlay
 	private static PGraphics overlay;
@@ -58,14 +55,13 @@ public class Vekta extends PApplet {
 		
 		DEF_ZOOM = (height / 2.0F) / tan((PI * 30.0F / 180.0F)); // For some reason, this is the default eyeZ location for Processing
 		UI_COLOR = color(0, 255, 0);
-		
+
+		Settings.init();
 		Resources.init();
 
 		background(color(0));
 		frameRate(60);
 		noCursor();
-
-		createSettings();
 
 		textMode(SHAPE);
 
@@ -75,7 +71,7 @@ public class Vekta extends PApplet {
 		headerFont = createFont(FONTNAME, 72);
 		bodyFont = createFont(FONTNAME, 24);
 
-		mainMenu = new MainMenu();
+		mainMenu = new MainMenuContext();
 		setContext(mainMenu);
 	}
 	
@@ -141,7 +137,7 @@ public class Vekta extends PApplet {
 		world.init();
 	}
 
-	static void clearOverlay() {
+	public static void clearOverlay() {
 		if(overlay.isLoaded()) {
 			overlay.clear();
 			overlay.beginDraw();
@@ -151,7 +147,7 @@ public class Vekta extends PApplet {
 		}
 	}
 
-	static void drawOverlay() {
+	public static void drawOverlay() {
 		// Overlay the overlay
 		// NOTE: THIS IS VERY SLOW. Use only for menus, not gameplay!
 		if(overlay.isLoaded()) {
@@ -167,45 +163,7 @@ public class Vekta extends PApplet {
 			//redraw();
 		}
 	}
-
-	void createSettings() {
-		// Default settings
-		defaultSettings = new JSONObject();
-		defaultSettings.put("sound", 1);
-		defaultSettings.put("music", 1);
-		// Settings
-		try {
-			settings = loadJSONObject(SETTINGS_PATH);
-		}
-		catch(NullPointerException e) {
-			System.out.println("settings.json not found. Using default settings.");
-			settings = defaultSettings;
-			saveJSONObject(settings, SETTINGS_PATH);
-		}
-	}
-
-	static int getSetting(String key) {
-		if(!settings.isNull(key)) {
-			return settings.getInt(key);
-		}
-		else {
-			if(!defaultSettings.isNull(key)) {
-				return defaultSettings.getInt(key);
-			}
-			else {
-				return 0;
-			}
-		}
-	}
-
-	static void setSetting(String key, int value) {
-		settings.setInt(key, value);
-	}
-
-	static void saveSettings() {
-		getInstance().saveJSONObject(settings, SETTINGS_PATH);
-	}
-
+	
 	public static void addObject(Object object) {
 		getWorld().addObject(object);
 	}

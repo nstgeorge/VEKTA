@@ -1,10 +1,11 @@
-package vekta;
+package vekta.object;
 
 import processing.core.PVector;
+import vekta.Vekta;
 
 import static vekta.Vekta.*;
 
-class Projectile extends SpaceObject {
+public class Projectile extends SpaceObject {
 	// Default settings
 	private static final float DEF_MASS = 1000;
 	private static final int DEF_RADIUS = 2;

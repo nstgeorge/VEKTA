@@ -1,6 +1,6 @@
-package vekta;
+package vekta.context;
 
-interface Context {
+public interface Context {
 	/**
 	 * Draws the context each loop
 	 */

@@ -2,13 +2,18 @@ package vekta;
 
 import processing.core.PVector;
 import processing.sound.LowPass;
+import vekta.context.PauseMenuContext;
+import vekta.context.World;
+import vekta.object.Planet;
+import vekta.object.SpaceObject;
+import vekta.object.Spaceship;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static vekta.Vekta.*;
 
-class Singleplayer implements World {
+public class Singleplayer implements World {
 	private static int nextID = 0;
 
 	// Low pass filter
@@ -25,7 +30,7 @@ class Singleplayer implements World {
 	float minDistSq = Float.POSITIVE_INFINITY;
 
 	Spaceship playerShip;
-	SpaceObject closestObject; // TODO: move this logic into Spaceship instances
+	public SpaceObject closestObject; // TODO: move this logic into Spaceship instances
 
 	float zoom = 1; // Camera zoom
 
@@ -254,7 +259,7 @@ class Singleplayer implements World {
 		}
 		else {
 			if(key == ESC) {
-				setContext(new PauseMenu(this));
+				setContext(new PauseMenuContext(this));
 			}
 			if(key == 'k') {
 				dead = true;
