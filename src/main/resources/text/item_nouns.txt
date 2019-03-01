@@ -23,3 +23,29 @@ Laser
 Rocket
 Spider
 Bear
+Cell Phone
+Shoe
+Cat
+Piston
+Circuit Board
+Map
+Mint
+Jacket
+Screen
+Machine
+Button
+Lever
+Sensor
+Finger
+Sock
+Cardboard Box
+Transmogrifier
+Pylon
+Command Center
+AI
+Robot
+Razor
+Graphics Card
+CPU
+Motherboard
+N-body Simulation

@@ -12,3 +12,8 @@ Simulator
 Juju
 Butterer
 Remains
+Moistener
+Tickler
+Exciter
+Holder
+Amplifier
