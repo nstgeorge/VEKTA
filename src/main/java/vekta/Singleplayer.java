@@ -244,7 +244,7 @@ public class Singleplayer implements World {
 				//textSize(24);
 				v.text(":: Landing Autopilot ::", 50, v.height - 150);
 			} else if(TargetingModule.isUsingTargeter()) {
-				v.text(":: Targeting Computer: Nearest (p)lanet, nearest s(h)ip? ::", 50, v.height - 150);
+				v.text(":: Targeting Computer: planet [1], ship [2] ::", 50, v.height - 150);
 			}
 		}
 		// Menus
@@ -382,5 +382,27 @@ public class Singleplayer implements World {
 		else {
 			throw new RuntimeException("Cannot remove object: " + object);
 		}
+	}
+
+	public void playSoundAt(String sound, PVector location) {
+		float distance = getPlayerShip().getPosition().dist(location);
+		float distanceX = getPlayerShip().getPosition().x - location.x;
+
+		// Pan
+		float pan = (MAX_PAN_DISTANCE - distanceX) / MAX_PAN_DISTANCE;
+		if(pan < -1) pan = -1;
+		if(pan >  1) pan =  1;
+
+		// Volume
+		float volume = (MAX_AUDITORY_DISTANCE - distance) / MAX_AUDITORY_DISTANCE;
+		if(volume < 0) volume = 0;
+		if(volume > 1) volume = 1;
+
+		System.out.println("Pan: " + pan);
+		System.out.println("Volume: " + volume);
+
+		Resources.setSoundVolume(sound, volume);
+		Resources.setSoundPan(sound, pan);
+		Resources.playSound(sound);
 	}
 }

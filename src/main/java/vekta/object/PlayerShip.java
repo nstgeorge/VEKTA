@@ -30,10 +30,9 @@ public class PlayerShip extends Ship implements Upgradeable {
 
 	// Exclusive PlayerShip things
 	private final int controlScheme; // Defined by CONTROL_DEF: 0 = WASD, 1 = IJKL
-	private int ammo;
 	private float thrust;
 	private float turn;
-	private boolean usingTargeter;
+	private int ammo; // TODO convert to energy
 
 	// Landing doodads
 	private boolean landing;
@@ -220,9 +219,6 @@ public class PlayerShip extends Ship implements Upgradeable {
 			case 'e':
 				openMenu();
 				break;
-			case 't':
-				usingTargeter = !usingTargeter;
-				break;
 			}
 		}
 		// TODO: map these keys using a config object rather than as switch statements
@@ -247,9 +243,6 @@ public class PlayerShip extends Ship implements Upgradeable {
 				break;
 			case ',':
 				fireProjectile();
-				break;
-			case '\\':
-				landing = true;
 				break;
 			}
 		}
