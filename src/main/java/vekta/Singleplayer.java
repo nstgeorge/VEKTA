@@ -9,7 +9,7 @@ import vekta.object.Planet;
 import vekta.object.PlayerShip;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
-import vekta.object.module.EngineModule;
+import vekta.object.module.HyperdriveModule;
 import vekta.object.module.RCSModule;
 
 import java.util.ArrayList;
@@ -18,6 +18,8 @@ import java.util.List;
 import static vekta.Vekta.*;
 
 public class Singleplayer implements World {
+	private static final float MAX_CAMERA_Y = 5000;
+	
 	private static int nextID = 0;
 
 	// Low pass filter
@@ -80,8 +82,8 @@ public class Singleplayer implements World {
 		addObject(playerShip);
 
 		// TEMP
-		playerShip.getInventory().add(new ModuleItem(new EngineModule(5))); // Module upgrade for testing
-		playerShip.getInventory().add(new ModuleItem(new RCSModule(5))); // Module upgrade for testing
+		playerShip.getInventory().add(new ModuleItem(new HyperdriveModule(1))); // Hyperdrive upgrade for testing
+		playerShip.getInventory().add(new ModuleItem(new RCSModule(2))); // RCS upgrade for testing
 	}
 
 	@Override
@@ -96,7 +98,7 @@ public class Singleplayer implements World {
 		} else {
 			cameraSpd = 0;
 		}
-		v.camera(cameraPos.x, cameraPos.y, (.07F * cameraSpd + .7F) * (v.height / 2F) / tan(PI * 30 / 180) * zoom, cameraPos.x, cameraPos.y, 0F,
+		v.camera(cameraPos.x, cameraPos.y, min(MAX_CAMERA_Y, (.07F * cameraSpd + .7F) * (v.height / 2F) / tan(PI * 30 / 180) * zoom), cameraPos.x, cameraPos.y, 0F,
 				0F, 1F, 0F);
 		
 		cameraPos = playerShip.getPosition();
@@ -326,7 +328,7 @@ public class Singleplayer implements World {
 
 	@Override
 	public void mouseWheel(int amount) {
-		zoom = Vekta.max(.1F, Vekta.min(3, zoom * (1 + amount * .1F)));
+		zoom = max(.1F, min(3, zoom * (1 + amount * .1F)));
 	}
 
 	public void setDead() {

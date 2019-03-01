@@ -70,6 +70,8 @@ public class Vekta extends PApplet {
 		bodyFont = createFont(FONTNAME, 24);
 
 		mainMenu = new MainMenuContext();
+//		mainMenu = new Menu(new MainMenuHandle(new ExitGameOption("Quit")));
+//		mainMenu.addDefault();
 		setContext(mainMenu);
 	}
 	

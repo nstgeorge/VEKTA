@@ -1,13 +1,10 @@
 package vekta.menu.handle;
 
-import vekta.terrain.LandingSite;
-import vekta.object.SpaceObject;
-import vekta.Vekta;
 import vekta.context.World;
 import vekta.menu.Menu;
 import vekta.menu.option.TakeoffOption;
-
-import static vekta.Vekta.getInstance;
+import vekta.object.SpaceObject;
+import vekta.terrain.LandingSite;
 
 /**
  * Menu renderer for landing on planets
@@ -24,7 +21,6 @@ public class LandingMenuHandle extends MenuHandle {
 	public void render(Menu menu) {
 		super.render(menu);
 
-		Vekta v = getInstance();
 		SpaceObject s = site.getParent();
 		v.textSize(32);
 		v.fill(100);
