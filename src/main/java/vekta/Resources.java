@@ -28,6 +28,11 @@ public class Resources {
 		addSound("change");
 		addSound("select");
 		addSound("chirp");
+		addSound("hyperdriveHit");
+		addSound("hyperdriveLoop");
+		addSound("hyperdriveEnd");
+		addSound("tractorBeam");
+		addSound("land");
 
 		// Name strings
 		addStrings("planet_prefixes");
@@ -97,8 +102,7 @@ public class Resources {
 	public static void loopSound(String key) {
 		if(Settings.get("sound") > 0) {
 			SoundFile sound = getSound(key);
-			if(sound != null) {
-				sound.stop();
+			if(sound != null && !sound.isPlaying()) {
 				sound.loop();
 			}
 		}

@@ -19,7 +19,7 @@ import static vekta.Vekta.*;
 public class Singleplayer implements World {
 
 	private static final float MAX_CAMERA_Y = 5000;
-	
+
 	private static int nextID = 0;
 
 	// Low pass filter
@@ -352,6 +352,7 @@ public class Singleplayer implements World {
 		dead = true;
 		if(Resources.getMusic() != null) lowPass.process(Resources.getMusic(), 800);
 		Resources.stopSound("engine");
+		Resources.stopSound("hyperdriveLoop");
 		Resources.playSound("death");
 	}
 

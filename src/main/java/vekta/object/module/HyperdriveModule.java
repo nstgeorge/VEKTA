@@ -1,5 +1,6 @@
 package vekta.object.module;
 
+import vekta.Resources;
 import vekta.object.Ship;
 
 import static vekta.Vekta.*;
@@ -48,7 +49,17 @@ public class HyperdriveModule extends EngineModule {
 
 	@Override
 	public void onUpdate(Ship ship) {
+		boolean wasBoosting = currentBoost > 0;
 		currentBoost = max(0, ship.getVelocity().mag() * getBoost() - MIN_SPEED);
+		if(!wasBoosting && currentBoost > 0) {
+			Resources.playSound("hyperdriveHit");
+			Resources.loopSound("hyperdriveLoop");
+		}
+		if(wasBoosting && currentBoost == 0) {
+			Resources.stopSound("hyperdriveLoop");
+			Resources.playSound("hyperdriveEnd");
+		}
+
 		super.onUpdate(ship);
 	}
 }

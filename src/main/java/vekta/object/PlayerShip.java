@@ -64,6 +64,7 @@ public class PlayerShip extends Ship implements Upgradeable {
 		site.getTerrain().setupLandingMenu(this, menu);
 		menu.add(new InfoOption(site.getTerrain()));
 		menu.addDefault();
+		Resources.playSound("land");
 		Vekta.setContext(menu);
 	}
 
