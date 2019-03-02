@@ -2,7 +2,6 @@ package vekta.object;
 
 import processing.core.PVector;
 import vekta.Counter;
-import vekta.Resources;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -52,19 +51,10 @@ public class PirateShip extends Ship implements Targeter {
 		return obj instanceof PlayerShip;
 	}
 
-	@Override public boolean isLanding() {
-		return false;
-	}
-
-	@Override
-	public float getThrustControl() {
-		return 0; // Not using standard ship controls
-	}
-
-	@Override
-	public float getTurnControl() {
-		return 0;// Not using standard ship controls
-	}
+	//	@Override
+	//	public boolean isLanding() {
+	//		return false;
+	//	}
 
 	@Override
 	public void onUpdate() {

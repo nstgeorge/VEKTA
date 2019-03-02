@@ -5,7 +5,6 @@ public enum ModuleType {
 	BATTERY,
 	ENGINE,
 	RCS,
-	LANDER,
 	WEAPON,
 	TARGET_COMPUTER,
 	UTILITY,

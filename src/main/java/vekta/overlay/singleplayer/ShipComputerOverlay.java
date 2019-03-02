@@ -1,7 +1,6 @@
 package vekta.overlay.singleplayer;
 
 import vekta.object.PlayerShip;
-import vekta.object.module.TargetingModule;
 import vekta.overlay.TextOverlay;
 
 import static vekta.Vekta.UI_COLOR;
@@ -21,10 +20,7 @@ public class ShipComputerOverlay extends TextOverlay {
 	@Override
 	public String getText() {
 		if(ship.isLanding()) {
-			return ":: Autopilot ::";
-		}
-		else if(TargetingModule.isUsingTargeter()) {
-			return ":: Targeting Computer: planet [1], ship [2] ::";
+			return ":: Autopilot: Active ::";
 		}
 		return null;
 	}

@@ -1,11 +1,12 @@
 package vekta.object.module;
 
 import vekta.Resources;
-import vekta.object.Ship;
+import vekta.object.ControllableShip;
 
-import static vekta.Vekta.*;
+import static vekta.Vekta.max;
+import static vekta.Vekta.min;
 
-public class HyperdriveModule implements Module {
+public class HyperdriveModule extends ShipModule {
 	private static final float MIN_SPEED = 15;
 	private static final float MAX_SPEED = 100;
 
@@ -37,12 +38,13 @@ public class HyperdriveModule implements Module {
 	}
 
 	@Override
-	public void onUninstall(Ship ship) {
+	public void onUninstall() {
 		currentBoost = 0;
 	}
 
 	@Override
-	public void onUpdate(Ship ship) {
+	public void onUpdate() {
+		ControllableShip ship = getShip();
 		if(ship.isLanding()) {
 			currentBoost = 0;
 		}
@@ -58,7 +60,7 @@ public class HyperdriveModule implements Module {
 			Resources.stopSound("hyperdriveLoop");
 			Resources.playSound("hyperdriveEnd");
 		}
-		
+
 		if(nowBoosting && ship.consumeEnergy(1 * thrust * PER_SECOND)) {
 			ship.accelerate(thrust * currentBoost, ship.getVelocity());
 		}

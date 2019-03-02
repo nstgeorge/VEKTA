@@ -6,6 +6,7 @@ import vekta.context.PauseMenuContext;
 import vekta.context.World;
 import vekta.item.ModuleItem;
 import vekta.object.*;
+import vekta.object.module.AutopilotModule;
 import vekta.object.module.HyperdriveModule;
 import vekta.object.module.RCSModule;
 import vekta.object.module.TractorBeamModule;
@@ -35,7 +36,7 @@ public class Singleplayer implements World {
 	private Counter targetCt = new Counter(30); // Counter for periodically updating Targeter instances
 	private Counter spawnCt = new Counter(100); // Counter for periodically cleaning/spawning objects
 
-	UniverseGen generator = new UniverseGen(10000);
+	WorldGenerator generator = new WorldGenerator(10000);
 
 	private final List<SpaceObject> objects = new ArrayList<>();
 	private final List<SpaceObject> markedForDeath = new ArrayList<>();
@@ -55,26 +56,26 @@ public class Singleplayer implements World {
 
 		playerShip = new PlayerShip(
 				"VEKTA I",
-				new PVector(1, 0), // Heading
+				PVector.fromAngle(0), // Heading
 				new PVector(), // Position
 				new PVector(),    // Velocity
-				v.color(0, 255, 0),
-				0  // Control scheme, Speed, and Handling
+				v.color(0, 255, 0)
 		);
 		playerShip.getInventory().add(50); // Starting money
 		addObject(playerShip);
 
 		Ship ship = new CargoShip(
 				"Test Ship",
-				new PVector(1, 0), // Heading
+				PVector.random2D(), // Heading
 				new PVector(500, 500), // Position
 				new PVector(),    // Velocity
 				v.color(255)
 		);
 		ship.getInventory().add(new ModuleItem(new RCSModule(2)));
 		addObject(ship);
-
+		
 		// TEMP
+		playerShip.addModule(new AutopilotModule());
 		playerShip.getInventory().add(new ModuleItem(new HyperdriveModule(1))); // Hyperdrive upgrade for testing
 		playerShip.getInventory().add(new ModuleItem(new TractorBeamModule(1))); // Tractor beam upgrade for testing
 
@@ -203,22 +204,15 @@ public class Singleplayer implements World {
 				setContext(new PauseMenuContext(this));
 			}
 			if(key == 'k') {
-				playerShip.destroyBecause(null);
+				playerShip.destroyBecause(playerShip);
 			}
-			// Phasing out in favor of mouse wheel
-			//			if(key == 'r') {
-			//				mouseWheel(-1);
-			//			}
-			//			if(key == 'f') {
-			//				mouseWheel(1);
-			//			}
-			playerShip.keyPress(key);
+			playerShip.onKeyPress(key);
 		}
 	}
 
 	@Override
 	public void keyReleased(char key) {
-		playerShip.keyReleased(key);
+		playerShip.onKeyRelease(key);
 	}
 
 	@Override

@@ -1,11 +1,14 @@
 package vekta.object.module;
 
 import processing.core.PVector;
-import vekta.object.*;
+import vekta.object.CargoCrate;
+import vekta.object.ControllableShip;
+import vekta.object.SpaceObject;
+import vekta.object.Targeter;
 
 import static vekta.Vekta.min;
 
-public class TractorBeamModule implements Module, Targeter {
+public class TractorBeamModule extends ShipModule implements Targeter {
 	private static final float BASE_STRENGTH = 1000;
 	private static final float MAX_FORCE = 1F;
 	private static final float VELOCITY_DECAY = .95F;
@@ -47,16 +50,19 @@ public class TractorBeamModule implements Module, Targeter {
 		this.target = target;
 	}
 
-	@Override public boolean isValidTarget(SpaceObject obj) {
+	@Override
+	public boolean isValidTarget(SpaceObject obj) {
 		return obj instanceof CargoCrate;
 	}
 
-	@Override public boolean shouldUpdateTarget() {
+	@Override
+	public boolean shouldUpdateTarget() {
 		return true;
 	}
 
 	@Override
-	public void onUpdate(Ship ship) {
+	public void onUpdate() {
+		ControllableShip ship = getShip();
 		SpaceObject t = getTarget();
 		if(t != null && ship.consumeEnergy(.2F * PER_SECOND)) {
 			float force = getForce() / t.getMass() * BASE_STRENGTH;
