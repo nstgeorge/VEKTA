@@ -34,6 +34,10 @@ public class Menu implements Context {
 	public MenuOption get(int i) {
 		return items.get(i);
 	}
+	
+	public void clear() {
+		items.clear();
+	}
 
 	public void add(MenuOption item) {
 		items.add(item);

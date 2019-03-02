@@ -4,18 +4,18 @@ import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;
 
-public class TradeOption implements MenuOption {
+public class ItemTradeOption implements MenuOption {
 	private final boolean buying;
 	private final Inventory you, them;
 	private final Item item;
 	private final int price;
 	private final boolean transfer;
 
-	public TradeOption(boolean buying, Inventory you, Inventory them, Item item) {
+	public ItemTradeOption(boolean buying, Inventory you, Inventory them, Item item) {
 		this(buying, you, them, item, 0, true);
 	}
 
-	public TradeOption(boolean buying, Inventory you, Inventory them, Item item, int price, boolean transfer) {
+	public ItemTradeOption(boolean buying, Inventory you, Inventory them, Item item, int price, boolean transfer) {
 		this.buying = buying;
 		this.you = you;
 		this.them = them;
@@ -28,6 +28,11 @@ public class TradeOption implements MenuOption {
 	public String getName() {
 		String tag = price > 0 ? " [" + price + " G]" : "";
 		return item.getName() + tag;
+	}
+
+	@Override
+	public int getColor() {
+		return getItem().getType().getColor();
 	}
 
 	public Item getItem() {

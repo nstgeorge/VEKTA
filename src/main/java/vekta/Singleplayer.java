@@ -40,7 +40,7 @@ public class Singleplayer implements World {
 	private Counter targetCt = new Counter(30); // Counter for periodically updating Targeter instances
 	private Counter spawnCt = new Counter(100); // Counter for periodically cleaning/spawning objects
 
-	UniverseGen generator = new UniverseGen(10000, 10);
+	UniverseGen generator = new UniverseGen(10000);
 
 	List<SpaceObject> objects = new ArrayList<>();
 
@@ -64,9 +64,6 @@ public class Singleplayer implements World {
 		Resources.setMusic("atmosphere");
 
 		v.frameCount = 0;
-
-		// Add initial planets
-		generator.populate();
 
 		playerShip = new PlayerShip(
 				"VEKTA I",

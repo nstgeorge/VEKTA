@@ -6,7 +6,7 @@ import vekta.object.*;
 import static vekta.Vekta.min;
 
 public class TractorBeamModule implements Module, Targeter {
-	private static final float BASE_STRENGTH = 100;
+	private static final float BASE_STRENGTH = 1000;
 	private static final float MAX_FORCE = 1F;
 	private static final float VELOCITY_DECAY = .95F;
 

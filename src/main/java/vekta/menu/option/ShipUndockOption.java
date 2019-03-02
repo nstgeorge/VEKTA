@@ -6,11 +6,11 @@ import vekta.object.Ship;
 
 import static vekta.Vekta.setContext;
 
-public class UndockOption implements MenuOption {
+public class ShipUndockOption implements MenuOption {
 	private final Ship ship;
 	private final World world;
 
-	public UndockOption(Ship ship, World world) {
+	public ShipUndockOption(Ship ship, World world) {
 		this.ship = ship;
 		this.world = world;
 	}

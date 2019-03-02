@@ -3,10 +3,9 @@ package vekta.menu.handle;
 import vekta.Resources;
 import vekta.Vekta;
 import vekta.context.Context;
-import vekta.menu.option.BackOption;
 import vekta.menu.Menu;
+import vekta.menu.option.BackOption;
 import vekta.menu.option.MenuOption;
-import vekta.menu.option.TradeOption;
 
 import static processing.core.PConstants.*;
 import static vekta.Vekta.*;
@@ -39,54 +38,49 @@ public class MenuHandle {
 		return 200;
 	}
 
+	public int getButtonX() {
+		return v.width / 2;
+	}
+
+	public int getButtonY(int i) {
+		return v.height / 2 + i * getSpacing();
+	}
+
+	public String getHelperText() {
+		return "X to select";
+	}
+
 	public void render(Menu menu) {
-		v.clear();
+		v.clear(); // TODO: only clear region behind menu
 		v.hint(DISABLE_DEPTH_TEST);
 		v.camera();
 		v.noLights();
 
-		// TODO
-		//		// Partially fill in background
-		//		v.fill(v.color(100));
-		//		v.rect((v.width - buttonWidth) / 2F, (v.width + buttonWidth) / 2F, 0, v.height);
+		v.textFont(bodyFont);
 
 		v.stroke(0);
 		v.fill(255);
-		v.textAlign(CENTER, CENTER);
-		v.textFont(bodyFont);
 		v.textSize(24);
+		v.textAlign(CENTER, CENTER);
+		v.rectMode(CENTER);
 		for(int i = 0; i < menu.size(); i++) {
-			drawButton(menu.get(i), (v.height / 2) + (i * getSpacing()), menu.getIndex() == i);
+			drawButton(menu.get(i), getButtonY(i), menu.getIndex() == i);
 		}
 
-		//textFont(bodyFont);
 		v.stroke(0);
 		v.fill(255);
 		v.textAlign(CENTER);
-		v.text("X to select", v.width / 2F, (v.height / 2F) + (menu.size() * 100) + 200);
+		v.text(getHelperText(), getButtonX(), getButtonY(menu.size()) + 100);
 	}
 
 	void drawButton(MenuOption opt, int yPos, boolean selected) {
-		if(selected)
-			v.stroke(255);
-		else
-			v.stroke(UI_COLOR);
-		v.fill(1);
-		v.rectMode(CENTER);
-		v.rect(v.width / 2F, yPos, getButtonWidth() + (selected ? 10 : 0), 50);
+		v.stroke(selected ? 255 : UI_COLOR);
+		v.noFill();
+		v.rect(getButtonX(), yPos, getButtonWidth() + (selected ? 10 : 0), 50);
 		// Text ----------------------
-		//textFont(bodyFont);
 		v.stroke(0);
-		v.fill(getButtonColor(opt));
-		v.text(opt.getName(), v.width / 2F, yPos - 3);
-	}
-
-	private int getButtonColor(MenuOption opt) {
-		// TODO: define special cases in their own classes
-		if(opt instanceof TradeOption) {
-			return ((TradeOption)opt).getItem().getType().getColor();
-		}
-		return UI_COLOR;
+		v.fill(opt.getColor());
+		v.text(opt.getName(), getButtonX(), yPos - 3);
 	}
 
 	public void keyPressed(Menu menu, char key) {

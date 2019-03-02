@@ -10,24 +10,14 @@ import vekta.terrain.*;
 import static vekta.Vekta.*;
 
 public class UniverseGen {
-	private static final int MIN_POPULATE_DISTANCE = 1000; // Min initial object spawn distance
-
 	private final float radius; // Max persistent object distance
-	private final int density; // Initial spawn density
 
-	public UniverseGen(int size, int density) {
+	public UniverseGen(int size) {
 		this.radius = size;
-		this.density = density;
 	}
 
 	public float getRadius() {
 		return radius;
-	}
-
-	public void populate() {
-//		for(int i = 0; i < density; i++) {
-//			createSystem(randomPos(MIN_POPULATE_DISTANCE, getRadius()));
-//		}
 	}
 
 	public void spawnOccasional(PVector around) {

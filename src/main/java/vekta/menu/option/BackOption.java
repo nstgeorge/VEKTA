@@ -20,5 +20,6 @@ public class BackOption implements MenuOption {
 	@Override
 	public void select(Menu menu) {
 		setContext(parent);
+//		applyContext();
 	}
 }

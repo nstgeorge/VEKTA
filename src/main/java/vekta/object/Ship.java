@@ -12,6 +12,7 @@ import static vekta.Vekta.*;
 
 public abstract class Ship extends SpaceObject {
 	private static final float CRATE_SPEED = 1;
+	private static final float MAX_DOCKING_SPEED = 2;
 
 	private final String name;
 	private final float mass;
@@ -57,10 +58,6 @@ public abstract class Ship extends SpaceObject {
 
 	public PVector getHeading() {
 		return heading.copy();
-	}
-
-	public void setHeading(PVector heading) {
-		heading.set(heading).normalize();
 	}
 
 	public float getSpeed() {
@@ -137,7 +134,7 @@ public abstract class Ship extends SpaceObject {
 		}
 		else if(s instanceof Ship) {
 			Ship ship = (Ship)s;
-			if(ship.isLanding()) {
+			if(ship.getVelocity().sub(velocity).magSq() <= MAX_DOCKING_SPEED * MAX_DOCKING_SPEED) {
 				// Board ship
 				ship.dock(this);
 				return;

@@ -7,11 +7,11 @@ import vekta.context.World;
 import static vekta.Vekta.applyContext;
 import static vekta.Vekta.setContext;
 
-public class TakeoffOption implements MenuOption {
+public class ShipTakeoffOption implements MenuOption {
 	private final LandingSite site;
 	private final World world;
 
-	public TakeoffOption(LandingSite site, World world) {
+	public ShipTakeoffOption(LandingSite site, World world) {
 		this.site = site;
 		this.world = world;
 	}

@@ -26,7 +26,7 @@ public class LootMenuOption implements MenuOption {
 	public void select(Menu menu) {
 		Menu sub = new Menu(new LootMenuHandle(new BackOption(menu), them));
 		for(Item item : them) {
-			sub.add(new TradeOption(true, you, them, item));
+			sub.add(new ItemTradeOption(true, you, them, item));
 		}
 		sub.addDefault();
 		setContext(sub);

@@ -47,6 +47,9 @@ public class TargetingModule implements Module, Targeter {
 
 	@Override
 	public boolean isValidTarget(SpaceObject obj) {
+		if(ship.isLanding()) {
+			return obj instanceof Planet || obj instanceof Ship;
+		}
 		if(mode == null) {
 			return false;
 		}
@@ -55,7 +58,7 @@ public class TargetingModule implements Module, Targeter {
 		case NEAREST_PLANET:
 			return obj instanceof Planet;
 		case NEAREST_SHIP:
-			return obj instanceof Ship && obj != ship;
+			return obj instanceof Ship;
 		default:
 			return false;
 		}

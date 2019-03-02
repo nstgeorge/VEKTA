@@ -78,9 +78,7 @@ public class Vekta extends PApplet {
 
 	@Override
 	public void draw() {
-		if(nextContext != null) {
-			applyContext();
-		}
+		applyContext();
 
 		if(context != null) {
 			context.render();
@@ -169,8 +167,10 @@ public class Vekta extends PApplet {
 	}
 
 	public static void applyContext() {
-		context = nextContext;
-		nextContext = null;
+		if(nextContext != null) {
+			context = nextContext;
+			nextContext = null;
+		}
 	}
 
 	//// Generator methods (will move to another class) ////

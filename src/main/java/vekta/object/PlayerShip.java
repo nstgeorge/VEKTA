@@ -63,7 +63,7 @@ public class PlayerShip extends Ship implements Upgradeable {
 	public void onLand(LandingSite site) {
 		Menu menu = new Menu(new LandingMenuHandle(site, getWorld()));
 		site.getTerrain().setupLandingMenu(this, menu);
-		menu.add(new InfoOption(site.getTerrain()));
+		menu.add(new TerrainInfoOption(site.getTerrain()));
 		menu.addDefault();
 		Resources.playSound("land");
 		Vekta.setContext(menu);
@@ -71,9 +71,10 @@ public class PlayerShip extends Ship implements Upgradeable {
 
 	@Override
 	public void onDock(SpaceObject s) {
+		thrust = 0;
 		if(s instanceof CargoShip) {
 			Inventory inv = ((CargoShip)s).getInventory();
-			Menu menu = new Menu(new ObjectMenuHandle(new UndockOption(this, getWorld()), s));
+			Menu menu = new Menu(new ObjectMenuHandle(new ShipUndockOption(this, getWorld()), s));
 			menu.add(new LootMenuOption("Loot", getInventory(), inv));
 			menu.addDefault();
 			setContext(menu);
@@ -296,7 +297,7 @@ public class PlayerShip extends Ship implements Upgradeable {
 
 	public void openMenu() {
 		Menu menu = new Menu(new ObjectMenuHandle(new BackOption(getWorld()), this));
-		menu.add(new UpgradeMenuOption(this));
+		menu.add(new LoadoutMenuOption(this));
 		menu.addDefault();
 		setContext(menu);
 	}

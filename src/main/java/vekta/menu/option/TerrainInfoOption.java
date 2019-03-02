@@ -3,10 +3,10 @@ package vekta.menu.option;
 import vekta.menu.Menu;
 import vekta.terrain.Terrain;
 
-public class InfoOption implements MenuOption {
+public class TerrainInfoOption implements MenuOption {
 	private final Terrain terrain;
 	
-	public InfoOption(Terrain terrain) {
+	public TerrainInfoOption(Terrain terrain) {
 		this.terrain = terrain;
 	}
 

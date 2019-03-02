@@ -2,7 +2,7 @@ package vekta.menu.handle;
 
 import vekta.context.World;
 import vekta.menu.Menu;
-import vekta.menu.option.TakeoffOption;
+import vekta.menu.option.ShipTakeoffOption;
 import vekta.object.SpaceObject;
 import vekta.terrain.LandingSite;
 
@@ -13,7 +13,7 @@ public class LandingMenuHandle extends MenuHandle {
 	private final LandingSite site;
 
 	public LandingMenuHandle(LandingSite site, World world) {
-		super(new TakeoffOption(site, world));
+		super(new ShipTakeoffOption(site, world));
 
 		this.site = site;
 	}
