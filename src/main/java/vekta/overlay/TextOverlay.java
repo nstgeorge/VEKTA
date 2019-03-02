@@ -2,20 +2,9 @@ package vekta.overlay;
 
 import vekta.Vekta;
 
-public abstract class TextOverlay implements Overlay {
-	private final int x, y;
-
+public abstract class TextOverlay extends PositionOverlay {
 	public TextOverlay(int x, int y) {
-		this.x = x;
-		this.y = y;
-	}
-
-	public int getX() {
-		return x;
-	}
-
-	public int getY() {
-		return y;
+		super(x, y);
 	}
 
 	public abstract String getText();
@@ -28,15 +17,7 @@ public abstract class TextOverlay implements Overlay {
 		if(text != null) {
 			Vekta v = Vekta.getInstance();
 			v.fill(v.color(getColor()));
-			int x = getX();
-			if(x < 0) {
-				x += v.width;
-			}
-			int y = getY();
-			if(y < 0) {
-				y += v.height;
-			}
-			v.text(text, x, y);
+			v.text(text, getX(), getY());
 		}
 	}
 }

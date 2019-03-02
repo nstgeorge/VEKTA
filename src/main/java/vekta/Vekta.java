@@ -20,7 +20,7 @@ public class Vekta extends PApplet {
 		// Prevent library startup messages
 		LogManager.getLogManager().reset();
 	}
-	
+
 	private static Vekta instance;
 
 	public static Vekta getInstance() {

@@ -8,19 +8,20 @@ import static vekta.Vekta.UI_COLOR;
 
 /**
  * Ship computer (autopilot, targeter, etc.)
- * */
+ */
 public class ShipComputerOverlay extends TextOverlay {
 	private final PlayerShip ship;
 
 	public ShipComputerOverlay(int x, int y, PlayerShip ship) {
 		super(x, y);
-		
+
 		this.ship = ship;
 	}
 
-	@Override public String getText() {
+	@Override
+	public String getText() {
 		if(ship.isLanding()) {
-			return ":: Autopilot: Landing... ::";
+			return ":: Autopilot Engaged ::";
 		}
 		else if(TargetingModule.isUsingTargeter()) {
 			return ":: Targeting Computer: planet [1], ship [2] ::";

@@ -3,7 +3,7 @@ package vekta.overlay;
 import vekta.Vekta;
 
 /**
- * General-purpose overlay with external state management
+ * General-purpose overlay with external state management.
  */
 public class BasicTextOverlay extends TextOverlay {
 	private static final int DEF_COLOR = Vekta.getInstance().color(255);
