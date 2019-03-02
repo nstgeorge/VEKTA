@@ -8,8 +8,9 @@ import vekta.item.ModuleItem;
 import vekta.object.*;
 import vekta.object.module.HyperdriveModule;
 import vekta.object.module.RCSModule;
-import vekta.object.module.TargetingModule;
 import vekta.object.module.TractorBeamModule;
+import vekta.overlay.Overlay;
+import vekta.overlay.singleplayer.ShipComputerOverlay;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -44,9 +45,10 @@ public class Singleplayer implements World {
 	UniverseGen generator = new UniverseGen(10000);
 
 	List<SpaceObject> objects = new ArrayList<>();
-
 	List<SpaceObject> markedForDeath = new ArrayList<>();
 	List<SpaceObject> markedForAddition = new ArrayList<>();
+
+	List<Overlay> overlays = new ArrayList<>();
 
 	// UI Variables (not real time updated)
 	float shortDist;
@@ -55,14 +57,10 @@ public class Singleplayer implements World {
 	String position;
 	String closestMassUnit;
 
-	Status status;
-
 	@Override
 	public void init() {
 		Vekta v = getInstance();
 		v.background(0);
-
-		status = new Status();
 
 		lowPass = new LowPass(v);
 
@@ -86,7 +84,7 @@ public class Singleplayer implements World {
 				new PVector(1, 0), // Heading
 				new PVector(500, 500), // Position
 				new PVector(),    // Velocity
-				v.color(255, 255, 255)
+				v.color(255)
 		);
 		ship.getInventory().add(new ModuleItem(new RCSModule(2)));
 		addObject(ship);
@@ -94,6 +92,13 @@ public class Singleplayer implements World {
 		// TEMP
 		playerShip.getInventory().add(new ModuleItem(new HyperdriveModule(1))); // Hyperdrive upgrade for testing
 		playerShip.getInventory().add(new ModuleItem(new TractorBeamModule(1))); // Tractor beam upgrade for testing
+
+		// Add overlays
+		addOverlay(new ShipComputerOverlay(50, -150, playerShip));
+	}
+
+	public void addOverlay(Overlay overlay) {
+		overlays.add(overlay);
 	}
 
 	@Override
@@ -232,20 +237,9 @@ public class Singleplayer implements World {
 				v.fill(closestObject.getColor());
 			}
 			v.text(closestObjectString, 50, v.height - 100);
-			if(status.isShown()) {
-				v.fill(v.color(status.getColor()));
-				v.text(status.getMessage(), status.getX(), status.getY());
-			}
-			if(playerShip.isLanding()) {
-				status.setMessage("Autopilot: Landing...");
-				status.show();
-			}
-			else if(TargetingModule.isUsingTargeter()) {
-				status.setMessage("Targeting Computer: planet [1], ship [2]");
-				status.show();
-			}
-			else {
-				status.hide();
+			
+			for(Overlay overlay : overlays) {
+				overlay.draw();
 			}
 		}
 		// Menus

@@ -64,11 +64,6 @@ public class TargetingModule implements Module, Targeter {
 		}
 	}
 
-//	@Override
-//	public boolean shouldUpdateTarget() {
-//		return ship.isLanding() || getTarget() == null;
-//	}
-
 	@Override
 	public String getName() {
 		return "Targeting Computer";
@@ -99,6 +94,7 @@ public class TargetingModule implements Module, Targeter {
 	public void onKeyPress(Ship ship, char key) {
 		switch(key) {
 		case 't':
+			setMode(null);
 			selecting = true;
 			break;
 		case '1':

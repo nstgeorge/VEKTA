@@ -29,13 +29,12 @@ public class TerrestrialPlanet extends Planet {
 
 	@Override
 	public void onCollide(SpaceObject s) {
-		// Check if landing
 		if(s instanceof Ship) {
 			Ship ship = (Ship)s;
 			if(ship.isLanding()) {
 				site.land(ship);
+				return; // Prevent ships from being destroyed after landing
 			}
-			return; // Prevent ships from being destroyed when landing
 		}
 		super.onCollide(s);
 	}
