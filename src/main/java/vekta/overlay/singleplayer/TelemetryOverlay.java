@@ -52,7 +52,8 @@ public class TelemetryOverlay implements Overlay {
 		String targetString;
 		if(target == null) {
 			v.fill(100, 100, 100);
-			targetString = "Closest Object: None selected";
+			v.stroke(UI_COLOR);
+			targetString = "None selected";
 		}
 		else {
 			float mass;
@@ -67,15 +68,15 @@ public class TelemetryOverlay implements Overlay {
 			}
 			if(target instanceof Planet) {
 				Planet closestPlanet = (Planet)target;
-				targetString = target.getName() + " - " + distString + "AU \nHabitable: " + (closestPlanet.isHabitable() ? "YES" : "NO") + "\nMass: " + mass + " " + unit;
+				targetString = target.getName() + " - " + distString + " AU \nHabitable: " + (closestPlanet.isHabitable() ? "YES" : "NO") + "\nMass: " + mass + " " + unit;
 			}
 			else {
-				targetString = target.getName() + " - " + distString + "AU \nSpeed: " + (float)round(target.getVelocity().mag() * 100) / 100 + "\nMass: " + mass + " " + unit;
+				targetString = target.getName() + " - " + distString + " AU \nSpeed: " + (float)round(target.getVelocity().mag() * 100) / 100 + "\nMass: " + mass + " " + unit;
 			}
 			// Closest object arrow
 			drawDial("Direction", target.getPosition().sub(ship.getPosition()), 450, v.height - 65, target.getColor());
-			v.stroke(target.getColor());
 			v.fill(target.getColor());
+			v.stroke(target.getColor());
 		}
 		v.text("Target: " + targetString, 50, v.height - 100);
 	}
@@ -94,9 +95,6 @@ public class TelemetryOverlay implements Overlay {
 		v.textSize(16);
 		v.stroke(c);
 		drawArrow(info, (int)(radius * .8), locX, locY);
-		// Reset colors
-		v.fill(0);
-		v.stroke(UI_COLOR);
 	}
 
 	private void drawArrow(PVector heading, int length, int locX, int locY) {

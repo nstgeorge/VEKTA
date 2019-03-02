@@ -21,7 +21,7 @@ public class ShipComputerOverlay extends TextOverlay {
 	@Override
 	public String getText() {
 		if(ship.isLanding()) {
-			return ":: Autopilot Engaged ::";
+			return ":: Autopilot ::";
 		}
 		else if(TargetingModule.isUsingTargeter()) {
 			return ":: Targeting Computer: planet [1], ship [2] ::";

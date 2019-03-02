@@ -95,6 +95,7 @@ public class TargetingModule implements Module, Targeter {
 		switch(key) {
 		case 't':
 			setMode(null);
+			target = null;
 			selecting = true;
 			break;
 		case '1':
