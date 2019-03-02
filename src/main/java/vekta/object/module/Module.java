@@ -12,7 +12,7 @@ public interface Module {
 
 	default void onInstall(Ship ship) {}
 
-	default void onUninstall() {}
+	default void onUninstall(Ship ship) {}
 	
 	default void onUpdate(Ship ship) {}
 	

@@ -1,6 +1,8 @@
 package vekta.context;
 
 import processing.core.PVector;
+import vekta.object.SpaceObject;
+import vekta.object.Targeter;
 
 public interface World extends Context {
 	float MAX_AUDITORY_DISTANCE = 3000; // Used for calculating volume of sounds. Higher = hear more
@@ -24,6 +26,8 @@ public interface World extends Context {
 	void addObject(Object object);
 
 	void removeObject(Object object);
-	
+
+	void updateTargeter(SpaceObject object, Targeter targeter);
+
 	void playSoundAt(String sound, PVector location);
 }  

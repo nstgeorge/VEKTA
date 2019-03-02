@@ -32,24 +32,26 @@ public class PlayerShip extends Ship implements Upgradeable {
 	private final int controlScheme; // Defined by CONTROL_DEF: 0 = WASD, 1 = IJKL
 	private float thrust;
 	private float turn;
-	private int ammo; // TODO convert to energy
+	private float energy;
+	private float maxEnergy;
 
-	// Landing doodads
 	private boolean landing;
 	private final PVector influence = new PVector();
 
 	// Upgradeable modules
 	private final List<Module> modules = new ArrayList<>();
 
-	public PlayerShip(String name, PVector heading, PVector position, PVector velocity, int color, int ctrl, int ammo) {
+	public PlayerShip(String name, PVector heading, PVector position, PVector velocity, int color, int ctrl) {
 		super(name, DEF_MASS, DEF_RADIUS, heading, position, velocity, color, DEF_SPEED, DEF_TURN);
 		this.controlScheme = ctrl;
-		this.ammo = ammo;
 
 		// Default modules
 		addModule(new EngineModule(1));
 		addModule(new RCSModule(1));
 		addModule(new TargetingModule());
+		addModule(new BatteryModule(100));
+
+		setEnergy(getMaxEnergy() * .2F);
 	}
 
 	@Override
@@ -75,7 +77,7 @@ public class PlayerShip extends Ship implements Upgradeable {
 			menu.addDefault();
 			setContext(menu);
 		}
-//		super.onDock(s);
+		//		super.onDock(s);
 	}
 
 	@Override
@@ -86,6 +88,31 @@ public class PlayerShip extends Ship implements Upgradeable {
 	@Override
 	public float getTurnControl() {
 		return turn;
+	}
+
+	public float getEnergy() {
+		return energy;
+	}
+
+	public void setEnergy(float energy) {
+		this.energy = max(0, min(getMaxEnergy(), energy));
+	}
+
+	public void addEnergy(float amount) {
+		setEnergy(getEnergy() + amount);
+	}
+
+	public void depleteEnergy(float amount) {
+		setEnergy(getEnergy() - amount);
+	}
+
+	public float getMaxEnergy() {
+		return maxEnergy;
+	}
+	
+	// TEMPORARY: only use by modules to adjust max energy
+	public void addMaxEnergy(float amount) {
+		maxEnergy += amount;
 	}
 
 	@Override
@@ -157,7 +184,7 @@ public class PlayerShip extends Ship implements Upgradeable {
 		if(modules.remove(module)) {
 			getInventory().add(new ModuleItem(module));
 		}
-		module.onUninstall();
+		module.onUninstall(this);
 	}
 
 	@Override
@@ -274,20 +301,16 @@ public class PlayerShip extends Ship implements Upgradeable {
 	}
 
 	private void fireProjectile() {
-		if(ammo > 0) {
+		if(getEnergy() > 0) {
 			Resources.playSound("laser");
 			addObject(new Projectile(this, position.copy(), heading.copy().setMag(PROJECTILE_SPEED).add(velocity), getColor()));
-			ammo--;
+			depleteEnergy(.5F); // will be defined in module
 		}
 	}
 
 	@Override
 	public void onDestroy(SpaceObject s) {
 		getWorld().setDead();
-	}
-
-	public int getAmmo() {
-		return ammo;
 	}
 
 	@Override
