@@ -71,7 +71,6 @@ public class PauseMenuContext implements Context {
 	@Override
 	public void keyPressed(char key) {
 		if(key == ESC) {
-			clearOverlay();
 			setContext(world);
 		}
 		else if(key == 'w') {
@@ -87,7 +86,6 @@ public class PauseMenuContext implements Context {
 		else if(key == 'x') {
 //			Resources.stopMusic("theme");
 			Resources.playSound("select");
-			clearOverlay();
 			switch(selected) {
 			case (0):
 				setContext(world);

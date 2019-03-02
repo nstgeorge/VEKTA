@@ -137,39 +137,9 @@ public class Vekta extends PApplet {
 	}
 
 	public static void startWorld(World world) {
-		Vekta.clearOverlay();
 		Vekta.setContext(world);
 		Vekta.applyContext();
 		world.init();
-	}
-
-	// TODO: is this being used?
-
-	public static void clearOverlay() {
-		if(overlay.isLoaded()) {
-			overlay.clear();
-			overlay.beginDraw();
-			overlay.background(0, 0);
-			overlay.endDraw();
-			overlay.setLoaded(false);
-		}
-	}
-
-	public static void drawOverlay() {
-		// Overlay the overlay
-		// NOTE: THIS IS VERY SLOW. Use only for menus, not gameplay!
-		if(overlay.isLoaded()) {
-			Vekta v = getInstance();
-			overlay.loadPixels();
-			v.loadPixels();
-			for(int i = 0; i < v.pixels.length; i++)
-				if(overlay.pixels[i] != 0)
-					v.pixels[i] = overlay.pixels[i];
-			v.updatePixels();
-			overlay.updatePixels();
-			//image(overlay, 0, 0);
-			//redraw();
-		}
 	}
 
 	public static void addObject(Object object) {

@@ -5,8 +5,7 @@ import vekta.Vekta;
 import vekta.object.Ship;
 import vekta.object.SpaceObject;
 
-import static vekta.Vekta.G;
-import static vekta.Vekta.SCALE;
+import static vekta.Vekta.*;
 
 /**
  * A landing terrain for one spacecraft-like object.
