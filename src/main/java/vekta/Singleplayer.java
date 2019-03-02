@@ -414,9 +414,6 @@ public class Singleplayer implements World {
 		if(volume > 1)
 			volume = 1;
 
-		System.out.println("Pan: " + pan);
-		System.out.println("Volume: " + volume);
-
 		Resources.setSoundVolume(sound, volume);
 		Resources.setSoundPan(sound, pan);
 		Resources.playSound(sound);
