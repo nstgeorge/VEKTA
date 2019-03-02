@@ -82,11 +82,13 @@ public abstract class Ship extends SpaceObject {
 	}
 
 	public void undock() {
-		if(getDock() != null) {
-			setVelocity(getDock().getVelocity());
-			PVector offset = getPosition().sub(getDock().getPosition());
-			position.add(offset.setMag(getRadius() * 2 + getDock().getRadius() - offset.mag()));
-			dock = null;
+		SpaceObject dock = getDock();
+		if(dock != null) {
+			setVelocity(dock.getVelocity());
+			PVector offset = getPosition().sub(dock.getPosition());
+			position.add(offset.setMag(getRadius() * 2 + dock.getRadius() - offset.mag()));
+			this.dock = null;
+			onDepart(dock);
 		}
 	}
 
@@ -198,6 +200,9 @@ public abstract class Ship extends SpaceObject {
 
 	public void onDock(SpaceObject obj) {
 		undock();
+	}
+	
+	public void onDepart(SpaceObject obj) {
 	}
 
 	protected enum ShipModelType {

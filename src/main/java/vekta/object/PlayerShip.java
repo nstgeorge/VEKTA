@@ -61,7 +61,6 @@ public class PlayerShip extends Ship implements Upgradeable {
 
 	@Override
 	public void onLand(LandingSite site) {
-		clearControls();
 		Menu menu = new Menu(new LandingMenuHandle(site, getWorld()));
 		site.getTerrain().setupLandingMenu(this, menu);
 		menu.add(new TerrainInfoOption(site.getTerrain()));
@@ -72,7 +71,6 @@ public class PlayerShip extends Ship implements Upgradeable {
 
 	@Override
 	public void onDock(SpaceObject s) {
-		clearControls();
 		if(s instanceof CargoShip) {
 			Inventory inv = ((CargoShip)s).getInventory();
 			Menu menu = new Menu(new ObjectMenuHandle(new ShipUndockOption(this, getWorld()), s));
@@ -80,6 +78,13 @@ public class PlayerShip extends Ship implements Upgradeable {
 			menu.addDefault();
 			setContext(menu);
 		}
+	}
+
+	@Override
+	public void onDepart(SpaceObject obj) {
+		thrust = 0;
+		turn = 0;
+		autopilot = false;
 	}
 
 	@Override
@@ -142,13 +147,6 @@ public class PlayerShip extends Ship implements Upgradeable {
 	public SpaceObject findTarget() {
 		Targeter t = ((Targeter)getBestModule(ModuleType.TARGET_COMPUTER));
 		return t != null ? t.getTarget() : null;
-	}
-
-	// Reset after landing/docking (temporary)
-	public void clearControls() {
-		thrust = 0;
-		turn = 0;
-		autopilot = false;
 	}
 
 	@Override
