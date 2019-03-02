@@ -51,7 +51,7 @@ public class TractorBeamModule implements Module, Targeter {
 		return obj instanceof CargoCrate;
 	}
 
-	@Override public boolean shouldResetTarget() {
+	@Override public boolean shouldUpdateTarget() {
 		return true;
 	}
 

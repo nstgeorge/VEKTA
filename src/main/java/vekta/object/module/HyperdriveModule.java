@@ -5,8 +5,8 @@ import vekta.object.Ship;
 
 import static vekta.Vekta.*;
 
-public class HyperdriveModule extends EngineModule {
-	private static final float MIN_SPEED = 20;
+public class HyperdriveModule implements Module {
+	private static final float MIN_SPEED = 15;
 	private static final float MAX_SPEED = 100;
 
 	private final float boost;
@@ -14,18 +14,11 @@ public class HyperdriveModule extends EngineModule {
 	private float currentBoost;
 
 	public HyperdriveModule(float boost) {
-		super(1);
-
 		this.boost = boost;
 	}
 
 	public float getBoost() {
 		return boost;
-	}
-
-	@Override 
-	public float getSpeed() {
-		return super.getSpeed() + currentBoost;
 	}
 
 	@Override
@@ -35,12 +28,12 @@ public class HyperdriveModule extends EngineModule {
 
 	@Override
 	public ModuleType getType() {
-		return ModuleType.ENGINE;
+		return ModuleType.UTILITY;
 	}
 
 	@Override
 	public boolean isBetter(Module other) {
-		return other instanceof HyperdriveModule && getSpeed() > ((HyperdriveModule)other).getSpeed();
+		return other instanceof HyperdriveModule && getBoost() > ((HyperdriveModule)other).getBoost();
 	}
 
 	@Override 
@@ -51,7 +44,7 @@ public class HyperdriveModule extends EngineModule {
 	@Override
 	public void onUpdate(Ship ship) {
 		boolean wasBoosting = currentBoost > 0;
-		currentBoost = min(max(0, ship.getVelocity().mag() * getBoost() - MIN_SPEED), MAX_SPEED);
+		currentBoost = ship.isLanding() ? 0 : min(max(0, ship.getVelocity().mag() * getBoost() - MIN_SPEED), MAX_SPEED);
 		if(!wasBoosting && currentBoost > 0) {
 			Resources.playSound("hyperdriveHit");
 			Resources.loopSound("hyperdriveLoop");
@@ -60,7 +53,6 @@ public class HyperdriveModule extends EngineModule {
 			Resources.stopSound("hyperdriveLoop");
 			Resources.playSound("hyperdriveEnd");
 		}
-
-		super.onUpdate(ship);
+		ship.accelerate(ship.getThrustControl() * currentBoost, ship.getVelocity());
 	}
 }

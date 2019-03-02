@@ -22,7 +22,7 @@ public class TargetingModule implements Module, Targeter {
 	private SpaceObject target;
 
 	public TargetingModule() {
-		
+
 	}
 
 	public TargetingMode getMode() {
@@ -47,6 +47,10 @@ public class TargetingModule implements Module, Targeter {
 
 	@Override
 	public boolean isValidTarget(SpaceObject obj) {
+		if(mode == null) {
+			return false;
+		}
+
 		switch(mode) {
 		case NEAREST_PLANET:
 			return obj instanceof Planet;
@@ -58,8 +62,8 @@ public class TargetingModule implements Module, Targeter {
 	}
 
 	@Override
-	public boolean shouldResetTarget() {
-		return mode != null;
+	public boolean shouldUpdateTarget() {
+		return ship.isLanding() || getTarget() == null;
 	}
 
 	@Override

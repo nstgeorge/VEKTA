@@ -129,7 +129,9 @@ public class Singleplayer implements World {
 				Collection<Targeter> ts = s.getTargeters();
 				if(ts != null) {
 					for(Targeter t : ts) {
-						updateTargeter(s, t);
+						if(t.shouldUpdateTarget()) {
+							updateTargeter(s, t);
+						}
 					}
 				}
 			}
@@ -204,7 +206,7 @@ public class Singleplayer implements World {
 			String closestObjectString;
 			if(closestObject == null) {
 				v.fill(100, 100, 100);
-				closestObjectString = "Closest Object: None in range";
+				closestObjectString = "Closest Object: None selected";
 			}
 			else {
 				if(closestObject.getMass() / 1.989e30 < .1) {
@@ -379,16 +381,14 @@ public class Singleplayer implements World {
 	@Override
 	public void updateTargeter(SpaceObject s, Targeter t) {
 		SpaceObject target = t.getTarget();
-		if(t.shouldResetTarget()) {
-			float minDistSq = Float.POSITIVE_INFINITY;
-			// Search for new targets
-			for(SpaceObject other : objects) {
-				if(s != other && t.isValidTarget(other)) {
-					float distSq = s.getPosition().sub(other.getPosition()).magSq();
-					if(distSq < minDistSq) {
-						minDistSq = distSq;
-						target = other;
-					}
+		float minDistSq = Float.POSITIVE_INFINITY;
+		// Search for new targets
+		for(SpaceObject other : objects) {
+			if(s != other && t.isValidTarget(other)) {
+				float distSq = s.getPosition().sub(other.getPosition()).magSq();
+				if(distSq < minDistSq) {
+					minDistSq = distSq;
+					target = other;
 				}
 			}
 		}
