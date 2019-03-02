@@ -54,10 +54,14 @@ public class Singleplayer implements World {
 	String position;
 	String closestMassUnit;
 
+	Status status;
+
 	@Override
 	public void init() {
 		Vekta v = getInstance();
 		v.background(0);
+
+		status = new Status();
 
 		lowPass = new LowPass(v);
 
@@ -227,12 +231,19 @@ public class Singleplayer implements World {
 				v.fill(closestObject.getColor());
 			}
 			v.text(closestObjectString, 50, v.height - 100);
+			if(status.isShown()) {
+				v.fill(v.color(status.getColor()));
+				v.text(status.getMessage(), status.getX(), status.getY());
+			}
 			if(playerShip.isLanding()) {
-				//textSize(24);
-				v.text(":: Landing Autopilot ::", 50, v.height - 150);
+				status.setMessage("Autopilot: Landing...");
+				status.show();
 			}
 			else if(TargetingModule.isUsingTargeter()) {
-				v.text(":: Targeting Computer: planet [1], ship [2] ::", 50, v.height - 150);
+				status.setMessage("Targeting Computer: planet [1], ship [2]");
+				status.show();
+			} else {
+				status.hide();
 			}
 		}
 		// Menus

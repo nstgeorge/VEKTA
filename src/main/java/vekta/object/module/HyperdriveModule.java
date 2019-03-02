@@ -44,12 +44,12 @@ public class HyperdriveModule implements Module {
 	@Override
 	public void onUpdate(Ship ship) {
 		boolean wasBoosting = currentBoost > 0;
-		currentBoost = ship.isLanding() ? 0 : min(max(0, ship.getVelocity().mag() * getBoost() - MIN_SPEED), MAX_SPEED);
-		if(!wasBoosting && currentBoost > 0) {
+		if(!wasBoosting && currentBoost > 0 && ship.getThrustControl() > 0) {
+			currentBoost = ship.isLanding() ? 0 : min(max(0, ship.getVelocity().mag() * getBoost() - MIN_SPEED), MAX_SPEED);
 			Resources.playSound("hyperdriveHit");
 			Resources.loopSound("hyperdriveLoop");
 		}
-		if(wasBoosting && currentBoost == 0) {
+		if(wasBoosting && currentBoost == 0 && ship.getThrustControl() < 0) {
 			Resources.stopSound("hyperdriveLoop");
 			Resources.playSound("hyperdriveEnd");
 		}
