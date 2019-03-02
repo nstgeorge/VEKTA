@@ -33,7 +33,8 @@ public class Resources {
 		addSound("hyperdriveEnd");
 		addSound("tractorBeam");
 		addSound("land");
-
+		addSound("explosion");
+		
 		// Name strings
 		addStrings("planet_prefixes");
 		addStrings("planet_suffixes");

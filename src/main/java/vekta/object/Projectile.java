@@ -2,8 +2,7 @@ package vekta.object;
 
 import processing.core.PVector;
 
-import static vekta.Vekta.RADIUS;
-import static vekta.Vekta.removeObject;
+import static vekta.Vekta.*;
 
 public class Projectile extends SpaceObject {
 	// Default settings
@@ -75,5 +74,6 @@ public class Projectile extends SpaceObject {
 	public void onCollide(SpaceObject s) {
 		super.onCollide(s);
 		removeObject(this);
+		getWorld().playSoundAt("explosion", getPosition());
 	}
 }  

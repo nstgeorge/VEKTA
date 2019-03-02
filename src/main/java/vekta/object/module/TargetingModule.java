@@ -64,10 +64,10 @@ public class TargetingModule implements Module, Targeter {
 		}
 	}
 
-	@Override
-	public boolean shouldUpdateTarget() {
-		return ship.isLanding() || getTarget() == null;
-	}
+//	@Override
+//	public boolean shouldUpdateTarget() {
+//		return ship.isLanding() || getTarget() == null;
+//	}
 
 	@Override
 	public String getName() {

@@ -26,7 +26,6 @@ public class PlayerShip extends Ship implements Upgradeable {
 	private static final float DEF_SPEED = .1F; // Base speed (engine speed = 1)
 	private static final float DEF_TURN = 20; // Base turn speed (RCS turnSpeed = 1)
 	private static final float APPROACH_SPEED = 1F;
-	private static final float PROJECTILE_SPEED = 7;
 
 	// Exclusive PlayerShip things
 	private final int controlScheme; // Defined by CONTROL_DEF: 0 = WASD, 1 = IJKL
@@ -50,6 +49,7 @@ public class PlayerShip extends Ship implements Upgradeable {
 		addModule(new RCSModule(1));
 		addModule(new TargetingModule());
 		addModule(new BatteryModule(100));
+		addModule(new CannonModule());
 
 		setEnergy(getMaxEnergy() * .2F);
 	}
@@ -247,12 +247,6 @@ public class PlayerShip extends Ship implements Upgradeable {
 			case 'd':
 				turn = 1;
 				break;
-			case 'x':
-				fireProjectile();
-				break;
-			case 'z':
-				fireProjectile();
-				break;
 			case '\t':
 				landing = true;
 				getWorld().updateTargeters(this);
@@ -278,12 +272,6 @@ public class PlayerShip extends Ship implements Upgradeable {
 				break;
 			case 'l':
 				turn = 1;
-				break;
-			case 'm':
-				fireProjectile();
-				break;
-			case ',':
-				fireProjectile();
 				break;
 			}
 		}
@@ -312,14 +300,6 @@ public class PlayerShip extends Ship implements Upgradeable {
 		menu.add(new LoadoutMenuOption(this));
 		menu.addDefault();
 		setContext(menu);
-	}
-
-	// TODO: move this to a cannon module
-	private void fireProjectile() {
-		if(consumeEnergy(.5F)) {
-			Resources.playSound("laser");
-			addObject(new Projectile(this, position.copy(), heading.copy().setMag(PROJECTILE_SPEED).add(velocity), getColor()));
-		}
 	}
 
 	@Override

@@ -18,5 +18,6 @@ public class RechargeOption implements MenuOption {
 	@Override
 	public void select(Menu menu) {
 		ship.recharge();
+		menu.remove(this);
 	}
 }

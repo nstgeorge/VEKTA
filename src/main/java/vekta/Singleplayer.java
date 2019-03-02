@@ -317,7 +317,6 @@ public class Singleplayer implements World {
 	public void keyPressed(char key) {
 		if(dead) {
 			if(key == 'x') {
-				lowPass.stop();
 				restart();
 			}
 		}
@@ -359,6 +358,7 @@ public class Singleplayer implements World {
 
 	@Override
 	public void restart() {
+		lowPass.stop();
 		Vekta.startWorld(new Singleplayer());
 	}
 

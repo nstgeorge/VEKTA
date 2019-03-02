@@ -65,7 +65,7 @@ public abstract class Planet extends SpaceObject {
 			Terrain terrain = new MoltenTerrain();
 			Planet a = new TerrestrialPlanet(newMass, getDensity(), terrain, getPosition().copy().add(offset), newVelocity.copy().add(splitVelocity), getColor());
 			Planet b = new TerrestrialPlanet(newMass, getDensity(), terrain, getPosition().copy().sub(offset), newVelocity.copy().sub(splitVelocity), getColor());
-			// TODO: fix breaking when landing on newly created planet
+			// TODO: fix weird behaviour when landing on newly created planet
 			if(!s.collidesWith(a)) {
 				mass -= a.mass;
 				addObject(a);
