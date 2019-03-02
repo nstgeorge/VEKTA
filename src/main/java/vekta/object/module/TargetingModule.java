@@ -5,6 +5,8 @@ import vekta.object.Ship;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 
+import static vekta.Vekta.*;
+
 public class TargetingModule implements Module, Targeter {
 	private static boolean selecting;
 
@@ -20,7 +22,7 @@ public class TargetingModule implements Module, Targeter {
 	private SpaceObject target;
 
 	public TargetingModule() {
-
+		
 	}
 
 	public TargetingMode getMode() {
@@ -30,6 +32,7 @@ public class TargetingModule implements Module, Targeter {
 	public void setMode(TargetingMode mode) {
 		this.mode = mode;
 		selecting = false;
+		getWorld().updateTargeter(ship, this);
 	}
 
 	@Override
@@ -81,7 +84,7 @@ public class TargetingModule implements Module, Targeter {
 	}
 
 	@Override
-	public void onUninstall() {
+	public void onUninstall(Ship ship) {
 		onInstall(null);
 	}
 
@@ -91,10 +94,10 @@ public class TargetingModule implements Module, Targeter {
 		case 't':
 			selecting = true;
 			break;
-		case 'p':
+		case '1':
 			setMode(TargetingModule.TargetingMode.NEAREST_PLANET);
 			break;
-		case 'h':
+		case '2':
 			setMode(TargetingModule.TargetingMode.NEAREST_SHIP);
 			break;
 		}

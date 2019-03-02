@@ -27,12 +27,11 @@ public class Singleplayer implements World {
 
 	int planetCount;
 	boolean dead;
-	
+
 	PVector cameraPos;
 	float cameraSpd;
-	
+
 	int health;
-	int ammunition = 100;
 
 	PlayerShip playerShip;
 
@@ -75,12 +74,11 @@ public class Singleplayer implements World {
 				new PVector(), // Position
 				new PVector(),    // Velocity
 				v.color(0, 255, 0),
-				0,  // Control scheme, Speed, and Handling
-				100 // Starting ammo
+				0  // Control scheme, Speed, and Handling
 		);
 		playerShip.getInventory().add(50); // Starting money
 		addObject(playerShip);
-		
+
 		Ship ship = new CargoShip(
 				"Test Ship",
 				new PVector(1, 0), // Heading
@@ -105,12 +103,13 @@ public class Singleplayer implements World {
 			cameraPos = playerShip.getPosition();
 			cameraSpd = playerShip.getVelocity().mag();
 			// Camera follow
-		} else {
+		}
+		else {
 			cameraSpd = 0;
 		}
 		v.camera(cameraPos.x, cameraPos.y, min(MAX_CAMERA_Y, (.07F * cameraSpd + .7F) * (v.height / 2F) / tan(PI * 30 / 180) * zoom), cameraPos.x, cameraPos.y, 0F,
 				0F, 1F, 0F);
-		
+
 		cameraPos = playerShip.getPosition();
 
 		boolean targeting = targetCt.cycle();
@@ -130,21 +129,7 @@ public class Singleplayer implements World {
 				Collection<Targeter> ts = s.getTargeters();
 				if(ts != null) {
 					for(Targeter t : ts) {
-						SpaceObject target = t.getTarget();
-						if(t.shouldResetTarget()) {
-							float minDistSq = Float.POSITIVE_INFINITY;
-							// Search for new targets
-							for(SpaceObject other : objects) {
-								if(other != t && t.isValidTarget(other)) {
-									float distSq = s.getPosition().sub(other.getPosition()).magSq();
-									if(distSq < minDistSq) {
-										minDistSq = distSq;
-										target = other;
-									}
-								}
-							}
-						}
-						t.setTarget(target);
+						updateTargeter(s, t);
 					}
 				}
 			}
@@ -208,7 +193,9 @@ public class Singleplayer implements World {
 			v.rect(-1, v.height - 130, v.width + 1, v.height + 1);
 			v.fill(UI_COLOR);
 			// Text - Far right
-			v.text("Health = " + health + "\nAmmunition = " + ammunition + "\nGold = " + playerShip.getInventory().getMoney(), v.width - 300, v.height - 100);
+			v.text("Health = " + health +
+					"\nEnergy = " + (int)playerShip.getEnergy() + " / " + playerShip.getMaxEnergy() + " (" + (int)(playerShip.getEnergy() / playerShip.getMaxEnergy() * 100) + "%)" +
+					"\nGold = " + playerShip.getInventory().getMoney(), v.width - 300, v.height - 100);
 			// Ship heading indicator
 			drawDial("Heading", playerShip.getHeading(), v.width - 370, v.height - 65, 50, v.color(0, 255, 0));
 			drawDial("Velocity", playerShip.getVelocity().copy(), v.width - 500, v.height - 65, 50, v.color(0, 255, 0));
@@ -231,7 +218,8 @@ public class Singleplayer implements World {
 				if(closestObject instanceof Planet) {
 					Planet closestPlanet = (Planet)closestObject;
 					closestObjectString = "Closest Object: " + closestObject.getName() + " - " + shortDist + "AU \nHabitable: " + (closestPlanet.isHabitable() ? "YES" : "NO") + "\nMass: " + closestMass + " " + closestMassUnit;
-				} else {
+				}
+				else {
 					closestObjectString = "Closest Object: " + closestObject.getName() + " - " + shortDist + "AU \nSpeed: " + (float)round(closestObject.getVelocity().mag() * 100) / 100 + "\nMass: " + closestMass + " " + closestMassUnit;
 				}
 				// Closest object arrow
@@ -243,8 +231,9 @@ public class Singleplayer implements World {
 			if(playerShip.isLanding()) {
 				//textSize(24);
 				v.text(":: Landing Autopilot ::", 50, v.height - 150);
-			} else if(TargetingModule.isUsingTargeter()) {
-				v.text(":: Targeting Computer: Nearest (p)lanet, nearest s(h)ip? ::", 50, v.height - 150);
+			}
+			else if(TargetingModule.isUsingTargeter()) {
+				v.text(":: Targeting Computer: planet [1], ship [2] ::", 50, v.height - 150);
 			}
 		}
 		// Menus
@@ -309,7 +298,6 @@ public class Singleplayer implements World {
 				? (float)round(playerShip.getPosition().dist(playerShip.getTarget().getPosition()) * 100) / 100
 				: 0;
 		speed = (float)round(cameraSpd * 100) / 100;
-		ammunition = playerShip.getAmmo();
 		position = round(cameraPos.x) + ", " + round(cameraPos.y);
 	}
 
@@ -350,7 +338,8 @@ public class Singleplayer implements World {
 
 	public void setDead() {
 		dead = true;
-		if(Resources.getMusic() != null) lowPass.process(Resources.getMusic(), 800);
+		if(Resources.getMusic() != null)
+			lowPass.process(Resources.getMusic(), 800);
 		Resources.stopSound("engine");
 		Resources.stopSound("hyperdriveLoop");
 		Resources.playSound("death");
@@ -361,7 +350,9 @@ public class Singleplayer implements World {
 		Vekta.startWorld(new Singleplayer());
 	}
 
-	public PlayerShip getPlayerShip() { return playerShip; }
+	public PlayerShip getPlayerShip() {
+		return playerShip;
+	}
 
 	@Override
 	public void addObject(Object object) {
@@ -383,5 +374,52 @@ public class Singleplayer implements World {
 		else {
 			throw new RuntimeException("Cannot remove object: " + object);
 		}
+	}
+
+	@Override
+	public void updateTargeter(SpaceObject s, Targeter t) {
+		SpaceObject target = t.getTarget();
+		if(t.shouldResetTarget()) {
+			float minDistSq = Float.POSITIVE_INFINITY;
+			// Search for new targets
+			for(SpaceObject other : objects) {
+				if(s != other && t.isValidTarget(other)) {
+					float distSq = s.getPosition().sub(other.getPosition()).magSq();
+					if(distSq < minDistSq) {
+						minDistSq = distSq;
+						target = other;
+					}
+				}
+			}
+		}
+		t.setTarget(target);
+	}
+
+	@Override
+	public void playSoundAt(String sound, PVector location) {
+		float distance = getPlayerShip().getPosition().dist(location);
+		float distanceX = getPlayerShip().getPosition().x - location.x;
+
+		// Pan
+		float pan = (MAX_PAN_DISTANCE - distanceX) / MAX_PAN_DISTANCE;
+		if(pan < -1)
+			pan = -1;
+		if(pan > 1)
+			pan = 1;
+
+		// Volume
+		float volume = (MAX_AUDITORY_DISTANCE - distance) / MAX_AUDITORY_DISTANCE;
+		if(volume < 0)
+			volume = 0;
+		if(volume > 1)
+			volume = 1;
+
+		System.out.println("Pan: " + pan);
+		System.out.println("Volume: " + volume);
+
+		Resources.setSoundVolume(sound, volume);
+		Resources.setSoundPan(sound, pan);
+		Resources.playSound(sound);
+		Resources.resetSoundVolumeAndPan(sound);
 	}
 }

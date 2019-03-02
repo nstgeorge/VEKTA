@@ -79,10 +79,9 @@ public class Vekta extends PApplet {
 	@Override
 	public void draw() {
 		if(nextContext != null) {
-			context = nextContext;
-			nextContext = null;
+			applyContext();
 		}
-		
+
 		if(context != null) {
 			context.render();
 		}
@@ -140,11 +139,12 @@ public class Vekta extends PApplet {
 	public static void startWorld(World world) {
 		Vekta.clearOverlay();
 		Vekta.setContext(world);
+		Vekta.applyContext();
 		world.init();
 	}
 
 	// TODO: is this being used?
-	
+
 	public static void clearOverlay() {
 		if(overlay.isLoaded()) {
 			overlay.clear();
@@ -196,6 +196,11 @@ public class Vekta extends PApplet {
 			throw new RuntimeException("Context cannot be set to null");
 		}
 		nextContext = context;
+	}
+
+	public static void applyContext() {
+		context = nextContext;
+		nextContext = null;
 	}
 
 	//// Generator methods (will move to another class) ////

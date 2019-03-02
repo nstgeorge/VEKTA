@@ -43,7 +43,7 @@ public class HyperdriveModule extends EngineModule {
 	}
 
 	@Override 
-	public void onUninstall() {
+	public void onUninstall(Ship ship) {
 		currentBoost = 0;
 	}
 
