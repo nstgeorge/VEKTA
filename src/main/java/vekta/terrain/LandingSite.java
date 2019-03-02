@@ -34,16 +34,15 @@ public class LandingSite {
 		return landed;
 	}
 
-	public boolean land(Ship ship) {
+	public void land(Ship ship) {
 		if(landed != null) {
-			return false;
+			takeoff();
 		}
 
 		landed = ship;
 		Vekta.removeObject(ship);
 		
 		ship.onLand(this);
-		return true;
 	}
 
 	public boolean takeoff() {

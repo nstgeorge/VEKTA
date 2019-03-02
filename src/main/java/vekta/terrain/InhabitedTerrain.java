@@ -4,8 +4,9 @@ import vekta.Resources;
 import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;
+import vekta.menu.option.RechargeOption;
 import vekta.menu.option.TradeMenuOption;
-import vekta.object.Ship;
+import vekta.object.PlayerShip;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,9 +25,8 @@ public class InhabitedTerrain extends Terrain {
 	public InhabitedTerrain() {
 		add("Atmosphere");
 		add("Habitable");
-		add("Inhabited");
 		
-		String key = "overview_urban";
+		String key;
 		if(chance(.4)) {
 			add("Urban");
 			key = "overview_urban";
@@ -49,10 +49,13 @@ public class InhabitedTerrain extends Terrain {
 	}
 
 	@Override
-	public void setupLandingMenu(Ship ship, Menu menu) {
+	public void setupLandingMenu(PlayerShip ship, Menu menu) {
 		computeOffers(ship.getInventory(), shipOffers, offers, 1 / ITEM_MARKUP);
 		computeOffers(getInventory(), offers, shipOffers, ITEM_MARKUP);
 
+		if(has("Urban")) {
+			menu.add(new RechargeOption(ship));
+		}
 		menu.add(new TradeMenuOption(true, ship.getInventory(), getInventory(), offers));
 		menu.add(new TradeMenuOption(false, ship.getInventory(), getInventory(), shipOffers));
 	}

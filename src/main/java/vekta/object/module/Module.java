@@ -3,11 +3,14 @@ package vekta.object.module;
 import vekta.object.Ship;
 
 public interface Module {
+	// Define per-second energy consumption rate
+	float PER_SECOND = 1 / 60F;
+	float PER_MINUTE = PER_SECOND / 60F;
+	
 	String getName();
 	
 	ModuleType getType();
 	
-	// TODO: show in UI
 	boolean isBetter(Module other);
 
 	default void onInstall(Ship ship) {}

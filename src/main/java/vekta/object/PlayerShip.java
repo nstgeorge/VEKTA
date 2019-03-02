@@ -92,6 +92,10 @@ public class PlayerShip extends Ship implements Upgradeable {
 		return turn;
 	}
 
+	public boolean hasEnergy() {
+		return energy > 0;
+	}
+
 	public float getEnergy() {
 		return energy;
 	}
@@ -101,20 +105,27 @@ public class PlayerShip extends Ship implements Upgradeable {
 	}
 
 	public void addEnergy(float amount) {
-		setEnergy(getEnergy() + amount);
+		setEnergy(energy + amount);
 	}
 
-	public void depleteEnergy(float amount) {
-		setEnergy(getEnergy() - amount);
+	@Override
+	public boolean consumeEnergy(float amount) {
+		float output = energy - amount;
+		setEnergy(output);
+		return output >= 0;
 	}
 
 	public float getMaxEnergy() {
 		return maxEnergy;
 	}
-	
+
 	// TEMPORARY: only use by modules to adjust max energy
 	public void addMaxEnergy(float amount) {
 		maxEnergy += amount;
+	}
+
+	public void recharge() {
+		setEnergy(getMaxEnergy());
 	}
 
 	@Override
@@ -244,6 +255,7 @@ public class PlayerShip extends Ship implements Upgradeable {
 				break;
 			case '\t':
 				landing = true;
+				getWorld().updateTargeters(this);
 				break;
 			case 'e':
 				openMenu();
@@ -302,11 +314,11 @@ public class PlayerShip extends Ship implements Upgradeable {
 		setContext(menu);
 	}
 
+	// TODO: move this to a cannon module
 	private void fireProjectile() {
-		if(getEnergy() > 0) {
+		if(consumeEnergy(.5F)) {
 			Resources.playSound("laser");
 			addObject(new Projectile(this, position.copy(), heading.copy().setMag(PROJECTILE_SPEED).add(velocity), getColor()));
-			depleteEnergy(.5F); // will be defined in module
 		}
 	}
 

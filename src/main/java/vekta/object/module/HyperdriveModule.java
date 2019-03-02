@@ -36,23 +36,31 @@ public class HyperdriveModule implements Module {
 		return other instanceof HyperdriveModule && getBoost() > ((HyperdriveModule)other).getBoost();
 	}
 
-	@Override 
+	@Override
 	public void onUninstall(Ship ship) {
 		currentBoost = 0;
 	}
 
 	@Override
 	public void onUpdate(Ship ship) {
+		if(ship.isLanding()) {
+			currentBoost = 0;
+		}
+		float thrust = ship.getThrustControl();
 		boolean wasBoosting = currentBoost > 0;
-		if(!wasBoosting && currentBoost > 0 && ship.getThrustControl() > 0) {
-			currentBoost = ship.isLanding() ? 0 : min(max(0, ship.getVelocity().mag() * getBoost() - MIN_SPEED), MAX_SPEED);
+		currentBoost = max(0, min(MAX_SPEED, ship.getVelocity().mag() * getBoost() - MIN_SPEED));
+		boolean nowBoosting = currentBoost > 0;
+		if(!wasBoosting && nowBoosting && thrust > 0) {
 			Resources.playSound("hyperdriveHit");
 			Resources.loopSound("hyperdriveLoop");
 		}
-		if(wasBoosting && currentBoost == 0 && ship.getThrustControl() < 0) {
+		if(wasBoosting && nowBoosting && thrust < 0) {
 			Resources.stopSound("hyperdriveLoop");
 			Resources.playSound("hyperdriveEnd");
 		}
-		ship.accelerate(ship.getThrustControl() * currentBoost, ship.getVelocity());
+		
+		if(nowBoosting && ship.consumeEnergy(1 * thrust * PER_SECOND)) {
+			ship.accelerate(thrust * currentBoost, ship.getVelocity());
+		}
 	}
 }

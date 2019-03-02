@@ -7,6 +7,7 @@ import vekta.context.World;
 import vekta.item.ModuleItem;
 import vekta.object.*;
 import vekta.object.module.HyperdriveModule;
+import vekta.object.module.RCSModule;
 import vekta.object.module.TargetingModule;
 import vekta.object.module.TractorBeamModule;
 
@@ -87,7 +88,7 @@ public class Singleplayer implements World {
 				new PVector(),    // Velocity
 				v.color(255, 255, 255)
 		);
-		ship.getInventory().add(new ModuleItem(new HyperdriveModule(1)));
+		ship.getInventory().add(new ModuleItem(new RCSModule(2)));
 		addObject(ship);
 
 		// TEMP
@@ -131,7 +132,7 @@ public class Singleplayer implements World {
 				if(ts != null) {
 					for(Targeter t : ts) {
 						if(t.shouldUpdateTarget()) {
-							updateTargeter(s, t);
+							updateTargeters(s);
 						}
 					}
 				}
@@ -242,7 +243,8 @@ public class Singleplayer implements World {
 			else if(TargetingModule.isUsingTargeter()) {
 				status.setMessage("Targeting Computer: planet [1], ship [2]");
 				status.show();
-			} else {
+			}
+			else {
 				status.hide();
 			}
 		}
@@ -387,20 +389,22 @@ public class Singleplayer implements World {
 	}
 
 	@Override
-	public void updateTargeter(SpaceObject s, Targeter t) {
-		SpaceObject target = t.getTarget();
-		float minDistSq = Float.POSITIVE_INFINITY;
-		// Search for new targets
-		for(SpaceObject other : objects) {
-			if(s != other && t.isValidTarget(other)) {
-				float distSq = s.getPosition().sub(other.getPosition()).magSq();
-				if(distSq < minDistSq) {
-					minDistSq = distSq;
-					target = other;
+	public void updateTargeters(SpaceObject s) {
+		for(Targeter t : s.getTargeters()) {
+			SpaceObject target = t.getTarget();
+			float minDistSq = Float.POSITIVE_INFINITY;
+			// Search for new targets
+			for(SpaceObject other : objects) {
+				if(s != other && t.isValidTarget(other)) {
+					float distSq = s.getPosition().sub(other.getPosition()).magSq();
+					if(distSq < minDistSq) {
+						minDistSq = distSq;
+						target = other;
+					}
 				}
 			}
+			t.setTarget(target);
 		}
-		t.setTarget(target);
 	}
 
 	@Override

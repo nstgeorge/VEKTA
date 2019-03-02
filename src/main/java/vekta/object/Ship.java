@@ -105,6 +105,10 @@ public abstract class Ship extends SpaceObject {
 	 */
 	public abstract float getTurnControl();
 
+	public boolean consumeEnergy(float amount) {
+		return true;
+	}
+
 	public void accelerate(float amount) {
 		accelerate(amount, heading);
 	}

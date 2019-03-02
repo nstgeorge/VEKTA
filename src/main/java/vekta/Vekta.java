@@ -10,10 +10,17 @@ import vekta.context.MainMenuContext;
 import vekta.context.World;
 import vekta.item.ItemType;
 
+import java.util.logging.LogManager;
+
 /**
  * Core class for all of Vekta.
  */
 public class Vekta extends PApplet {
+	static {
+		// Prevent library startup messages
+		LogManager.getLogManager().reset();
+	}
+	
 	private static Vekta instance;
 
 	public static Vekta getInstance() {

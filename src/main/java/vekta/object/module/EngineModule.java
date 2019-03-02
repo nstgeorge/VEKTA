@@ -30,6 +30,9 @@ public class EngineModule implements Module {
 
 	@Override
 	public void onUpdate(Ship ship) {
-		ship.accelerate(ship.getThrustControl() * getSpeed());
+		float thrust = ship.getThrustControl();
+		if(ship.consumeEnergy(20 * thrust * PER_MINUTE)) {
+			ship.accelerate(thrust * getSpeed());
+		}
 	}
 }

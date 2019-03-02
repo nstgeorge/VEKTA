@@ -1,12 +1,12 @@
 package vekta.terrain;
 
 import vekta.menu.Menu;
-import vekta.object.Ship;
+import vekta.object.PlayerShip;
 
 public class MoltenTerrain extends Terrain {
 
 	public MoltenTerrain() {
-		add("Dangerous");
+		add("Treacherous");
 	}
 
 	@Override
@@ -15,7 +15,7 @@ public class MoltenTerrain extends Terrain {
 	}
 
 	@Override
-	public void setupLandingMenu(Ship ship, Menu menu) {
+	public void setupLandingMenu(PlayerShip ship, Menu menu) {
 		
 	}
 }

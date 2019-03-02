@@ -32,7 +32,7 @@ public class TargetingModule implements Module, Targeter {
 	public void setMode(TargetingMode mode) {
 		this.mode = mode;
 		selecting = false;
-		getWorld().updateTargeter(ship, this);
+		getWorld().updateTargeters(ship);
 	}
 
 	@Override
@@ -55,9 +55,9 @@ public class TargetingModule implements Module, Targeter {
 		}
 
 		switch(mode) {
-		case NEAREST_PLANET:
+		case PLANET:
 			return obj instanceof Planet;
-		case NEAREST_SHIP:
+		case SHIP:
 			return obj instanceof Ship;
 		default:
 			return false;
@@ -102,16 +102,16 @@ public class TargetingModule implements Module, Targeter {
 			selecting = true;
 			break;
 		case '1':
-			setMode(TargetingModule.TargetingMode.NEAREST_PLANET);
+			setMode(TargetingModule.TargetingMode.PLANET);
 			break;
 		case '2':
-			setMode(TargetingModule.TargetingMode.NEAREST_SHIP);
+			setMode(TargetingModule.TargetingMode.SHIP);
 			break;
 		}
 	}
 
 	public enum TargetingMode {
-		NEAREST_PLANET,
-		NEAREST_SHIP,
+		PLANET,
+		SHIP,
 	}
 }

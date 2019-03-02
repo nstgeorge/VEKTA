@@ -1,7 +1,8 @@
 package vekta.terrain;
 
 import vekta.menu.Menu;
-import vekta.object.Ship;
+import vekta.menu.option.RechargeOption;
+import vekta.object.PlayerShip;
 
 public class MiningTerrain extends Terrain {
 
@@ -19,7 +20,7 @@ public class MiningTerrain extends Terrain {
 	}
 
 	@Override
-	public void setupLandingMenu(Ship ship, Menu menu) {
-		// TODO: scavenge option
+	public void setupLandingMenu(PlayerShip ship, Menu menu) {
+		menu.add(new RechargeOption(ship));
 	}
 }

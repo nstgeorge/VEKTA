@@ -30,15 +30,13 @@ public class TerrestrialPlanet extends Planet {
 	@Override
 	public void onCollide(SpaceObject s) {
 		// Check if landing
-		if(s instanceof PlayerShip) {
-			PlayerShip ship = (PlayerShip)s;
+		if(s instanceof Ship) {
+			Ship ship = (Ship)s;
 			if(ship.isLanding()) {
-				if(site.land(ship)) {
-					return;
-				}
+				site.land(ship);
 			}
+			return; // Prevent ships from being destroyed when landing
 		}
-		// Oof
 		super.onCollide(s);
 	}
 

@@ -2,7 +2,7 @@ package vekta.terrain;
 
 import vekta.Vekta;
 import vekta.menu.Menu;
-import vekta.object.Ship;
+import vekta.object.PlayerShip;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -39,5 +39,5 @@ public abstract class Terrain {
 
 	public abstract String getOverview();
 
-	public abstract void setupLandingMenu(Ship ship, Menu menu);
+	public abstract void setupLandingMenu(PlayerShip ship, Menu menu);
 }

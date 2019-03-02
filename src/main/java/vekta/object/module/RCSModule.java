@@ -30,6 +30,9 @@ public class RCSModule implements Module {
 
 	@Override
 	public void onUpdate(Ship ship) {
-		ship.turn(ship.getTurnControl() * getTurnSpeed());
+		float turn = ship.getTurnControl();
+		if(ship.consumeEnergy(5 * turn * PER_MINUTE)) {
+			ship.turn(turn * getTurnSpeed());
+		}
 	}
 }

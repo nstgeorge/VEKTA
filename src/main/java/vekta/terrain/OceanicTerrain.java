@@ -1,7 +1,7 @@
 package vekta.terrain;
 
 import vekta.menu.Menu;
-import vekta.object.Ship;
+import vekta.object.PlayerShip;
 
 public class OceanicTerrain extends Terrain {
 
@@ -9,7 +9,6 @@ public class OceanicTerrain extends Terrain {
 		if(chance(.9)) {
 			add("Atmosphere");
 		}
-		add("Oceans");
 	}
 
 	@Override
@@ -19,7 +18,7 @@ public class OceanicTerrain extends Terrain {
 
 	
 	@Override
-	public void setupLandingMenu(Ship ship, Menu menu) {
+	public void setupLandingMenu(PlayerShip ship, Menu menu) {
 		// TODO: scavenge option
 	}
 }
