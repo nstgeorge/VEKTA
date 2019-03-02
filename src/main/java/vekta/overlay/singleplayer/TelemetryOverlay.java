@@ -23,8 +23,9 @@ public class TelemetryOverlay implements Overlay {
 	}
 
 	private void updateUIInformation() {
-		distString = String.valueOf(ship.getTarget() != null
-				? (float)round(ship.getPosition().dist(ship.getTarget().getPosition()) * 100) / 100
+		SpaceObject target = ship.findTarget();
+		distString = String.valueOf(target != null
+				? (float)round(ship.getPosition().dist(target.getPosition()) * 100) / 100
 				: 0);
 	}
 
@@ -48,7 +49,7 @@ public class TelemetryOverlay implements Overlay {
 		drawDial("Velocity", ship.getVelocity().copy(), v.width - 500, v.height - 65, v.color(0, 255, 0));
 
 		// Text - left
-		SpaceObject target = ship.getTarget();
+		SpaceObject target = ship.findTarget();
 		String targetString;
 		if(target == null) {
 			v.fill(100, 100, 100);

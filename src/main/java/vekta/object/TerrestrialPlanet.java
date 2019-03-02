@@ -31,10 +31,10 @@ public class TerrestrialPlanet extends Planet {
 	public void onCollide(SpaceObject s) {
 		if(s instanceof Ship) {
 			Ship ship = (Ship)s;
-			if(ship.isLanding()) {
+//			if(ship.isLanding()) {
 				site.land(ship);
 				return; // Prevent ships from being destroyed after landing
-			}
+//			}
 		}
 		super.onCollide(s);
 	}

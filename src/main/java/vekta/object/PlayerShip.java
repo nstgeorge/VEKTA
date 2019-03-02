@@ -25,7 +25,7 @@ public class PlayerShip extends Ship implements Upgradeable {
 	private static final float DEF_RADIUS = 5;
 	private static final float DEF_SPEED = .1F; // Base speed (engine speed = 1)
 	private static final float DEF_TURN = 20; // Base turn speed (RCS turnSpeed = 1)
-	private static final float APPROACH_SPEED = 1F;
+	private static final float APPROACH_SPEED = .02F;
 
 	// Exclusive PlayerShip things
 	private final int controlScheme; // Defined by CONTROL_DEF: 0 = WASD, 1 = IJKL
@@ -34,7 +34,7 @@ public class PlayerShip extends Ship implements Upgradeable {
 	private float energy;
 	private float maxEnergy;
 
-	private boolean landing;
+	private boolean autopilot;
 	private final PVector influence = new PVector();
 
 	// Upgradeable modules
@@ -56,11 +56,12 @@ public class PlayerShip extends Ship implements Upgradeable {
 
 	@Override
 	public boolean isLanding() {
-		return landing;
+		return autopilot;
 	}
 
 	@Override
 	public void onLand(LandingSite site) {
+		clearControls();
 		Menu menu = new Menu(new LandingMenuHandle(site, getWorld()));
 		site.getTerrain().setupLandingMenu(this, menu);
 		menu.add(new TerrainInfoOption(site.getTerrain()));
@@ -71,7 +72,7 @@ public class PlayerShip extends Ship implements Upgradeable {
 
 	@Override
 	public void onDock(SpaceObject s) {
-		thrust = 0;
+		clearControls();
 		if(s instanceof CargoShip) {
 			Inventory inv = ((CargoShip)s).getInventory();
 			Menu menu = new Menu(new ObjectMenuHandle(new ShipUndockOption(this, getWorld()), s));
@@ -79,7 +80,6 @@ public class PlayerShip extends Ship implements Upgradeable {
 			menu.addDefault();
 			setContext(menu);
 		}
-		//		super.onDock(s);
 	}
 
 	@Override
@@ -139,9 +139,16 @@ public class PlayerShip extends Ship implements Upgradeable {
 		return list;
 	}
 
-	public SpaceObject getTarget() {
-		Targeter m = ((Targeter)getBestModule(ModuleType.TARGETING_COMPUTER));
-		return m != null ? m.getTarget() : null;
+	public SpaceObject findTarget() {
+		Targeter t = ((Targeter)getBestModule(ModuleType.TARGET_COMPUTER));
+		return t != null ? t.getTarget() : null;
+	}
+
+	// Reset after landing/docking (temporary)
+	public void clearControls() {
+		thrust = 0;
+		turn = 0;
+		autopilot = false;
 	}
 
 	@Override
@@ -215,14 +222,16 @@ public class PlayerShip extends Ship implements Upgradeable {
 			module.onUpdate(this);
 		}
 
-		if(landing && getTarget() != null) {
-			PVector relative = velocity.copy().sub(getTarget().getVelocity());
-			float mag = relative.mag();
-			if(mag > 0) {
-				heading.set(relative).normalize();
-				float approachFactor = Math.min(1, 5 * getTarget().getRadius() / getTarget().getPosition().sub(position).mag());
-				thrust = Math.max(-1, Math.min(1, (APPROACH_SPEED * (1 - approachFactor / 2) - mag) * approachFactor / getSpeed()));
-			}
+		// TODO: externalize as TargeterModule upgrade
+		SpaceObject target = findTarget();
+		if(autopilot && target != null) {
+			PVector offset = target.getPosition().sub(position);
+			PVector relative = target.getVelocity().sub(velocity);
+			PVector headingCorrection = relative.setMag(APPROACH_SPEED);
+			PVector desiredVelocity = offset.mult(APPROACH_SPEED).add(target.getVelocity());
+			float dir = offset.dot(getVelocity().sub(desiredVelocity)) >= 0 ? -1 : 1;
+			heading.set(getVelocity().sub(desiredVelocity).setMag(-dir).add(headingCorrection));
+			thrust = Math.max(-1, Math.min(1, dir * getVelocity().dist(desiredVelocity) / getSpeed()));
 		}
 	}
 
@@ -230,25 +239,28 @@ public class PlayerShip extends Ship implements Upgradeable {
 		for(Module module : getModules()) {
 			module.onKeyPress(this, key);
 		}
-		landing = false;
 		if(controlScheme == 0) {   // WASD
 			switch(key) {
 			case 'w':
 				Resources.loopSound("engine");
 				thrust = 1;
+				autopilot = false;
 				break;
 			case 'a':
 				turn = -1;
+				autopilot = false;
 				break;
 			case 's':
 				Resources.loopSound("engine");
 				thrust = -1;
+				autopilot = false;
 				break;
 			case 'd':
 				turn = 1;
+				autopilot = false;
 				break;
 			case '\t':
-				landing = true;
+				autopilot = true;
 				getWorld().updateTargeters(this);
 				break;
 			case 'e':
@@ -262,16 +274,20 @@ public class PlayerShip extends Ship implements Upgradeable {
 			case 'i':
 				Resources.stopSound("engine");
 				thrust = 1;
+				autopilot = false;
 				break;
 			case 'j':
 				turn = -1;
+				autopilot = false;
 				break;
 			case 'k':
 				Resources.stopSound("engine");
 				thrust = -1;
+				autopilot = false;
 				break;
 			case 'l':
 				turn = 1;
+				autopilot = false;
 				break;
 			}
 		}

@@ -53,7 +53,7 @@ public class InhabitedTerrain extends Terrain {
 		computeOffers(ship.getInventory(), shipOffers, offers, 1 / ITEM_MARKUP);
 		computeOffers(getInventory(), offers, shipOffers, ITEM_MARKUP);
 
-		if(has("Urban")) {
+		if(ship.getEnergy() / ship.getMaxEnergy() <= .9F) {
 			menu.add(new RechargeOption(ship));
 		}
 		menu.add(new TradeMenuOption(true, ship.getInventory(), getInventory(), offers));

@@ -1,11 +1,10 @@
 package vekta.object.module;
 
+import vekta.Vekta;
 import vekta.object.Planet;
 import vekta.object.Ship;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
-
-import static vekta.Vekta.*;
 
 public class TargetingModule implements Module, Targeter {
 	private static boolean selecting;
@@ -32,7 +31,7 @@ public class TargetingModule implements Module, Targeter {
 	public void setMode(TargetingMode mode) {
 		this.mode = mode;
 		selecting = false;
-		getWorld().updateTargeters(ship);
+		Vekta.getWorld().updateTargeters(ship);
 	}
 
 	@Override
@@ -47,9 +46,6 @@ public class TargetingModule implements Module, Targeter {
 
 	@Override
 	public boolean isValidTarget(SpaceObject obj) {
-		if(ship.isLanding()) {
-			return obj instanceof Planet || obj instanceof Ship;
-		}
 		if(mode == null) {
 			return false;
 		}
@@ -71,7 +67,7 @@ public class TargetingModule implements Module, Targeter {
 
 	@Override
 	public ModuleType getType() {
-		return ModuleType.TARGETING_COMPUTER;
+		return ModuleType.TARGET_COMPUTER;
 	}
 
 	@Override
