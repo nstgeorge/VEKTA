@@ -56,7 +56,11 @@ public abstract class Ship extends SpaceObject {
 	}
 
 	public PVector getHeading() {
-		return heading;
+		return heading.copy();
+	}
+
+	public void setHeading(PVector heading) {
+		heading.set(heading).normalize();
 	}
 
 	public float getSpeed() {
@@ -66,7 +70,7 @@ public abstract class Ship extends SpaceObject {
 	public float getTurnSpeed() {
 		return turnSpeed;
 	}
-	
+
 	public boolean isDocked() {
 		return getDock() != null;
 	}
@@ -105,8 +109,12 @@ public abstract class Ship extends SpaceObject {
 	public abstract float getTurnControl();
 
 	public void accelerate(float amount) {
+		accelerate(amount, heading);
+	}
+
+	public void accelerate(float amount, PVector direction) {
 		if(amount != 0) {
-			addVelocity(getHeading().copy().setMag(amount * getSpeed()));
+			addVelocity(direction.copy().setMag(amount * getSpeed()));
 		}
 	}
 

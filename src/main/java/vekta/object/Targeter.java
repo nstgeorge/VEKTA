@@ -7,7 +7,7 @@ public interface Targeter {
 
 	boolean isValidTarget(SpaceObject obj);
 	
-	default boolean shouldResetTarget() {
+	default boolean shouldUpdateTarget() {
 		SpaceObject t = getTarget();
 		return t == null || !isValidTarget(t);
 	}
