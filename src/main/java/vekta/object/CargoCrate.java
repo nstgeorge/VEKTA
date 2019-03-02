@@ -58,14 +58,7 @@ public class CargoCrate extends SpaceObject {
 		v.popMatrix();
 	}
 
-	@Override
-	public boolean shouldDestroy(SpaceObject other) {
-		return false;
-	}
-
-	@Override
-	public void onCollide(SpaceObject s) {
-		super.onCollide(s);
-//		removeObject(this);
+	@Override public void onCollide(SpaceObject s) {
+		destroyBecause(s);
 	}
 }  

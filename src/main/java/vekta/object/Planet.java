@@ -46,6 +46,13 @@ public abstract class Planet extends SpaceObject {
 	}
 
 	@Override
+	public void onCollide(SpaceObject s) {
+		if(getMass() * 2 >= s.getMass()) {
+			s.destroyBecause(this);
+		}
+	}
+
+	@Override
 	public void onDestroy(SpaceObject s) {
 		//println("Planet destroyed with radius: " + getRadius());
 

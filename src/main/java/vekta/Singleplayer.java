@@ -10,10 +10,7 @@ import vekta.object.module.HyperdriveModule;
 import vekta.object.module.RCSModule;
 import vekta.object.module.TractorBeamModule;
 import vekta.overlay.Overlay;
-import vekta.overlay.singleplayer.ShipComputerOverlay;
-import vekta.overlay.singleplayer.ShipEnergyOverlay;
-import vekta.overlay.singleplayer.ShipMoneyOverlay;
-import vekta.overlay.singleplayer.TelemetryOverlay;
+import vekta.overlay.singleplayer.SingleplayerOverlay;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,50 +19,39 @@ import java.util.List;
 import static vekta.Vekta.*;
 
 public class Singleplayer implements World {
-
-	private static final float MAX_CAMERA_Y = 5000;
-
 	private static int nextID = 0;
 
 	// Low pass filter
 	private LowPass lowPass;
 
-	int planetCount;
-	boolean dead;
+	// Camera position tracking
+	private PVector cameraPos;
+	private float cameraSpd;
 
-	PVector cameraPos;
-	float cameraSpd;
+	private PlayerShip playerShip;
 
-	PlayerShip playerShip;
-
-	private float zoom = 1; // Camera zoom
+	private float zoom = 1; // Camera zoom factor
 
 	private Counter targetCt = new Counter(30); // Counter for periodically updating Targeter instances
 	private Counter spawnCt = new Counter(100); // Counter for periodically cleaning/spawning objects
 
 	UniverseGen generator = new UniverseGen(10000);
 
-	List<SpaceObject> objects = new ArrayList<>();
-	List<SpaceObject> markedForDeath = new ArrayList<>();
-	List<SpaceObject> markedForAddition = new ArrayList<>();
+	private final List<SpaceObject> objects = new ArrayList<>();
+	private final List<SpaceObject> markedForDeath = new ArrayList<>();
+	private final List<SpaceObject> markedForAddition = new ArrayList<>();
 
-	List<Overlay> overlays = new ArrayList<>();
-
-	// UI Variables (not real time updated)
-	float shortDist;
-	float speed;
-	String position;
+	private Overlay overlay;
 
 	@Override
 	public void init() {
 		Vekta v = getInstance();
 		v.background(0);
+		v.frameCount = 0;
 
 		lowPass = new LowPass(v);
 
 		Resources.setMusic("atmosphere");
-
-		v.frameCount = 0;
 
 		playerShip = new PlayerShip(
 				"VEKTA I",
@@ -92,15 +78,8 @@ public class Singleplayer implements World {
 		playerShip.getInventory().add(new ModuleItem(new HyperdriveModule(1))); // Hyperdrive upgrade for testing
 		playerShip.getInventory().add(new ModuleItem(new TractorBeamModule(1))); // Tractor beam upgrade for testing
 
-		// Player ship overlays
-		addOverlay(new TelemetryOverlay(playerShip));
-		addOverlay(new ShipComputerOverlay(50, -150, playerShip));
-		addOverlay(new ShipEnergyOverlay(-300, -100 + 24, playerShip));
-		addOverlay(new ShipMoneyOverlay(-300, -100 + 48, playerShip));
-	}
-
-	public void addOverlay(Overlay overlay) {
-		overlays.add(overlay);
+		// Overlay UI
+		overlay = new SingleplayerOverlay(playerShip);
 	}
 
 	@Override
@@ -108,13 +87,10 @@ public class Singleplayer implements World {
 		Vekta v = getInstance();
 		v.background(0);
 
-		if(!dead) {
+		if(!playerShip.isDestroyed()) {
+			// Camera follow
 			cameraPos = playerShip.getPosition();
 			cameraSpd = playerShip.getVelocity().mag();
-			// Camera follow
-		}
-		else {
-			cameraSpd = 0;
 		}
 		v.camera(cameraPos.x, cameraPos.y, min(MAX_CAMERA_Y, (.07F * cameraSpd + .7F) * (v.height / 2F) / tan(PI * 30 / 180) * zoom), cameraPos.x, cameraPos.y, 0F,
 				0F, 1F, 0F);
@@ -127,7 +103,7 @@ public class Singleplayer implements World {
 		objects.addAll(markedForAddition);
 		markedForAddition.clear();
 
-		planetCount = 0;
+		int planetCount = 0;
 		for(SpaceObject s : objects) {
 			if(markedForDeath.contains(s)) {
 				continue;
@@ -184,26 +160,20 @@ public class Singleplayer implements World {
 		}
 
 		// Info
-		if(!dead) {
+		if(!playerShip.isDestroyed()) {
 			// GUI setup
 			v.hint(DISABLE_DEPTH_TEST);
 			v.camera();
 			v.noLights();
 
-			// Set overlay text settings
-			v.textFont(bodyFont);
-			v.textAlign(LEFT);
-			v.textSize(16);
-			
-			for(Overlay overlay : overlays) {
-				overlay.draw();
-			}
+			overlay.draw();
 		}
 		// Menus
 		else {
 			v.hint(DISABLE_DEPTH_TEST);
 			v.camera();
 			v.noLights();
+
 			v.textFont(headerFont);
 			v.textAlign(CENTER, CENTER);
 
@@ -223,7 +193,7 @@ public class Singleplayer implements World {
 
 	@Override
 	public void keyPressed(char key) {
-		if(dead) {
+		if(playerShip.isDestroyed()) {
 			if(key == 'x') {
 				restart();
 			}
@@ -233,14 +203,15 @@ public class Singleplayer implements World {
 				setContext(new PauseMenuContext(this));
 			}
 			if(key == 'k') {
-				dead = true;
+				playerShip.destroyBecause(null);
 			}
-			if(key == 'r') {
-				mouseWheel(-1);
-			}
-			if(key == 'f') {
-				mouseWheel(1);
-			}
+			// Phasing out in favor of mouse wheel
+			//			if(key == 'r') {
+			//				mouseWheel(-1);
+			//			}
+			//			if(key == 'f') {
+			//				mouseWheel(1);
+			//			}
 			playerShip.keyPress(key);
 		}
 	}
@@ -256,7 +227,6 @@ public class Singleplayer implements World {
 	}
 
 	public void setDead() {
-		dead = true;
 		if(Resources.getMusic() != null)
 			lowPass.process(Resources.getMusic(), 800);
 		Resources.stopSound("engine");

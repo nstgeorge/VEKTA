@@ -31,19 +31,18 @@ public class TerrestrialPlanet extends Planet {
 	public void onCollide(SpaceObject s) {
 		if(s instanceof Ship) {
 			Ship ship = (Ship)s;
-//			if(ship.isLanding()) {
-				site.land(ship);
+			if(ship.isLanding() && site.land(ship)) {
 				return; // Prevent ships from being destroyed after landing
-//			}
+			}
 		}
-		super.onCollide(s);
+		super.onCollide(s); // Oof
 	}
 
 	@Override
 	public void onDestroy(SpaceObject s) {
 		super.onDestroy(s);
 
-		// If something landed on this planet, destroy it as well
+		// If something landed on this planet, destroyBecause it as well
 		SpaceObject landed = site.getLanded();
 		if(landed != null) {
 			landed.onDestroy(s);

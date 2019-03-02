@@ -141,10 +141,10 @@ public abstract class Ship extends SpaceObject {
 			if(ship.getVelocity().sub(velocity).magSq() <= MAX_DOCKING_SPEED * MAX_DOCKING_SPEED) {
 				// Board ship
 				ship.dock(this);
-				return;
+//				return;
 			}
 		}
-		super.onCollide(s);
+		//		super.onCollide(s);
 	}
 
 	@Override
