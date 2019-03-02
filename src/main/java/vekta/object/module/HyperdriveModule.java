@@ -6,7 +6,8 @@ import vekta.object.Ship;
 import static vekta.Vekta.*;
 
 public class HyperdriveModule extends EngineModule {
-	private static final float MIN_SPEED = 10;
+	private static final float MIN_SPEED = 20;
+	private static final float MAX_SPEED = 100;
 
 	private final float boost;
 
@@ -50,7 +51,7 @@ public class HyperdriveModule extends EngineModule {
 	@Override
 	public void onUpdate(Ship ship) {
 		boolean wasBoosting = currentBoost > 0;
-		currentBoost = max(0, ship.getVelocity().mag() * getBoost() - MIN_SPEED);
+		currentBoost = min(max(0, ship.getVelocity().mag() * getBoost() - MIN_SPEED), MAX_SPEED);
 		if(!wasBoosting && currentBoost > 0) {
 			Resources.playSound("hyperdriveHit");
 			Resources.loopSound("hyperdriveLoop");
