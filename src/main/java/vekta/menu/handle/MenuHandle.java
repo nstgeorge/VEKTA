@@ -102,7 +102,7 @@ public class MenuHandle {
 			menu.scroll(1);
 		}
 		else if(key == 'x') {
-			Resources.playSound("change");
+			Resources.playSound("select");
 			menu.getCursor().select(menu);
 		}
 	}

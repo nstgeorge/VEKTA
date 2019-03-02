@@ -34,10 +34,10 @@ public class UniverseGen {
 		Vekta v = getInstance();
 		PVector pos = randomPos(getRadius() / 2, getRadius()).add(around);
 		float r = v.random(1);
-		if(r > .4F) {
+		if(r > .3F) {
 			createSystem(pos);
 		}
-		else if(r > .2F) {
+		else if(r > .1F) {
 			Ship s = new CargoShip("TRAWLX", PVector.random2D(), pos, new PVector(), v.color(0, 100, 255));
 			addItems(s.getInventory(), 3);
 			addObject(s);
