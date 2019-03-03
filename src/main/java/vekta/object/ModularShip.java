@@ -4,6 +4,7 @@ import processing.core.PVector;
 import vekta.Resources;
 import vekta.item.Item;
 import vekta.item.ModuleItem;
+import vekta.object.module.BatteryModule;
 import vekta.object.module.Module;
 import vekta.object.module.ModuleType;
 import vekta.object.module.Upgradeable;
@@ -19,6 +20,8 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 	
 	private float energy;
 	private float maxEnergy;
+	
+	private BatteryModule battery;
 
 	// Upgradeable modules
 	private final List<Module> modules = new ArrayList<>();
@@ -90,8 +93,7 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 		return maxEnergy;
 	}
 
-	// TEMPORARY: only use by modules to adjust max energy
-	public void addMaxEnergy(float amount) {
+	public void setMaxEnergy(float amount) {
 		maxEnergy += amount;
 	}
 
@@ -116,16 +118,13 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 	}
 
 	@Override
-	public Module getBestModule(ModuleType type) {
-		//		Module module = null;
+	public Module getModule(ModuleType type) {
 		for(Module m : getModules()) {
-			if(m.getType() == type/* && (module == null || m.isBetter(module))*/) {
-				//				module = m;
-				return m; // Only one module allowed per type for now
+			if(m.getType() == type) {
+				return m;
 			}
 		}
 		return null;
-		//		return module;
 	}
 
 	@Override

@@ -1,19 +1,31 @@
 package vekta.object.module;
 
+import static java.lang.Math.round;
+
 public class BatteryModule extends ShipModule {
-	private final float capacity;
-	
-	public BatteryModule(float capacity) {
+	private final int capacity;
+
+	private float charge;
+
+	public BatteryModule(int capacity) {
 		this.capacity = capacity;
 	}
 
-	public float getCapacity() {
+	public int getCapacity() {
 		return capacity;
+	}
+
+	public float getCharge() {
+		return getShip() != null ? getShip().getEnergy() : charge;
+	}
+
+	public float getRatio() {
+		return getCharge() / getCapacity();
 	}
 
 	@Override
 	public String getName() {
-		return "Battery v" + getCapacity();
+		return "Battery v" + getCapacity() + " (" + round(getRatio() * 100) + "%)";
 	}
 
 	@Override
@@ -28,16 +40,20 @@ public class BatteryModule extends ShipModule {
 
 	@Override
 	public Module getVariant() {
-		return new BatteryModule(chooseInclusive(.1F, 2, .1F) * 100);
+		BatteryModule battery = new BatteryModule(chooseInclusive(1, 20) * 10);
+		battery.charge = choose(0, battery.getCapacity());
+		return battery;
 	}
 
 	@Override
 	public void onInstall() {
-		getShip().addMaxEnergy(getCapacity());
+		getShip().setEnergy(getCharge());
+		getShip().setMaxEnergy(getCapacity());
 	}
 
 	@Override
 	public void onUninstall() {
-		getShip().addMaxEnergy(-getCapacity());
+		charge = getShip().getEnergy();
+		getShip().setMaxEnergy(0);
 	}
 }

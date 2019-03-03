@@ -5,7 +5,7 @@ import java.util.List;
 public interface Upgradeable {
 	List<Module> getModules();
 
-	Module getBestModule(ModuleType type);
+	Module getModule(ModuleType type);
 
 	List<Module> findUpgrades();
 

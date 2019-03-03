@@ -11,7 +11,7 @@ import static vekta.Vekta.getWorld;
 
 public class TorpedoModule extends WeaponModule {
 	private final float speed;
-	
+
 	public TorpedoModule(float speed) {
 		this.speed = speed;
 	}
@@ -31,9 +31,14 @@ public class TorpedoModule extends WeaponModule {
 	}
 
 	@Override
+	public boolean isBetter(Module other) {
+		return other instanceof TorpedoModule && getSpeed() > ((TorpedoModule)other).getSpeed();
+	}
+
+	@Override
 	public void fireWeapon() {
 		ModularShip ship = getShip();
-		Module m = ship.getBestModule(ModuleType.TARGET_COMPUTER);
+		Module m = ship.getModule(ModuleType.TARGET_COMPUTER);
 		if(m instanceof Targeter) {
 			SpaceObject target = ((Targeter)m).getTarget();
 			if(target != null && ship.consumeEnergy(1)) {

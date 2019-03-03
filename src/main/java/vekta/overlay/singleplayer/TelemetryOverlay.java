@@ -26,7 +26,7 @@ public class TelemetryOverlay implements Overlay {
 	}
 
 	private void updateUIInformation() {
-		targeter = ((Targeter)ship.getBestModule(ModuleType.TARGET_COMPUTER));
+		targeter = ((Targeter)ship.getModule(ModuleType.TARGET_COMPUTER));
 
 		if(targeter != null) {
 			SpaceObject target = targeter.getTarget();

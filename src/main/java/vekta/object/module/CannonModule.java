@@ -21,6 +21,11 @@ public class CannonModule extends WeaponModule {
 	}
 
 	@Override
+	public boolean isBetter(Module other) {
+		return false;
+	}
+
+	@Override
 	public void fireWeapon() {
 		ModularShip ship = getShip();
 		if(ship.consumeEnergy(.5F)) {
