@@ -1,8 +1,10 @@
 Geysers
 Volcanoes
+Radiation
 Tunnels
 Caves
 Earthquakes
+Landslides
 Natural Arches
 Ravines
 Mountains

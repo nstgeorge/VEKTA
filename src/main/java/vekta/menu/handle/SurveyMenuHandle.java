@@ -70,7 +70,7 @@ public class SurveyMenuHandle extends MenuHandle {
 		List<String> features = site.getTerrain().getFeatures();
 		for(int i = 0; i < features.size(); i++) {
 			String feature = features.get(i);
-			v.text(feature, PLANET_SIZE + 50, (i - (features.size() - 1) / 2F) * 50);
+			v.text(feature, PLANET_SIZE * 1.5F, (i - (features.size() - 1) / 2F) * 50);
 		}
 
 		v.strokeWeight(1);
