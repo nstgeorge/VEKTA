@@ -17,6 +17,7 @@ public class ItemGenerator {
 			new CannonModule(),
 			new DrillModule(1),
 			new EngineModule(1),
+			new GeneratorModule(1),
 			new HyperdriveModule(1),
 			new RCSModule(1),
 			new TargetingModule(),

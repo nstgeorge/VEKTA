@@ -13,7 +13,7 @@ public interface Module extends Cloneable {
 	String getName();
 
 	ModuleType getType();
-
+	
 	boolean isBetter(Module other);
 
 	Module getVariant();

@@ -12,9 +12,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static vekta.Vekta.max;
-import static vekta.Vekta.min;
-
 public abstract class ModularShip extends Ship implements Upgradeable {
 	private boolean landing;
 	private float thrust;
@@ -69,7 +66,10 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 	}
 
 	public void setEnergy(float energy) {
-		this.energy = max(0, min(getMaxEnergy(), energy));
+		this.energy = energy;
+		if(this.energy > maxEnergy){
+			this.energy = maxEnergy;
+		}
 	}
 
 	public void addEnergy(float amount) {
