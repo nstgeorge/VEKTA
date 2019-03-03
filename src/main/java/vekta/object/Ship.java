@@ -8,8 +8,7 @@ import vekta.item.Item;
 import vekta.terrain.LandingSite;
 
 import static processing.core.PConstants.CLOSE;
-import static vekta.Vekta.addObject;
-import static vekta.Vekta.getInstance;
+import static vekta.Vekta.*;
 
 public abstract class Ship extends SpaceObject {
 	private static final float CRATE_SPEED = 1;
@@ -143,7 +142,7 @@ public abstract class Ship extends SpaceObject {
 	@Override
 	public void onDestroy(SpaceObject s) {
 		for(Item item : getInventory()) {
-			addObject(new CargoCrate(item, getPosition(), PVector.random2D().setMag(getInstance().random(CRATE_SPEED))));
+			addObject(new CargoCrate(item, getPosition(), PVector.random2D().setMag(v.random(CRATE_SPEED))));
 		}
 		super.onDestroy(s);
 	}

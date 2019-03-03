@@ -6,8 +6,7 @@ import vekta.item.ItemType;
 import vekta.item.ModuleItem;
 import vekta.object.module.*;
 
-import static vekta.Vekta.getInstance;
-import static vekta.Vekta.round;
+import static vekta.Vekta.*;
 
 public class ItemGenerator {
 
@@ -27,7 +26,6 @@ public class ItemGenerator {
 	};
 
 	public static Item randomItem() {
-		Vekta v = getInstance();
 		float r = v.random(1);
 		if(r > .4) {
 			ItemType type = randomItemType();
@@ -42,12 +40,12 @@ public class ItemGenerator {
 	}
 
 	public static Item randomOre(String planetName) {
-		ItemType type = getInstance().random(1) > .2F ? ItemType.COMMON : ItemType.RARE;
+		ItemType type = v.random(1) > .2F ? ItemType.COMMON : ItemType.RARE;
 		return new Item(generateOreName(planetName, type), type);
 	}
 
 	public static ItemType randomItemType() {
-		float r = getInstance().random(1);
+		float r = v.random(1);
 		if(r > .3) {
 			return ItemType.COMMON;
 		}
@@ -60,17 +58,15 @@ public class ItemGenerator {
 	}
 
 	public static void addLoot(Inventory inv, int lootTier) {
-		int itemCt = round(getInstance().random(lootTier - 1, lootTier * 2));
+		int itemCt = round(v.random(lootTier - 1, lootTier * 2));
 		for(int i = 0; i < itemCt; i++) {
-			// TODO: occasionally add ModuleItems
+			// TODO: occasionally addFeature ModuleItems
 			Item item = randomItem();
 			inv.add(item);
 		}
 	}
 
 	public static String generateItemName(ItemType type) {
-		Vekta v = getInstance();
-		
 		String name = v.random(Resources.getStrings("item_nouns"));
 		if(v.random(1) < .5) {
 			name += " " + v.random(Resources.getStrings("item_modifiers"));
@@ -89,7 +85,6 @@ public class ItemGenerator {
 	}
 
 	public static String generateOreName(String planetName, ItemType type) {
-		Vekta v = getInstance();
 		String key = "ore_" + (type == ItemType.COMMON ? "common" : "rare");
 		String name = v.random(Resources.getStrings(key));
 		if(type == ItemType.LEGENDARY) {

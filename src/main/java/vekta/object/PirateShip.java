@@ -68,7 +68,7 @@ public class PirateShip extends Ship implements Targeter {
 			accelerate(max(-.5F, min(1F, -rangeFactor)));
 			if(rangeFactor >= -ATTACK_DIST * ATTACK_DIST / 16 && attackCt.cycle()) {
 				fireProjectile();
-				attackCt.delay((int)getInstance().random(MIN_ATTACK, MAX_ATTACK));
+				attackCt.delay((int)v.random(MIN_ATTACK, MAX_ATTACK));
 			}
 		}
 		velocity.mult(SPEED_DAMPEN);
@@ -82,7 +82,7 @@ public class PirateShip extends Ship implements Targeter {
 	private void fireProjectile() {
 		getWorld().playSound("laser", this.position);
 		PVector vel = heading.copy().setMag(PROJECTILE_SPEED)
-				.rotate(getInstance().random(-ATTACK_SPREAD, ATTACK_SPREAD) * PI / 360)
+				.rotate(v.random(-ATTACK_SPREAD, ATTACK_SPREAD) * PI / 360)
 				.add(velocity);
 
 		SpaceObject projectile = v.random(1) < .2F

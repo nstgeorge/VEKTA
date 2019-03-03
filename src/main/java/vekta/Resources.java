@@ -6,7 +6,8 @@ import processing.sound.SoundFile;
 import java.util.HashMap;
 import java.util.Map;
 
-import static vekta.Vekta.*;
+import static vekta.Vekta.concat;
+import static vekta.Vekta.v;
 
 public class Resources {
 	private static final Map<String, String[]> STRING_ARRAYS = new HashMap<>();
@@ -34,11 +35,12 @@ public class Resources {
 		addSound("tractorBeam");
 		addSound("land");
 		addSound("explosion");
-		
+
 		// Name strings
 		addStrings("planet_prefixes");
 		addStrings("planet_suffixes");
-		
+		addStrings("planet_features");
+
 		addStrings("item_adj_common");
 		addStrings("item_adj_rare");
 		addStrings("item_nouns");
@@ -50,16 +52,16 @@ public class Resources {
 		addStrings("overview_urban");
 		addStrings("overview_rural");
 
-		logo = getInstance().loadShape("VEKTA.svg");
+		logo = v.loadShape("VEKTA.svg");
 	}
 
 	private static void addStrings(String key) {
-		String[] strings = getInstance().loadStrings("text/" + key + ".txt");
+		String[] strings = v.loadStrings("text/" + key + ".txt");
 		STRING_ARRAYS.put(key, strings);
 	}
 
 	private static void addSound(String key) {
-		SoundFile sound = new SoundFile(getInstance(), "sound/" + key + ".wav");
+		SoundFile sound = new SoundFile(v, "sound/" + key + ".wav");
 		SOUNDS.put(key, sound);
 	}
 
@@ -101,7 +103,7 @@ public class Resources {
 			sound.stop();
 		}
 	}
-	
+
 	public static void stopAllSounds() {
 		for(SoundFile sound : SOUNDS.values()) {
 			sound.stop();
@@ -141,7 +143,8 @@ public class Resources {
 		SoundFile sound = getSound(key);
 		if(sound != null) {
 			sound.amp(volume);
-		} else {
+		}
+		else {
 			System.out.println("Sound dont exist");
 		}
 	}

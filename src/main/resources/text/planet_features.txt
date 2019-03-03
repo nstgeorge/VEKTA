@@ -1,0 +1,20 @@
+Geysers
+Volcanoes
+Tunnels
+Caves
+Earthquakes
+Natural Arches
+Ravines
+Mountains
+Sheer Cliffs
+Canyons
+Plateaus
+Atmosphere
+Atmosphere, Toxic Air
+Atmosphere, Tornadoes
+Atmosphere, Hurricanes
+Atmosphere, Northern Lights
+Oceanic
+Oceanic, Islands
+Oceanic, Tsunamis
+Space Worms

@@ -22,12 +22,8 @@ public class Vekta extends PApplet {
 		// Prevent library startup messages
 		LogManager.getLogManager().reset();
 	}
-
-	private static Vekta instance;
-
-	public static Vekta getInstance() {
-		return instance;
-	}
+	
+	public static Vekta v; // Global access to Vekta instance
 
 	public static final String FONTNAME = "font/undefined-medium.ttf";
 
@@ -57,7 +53,7 @@ public class Vekta extends PApplet {
 	}
 
 	public void setup() {
-		instance = this;
+		v = this;
 
 		DEF_ZOOM = (height / 2.0F) / tan((PI * 30.0F / 180.0F)); // For some reason, this is the default eyeZ location for Processing
 		UI_COLOR = color(0, 255, 0);

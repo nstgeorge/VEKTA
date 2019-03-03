@@ -11,7 +11,7 @@ import vekta.object.PlayerShip;
 import java.util.HashMap;
 import java.util.Map;
 
-import static vekta.Vekta.getInstance;
+import static vekta.Vekta.v;
 
 public class InhabitedTerrain extends Terrain {
 	private static final float ITEM_MARKUP = 1.5F; // Price modifier after buying/selling to a landing terrain
@@ -23,20 +23,21 @@ public class InhabitedTerrain extends Terrain {
 	private final String overview;
 
 	public InhabitedTerrain() {
-		add("Atmosphere");
-		add("Habitable");
-		
+		addFeature("Atmosphere");
+		addFeature("Habitable");
+
 		String key;
 		if(chance(.4F)) {
-			add("Urban");
+			addFeature("Urban");
+			addFeature("Defended");
 			key = "overview_urban";
 		}
 		else {
-			add("Rural");
+			addFeature("Rural");
 			key = "overview_rural";
 		}
 
-		overview = getInstance().random(Resources.getStrings(key));
+		overview = v.random(Resources.getStrings(key));
 	}
 
 	public Inventory getInventory() {

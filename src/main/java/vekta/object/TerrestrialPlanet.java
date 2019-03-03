@@ -11,8 +11,8 @@ public class TerrestrialPlanet extends Planet {
 	private final LandingSite site;
 	private final Terrain terrain;
 
-	public TerrestrialPlanet(float mass, float density, Terrain terrain, PVector position, PVector velocity, int color) {
-		super(mass, density, position, velocity, color);
+	public TerrestrialPlanet(String name, float mass, float density, Terrain terrain, PVector position, PVector velocity, int color) {
+		super(name, mass, density, position, velocity, color);
 
 		this.terrain = terrain;
 		this.site = new LandingSite(this, terrain);
@@ -24,7 +24,7 @@ public class TerrestrialPlanet extends Planet {
 
 	@Override
 	public boolean isHabitable() {
-		return terrain.has("Habitable");
+		return terrain.hasFeature("Habitable");
 	}
 
 	@Override

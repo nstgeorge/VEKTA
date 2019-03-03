@@ -1,5 +1,7 @@
 package vekta;
 
+import static vekta.Vekta.*;
+
 public final class Counter {
 	private final int frames;
 	private int ct;
@@ -30,7 +32,7 @@ public final class Counter {
 	}
 
 	public Counter randomize() {
-		ct = (int)Vekta.getInstance().random(frames);
+		ct = (int)v.random(frames);
 		return this;
 	}
 

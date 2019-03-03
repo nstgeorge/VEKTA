@@ -7,6 +7,7 @@ import vekta.menu.Menu;
 import vekta.menu.option.MenuOption;
 
 import static processing.core.PConstants.CENTER;
+import static vekta.Vekta.v;
 
 /**
  * Main menu renderer
@@ -36,7 +37,7 @@ public class MainMenuHandle extends MenuHandle {
 	@Override
 	public void render(Menu menu) {
 		super.render(menu);
-		
+
 		v.shapeMode(CENTER);
 		v.shape(Resources.logo, v.width / 2F, v.height / 4F, 339.26F, 100);
 

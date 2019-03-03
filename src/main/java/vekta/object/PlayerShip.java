@@ -13,8 +13,7 @@ import vekta.terrain.LandingSite;
 
 import java.util.List;
 
-import static vekta.Vekta.getWorld;
-import static vekta.Vekta.setContext;
+import static vekta.Vekta.*;
 
 public class PlayerShip extends ModularShip {
 	// Default PlayerShip stuff
@@ -82,7 +81,7 @@ public class PlayerShip extends ModularShip {
 		for(Module m : getModules()) {
 			m.onLandingMenu(site, menu);
 		}
-		menu.add(new TerrainInfoOption(site.getTerrain()));
+		menu.add(new SurveyOption(site));
 		menu.addDefault();
 		Resources.playSound("land");
 		Vekta.setContext(menu);

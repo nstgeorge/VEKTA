@@ -7,6 +7,8 @@ import vekta.object.module.Upgradeable;
 
 import java.util.List;
 
+import static vekta.Vekta.v;
+
 /**
  * Module loadout menu renderer
  */

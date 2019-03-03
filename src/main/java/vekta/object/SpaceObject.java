@@ -1,7 +1,6 @@
 package vekta.object;
 
 import processing.core.PVector;
-import vekta.Vekta;
 
 import java.util.Collection;
 import java.util.List;
@@ -10,9 +9,6 @@ import static vekta.Vekta.*;
 
 public abstract class SpaceObject {
 	private static final int TRAIL_LENGTH = 100;
-	
-	// Convenient reference to Vekta instance
-	protected static final Vekta v = getInstance();
 
 	private int id;
 	private boolean destroyed;
@@ -77,6 +73,7 @@ public abstract class SpaceObject {
 	public final PVector setVelocity(PVector velocity) {
 		return this.velocity.set(velocity);
 	}
+
 	/**
 	 * Applies the given velocity to the object
 	 */
@@ -113,7 +110,7 @@ public abstract class SpaceObject {
 			float distSq = getDistSq(position, s.getPosition());
 			if(distSq == 0 || distSq > MAX_G_DISTANCE * MAX_G_DISTANCE)
 				continue; // If the planet being checked is itself (or directly on top), don't move
-			float force = (G * (mass/SCALE) * (s.getMass()/SCALE)) / (distSq); // G defined in orbit
+			float force = (G * (mass / SCALE) * (s.getMass() / SCALE)) / (distSq); // G defined in orbit
 			influence.add(new PVector(s.getPosition().x - position.x, s.getPosition().y - position.y).setMag(force / mass));
 		}
 		// Prevent insane acceleration
@@ -152,7 +149,7 @@ public abstract class SpaceObject {
 		onDestroy(reason);
 		removeObject(this);
 	}
-	
+
 	/**
 	 * Invoked when destroyed by SpaceObject `s`
 	 */
@@ -190,7 +187,7 @@ public abstract class SpaceObject {
 
 	public void onUpdate() {
 	}
-	
+
 	public Collection<Targeter> getTargeters() {
 		return null;
 	}

@@ -1,7 +1,6 @@
 package vekta.context;
 
 import processing.core.PVector;
-import vekta.Vekta;
 
 import static vekta.Vekta.*;
 
@@ -12,7 +11,6 @@ public class Hyperspace {
 	private final float INIT_VELOCITY = .2F;
 
 	public Hyperspace(PVector origin, float accel, int particleNum) {
-		Vekta v = getInstance();
 		this.origin = origin;
 		this.accel = accel;
 		particles = new Particle[particleNum];
@@ -39,16 +37,15 @@ public class Hyperspace {
 	}
 
 	public void render() {
-		getInstance().hint(ENABLE_DEPTH_TEST);
+		v.hint(ENABLE_DEPTH_TEST);
 		update();
 		for(Particle p : particles) {
 			p.render();
 		}
-		getInstance().hint(DISABLE_DEPTH_TEST);
+		v.hint(DISABLE_DEPTH_TEST);
 	}
 
 	public void update() {
-		Vekta v = getInstance();
 		for(int i = 0; i < particles.length; i++) {
 			Particle p = particles[i];
 			particles[i].update();
@@ -68,13 +65,12 @@ public class Hyperspace {
 		public Particle(PVector loc, PVector initVelocity, PVector accel) {
 			this.loc = loc;
 			this.accel = accel;
-			dist = getInstance().random(.2F, 2);
+			dist = v.random(.2F, 2);
 			this.velocity = initVelocity.mult(dist);
 			time = 0;
 		}
 	
 		public void render() {
-			Vekta v = getInstance();
 			v.noFill();
 			v.stroke(Math.max((((time * 10) - 255) - (dist * 100)) / 4, 0));
 			v.line(loc.x, loc.y, -1, loc.x - (velocity.x * time / 9), loc.y - (velocity.y * time / 9), -1);

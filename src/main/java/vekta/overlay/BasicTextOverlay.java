@@ -1,12 +1,12 @@
 package vekta.overlay;
 
-import vekta.Vekta;
+import static vekta.Vekta.v;
 
 /**
  * General-purpose overlay with external state management.
  */
 public class BasicTextOverlay extends TextOverlay {
-	private static final int DEF_COLOR = Vekta.getInstance().color(255);
+	private static final int DEF_COLOR = v.color(255);
 
 	private String text;
 	private int color;

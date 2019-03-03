@@ -7,8 +7,7 @@ import vekta.menu.Menu;
 import vekta.menu.handle.LootMenuHandle;
 import vekta.terrain.LandingSite;
 
-import static vekta.Vekta.getInstance;
-import static vekta.Vekta.setContext;
+import static vekta.Vekta.*;
 
 public class ExtractMenuOption implements MenuOption {
 	private final LandingSite site;
@@ -30,7 +29,7 @@ public class ExtractMenuOption implements MenuOption {
 	public void select(Menu menu) {
 		Inventory loot = new Inventory();
 		Menu sub = new Menu(new LootMenuHandle(new BackOption(menu), loot));
-		int ct = (int)getInstance().random(amount) + 1;
+		int ct = (int)v.random(amount) + 1;
 		for(int i = 0; i < ct; i++) {
 			Item item = ItemGenerator.randomOre(site.getParent().getName());
 			loot.add(item);

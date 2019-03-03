@@ -13,8 +13,8 @@ public class CargoCrate extends SpaceObject {
 
 	private final Item item;
 
-	private float angle = getInstance().random(2 * PI);
-	private float spinSpeed = getInstance().random(-1, 1) * SPIN_SCALE;
+	private float angle = v.random(2 * PI);
+	private float spinSpeed = v.random(-1, 1) * SPIN_SCALE;
 
 	public CargoCrate(Item item, PVector position, PVector velocity) {
 		super(position, velocity, item.getType().getColor());

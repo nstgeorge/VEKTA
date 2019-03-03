@@ -1,7 +1,8 @@
 package vekta.menu.option;
 
-import vekta.Vekta;
 import vekta.menu.Menu;
+
+import static vekta.Vekta.v;
 
 public class ExitGameOption implements MenuOption {
 	private final String name;
@@ -17,6 +18,6 @@ public class ExitGameOption implements MenuOption {
 
 	@Override
 	public void select(Menu menu) {
-		Vekta.getInstance().exit();
+		v.exit();
 	}
 }

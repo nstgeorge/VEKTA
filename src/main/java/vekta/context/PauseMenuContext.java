@@ -1,7 +1,6 @@
 package vekta.context;
 
 import vekta.Resources;
-import vekta.Vekta;
 
 import static vekta.Vekta.*;
 
@@ -25,8 +24,6 @@ public class PauseMenuContext implements Context {
 
 	@Override
 	public void render() {
-		Vekta v = Vekta.getInstance();
-
 		// Border box
 		v.rectMode(CORNER);
 		v.stroke(UI_COLOR);
@@ -52,7 +49,6 @@ public class PauseMenuContext implements Context {
 	 * Draws an option of name "name" at yPos in the overlay
 	 */
 	private void drawOption(String name, int yPos, boolean selected) {
-		Vekta v = getInstance();
 		// Shape ---------------------
 		v.hint(DISABLE_DEPTH_TEST);
 		v.camera();

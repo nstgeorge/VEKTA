@@ -3,7 +3,7 @@ package vekta.menu.option;
 import vekta.menu.Menu;
 import vekta.object.module.Module;
 
-import static vekta.Vekta.getInstance;
+import static vekta.Vekta.v;
 
 public class ShipModuleOption implements MenuOption {
 	private final LoadoutMenuOption parent;
@@ -43,9 +43,9 @@ public class ShipModuleOption implements MenuOption {
 	}
 
 	private enum ModuleStatus {
-		BETTER("[^]", getInstance().color(255, 255, 0)),
-		DIFFERENT("[*]", getInstance().color(200)),
-		WORSE("", getInstance().color(100));
+		BETTER("[^]", v.color(255, 255, 0)),
+		DIFFERENT("[*]", v.color(200)),
+		WORSE("", v.color(100));
 
 		private final String tag;
 		private final int color;

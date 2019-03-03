@@ -4,7 +4,6 @@ import processing.data.IntDict;
 import processing.data.StringDict;
 import vekta.Resources;
 import vekta.Settings;
-import vekta.Vekta;
 import vekta.menu.handle.MainMenuHandle;
 
 import static vekta.Vekta.*;
@@ -23,7 +22,6 @@ public class SettingsMenuContext implements Context {
 	public SettingsMenuContext(Context parent) {
 		this.parent = parent;
 
-		Vekta v = getInstance();
 		settingsOptions = new StringDict();
 		settingsOptions.set("Music", "On,Off");
 		settingsOptions.set("Sound", "On,Off");
@@ -39,7 +37,6 @@ public class SettingsMenuContext implements Context {
 
 	@Override
 	public void render() {
-		Vekta v = getInstance();
 		// hyperspace background
 		v.camera(v.width / 2F, v.height / 2F, (v.height / 2F) / tan(PI * 30F / 180F), v.width / 2F, v.height / 2F, 0F,
 				0F, 1F, 0F);
@@ -77,12 +74,11 @@ public class SettingsMenuContext implements Context {
 		v.textSize(16);
 		v.fill(255, 255, 255);
 		v.text("X to cycle options, ESC to go back", v.width / 2F, 200 + ((optionIndex + 2) * SETTINGS_SPACING));
-//		v.textFont(bodyFont);
-//		v.hint(ENABLE_DEPTH_TEST);
+		//		v.textFont(bodyFont);
+		//		v.hint(ENABLE_DEPTH_TEST);
 	}
 
 	private void drawButton(String name, int yPos, boolean selected) {
-		Vekta v = getInstance();
 		if(selected)
 			v.stroke(255);
 		else
@@ -106,7 +102,6 @@ public class SettingsMenuContext implements Context {
 
 	@Override
 	public void keyPressed(char key) {
-		Vekta v = getInstance();
 		if(key == ESC) {
 			setContext(parent);
 		}

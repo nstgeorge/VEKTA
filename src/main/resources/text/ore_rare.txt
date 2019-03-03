@@ -1,5 +1,7 @@
 Silver Ore
 Gold Ore
-Unique Gemstone
-Perfect Gemstone
+Unique Gemstones
+Perfect Gemstones
 Small Diamond
+Marble Slabs
+Glowing Rocks

@@ -1,7 +1,6 @@
 package vekta.menu.handle;
 
 import vekta.Resources;
-import vekta.Vekta;
 import vekta.context.Context;
 import vekta.menu.Menu;
 import vekta.menu.option.BackOption;
@@ -14,8 +13,6 @@ import static vekta.Vekta.*;
  * Default menu renderer implementation; draws buttons and select text
  */
 public class MenuHandle {
-	protected static final Vekta v = getInstance();
-
 	private final MenuOption defaultOption;
 
 	public MenuHandle(Context parent) {

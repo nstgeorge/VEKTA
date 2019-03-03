@@ -1,13 +1,13 @@
 Iron Ore
 Coal Ore
 Granite
+Silt
 Sandstone
 Copper Ore
-Obscure Gemstone
-Imperfect Gemstone
-Odd Crystal
+Obscure Gemstones
+Imperfect Gemstones
+Odd Crystals
 Shiny Rocks
-Glowing Rocks
 Salt
 Quartz
 Silicon

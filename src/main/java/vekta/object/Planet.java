@@ -22,9 +22,9 @@ public abstract class Planet extends SpaceObject {
 
 	private float radiusCache;
 
-	public Planet(float mass, float density, PVector position, PVector velocity, int color) {
+	public Planet(String name, float mass, float density, PVector position, PVector velocity, int color) {
 		super(position, velocity, color);
-		this.name = WorldGenerator.generatePlanetName();
+		this.name = name;
 		this.mass = mass;
 		this.density = density;
 
@@ -71,9 +71,8 @@ public abstract class Planet extends SpaceObject {
 			PVector offset = base.copy().mult(getRadius() * SPLIT_OFFSET_SCALE);
 			PVector splitVelocity = base.copy().mult(SPLIT_VELOCITY_SCALE);
 			Terrain terrain = new MoltenTerrain();
-			Planet a = new TerrestrialPlanet(newMass, getDensity(), terrain, getPosition().copy().add(offset), newVelocity.copy().add(splitVelocity), getColor());
-			Planet b = new TerrestrialPlanet(newMass, getDensity(), terrain, getPosition().copy().sub(offset), newVelocity.copy().sub(splitVelocity), getColor());
-			// TODO: fix weird behaviour when landing on newly created planet
+			Planet a = new TerrestrialPlanet(WorldGenerator.generatePlanetName(), newMass, getDensity(), terrain, getPosition().copy().add(offset), newVelocity.copy().add(splitVelocity), getColor());
+			Planet b = new TerrestrialPlanet(WorldGenerator.generatePlanetName(), newMass, getDensity(), terrain, getPosition().copy().sub(offset), newVelocity.copy().sub(splitVelocity), getColor());
 			if(!s.collidesWith(a)) {
 				mass -= a.mass;
 				addObject(a);
@@ -84,7 +83,7 @@ public abstract class Planet extends SpaceObject {
 			}
 		}
 
-		// If this is a planetary collision, add some additional mass to the other planet
+		// If this is a planetary collision, addFeature some additional mass to the other planet
 		if(mass > 0 && s instanceof Planet) {
 			Planet p = (Planet)s;
 			p.setMass(p.getMass() + mass * SPLIT_MASS_ABSORB);

@@ -1,7 +1,6 @@
 package vekta.overlay.singleplayer;
 
 import processing.core.PVector;
-import vekta.Vekta;
 import vekta.object.Planet;
 import vekta.object.PlayerShip;
 import vekta.object.SpaceObject;
@@ -13,7 +12,7 @@ import static processing.core.PApplet.*;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import static vekta.Vekta.UI_COLOR;
-import static vekta.Vekta.getInstance;
+import static vekta.Vekta.v;
 
 public class TelemetryOverlay implements Overlay {
 	private final PlayerShip ship;
@@ -38,8 +37,6 @@ public class TelemetryOverlay implements Overlay {
 
 	@Override
 	public void draw() {
-		Vekta v = getInstance();
-
 		if(v.frameCount % 10 == 0) {
 			updateUIInformation();
 		}
@@ -93,7 +90,6 @@ public class TelemetryOverlay implements Overlay {
 
 	private void drawDial(String name, PVector info, int locX, int locY, int c) {
 		int radius = 50;
-		Vekta v = getInstance();
 		v.fill(0);
 		v.stroke(c);
 		v.ellipse(locX, locY, radius, radius);
@@ -108,7 +104,6 @@ public class TelemetryOverlay implements Overlay {
 	}
 
 	private void drawArrow(PVector heading, int length, int locX, int locY) {
-		Vekta v = Vekta.getInstance();
 		heading.normalize().mult(length);
 		v.line(locX, locY, locX + heading.x, locY + heading.y);
 		float angle = heading.heading();

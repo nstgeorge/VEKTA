@@ -39,7 +39,7 @@ public class DrillModule extends ShipModule {
 
 	@Override
 	public void onLandingMenu(LandingSite site, Menu menu) {
-		if(site.getTerrain().has("Mineable")) {
+		if(site.getTerrain().hasFeature("Mineable")) {
 			menu.add(new ExtractMenuOption(site, getShip().getInventory(), round(getEfficiency() * 2)));
 		}
 	}

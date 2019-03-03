@@ -63,7 +63,7 @@ public class AutopilotModule extends TargetingModule {
 					APPROACH_SCALE * (1 + target.getRadius() / dist));
 			
 			PVector desiredVelocity = target.getVelocity()
-//					.add(relative.sub(offset.copy().setMag(dot)).mult(1))
+//					.addFeature(relative.sub(offset.copy().setMag(dot)).mult(1))
 					.add(offset.copy().mult(approachSpeed));
 
 			// Choose direction to fire engines

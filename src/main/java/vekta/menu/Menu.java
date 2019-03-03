@@ -1,12 +1,14 @@
 package vekta.menu;// These will move into their own files once we migrate to Maven
 
-import vekta.Resources;
 import vekta.context.Context;
 import vekta.menu.handle.MenuHandle;
 import vekta.menu.option.MenuOption;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 public class Menu implements Context {
 	private final MenuHandle handle;
@@ -52,13 +54,10 @@ public class Menu implements Context {
 	}
 
 	public void scroll(int n) {
-		Resources.stopSound("change");
-		index += n;
-		int len = items.size();
-		while(index < 0) {
-			index += len;
+		int next = max(0, min(size() - 1, index + n));
+		if(index != next) {
+			index = next;
 		}
-		index %= len;
 	}
 
 	@Override

@@ -6,7 +6,8 @@ import vekta.object.PlayerShip;
 public class MoltenTerrain extends Terrain {
 
 	public MoltenTerrain() {
-		add("Treacherous");
+		addFeature("Molten Surface");
+		addFeature("Treacherous");
 	}
 
 	@Override

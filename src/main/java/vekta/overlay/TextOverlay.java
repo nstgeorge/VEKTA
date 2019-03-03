@@ -1,6 +1,6 @@
 package vekta.overlay;
 
-import vekta.Vekta;
+import static vekta.Vekta.v;
 
 public abstract class TextOverlay extends PositionOverlay {
 	public TextOverlay(int x, int y) {
@@ -15,7 +15,6 @@ public abstract class TextOverlay extends PositionOverlay {
 	public void draw() {
 		String text = getText();
 		if(text != null) {
-			Vekta v = Vekta.getInstance();
 			v.fill(v.color(getColor()));
 			v.text(text, getX(), getY());
 		}

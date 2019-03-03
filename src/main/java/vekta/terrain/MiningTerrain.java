@@ -1,16 +1,15 @@
 package vekta.terrain;
 
 import vekta.menu.Menu;
-import vekta.menu.option.RechargeOption;
 import vekta.object.PlayerShip;
 
 public class MiningTerrain extends Terrain {
 
 	public MiningTerrain() {
-		add("Mineable");
+		addFeature("Mineable");
 		if(chance(.1F)) {
-			add("Habitable");
-			add("Inhabited");
+			addFeature("Habitable");
+			addFeature("Inhabited");
 		}
 	}
 
@@ -21,6 +20,6 @@ public class MiningTerrain extends Terrain {
 
 	@Override
 	public void setupLandingMenu(PlayerShip ship, Menu menu) {
-		menu.add(new RechargeOption(ship));
+
 	}
 }

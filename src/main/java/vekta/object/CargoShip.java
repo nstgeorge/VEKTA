@@ -3,6 +3,8 @@ package vekta.object;
 import processing.core.PVector;
 import vekta.Counter;
 
+import static vekta.Vekta.v;
+
 public class CargoShip extends Ship {
 	// CargoShip defaults
 	private static final float DEF_MASS = 25000;
@@ -18,7 +20,7 @@ public class CargoShip extends Ship {
 	public CargoShip(String name, PVector heading, PVector position, PVector velocity, int color) {
 		super(name, DEF_MASS, DEF_RADIUS, heading, position, velocity, color, DEF_SPEED, DEF_TURN);
 	}
-	
+
 	@Override
 	public void onUpdate() {
 		if(steerCt.cycle()) {
@@ -29,7 +31,7 @@ public class CargoShip extends Ship {
 		accelerate(thrust);
 		turn(turn);
 	}
-	
+
 	@Override
 	public void onDepart(SpaceObject obj) {
 		// TODO: spawn fighter escorts to attack after ship is boarded

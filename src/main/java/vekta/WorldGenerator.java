@@ -13,7 +13,6 @@ public class WorldGenerator {
 	}
 
 	public static void spawnOccasional(PVector around) {
-		Vekta v = getInstance();
 		PVector pos = randomPos(getRadius() / 2, getRadius()).add(around);
 		float r = v.random(1);
 		if(r > .3F) {
@@ -32,7 +31,6 @@ public class WorldGenerator {
 	}
 
 	public static void createSystem(PVector pos) {
-		Vekta v = Vekta.getInstance();
 		float order = v.random(29, 32);
 
 		// Create the center body
@@ -41,6 +39,7 @@ public class WorldGenerator {
 		float centerDensity = v.random(.7F, 2);
 		if(order >= 30) {
 			addObject(new Star(
+					WorldGenerator.generatePlanetName(),
 					centerMass, // Mass
 					centerDensity, // Radius
 					pos,
@@ -50,6 +49,7 @@ public class WorldGenerator {
 		}
 		else {
 			addObject(new GasGiant(
+					WorldGenerator.generatePlanetName(),
 					centerMass, // Mass
 					centerDensity,   // Radius
 					pos,  // Position
@@ -73,9 +73,9 @@ public class WorldGenerator {
 	}
 
 	public static Planet createPlanet(float mass, float density, PVector pos) {
-		Vekta v = Vekta.getInstance();
 		float r = v.random(1);
 		Terrain terrain;
+		boolean features = true;
 		if(r > .6) {
 			InhabitedTerrain t = new InhabitedTerrain();
 			Inventory inv = t.getInventory();
@@ -89,15 +89,27 @@ public class WorldGenerator {
 			terrain = t;
 		}
 		else if(r > .2) {
-			terrain = new OceanicTerrain();
+			terrain = new MiningTerrain();
 		}
 		else if(r > .1) {
-			terrain = new MiningTerrain();
+			terrain = new OceanicTerrain();
+			features = false;
 		}
 		else {
 			terrain = new MoltenTerrain();
+			features = false;
+		}
+		if(features) {
+			int featureCt = (int)v.random(1, 4);
+			for(int i = 0; i < featureCt; i++) {
+				String feature = v.random(Resources.getStrings("planet_features"));
+				for(String s : feature.split(",")) {
+					terrain.addFeature(s.trim());
+				}
+			}
 		}
 		TerrestrialPlanet planet = new TerrestrialPlanet(
+				generatePlanetName(),
 				mass, // Mass
 				density,   // Density
 				terrain, // Terrain
@@ -110,11 +122,10 @@ public class WorldGenerator {
 	}
 
 	public static PVector randomPos(float min, float max) {
-		return PVector.random2D().mult(getInstance().random(min, max));
+		return PVector.random2D().mult(v.random(min, max));
 	}
 
 	public static String generatePlanetName() {
-		Vekta v = getInstance();
 		return v.random(Resources.getStrings("planet_prefixes")) + v.random(Resources.getStrings("planet_suffixes", ""));
 	}
 }  

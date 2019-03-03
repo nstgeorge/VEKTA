@@ -2,8 +2,7 @@ package vekta.object.module;
 
 import vekta.object.ModularShip;
 
-import static vekta.Vekta.getInstance;
-import static vekta.Vekta.round;
+import static vekta.Vekta.*;
 
 public abstract class ShipModule implements Module {
 	private ModularShip ship;
@@ -31,14 +30,14 @@ public abstract class ShipModule implements Module {
 	}
 
 	protected final float choose(float min, float max) {
-		return getInstance().random(min, max);
+		return v.random(min, max);
 	}
 
 	protected final int chooseInclusive(int min, int max) {
-		return round(getInstance().random(min, max));
+		return round(v.random(min, max));
 	}
 
 	protected final float chooseInclusive(float min, float max, float interval) {
-		return round(getInstance().random(min, max) / interval) * interval;
+		return round(v.random(min, max) / interval) * interval;
 	}
 }

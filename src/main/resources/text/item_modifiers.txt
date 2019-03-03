@@ -18,3 +18,5 @@ Tickler
 Exciter
 Holder
 Amplifier
+Curler
+Fastener

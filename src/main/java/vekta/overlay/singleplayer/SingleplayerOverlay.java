@@ -1,13 +1,12 @@
 package vekta.overlay.singleplayer;
 
-import vekta.Vekta;
 import vekta.object.PlayerShip;
 import vekta.overlay.CompoundOverlay;
 import vekta.overlay.Overlay;
 
 import static processing.core.PConstants.LEFT;
 import static vekta.Vekta.bodyFont;
-import static vekta.Vekta.getInstance;
+import static vekta.Vekta.v;
 
 public class SingleplayerOverlay extends CompoundOverlay {
 	public SingleplayerOverlay(PlayerShip ship) {
@@ -21,7 +20,6 @@ public class SingleplayerOverlay extends CompoundOverlay {
 
 	@Override
 	public void draw() {
-		Vekta v = getInstance();
 		// Set overlay text settings
 		v.textFont(bodyFont);
 		v.textAlign(LEFT);

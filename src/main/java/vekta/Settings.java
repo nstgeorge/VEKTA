@@ -2,7 +2,7 @@ package vekta;
 
 import processing.data.JSONObject;
 
-import static vekta.Vekta.getInstance;
+import static vekta.Vekta.v;
 
 public class Settings {
 	private static final String PATH = System.getProperty("user.dir") + "/settings.json";
@@ -18,12 +18,12 @@ public class Settings {
 
 		// Settings
 		try {
-			settings = getInstance().loadJSONObject(PATH);
+			settings = v.loadJSONObject(PATH);
 		}
 		catch(NullPointerException e) {
 			System.out.println("settings.json not found. Using default settings.");
 			settings = defaults;
-			getInstance().saveJSONObject(settings, PATH);
+			v.saveJSONObject(settings, PATH);
 		}
 	}
 
@@ -42,6 +42,6 @@ public class Settings {
 	}
 
 	private static void save() {
-		getInstance().saveJSONObject(settings, PATH);
+		v.saveJSONObject(settings, PATH);
 	}
 }

@@ -1,9 +1,8 @@
 package vekta.object;
 
 import processing.core.PVector;
-import vekta.Vekta;
 
-import static vekta.Vekta.getInstance;
+import static vekta.Vekta.v;
 
 /**
  * Gas giant planet variant
@@ -14,8 +13,8 @@ public class GasGiant extends Planet {
 	private final float ringRatio;
 	private final float[] ringDistances;
 
-	public GasGiant(float mass, float density, PVector position, PVector velocity, int color) {
-		super(mass, density, position, velocity, color);
+	public GasGiant(String name, float mass, float density, PVector position, PVector velocity, int color) {
+		super(name, mass, density, position, velocity, color);
 		ringAngle = v.random(360);
 		ringRatio = v.random(.1F, 1);
 		ringDistances = new float[(int)v.random(2, 7)];
@@ -34,7 +33,6 @@ public class GasGiant extends Planet {
 	public void draw() {
 		super.draw();
 
-		Vekta v = getInstance();
 		v.stroke(v.color(50));
 		v.noFill();
 		v.pushMatrix();

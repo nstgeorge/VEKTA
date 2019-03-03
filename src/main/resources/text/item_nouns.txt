@@ -49,3 +49,6 @@ Graphics Card
 CPU
 Motherboard
 N-Body Simulation
+Relic
+Tooth
+Whisker

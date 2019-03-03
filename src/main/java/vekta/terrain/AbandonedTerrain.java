@@ -10,7 +10,7 @@ public class AbandonedTerrain extends Terrain {
 	
 	public AbandonedTerrain() {
 		if(chance(.5F)) {
-			add("Habitable");
+			addFeature("Habitable");
 		}
 	}
 

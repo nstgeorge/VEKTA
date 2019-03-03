@@ -2,11 +2,11 @@ package vekta.object;
 
 import processing.core.PVector;
 
-import static vekta.Vekta.getInstance;
+import static vekta.Vekta.v;
 
 public class Star extends Planet {
-	public Star(float mass, float density, PVector position, PVector velocity, int color) {
-		super(mass, density, position, velocity, color);
+	public Star(String name, float mass, float density, PVector position, PVector velocity, int color) {
+		super(name, mass, density, position, velocity, color);
 	}
 
 	@Override
@@ -16,7 +16,7 @@ public class Star extends Planet {
 
 	@Override
 	public void draw() {
-		drawRadialGradient(position, super.getColor(), getInstance().color(0), getRadius(), getRadius() * 1.5F);
+		drawRadialGradient(position, super.getColor(), v.color(0), getRadius(), getRadius() * 1.5F);
 		super.draw();
 	}
 

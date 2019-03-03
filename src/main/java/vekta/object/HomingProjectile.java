@@ -5,11 +5,12 @@ import processing.core.PVector;
 
 import static processing.core.PApplet.sqrt;
 import static processing.core.PConstants.CLOSE;
+import static vekta.Vekta.v;
 
 public class HomingProjectile extends Projectile {
 	private static final float HOMING_ACCEL = .1F;
 	private static final float HOMING_DAMPEN = .98F;
-	
+
 	private static final float RADIUS = 2;
 	private final SpaceObject target;
 	private final float speed;

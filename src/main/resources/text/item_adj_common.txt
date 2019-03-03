@@ -10,6 +10,7 @@ Alien
 Ancient
 Factory
 Grumpy
+Funky
 Scruffy
 Single-Use
 Flappy

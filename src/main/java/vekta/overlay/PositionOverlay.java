@@ -1,6 +1,6 @@
 package vekta.overlay;
 
-import vekta.Vekta;
+import static vekta.Vekta.v;
 
 public abstract class PositionOverlay implements Overlay {
 	private final int x, y;
@@ -12,14 +12,14 @@ public abstract class PositionOverlay implements Overlay {
 
 	public int getX() {
 		if(x < 0) {
-			return x + Vekta.getInstance().width;
+			return x + v.width;
 		}
 		return x;
 	}
 
 	public int getY() {
 		if(y < 0) {
-			return y + Vekta.getInstance().height;
+			return y + v.height;
 		}
 		return y;
 	}

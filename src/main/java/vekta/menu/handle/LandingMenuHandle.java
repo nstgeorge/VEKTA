@@ -5,6 +5,7 @@ import vekta.menu.Menu;
 import vekta.menu.option.ShipTakeoffOption;
 import vekta.object.SpaceObject;
 import vekta.terrain.LandingSite;
+import static vekta.Vekta.*;
 
 /**
  * Menu renderer for landing on planets

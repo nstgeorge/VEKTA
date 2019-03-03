@@ -41,7 +41,6 @@ public class Singleplayer implements World {
 
 	@Override
 	public void start() {
-		Vekta v = getInstance();
 		v.frameCount = 0;
 
 		lowPass = new LowPass(v);
@@ -67,7 +66,7 @@ public class Singleplayer implements World {
 //				new PVector(),    // Velocity
 //				v.color(255)
 //		);
-//		ship.getInventory().add(new ModuleItem(new RCSModule(2)));
+//		ship.getInventory().addFeature(new ModuleItem(new RCSModule(2)));
 //		addObject(ship);
 
 		//// TEMP
@@ -88,7 +87,6 @@ public class Singleplayer implements World {
 
 	@Override
 	public void render() {
-		Vekta v = getInstance();
 		v.background(0);
 
 		if(!playerShip.isDestroyed()) {
@@ -243,7 +241,7 @@ public class Singleplayer implements World {
 			markedForAddition.add(s);
 		}
 		else {
-			throw new RuntimeException("Cannot add object: " + object);
+			throw new RuntimeException("Cannot addFeature object: " + object);
 		}
 	}
 

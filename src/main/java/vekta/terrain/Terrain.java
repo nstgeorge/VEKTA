@@ -1,40 +1,45 @@
 package vekta.terrain;
 
-import vekta.Vekta;
 import vekta.menu.Menu;
 import vekta.object.PlayerShip;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static vekta.Vekta.v;
 
 /**
  * An abstract representation of planetary terrain.
  */
 public abstract class Terrain {
-	private final Set<String> properties = new HashSet<>();
+	private final List<String> features = new ArrayList<>();
 
 	public Terrain() {
-
+		
+	}
+	
+	public List<String> getFeatures() {
+		return features;
 	}
 
-	public Set<String> getProperties() {
-		return properties;
+	public boolean hasFeature(String prop) {
+		return getFeatures().contains(prop);
 	}
 
-	public boolean has(String prop) {
-		return getProperties().contains(prop);
+	public void addFeature(String feature) {
+		if(!getFeatures().contains(feature)) {
+			getFeatures().add(feature);
+			Collections.sort(getFeatures());
+		}
 	}
 
-	public void add(String prop) {
-		getProperties().add(prop);
-	}
-
-	public void remove(String prop) {
-		getProperties().remove(prop);
+	public void remove(String feature) {
+		getFeatures().remove(feature);
 	}
 	
 	protected boolean chance(float amount) {
-		return Vekta.getInstance().random(1) < amount;
+		return v.random(1) < amount;
 	}
 
 	public abstract String getOverview();

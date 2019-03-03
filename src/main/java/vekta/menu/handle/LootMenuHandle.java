@@ -5,6 +5,7 @@ import vekta.menu.Menu;
 import vekta.menu.option.MenuOption;
 
 import static vekta.Vekta.UI_COLOR;
+import static vekta.Vekta.v;
 
 /**
  * Menu renderer for looting/scavenging
