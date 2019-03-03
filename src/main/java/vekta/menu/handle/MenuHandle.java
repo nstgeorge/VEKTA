@@ -43,43 +43,53 @@ public class MenuHandle {
 	}
 
 	public int getButtonY(int i) {
-		return v.height / 2 + i * getSpacing();
+		return v.height / 2 - 64 + i * getSpacing();
 	}
 
 	public String getHelperText() {
 		return "X to select";
 	}
 
-	public void render(Menu menu) {
+	public void init(Menu menu) {
+	}
+
+	public void beforeDraw() {
 		v.clear(); // TODO: only clear region behind menu
 		v.hint(DISABLE_DEPTH_TEST);
 		v.camera();
 		v.noLights();
+	}
 
-		v.textFont(bodyFont);
+	public void render(Menu menu) {
+		beforeDraw();
 
-		v.stroke(0);
+		v.noStroke();
 		v.fill(255);
+		v.textFont(bodyFont);
 		v.textSize(24);
 		v.textAlign(CENTER, CENTER);
 		v.rectMode(CENTER);
 		for(int i = 0; i < menu.size(); i++) {
-			drawButton(menu.get(i), getButtonY(i), menu.getIndex() == i);
+			drawButton(menu.get(i), i, menu.getIndex() == i);
 		}
 
-		v.stroke(0);
+		v.noStroke();
 		v.fill(255);
 		v.textAlign(CENTER);
 		v.text(getHelperText(), getButtonX(), getButtonY(menu.size()) + 100);
 	}
 
-	void drawButton(MenuOption opt, int yPos, boolean selected) {
+	void drawButton(MenuOption opt, int index, boolean selected) {
+		float yPos = getButtonY(index);
+		
+		// Draw border
 		v.stroke(selected ? 255 : UI_COLOR);
 		v.noFill();
 		v.rect(getButtonX(), yPos, getButtonWidth() + (selected ? 10 : 0), 50);
-		// Text ----------------------
-		v.stroke(0);
+		
+		// Draw text
 		v.fill(opt.getColor());
+		v.noStroke();
 		v.text(opt.getName(), getButtonX(), yPos - 3);
 	}
 

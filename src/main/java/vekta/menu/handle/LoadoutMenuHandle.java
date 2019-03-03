@@ -8,7 +8,7 @@ import vekta.object.module.Upgradeable;
 import java.util.List;
 
 /**
- * Menu renderer for scavenging
+ * Module loadout menu renderer
  */
 public class LoadoutMenuHandle extends MenuHandle {
 	private final Upgradeable upgradeable;
@@ -39,6 +39,7 @@ public class LoadoutMenuHandle extends MenuHandle {
 		return "X to install";
 	}
 
+	@Override
 	public void render(Menu menu) {
 		super.render(menu);
 
@@ -48,14 +49,14 @@ public class LoadoutMenuHandle extends MenuHandle {
 		v.text("Available Modules:", getButtonX(), getButtonY(-2));
 		v.textAlign(v.LEFT);
 		v.text("Installed Modules:", v.width - getButtonX() - 20, getButtonY(-2));
-		
+
 		v.textSize(24);
 		v.stroke(0);
 		v.fill(v.color(200));
 		List<Module> modules = upgradeable.getModules();
 		for(int i = 0; i < modules.size(); i++) {
 			Module m = modules.get(i);
-			
+
 			v.text(m.getName(), v.width - getButtonX(), getButtonY(i));
 		}
 	}

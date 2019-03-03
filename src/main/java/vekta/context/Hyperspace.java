@@ -1,9 +1,9 @@
-package vekta;
+package vekta.context;
 
 import processing.core.PVector;
-import vekta.object.Particle;
+import vekta.Vekta;
 
-import static vekta.Vekta.getInstance;
+import static vekta.Vekta.*;
 
 public class Hyperspace {
 	private PVector origin;
@@ -53,6 +53,39 @@ public class Hyperspace {
 			if(p.getPosition().x > v.width + 300 || p.getPosition().y > v.height + 200 || p.getPosition().x < -300 || p.getPosition().y < -200) {
 				particles[i] = newParticle();
 			}
+		}
+	}
+
+	private static class Particle {
+		private PVector loc;
+		private PVector accel;
+		private PVector velocity;
+		private float dist;
+		private float time;
+	
+		public Particle(PVector loc, PVector initVelocity, PVector accel) {
+			this.loc = loc;
+			this.accel = accel;
+			dist = getInstance().random(.2F, 2);
+			this.velocity = initVelocity.mult(dist);
+			time = 0;
+		}
+	
+		public void render() {
+			Vekta v = getInstance();
+			v.noFill();
+			v.stroke(Math.max((((time * 10) - 255) - (dist * 100)) / 4, 0));
+			v.line(loc.x, loc.y, loc.x - (velocity.x * time / 9), loc.y - (velocity.y * time / 9));
+		}
+	
+		public void update() {
+			loc.add(velocity);
+			velocity.add(accel);
+			time++;
+		}
+	
+		public PVector getPosition() {
+			return loc;
 		}
 	}
 }  

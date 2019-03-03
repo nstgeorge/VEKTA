@@ -19,6 +19,7 @@ public class ObjectMenuHandle extends MenuHandle {
 		this.target = target;
 	}
 
+	@Override
 	public void render(Menu menu) {
 		super.render(menu);
 

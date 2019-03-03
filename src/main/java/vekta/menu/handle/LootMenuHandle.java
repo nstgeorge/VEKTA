@@ -7,7 +7,7 @@ import vekta.menu.option.MenuOption;
 import static vekta.Vekta.UI_COLOR;
 
 /**
- * Menu renderer for scavenging
+ * Menu renderer for looting/scavenging
  */
 public class LootMenuHandle extends MenuHandle {
 	private final Inventory inv;
@@ -29,10 +29,6 @@ public class LootMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public int getButtonY(int i) {
-		return super.getButtonY(i) - 64;
-	}
-
 	public void render(Menu menu) {
 		super.render(menu);
 

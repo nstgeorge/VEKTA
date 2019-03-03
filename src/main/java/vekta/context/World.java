@@ -8,11 +8,6 @@ public interface World extends Context {
 	float MAX_PAN_DISTANCE 		= 1000; // Distance where sound is panned entirely left/right
 
 	/**
-	 * Initializes all required variables
-	 */
-	void init();
-
-	/**
 	 * Called when player dies
 	 */
 	void setDead();

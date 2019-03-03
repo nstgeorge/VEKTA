@@ -1,30 +1,29 @@
 package vekta.context;
 
-import processing.core.PVector;
 import processing.data.IntDict;
 import processing.data.StringDict;
-import vekta.*;
+import vekta.Resources;
+import vekta.Settings;
+import vekta.Vekta;
+import vekta.menu.handle.MainMenuHandle;
 
 import static vekta.Vekta.*;
 
-public class MainMenuContext implements Context {
-	String[] modes = {"Singleplayer"};
-	int selectedMode;
-	Hyperspace hyperspace;
+public class SettingsMenuContext implements Context {
+	private final Context parent;
+
 	// Settings
-	boolean inSettings;
-	StringDict settingsOptions;
-	IntDict settingsDefinitions;
-	int[] selectedOptions;
-	int selectedSetting;
+	private final StringDict settingsOptions;
+	private final IntDict settingsDefinitions;
+	private final int[] selectedOptions;
+	private int selectedSetting;
 
 	final int SETTINGS_SPACING = 50;
 
-	public MainMenuContext() {
+	public SettingsMenuContext(Context parent) {
+		this.parent = parent;
+
 		Vekta v = getInstance();
-		Resources.setMusic("theme");
-		hyperspace = new Hyperspace(new PVector(v.width / 2F, v.height / 2F - 100), 0.1F, 170);
-		inSettings = false;
 		settingsOptions = new StringDict();
 		settingsOptions.set("Music", "On,Off");
 		settingsOptions.set("Sound", "On,Off");
@@ -35,48 +34,19 @@ public class MainMenuContext implements Context {
 	}
 
 	@Override
+	public void init() {
+	}
+
+	@Override
 	public void render() {
 		Vekta v = getInstance();
 		// hyperspace background
 		v.camera(v.width / 2F, v.height / 2F, (v.height / 2F) / tan(PI * 30F / 180F), v.width / 2F, v.height / 2F, 0F,
 				0F, 1F, 0F);
 		v.background(0);
-		hyperspace.render();
+		MainMenuHandle.HYPERSPACE.render();
 
-		if(!inSettings) {
-			drawMain();
-		}
-		else {
-			drawSettings();
-		}
-	}
-
-	private void drawMain() {
-		Vekta v = getInstance();
-		v.hint(DISABLE_DEPTH_TEST);
-		v.camera();
-		v.noLights();
-		v.shapeMode(CENTER);
-		v.shape(Resources.logo, v.width / 2F, v.height / 4F, 339.26F, 100);
-		for(int i = 0; i < modes.length; i++) {
-			drawButton(modes[i], (v.height / 2) + (i * 100), i == selectedMode);
-		}
-		drawButton("Settings", (v.height / 2) + (modes.length * 100), selectedMode == modes.length);
-		drawButton("Quit", (v.height / 2) + (modes.length * 100) + 100, selectedMode == modes.length + 1);
-
-		v.textFont(bodyFont);
-		v.stroke(0);
-		v.fill(255);
-		v.textAlign(CENTER);
-		v.text("X to select", v.width / 2F, (v.height / 2) + (modes.length * 100) + 200);
-
-		v.textSize(14);
-		v.text("Created by Nate St. George", v.width / 2F, (v.height / 2) + (modes.length * 100) + 300);
-		v.hint(ENABLE_DEPTH_TEST);
-	}
-
-	private void drawSettings() {
-		Vekta v = getInstance();
+		// Draw settings
 		v.hint(DISABLE_DEPTH_TEST);
 		v.camera();
 		v.noLights();
@@ -138,70 +108,32 @@ public class MainMenuContext implements Context {
 	public void keyPressed(char key) {
 		Vekta v = getInstance();
 		if(key == ESC) {
-			inSettings = false;
+			setContext(parent);
 		}
 		if(key == 'w') {
 			// Play the sound for changing menu selection
 			Resources.playSound("change");
-			if(!inSettings) {
-				selectedMode = Math.max(selectedMode - 1, 0);
-				v.redraw();
-			}
-			else {
-				selectedSetting = Math.max(selectedSetting - 1, 0);
-				v.redraw();
-			}
+			selectedSetting = Math.max(selectedSetting - 1, 0);
+			v.redraw();
 		}
 		if(key == 's') {
 			// Play the sound for changing menu selection
 			Resources.playSound("change");
-			if(!inSettings) {
-				selectedMode = Math.min(selectedMode + 1, modes.length + 1);
-				v.redraw();
-			}
-			else {
-				selectedSetting = Math.min(selectedSetting + 1, settingsOptions.size());
-				v.redraw();
-			}
+			selectedSetting = Math.min(selectedSetting + 1, settingsOptions.size());
+			v.redraw();
 		}
 		if(key == 'x') {
 			// Play the sound for selection
 			Resources.playSound("change");
-			if(!inSettings) {
-				// Just selected a game mode
-				if(selectedMode < modes.length) {
-					selectMode();
-				}
-				else {
-					// Just selected settings
-					if(selectedMode == modes.length) {
-						inSettings = true;
-					}
-					//Just selected quit
-					if(selectedMode == modes.length + 1) {
-						v.exit();
-					}
-				}
+			if(selectedSetting == settingsOptions.size()) {
+				// Return to parent context
+				setContext(parent);
 			}
 			else {
-				if(selectedSetting == settingsOptions.size()) {
-					// Settings autosave
-					inSettings = false;
-				}
-				else {
-					// Update settings
-					updateSetting();
-				}
+				// Update settings
+				updateSetting();
 			}
 		}
-	}
-
-	private void selectMode() {
-		if(selectedMode == 0)
-			startWorld(new Singleplayer());
-		//if(selectedMode == 1) startGamemode(new Multiplayer());
-//		if(getSetting("music") > 0)
-//			theme.stop();
 	}
 
 	@Override

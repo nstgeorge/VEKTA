@@ -231,7 +231,7 @@ public class Singleplayer implements World {
 	@Override
 	public void restart() {
 		lowPass.stop();
-		Vekta.startWorld(new Singleplayer());
+		setContext(new Singleplayer());
 	}
 
 	public PlayerShip getPlayerShip() {

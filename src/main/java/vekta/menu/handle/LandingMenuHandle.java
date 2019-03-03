@@ -18,6 +18,7 @@ public class LandingMenuHandle extends MenuHandle {
 		this.site = site;
 	}
 
+	@Override
 	public void render(Menu menu) {
 		super.render(menu);
 

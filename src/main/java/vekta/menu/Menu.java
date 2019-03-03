@@ -1,7 +1,7 @@
 package vekta.menu;// These will move into their own files once we migrate to Maven
 
-import vekta.context.Context;
 import vekta.Resources;
+import vekta.context.Context;
 import vekta.menu.handle.MenuHandle;
 import vekta.menu.option.MenuOption;
 
@@ -34,7 +34,7 @@ public class Menu implements Context {
 	public MenuOption get(int i) {
 		return items.get(i);
 	}
-	
+
 	public void clear() {
 		items.clear();
 	}
@@ -59,6 +59,11 @@ public class Menu implements Context {
 			index += len;
 		}
 		index %= len;
+	}
+
+	@Override
+	public void init() {
+		handle.init(this);
 	}
 
 	@Override

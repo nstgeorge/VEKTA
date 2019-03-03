@@ -84,10 +84,10 @@ public class PirateShip extends Ship implements Targeter {
 		PVector vel = heading.copy().setMag(PROJECTILE_SPEED)
 				.rotate(getInstance().random(-ATTACK_SPREAD, ATTACK_SPREAD) * PI / 360)
 				.add(velocity);
-		
-		SpaceObject projectile = v.random(1) < .2
-				? new Projectile(this, getPosition(), vel, getColor())
-				: new HomingProjectile(this, getTarget(), 1, getPosition(), getVelocity(), getColor());
+
+		SpaceObject projectile = v.random(1) < .2F
+				? new HomingProjectile(this, getTarget(), 1.5F, getPosition(), getVelocity(), getColor())
+				: new Projectile(this, getPosition(), vel, getColor());
 		addObject(projectile);
 	}
 }  

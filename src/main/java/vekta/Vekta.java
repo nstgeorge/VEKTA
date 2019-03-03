@@ -6,8 +6,12 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 import processing.event.MouseEvent;
 import vekta.context.Context;
-import vekta.context.MainMenuContext;
 import vekta.context.World;
+import vekta.menu.Menu;
+import vekta.menu.handle.MainMenuHandle;
+import vekta.menu.option.ExitGameOption;
+import vekta.menu.option.GameModeOption;
+import vekta.menu.option.SettingsMenuOption;
 
 import java.util.logging.LogManager;
 
@@ -28,7 +32,7 @@ public class Vekta extends PApplet {
 
 	public static final String FONTNAME = "font/undefined-medium.ttf";
 
-	public static Context mainMenu;
+	public static Menu mainMenu;
 
 	private static Context context;
 	private static Context nextContext;
@@ -52,7 +56,7 @@ public class Vekta extends PApplet {
 
 	@Override
 	public void settings() {
-		fullScreen(P3D);
+		fullScreen(P3D); // TODO: can we convert to P2D? (performance benefits)
 		pixelDensity(displayDensity());
 	}
 
@@ -77,9 +81,11 @@ public class Vekta extends PApplet {
 		headerFont = createFont(FONTNAME, 72);
 		bodyFont = createFont(FONTNAME, 24);
 
-		mainMenu = new MainMenuContext();
-		//		mainMenu = new Menu(new MainMenuHandle(new ExitGameOption("Quit")));
-		//		mainMenu.addDefault();
+//		mainMenu = new SettingsMenuContext();
+		mainMenu = new Menu(new MainMenuHandle(new ExitGameOption("Quit")));
+		mainMenu.add(new GameModeOption("Singleplayer", new Singleplayer()));
+		mainMenu.add(new SettingsMenuOption());
+		mainMenu.addDefault();
 		setContext(mainMenu);
 	}
 
@@ -141,12 +147,6 @@ public class Vekta extends PApplet {
 		}
 	}
 
-	public static void startWorld(World world) {
-		Vekta.setContext(world);
-		Vekta.applyContext();
-		world.init();
-	}
-
 	public static void addObject(Object object) {
 		getWorld().addObject(object);
 	}
@@ -177,10 +177,11 @@ public class Vekta extends PApplet {
 		if(nextContext != null) {
 			context = nextContext;
 			nextContext = null;
+			context.init();
 		}
 	}
 
-	//// Generator methods (will move to another class) ////
+	//// Utility methods ////
 
 	public <T> T random(T[] array) {
 		return array[(int)random(array.length)];

@@ -20,6 +20,10 @@ public class PauseMenuContext implements Context {
 	}
 
 	@Override
+	public void init() {
+	}
+
+	@Override
 	public void render() {
 		Vekta v = Vekta.getInstance();
 
@@ -84,7 +88,7 @@ public class PauseMenuContext implements Context {
 			selected = Math.min(selected + 1, pauseMenu.length - 1);
 		}
 		else if(key == 'x') {
-//			Resources.stopMusic("theme");
+			//			Resources.stopMusic("theme");
 			Resources.playSound("select");
 			switch(selected) {
 			case (0):

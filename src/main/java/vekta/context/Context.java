@@ -2,6 +2,11 @@ package vekta.context;
 
 public interface Context {
 	/**
+	 * Called whenever the context is loaded
+	 */
+	void init();
+	
+	/**
 	 * Draws the context each loop
 	 */
 	void render();
