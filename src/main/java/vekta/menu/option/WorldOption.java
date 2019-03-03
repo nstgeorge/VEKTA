@@ -3,7 +3,7 @@ package vekta.menu.option;
 import vekta.context.World;
 import vekta.menu.Menu;
 
-import static vekta.Vekta.setContext;
+import static vekta.Vekta.startWorld;
 
 public class WorldOption implements MenuOption {
 	private final String name;
@@ -21,6 +21,6 @@ public class WorldOption implements MenuOption {
 
 	@Override
 	public void select(Menu menu) {
-		setContext(world);
+		startWorld(world);
 	}
 }

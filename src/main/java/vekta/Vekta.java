@@ -9,8 +9,8 @@ import vekta.context.World;
 import vekta.menu.Menu;
 import vekta.menu.handle.MainMenuHandle;
 import vekta.menu.option.ExitGameOption;
-import vekta.menu.option.WorldOption;
 import vekta.menu.option.SettingsMenuOption;
+import vekta.menu.option.WorldOption;
 
 import java.util.logging.LogManager;
 
@@ -52,7 +52,7 @@ public class Vekta extends PApplet {
 
 	@Override
 	public void settings() {
-		fullScreen(P3D); // TODO: convert to P2D for performance, unless we anticipate adding features using 3D rendering
+		fullScreen(P3D);
 		pixelDensity(displayDensity());
 	}
 
@@ -91,16 +91,15 @@ public class Vekta extends PApplet {
 			context.render();
 		}
 
-//		hint(DISABLE_DEPTH_TEST);
-//		camera();
-//		noLights();
+		hint(DISABLE_DEPTH_TEST);
+		camera();
+		noLights();
 
 		// FPS OVERLAY
 		fill(255);
 		textAlign(LEFT);
 		textSize(16);
 		text("FPS = " + frameRate, 50, height - 20);
-		//loop();
 	}
 
 	@Override
@@ -160,6 +159,12 @@ public class Vekta extends PApplet {
 		return (World)context;
 	}
 
+	public static void startWorld(World world) {
+		Vekta.setContext(world);
+		Vekta.applyContext();
+		world.start();
+	}
+
 	public static void setContext(Context context) {
 		if(context == null) {
 			throw new RuntimeException("Context cannot be set to null");
@@ -171,7 +176,7 @@ public class Vekta extends PApplet {
 		if(nextContext != null) {
 			context = nextContext;
 			nextContext = null;
-			context.init();
+			context.focus();
 		}
 	}
 

@@ -2,9 +2,9 @@ package vekta.context;
 
 public interface Context {
 	/**
-	 * Called whenever the context is loaded
+	 * Called whenever the context is activated
 	 */
-	void init();
+	void focus();
 	
 	/**
 	 * Draws the context each loop

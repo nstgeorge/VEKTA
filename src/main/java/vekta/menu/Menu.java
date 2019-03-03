@@ -62,8 +62,8 @@ public class Menu implements Context {
 	}
 
 	@Override
-	public void init() {
-		handle.init(this);
+	public void focus() {
+		handle.focus(this);
 	}
 
 	@Override

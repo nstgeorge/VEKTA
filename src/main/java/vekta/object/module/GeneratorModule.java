@@ -13,7 +13,7 @@ public class GeneratorModule extends ShipModule {
 
 	@Override
 	public String getName() {
-		return "Nuclear Generator v" + getRate();
+		return "Energy Generator v" + getRate();
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class GeneratorModule extends ShipModule {
 
 	@Override
 	public Module getVariant() {
-		return new GeneratorModule(chooseInclusive(.5F, 3, .5F));
+		return new GeneratorModule(chooseInclusive(.5F, 5, .5F));
 	}
 
 	@Override

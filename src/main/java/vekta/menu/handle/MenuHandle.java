@@ -50,14 +50,14 @@ public class MenuHandle {
 		return "X to select";
 	}
 
-	public void init(Menu menu) {
+	public void focus(Menu menu) {
 	}
 
 	public void beforeDraw() {
 		v.clear(); // TODO: only clear region behind menu
-		v.hint(DISABLE_DEPTH_TEST);
 		v.camera();
 		v.noLights();
+		v.hint(DISABLE_DEPTH_TEST);
 	}
 
 	public void render(Menu menu) {
@@ -70,7 +70,7 @@ public class MenuHandle {
 		v.textAlign(CENTER, CENTER);
 		v.rectMode(CENTER);
 		for(int i = 0; i < menu.size(); i++) {
-			drawButton(menu.get(i), i);
+			drawButton(menu.get(i), i, menu.getIndex() == i);
 		}
 
 		v.noStroke();
@@ -79,9 +79,8 @@ public class MenuHandle {
 		v.text(getHelperText(), getButtonX(), getButtonY(menu.size()) + 100);
 	}
 
-	void drawButton(MenuOption opt, int index) {
+	void drawButton(MenuOption opt, int index, boolean selected) {
 		float yPos = getButtonY(index);
-		boolean selected = mainMenu.getIndex() == index;
 		
 		// Draw border
 		v.stroke(selected ? 255 : UI_COLOR);

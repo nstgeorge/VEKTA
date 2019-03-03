@@ -34,7 +34,7 @@ public class SettingsMenuContext implements Context {
 	}
 
 	@Override
-	public void init() {
+	public void focus() {
 	}
 
 	@Override

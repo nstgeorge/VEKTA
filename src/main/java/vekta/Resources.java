@@ -101,6 +101,12 @@ public class Resources {
 			sound.stop();
 		}
 	}
+	
+	public static void stopAllSounds() {
+		for(SoundFile sound : SOUNDS.values()) {
+			sound.stop();
+		}
+	}
 
 	public static void loopSound(String key) {
 		if(Settings.get("sound") > 0) {

@@ -39,10 +39,12 @@ public class Hyperspace {
 	}
 
 	public void render() {
+		getInstance().hint(ENABLE_DEPTH_TEST);
 		update();
 		for(Particle p : particles) {
 			p.render();
 		}
+		getInstance().hint(DISABLE_DEPTH_TEST);
 	}
 
 	public void update() {
@@ -75,7 +77,7 @@ public class Hyperspace {
 			Vekta v = getInstance();
 			v.noFill();
 			v.stroke(Math.max((((time * 10) - 255) - (dist * 100)) / 4, 0));
-			v.line(loc.x, loc.y, loc.x - (velocity.x * time / 9), loc.y - (velocity.y * time / 9));
+			v.line(loc.x, loc.y, -1, loc.x - (velocity.x * time / 9), loc.y - (velocity.y * time / 9), -1);
 		}
 	
 		public void update() {

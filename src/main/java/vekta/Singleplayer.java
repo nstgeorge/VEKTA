@@ -40,7 +40,7 @@ public class Singleplayer implements World {
 	private Overlay overlay;
 
 	@Override
-	public void init() {
+	public void start() {
 		Vekta v = getInstance();
 		v.frameCount = 0;
 
@@ -83,6 +83,10 @@ public class Singleplayer implements World {
 	}
 
 	@Override
+	public void focus() {
+	}
+
+	@Override
 	public void render() {
 		Vekta v = getInstance();
 		v.background(0);
@@ -97,9 +101,6 @@ public class Singleplayer implements World {
 		v.hint(ENABLE_DEPTH_TEST);
 		v.camera(cameraPos.x, cameraPos.y, min(MAX_CAMERA_Y, (.07F * cameraSpd + .7F) * (v.height / 2F) / tan(PI * 30 / 180) * zoom), cameraPos.x, cameraPos.y, 0F,
 				0F, 1F, 0F);
-		
-//		v.pushMatrix();
-//		v.translate(v.width / 2F - cameraPos.x, v.height / 2F - cameraPos.y);
 		
 		cameraPos = playerShip.getPosition();
 
@@ -179,7 +180,7 @@ public class Singleplayer implements World {
 			// Header text
 			v.stroke(0);
 			v.fill(255, 0, 0);
-			v.text("You died.", v.width / 2F, (v.height / 2F) - 100);
+			v.text("You died.", v.width / 2F, v.height / 2F - 100);
 
 			// Body text
 			v.stroke(0);
@@ -220,15 +221,14 @@ public class Singleplayer implements World {
 	public void setDead() {
 		if(Resources.getMusic() != null)
 			lowPass.process(Resources.getMusic(), 800);
-		Resources.stopSound("engine");
-		Resources.stopSound("hyperdriveLoop");
+		Resources.stopAllSounds();
 		Resources.playSound("death");
 	}
 
 	@Override
 	public void restart() {
 		lowPass.stop();
-		setContext(new Singleplayer());
+		startWorld(new Singleplayer());
 	}
 
 	public PlayerShip getPlayerShip() {

@@ -22,7 +22,7 @@ public class MainMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public void init(Menu menu) {
+	public void focus(Menu menu) {
 		Resources.setMusic("theme");
 	}
 
