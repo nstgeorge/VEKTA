@@ -32,6 +32,11 @@ public class TradeMenuHandle extends MenuHandle {
 		return v.width * 2 / 3;
 	}
 
+	@Override
+	public int getButtonY(int i) {
+		return super.getButtonY(i) - 64;
+	}
+
 	public void render(Menu menu) {
 		super.render(menu);
 
