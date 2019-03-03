@@ -1,12 +1,12 @@
 package vekta.menu.option;
 
 import vekta.menu.Menu;
-import vekta.object.PlayerShip;
+import vekta.object.ModularShip;
 
 public class RechargeOption implements MenuOption {
-	private final PlayerShip ship;
+	private final ModularShip ship;
 
-	public RechargeOption(PlayerShip ship) {
+	public RechargeOption(ModularShip ship) {
 		this.ship = ship;
 	}
 

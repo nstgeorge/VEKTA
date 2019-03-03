@@ -37,4 +37,8 @@ public abstract class ShipModule implements Module {
 	protected final int chooseInclusive(int min, int max) {
 		return round(getInstance().random(min, max));
 	}
+
+	protected final float chooseInclusive(float min, float max, float interval) {
+		return round(getInstance().random(min, max) * interval) / interval;
+	}
 }

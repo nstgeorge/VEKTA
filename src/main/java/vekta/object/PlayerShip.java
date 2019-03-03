@@ -56,7 +56,7 @@ public class PlayerShip extends ModularShip {
 
 	public void onKeyPress(char key) {
 		super.onKeyPress(key);
-		
+
 		if(key == 'e') {
 			openMenu();
 		}
@@ -79,6 +79,9 @@ public class PlayerShip extends ModularShip {
 	public void onLand(LandingSite site) {
 		Menu menu = new Menu(new LandingMenuHandle(site, getWorld()));
 		site.getTerrain().setupLandingMenu(this, menu);
+		for(Module m : getModules()) {
+			m.onLandingMenu(site, menu);
+		}
 		menu.add(new TerrainInfoOption(site.getTerrain()));
 		menu.addDefault();
 		Resources.playSound("land");

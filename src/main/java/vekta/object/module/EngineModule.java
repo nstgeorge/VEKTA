@@ -32,7 +32,7 @@ public class EngineModule extends ShipModule {
 
 	@Override
 	public Module getVariant() {
-		return new EngineModule(chooseInclusive(1, 3));
+		return new EngineModule(chooseInclusive(.5F, 3, .1F));
 	}
 
 	@Override

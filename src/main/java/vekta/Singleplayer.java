@@ -73,9 +73,10 @@ public class Singleplayer implements World {
 
 		//// TEMP
 		playerShip.addModule(new AutopilotModule());
-		playerShip.getInventory().add(new ModuleItem(new TorpedoModule(2))); // Torpedo upgrade for testing
-		playerShip.getInventory().add(new ModuleItem(new HyperdriveModule(1))); // Hyperdrive upgrade for testing
-		playerShip.getInventory().add(new ModuleItem(new TractorBeamModule(1))); // Tractor beam upgrade for testing
+		playerShip.getInventory().add(new ModuleItem(new DrillModule(1)));
+		playerShip.getInventory().add(new ModuleItem(new TorpedoModule(2)));
+		playerShip.getInventory().add(new ModuleItem(new HyperdriveModule(1)));
+		playerShip.getInventory().add(new ModuleItem(new TractorBeamModule(1)));
 		////
 
 		// Configure UI overlay

@@ -1,7 +1,9 @@
 package vekta.object.module;
 
+import vekta.menu.Menu;
 import vekta.object.ModularShip;
 import vekta.object.SpaceObject;
+import vekta.terrain.LandingSite;
 
 public interface Module extends Cloneable {
 	// Define per-second energy consumption rate
@@ -32,5 +34,8 @@ public interface Module extends Cloneable {
 	}
 
 	default void onKeyRelease(char key) {
+	}
+	
+	default void onLandingMenu(LandingSite site, Menu menu) {
 	}
 }
