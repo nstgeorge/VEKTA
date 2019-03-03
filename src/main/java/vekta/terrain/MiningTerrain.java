@@ -7,7 +7,7 @@ public class MiningTerrain extends Terrain {
 
 	public MiningTerrain() {
 		addFeature("Mineable");
-		if(chance(.1F)) {
+		if(chance(.5F)) {
 			addFeature("Habitable");
 			addFeature("Inhabited");
 		}

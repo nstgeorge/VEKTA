@@ -4,7 +4,6 @@ import vekta.Resources;
 import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;
-import vekta.menu.option.RechargeOption;
 import vekta.menu.option.TradeMenuOption;
 import vekta.object.PlayerShip;
 
@@ -54,9 +53,6 @@ public class InhabitedTerrain extends Terrain {
 		computeOffers(ship.getInventory(), shipOffers, offers, 1 / ITEM_MARKUP);
 		computeOffers(getInventory(), offers, shipOffers, ITEM_MARKUP);
 
-		if(ship.getEnergy() / ship.getMaxEnergy() <= .9F) {
-			menu.add(new RechargeOption(ship));
-		}
 		menu.add(new TradeMenuOption(true, ship.getInventory(), getInventory(), offers));
 		menu.add(new TradeMenuOption(false, ship.getInventory(), getInventory(), shipOffers));
 	}

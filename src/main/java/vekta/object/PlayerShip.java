@@ -77,10 +77,10 @@ public class PlayerShip extends ModularShip {
 	@Override
 	public void onLand(LandingSite site) {
 		Menu menu = new Menu(new LandingMenuHandle(site, getWorld()));
-		site.getTerrain().setupLandingMenu(this, menu);
 		for(Module m : getModules()) {
 			m.onLandingMenu(site, menu);
 		}
+		site.getTerrain().setupLandingMenu(this, menu);
 		menu.add(new SurveyOption(site));
 		menu.addDefault();
 		Resources.playSound("land");

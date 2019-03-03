@@ -1,5 +1,9 @@
 package vekta.object.module;
 
+import vekta.menu.Menu;
+import vekta.menu.option.RechargeOption;
+import vekta.terrain.LandingSite;
+
 import static java.lang.Math.round;
 
 public class BatteryModule extends ShipModule {
@@ -55,5 +59,12 @@ public class BatteryModule extends ShipModule {
 	public void onUninstall() {
 		charge = getShip().getEnergy();
 		getShip().setMaxEnergy(0);
+	}
+
+	@Override
+	public void onLandingMenu(LandingSite site, Menu menu) {
+		if(site.getTerrain().hasFeature("Inhabited") && getCharge() <= getCapacity() * .9F) {
+			menu.add(new RechargeOption(getShip()));
+		}
 	}
 }
