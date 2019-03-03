@@ -8,3 +8,6 @@ Imperfect Gemstone
 Odd Crystal
 Shiny Rocks
 Glowing Rocks
+Salt
+Quartz
+Silicon

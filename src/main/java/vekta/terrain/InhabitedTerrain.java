@@ -27,7 +27,7 @@ public class InhabitedTerrain extends Terrain {
 		add("Habitable");
 		
 		String key;
-		if(chance(.4)) {
+		if(chance(.4F)) {
 			add("Urban");
 			key = "overview_urban";
 		}

@@ -1,4 +1,5 @@
 Silver Ore
 Gold Ore
+Unique Gemstone
 Perfect Gemstone
 Small Diamond

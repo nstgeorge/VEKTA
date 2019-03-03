@@ -9,7 +9,7 @@ public class AbandonedTerrain extends Terrain {
 	private final Inventory inventory = new Inventory();
 	
 	public AbandonedTerrain() {
-		if(chance(.5)) {
+		if(chance(.5F)) {
 			add("Habitable");
 		}
 	}

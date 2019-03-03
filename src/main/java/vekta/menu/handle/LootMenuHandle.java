@@ -28,9 +28,14 @@ public class LootMenuHandle extends MenuHandle {
 		return v.width * 2 / 3;
 	}
 
+	@Override
+	public int getButtonY(int i) {
+		return super.getButtonY(i) - 64;
+	}
+
 	public void render(Menu menu) {
 		super.render(menu);
-		
+
 		v.textSize(32);
 		v.fill(UI_COLOR);
 		v.text("Items Found: " + inv.size(), v.width / 2F, v.height / 4F);

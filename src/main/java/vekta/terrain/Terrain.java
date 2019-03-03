@@ -33,7 +33,7 @@ public abstract class Terrain {
 		getProperties().remove(prop);
 	}
 	
-	protected boolean chance(double amount) {
+	protected boolean chance(float amount) {
 		return Vekta.getInstance().random(1) < amount;
 	}
 

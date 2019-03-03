@@ -6,7 +6,7 @@ import vekta.object.PlayerShip;
 public class OceanicTerrain extends Terrain {
 
 	public OceanicTerrain() {
-		if(chance(.9)) {
+		if(chance(.9F)) {
 			add("Atmosphere");
 		}
 	}
