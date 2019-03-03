@@ -1,8 +1,6 @@
 package vekta.object.module;
 
-import vekta.object.Ship;
-
-public abstract class WeaponModule implements Module {
+public abstract class WeaponModule extends ShipModule {
 
 	@Override
 	public ModuleType getType() {
@@ -15,11 +13,11 @@ public abstract class WeaponModule implements Module {
 	}
 
 	@Override
-	public void onKeyPress(Ship ship, char key) {
+	public void onKeyPress(char key) {
 		if(key == 'x') {
-			fireWeapon(ship);
+			fireWeapon();
 		}
 	}
 
-	public abstract void fireWeapon(Ship ship);
+	public abstract void fireWeapon();
 }

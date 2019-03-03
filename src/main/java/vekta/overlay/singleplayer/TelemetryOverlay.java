@@ -5,6 +5,8 @@ import vekta.Vekta;
 import vekta.object.Planet;
 import vekta.object.PlayerShip;
 import vekta.object.SpaceObject;
+import vekta.object.Targeter;
+import vekta.object.module.ModuleType;
 import vekta.overlay.Overlay;
 
 import static processing.core.PApplet.*;
@@ -16,6 +18,7 @@ import static vekta.Vekta.getInstance;
 public class TelemetryOverlay implements Overlay {
 	private final PlayerShip ship;
 
+	private Targeter targeter;
 	private String distString;
 
 	public TelemetryOverlay(PlayerShip ship) {
@@ -23,10 +26,14 @@ public class TelemetryOverlay implements Overlay {
 	}
 
 	private void updateUIInformation() {
-		SpaceObject target = ship.findTarget();
-		distString = String.valueOf(target != null
-				? (float)round(ship.getPosition().dist(target.getPosition()) * 100) / 100
-				: 0);
+		targeter = ((Targeter)ship.getBestModule(ModuleType.TARGET_COMPUTER));
+
+		if(targeter != null) {
+			SpaceObject target = targeter.getTarget();
+			distString = String.valueOf(target != null
+					? (float)round(ship.getPosition().dist(target.getPosition()) * 100) / 100
+					: 0);
+		}
 	}
 
 	@Override
@@ -48,38 +55,40 @@ public class TelemetryOverlay implements Overlay {
 		drawDial("Heading", ship.getHeading(), v.width - 370, v.height - 65, v.color(0, 255, 0));
 		drawDial("Velocity", ship.getVelocity().copy(), v.width - 500, v.height - 65, v.color(0, 255, 0));
 
-		// Text - left
-		SpaceObject target = ship.findTarget();
-		String targetString;
-		if(target == null) {
-			v.fill(100, 100, 100);
-			v.stroke(UI_COLOR);
-			targetString = "None selected";
-		}
-		else {
-			float mass;
-			String unit;
-			if(target.getMass() / 1.989e30 < .1) {
-				mass = (float)round(target.getMass() / 5.9736e24F * 1000) / 1000;
-				unit = "Earths";
+		// Targeter information
+		if(targeter != null) {
+			SpaceObject target = targeter.getTarget();
+			String targetString;
+			if(target == null) {
+				v.fill(100, 100, 100);
+				v.stroke(UI_COLOR);
+				targetString = "planet [1], ship [2]";
 			}
 			else {
-				mass = (float)round(target.getMass() / 1.989e30F * 1000) / 1000;
-				unit = "Suns";
+				float mass;
+				String unit;
+				if(target.getMass() / 1.989e30 < .1) {
+					mass = (float)round(target.getMass() / 5.9736e24F * 1000) / 1000;
+					unit = "Earths";
+				}
+				else {
+					mass = (float)round(target.getMass() / 1.989e30F * 1000) / 1000;
+					unit = "Suns";
+				}
+				if(target instanceof Planet) {
+					Planet closestPlanet = (Planet)target;
+					targetString = target.getName() + " - " + distString + " AU \nHabitable: " + (closestPlanet.isHabitable() ? "YES" : "NO") + "\nMass: " + mass + " " + unit;
+				}
+				else {
+					targetString = target.getName() + " - " + distString + " AU \nSpeed: " + (float)round(target.getVelocity().mag() * 100) / 100 + "\nMass: " + mass + " " + unit;
+				}
+				// Closest object arrow
+				drawDial("Direction", target.getPosition().sub(ship.getPosition()), 450, v.height - 65, target.getColor());
+				v.fill(target.getColor());
+				v.stroke(target.getColor());
 			}
-			if(target instanceof Planet) {
-				Planet closestPlanet = (Planet)target;
-				targetString = target.getName() + " - " + distString + " AU \nHabitable: " + (closestPlanet.isHabitable() ? "YES" : "NO") + "\nMass: " + mass + " " + unit;
-			}
-			else {
-				targetString = target.getName() + " - " + distString + " AU \nSpeed: " + (float)round(target.getVelocity().mag() * 100) / 100 + "\nMass: " + mass + " " + unit;
-			}
-			// Closest object arrow
-			drawDial("Direction", target.getPosition().sub(ship.getPosition()), 450, v.height - 65, target.getColor());
-			v.fill(target.getColor());
-			v.stroke(target.getColor());
+			v.text("Target: " + targetString, 50, v.height - 100);
 		}
-		v.text("Target: " + targetString, 50, v.height - 100);
 	}
 
 	private void drawDial(String name, PVector info, int locX, int locY, int c) {

@@ -1,28 +1,17 @@
 package vekta.object.module;
 
 import vekta.Vekta;
+import vekta.context.Context;
+import vekta.context.World;
 import vekta.object.Planet;
 import vekta.object.Ship;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 
-public class TargetingModule implements Module, Targeter {
-	private static boolean selecting;
+public class TargetingModule extends ShipModule implements Targeter {
 
-	/**
-	 * Static access to target selection for UI
-	 */
-	public static boolean isUsingTargeter() {
-		return selecting;
-	}
-
-	private Ship ship; // TODO: add a parent class for stateful modules
 	private TargetingMode mode;
 	private SpaceObject target;
-
-	public TargetingModule() {
-
-	}
 
 	public TargetingMode getMode() {
 		return mode;
@@ -30,8 +19,13 @@ public class TargetingModule implements Module, Targeter {
 
 	public void setMode(TargetingMode mode) {
 		this.mode = mode;
-		selecting = false;
-		Vekta.getWorld().updateTargeters(ship);
+		setTarget(null);
+		
+		// Immediately update the target (except in menus)
+		Context context = Vekta.getContext();
+		if(context instanceof World) {
+			((World)context).updateTargeters(getShip());
+		}
 	}
 
 	@Override
@@ -49,7 +43,6 @@ public class TargetingModule implements Module, Targeter {
 		if(mode == null) {
 			return false;
 		}
-
 		switch(mode) {
 		case PLANET:
 			return obj instanceof Planet;
@@ -58,6 +51,11 @@ public class TargetingModule implements Module, Targeter {
 		default:
 			return false;
 		}
+	}
+
+	@Override
+	public boolean shouldUpdateTarget() {
+		return target == null;
 	}
 
 	@Override
@@ -76,23 +74,15 @@ public class TargetingModule implements Module, Targeter {
 	}
 
 	@Override
-	public void onInstall(Ship ship) {
-		this.ship = ship;
+	public void onInstall() {
 		setMode(null);
 	}
 
 	@Override
-	public void onUninstall(Ship ship) {
-		onInstall(null);
-	}
-
-	@Override
-	public void onKeyPress(Ship ship, char key) {
+	public void onKeyPress(char key) {
 		switch(key) {
 		case 't':
 			setMode(null);
-			target = null;
-			selecting = true;
 			break;
 		case '1':
 			setMode(TargetingModule.TargetingMode.PLANET);

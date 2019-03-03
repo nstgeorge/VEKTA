@@ -8,7 +8,8 @@ import vekta.item.Item;
 import vekta.terrain.LandingSite;
 
 import static processing.core.PConstants.CLOSE;
-import static vekta.Vekta.*;
+import static vekta.Vekta.addObject;
+import static vekta.Vekta.getInstance;
 
 public abstract class Ship extends SpaceObject {
 	private static final float CRATE_SPEED = 1;
@@ -60,6 +61,14 @@ public abstract class Ship extends SpaceObject {
 		return heading.copy();
 	}
 
+	public void setHeading(PVector heading) {
+		this.heading.set(heading).normalize();
+	}
+	
+	public void setAngle(float angle) {
+		this.heading.set(PVector.fromAngle(angle));
+	}
+
 	public float getSpeed() {
 		return speed;
 	}
@@ -82,31 +91,14 @@ public abstract class Ship extends SpaceObject {
 	}
 
 	public void undock() {
-		if(getDock() != null) {
-			setVelocity(getDock().getVelocity());
-			PVector offset = getPosition().sub(getDock().getPosition());
-			position.add(offset.setMag(getRadius() * 2 + getDock().getRadius() - offset.mag()));
-			dock = null;
+		SpaceObject dock = getDock();
+		if(dock != null) {
+			PVector offset = getPosition().sub(dock.getPosition());
+			setVelocity(dock.getVelocity().add(offset.copy().mult(.1F)));
+			position.add(offset.setMag(getRadius() * 2 + dock.getRadius() - offset.mag()));
+			this.dock = null;
+			onDepart(dock);
 		}
-	}
-
-	/**
-	 * Check whether this ship is attempting to land.
-	 */
-	public abstract boolean isLanding();
-
-	/**
-	 * Get the current thrust (usually either -1 or 1)
-	 */
-	public abstract float getThrustControl();
-
-	/**
-	 * Get the current turning speed (usually either -1 or 1)
-	 */
-	public abstract float getTurnControl();
-
-	public boolean consumeEnergy(float amount) {
-		return true;
 	}
 
 	public void accelerate(float amount) {
@@ -141,10 +133,11 @@ public abstract class Ship extends SpaceObject {
 			if(ship.getVelocity().sub(velocity).magSq() <= MAX_DOCKING_SPEED * MAX_DOCKING_SPEED) {
 				// Board ship
 				ship.dock(this);
-				return;
+			}
+			else {
+				destroyBecause(s);
 			}
 		}
-		super.onCollide(s);
 	}
 
 	@Override
@@ -198,6 +191,9 @@ public abstract class Ship extends SpaceObject {
 
 	public void onDock(SpaceObject obj) {
 		undock();
+	}
+
+	public void onDepart(SpaceObject obj) {
 	}
 
 	protected enum ShipModelType {

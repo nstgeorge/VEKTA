@@ -14,6 +14,12 @@ public class Star extends Planet {
 		return false;
 	}
 
+	@Override
+	public boolean doesSplitOnDestroy() {
+		return false;
+	}
+
+	@Override
 	public void draw() {
 		drawRadialGradient(position, super.getColor(), getInstance().color(0), getRadius(), getRadius() * 1.5F);
 		super.draw();

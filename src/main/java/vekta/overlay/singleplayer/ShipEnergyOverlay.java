@@ -2,6 +2,8 @@ package vekta.overlay.singleplayer;
 
 import vekta.object.PlayerShip;
 
+import static vekta.Vekta.getInstance;
+
 /**
  * Ship stats (energy, money, etc.)
  */
@@ -20,5 +22,17 @@ public class ShipEnergyOverlay extends ShipStatOverlay {
 		float energy = getShip().getEnergy();
 		float max = getShip().getMaxEnergy();
 		return (int)energy + " / " + max + " (" + (int)(energy / max * 100) + "%)";
+	}
+
+	@Override
+	public int getColor() {
+		float ratio = getShip().getEnergy() / getShip().getMaxEnergy();
+		if(ratio <= .2F) {
+			return getInstance().color(255, 255, 0);
+		}
+		if(ratio <= .1F) {
+			return getInstance().color(255, 0, 0);
+		}
+		return super.getColor();
 	}
 }

@@ -15,6 +15,7 @@ public abstract class SpaceObject {
 	protected static final Vekta v = getInstance();
 
 	private int id;
+	private boolean destroyed;
 
 	protected final PVector position;
 	protected final PVector velocity;
@@ -76,6 +77,12 @@ public abstract class SpaceObject {
 	public final PVector setVelocity(PVector velocity) {
 		return this.velocity.set(velocity);
 	}
+	/**
+	 * Applies the given velocity to the object
+	 */
+	public final void applyVelocity(PVector velocity) {
+		this.position.add(velocity);
+	}
 
 	/**
 	 * Adds velocity to the object
@@ -128,24 +135,24 @@ public abstract class SpaceObject {
 	}
 
 	/**
-	 * When colliding, does this object destroy the other?
-	 * By default, the other object will be destroyed if this mass is at least half of their mass.
-	 */
-	public boolean shouldDestroy(SpaceObject other) {
-		return getMass() * 2 >= other.getMass();
-	}
-
-	/**
 	 * Invoked when colliding with SpaceObject `s`
 	 */
 	public void onCollide(SpaceObject s) {
-		if(shouldDestroy(s)) {
-			s.onDestroy(this);
-			removeObject(s);
-		}
-
 	}
 
+	public final boolean isDestroyed() {
+		return destroyed;
+	}
+
+	public final void destroyBecause(SpaceObject reason) {
+		if(destroyed) {
+			return;
+		}
+		destroyed = true;
+		onDestroy(reason);
+		removeObject(this);
+	}
+	
 	/**
 	 * Invoked when destroyed by SpaceObject `s`
 	 */
@@ -174,11 +181,11 @@ public abstract class SpaceObject {
 	}
 
 	/**
-	 * Update the position of this SpaceObject.
+	 * Perform physics updates for this SpaceObject.
 	 */
 	public final void update() {
 		onUpdate();
-		position.add(velocity);
+		applyVelocity(velocity);
 	}
 
 	public void onUpdate() {

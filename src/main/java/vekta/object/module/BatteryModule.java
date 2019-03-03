@@ -1,9 +1,6 @@
 package vekta.object.module;
 
-import vekta.object.PlayerShip;
-import vekta.object.Ship;
-
-public class BatteryModule implements Module {
+public class BatteryModule extends ShipModule {
 	private final float capacity;
 
 	public BatteryModule(float capacity) {
@@ -30,12 +27,12 @@ public class BatteryModule implements Module {
 	}
 
 	@Override
-	public void onInstall(Ship ship) {
-		((PlayerShip)ship).addMaxEnergy(getCapacity());
+	public void onInstall() {
+		getShip().addMaxEnergy(getCapacity());
 	}
 
 	@Override
-	public void onUninstall(Ship ship) {
-		((PlayerShip)ship).addMaxEnergy(-getCapacity());
+	public void onUninstall() {
+		getShip().addMaxEnergy(-getCapacity());
 	}
 }

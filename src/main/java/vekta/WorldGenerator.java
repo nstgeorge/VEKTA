@@ -9,10 +9,10 @@ import vekta.terrain.*;
 
 import static vekta.Vekta.*;
 
-public class UniverseGen {
+public class WorldGenerator {
 	private final float radius; // Max persistent object distance
 
-	public UniverseGen(int size) {
+	public WorldGenerator(int size) {
 		this.radius = size;
 	}
 

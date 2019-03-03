@@ -9,6 +9,6 @@ public interface Targeter {
 	
 	default boolean shouldUpdateTarget() {
 		SpaceObject t = getTarget();
-		return t == null || !isValidTarget(t);
+		return t == null || t.isDestroyed() || !isValidTarget(t);
 	}
 }

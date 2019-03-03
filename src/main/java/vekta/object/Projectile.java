@@ -62,18 +62,14 @@ public class Projectile extends SpaceObject {
 		return s != getParent() && super.collidesWith(s);
 	}
 
-	@Override
-	public boolean shouldDestroy(SpaceObject other) {
-		return true;
-	}
-
 	/**
-	 * Override to always destroy projectiles on impact
+	 * Override to always destroyBecause projectiles on impact
 	 */
 	@Override
 	public void onCollide(SpaceObject s) {
-		super.onCollide(s);
-		removeObject(this);
+//		super.onCollide(s);
+		destroyBecause(s);
+		s.destroyBecause(this); // TODO: switch out with imparting damage
 		getWorld().playSoundAt("explosion", getPosition());
 	}
 }  

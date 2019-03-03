@@ -46,11 +46,22 @@ public abstract class Planet extends SpaceObject {
 	}
 
 	@Override
+	public void onCollide(SpaceObject s) {
+		if(getMass() * 2 >= s.getMass()) {
+			s.destroyBecause(this);
+		}
+	}
+	
+	public boolean doesSplitOnDestroy() {
+		return getRadius() >= MIN_SPLIT_RADIUS;
+	}
+
+	@Override
 	public void onDestroy(SpaceObject s) {
 		//println("Planet destroyed with radius: " + getRadius());
 
 		// If sufficiently large, split planet in half
-		if(getRadius() >= MIN_SPLIT_RADIUS) {
+		if(doesSplitOnDestroy()) {
 			float newMass = getMass() / 2;
 
 			// Use mass-weighted collision velocity for base debris velocity
