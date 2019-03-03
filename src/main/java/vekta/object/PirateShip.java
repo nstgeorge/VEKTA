@@ -80,7 +80,7 @@ public class PirateShip extends Ship implements Targeter {
 	}
 
 	private void fireProjectile() {
-		getWorld().playSoundAt("laser", this.position);
+		getWorld().playSound("laser", this.position);
 		PVector vel = heading.copy().setMag(PROJECTILE_SPEED)
 				.rotate(getInstance().random(-ATTACK_SPREAD, ATTACK_SPREAD) * PI / 360)
 				.add(velocity);

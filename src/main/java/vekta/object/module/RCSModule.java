@@ -1,6 +1,6 @@
 package vekta.object.module;
 
-import vekta.object.ControllableShip;
+import vekta.object.ModularShip;
 
 import static java.lang.Math.abs;
 
@@ -37,7 +37,7 @@ public class RCSModule extends ShipModule {
 
 	@Override
 	public void onUpdate() {
-		ControllableShip ship = getShip();
+		ModularShip ship = getShip();
 		float turn = ship.getTurnControl();
 		if(ship.consumeEnergy(5 * getTurnSpeed() * abs(turn) * PER_MINUTE)) {
 			ship.turn(turn * getTurnSpeed());

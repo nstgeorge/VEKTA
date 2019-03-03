@@ -6,10 +6,7 @@ import vekta.context.PauseMenuContext;
 import vekta.context.World;
 import vekta.item.ModuleItem;
 import vekta.object.*;
-import vekta.object.module.AutopilotModule;
-import vekta.object.module.HyperdriveModule;
-import vekta.object.module.RCSModule;
-import vekta.object.module.TractorBeamModule;
+import vekta.object.module.*;
 import vekta.overlay.Overlay;
 import vekta.overlay.singleplayer.SingleplayerOverlay;
 
@@ -73,13 +70,15 @@ public class Singleplayer implements World {
 		);
 		ship.getInventory().add(new ModuleItem(new RCSModule(2)));
 		addObject(ship);
-		
-		// TEMP
+
+		//// TEMP
 		playerShip.addModule(new AutopilotModule());
+		playerShip.getInventory().add(new ModuleItem(new TorpedoModule(2))); // Torpedo upgrade for testing
 		playerShip.getInventory().add(new ModuleItem(new HyperdriveModule(1))); // Hyperdrive upgrade for testing
 		playerShip.getInventory().add(new ModuleItem(new TractorBeamModule(1))); // Tractor beam upgrade for testing
+		////
 
-		// Overlay UI
+		// Configure UI overlay
 		overlay = new SingleplayerOverlay(playerShip);
 	}
 
@@ -280,7 +279,7 @@ public class Singleplayer implements World {
 	}
 
 	@Override
-	public void playSoundAt(String sound, PVector location) {
+	public void playSound(String sound, PVector location) {
 		float distance = getPlayerShip().getPosition().dist(location);
 		float distanceX = getPlayerShip().getPosition().x - location.x;
 

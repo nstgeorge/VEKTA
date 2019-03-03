@@ -4,8 +4,6 @@ import processing.core.PVector;
 import vekta.Resources;
 import vekta.Vekta;
 import vekta.item.Inventory;
-import vekta.item.Item;
-import vekta.item.ModuleItem;
 import vekta.menu.Menu;
 import vekta.menu.handle.LandingMenuHandle;
 import vekta.menu.handle.ObjectMenuHandle;
@@ -13,14 +11,12 @@ import vekta.menu.option.*;
 import vekta.object.module.*;
 import vekta.terrain.LandingSite;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import static vekta.Vekta.getWorld;
 import static vekta.Vekta.setContext;
 
-public class PlayerShip extends ControllableShip implements Upgradeable {
+public class PlayerShip extends ModularShip {
 	// Default PlayerShip stuff
 	private static final float DEF_MASS = 5000;
 	private static final float DEF_RADIUS = 5;
@@ -28,9 +24,6 @@ public class PlayerShip extends ControllableShip implements Upgradeable {
 	private static final float DEF_TURN = 20; // Base turn speed (RCS turnSpeed = 1)
 
 	private final PVector influence = new PVector();
-
-	// Upgradeable modules
-	private final List<Module> modules = new ArrayList<>();
 
 	public PlayerShip(String name, PVector heading, PVector position, PVector velocity, int color) {
 		super(name, DEF_MASS, DEF_RADIUS, heading, position, velocity, color, DEF_SPEED, DEF_TURN);
@@ -43,73 +36,6 @@ public class PlayerShip extends ControllableShip implements Upgradeable {
 		addModule(new CannonModule());
 
 		setEnergy(getMaxEnergy() * .2F);
-	}
-
-	@Override
-	public Collection<Targeter> getTargeters() {
-		ArrayList<Targeter> list = new ArrayList<>(); // TODO cache
-		for(Module m : getModules()) {
-			if(m instanceof Targeter) {
-				list.add((Targeter)m);
-			}
-		}
-		return list;
-	}
-
-	@Override
-	public List<Module> getModules() {
-		return modules;
-	}
-
-	@Override
-	public Module getBestModule(ModuleType type) {
-		Module module = null;
-		for(Module m : getModules()) {
-			if(m.getType() == type && (module == null || m.isBetter(module))) {
-				module = m;
-			}
-		}
-		return module;
-	}
-
-	@Override
-	public List<Module> findUpgrades() {
-		List<Module> list = new ArrayList<>();
-		for(Item item : getInventory()) {
-			if(item instanceof ModuleItem) {
-				list.add(((ModuleItem)item).getModule());
-			}
-		}
-		return list;
-	}
-
-	@Override
-	public void upgrade(Module module) {
-		addModule(module);
-		for(Item item : new ArrayList<>(getInventory().getItems())) {
-			if(item instanceof ModuleItem && ((ModuleItem)item).getModule() == module) {
-				getInventory().remove(item);
-				break;
-			}
-		}
-	}
-
-	public void addModule(Module module) {
-		// TODO: more control over module exclusivity
-		for(Module m : new ArrayList<>(modules)) {
-			if(m.getType() == module.getType()) {
-				removeModule(m);
-			}
-		}
-		modules.add(module);
-		module.onInstall(this);
-	}
-
-	public void removeModule(Module module) {
-		if(modules.remove(module)) {
-			getInventory().add(new ModuleItem(module));
-		}
-		module.onUninstall(this);
 	}
 
 	@Override
@@ -129,9 +55,8 @@ public class PlayerShip extends ControllableShip implements Upgradeable {
 	}
 
 	public void onKeyPress(char key) {
-		for(Module module : getModules()) {
-			module.onKeyPress(key);
-		}
+		super.onKeyPress(key);
+		
 		if(key == 'e') {
 			openMenu();
 		}

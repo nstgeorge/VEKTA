@@ -1,6 +1,6 @@
 package vekta.object.module;
 
-import vekta.object.ControllableShip;
+import vekta.object.ModularShip;
 import vekta.object.SpaceObject;
 
 public interface Module extends Cloneable {
@@ -16,10 +16,10 @@ public interface Module extends Cloneable {
 
 	Module getVariant();
 
-	default void onInstall(ControllableShip ship) {
+	default void onInstall(ModularShip ship) {
 	}
 
-	default void onUninstall(ControllableShip ship) {
+	default void onUninstall(ModularShip ship) {
 	}
 
 	default void onUpdate() {

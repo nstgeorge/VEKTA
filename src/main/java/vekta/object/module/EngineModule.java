@@ -1,6 +1,6 @@
 package vekta.object.module;
 
-import vekta.object.ControllableShip;
+import vekta.object.ModularShip;
 
 import static com.jogamp.opengl.math.FloatUtil.abs;
 
@@ -37,7 +37,7 @@ public class EngineModule extends ShipModule {
 
 	@Override
 	public void onUpdate() {
-		ControllableShip ship = getShip();
+		ModularShip ship = getShip();
 		float thrust = ship.getThrustControl();
 		if(ship.consumeEnergy(20 * getSpeed() * abs(thrust) * PER_MINUTE)) {
 			ship.accelerate(thrust * getSpeed());

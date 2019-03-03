@@ -1,25 +1,25 @@
 package vekta.object.module;
 
-import vekta.object.ControllableShip;
+import vekta.object.ModularShip;
 
 import static vekta.Vekta.getInstance;
 import static vekta.Vekta.round;
 
 public abstract class ShipModule implements Module {
-	private ControllableShip ship;
+	private ModularShip ship;
 
-	public ControllableShip getShip() {
+	public final ModularShip getShip() {
 		return ship;
 	}
 
 	@Override
-	public final void onInstall(ControllableShip ship) {
+	public final void onInstall(ModularShip ship) {
 		this.ship = ship;
 		onInstall();
 	}
 
 	@Override
-	public final void onUninstall(ControllableShip ship) {
+	public final void onUninstall(ModularShip ship) {
 		onUninstall();
 		this.ship = null;
 	}

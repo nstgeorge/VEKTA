@@ -28,5 +28,5 @@ public interface World extends Context {
 
 	void updateTargeters(SpaceObject object);
 
-	void playSoundAt(String sound, PVector location);
+	void playSound(String sound, PVector location);
 }  

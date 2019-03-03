@@ -1,11 +1,11 @@
 package vekta.object.module;
 
 import processing.core.PVector;
-import vekta.Resources;
-import vekta.object.ControllableShip;
+import vekta.object.ModularShip;
 import vekta.object.Projectile;
 
 import static vekta.Vekta.addObject;
+import static vekta.Vekta.getWorld;
 
 public class CannonModule extends WeaponModule {
 	private static final float PROJECTILE_SPEED = 7;
@@ -22,10 +22,10 @@ public class CannonModule extends WeaponModule {
 
 	@Override
 	public void fireWeapon() {
-		ControllableShip ship = getShip();
+		ModularShip ship = getShip();
 		if(ship.consumeEnergy(.5F)) {
-			Resources.playSound("laser");
-			PVector velocity = ship.getHeading().setMag(PROJECTILE_SPEED).add(ship.getVelocity());
+			getWorld().playSound("laser", ship.getPosition());
+			PVector velocity = ship.getVelocity().add(ship.getHeading().setMag(PROJECTILE_SPEED));
 			addObject(new Projectile(ship, ship.getPosition(), velocity, ship.getColor()));
 		}
 	}

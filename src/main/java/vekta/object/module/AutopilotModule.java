@@ -1,7 +1,7 @@
 package vekta.object.module;
 
 import processing.core.PVector;
-import vekta.object.ControllableShip;
+import vekta.object.ModularShip;
 import vekta.object.SpaceObject;
 
 import static vekta.Vekta.*;
@@ -43,7 +43,7 @@ public class AutopilotModule extends TargetingModule {
 	public void onUpdate() {
 		super.onUpdate();
 
-		ControllableShip ship = getShip();
+		ModularShip ship = getShip();
 		SpaceObject target = getTarget();
 		if(isActive() && target != null) {
 			// Grab telemetry vectors

@@ -9,7 +9,7 @@ public abstract class WeaponModule extends ShipModule {
 
 	@Override
 	public boolean isBetter(Module other) {
-		return false;
+		return other instanceof ShipModule && getClass() != other.getClass();
 	}
 
 	@Override

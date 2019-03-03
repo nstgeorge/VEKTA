@@ -1,7 +1,7 @@
 package vekta.object.module;
 
 import vekta.Resources;
-import vekta.object.ControllableShip;
+import vekta.object.ModularShip;
 
 import static vekta.Vekta.max;
 import static vekta.Vekta.min;
@@ -49,13 +49,10 @@ public class HyperdriveModule extends ShipModule {
 
 	@Override
 	public void onUpdate() {
-		ControllableShip ship = getShip();
-		if(ship.isLanding()) {
-			currentBoost = 0;
-		}
+		ModularShip ship = getShip();
 		float thrust = ship.getThrustControl();
 		boolean wasBoosting = currentBoost > 0;
-		currentBoost = max(0, min(MAX_SPEED, ship.getVelocity().mag() * getBoost() - MIN_SPEED));
+		currentBoost = ship.isLanding() ? 0 : max(0, min(MAX_SPEED, ship.getVelocity().mag() * getBoost() - MIN_SPEED));
 		boolean nowBoosting = currentBoost > 0;
 		if(!wasBoosting && nowBoosting && thrust > 0) {
 			Resources.playSound("hyperdriveHit");

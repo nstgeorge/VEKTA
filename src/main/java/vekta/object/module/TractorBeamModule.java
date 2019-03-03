@@ -2,7 +2,7 @@ package vekta.object.module;
 
 import processing.core.PVector;
 import vekta.object.CargoCrate;
-import vekta.object.ControllableShip;
+import vekta.object.ModularShip;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 
@@ -67,7 +67,7 @@ public class TractorBeamModule extends ShipModule implements Targeter {
 
 	@Override
 	public void onUpdate() {
-		ControllableShip ship = getShip();
+		ModularShip ship = getShip();
 		SpaceObject t = getTarget();
 		if(t != null && ship.consumeEnergy(.2F * PER_SECOND)) {
 			float force = getForce() / t.getMass() * BASE_STRENGTH;

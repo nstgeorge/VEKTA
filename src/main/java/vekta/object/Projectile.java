@@ -13,7 +13,7 @@ public class Projectile extends SpaceObject {
 	private SpaceObject parent;
 	private float mass;
 	private float radius;
-	
+
 	private int aliveTime = 0;
 
 	public Projectile(SpaceObject parent, PVector position, PVector velocity, int color) {
@@ -21,21 +21,6 @@ public class Projectile extends SpaceObject {
 		this.parent = parent;
 		this.mass = DEF_MASS;
 		this.radius = DEF_RADIUS;
-	}
-
-	@Override
-	public void onUpdate() {
-		if(++aliveTime >= DESPAWN_TIME) {
-			removeObject(this);
-		}
-	}
-
-	@Override
-	public void draw() {
-		v.stroke(getColor());
-		v.fill(0);
-		v.ellipseMode(RADIUS);
-		v.ellipse(position.x, position.y, radius, radius);
 	}
 
 	public SpaceObject getParent() {
@@ -58,6 +43,21 @@ public class Projectile extends SpaceObject {
 	}
 
 	@Override
+	public void onUpdate() {
+		if(++aliveTime >= DESPAWN_TIME) {
+			removeObject(this);
+		}
+	}
+
+	@Override
+	public void draw() {
+		v.stroke(getColor());
+		v.fill(0);
+		v.ellipseMode(RADIUS);
+		v.ellipse(position.x, position.y, radius, radius);
+	}
+
+	@Override
 	public boolean collidesWith(SpaceObject s) {
 		return s != getParent() && super.collidesWith(s);
 	}
@@ -67,9 +67,9 @@ public class Projectile extends SpaceObject {
 	 */
 	@Override
 	public void onCollide(SpaceObject s) {
-//		super.onCollide(s);
+		//		super.onCollide(s);
 		destroyBecause(s);
 		s.destroyBecause(this); // TODO: switch out with imparting damage
-		getWorld().playSoundAt("explosion", getPosition());
+		getWorld().playSound("explosion", getPosition());
 	}
 }  
