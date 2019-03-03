@@ -88,9 +88,4 @@ public class AutopilotModule extends TargetingModule {
 			setActive(false);
 		}
 	}
-
-	@Override
-	public void onDepart(SpaceObject s) {
-		setActive(false);
-	}
 }

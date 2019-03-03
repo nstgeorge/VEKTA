@@ -31,11 +31,6 @@ public class GasGiant extends Planet {
 	}
 
 	@Override
-	public boolean doesSplitOnDestroy() {
-		return false;
-	}
-
-	@Override
 	public void draw() {
 		super.draw();
 

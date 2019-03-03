@@ -2,11 +2,13 @@ package vekta.item;
 
 import vekta.Vekta;
 
+import static vekta.Vekta.getInstance;
+
 public enum ItemType {
-	COMMON(0xFFCCCCCC, 1),
-	RARE(0xFFFFAA88, 5),
-	LEGENDARY(0xFFAA88FF, 20),
-	SPECIAL(0xFFAAFF88, 10);
+	COMMON(getInstance().color(220), 1),
+	RARE(getInstance().color(255, 200, 100), 5),
+	LEGENDARY(getInstance().color(200, 100, 255), 20),
+	SPECIAL(getInstance().color(200, 255, 100), 10);
 
 	private final int color;
 	private final float priceModifier;
@@ -23,7 +25,7 @@ public enum ItemType {
 	public float getPriceModifier() {
 		return priceModifier;
 	}
-	
+
 	public int randomPrice() {
 		return (int)(Vekta.getInstance().random(1, 10) * getPriceModifier());
 	}

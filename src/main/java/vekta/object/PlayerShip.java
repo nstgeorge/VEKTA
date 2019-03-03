@@ -35,7 +35,7 @@ public class PlayerShip extends ModularShip {
 		addModule(new BatteryModule(100));
 		addModule(new CannonModule());
 
-		setEnergy(getMaxEnergy() * .2F);
+		setEnergy(getMaxEnergy());
 	}
 
 	@Override

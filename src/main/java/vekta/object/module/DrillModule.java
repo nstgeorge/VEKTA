@@ -1,7 +1,7 @@
 package vekta.object.module;
 
 import vekta.menu.Menu;
-import vekta.menu.option.MineOption;
+import vekta.menu.option.ExtractMenuOption;
 import vekta.terrain.LandingSite;
 
 import static processing.core.PApplet.round;
@@ -34,13 +34,13 @@ public class DrillModule extends ShipModule {
 
 	@Override
 	public Module getVariant() {
-		return new DrillModule(chooseInclusive(.5F, 10, .5F));
+		return new DrillModule(chooseInclusive(.5F, 3, .5F));
 	}
 
 	@Override
 	public void onLandingMenu(LandingSite site, Menu menu) {
 		if(site.getTerrain().has("Mineable")) {
-			menu.add(new MineOption(site.getTerrain(), getShip().getInventory(), round(getEfficiency() * 5)));
+			menu.add(new ExtractMenuOption(site, getShip().getInventory(), round(getEfficiency() * 2)));
 		}
 	}
 }

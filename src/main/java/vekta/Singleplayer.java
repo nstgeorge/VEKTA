@@ -33,8 +33,6 @@ public class Singleplayer implements World {
 	private Counter targetCt = new Counter(30); // Counter for periodically updating Targeter instances
 	private Counter spawnCt = new Counter(100); // Counter for periodically cleaning/spawning objects
 
-	WorldGenerator generator = new WorldGenerator(10000);
-
 	private final List<SpaceObject> objects = new ArrayList<>();
 	private final List<SpaceObject> markedForDeath = new ArrayList<>();
 	private final List<SpaceObject> markedForAddition = new ArrayList<>();
@@ -51,6 +49,8 @@ public class Singleplayer implements World {
 
 		Resources.setMusic("atmosphere");
 
+		WorldGenerator.createSystem(PVector.random2D().mult(v.random(1000, 2000)));
+
 		playerShip = new PlayerShip(
 				"VEKTA I",
 				PVector.fromAngle(0), // Heading
@@ -61,19 +61,19 @@ public class Singleplayer implements World {
 		playerShip.getInventory().add(50); // Starting money
 		addObject(playerShip);
 
-		Ship ship = new CargoShip(
-				"Test Ship",
-				PVector.random2D(), // Heading
-				new PVector(500, 500), // Position
-				new PVector(),    // Velocity
-				v.color(255)
-		);
-		ship.getInventory().add(new ModuleItem(new RCSModule(2)));
-		addObject(ship);
+//		Ship ship = new CargoShip(
+//				"Test Ship",
+//				PVector.random2D(), // Heading
+//				new PVector(500, 500), // Position
+//				new PVector(),    // Velocity
+//				v.color(255)
+//		);
+//		ship.getInventory().add(new ModuleItem(new RCSModule(2)));
+//		addObject(ship);
 
 		//// TEMP
 		playerShip.addModule(new AutopilotModule());
-		playerShip.getInventory().add(new ModuleItem(new DrillModule(1)));
+		playerShip.getInventory().add(new ModuleItem(new DrillModule(2)));
 		playerShip.getInventory().add(new ModuleItem(new TorpedoModule(2)));
 		playerShip.getInventory().add(new ModuleItem(new HyperdriveModule(1)));
 		playerShip.getInventory().add(new ModuleItem(new TractorBeamModule(1)));
@@ -124,7 +124,7 @@ public class Singleplayer implements World {
 
 			// Run on spawning loop
 			if(spawning) {
-				if(playerShip.getPosition().sub(s.getPosition()).magSq() > generator.getRadius() * generator.getRadius()) {
+				if(playerShip.getPosition().sub(s.getPosition()).magSq() > WorldGenerator.getRadius() * WorldGenerator.getRadius()) {
 					removeObject(s);
 					continue;
 				}
@@ -157,7 +157,7 @@ public class Singleplayer implements World {
 		markedForDeath.clear();
 
 		if(planetCount < MAX_PLANETS) {
-			generator.spawnOccasional(playerShip.getPosition());
+			WorldGenerator.spawnOccasional(playerShip.getPosition());
 		}
 
 		// Info

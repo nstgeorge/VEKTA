@@ -8,7 +8,6 @@ import processing.event.MouseEvent;
 import vekta.context.Context;
 import vekta.context.MainMenuContext;
 import vekta.context.World;
-import vekta.item.ItemType;
 
 import java.util.logging.LogManager;
 
@@ -182,30 +181,6 @@ public class Vekta extends PApplet {
 	}
 
 	//// Generator methods (will move to another class) ////
-
-	public static String generatePlanetName() {
-		Vekta v = getInstance();
-		return v.random(Resources.getStrings("planet_prefixes")) + v.random(Resources.getStrings("planet_suffixes", ""));
-	}
-
-	public static String generateItemName(ItemType type) {
-		Vekta v = getInstance();
-		String name = v.random(Resources.getStrings("item_nouns"));
-		if(v.random(1) > .5) {
-			name += " " + v.random(Resources.getStrings("item_modifiers"));
-		}
-
-		if(type == ItemType.LEGENDARY) {
-			name += " of " + generatePlanetName();
-		}
-		else {
-			if(v.random(1) > .5) {
-				String adj = v.random(Resources.getStrings(type == ItemType.COMMON ? "item_adj_common" : "item_adj_rare"));
-				name = adj + " " + name;
-			}
-		}
-		return name;
-	}
 
 	public <T> T random(T[] array) {
 		return array[(int)random(array.length)];

@@ -1,0 +1,10 @@
+Iron Ore
+Coal Ore
+Granite
+Sandstone
+Copper Ore
+Obscure Gemstone
+Imperfect Gemstone
+Odd Crystal
+Shiny Rocks
+Glowing Rocks

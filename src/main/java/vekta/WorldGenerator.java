@@ -8,19 +8,11 @@ import vekta.terrain.*;
 import static vekta.Vekta.*;
 
 public class WorldGenerator {
-	private final float radius; // Max persistent object distance
-	private final ItemGenerator items;
-
-	public WorldGenerator(int size) {
-		this.radius = size;
-		this.items = new ItemGenerator();
+	public static float getRadius() {
+		return 10000;
 	}
 
-	public float getRadius() {
-		return radius;
-	}
-
-	public void spawnOccasional(PVector around) {
+	public static void spawnOccasional(PVector around) {
 		Vekta v = getInstance();
 		PVector pos = randomPos(getRadius() / 2, getRadius()).add(around);
 		float r = v.random(1);
@@ -29,17 +21,17 @@ public class WorldGenerator {
 		}
 		else if(r > .1F) {
 			Ship s = new CargoShip("TRAWLX", PVector.random2D(), pos, new PVector(), v.color(0, 100, 255));
-			items.addLoot(s.getInventory(), 3);
+			ItemGenerator.addLoot(s.getInventory(), 3);
 			addObject(s);
 		}
 		else {
 			Ship s = new PirateShip("YARRYACHT", PVector.random2D(), pos, new PVector(), v.color(220, 100, 0));
-			items.addLoot(s.getInventory(), 1);
+			ItemGenerator.addLoot(s.getInventory(), 1);
 			addObject(s);
 		}
 	}
 
-	private void createSystem(PVector pos) {
+	public static void createSystem(PVector pos) {
 		Vekta v = Vekta.getInstance();
 		float order = v.random(29, 32);
 
@@ -75,12 +67,12 @@ public class WorldGenerator {
 			float mass = v.random(0.05F, 0.5F) * power;
 			float density = v.random(4, 8);
 			float angle = v.random(360);
-			Planet planet = spawnPlanet(mass, density, new PVector(radiusLoc, 0).rotate(angle).add(pos));
+			Planet planet = createPlanet(mass, density, new PVector(radiusLoc, 0).rotate(angle).add(pos));
 			planet.addVelocity(new PVector(0, speed).rotate(angle));
 		}
 	}
 
-	private Planet spawnPlanet(float mass, float density, PVector pos) {
+	public static Planet createPlanet(float mass, float density, PVector pos) {
 		Vekta v = Vekta.getInstance();
 		float r = v.random(1);
 		Terrain terrain;
@@ -88,12 +80,12 @@ public class WorldGenerator {
 			InhabitedTerrain t = new InhabitedTerrain();
 			Inventory inv = t.getInventory();
 			inv.add((int)v.random(10, 500));
-			items.addLoot(inv, 2);
+			ItemGenerator.addLoot(inv, 2);
 			terrain = t;
 		}
 		else if(r > .3) {
 			AbandonedTerrain t = new AbandonedTerrain();
-			items.addLoot(t.getInventory(), 1);
+			ItemGenerator.addLoot(t.getInventory(), 1);
 			terrain = t;
 		}
 		else if(r > .2) {
@@ -117,7 +109,12 @@ public class WorldGenerator {
 		return planet;
 	}
 
-	private PVector randomPos(float min, float max) {
+	public static PVector randomPos(float min, float max) {
 		return PVector.random2D().mult(getInstance().random(min, max));
+	}
+
+	public static String generatePlanetName() {
+		Vekta v = getInstance();
+		return v.random(Resources.getStrings("planet_prefixes")) + v.random(Resources.getStrings("planet_suffixes", ""));
 	}
 }  

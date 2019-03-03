@@ -1,6 +1,7 @@
 package vekta.object;
 
 import processing.core.PVector;
+import vekta.WorldGenerator;
 import vekta.terrain.MoltenTerrain;
 import vekta.terrain.Terrain;
 
@@ -23,7 +24,7 @@ public abstract class Planet extends SpaceObject {
 
 	public Planet(float mass, float density, PVector position, PVector velocity, int color) {
 		super(position, velocity, color);
-		this.name = generatePlanetName();
+		this.name = WorldGenerator.generatePlanetName();
 		this.mass = mass;
 		this.density = density;
 
@@ -51,17 +52,13 @@ public abstract class Planet extends SpaceObject {
 			s.destroyBecause(this);
 		}
 	}
-	
-	public boolean doesSplitOnDestroy() {
-		return getRadius() >= MIN_SPLIT_RADIUS;
-	}
 
 	@Override
 	public void onDestroy(SpaceObject s) {
 		//println("Planet destroyed with radius: " + getRadius());
 
 		// If sufficiently large, split planet in half
-		if(doesSplitOnDestroy()) {
+		if(getRadius() >= MIN_SPLIT_RADIUS) {
 			float newMass = getMass() / 2;
 
 			// Use mass-weighted collision velocity for base debris velocity

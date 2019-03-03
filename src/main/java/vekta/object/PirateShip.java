@@ -17,7 +17,7 @@ public class PirateShip extends Ship implements Targeter {
 	private static final float ATTACK_DIST = 1000;
 	private static final float PROJECTILE_SPEED = 10;
 	private static final float MIN_ATTACK = 10;
-	private static final float MAX_ATTACK = 100;
+	private static final float MAX_ATTACK = 200;
 	private static final float ATTACK_SPREAD = 10;
 	private static final float SPEED_DAMPEN = .98F;
 
@@ -84,6 +84,10 @@ public class PirateShip extends Ship implements Targeter {
 		PVector vel = heading.copy().setMag(PROJECTILE_SPEED)
 				.rotate(getInstance().random(-ATTACK_SPREAD, ATTACK_SPREAD) * PI / 360)
 				.add(velocity);
-		addObject(new Projectile(this, position.copy(), vel, getColor()));
+		
+		SpaceObject projectile = v.random(1) < .2
+				? new Projectile(this, getPosition(), vel, getColor())
+				: new HomingProjectile(this, getTarget(), 1, getPosition(), getVelocity(), getColor());
+		addObject(projectile);
 	}
 }  

@@ -43,6 +43,8 @@ public class Resources {
 		addStrings("item_adj_rare");
 		addStrings("item_nouns");
 		addStrings("item_modifiers");
+		addStrings("ore_common");
+		addStrings("ore_rare");
 
 		// Overview strings
 		addStrings("overview_urban");
