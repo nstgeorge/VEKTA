@@ -42,7 +42,6 @@ public class Singleplayer implements World {
 	@Override
 	public void init() {
 		Vekta v = getInstance();
-		v.background(0);
 		v.frameCount = 0;
 
 		lowPass = new LowPass(v);
@@ -93,9 +92,15 @@ public class Singleplayer implements World {
 			cameraPos = playerShip.getPosition();
 			cameraSpd = playerShip.getVelocity().mag();
 		}
+		
+		// Set up world camera
+		v.hint(ENABLE_DEPTH_TEST);
 		v.camera(cameraPos.x, cameraPos.y, min(MAX_CAMERA_Y, (.07F * cameraSpd + .7F) * (v.height / 2F) / tan(PI * 30 / 180) * zoom), cameraPos.x, cameraPos.y, 0F,
 				0F, 1F, 0F);
-
+		
+//		v.pushMatrix();
+//		v.translate(v.width / 2F - cameraPos.x, v.height / 2F - cameraPos.y);
+		
 		cameraPos = playerShip.getPosition();
 
 		boolean targeting = targetCt.cycle();
@@ -160,21 +165,14 @@ public class Singleplayer implements World {
 			WorldGenerator.spawnOccasional(playerShip.getPosition());
 		}
 
-		// Info
+		// GUI setup
+		v.camera();
+		v.noLights();
+		v.hint(DISABLE_DEPTH_TEST);
 		if(!playerShip.isDestroyed()) {
-			// GUI setup
-			v.hint(DISABLE_DEPTH_TEST);
-			v.camera();
-			v.noLights();
-
 			overlay.draw();
 		}
-		// Menus
 		else {
-			v.hint(DISABLE_DEPTH_TEST);
-			v.camera();
-			v.noLights();
-
 			v.textFont(headerFont);
 			v.textAlign(CENTER, CENTER);
 
@@ -189,7 +187,6 @@ public class Singleplayer implements World {
 			v.textFont(bodyFont);
 			v.text("X TO RETRY", v.width / 2F, (v.height / 2F) + 97);
 		}
-		v.hint(ENABLE_DEPTH_TEST);
 	}
 
 	@Override

@@ -2,7 +2,6 @@ package vekta;
 
 import processing.core.PApplet;
 import processing.core.PFont;
-import processing.core.PGraphics;
 import processing.core.PVector;
 import processing.event.MouseEvent;
 import vekta.context.Context;
@@ -10,7 +9,7 @@ import vekta.context.World;
 import vekta.menu.Menu;
 import vekta.menu.handle.MainMenuHandle;
 import vekta.menu.option.ExitGameOption;
-import vekta.menu.option.GameModeOption;
+import vekta.menu.option.WorldOption;
 import vekta.menu.option.SettingsMenuOption;
 
 import java.util.logging.LogManager;
@@ -51,12 +50,9 @@ public class Vekta extends PApplet {
 	public static PFont headerFont;
 	public static PFont bodyFont;
 
-	// HUD/Menu overlay
-	private static PGraphics overlay;
-
 	@Override
 	public void settings() {
-		fullScreen(P3D); // TODO: can we convert to P2D? (performance benefits)
+		fullScreen(P3D); // TODO: convert to P2D for performance, unless we anticipate adding features using 3D rendering
 		pixelDensity(displayDensity());
 	}
 
@@ -69,37 +65,35 @@ public class Vekta extends PApplet {
 		Settings.init();
 		Resources.init();
 
-		background(color(0));
+		background(0);
 		frameRate(60);
 		noCursor();
 
 		textMode(SHAPE);
 
-		// Overlay initialization
-		overlay = createGraphics(width, height);
 		// Fonts
 		headerFont = createFont(FONTNAME, 72);
 		bodyFont = createFont(FONTNAME, 24);
 
-//		mainMenu = new SettingsMenuContext();
+		//		mainMenu = new SettingsMenuContext();
 		mainMenu = new Menu(new MainMenuHandle(new ExitGameOption("Quit")));
-		mainMenu.add(new GameModeOption("Singleplayer", new Singleplayer()));
+		mainMenu.add(new WorldOption("Singleplayer", new Singleplayer()));
 		mainMenu.add(new SettingsMenuOption());
 		mainMenu.addDefault();
 		setContext(mainMenu);
+		applyContext();
 	}
 
 	@Override
 	public void draw() {
 		applyContext();
-
 		if(context != null) {
 			context.render();
 		}
 
-		hint(DISABLE_DEPTH_TEST);
-		camera();
-		noLights();
+//		hint(DISABLE_DEPTH_TEST);
+//		camera();
+//		noLights();
 
 		// FPS OVERLAY
 		fill(255);
@@ -198,4 +192,4 @@ public class Vekta extends PApplet {
 	public static void main(String[] argv) {
 		PApplet.main(Vekta.class, argv);
 	}
-};
+}

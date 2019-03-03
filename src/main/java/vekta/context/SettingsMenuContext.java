@@ -77,8 +77,8 @@ public class SettingsMenuContext implements Context {
 		v.textSize(16);
 		v.fill(255, 255, 255);
 		v.text("X to cycle options, ESC to go back", v.width / 2F, 200 + ((optionIndex + 2) * SETTINGS_SPACING));
-		v.textFont(bodyFont);
-		v.hint(ENABLE_DEPTH_TEST);
+//		v.textFont(bodyFont);
+//		v.hint(ENABLE_DEPTH_TEST);
 	}
 
 	private void drawButton(String name, int yPos, boolean selected) {

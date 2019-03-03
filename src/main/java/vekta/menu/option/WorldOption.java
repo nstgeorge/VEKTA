@@ -5,11 +5,11 @@ import vekta.menu.Menu;
 
 import static vekta.Vekta.setContext;
 
-public class GameModeOption implements MenuOption {
+public class WorldOption implements MenuOption {
 	private final String name;
 	private final World world;
 
-	public GameModeOption(String name, World world) {
+	public WorldOption(String name, World world) {
 		this.name = name;
 		this.world = world;
 	}

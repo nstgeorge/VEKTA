@@ -70,7 +70,7 @@ public class MenuHandle {
 		v.textAlign(CENTER, CENTER);
 		v.rectMode(CENTER);
 		for(int i = 0; i < menu.size(); i++) {
-			drawButton(menu.get(i), i, menu.getIndex() == i);
+			drawButton(menu.get(i), i);
 		}
 
 		v.noStroke();
@@ -79,8 +79,9 @@ public class MenuHandle {
 		v.text(getHelperText(), getButtonX(), getButtonY(menu.size()) + 100);
 	}
 
-	void drawButton(MenuOption opt, int index, boolean selected) {
+	void drawButton(MenuOption opt, int index) {
 		float yPos = getButtonY(index);
+		boolean selected = mainMenu.getIndex() == index;
 		
 		// Draw border
 		v.stroke(selected ? 255 : UI_COLOR);
