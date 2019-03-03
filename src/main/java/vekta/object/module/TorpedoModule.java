@@ -13,8 +13,6 @@ import static vekta.Vekta.getWorld;
 
 public class TorpedoModule extends WeaponModule {
 	private final float speed;
-	private final float RADIUS = 1;
-	private Vekta v;
 	
 	public TorpedoModule(float speed) {
 		v = Vekta.getInstance();
