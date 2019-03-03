@@ -138,7 +138,7 @@ public class Singleplayer implements World {
 			s.applyInfluenceVector(objects);
 			for(SpaceObject other : objects) {
 				if(s != other) {
-					// Check both collisions before firing events (prevents race condition)
+					// Check both collisions before firing events (prevents race conditions)
 					boolean collides1 = s.collidesWith(other);
 					boolean collides2 = other.collidesWith(s);
 					if(collides1) {

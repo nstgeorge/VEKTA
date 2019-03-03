@@ -5,7 +5,8 @@ import vekta.Vekta;
 import vekta.object.Ship;
 import vekta.object.SpaceObject;
 
-import static vekta.Vekta.*;
+import static vekta.Vekta.G;
+import static vekta.Vekta.SCALE;
 
 /**
  * A landing terrain for one spacecraft-like object.
@@ -41,7 +42,13 @@ public class LandingSite {
 
 		landed = ship;
 		Vekta.removeObject(ship);
-		
+
+		// Set position/velocity for takeoff
+		PVector offset = landed.getPosition().copy().sub(getParent().getPosition());
+		PVector velocity = offset.setMag(getLaunchSpeed()).add(getParent().getVelocity());
+		landed.setVelocity(velocity);
+		landed.applyVelocity(velocity); // Boost the ship away from the planet
+
 		ship.onLand(this);
 		return true;
 	}
@@ -51,9 +58,6 @@ public class LandingSite {
 			return false;
 		}
 
-		PVector offset = landed.getPosition().copy().sub(getParent().getPosition());
-		landed.setVelocity(offset.setMag(getLaunchSpeed()).add(getParent().getVelocity()));
-		landed.update(); // Boost the ship away from the planet
 		Vekta.addObject(landed);
 		landed.onDepart(getParent());
 		landed = null;

@@ -77,6 +77,12 @@ public abstract class SpaceObject {
 	public final PVector setVelocity(PVector velocity) {
 		return this.velocity.set(velocity);
 	}
+	/**
+	 * Applies the given velocity to the object
+	 */
+	public final void applyVelocity(PVector velocity) {
+		this.position.add(velocity);
+	}
 
 	/**
 	 * Adds velocity to the object
@@ -179,7 +185,7 @@ public abstract class SpaceObject {
 	 */
 	public final void update() {
 		onUpdate();
-		position.add(velocity);
+		applyVelocity(velocity);
 	}
 
 	public void onUpdate() {
