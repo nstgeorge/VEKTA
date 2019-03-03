@@ -45,7 +45,7 @@ public class AutopilotModule extends TargetingModule {
 
 		ModularShip ship = getShip();
 		SpaceObject target = getTarget();
-		if(isActive() && target != null) {
+		if(isActive() && target != null && ship.consumeEnergy(5 * PER_MINUTE)) {
 			// Grab telemetry vectors
 			PVector position = ship.getPosition();
 			PVector velocity = ship.getVelocity();
