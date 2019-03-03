@@ -20,7 +20,7 @@ public class ShipComputerOverlay extends TextOverlay {
 	@Override
 	public String getText() {
 		if(ship.isLanding()) {
-			return ":: Autopilot: Engaged ::";
+			return ":: Autopilot: Engaged ::"; // TODO: split into two Overlays, one for landing/docking mode and the other for autopilot messages
 		}
 		return null;
 	}
