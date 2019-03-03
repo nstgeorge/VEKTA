@@ -54,7 +54,7 @@ public class HyperdriveModule implements Module {
 			Resources.playSound("hyperdriveHit");
 			Resources.loopSound("hyperdriveLoop");
 		}
-		if(wasBoosting && nowBoosting && thrust < 0) {
+		if(wasBoosting && !nowBoosting && thrust < 0) {
 			Resources.stopSound("hyperdriveLoop");
 			Resources.playSound("hyperdriveEnd");
 		}
