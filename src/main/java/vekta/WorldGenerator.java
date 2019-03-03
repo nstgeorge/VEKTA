@@ -2,8 +2,6 @@ package vekta;
 
 import processing.core.PVector;
 import vekta.item.Inventory;
-import vekta.item.Item;
-import vekta.item.ItemType;
 import vekta.object.*;
 import vekta.terrain.*;
 
@@ -11,9 +9,11 @@ import static vekta.Vekta.*;
 
 public class WorldGenerator {
 	private final float radius; // Max persistent object distance
+	private final ItemGenerator items;
 
 	public WorldGenerator(int size) {
 		this.radius = size;
+		this.items = new ItemGenerator();
 	}
 
 	public float getRadius() {
@@ -29,12 +29,12 @@ public class WorldGenerator {
 		}
 		else if(r > .1F) {
 			Ship s = new CargoShip("TRAWLX", PVector.random2D(), pos, new PVector(), v.color(0, 100, 255));
-			addItems(s.getInventory(), 3);
+			items.addLoot(s.getInventory(), 3);
 			addObject(s);
 		}
 		else {
 			Ship s = new PirateShip("YARRYACHT", PVector.random2D(), pos, new PVector(), v.color(220, 100, 0));
-			addItems(s.getInventory(), 1);
+			items.addLoot(s.getInventory(), 1);
 			addObject(s);
 		}
 	}
@@ -88,12 +88,12 @@ public class WorldGenerator {
 			InhabitedTerrain t = new InhabitedTerrain();
 			Inventory inv = t.getInventory();
 			inv.add((int)v.random(10, 500));
-			addItems(inv, 2);
+			items.addLoot(inv, 2);
 			terrain = t;
 		}
 		else if(r > .3) {
 			AbandonedTerrain t = new AbandonedTerrain();
-			addItems(t.getInventory(), 1);
+			items.addLoot(t.getInventory(), 1);
 			terrain = t;
 		}
 		else if(r > .2) {
@@ -115,29 +115,6 @@ public class WorldGenerator {
 		);
 		addObject(planet);
 		return planet;
-	}
-
-	private void addItems(Inventory inv, int lootTier) {
-		int itemCt = round(getInstance().random(lootTier - 1, lootTier * 2));
-		for(int i = 0; i < itemCt; i++) {
-			ItemType type = randomItemType();
-			// TODO: occasionally add ModuleItems
-			Item item = new Item(generateItemName(type), type);
-			inv.add(item);
-		}
-	}
-
-	private ItemType randomItemType() {
-		float r = getInstance().random(1);
-		if(r < .7) {
-			return ItemType.COMMON;
-		}
-		else if(r < .95) {
-			return ItemType.RARE;
-		}
-		else {
-			return ItemType.LEGENDARY;
-		}
 	}
 
 	private PVector randomPos(float min, float max) {

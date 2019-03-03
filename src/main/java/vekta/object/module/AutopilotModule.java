@@ -35,6 +35,11 @@ public class AutopilotModule extends TargetingModule {
 	}
 
 	@Override
+	public Module getVariant() {
+		return new AutopilotModule();
+	}
+
+	@Override
 	public void onUpdate() {
 		super.onUpdate();
 

@@ -31,10 +31,15 @@ public class EngineModule extends ShipModule {
 	}
 
 	@Override
+	public Module getVariant() {
+		return new EngineModule(chooseInclusive(1, 3));
+	}
+
+	@Override
 	public void onUpdate() {
 		ControllableShip ship = getShip();
 		float thrust = ship.getThrustControl();
-		if(ship.consumeEnergy(20 * abs(thrust) * PER_MINUTE)) {
+		if(ship.consumeEnergy(20 * getSpeed() * abs(thrust) * PER_MINUTE)) {
 			ship.accelerate(thrust * getSpeed());
 		}
 	}

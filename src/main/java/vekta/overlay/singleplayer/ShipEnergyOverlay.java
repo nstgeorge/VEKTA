@@ -21,17 +21,17 @@ public class ShipEnergyOverlay extends ShipStatOverlay {
 	public String getValue() {
 		float energy = getShip().getEnergy();
 		float max = getShip().getMaxEnergy();
-		return (int)energy + " / " + max + " (" + (int)(energy / max * 100) + "%)";
+		return (int)energy + " / " + (int)max + " (" + (int)(energy / max * 100) + "%)";
 	}
 
 	@Override
 	public int getColor() {
 		float ratio = getShip().getEnergy() / getShip().getMaxEnergy();
-		if(ratio <= .2F) {
-			return getInstance().color(255, 255, 0);
-		}
 		if(ratio <= .1F) {
 			return getInstance().color(255, 0, 0);
+		}
+		else if(ratio <= .2F) {
+			return getInstance().color(255, 255, 0);
 		}
 		return super.getColor();
 	}

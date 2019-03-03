@@ -3,7 +3,7 @@ package vekta.object.module;
 import vekta.object.ControllableShip;
 import vekta.object.SpaceObject;
 
-public interface Module {
+public interface Module extends Cloneable {
 	// Define per-second energy consumption rate
 	float PER_SECOND = 1 / 60F;
 	float PER_MINUTE = PER_SECOND / 60F;
@@ -13,6 +13,8 @@ public interface Module {
 	ModuleType getType();
 
 	boolean isBetter(Module other);
+
+	Module getVariant();
 
 	default void onInstall(ControllableShip ship) {
 	}

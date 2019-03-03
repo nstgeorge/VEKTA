@@ -20,7 +20,7 @@ public class TargetingModule extends ShipModule implements Targeter {
 	public void setMode(TargetingMode mode) {
 		this.mode = mode;
 		setTarget(null);
-		
+
 		// Immediately update the target (except in menus)
 		Context context = Vekta.getContext();
 		if(context instanceof World) {
@@ -71,6 +71,11 @@ public class TargetingModule extends ShipModule implements Targeter {
 	@Override
 	public boolean isBetter(Module other) {
 		return false;
+	}
+
+	@Override
+	public Module getVariant() {
+		return new TargetingModule();
 	}
 
 	@Override

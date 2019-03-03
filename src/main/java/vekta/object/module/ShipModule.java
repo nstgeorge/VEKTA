@@ -2,13 +2,16 @@ package vekta.object.module;
 
 import vekta.object.ControllableShip;
 
+import static vekta.Vekta.getInstance;
+import static vekta.Vekta.round;
+
 public abstract class ShipModule implements Module {
 	private ControllableShip ship;
-	
+
 	public ControllableShip getShip() {
 		return ship;
 	}
-	
+
 	@Override
 	public final void onInstall(ControllableShip ship) {
 		this.ship = ship;
@@ -25,5 +28,13 @@ public abstract class ShipModule implements Module {
 	}
 
 	public void onUninstall() {
+	}
+
+	protected final float choose(float min, float max) {
+		return getInstance().random(min, max);
+	}
+
+	protected final int chooseInclusive(int min, int max) {
+		return round(getInstance().random(min, max));
 	}
 }

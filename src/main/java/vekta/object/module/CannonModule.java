@@ -16,6 +16,11 @@ public class CannonModule extends WeaponModule {
 	}
 
 	@Override
+	public Module getVariant() {
+		return new CannonModule();
+	}
+
+	@Override
 	public void fireWeapon() {
 		ControllableShip ship = getShip();
 		if(ship.consumeEnergy(.5F)) {

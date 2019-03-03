@@ -2,7 +2,7 @@ package vekta.object.module;
 
 public class BatteryModule extends ShipModule {
 	private final float capacity;
-
+	
 	public BatteryModule(float capacity) {
 		this.capacity = capacity;
 	}
@@ -24,6 +24,11 @@ public class BatteryModule extends ShipModule {
 	@Override
 	public boolean isBetter(Module other) {
 		return other instanceof BatteryModule && getCapacity() > ((BatteryModule)other).getCapacity();
+	}
+
+	@Override
+	public Module getVariant() {
+		return new BatteryModule(chooseInclusive(1, 20) * 10);
 	}
 
 	@Override

@@ -41,6 +41,11 @@ public class TractorBeamModule extends ShipModule implements Targeter {
 	}
 
 	@Override
+	public Module getVariant() {
+		return new TractorBeamModule(chooseInclusive(1, 2));
+	}
+
+	@Override
 	public SpaceObject getTarget() {
 		return target;
 	}

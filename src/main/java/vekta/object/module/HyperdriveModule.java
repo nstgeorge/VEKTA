@@ -38,6 +38,11 @@ public class HyperdriveModule extends ShipModule {
 	}
 
 	@Override
+	public Module getVariant() {
+		return new HyperdriveModule(chooseInclusive(1, 2));
+	}
+
+	@Override
 	public void onUninstall() {
 		currentBoost = 0;
 	}
@@ -56,12 +61,12 @@ public class HyperdriveModule extends ShipModule {
 			Resources.playSound("hyperdriveHit");
 			Resources.loopSound("hyperdriveLoop");
 		}
-		if(wasBoosting && nowBoosting && thrust < 0) {
+		if(wasBoosting && !nowBoosting && thrust < 0) {
 			Resources.stopSound("hyperdriveLoop");
 			Resources.playSound("hyperdriveEnd");
 		}
 
-		if(nowBoosting && ship.consumeEnergy(1 * thrust * PER_SECOND)) {
+		if(nowBoosting && ship.consumeEnergy(.1F * currentBoost * PER_SECOND)) {
 			ship.accelerate(thrust * currentBoost, ship.getVelocity());
 		}
 	}

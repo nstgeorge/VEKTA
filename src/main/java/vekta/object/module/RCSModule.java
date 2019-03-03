@@ -31,10 +31,15 @@ public class RCSModule extends ShipModule {
 	}
 
 	@Override
+	public Module getVariant() {
+		return new RCSModule(chooseInclusive(1, 3));
+	}
+
+	@Override
 	public void onUpdate() {
 		ControllableShip ship = getShip();
 		float turn = ship.getTurnControl();
-		if(ship.consumeEnergy(5 * abs(turn) * PER_MINUTE)) {
+		if(ship.consumeEnergy(5 * getTurnSpeed() * abs(turn) * PER_MINUTE)) {
 			ship.turn(turn * getTurnSpeed());
 		}
 	}
