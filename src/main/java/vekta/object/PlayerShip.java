@@ -110,7 +110,7 @@ public class PlayerShip extends ModularShip {
 			menu.addDefault();
 			setContext(menu);
 		}
-		else if(s instanceof SpaceStation) {
+		else if(s instanceof SpaceStation && s.getColor() == getColor()) {
 			setContext(new StationLayoutContext(getWorld(), (SpaceStation)s, this));
 		}
 	}

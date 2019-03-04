@@ -8,6 +8,7 @@ import vekta.menu.option.InstallModuleOption;
 import vekta.object.ModularShip;
 import vekta.object.SpaceStation;
 import vekta.object.module.Module;
+import vekta.object.module.ModuleType;
 import vekta.object.module.Upgrader;
 import vekta.object.module.station.ComponentModule;
 
@@ -26,7 +27,7 @@ public class StationLayoutContext implements Context, Upgrader {
 	private final ModularShip ship;
 
 	private SpaceStation.Component cursor;
-	private SpaceStation.Direction placementDir;
+	private final ComponentModule placementModule = new PlacementModule();
 
 	public StationLayoutContext(Context parent, SpaceStation station, ModularShip ship) {
 		this.parent = parent;
@@ -63,24 +64,12 @@ public class StationLayoutContext implements Context, Upgrader {
 
 		// Highlight cursor component
 		SpaceStation.Direction dir = cursor.getDirection();
-		if(placementDir == null) {
-			v.stroke(255);
-			v.pushMatrix();
-			v.translate(cursor.getX(), cursor.getY());
-			v.rotate(dir.getAngle());
-			cursor.getModule().draw(station.getTileSize());
-			v.popMatrix();
-		}
-		else {
-			v.stroke(v.color(200));
-			float bx = cursor.getBorderX(placementDir);
-			float by = cursor.getBorderY(placementDir);
-			v.ellipse(
-					cursor.getX() + bx + v.sign(bx) * station.getTileSize() / 2,
-					cursor.getY() + by + v.sign(by) * station.getTileSize() / 2,
-					tileSize / 3,
-					tileSize / 3);
-		}
+		v.stroke(isPlacing() ? 200 : 255);
+		v.pushMatrix();
+		v.translate(cursor.getX(), cursor.getY());
+		v.rotate(dir.getAngle());
+		cursor.getModule().draw(station.getTileSize());
+		v.popMatrix();
 
 		// End station rendering
 		v.popMatrix();
@@ -89,36 +78,43 @@ public class StationLayoutContext implements Context, Upgrader {
 		v.textSize(48);
 		v.textAlign(CENTER);
 		v.fill(100);
-		v.text(station.getName(), v.width / 2F, v.height / 4F);
+		v.text(station.getName(), v.width / 2F, 200);
 
 		// Draw current module name
 		v.textSize(32);
 		v.fill(200);
-		v.text(cursor.getModule().getName(), v.width / 2F, v.height * 3 / 4F);
+		v.text(cursor.getModule().getName(), v.width / 2F, v.height - 100);
 
 		// Draw helper text
 		v.textSize(24);
 		v.fill(255);
 		if(!cursor.hasChildren()) {
-			v.text("X to " + (placementDir != null ? "INSTALL" : "REMOVE"), v.width / 2F, v.height * 3 / 4F + 100);
+			v.text("X to " + (isPlacing() ? "INSTALL" : "REMOVE"), v.width / 2F, v.height - 32);
 		}
 	}
 
 	public void moveCursor(SpaceStation.Direction dir) {
+		SpaceStation.Component prevCursor = cursor;
 		SpaceStation.Component component = cursor.getAttached(dir);
-		if(placementDir != null) {
-			placementDir = null;
-		}
-		else if(component != null) {
+//		if(isPlacing()) {
+//			cursor = cursor.getParent();
+//		}
+		/*else */if(component != null) {
 			cursor = component;
 		}
-		else if(cursor.getModule().hasAttachmentPoint(dir)) {
-			placementDir = dir;
-		}
 		else {
-			return;
+			SpaceStation.Component hypothetical = station.new Component(cursor, dir, placementModule);
+			if(!isPlacing() && cursor.isAttachable(hypothetical)) {
+				cursor = hypothetical;
+			}
+			else {
+				cursor = hypothetical.getNearest(dir);
+			}
 		}
-		Resources.playSound("change");
+
+		if(cursor != prevCursor) {
+			Resources.playSound("change");
+		}
 	}
 
 	@Override
@@ -143,11 +139,14 @@ public class StationLayoutContext implements Context, Upgrader {
 				// Uninstall cursor
 				uninstallModule(cursor.getModule());
 			}
-			else if(placementDir != null) {
+			else if(isPlacing()) {
 				Menu menu = new Menu(new LoadoutMenuHandle(new BackOption(this), Collections.singletonList(cursor.getModule())));
 				for(Module module : ship.findUpgrades()) {
-					if(module instanceof ComponentModule && cursor.isReplaceable((ComponentModule)module)) {
-						menu.add(new InstallModuleOption(this, module));
+					if(module instanceof ComponentModule) {
+						ComponentModule m = (ComponentModule)module;
+						if(isPlacing() ? cursor.isAttachable(cursor) : cursor.isReplaceable(m)) {
+							menu.add(new InstallModuleOption(this, m));
+						}
 					}
 				}
 				//			if(isCursorRemovable()) {
@@ -173,7 +172,7 @@ public class StationLayoutContext implements Context, Upgrader {
 
 	@Override
 	public Module getRelevantModule(Module module) {
-		return placementDir != null ? null : cursor.getModule();
+		return isPlacing() ? null : cursor.getModule();
 	}
 
 	@Override
@@ -184,12 +183,8 @@ public class StationLayoutContext implements Context, Upgrader {
 
 		ship.getInventory().moveTo(station.getInventory()); // Transfer ship items to station
 
-		if(placementDir != null) {
-			SpaceStation.Component component = cursor.attach(placementDir, (ComponentModule)module);
-			if(component != null) {
-				placementDir = null;
-				cursor = component;
-			}
+		if(isPlacing()) {
+			cursor = cursor.getParent().attach(cursor.getDirection(), (ComponentModule)module);
 		}
 		else {
 			cursor.replaceModule((ComponentModule)module);
@@ -213,7 +208,53 @@ public class StationLayoutContext implements Context, Upgrader {
 		setContext(this);
 	}
 
+	private boolean isPlacing() {
+		return cursor.getModule() == placementModule;
+	}
+
 	private boolean isCursorRemovable() {
-		return placementDir == null && !cursor.hasChildren();
+		return !isPlacing() && !cursor.hasChildren();
+	}
+
+	private final class PlacementModule implements ComponentModule {
+		@Override
+		public int getWidth() {
+			return 1;
+		}
+
+		@Override
+		public int getHeight() {
+			return 1;
+		}
+
+		@Override
+		public void draw(float tileSize) {
+			v.ellipse(0, 0, tileSize / 3, tileSize / 3);
+		}
+
+		@Override
+		public boolean hasAttachmentPoint(SpaceStation.Direction direction) {
+			return true;
+		}
+
+		@Override
+		public String getName() {
+			return "";
+		}
+
+		@Override
+		public ModuleType getType() {
+			return null;
+		}
+
+		@Override
+		public boolean isBetter(Module other) {
+			return false;
+		}
+
+		@Override
+		public Module getVariant() {
+			return null;
+		}
 	}
 }

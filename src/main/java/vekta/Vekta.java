@@ -192,7 +192,7 @@ public class Vekta extends PApplet {
 	/**
 	 * Return the squared distance between two vectors.
 	 * */
-	public static float getDistSq(PVector a, PVector b) {
+	public static float distSq(PVector a, PVector b) {
 		float x = a.x - b.x;
 		float y = a.y - b.y;
 		return x * x + y * y;

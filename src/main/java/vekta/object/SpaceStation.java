@@ -4,11 +4,12 @@ import processing.core.PVector;
 import vekta.object.module.ModuleType;
 import vekta.object.module.station.ComponentModule;
 
+import java.awt.*;
+import java.util.List;
 import java.util.*;
 
-import static processing.core.PApplet.abs;
-import static processing.core.PApplet.sqrt;
-import static processing.core.PConstants.HALF_PI;
+import static processing.core.PApplet.*;
+import static vekta.Vekta.distSq;
 import static vekta.Vekta.v;
 
 public class SpaceStation extends ModularShip {
@@ -80,6 +81,14 @@ public class SpaceStation extends ModularShip {
 			v.rotate(component.getDirection()/*.rotate(component.getRotation())*/.getAngle());
 			component.getModule().draw(TILE_SIZE);
 			v.popMatrix();
+
+			//			// DEBUG: draw bounding boxes
+			//			v.stroke(100);
+			//			Rectangle b = component.getBounds();
+			//			v.rectMode(CORNER);
+			//			v.rect(b.x, b.y, b.width, b.height);
+			//			v.rectMode(CENTER);
+			//			v.stroke(getColor());
 		}
 	}
 
@@ -106,7 +115,7 @@ public class SpaceStation extends ModularShip {
 			else {
 				x = parent.getX() + getOffsetX();
 				y = parent.getY() + getOffsetY();
-				
+
 				attached.put(dir.back(), parent);
 			}
 		}
@@ -156,19 +165,39 @@ public class SpaceStation extends ModularShip {
 			return y;
 		}
 
-		public Direction getRelativeDirection() {
-			if(parent == null) {
-				return getDirection();
-			}
-			return getDirection().relativeTo(parent.getDirection());
-		}
-
 		public float getOffsetX() {
+			if(parent == null) {
+				return 0;
+			}
 			return parent.getBorderX(getDirection()) - getBorderX(getDirection().back());
 		}
 
 		public float getOffsetY() {
+			if(parent == null) {
+				return 0;
+			}
 			return parent.getBorderY(getDirection()) - getBorderY(getDirection().back());
+		}
+
+		public Component getNearest(Direction dir) {
+			return getNearest(dir.getX(getTileSize()), dir.getY(getTileSize()));
+		}
+
+		public Component getNearest(float offsetX, float offsetY) {
+			PVector point = new PVector(getX() + offsetX, getY() + offsetY);
+			Component nearest = this;
+			float minSq = Float.POSITIVE_INFINITY;
+			for(Component other : components) {
+				if(other != this){
+					float distSq = distSq(point, new PVector(other.getX(), other.getY()));
+					if(distSq < minSq) {
+						minSq = distSq;
+						nearest = other;
+					}
+					
+				}
+			}
+			return nearest;
 		}
 
 		public boolean hasChildren() {
@@ -185,6 +214,18 @@ public class SpaceStation extends ModularShip {
 
 		public boolean hasAttachmentPoint(Direction dir) {
 			return !attached.containsKey(dir) && getModule().hasAttachmentPoint(dir/*.rotate(getRotation())*/.relativeTo(getDirection()));
+		}
+
+		public boolean isAttachable(Component hypothetical) {
+			if(!hasAttachmentPoint(hypothetical.getDirection())) {
+				return false;
+			}
+			for(Component component : components) {
+				if(component.collidesWith(hypothetical)) {
+					return false;
+				}
+			}
+			return true;
 		}
 
 		public Collection<Direction> getVacantDirections() {
@@ -224,12 +265,26 @@ public class SpaceStation extends ModularShip {
 
 		public float getBorderX(Direction dir) {
 			float dist = abs(getDirection().getX(module.getWidth(), module.getHeight()));
-			return dir.getX(dist, 0) * getTileSize() / 2F;
+			return dir.getX(dist) * getTileSize() / 2F;
 		}
 
 		public float getBorderY(Direction dir) {
 			float dist = abs(getDirection().getY(module.getWidth(), module.getHeight()));
-			return dir.getY(dist, 0) * getTileSize() / 2F;
+			return dir.getY(dist) * getTileSize() / 2F;
+		}
+
+		public boolean collidesWith(Component other) {
+			return getBounds().intersects(other.getBounds());
+		}
+
+		private Rectangle getBounds() {
+			float width = getBorderX(Direction.RIGHT) - getBorderX(Direction.LEFT);
+			float height = getBorderY(Direction.DOWN) - getBorderY(Direction.UP);
+			return new Rectangle(
+					(int)(x - width / 2 + 1),
+					(int)(y - height / 2 + 1),
+					(int)(width - 2),
+					(int)(height - 2));
 		}
 	}
 
@@ -248,6 +303,14 @@ public class SpaceStation extends ModularShip {
 
 		public float getAngle() {
 			return -ordinal() * HALF_PI; // Negative sign accounts for upside-down world coordinates
+		}
+
+		public float getX(float dist) {
+			return getX(dist, 0);
+		}
+
+		public float getY(float dist) {
+			return getY(dist, 0);
 		}
 
 		public float getX(float x, float y) {
