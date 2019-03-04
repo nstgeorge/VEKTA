@@ -1,4 +1,8 @@
-package vekta.object.module;
+package vekta.object.module.station;
+
+import vekta.object.module.Module;
+import vekta.object.module.ModuleType;
+import vekta.object.module.ShipModule;
 
 import static vekta.Vekta.v;
 

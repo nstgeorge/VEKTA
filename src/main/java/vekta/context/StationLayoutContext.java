@@ -8,9 +8,9 @@ import vekta.menu.option.InstallModuleOption;
 import vekta.menu.option.UninstallModuleOption;
 import vekta.object.ModularShip;
 import vekta.object.SpaceStation;
-import vekta.object.module.ComponentModule;
 import vekta.object.module.Module;
 import vekta.object.module.Upgrader;
+import vekta.object.module.station.ComponentModule;
 
 import java.util.Collections;
 
@@ -65,37 +65,39 @@ public class StationLayoutContext implements Context, Upgrader {
 		// Draw station components
 		v.noFill();
 		v.stroke(UI_COLOR);
-		core.draw();
+		station.drawRelative();
 
 		// Highlight cursor component
-		v.pushMatrix();
-		v.translate(cursor.getTileX() * tileSize, cursor.getTileY() * tileSize);
-		SpaceStation.Direction dir = cursor.getTileDirection();
-		v.rotate(dir.getAngle());
+		SpaceStation.Direction dir = cursor.getDirection();
 		v.stroke(255);
 		if(placementDir == null) {
+			v.pushMatrix();
+			v.translate(cursor.getX(), cursor.getY());
+			v.rotate(dir.getAngle());
 			cursor.getModule().draw(station.getTileSize());
+			v.popMatrix();
 		}
 		else {
-			SpaceStation.Direction rel = placementDir;
-			v.ellipse(rel.getX(cursor.getModule()) * tileSize, rel.getY(cursor.getModule()) * tileSize, tileSize / 3, tileSize / 3);
+			v.ellipse(
+					cursor.getX() + cursor.getBorderX(placementDir) * 2,
+					cursor.getY() + cursor.getBorderY(placementDir) * 2,
+					tileSize / 3,
+					tileSize / 3);
 		}
-		v.popMatrix();
 
 		v.popMatrix();
 	}
 
 	public void moveCursor(SpaceStation.Direction dir) {
-		SpaceStation.Direction rel = dir.relativeTo(cursor.getTileDirection());
-		SpaceStation.Component component = cursor.getAttached(rel);
+		SpaceStation.Component component = cursor.getAttached(dir);
 		if(placementDir != null) {
 			placementDir = null;
 		}
 		else if(component != null) {
 			cursor = component;
 		}
-		else if(cursor.getModule().hasAttachmentPoint(rel)) {
-			placementDir = rel;
+		else if(cursor.getModule().hasAttachmentPoint(dir)) {
+			placementDir = dir;
 		}
 		else {
 			return;
@@ -158,7 +160,7 @@ public class StationLayoutContext implements Context, Upgrader {
 		ship.getInventory().moveTo(station.getInventory()); // Transfer ship items to station
 
 		if(placementDir != null) {
-			SpaceStation.Component component = cursor.tryAttach(placementDir, (ComponentModule)module);
+			SpaceStation.Component component = cursor.attach(placementDir, (ComponentModule)module);
 			if(component != null) {
 				placementDir = null;
 				cursor = component;
@@ -179,7 +181,7 @@ public class StationLayoutContext implements Context, Upgrader {
 			return;
 		}
 
-		cursor.getParent().detach(cursor);
+		cursor.detach();
 		cursor = cursor.getParent();
 		station.getInventory().moveTo(ship.getInventory()); // Send items to ship
 

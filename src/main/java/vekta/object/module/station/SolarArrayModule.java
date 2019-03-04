@@ -1,6 +1,9 @@
-package vekta.object.module;
+package vekta.object.module.station;
 
 import vekta.object.SpaceStation;
+import vekta.object.module.GeneratorModule;
+import vekta.object.module.Module;
+import vekta.object.module.ModuleType;
 
 import static vekta.Vekta.v;
 
@@ -52,7 +55,7 @@ public class SolarArrayModule extends GeneratorModule {
 	@Override
 	public void draw(float tileSize) {
 		// TODO: draw proper solar array
-		// Note: I switched the Singelplayer rect rendering mode to CENTER rather than CORNERS as before
-		v.rect(tileSize, 0, tileSize * getWidth(), tileSize * getHeight());
+		// Note: I switched the Singleplayer rect rendering mode to CENTER rather than CORNERS as before
+		v.rect(0, 0, tileSize * getWidth(), tileSize * getHeight());
 	}
 }
