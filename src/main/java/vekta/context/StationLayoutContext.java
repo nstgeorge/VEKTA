@@ -46,6 +46,12 @@ public class StationLayoutContext implements Context, Upgrader {
 		v.noLights();
 		v.hint(DISABLE_DEPTH_TEST);
 
+		// Draw title
+		v.textSize(48);
+		v.textAlign(CENTER);
+		v.fill(100);
+		v.text(station.getName(), v.width / 2F, v.height / 4F);
+
 		float tileSize = station.getTileSize();
 		SpaceStation.Component core = station.getCore();
 		if(cursor == null) {
