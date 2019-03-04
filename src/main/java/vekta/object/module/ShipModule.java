@@ -1,10 +1,12 @@
 package vekta.object.module;
 
 import vekta.object.ModularShip;
+import vekta.object.SpaceStation;
 
-import static vekta.Vekta.*;
+import static vekta.Vekta.round;
+import static vekta.Vekta.v;
 
-public abstract class ShipModule implements Module {
+public abstract class ShipModule implements ComponentModule {
 	private ModularShip ship;
 
 	public final ModularShip getShip() {
@@ -39,5 +41,23 @@ public abstract class ShipModule implements Module {
 
 	protected final float chooseInclusive(float min, float max, float interval) {
 		return round(v.random(min, max) / interval) * interval;
+	}
+
+	public int getWidth() {
+		return 1;
+	}
+
+	public int getHeight() {
+		return 1;
+	}
+
+	public boolean hasAttachmentPoint(SpaceStation.Direction direction) {
+		return true;
+	}
+
+	public void draw(float tileSize) {
+		float t = tileSize / 2;
+		v.rect(-t / 2, -t, t / 2, t);
+		v.rect(-t, -t / 2, t, t / 2);
 	}
 }

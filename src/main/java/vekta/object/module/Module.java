@@ -5,7 +5,7 @@ import vekta.object.ModularShip;
 import vekta.object.SpaceObject;
 import vekta.terrain.LandingSite;
 
-public interface Module extends Cloneable {
+public interface Module {
 	// Define per-second energy consumption rate
 	float PER_SECOND = 1 / 60F;
 	float PER_MINUTE = PER_SECOND / 60F;
@@ -13,7 +13,7 @@ public interface Module extends Cloneable {
 	String getName();
 
 	ModuleType getType();
-	
+
 	boolean isBetter(Module other);
 
 	Module getVariant();
@@ -35,7 +35,7 @@ public interface Module extends Cloneable {
 
 	default void onKeyRelease(char key) {
 	}
-	
+
 	default void onLandingMenu(LandingSite site, Menu menu) {
 	}
 }

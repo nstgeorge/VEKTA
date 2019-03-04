@@ -8,13 +8,13 @@ import static processing.core.PConstants.LEFT;
 import static vekta.Vekta.bodyFont;
 import static vekta.Vekta.v;
 
-public class SingleplayerOverlay extends CompoundOverlay {
-	public SingleplayerOverlay(PlayerShip ship) {
+public class ShipOverlay extends CompoundOverlay {
+	public ShipOverlay(PlayerShip ship) {
 		super(new Overlay[] {
 				new TelemetryOverlay(ship),
 				new ShipComputerOverlay(50, -150, ship),
-				new ShipEnergyOverlay(-300, -100 + 24, ship),
-				new ShipMoneyOverlay(-300, -100 + 48, ship),
+				new ShipEnergyOverlay(-300, -75, ship),
+				new ShipMoneyOverlay(-300, -50, ship),
 		});
 	}
 

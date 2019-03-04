@@ -3,8 +3,8 @@ package vekta.object.module;
 public class GeneratorModule extends ShipModule {
 	private final float rate;
 
-	public GeneratorModule(float turnSpeed) {
-		this.rate = turnSpeed;
+	public GeneratorModule(float rate) {
+		this.rate = rate;
 	}
 
 	public float getRate() {

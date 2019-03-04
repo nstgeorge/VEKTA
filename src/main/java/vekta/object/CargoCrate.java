@@ -3,7 +3,8 @@ package vekta.object;
 import processing.core.PVector;
 import vekta.item.Item;
 
-import static vekta.Vekta.*;
+import static vekta.Vekta.PI;
+import static vekta.Vekta.v;
 
 public class CargoCrate extends SpaceObject {
 	// Default settings
@@ -54,11 +55,11 @@ public class CargoCrate extends SpaceObject {
 		v.rotate(angle);
 		float r = getRadius();
 		v.rect(-r, -r, r, r);
-		v.rotate(-angle);
 		v.popMatrix();
 	}
 
-	@Override public void onCollide(SpaceObject s) {
+	@Override
+	public void onCollide(SpaceObject s) {
 		destroyBecause(s);
 	}
 }  

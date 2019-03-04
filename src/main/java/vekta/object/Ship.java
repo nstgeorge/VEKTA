@@ -2,21 +2,19 @@ package vekta.object;
 
 import processing.core.PApplet;
 import processing.core.PVector;
-import vekta.Resources;
 import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.terrain.LandingSite;
 
 import static processing.core.PConstants.CLOSE;
-import static vekta.Vekta.*;
+import static vekta.Vekta.addObject;
+import static vekta.Vekta.v;
 
 public abstract class Ship extends SpaceObject {
 	private static final float CRATE_SPEED = 1;
 	private static final float MAX_DOCKING_SPEED = 2;
 
 	private final String name;
-	private final float mass;
-	private final float radius;
 	protected final PVector heading;
 	private final float speed;  // Force of the vector added when engine is on
 	private final float turnSpeed; // Angular speed when turning
@@ -25,11 +23,9 @@ public abstract class Ship extends SpaceObject {
 
 	private SpaceObject dock;
 
-	public Ship(String name, float mass, float radius, PVector heading, PVector position, PVector velocity, int color, float speed, float turnSpeed) {
+	public Ship(String name, PVector heading, PVector position, PVector velocity, int color, float speed, float turnSpeed) {
 		super(position, velocity, color);
 		this.name = name;
-		this.mass = mass;
-		this.radius = radius;
 		this.heading = heading;
 		this.speed = speed;
 		this.turnSpeed = turnSpeed;
@@ -46,26 +42,12 @@ public abstract class Ship extends SpaceObject {
 		return name;
 	}
 
-	@Override
-	public float getMass() {
-		return mass;
-	}
-
-	@Override
-	public float getRadius() {
-		return radius;
-	}
-
 	public PVector getHeading() {
 		return heading.copy();
 	}
 
 	public void setHeading(PVector heading) {
 		this.heading.set(heading).normalize();
-	}
-	
-	public void setAngle(float angle) {
-		this.heading.set(PVector.fromAngle(angle));
 	}
 
 	public float getSpeed() {
@@ -125,7 +107,6 @@ public abstract class Ship extends SpaceObject {
 		if(s instanceof CargoCrate) {
 			// Add item to ship's inventory
 			getInventory().add(((CargoCrate)s).getItem());
-			Resources.playSound("change"); // TODO: custom pickup sound
 		}
 		else if(s instanceof Ship) {
 			Ship ship = (Ship)s;
@@ -148,6 +129,7 @@ public abstract class Ship extends SpaceObject {
 	}
 
 	protected void drawShip(ShipModelType shape) {
+		float r = getRadius();
 		float theta = heading.heading() + PApplet.radians(90);
 		v.fill(0);
 		v.stroke(getColor());
@@ -157,27 +139,27 @@ public abstract class Ship extends SpaceObject {
 		v.beginShape();
 		switch(shape) {
 		case CARGO_SHIP:
-			v.vertex(0, -radius * 1.35F);
-			v.vertex(-radius / 2, -radius);
-			v.vertex(-radius / 2, radius);
-			v.vertex(radius / 2, radius);
-			v.vertex(radius / 2, -radius);
+			v.vertex(0, -r * 1.35F);
+			v.vertex(-r / 2, -r);
+			v.vertex(-r / 2, r);
+			v.vertex(r / 2, r);
+			v.vertex(r / 2, -r);
 			break;
 		case FIGHTER:
-			v.vertex(0, -radius * 2);
+			v.vertex(0, -r * 2);
 			// Draw left spike
-			v.vertex(-radius, radius * 2);
-			v.vertex(-radius, -radius / 3.0F);
-			v.vertex(-radius, radius * 2);
+			v.vertex(-r, r * 2);
+			v.vertex(-r, -r / 3.0F);
+			v.vertex(-r, r * 2);
 			// Draw right spike
-			v.vertex(radius, radius * 2);
-			v.vertex(radius, -radius / 3.0F);
-			v.vertex(radius, radius * 2);
+			v.vertex(r, r * 2);
+			v.vertex(r, -r / 3.0F);
+			v.vertex(r, r * 2);
 			break;
 		default:
-			v.vertex(0, -radius * 2);
-			v.vertex(-radius, radius * 2);
-			v.vertex(radius, radius * 2);
+			v.vertex(0, -r * 2);
+			v.vertex(-r, r * 2);
+			v.vertex(r, r * 2);
 			break;
 		}
 		v.endShape(CLOSE);

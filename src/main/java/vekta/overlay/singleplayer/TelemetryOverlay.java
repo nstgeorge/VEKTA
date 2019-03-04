@@ -49,8 +49,13 @@ public class TelemetryOverlay implements Overlay {
 
 		// Ship heading/velocity indicators
 		v.fill(UI_COLOR);
+		PVector heading = ship.getHeading();
+		PVector velocity = ship.getVelocity();
+		if(velocity.magSq() == 0) {
+			velocity.set(heading);
+		}
 		drawDial("Heading", ship.getHeading(), v.width - 370, v.height - 65, v.color(0, 255, 0));
-		drawDial("Velocity", ship.getVelocity().copy(), v.width - 500, v.height - 65, v.color(0, 255, 0));
+		drawDial("Velocity", velocity, v.width - 500, v.height - 65, v.color(0, 255, 0));
 
 		// Targeter information
 		if(targeter != null) {

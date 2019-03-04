@@ -20,6 +20,8 @@ public class ItemGenerator {
 			new GeneratorModule(1),
 			new HyperdriveModule(1),
 			new RCSModule(1),
+			new SolarArrayModule(1),
+			new StationCoreModule(),
 			new TargetingModule(),
 			new TorpedoModule(1),
 			new TractorBeamModule(1),

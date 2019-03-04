@@ -7,7 +7,7 @@ import static vekta.Vekta.v;
 
 public class CargoShip extends Ship {
 	// CargoShip defaults
-	private static final float DEF_MASS = 25000;
+	private static final float DEF_MASS = 500;
 	private static final float DEF_RADIUS = 15;
 	private static final float DEF_SPEED = .01F;
 	private static final float DEF_TURN = 1;
@@ -18,7 +18,17 @@ public class CargoShip extends Ship {
 	private final Counter steerCt = new Counter();
 
 	public CargoShip(String name, PVector heading, PVector position, PVector velocity, int color) {
-		super(name, DEF_MASS, DEF_RADIUS, heading, position, velocity, color, DEF_SPEED, DEF_TURN);
+		super(name, heading, position, velocity, color, DEF_SPEED, DEF_TURN);
+	}
+
+	@Override
+	public float getMass() {
+		return DEF_MASS;
+	}
+
+	@Override
+	public float getRadius() {
+		return DEF_RADIUS;
 	}
 
 	@Override

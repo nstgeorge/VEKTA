@@ -25,7 +25,17 @@ public class PirateShip extends Ship implements Targeter {
 	private final Counter attackCt = new Counter();
 
 	public PirateShip(String name, PVector heading, PVector position, PVector velocity, int color) {
-		super(name, DEF_MASS, DEF_RADIUS, heading, position, velocity, color, DEF_SPEED, DEF_TURN);
+		super(name, heading, position, velocity, color, DEF_SPEED, DEF_TURN);
+	}
+
+	@Override
+	public float getMass() {
+		return DEF_MASS;
+	}
+
+	@Override
+	public float getRadius() {
+		return DEF_RADIUS;
 	}
 
 	@Override
@@ -45,16 +55,11 @@ public class PirateShip extends Ship implements Targeter {
 
 	@Override
 	public boolean isValidTarget(SpaceObject obj) {
-		// return obj instanceof Ship && !(obj instanceof PirateShip);
-
+		return obj instanceof Ship && obj.getColor() != getColor();
+		
 		// TEMP: prevent random off-screen shooting noises until we have a clean way to ignore distant sounds
-		return obj instanceof PlayerShip;
+		//		return obj instanceof PlayerShip;
 	}
-
-	//	@Override
-	//	public boolean isLanding() {
-	//		return false;
-	//	}
 
 	@Override
 	public void onUpdate() {

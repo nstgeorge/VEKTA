@@ -8,7 +8,9 @@ import vekta.item.ModuleItem;
 import vekta.object.*;
 import vekta.object.module.*;
 import vekta.overlay.Overlay;
-import vekta.overlay.singleplayer.SingleplayerOverlay;
+import vekta.overlay.singleplayer.Notification;
+import vekta.overlay.singleplayer.NotificationOverlay;
+import vekta.overlay.singleplayer.ShipOverlay;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,6 +40,7 @@ public class Singleplayer implements World {
 	private final List<SpaceObject> markedForAddition = new ArrayList<>();
 
 	private Overlay overlay;
+	private NotificationOverlay notifications; // TODO: combine this into `overlay`
 
 	@Override
 	public void start() {
@@ -59,16 +62,20 @@ public class Singleplayer implements World {
 		playerShip.getInventory().add(50); // Starting money
 		addObject(playerShip);
 
-//		Ship ship = new CargoShip(
-//				"Test Ship",
-//				PVector.random2D(), // Heading
-//				new PVector(500, 500), // Position
-//				new PVector(),    // Velocity
-//				v.color(255)
-//		);
-//		ship.getInventory().addFeature(new ModuleItem(new RCSModule(2)));
-//		addObject(ship);
-
+		SpaceStation station = new SpaceStation(
+				"OUTPOST I",
+				new StationCoreModule(),
+				PVector.random2D(), // Heading
+				new PVector(200, 200), // Position
+				new PVector(),    // Velocity
+				playerShip.getColor()
+		);
+		SpaceStation.Component core = station.getCore();
+		SpaceStation.Component rcs = core.tryAttach(SpaceStation.Direction.UP, new RCSModule(1));
+		SpaceStation.Component battery = core.tryAttach(SpaceStation.Direction.LEFT, new BatteryModule(1));
+		SpaceStation.Component panel = battery.tryAttach(SpaceStation.Direction.RIGHT /*relative to parent*/, new SolarArrayModule(1));
+		addObject(station);
+		
 		//// TEMP
 		playerShip.addModule(new AutopilotModule());
 		playerShip.getInventory().add(new ModuleItem(new DrillModule(2)));
@@ -78,7 +85,10 @@ public class Singleplayer implements World {
 		////
 
 		// Configure UI overlay
-		overlay = new SingleplayerOverlay(playerShip);
+		overlay = new ShipOverlay(playerShip);
+		notifications = new NotificationOverlay(600, -150);
+		
+		addObject(new Notification("Test notification"));///
 	}
 
 	@Override
@@ -94,12 +104,12 @@ public class Singleplayer implements World {
 			cameraPos = playerShip.getPosition();
 			cameraSpd = playerShip.getVelocity().mag();
 		}
-		
+
 		// Set up world camera
 		v.hint(ENABLE_DEPTH_TEST);
 		v.camera(cameraPos.x, cameraPos.y, min(MAX_CAMERA_Y, (.07F * cameraSpd + .7F) * (v.height / 2F) / tan(PI * 30 / 180) * zoom), cameraPos.x, cameraPos.y, 0F,
 				0F, 1F, 0F);
-		
+
 		cameraPos = playerShip.getPosition();
 
 		boolean targeting = targetCt.cycle();
@@ -170,6 +180,7 @@ public class Singleplayer implements World {
 		v.hint(DISABLE_DEPTH_TEST);
 		if(!playerShip.isDestroyed()) {
 			overlay.draw();
+			notifications.draw();
 		}
 		else {
 			v.textFont(headerFont);
@@ -239,6 +250,10 @@ public class Singleplayer implements World {
 			SpaceObject s = (SpaceObject)object;
 			s.setID(nextID++);
 			markedForAddition.add(s);
+		}
+		else if(object instanceof Notification) {
+			// Add notification from string
+			notifications.add((Notification)object);
 		}
 		else {
 			throw new RuntimeException("Cannot addFeature object: " + object);

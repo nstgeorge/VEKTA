@@ -4,7 +4,6 @@ import processing.core.PVector;
 import vekta.Resources;
 import vekta.item.Item;
 import vekta.item.ModuleItem;
-import vekta.object.module.BatteryModule;
 import vekta.object.module.Module;
 import vekta.object.module.ModuleType;
 import vekta.object.module.Upgradeable;
@@ -17,17 +16,15 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 	private boolean landing;
 	private float thrust;
 	private float turn;
-	
+
 	private float energy;
 	private float maxEnergy;
-	
-	private BatteryModule battery;
 
 	// Upgradeable modules
 	private final List<Module> modules = new ArrayList<>();
 
-	public ModularShip(String name, float mass, float radius, PVector heading, PVector position, PVector velocity, int color, float speed, float turnSpeed) {
-		super(name, mass, radius, heading, position, velocity, color, speed, turnSpeed);
+	public ModularShip(String name, PVector heading, PVector position, PVector velocity, int color, float speed, float turnSpeed) {
+		super(name, heading, position, velocity, color, speed, turnSpeed);
 	}
 
 	public boolean isLanding() {
@@ -70,7 +67,7 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 
 	public void setEnergy(float energy) {
 		this.energy = energy;
-		if(this.energy > maxEnergy){
+		if(this.energy > maxEnergy) {
 			this.energy = maxEnergy;
 		}
 	}
@@ -149,11 +146,17 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 		}
 	}
 
+	public boolean isModuleTypeExclusive(ModuleType type) {
+		return true;
+	}
+
 	public void addModule(Module module) {
 		// TODO: more control over module exclusivity
-		for(Module m : new ArrayList<>(modules)) {
-			if(m.getType() == module.getType()) {
-				removeModule(m);
+		if(isModuleTypeExclusive(module.getType())) {
+			for(Module m : new ArrayList<>(modules)) {
+				if(m.getType() == module.getType()) {
+					removeModule(m);
+				}
 			}
 		}
 		modules.add(module);
@@ -165,6 +168,13 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 			getInventory().add(new ModuleItem(module));
 		}
 		module.onUninstall(this);
+	}
+
+	@Override
+	public void onUpdate() {
+		for(Module module : getModules()) {
+			module.onUpdate();
+		}
 	}
 
 	public void onKeyPress(char key) {

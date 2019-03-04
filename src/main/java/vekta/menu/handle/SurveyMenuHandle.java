@@ -62,6 +62,8 @@ public class SurveyMenuHandle extends MenuHandle {
 			v.stroke(v.lerpColor(0, color, sq(cos(r / 2 + perspective))));
 			v.arc(0, 0, PLANET_SIZE * xScale, PLANET_SIZE, -HALF_PI, HALF_PI);
 		}
+		
+		// TODO: draw object info (mass, radius, etc.)
 
 		// Draw features
 		v.textAlign(LEFT, CENTER);

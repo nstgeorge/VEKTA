@@ -9,6 +9,7 @@ import vekta.menu.handle.LandingMenuHandle;
 import vekta.menu.handle.ObjectMenuHandle;
 import vekta.menu.option.*;
 import vekta.object.module.*;
+import vekta.overlay.singleplayer.Notification;
 import vekta.terrain.LandingSite;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class PlayerShip extends ModularShip {
 	private final PVector influence = new PVector();
 
 	public PlayerShip(String name, PVector heading, PVector position, PVector velocity, int color) {
-		super(name, DEF_MASS, DEF_RADIUS, heading, position, velocity, color, DEF_SPEED, DEF_TURN);
+		super(name, heading, position, velocity, color, DEF_SPEED, DEF_TURN);
 
 		// Default modules
 		addModule(new EngineModule(1));
@@ -35,6 +36,16 @@ public class PlayerShip extends ModularShip {
 		addModule(new CannonModule());
 
 		setEnergy(getMaxEnergy());
+	}
+
+	@Override
+	public float getMass() {
+		return DEF_MASS;
+	}
+
+	@Override
+	public float getRadius() {
+		return DEF_RADIUS;
 	}
 
 	@Override
@@ -102,6 +113,15 @@ public class PlayerShip extends ModularShip {
 	public void onDepart(SpaceObject obj) {
 		setThrustControl(0);
 		setTurnControl(0);
+	}
+
+	@Override
+	public void onCollide(SpaceObject s) {
+		super.onCollide(s);
+
+		if(s instanceof CargoCrate) {
+			addObject(new Notification("Picked up: " + ((CargoCrate)s).getItem().getName()));
+		}
 	}
 
 	@Override
