@@ -12,7 +12,7 @@ import static vekta.Vekta.v;
 
 public abstract class Ship extends SpaceObject {
 	private static final float CRATE_SPEED = 1;
-	private static final float MAX_DOCKING_SPEED = 2;
+	private static final float MAX_DOCKING_SPEED = 10;
 
 	private final String name;
 	protected final PVector heading;

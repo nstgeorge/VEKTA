@@ -1,20 +1,21 @@
 package vekta.menu.option;
 
+import vekta.object.module.Upgrader;
 import vekta.menu.Menu;
 import vekta.object.module.Module;
 
 import static vekta.Vekta.v;
 
-public class ShipModuleOption implements MenuOption {
-	private final LoadoutMenuOption parent;
+public class InstallModuleOption implements MenuOption {
+	private final Upgrader upgrader;
 	private final Module module;
 	private final ModuleStatus status;
 
-	public ShipModuleOption(LoadoutMenuOption parent, Module module) {
-		this.parent = parent;
+	public InstallModuleOption(Upgrader upgrader, Module module) {
+		this.upgrader = upgrader;
 		this.module = module;
 
-		Module best = parent.getUpgradeable().getModule(module.getType());
+		Module best = upgrader.getRelevantModule(module);
 		if(best == null || module.isBetter(best)) {
 			status = ModuleStatus.BETTER;
 		}
@@ -38,8 +39,7 @@ public class ShipModuleOption implements MenuOption {
 
 	@Override
 	public void select(Menu menu) {
-		parent.getUpgradeable().upgrade(module);
-		parent.updateMenu(menu);
+		upgrader.addModule(module);
 	}
 
 	private enum ModuleStatus {

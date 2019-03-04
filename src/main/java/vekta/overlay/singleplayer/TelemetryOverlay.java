@@ -46,6 +46,7 @@ public class TelemetryOverlay implements Overlay {
 		v.stroke(UI_COLOR);
 		v.rectMode(CORNERS);
 		v.rect(-1, v.height - 130, v.width + 1, v.height + 1);
+		v.rectMode(CENTER);
 
 		// Ship heading/velocity indicators
 		v.fill(UI_COLOR);

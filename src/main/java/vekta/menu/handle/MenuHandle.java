@@ -51,7 +51,7 @@ public class MenuHandle {
 	}
 
 	public void beforeDraw() {
-		v.clear(); // TODO: only clear region behind menu
+		v.clear();
 		v.camera();
 		v.noLights();
 		v.hint(DISABLE_DEPTH_TEST);

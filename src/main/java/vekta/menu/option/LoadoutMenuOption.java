@@ -2,15 +2,19 @@ package vekta.menu.option;
 
 import vekta.menu.Menu;
 import vekta.menu.handle.LoadoutMenuHandle;
+import vekta.object.ModularShip;
 import vekta.object.module.Module;
 import vekta.object.module.Upgradeable;
+import vekta.object.module.Upgrader;
 
 import static vekta.Vekta.setContext;
 
-public class LoadoutMenuOption implements MenuOption {
-	private final Upgradeable upgradeable;
+public class LoadoutMenuOption implements MenuOption, Upgrader {
+	private final ModularShip upgradeable;
 
-	public LoadoutMenuOption(Upgradeable upgradeable) {
+	private Menu subMenu;
+
+	public LoadoutMenuOption(ModularShip upgradeable) {
 		this.upgradeable = upgradeable;
 	}
 
@@ -25,16 +29,33 @@ public class LoadoutMenuOption implements MenuOption {
 
 	@Override
 	public void select(Menu menu) {
-		Menu sub = new Menu(new LoadoutMenuHandle(new BackOption(menu), upgradeable));
-		updateMenu(sub);
-		setContext(sub);
+		subMenu = new Menu(new LoadoutMenuHandle(new BackOption(menu), upgradeable.getModules()));
+		updateMenu();
+		setContext(subMenu);
 	}
 
-	public void updateMenu(Menu sub) {
-		sub.clear();
+	@Override
+	public Module getRelevantModule(Module module) {
+		return getUpgradeable().getModule(module.getType());
+	}
+
+	@Override
+	public void addModule(Module module) {
+		getUpgradeable().addModule(module);
+		updateMenu();
+	}
+
+	@Override
+	public void removeModule(Module module) {
+		getUpgradeable().removeModule(module);
+		updateMenu();
+	}
+
+	private void updateMenu() {
+		subMenu.clear();
 		for(Module module : upgradeable.findUpgrades()) {
-			sub.add(new ShipModuleOption(this, module));
+			subMenu.add(new InstallModuleOption(this, module));
 		}
-		sub.addDefault();
+		subMenu.addDefault();
 	}
 }

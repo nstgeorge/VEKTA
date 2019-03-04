@@ -9,5 +9,7 @@ public interface Upgradeable {
 
 	List<Module> findUpgrades();
 
-	void upgrade(Module module);
+	void addModule(Module module);
+
+	void removeModule(Module module);
 }

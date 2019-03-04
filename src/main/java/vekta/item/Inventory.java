@@ -53,6 +53,13 @@ public final class Inventory implements Iterable<Item> {
 	public boolean remove(Item item) {
 		return items.remove(item);
 	}
+	
+	public void moveTo(Inventory other) {
+		other.items.addAll(items);
+		other.money += money;
+		items.clear();
+		money = 0;
+	}
 
 	@Override
 	public Iterator<Item> iterator() {

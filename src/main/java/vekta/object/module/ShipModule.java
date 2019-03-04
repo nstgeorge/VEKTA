@@ -51,13 +51,12 @@ public abstract class ShipModule implements ComponentModule {
 		return 1;
 	}
 
-	public boolean hasAttachmentPoint(SpaceStation.Direction direction) {
+	public boolean hasAttachmentPoint(SpaceStation.Direction dir) {
 		return true;
 	}
 
 	public void draw(float tileSize) {
-		float t = tileSize / 2;
-		v.rect(-t / 2, -t, t / 2, t);
-		v.rect(-t, -t / 2, t, t / 2);
+		v.rect(0, 0, tileSize / 2, tileSize);
+		v.rect(0, 0, tileSize, tileSize / 2);
 	}
 }

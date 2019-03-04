@@ -29,7 +29,6 @@ public class StationCoreModule extends ShipModule {
 
 	@Override
 	public void draw(float tileSize) {
-		float t = tileSize / 2;
-		v.rect(-t, -t, t, t);
+		v.rect(0, 0, tileSize, tileSize);
 	}
 }

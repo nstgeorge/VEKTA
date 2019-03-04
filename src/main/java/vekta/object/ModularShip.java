@@ -135,23 +135,13 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 		return list;
 	}
 
-	@Override
-	public void upgrade(Module module) {
-		addModule(module);
-		for(Item item : new ArrayList<>(getInventory().getItems())) {
-			if(item instanceof ModuleItem && ((ModuleItem)item).getModule() == module) {
-				getInventory().remove(item);
-				break;
-			}
-		}
-	}
-
 	public boolean isModuleTypeExclusive(ModuleType type) {
 		return true;
 	}
 
+	@Override
 	public void addModule(Module module) {
-		// TODO: more control over module exclusivity
+		// Ensure only one module per type when necessary
 		if(isModuleTypeExclusive(module.getType())) {
 			for(Module m : new ArrayList<>(modules)) {
 				if(m.getType() == module.getType()) {
@@ -159,11 +149,20 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 				}
 			}
 		}
+		// Remove corresponding item if found in inventory
+		for(Item item : new ArrayList<>(getInventory().getItems())) {
+			if(item instanceof ModuleItem && ((ModuleItem)item).getModule() == module) {
+				getInventory().remove(item);
+				break;
+			}
+		}
 		modules.add(module);
 		module.onInstall(this);
 	}
 
+	@Override
 	public void removeModule(Module module) {
+		System.out.println("#@%@%");
 		if(modules.remove(module)) {
 			getInventory().add(new ModuleItem(module));
 		}

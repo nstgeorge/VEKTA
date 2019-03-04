@@ -3,6 +3,7 @@ package vekta.object;
 import processing.core.PVector;
 import vekta.Resources;
 import vekta.Vekta;
+import vekta.context.StationLayoutContext;
 import vekta.item.Inventory;
 import vekta.menu.Menu;
 import vekta.menu.handle.LandingMenuHandle;
@@ -94,18 +95,23 @@ public class PlayerShip extends ModularShip {
 		site.getTerrain().setupLandingMenu(this, menu);
 		menu.add(new SurveyOption(site));
 		menu.addDefault();
+		Resources.stopSound("engine");
 		Resources.playSound("land");
 		Vekta.setContext(menu);
 	}
 
 	@Override
 	public void onDock(SpaceObject s) {
+		Resources.stopSound("engine");
 		if(s instanceof CargoShip) {
 			Inventory inv = ((CargoShip)s).getInventory();
 			Menu menu = new Menu(new ObjectMenuHandle(new ShipUndockOption(this, getWorld()), s));
 			menu.add(new LootMenuOption("Loot", getInventory(), inv));
 			menu.addDefault();
 			setContext(menu);
+		}
+		else if(s instanceof SpaceStation) {
+			setContext(new StationLayoutContext(getWorld(), (SpaceStation)s, this));
 		}
 	}
 

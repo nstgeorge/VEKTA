@@ -66,7 +66,7 @@ public class Singleplayer implements World {
 				"OUTPOST I",
 				new StationCoreModule(),
 				PVector.random2D(), // Heading
-				new PVector(200, 200), // Position
+				new PVector(100, 100), // Position
 				new PVector(),    // Velocity
 				playerShip.getColor()
 		);
@@ -88,7 +88,7 @@ public class Singleplayer implements World {
 		overlay = new ShipOverlay(playerShip);
 		notifications = new NotificationOverlay(600, -150);
 		
-		addObject(new Notification("Test notification"));///
+//		addObject(new Notification("Test notification"));///
 	}
 
 	@Override
@@ -97,13 +97,14 @@ public class Singleplayer implements World {
 
 	@Override
 	public void render() {
-		v.background(0);
-
 		if(!playerShip.isDestroyed()) {
 			// Camera follow
 			cameraPos = playerShip.getPosition();
 			cameraSpd = playerShip.getVelocity().mag();
 		}
+		
+		v.clear();
+		v.rectMode(CENTER);
 
 		// Set up world camera
 		v.hint(ENABLE_DEPTH_TEST);

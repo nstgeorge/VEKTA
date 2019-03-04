@@ -4,6 +4,7 @@ import processing.core.PVector;
 import vekta.object.module.ComponentModule;
 import vekta.object.module.ModuleType;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ public class SpaceStation extends ModularShip {
 	private static final float DEF_SPEED = .02F; // Base engine speed (much slower than player)
 	private static final float DEF_TURN = 5; // Base turn speed (much slower than player)
 
-	private static final float TILE_SIZE = 24;
+	private static final float TILE_SIZE = 16;
 
 	private final Component core;
 
@@ -25,6 +26,10 @@ public class SpaceStation extends ModularShip {
 		// Default modules
 		addModule(coreModule);
 		this.core = new Component(null, Direction.RIGHT, coreModule);
+	}
+
+	public float getTileSize() {
+		return TILE_SIZE;
 	}
 
 	public Component getCore() {
@@ -58,28 +63,76 @@ public class SpaceStation extends ModularShip {
 		v.popMatrix();
 	}
 
-	public class Component {
+	public final class Component {
 		private final Component parent;
-		private final Direction direction;
-		private final ComponentModule module;
+		private Direction rotation;
+		private ComponentModule module;
+
+		private final Direction tileDirection;
+		private final int tileX, tileY;
+
 		private final Map<Direction, Component> attached = new HashMap<>();
 
-		public Component(Component parent, Direction direction, ComponentModule module) {
+		public Component(Component parent, Direction dir, ComponentModule module) {
 			this.parent = parent;
-			this.direction = direction;
+			this.rotation = Direction.RIGHT;
 			this.module = module;
+
+			if(parent == null) {
+				tileDirection = dir;
+				tileX = 0;
+				tileY = 0;
+			}
+			else {
+				attached.put(rotation.back(), parent);
+
+				tileDirection = parent.getTileDirection().rotate(dir);
+				tileX = parent.getTileX() + getTileDirection().getX(parent.getModule());
+				tileY = parent.getTileY() + getTileDirection().getY(parent.getModule());
+			}
 		}
 
 		public Component getParent() {
 			return parent;
 		}
 
-		public Direction getDirection() {
-			return direction;
+		public Direction getRotation() {
+			return rotation;
+		}
+
+		public void setRotation(Direction rotation) {
+			attached.put(rotation.back(), attached.remove(this.rotation.back()));
+			this.rotation = rotation;
 		}
 
 		public ComponentModule getModule() {
 			return module;
+		}
+
+		public void setModule(ComponentModule module) {
+			removeModule(getModule());
+			addModule(module);
+			this.module = module;
+		}
+
+		public Direction getTileDirection() {
+			return tileDirection;
+		}
+
+		public int getTileX() {
+			return tileX;
+		}
+
+		public int getTileY() {
+			return tileY;
+		}
+
+		public boolean hasChildren() {
+			return getAttached().size() > 1;
+		}
+
+		public Collection<Component> getAttached() {
+			return attached.values();
 		}
 
 		public Component getAttached(Direction dir) {
@@ -87,7 +140,7 @@ public class SpaceStation extends ModularShip {
 		}
 
 		public boolean hasAttachmentPoint(Direction dir) {
-			return !attached.containsKey(dir) && getModule().hasAttachmentPoint(dir.rotate(getDirection()));
+			return !attached.containsKey(dir) && getModule().hasAttachmentPoint(dir.rotate(getRotation()));
 		}
 
 		public Component tryAttach(Direction dir, ComponentModule module) {
@@ -97,7 +150,7 @@ public class SpaceStation extends ModularShip {
 				if(prev != null) {
 					detach(prev);
 				}
-				Component component = new Component(this, Direction.RIGHT, module);
+				Component component = new Component(this, dir, module);
 				attached.put(dir, component);
 				return component;
 			}
@@ -105,6 +158,7 @@ public class SpaceStation extends ModularShip {
 		}
 
 		public void detach(Component component) {
+			// TODO detach recursively
 			for(Direction dir : Direction.values()) {
 				if(getAttached(dir) == component) {
 					removeModule(component.getModule());
@@ -114,18 +168,24 @@ public class SpaceStation extends ModularShip {
 		}
 
 		public void draw() {
-			v.rotate(getDirection().getAngle());
+			v.rotate(getRotation().getAngle());
 			module.draw(TILE_SIZE);
 			for(Direction dir : attached.keySet()) {
-				v.pushMatrix();
-				v.translate(dir.getX(getModule()) * TILE_SIZE, dir.getY(getModule()) * TILE_SIZE);
-				v.rotate(dir.getAngle());
-				getAttached(dir).draw();
-				v.popMatrix();
+				Component next = getAttached(dir);
+				if(next != getParent()) {
+					v.pushMatrix();
+					v.translate(dir.getX(getModule()) * TILE_SIZE, dir.getY(getModule()) * TILE_SIZE);
+					v.rotate(dir.getAngle());
+					next.draw();
+					v.popMatrix();
+				}
 			}
 		}
 	}
 
+	/**
+	 * Cardinal directions (ordinals are counter-clockwise: +x, -y, -x, +y)
+	 */
 	public enum Direction {
 		RIGHT,
 		UP,
@@ -149,9 +209,9 @@ public class SpaceStation extends ModularShip {
 
 		public int getY(ComponentModule module) {
 			switch(this) {
-			case UP:
-				return module.getHeight();
 			case DOWN:
+				return module.getHeight();
+			case UP:
 				return -module.getHeight();
 			default:
 				return 0;
@@ -159,7 +219,7 @@ public class SpaceStation extends ModularShip {
 		}
 
 		public float getAngle() {
-			return ordinal() * HALF_PI;
+			return -ordinal() * HALF_PI; // Negative sign accounts for upside-down world coordinates
 		}
 
 		public Direction rotate(int d) {
@@ -169,6 +229,10 @@ public class SpaceStation extends ModularShip {
 
 		public Direction rotate(Direction dir) {
 			return rotate(dir.ordinal());
+		}
+
+		public Direction relativeTo(Direction dir) {
+			return rotate(-dir.ordinal());
 		}
 
 		public Direction left() {

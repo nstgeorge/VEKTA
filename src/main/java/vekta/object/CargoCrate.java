@@ -54,7 +54,7 @@ public class CargoCrate extends SpaceObject {
 		v.translate(position.x, position.y);
 		v.rotate(angle);
 		float r = getRadius();
-		v.rect(-r, -r, r, r);
+		v.rect(0, 0, r, r);
 		v.popMatrix();
 	}
 

@@ -1,5 +1,7 @@
 package vekta.object.module;
 
+import vekta.object.SpaceStation;
+
 import static vekta.Vekta.v;
 
 public class SolarArrayModule extends GeneratorModule {
@@ -43,9 +45,14 @@ public class SolarArrayModule extends GeneratorModule {
 	}
 
 	@Override
+	public boolean hasAttachmentPoint(SpaceStation.Direction dir) {
+		return dir == SpaceStation.Direction.LEFT;
+	}
+
+	@Override
 	public void draw(float tileSize) {
 		// TODO: draw proper solar array
-		float t = tileSize / 2;
-		v.rect(-t, -t * getHeight(), tileSize * getWidth(), t * getHeight());
+		// Note: I switched the Singelplayer rect rendering mode to CENTER rather than CORNERS as before
+		v.rect(tileSize, 0, tileSize * getWidth(), tileSize * getHeight());
 	}
 }
