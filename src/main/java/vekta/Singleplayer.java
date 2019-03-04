@@ -7,6 +7,9 @@ import vekta.context.World;
 import vekta.item.ModuleItem;
 import vekta.object.*;
 import vekta.object.module.*;
+import vekta.object.module.station.SolarArrayModule;
+import vekta.object.module.station.StationCoreModule;
+import vekta.object.module.station.StructuralModule;
 import vekta.overlay.Overlay;
 import vekta.overlay.singleplayer.Notification;
 import vekta.overlay.singleplayer.NotificationOverlay;
@@ -65,30 +68,37 @@ public class Singleplayer implements World {
 		SpaceStation station = new SpaceStation(
 				"OUTPOST I",
 				new StationCoreModule(),
-				PVector.random2D(), // Heading
+				new PVector(1, 0),
+				// PVector.random2D(), // Heading
 				new PVector(100, 100), // Position
 				new PVector(),    // Velocity
 				playerShip.getColor()
 		);
 		SpaceStation.Component core = station.getCore();
-		SpaceStation.Component rcs = core.tryAttach(SpaceStation.Direction.UP, new RCSModule(1));
-		SpaceStation.Component battery = core.tryAttach(SpaceStation.Direction.LEFT, new BatteryModule(1));
-		SpaceStation.Component panel = battery.tryAttach(SpaceStation.Direction.RIGHT /*relative to parent*/, new SolarArrayModule(1));
+		SpaceStation.Component rcs = core.attach(SpaceStation.Direction.UP, new RCSModule(1));
+		SpaceStation.Component battery = core.attach(SpaceStation.Direction.RIGHT, new BatteryModule(1));
+		SpaceStation.Component struct = core.attach(SpaceStation.Direction.LEFT, new StructuralModule(4, 1));
+		SpaceStation.Component struct2 = core.attach(SpaceStation.Direction.DOWN, new StructuralModule(4, 1));
+		SpaceStation.Component panel = struct.attach(SpaceStation.Direction.LEFT, new SolarArrayModule(1));
+		SpaceStation.Component panel2 = struct.attach(SpaceStation.Direction.DOWN, new SolarArrayModule(1));
+		SpaceStation.Component panel3 = struct2.attach(SpaceStation.Direction.RIGHT, new SolarArrayModule(1));
+		SpaceStation.Component panel4 = struct2.attach(SpaceStation.Direction.DOWN, new SolarArrayModule(1));
 		addObject(station);
-		
+
 		//// TEMP
 		playerShip.addModule(new AutopilotModule());
 		playerShip.getInventory().add(new ModuleItem(new DrillModule(2)));
 		playerShip.getInventory().add(new ModuleItem(new TorpedoModule(2)));
 		playerShip.getInventory().add(new ModuleItem(new HyperdriveModule(1)));
 		playerShip.getInventory().add(new ModuleItem(new TractorBeamModule(1)));
+		playerShip.getInventory().add(new ModuleItem(new StructuralModule(3, 1)));
 		////
 
 		// Configure UI overlay
 		overlay = new ShipOverlay(playerShip);
 		notifications = new NotificationOverlay(600, -150);
-		
-//		addObject(new Notification("Test notification"));///
+
+		//		addObject(new Notification("Test notification"));///
 	}
 
 	@Override
@@ -102,7 +112,7 @@ public class Singleplayer implements World {
 			cameraPos = playerShip.getPosition();
 			cameraSpd = playerShip.getVelocity().mag();
 		}
-		
+
 		v.clear();
 		v.rectMode(CENTER);
 

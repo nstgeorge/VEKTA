@@ -1,6 +1,9 @@
-package vekta.object.module;
+package vekta.object.module.station;
 
 import vekta.object.SpaceStation;
+import vekta.object.module.GeneratorModule;
+import vekta.object.module.Module;
+import vekta.object.module.ModuleType;
 
 import static processing.core.PConstants.*;
 import static vekta.Vekta.v;

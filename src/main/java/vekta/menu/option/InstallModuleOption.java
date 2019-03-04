@@ -39,7 +39,7 @@ public class InstallModuleOption implements MenuOption {
 
 	@Override
 	public void select(Menu menu) {
-		upgrader.addModule(module);
+		upgrader.installModule(module);
 	}
 
 	private enum ModuleStatus {

@@ -1,13 +1,15 @@
 package vekta.object;
 
 import processing.core.PVector;
-import vekta.object.module.ComponentModule;
 import vekta.object.module.ModuleType;
+import vekta.object.module.station.ComponentModule;
 
+import java.awt.*;
+import java.util.List;
 import java.util.*;
 
-import static processing.core.PApplet.sqrt;
-import static processing.core.PConstants.HALF_PI;
+import static processing.core.PApplet.*;
+import static vekta.Vekta.distSq;
 import static vekta.Vekta.v;
 
 public class SpaceStation extends ModularShip {
@@ -18,12 +20,23 @@ public class SpaceStation extends ModularShip {
 
 	private final Component core;
 
+	private final List<Component> components = new ArrayList<>();
+
 	public SpaceStation(String name, ComponentModule coreModule, PVector heading, PVector position, PVector velocity, int color) {
 		super(name, heading, position, velocity, color, DEF_SPEED, DEF_TURN);
 
-		// Default modules
-		addModule(coreModule);
 		this.core = new Component(null, Direction.RIGHT, coreModule);
+		addComponent(core);
+	}
+
+	public void addComponent(Component component) {
+		addModule(component.getModule());
+		components.add(component);
+	}
+
+	public void removeComponent(Component component) {
+		removeModule(component.getModule());
+		components.remove(component);
 	}
 
 	public float getTileSize() {
@@ -57,36 +70,53 @@ public class SpaceStation extends ModularShip {
 		v.pushMatrix();
 		v.translate(position.x, position.y);
 		v.rotate(heading.heading());
-		core.draw();
+		drawRelative();
 		v.popMatrix();
+	}
+
+	public void drawRelative() {
+		for(Component component : components) {
+			v.pushMatrix();
+			v.translate(component.getX(), component.getY());
+			v.rotate(component.getDirection()/*.rotate(component.getRotation())*/.getAngle());
+			component.getModule().draw(TILE_SIZE);
+			v.popMatrix();
+
+			//			// DEBUG: draw bounding boxes
+			//			v.stroke(100);
+			//			Rectangle b = component.getBounds();
+			//			v.rectMode(CORNER);
+			//			v.rect(b.x, b.y, b.width, b.height);
+			//			v.rectMode(CENTER);
+			//			v.stroke(getColor());
+		}
 	}
 
 	public final class Component {
 		private final Component parent;
-		private Direction rotation;
-		private ComponentModule module;
+		private final Direction direction;
 
-		private final Direction tileDirection;
-		private final int tileX, tileY;
+		private ComponentModule module;
+		//		private Direction rotation;
+		private float x, y;
 
 		private final Map<Direction, Component> attached = new HashMap<>();
 
 		public Component(Component parent, Direction dir, ComponentModule module) {
 			this.parent = parent;
-			this.rotation = Direction.RIGHT;
+			//			this.rotation = Direction.RIGHT;
 			this.module = module;
+			this.direction = dir;
 
 			if(parent == null) {
-				tileDirection = dir;
-				tileX = 0;
-				tileY = 0;
+				x = 0;
+				y = 0;
 			}
 			else {
-				attached.put(rotation.back(), parent);
+				x = parent.getX() + getOffsetX();
+				y = parent.getY() + getOffsetY();
 
-				tileDirection = parent.getTileDirection().rotate(dir);
-				tileX = parent.getTileX() + getTileDirection().getX(parent.getModule());
-				tileY = parent.getTileY() + getTileDirection().getY(parent.getModule());
+				attached.put(dir.back(), parent);
 			}
 		}
 
@@ -94,14 +124,15 @@ public class SpaceStation extends ModularShip {
 			return parent;
 		}
 
-		public Direction getRotation() {
-			return rotation;
-		}
-
-		public void setRotation(Direction rotation) {
-			attached.put(rotation.back(), attached.remove(this.rotation.back()));
-			this.rotation = rotation;
-		}
+		//		public Direction getRotation() {
+		//			return rotation;
+		//		}
+		//
+		//		public void setRotation(Direction rotation) {
+		//			attached.put(rotation.back(), attached.remove(this.rotation.back()));
+		//			this.rotation = rotation;
+		//			// TODO update x, y, direction
+		//		}
 
 		public ComponentModule getModule() {
 			return module;
@@ -122,16 +153,51 @@ public class SpaceStation extends ModularShip {
 			this.module = module;
 		}
 
-		public Direction getTileDirection() {
-			return tileDirection;
+		public Direction getDirection() {
+			return direction;
 		}
 
-		public int getTileX() {
-			return tileX;
+		public float getX() {
+			return x;
 		}
 
-		public int getTileY() {
-			return tileY;
+		public float getY() {
+			return y;
+		}
+
+		public float getOffsetX() {
+			if(parent == null) {
+				return 0;
+			}
+			return parent.getBorderX(getDirection()) - getBorderX(getDirection().back());
+		}
+
+		public float getOffsetY() {
+			if(parent == null) {
+				return 0;
+			}
+			return parent.getBorderY(getDirection()) - getBorderY(getDirection().back());
+		}
+
+		public Component getNearest(Direction dir) {
+			return getNearest(dir.getX(getTileSize()), dir.getY(getTileSize()));
+		}
+
+		public Component getNearest(float offsetX, float offsetY) {
+			PVector point = new PVector(getX() + offsetX, getY() + offsetY);
+			Component nearest = this;
+			float minSq = Float.POSITIVE_INFINITY;
+			for(Component other : components) {
+				if(other != this){
+					float distSq = distSq(point, new PVector(other.getX(), other.getY()));
+					if(distSq < minSq) {
+						minSq = distSq;
+						nearest = other;
+					}
+					
+				}
+			}
+			return nearest;
 		}
 
 		public boolean hasChildren() {
@@ -147,10 +213,22 @@ public class SpaceStation extends ModularShip {
 		}
 
 		public boolean hasAttachmentPoint(Direction dir) {
-			return !attached.containsKey(dir) && getModule().hasAttachmentPoint(dir.rotate(getRotation()));
+			return !attached.containsKey(dir) && getModule().hasAttachmentPoint(dir/*.rotate(getRotation())*/.relativeTo(getDirection()));
 		}
 
-		public Collection<Direction> getAttachableDirections() {
+		public boolean isAttachable(Component hypothetical) {
+			if(!hasAttachmentPoint(hypothetical.getDirection())) {
+				return false;
+			}
+			for(Component component : components) {
+				if(component.collidesWith(hypothetical)) {
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public Collection<Direction> getVacantDirections() {
 			Set<Direction> set = new HashSet<>();
 			for(Direction dir : Direction.values()) {
 				if(hasAttachmentPoint(dir)) {
@@ -160,43 +238,53 @@ public class SpaceStation extends ModularShip {
 			return set;
 		}
 
-		public Component tryAttach(Direction dir, ComponentModule module) {
-			if(hasAttachmentPoint(dir)) {
-				addModule(module);
-				Component prev = getAttached(dir);
-				if(prev != null) {
-					detach(prev);
-				}
-				Component component = new Component(this, dir, module);
-				attached.put(dir, component);
-				return component;
+		public Component attach(Direction dir, ComponentModule module) {
+			Component prev = getAttached(dir);
+			if(prev != null) {
+				prev.detach();
 			}
-			return null;
+			Component component = new Component(this, dir, module);
+			attached.put(dir, component);
+			addComponent(component);
+			return component;
 		}
 
-		public void detach(Component component) {
-			// TODO detach recursively
-			for(Direction dir : Direction.values()) {
-				if(getAttached(dir) == component) {
-					removeModule(component.getModule());
-					attached.remove(dir);
+		public void detach() {
+			for(Direction dir : new ArrayList<>(attached.keySet())) {
+				Component component = attached.get(dir);
+				if(component != parent) {
+					component.detach();
 				}
+				else {
+					parent.attached.remove(dir.back());
+				}
+				attached.remove(dir);
 			}
+			removeComponent(this);
 		}
 
-		public void draw() {
-			v.rotate(getRotation().getAngle());
-			module.draw(TILE_SIZE);
-			for(Direction dir : attached.keySet()) {
-				Component next = getAttached(dir);
-				if(next != getParent()) {
-					v.pushMatrix();
-					v.translate(dir.getX(getModule()) * TILE_SIZE, dir.getY(getModule()) * TILE_SIZE);
-					v.rotate(dir.getAngle());
-					next.draw();
-					v.popMatrix();
-				}
-			}
+		public float getBorderX(Direction dir) {
+			float dist = abs(getDirection().getX(module.getWidth(), module.getHeight()));
+			return dir.getX(dist) * getTileSize() / 2F;
+		}
+
+		public float getBorderY(Direction dir) {
+			float dist = abs(getDirection().getY(module.getWidth(), module.getHeight()));
+			return dir.getY(dist) * getTileSize() / 2F;
+		}
+
+		public boolean collidesWith(Component other) {
+			return getBounds().intersects(other.getBounds());
+		}
+
+		private Rectangle getBounds() {
+			float width = getBorderX(Direction.RIGHT) - getBorderX(Direction.LEFT);
+			float height = getBorderY(Direction.DOWN) - getBorderY(Direction.UP);
+			return new Rectangle(
+					(int)(x - width / 2 + 1),
+					(int)(y - height / 2 + 1),
+					(int)(width - 2),
+					(int)(height - 2));
 		}
 	}
 
@@ -213,30 +301,35 @@ public class SpaceStation extends ModularShip {
 			return Direction.values()[(int)v.random(4)];
 		}
 
-		public int getX(ComponentModule module) {
-			switch(this) {
-			case RIGHT:
-				return module.getWidth();
-			case LEFT:
-				return -module.getWidth();
-			default:
-				return 0;
-			}
-		}
-
-		public int getY(ComponentModule module) {
-			switch(this) {
-			case DOWN:
-				return module.getHeight();
-			case UP:
-				return -module.getHeight();
-			default:
-				return 0;
-			}
-		}
-
 		public float getAngle() {
 			return -ordinal() * HALF_PI; // Negative sign accounts for upside-down world coordinates
+		}
+
+		public float getX(float dist) {
+			return getX(dist, 0);
+		}
+
+		public float getY(float dist) {
+			return getY(dist, 0);
+		}
+
+		public float getX(float x, float y) {
+			switch(this) {
+			case RIGHT:
+				return +x;
+			case UP:
+				return -y;
+			case LEFT:
+				return -x;
+			case DOWN:
+				return +y;
+			default:
+				return 0;
+			}
+		}
+
+		public float getY(float x, float y) {
+			return left().getX(x, y);
 		}
 
 		public Direction rotate(int d) {
@@ -252,12 +345,16 @@ public class SpaceStation extends ModularShip {
 			return rotate(-dir.ordinal());
 		}
 
+		public Direction inverse() {
+			return RIGHT.relativeTo(this);
+		}
+
 		public Direction left() {
-			return rotate(-1);
+			return rotate(1);
 		}
 
 		public Direction right() {
-			return rotate(1);
+			return rotate(-1);
 		}
 
 		public Direction back() {

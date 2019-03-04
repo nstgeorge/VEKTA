@@ -2,6 +2,7 @@ package vekta.object.module;
 
 import vekta.object.ModularShip;
 import vekta.object.SpaceStation;
+import vekta.object.module.station.ComponentModule;
 
 import static vekta.Vekta.round;
 import static vekta.Vekta.v;
@@ -56,7 +57,7 @@ public abstract class ShipModule implements ComponentModule {
 	}
 
 	public void draw(float tileSize) {
-		v.rect(0, 0, tileSize / 2, tileSize);
-		v.rect(0, 0, tileSize, tileSize / 2);
+		v.rect(0, 0, getWidth() * tileSize / 2, getHeight() * tileSize);
+		v.rect(0, 0, getWidth() * tileSize, getHeight() * tileSize / 2);
 	}
 }

@@ -107,7 +107,7 @@ public abstract class SpaceObject {
 		float mass = getMass();
 		PVector influence = new PVector();
 		for(SpaceObject s : objects) {
-			float distSq = getDistSq(position, s.getPosition());
+			float distSq = distSq(position, s.getPosition());
 			if(distSq == 0 || distSq > MAX_G_DISTANCE * MAX_G_DISTANCE)
 				continue; // If the planet being checked is itself (or directly on top), don't move
 			float force = (G * (mass / SCALE) * (s.getMass() / SCALE)) / (distSq); // G defined in orbit

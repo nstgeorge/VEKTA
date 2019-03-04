@@ -40,13 +40,13 @@ public class LoadoutMenuOption implements MenuOption, Upgrader {
 	}
 
 	@Override
-	public void addModule(Module module) {
+	public void installModule(Module module) {
 		getUpgradeable().addModule(module);
 		updateMenu();
 	}
 
 	@Override
-	public void removeModule(Module module) {
+	public void uninstallModule(Module module) {
 		getUpgradeable().removeModule(module);
 		updateMenu();
 	}

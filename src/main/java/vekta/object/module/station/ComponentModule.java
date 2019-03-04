@@ -1,6 +1,7 @@
-package vekta.object.module;
+package vekta.object.module.station;
 
 import vekta.object.SpaceStation;
+import vekta.object.module.Module;
 
 public interface ComponentModule extends Module {
 	/**
