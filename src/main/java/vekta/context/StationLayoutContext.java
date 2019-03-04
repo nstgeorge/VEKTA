@@ -5,7 +5,6 @@ import vekta.menu.Menu;
 import vekta.menu.handle.LoadoutMenuHandle;
 import vekta.menu.option.BackOption;
 import vekta.menu.option.InstallModuleOption;
-import vekta.menu.option.UninstallModuleOption;
 import vekta.object.ModularShip;
 import vekta.object.SpaceStation;
 import vekta.object.module.Module;
@@ -46,18 +45,13 @@ public class StationLayoutContext implements Context, Upgrader {
 		v.noLights();
 		v.hint(DISABLE_DEPTH_TEST);
 
-		// Draw title
-		v.textSize(48);
-		v.textAlign(CENTER);
-		v.fill(100);
-		v.text(station.getName(), v.width / 2F, v.height / 4F);
-
 		float tileSize = station.getTileSize();
 		SpaceStation.Component core = station.getCore();
 		if(cursor == null) {
 			cursor = core;
 		}
 
+		// Set up station rendering
 		v.pushMatrix();
 		v.translate(v.width / 2F, v.height / 2F);
 		v.scale(STATION_SCALE);
@@ -69,8 +63,8 @@ public class StationLayoutContext implements Context, Upgrader {
 
 		// Highlight cursor component
 		SpaceStation.Direction dir = cursor.getDirection();
-		v.stroke(255);
 		if(placementDir == null) {
+			v.stroke(255);
 			v.pushMatrix();
 			v.translate(cursor.getX(), cursor.getY());
 			v.rotate(dir.getAngle());
@@ -78,14 +72,36 @@ public class StationLayoutContext implements Context, Upgrader {
 			v.popMatrix();
 		}
 		else {
+			v.stroke(v.color(200));
+			float bx = cursor.getBorderX(placementDir);
+			float by = cursor.getBorderY(placementDir);
 			v.ellipse(
-					cursor.getX() + cursor.getBorderX(placementDir) * 2,
-					cursor.getY() + cursor.getBorderY(placementDir) * 2,
+					cursor.getX() + bx + v.sign(bx) * station.getTileSize() / 2,
+					cursor.getY() + by + v.sign(by) * station.getTileSize() / 2,
 					tileSize / 3,
 					tileSize / 3);
 		}
 
+		// End station rendering
 		v.popMatrix();
+
+		// Draw title
+		v.textSize(48);
+		v.textAlign(CENTER);
+		v.fill(100);
+		v.text(station.getName(), v.width / 2F, v.height / 4F);
+
+		// Draw current module name
+		v.textSize(32);
+		v.fill(200);
+		v.text(cursor.getModule().getName(), v.width / 2F, v.height * 3 / 4F);
+
+		// Draw helper text
+		v.textSize(24);
+		v.fill(255);
+		if(!cursor.hasChildren()) {
+			v.text("X to " + (placementDir != null ? "INSTALL" : "REMOVE"), v.width / 2F, v.height * 3 / 4F + 100);
+		}
 	}
 
 	public void moveCursor(SpaceStation.Direction dir) {
@@ -123,18 +139,27 @@ public class StationLayoutContext implements Context, Upgrader {
 			moveCursor(SpaceStation.Direction.RIGHT);
 		}
 		else if(key == 'x') {
-			Resources.playSound("select");
-			Menu menu = new Menu(new LoadoutMenuHandle(new BackOption(this), Collections.singletonList(cursor.getModule())));
-			for(Module module : ship.findUpgrades()) {
-				if(module instanceof ComponentModule && cursor.isReplaceable((ComponentModule)module)) {
-					menu.add(new InstallModuleOption(this, module));
-				}
-			}
 			if(isCursorRemovable()) {
-				menu.add(new UninstallModuleOption(this, cursor.getModule()));
+				// Uninstall cursor
+				uninstallModule(cursor.getModule());
 			}
-			menu.addDefault();
-			setContext(menu);
+			else if(placementDir != null) {
+				Menu menu = new Menu(new LoadoutMenuHandle(new BackOption(this), Collections.singletonList(cursor.getModule())));
+				for(Module module : ship.findUpgrades()) {
+					if(module instanceof ComponentModule && cursor.isReplaceable((ComponentModule)module)) {
+						menu.add(new InstallModuleOption(this, module));
+					}
+				}
+				//			if(isCursorRemovable()) {
+				//				menu.add(new UninstallModuleOption(this, cursor.getModule()));
+				//			}
+				menu.addDefault();
+				setContext(menu);
+			}
+			else {
+				return;
+			}
+			Resources.playSound("select");
 		}
 	}
 
@@ -152,7 +177,7 @@ public class StationLayoutContext implements Context, Upgrader {
 	}
 
 	@Override
-	public void addModule(Module module) {
+	public void installModule(Module module) {
 		if(!(module instanceof ComponentModule)) {
 			return;
 		}
@@ -176,7 +201,7 @@ public class StationLayoutContext implements Context, Upgrader {
 	}
 
 	@Override
-	public void removeModule(Module module) {
+	public void uninstallModule(Module module) {
 		if(cursor.getModule() != module) {
 			return;
 		}

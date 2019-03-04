@@ -7,6 +7,7 @@ import vekta.context.World;
 import vekta.item.ModuleItem;
 import vekta.object.*;
 import vekta.object.module.*;
+import vekta.object.module.station.SolarArrayModule;
 import vekta.object.module.station.StationCoreModule;
 import vekta.object.module.station.StructuralModule;
 import vekta.overlay.Overlay;
@@ -76,9 +77,9 @@ public class Singleplayer implements World {
 		SpaceStation.Component core = station.getCore();
 		SpaceStation.Component rcs = core.attach(SpaceStation.Direction.UP, new RCSModule(1));
 		SpaceStation.Component battery = core.attach(SpaceStation.Direction.RIGHT, new BatteryModule(1));
-//		SpaceStation.Component struct = core.attach(SpaceStation.Direction.LEFT, new StructuralModule(3, 1));
-//		SpaceStation.Component panel = struct.attach(SpaceStation.Direction.LEFT, new SolarArrayModule(1));
-//		SpaceStation.Component panel2 = struct.attach(SpaceStation.Direction.DOWN, new SolarArrayModule(1));
+		SpaceStation.Component struct = core.attach(SpaceStation.Direction.LEFT, new StructuralModule(3, 1));
+		SpaceStation.Component panel = struct.attach(SpaceStation.Direction.LEFT, new SolarArrayModule(1));
+		SpaceStation.Component panel2 = struct.attach(SpaceStation.Direction.DOWN, new SolarArrayModule(1));
 		addObject(station);
 
 		//// TEMP

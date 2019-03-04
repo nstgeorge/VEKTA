@@ -22,7 +22,7 @@ public class Vekta extends PApplet {
 		// Prevent library startup messages
 		LogManager.getLogManager().reset();
 	}
-	
+
 	public static Vekta v; // Global access to Vekta instance
 
 	public static final String FONTNAME = "font/undefined-medium.ttf";
@@ -182,6 +182,16 @@ public class Vekta extends PApplet {
 		return array[(int)random(array.length)];
 	}
 
+	/**
+	 * Return the sign (-1, 0, or 1) of a number.
+	 * */
+	public float sign(float f) {
+		return f == 0 ? 0 : f > 0 ? 1 : -1;
+	}
+
+	/**
+	 * Return the squared distance between two vectors.
+	 * */
 	public static float getDistSq(PVector a, PVector b) {
 		float x = a.x - b.x;
 		float y = a.y - b.y;

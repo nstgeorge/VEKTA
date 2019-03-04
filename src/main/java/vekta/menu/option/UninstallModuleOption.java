@@ -20,6 +20,6 @@ public class UninstallModuleOption implements MenuOption {
 
 	@Override
 	public void select(Menu menu) {
-		upgrader.removeModule(module);
+		upgrader.uninstallModule(module);
 	}
 }
