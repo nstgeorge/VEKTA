@@ -4,9 +4,7 @@ import processing.core.PVector;
 import vekta.object.module.ComponentModule;
 import vekta.object.module.ModuleType;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static processing.core.PApplet.sqrt;
 import static processing.core.PConstants.HALF_PI;
@@ -109,7 +107,16 @@ public class SpaceStation extends ModularShip {
 			return module;
 		}
 
-		public void setModule(ComponentModule module) {
+		public boolean isReplaceable(ComponentModule module) {
+			for(Direction dir : attached.keySet()) {
+				if(!module.hasAttachmentPoint(dir)) {
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public void replaceModule(ComponentModule module) {
 			removeModule(getModule());
 			addModule(module);
 			this.module = module;
@@ -141,6 +148,16 @@ public class SpaceStation extends ModularShip {
 
 		public boolean hasAttachmentPoint(Direction dir) {
 			return !attached.containsKey(dir) && getModule().hasAttachmentPoint(dir.rotate(getRotation()));
+		}
+
+		public Collection<Direction> getAttachableDirections() {
+			Set<Direction> set = new HashSet<>();
+			for(Direction dir : Direction.values()) {
+				if(hasAttachmentPoint(dir)) {
+					set.add(dir);
+				}
+			}
+			return set;
 		}
 
 		public Component tryAttach(Direction dir, ComponentModule module) {

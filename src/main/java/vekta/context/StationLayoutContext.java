@@ -118,7 +118,7 @@ public class StationLayoutContext implements Context, Upgrader {
 			Resources.playSound("select");
 			Menu menu = new Menu(new LoadoutMenuHandle(new BackOption(this), Collections.singletonList(cursor.getModule())));
 			for(Module module : ship.findUpgrades()) {
-				if(module instanceof ComponentModule) {
+				if(module instanceof ComponentModule && cursor.isReplaceable((ComponentModule)module)) {
 					menu.add(new InstallModuleOption(this, module));
 				}
 			}
@@ -149,7 +149,7 @@ public class StationLayoutContext implements Context, Upgrader {
 			return;
 		}
 
-		ship.getInventory().moveTo(station.getInventory()); // Transfer items to station
+		ship.getInventory().moveTo(station.getInventory()); // Transfer ship items to station
 
 		if(placementDir != null) {
 			SpaceStation.Component component = cursor.tryAttach(placementDir, (ComponentModule)module);
@@ -159,10 +159,10 @@ public class StationLayoutContext implements Context, Upgrader {
 			}
 		}
 		else {
-			cursor.setModule((ComponentModule)module);
+			cursor.replaceModule((ComponentModule)module);
 		}
 
-		station.getInventory().moveTo(ship.getInventory()); // Transfer items back to player
+		station.getInventory().moveTo(ship.getInventory()); // Return items to ship
 
 		setContext(this);
 	}
@@ -175,7 +175,7 @@ public class StationLayoutContext implements Context, Upgrader {
 
 		cursor.getParent().detach(cursor);
 		cursor = cursor.getParent();
-		station.getInventory().moveTo(ship.getInventory());
+		station.getInventory().moveTo(ship.getInventory()); // Send items to ship
 
 		setContext(this);
 	}

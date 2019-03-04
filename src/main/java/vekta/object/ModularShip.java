@@ -162,7 +162,6 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 
 	@Override
 	public void removeModule(Module module) {
-		System.out.println("#@%@%");
 		if(modules.remove(module)) {
 			getInventory().add(new ModuleItem(module));
 		}
