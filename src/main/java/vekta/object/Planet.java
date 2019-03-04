@@ -71,8 +71,8 @@ public abstract class Planet extends SpaceObject {
 			PVector offset = base.copy().mult(getRadius() * SPLIT_OFFSET_SCALE);
 			PVector splitVelocity = base.copy().mult(SPLIT_VELOCITY_SCALE);
 			Terrain terrain = new MoltenTerrain();
-			Planet a = new TerrestrialPlanet(WorldGenerator.generatePlanetName(), newMass, getDensity(), terrain, getPosition().copy().add(offset), newVelocity.copy().add(splitVelocity), getColor());
-			Planet b = new TerrestrialPlanet(WorldGenerator.generatePlanetName(), newMass, getDensity(), terrain, getPosition().copy().sub(offset), newVelocity.copy().sub(splitVelocity), getColor());
+			Planet a = new TerrestrialPlanet(WorldGenerator.randomPlanetName(), newMass, getDensity(), terrain, getPosition().copy().add(offset), newVelocity.copy().add(splitVelocity), getColor());
+			Planet b = new TerrestrialPlanet(WorldGenerator.randomPlanetName(), newMass, getDensity(), terrain, getPosition().copy().sub(offset), newVelocity.copy().sub(splitVelocity), getColor());
 			if(!s.collidesWith(a)) {
 				mass -= a.mass;
 				addObject(a);

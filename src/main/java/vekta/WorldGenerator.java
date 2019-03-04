@@ -13,13 +13,13 @@ public class WorldGenerator {
 	}
 
 	public static void spawnOccasional(PVector around) {
-		PVector pos = randomPos(getRadius() / 2, getRadius()).add(around);
+		PVector pos = randomSpawnPosition(around);
 		float r = v.random(1);
 		if(r > .3F) {
 			createSystem(pos);
 		}
 		else if(r > .1F) {
-			Ship s = new CargoShip("TRAWLX", PVector.random2D(), pos, new PVector(), v.color(0, 100, 255));
+			Ship s = new CargoShip("TRAWLX", PVector.random2D(), pos, new PVector(), randomPlanetColor());
 			ItemGenerator.addLoot(s.getInventory(), 3);
 			addObject(s);
 		}
@@ -39,22 +39,22 @@ public class WorldGenerator {
 		float centerDensity = v.random(.7F, 2);
 		if(order >= 30) {
 			addObject(new Star(
-					WorldGenerator.generatePlanetName(),
+					WorldGenerator.randomPlanetName(),
 					centerMass, // Mass
 					centerDensity, // Radius
-					pos,
-					new PVector(),
-					v.color(v.random(100, 255), v.random(150, 255), v.random(100, 255))
+					pos, // Position
+					new PVector(), // Velocity
+					randomPlanetColor() // Color
 			));
 		}
 		else {
 			addObject(new GasGiant(
-					WorldGenerator.generatePlanetName(),
+					WorldGenerator.randomPlanetName(),
 					centerMass, // Mass
-					centerDensity,   // Radius
-					pos,  // Position
-					new PVector(),  // Velocity
-					v.color(v.random(100, 255), v.random(100, 255), v.random(100, 255))
+					centerDensity, // Radius
+					pos, // Position
+					new PVector(), // Velocity
+					randomPlanetColor() // Color
 			));
 		}
 
@@ -109,23 +109,27 @@ public class WorldGenerator {
 			}
 		}
 		TerrestrialPlanet planet = new TerrestrialPlanet(
-				generatePlanetName(),
+				randomPlanetName(),
 				mass, // Mass
 				density,   // Density
 				terrain, // Terrain
 				pos,  // Coords
 				new PVector(),  // Velocity
-				v.color(v.random(100, 255), v.random(100, 255), v.random(100, 255))
+				randomPlanetColor() // Color
 		);
 		addObject(planet);
 		return planet;
 	}
 
-	public static PVector randomPos(float min, float max) {
-		return PVector.random2D().mult(v.random(min, max));
+	public static PVector randomSpawnPosition(PVector center) {
+		return PVector.random2D().mult(v.random(getRadius() / 2, getRadius())).add(center);
 	}
 
-	public static String generatePlanetName() {
+	public static int randomPlanetColor() {
+		return v.color(v.random(100, 255), v.random(100, 255), v.random(100, 255));
+	}
+
+	public static String randomPlanetName() {
 		return v.random(Resources.getStrings("planet_prefixes")) + v.random(Resources.getStrings("planet_suffixes", ""));
 	}
 }  

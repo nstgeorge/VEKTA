@@ -106,7 +106,7 @@ public class PlayerShip extends ModularShip {
 		if(s instanceof CargoShip) {
 			Inventory inv = ((CargoShip)s).getInventory();
 			Menu menu = new Menu(new ObjectMenuHandle(new ShipUndockOption(this, getWorld()), s));
-			menu.add(new LootMenuOption("Loot", getInventory(), inv));
+			((Ship)s).setupDockingMenu(this, menu);
 			menu.addDefault();
 			setContext(menu);
 		}

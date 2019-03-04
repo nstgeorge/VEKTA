@@ -35,19 +35,19 @@ public class ItemGenerator {
 		float r = v.random(1);
 		if(r > .4) {
 			ItemType type = randomItemType();
-			return new Item(generateItemName(type), type);
+			return new Item(randomItemName(type), type);
 		}
 		else if(r > .2) {
 			return new ModuleItem(v.random(modules).getVariant());
 		}
 		else {
-			return randomOre(WorldGenerator.generatePlanetName());
+			return randomOre(WorldGenerator.randomPlanetName());
 		}
 	}
 
 	public static Item randomOre(String planetName) {
 		ItemType type = v.random(1) > .2F ? ItemType.COMMON : ItemType.RARE;
-		return new Item(generateOreName(planetName, type), type);
+		return new Item(randomOreName(planetName, type), type);
 	}
 
 	public static ItemType randomItemType() {
@@ -72,14 +72,14 @@ public class ItemGenerator {
 		}
 	}
 
-	public static String generateItemName(ItemType type) {
+	public static String randomItemName(ItemType type) {
 		String name = v.random(Resources.getStrings("item_nouns"));
 		if(v.random(1) < .5) {
 			name += " " + v.random(Resources.getStrings("item_modifiers"));
 		}
 
 		if(type == ItemType.LEGENDARY) {
-			name += " of " + WorldGenerator.generatePlanetName();
+			name += " of " + WorldGenerator.randomPlanetName();
 		}
 		else {
 			if(v.random(1) < .5) {
@@ -90,7 +90,7 @@ public class ItemGenerator {
 		return name;
 	}
 
-	public static String generateOreName(String planetName, ItemType type) {
+	public static String randomOreName(String planetName, ItemType type) {
 		String key = "ore_" + (type == ItemType.COMMON ? "common" : "rare");
 		String name = v.random(Resources.getStrings(key));
 		if(type == ItemType.LEGENDARY) {

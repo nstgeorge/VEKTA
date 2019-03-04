@@ -4,6 +4,7 @@ import processing.core.PApplet;
 import processing.core.PVector;
 import vekta.item.Inventory;
 import vekta.item.Item;
+import vekta.menu.Menu;
 import vekta.terrain.LandingSite;
 
 import static processing.core.PConstants.CLOSE;
@@ -172,6 +173,9 @@ public abstract class Ship extends SpaceObject {
 
 	public void onDock(SpaceObject obj) {
 		undock();
+	}
+
+	public void setupDockingMenu(PlayerShip ship, Menu menu) {
 	}
 
 	public void onDepart(SpaceObject obj) {
