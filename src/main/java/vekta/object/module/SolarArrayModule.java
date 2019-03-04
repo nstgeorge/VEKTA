@@ -2,9 +2,11 @@ package vekta.object.module;
 
 import vekta.object.SpaceStation;
 
+import static processing.core.PConstants.*;
 import static vekta.Vekta.v;
 
 public class SolarArrayModule extends GeneratorModule {
+
 	public SolarArrayModule(float rate) {
 		super(rate);
 	}
@@ -36,12 +38,12 @@ public class SolarArrayModule extends GeneratorModule {
 
 	@Override
 	public int getWidth() {
-		return 3;
+		return 10;
 	}
 
 	@Override
 	public int getHeight() {
-		return 2;
+		return 5;
 	}
 
 	@Override
@@ -51,8 +53,44 @@ public class SolarArrayModule extends GeneratorModule {
 
 	@Override
 	public void draw(float tileSize) {
-		// TODO: draw proper solar array
-		// Note: I switched the Singelplayer rect rendering mode to CENTER rather than CORNERS as before
-		v.rect(tileSize, 0, tileSize * getWidth(), tileSize * getHeight());
+		// Supports on station side of array
+		v.rectMode(CORNERS);
+		// For easier coordinates
+		v.translate(.2F * tileSize, -(getHeight() / 2F) * tileSize);
+		v.beginShape();
+		// Flat side
+		v.vertex(0, 				0);
+		v.vertex(-.5F * tileSize, 	0);
+		v.vertex(-.5F * tileSize, 	getHeight() * tileSize);
+		v.vertex(0, 			 	getHeight() * tileSize);
+		// Array-facing side
+		v.vertex(0,				 	(getHeight() - .2F) * tileSize);
+		v.vertex(-.3F * tileSize, 	(getHeight() - .2F) * tileSize);
+		v.vertex(-.3F * tileSize,	((float)Math.ceil(getHeight() / 2.0) + .2F) * tileSize);
+		v.vertex(0,					((float)Math.ceil(getHeight() / 2.0) + .2F) * tileSize);
+		v.vertex(0, 				((float)Math.ceil(getHeight() / 2.0) * tileSize));
+		v.vertex(-.3F * tileSize, 	((float)Math.ceil(getHeight() / 2.0) * tileSize));
+		v.vertex(-.3F * tileSize, 	((float)Math.floor(getHeight() / 2.0) * tileSize));
+		v.vertex(0,					((float)Math.floor(getHeight() / 2.0) * tileSize));
+		v.vertex(0, 				((float)Math.floor(getHeight() / 2.0) - .2F) * tileSize);
+		v.vertex(-.3F * tileSize,	((float)Math.floor(getHeight() / 2.0) - .2F) * tileSize);
+		v.vertex(-.3F * tileSize, 	.2F * tileSize);
+		v.vertex(0,					.2F * tileSize);
+		v.endShape(CLOSE);
+		// Middle connection point
+		v.fill(0);
+		v.rect(-.7F * tileSize, (getHeight() / 2F - .25F) * tileSize, .5F, (getHeight() / 2F + .25F) * tileSize);
+		// Panel outlines
+		v.rect(0, 0, (getWidth() - 2) * tileSize, (float)Math.floor(getHeight() / 2.0) * tileSize);
+		v.rect(0, getHeight() * tileSize, (getWidth() - 2) * tileSize, (float)Math.ceil(getHeight() / 2.0) * tileSize);
+		// Solar panels (top)
+//		v.beginShape(QUAD_STRIP);
+//		for(int i = 0; i < getWidth() * 2 - 4; i++) {
+//			v.vertex(i * tileSize,			0);
+//			v.vertex(i * tileSize,			tileSize);
+//			v.vertex((i - .5F) * tileSize,	tileSize);
+//		}
+//		v.endShape();
+		v.rectMode(CENTER);
 	}
 }
