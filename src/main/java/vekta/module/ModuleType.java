@@ -10,4 +10,6 @@ public enum ModuleType {
 	TELESCOPE,
 	DRILL,
 	UTILITY,
+	STRUCTURAL,
+	AESTHETIC
 }

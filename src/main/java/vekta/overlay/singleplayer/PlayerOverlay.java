@@ -23,10 +23,11 @@ public class PlayerOverlay implements Overlay, PlayerListener {
 	public void reset() {
 		overlays = new Overlay[] {
 				new TelemetryOverlay(player),
+				new MissionOverlay(player),
 				new ShipComputerOverlay(50, -150, player.getShip()),
 				new ShipEnergyOverlay(-300, -75, player.getShip()),
 				new ShipMoneyOverlay(-300, -50, player.getShip()),
-				notifications = new NotificationOverlay(600, -150),
+				notifications = new NotificationOverlay(v.width - 500, -v.height + 50),
 		};
 	}
 

@@ -19,7 +19,7 @@ public class StructuralModule extends ShipModule {
 
 	@Override
 	public ModuleType getType() {
-		return ModuleType.UTILITY;
+		return ModuleType.STRUCTURAL;
 	}
 
 	@Override
