@@ -106,13 +106,13 @@ public class SettingsMenuContext implements Context {
 			setContext(parent);
 		}
 		if(key == 'w') {
-			// Play the sound for changing menu selection
+			// Play the sound for changing inject selection
 			Resources.playSound("change");
 			selectedSetting = Math.max(selectedSetting - 1, 0);
 			v.redraw();
 		}
 		if(key == 's') {
-			// Play the sound for changing menu selection
+			// Play the sound for changing inject selection
 			Resources.playSound("change");
 			selectedSetting = Math.min(selectedSetting + 1, settingsOptions.size());
 			v.redraw();

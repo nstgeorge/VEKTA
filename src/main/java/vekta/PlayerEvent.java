@@ -5,6 +5,7 @@ import java.util.function.BiConsumer;
 public enum PlayerEvent {
 	KEY_PRESS(PlayerListener::onKeyPress),
 	KEY_RELEASE(PlayerListener::onKeyRelease),
+	MENU(PlayerListener::onMenu),
 	CHANGE_SHIP(PlayerListener::onChangeShip),
 	NOTIFICATION(PlayerListener::onNotification),
 	LAND(PlayerListener::onLand),

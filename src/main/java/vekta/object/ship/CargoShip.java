@@ -2,6 +2,7 @@ package vekta.object.ship;
 
 import processing.core.PVector;
 import vekta.Counter;
+import vekta.Player;
 import vekta.menu.Menu;
 import vekta.menu.option.LootMenuOption;
 
@@ -65,11 +66,11 @@ public class CargoShip extends Ship {
 	}
 
 	@Override
-	public void setupDockingMenu(ModularShip ship, Menu menu) {
-		menu.add(new LootMenuOption("Loot", ship.getInventory(), getInventory()));
+	public void setupDockingMenu(Player player, Menu menu) {
+		menu.add(new LootMenuOption("Loot", player.getShip().getInventory(), getInventory()));
 		
 		for(FighterShip fighter : fighters) {
-			fighter.setTarget(ship);
+			fighter.setTarget(player.getShip());
 		}
 	}
 

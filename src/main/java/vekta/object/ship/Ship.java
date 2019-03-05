@@ -1,6 +1,7 @@
 package vekta.object.ship;
 
 import processing.core.PVector;
+import vekta.Player;
 import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;
@@ -173,7 +174,7 @@ public abstract class Ship extends SpaceObject {
 		undock();
 	}
 
-	public void setupDockingMenu(ModularShip ship, Menu menu) {
+	public void setupDockingMenu(Player player, Menu menu) {
 	}
 
 	public void onDepart(SpaceObject obj) {

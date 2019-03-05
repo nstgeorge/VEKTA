@@ -10,7 +10,7 @@ import static processing.core.PConstants.CENTER;
 import static vekta.Vekta.v;
 
 /**
- * Main menu renderer
+ * Main inject renderer
  */
 public class MainMenuHandle extends MenuHandle {
 	public static final Hyperspace HYPERSPACE = new Hyperspace(

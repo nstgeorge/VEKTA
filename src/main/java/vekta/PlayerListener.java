@@ -1,5 +1,6 @@
 package vekta;
 
+import vekta.menu.Menu;
 import vekta.mission.Mission;
 import vekta.module.Module;
 import vekta.object.ship.ModularShip;
@@ -15,6 +16,9 @@ public interface PlayerListener {
 	}
 
 	default void onKeyRelease(char key) {
+	}
+
+	default void onMenu(Menu menu) {
 	}
 
 	default void onEvent(PlayerEvent event) {

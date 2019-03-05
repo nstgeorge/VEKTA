@@ -1,5 +1,7 @@
 package vekta.menu;// These will move into their own files once we migrate to Maven
 
+import vekta.Player;
+import vekta.PlayerEvent;
 import vekta.context.Context;
 import vekta.menu.handle.MenuHandle;
 import vekta.menu.option.MenuOption;
@@ -11,14 +13,28 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 public class Menu implements Context {
+	private final Player player;
 	private final MenuHandle handle;
 
 	private final List<MenuOption> options = new ArrayList<>();
 
 	private int index = 0;
 
-	public Menu(MenuHandle handle) {
+	public Menu(Player player, MenuHandle handle) {
+		this.player = player;
 		this.handle = handle;
+
+		if(getPlayer() != null) {
+			getPlayer().emit(PlayerEvent.MENU, this);
+		}
+	}
+
+	public MenuHandle getHandle() {
+		return handle;
+	}
+
+	public Player getPlayer() {
+		return player;
 	}
 
 	public MenuOption getCursor() {

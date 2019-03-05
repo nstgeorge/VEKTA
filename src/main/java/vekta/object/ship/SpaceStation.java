@@ -1,6 +1,7 @@
 package vekta.object.ship;
 
 import processing.core.PVector;
+import vekta.Player;
 import vekta.context.StationLayoutContext;
 import vekta.menu.Menu;
 import vekta.menu.option.BasicOption;
@@ -88,10 +89,11 @@ public class SpaceStation extends ModularShip {
 		}
 	}
 
+	// TODO: convert to event listener
 	@Override
-	public void setupDockingMenu(ModularShip ship, Menu menu) {
+	public void setupDockingMenu(Player player, Menu menu) {
 		menu.add(new BasicOption("Customize", () -> {
-			setContext(new StationLayoutContext(menu, this, ship));
+			setContext(new StationLayoutContext(menu, this, player));
 		}));
 	}
 

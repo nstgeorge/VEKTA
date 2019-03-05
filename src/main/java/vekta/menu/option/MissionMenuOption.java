@@ -26,7 +26,7 @@ public class MissionMenuOption implements MenuOption {
 
 	@Override
 	public void select(Menu menu) {
-		Menu sub = new Menu(new MissionMenuHandle(menu.getDefault()));
+		Menu sub = new Menu(menu.getPlayer(), new MissionMenuHandle(menu.getDefault()));
 		for(Mission mission : getPlayer().getMissions()) {
 			sub.add(new MissionOption(getPlayer(), mission));
 		}

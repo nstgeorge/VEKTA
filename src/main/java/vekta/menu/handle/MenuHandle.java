@@ -10,7 +10,7 @@ import static processing.core.PConstants.*;
 import static vekta.Vekta.*;
 
 /**
- * Default menu renderer implementation; draws buttons and select text
+ * Default inject renderer implementation; draws buttons and select text
  */
 public class MenuHandle {
 	private final MenuOption defaultOption;

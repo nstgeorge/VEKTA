@@ -36,7 +36,7 @@ public class TradeMenuOption implements MenuOption {
 
 	@Override
 	public void select(Menu menu) {
-		Menu sub = new Menu(new TradeMenuHandle(new BackOption(menu), buying, getTo()));
+		Menu sub = new Menu(menu.getPlayer(), new TradeMenuHandle(new BackOption(menu), buying, getTo()));
 		for(Item item : offers.keySet()) {
 			if(getFrom().has(item)) {
 				sub.add(new ItemTradeOption(buying, you, them, item, offers.get(item), true));

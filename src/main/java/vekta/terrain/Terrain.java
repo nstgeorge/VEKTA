@@ -46,5 +46,5 @@ public abstract class Terrain {
 
 	public abstract void setupLandingMenu(ModularShip ship, Menu menu);
 
-//	public abstract setupSurveyMenu(ModularShip ship, Menu menu);
+//	public abstract setupSurveyMenu(ModularShip ship, Menu inject);
 }

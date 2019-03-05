@@ -1,6 +1,8 @@
 package vekta.context;
 
+import vekta.Player;
 import vekta.Resources;
+import vekta.item.Inventory;
 import vekta.menu.Menu;
 import vekta.menu.handle.LoadoutMenuHandle;
 import vekta.menu.option.BackOption;
@@ -24,15 +26,23 @@ public class StationLayoutContext implements Context, Upgrader {
 
 	private final Context parent;
 	private final SpaceStation station;
-	private final ModularShip ship;
+	private final Player player;
 
 	private SpaceStation.Component cursor;
 	private final ComponentModule placementModule = new PlacementModule();
 
-	public StationLayoutContext(Context parent, SpaceStation station, ModularShip ship) {
+	public StationLayoutContext(Context parent, SpaceStation station, Player player) {
 		this.parent = parent;
 		this.station = station;
-		this.ship = ship;
+		this.player = player;
+	}
+
+	public Player getPlayer() {
+		return player;
+	}
+
+	public Inventory getPlayerInventory() {
+		return player.getShip().getInventory();
 	}
 
 	@Override
@@ -47,7 +57,6 @@ public class StationLayoutContext implements Context, Upgrader {
 		v.hint(DISABLE_DEPTH_TEST);
 		v.strokeWeight(.5F);
 
-		float tileSize = station.getTileSize();
 		SpaceStation.Component core = station.getCore();
 		if(cursor == null) {
 			cursor = core;
@@ -143,8 +152,8 @@ public class StationLayoutContext implements Context, Upgrader {
 				uninstallModule(cursor.getModule());
 			}
 			else if(isPlacing()) {
-				Menu menu = new Menu(new LoadoutMenuHandle(new BackOption(this), Collections.singletonList(cursor.getModule())));
-				for(Module module : ship.findUpgrades()) {
+				Menu menu = new Menu(getPlayer(), new LoadoutMenuHandle(new BackOption(this), Collections.singletonList(cursor.getModule())));
+				for(Module module : getPlayer().getShip().findUpgrades()) {
 					if(module instanceof ComponentModule) {
 						ComponentModule m = (ComponentModule)module;
 						if(isPlacing() ? cursor.isAttachable(cursor) : cursor.isReplaceable(m)) {
@@ -153,7 +162,7 @@ public class StationLayoutContext implements Context, Upgrader {
 					}
 				}
 				//			if(isCursorRemovable()) {
-				//				menu.add(new UninstallModuleOption(this, cursor.getModule()));
+				//				inject.add(new UninstallModuleOption(this, cursor.getModule()));
 				//			}
 				menu.addDefault();
 				setContext(menu);
@@ -184,7 +193,7 @@ public class StationLayoutContext implements Context, Upgrader {
 			return;
 		}
 
-		ship.getInventory().moveTo(station.getInventory()); // Transfer ship items to station
+		getPlayerInventory().moveTo(station.getInventory()); // Transfer ship items to station
 
 		if(isPlacing()) {
 			cursor = cursor.getParent().attach(cursor.getDirection(), (ComponentModule)module);
@@ -193,7 +202,7 @@ public class StationLayoutContext implements Context, Upgrader {
 			cursor.replaceModule((ComponentModule)module);
 		}
 
-		station.getInventory().moveTo(ship.getInventory()); // Return items to ship
+		station.getInventory().moveTo(getPlayerInventory()); // Return items to ship
 
 		setContext(this);
 	}
@@ -206,7 +215,7 @@ public class StationLayoutContext implements Context, Upgrader {
 
 		cursor.detach();
 		cursor = cursor.getParent();
-		station.getInventory().moveTo(ship.getInventory()); // Send items to ship
+		station.getInventory().moveTo(getPlayerInventory()); // Send items to ship
 
 		setContext(this);
 	}

@@ -28,7 +28,7 @@ public class ExtractMenuOption implements MenuOption {
 	@Override
 	public void select(Menu menu) {
 		Inventory loot = new Inventory();
-		Menu sub = new Menu(new LootMenuHandle(new BackOption(menu), loot));
+		Menu sub = new Menu(menu.getPlayer(), new LootMenuHandle(new BackOption(menu), loot));
 		int ct = (int)v.random(amount) + 1;
 		for(int i = 0; i < ct; i++) {
 			Item item = ItemGenerator.randomOre(site.getParent().getName());

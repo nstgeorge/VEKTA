@@ -9,7 +9,7 @@ import java.util.List;
 import static vekta.Vekta.v;
 
 /**
- * Module loadout menu renderer
+ * Module loadout inject renderer
  */
 public class LoadoutMenuHandle extends MenuHandle {
 	private final List<Module> modules;

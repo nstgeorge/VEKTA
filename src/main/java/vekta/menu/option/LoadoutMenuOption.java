@@ -28,7 +28,7 @@ public class LoadoutMenuOption implements MenuOption, Upgrader {
 
 	@Override
 	public void select(Menu menu) {
-		subMenu = new Menu(new LoadoutMenuHandle(menu.getDefault(), upgradeable.getModules()));
+		subMenu = new Menu(menu.getPlayer(), new LoadoutMenuHandle(menu.getDefault(), upgradeable.getModules()));
 		updateMenu();
 		setContext(subMenu);
 	}

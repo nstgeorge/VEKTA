@@ -5,12 +5,12 @@ import vekta.Resources;
 import static vekta.Vekta.*;
 
 /**
- * Pause menu implementation as a Context. Eventually this can be converted over to use a Menu for additional flexibility.
+ * Pause inject implementation as a Context. Eventually this can be converted over to use a Menu for additional flexibility.
  */
 public class PauseMenuContext implements Context {
 	private final World world;
 
-	// Pause menu options
+	// Pause inject options
 	private final String[] pauseMenu = {"Continue", "Restart", "Quit to Menu"};
 	private int selected = 0;
 
@@ -74,12 +74,12 @@ public class PauseMenuContext implements Context {
 			setContext(world);
 		}
 		else if(key == 'w') {
-			// Play the sound for changing menu selection
+			// Play the sound for changing inject selection
 			Resources.playSound("change");
 			selected = Math.max(selected - 1, 0);
 		}
 		else if(key == 's') {
-			// Play the sound for changing menu selection
+			// Play the sound for changing inject selection
 			Resources.playSound("change");
 			selected = Math.min(selected + 1, pauseMenu.length - 1);
 		}

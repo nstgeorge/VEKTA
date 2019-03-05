@@ -55,7 +55,7 @@ public class TelescopeModule extends ShipModule {
 				float maxDist = getResolution() * RANGE_SCALE;
 				if(dist <= maxDist) {
 					LandingSite site = ((TerrestrialPlanet)t.getTarget()).getLandingSite();
-					Menu menu = new Menu(new SurveyMenuHandle(new BackOption(getWorld()), site));
+					Menu menu = new Menu(getShip().getController(), new SurveyMenuHandle(new BackOption(getWorld()), site));
 					menu.addDefault();
 					setContext(menu);
 				}

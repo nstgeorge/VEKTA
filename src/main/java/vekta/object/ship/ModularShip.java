@@ -193,7 +193,7 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 		modules.add(module);
 		module.onInstall(this);
 		if(hasController()) {
-			if(module instanceof PlayerListener){
+			if(module instanceof PlayerListener) {
 				getController().addListener((PlayerListener)module);
 			}
 			getController().emit(PlayerEvent.INSTALL_MODULE, module);
@@ -206,7 +206,7 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 			getInventory().add(new ModuleItem(module));
 			module.onUninstall(this);
 			if(hasController()) {
-				if(module instanceof PlayerListener){
+				if(module instanceof PlayerListener) {
 					getController().removeListener((PlayerListener)module);
 				}
 				getController().emit(PlayerEvent.UNINSTALL_MODULE, module);
@@ -227,7 +227,7 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 		}
 
 		if(hasController()) {
-			// TODO: generalize menu shortcuts
+			// TODO: generalize inject shortcuts
 			if(key == 'v' || key == 'q' || key == 'e') {
 				Menu menu = openMenu();
 				for(MenuOption option : menu.getOptions()) {
@@ -254,7 +254,7 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 	}
 
 	public Menu openMenu() {
-		Menu menu = new Menu(new ObjectMenuHandle(new BackOption(getWorld()), this));
+		Menu menu = new Menu(getController(), new ObjectMenuHandle(new BackOption(getWorld()), this));
 		menu.add(new LoadoutMenuOption(this));
 		menu.add(new MissionMenuOption(getController()));
 		menu.addDefault();
@@ -266,7 +266,7 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 	@Override
 	public void onLand(LandingSite site) {
 		if(hasController()) {
-			Menu menu = new Menu(new LandingMenuHandle(site, getWorld()));
+			Menu menu = new Menu(getController(), new LandingMenuHandle(site, getWorld()));
 			for(Module m : getModules()) {
 				m.onLandingMenu(site, menu);
 			}
@@ -286,8 +286,8 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 		Resources.stopSound("engine");
 		if(hasController()) {
 			if(s instanceof Ship) {
-				Menu menu = new Menu(new ObjectMenuHandle(new ShipUndockOption(this, getWorld()), s));
-				((Ship)s).setupDockingMenu(this, menu);
+				Menu menu = new Menu(getController(), new ObjectMenuHandle(new ShipUndockOption(this, getWorld()), s));
+				((Ship)s).setupDockingMenu(getController(), menu);
 				menu.addDefault();
 				setContext(menu);
 			}

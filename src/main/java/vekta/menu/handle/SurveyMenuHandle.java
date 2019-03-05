@@ -9,7 +9,7 @@ import java.util.List;
 import static vekta.Vekta.*;
 
 /**
- * Main menu renderer
+ * Main inject renderer
  */
 public class SurveyMenuHandle extends MenuHandle {
 	private static final int PLANET_SIZE = 200;
