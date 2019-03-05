@@ -3,7 +3,7 @@ package vekta.terrain;
 import vekta.item.Inventory;
 import vekta.menu.Menu;
 import vekta.menu.option.LootMenuOption;
-import vekta.object.PlayerShip;
+import vekta.object.ship.PlayerShip;
 
 public class AbandonedTerrain extends Terrain {
 	private final Inventory inventory = new Inventory();

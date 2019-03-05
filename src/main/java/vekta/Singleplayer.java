@@ -6,10 +6,13 @@ import vekta.context.PauseMenuContext;
 import vekta.context.World;
 import vekta.item.ModuleItem;
 import vekta.object.*;
-import vekta.object.module.*;
-import vekta.object.module.station.SolarArrayModule;
-import vekta.object.module.station.StationCoreModule;
-import vekta.object.module.station.StructuralModule;
+import vekta.module.*;
+import vekta.module.station.SolarArrayModule;
+import vekta.module.station.StationCoreModule;
+import vekta.module.station.StructuralModule;
+import vekta.object.planet.Planet;
+import vekta.object.ship.PlayerShip;
+import vekta.object.ship.SpaceStation;
 import vekta.overlay.Overlay;
 import vekta.overlay.singleplayer.Notification;
 import vekta.overlay.singleplayer.NotificationOverlay;
@@ -89,7 +92,7 @@ public class Singleplayer implements World {
 		//// TEMP
 		playerShip.addModule(new AutopilotModule());
 		playerShip.addModule(new TelescopeModule(2));
-		playerShip.getInventory().add(new ModuleItem(new DrillModule(2)));
+		playerShip.addModule(new DrillModule(2));
 		playerShip.getInventory().add(new ModuleItem(new TorpedoModule(2)));
 		playerShip.getInventory().add(new ModuleItem(new HyperdriveModule(.5F)));
 		playerShip.getInventory().add(new ModuleItem(new TractorBeamModule(1)));
@@ -117,6 +120,7 @@ public class Singleplayer implements World {
 
 		v.clear();
 		v.rectMode(CENTER);
+		v.ellipseMode(RADIUS);
 
 		// Set up world camera
 		v.hint(ENABLE_DEPTH_TEST);
@@ -176,8 +180,18 @@ public class Singleplayer implements World {
 					}
 				}
 			}
-			s.draw();
+			
+			// Draw movement trail
 			s.drawTrail();
+
+			// Draw object
+			v.pushMatrix();
+			PVector position = s.getPositionReference();
+			v.translate(position.x, position.y);
+			v.stroke(s.getColor());
+			v.fill(0);
+			s.draw();
+			v.popMatrix();
 		}
 
 		objects.removeAll(markedForDeath);

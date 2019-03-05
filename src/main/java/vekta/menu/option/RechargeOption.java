@@ -1,7 +1,7 @@
 package vekta.menu.option;
 
 import vekta.menu.Menu;
-import vekta.object.ModularShip;
+import vekta.object.ship.ModularShip;
 
 public class RechargeOption implements MenuOption {
 	private final ModularShip ship;

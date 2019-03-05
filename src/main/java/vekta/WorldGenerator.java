@@ -2,7 +2,10 @@ package vekta;
 
 import processing.core.PVector;
 import vekta.item.Inventory;
-import vekta.object.*;
+import vekta.object.planet.*;
+import vekta.object.ship.CargoShip;
+import vekta.object.ship.PirateShip;
+import vekta.object.ship.Ship;
 import vekta.terrain.*;
 
 import static vekta.Vekta.*;
@@ -73,22 +76,13 @@ public class WorldGenerator {
 
 		int asteroids = (int)v.random(20);
 		for(int i = 0; i <= asteroids; i++) {
-			float power = pow(10, order - 4);
+			float power = pow(10, order - v.random(3, 4));
 			float radiusLoc = v.random(1000, 15000);
 			float speed = sqrt(G * centerMass / radiusLoc) / SCALE * v.random(.75F, 1.5F);
 			float mass = v.random(0.05F, 0.5F) * power;
-			float density = v.random(4, 8);
+			float density = v.random(2, 4);
 			float angle = v.random(360);
-			Terrain terrain = new AsteroidTerrain();
-			Planet asteroid = new Asteroid(
-					randomPlanetName(),
-					mass,
-					density,
-					terrain,
-					new PVector(radiusLoc, 0).rotate(angle).add(pos),
-					new PVector(),
-					randomPlanetColor());
-			addObject(asteroid);
+			Asteroid asteroid = createAsteroid(mass, density, new PVector(radiusLoc, 0).rotate(angle).add(pos));
 			asteroid.addVelocity(new PVector(0, speed).rotate(angle));
 		}
 	}
@@ -140,6 +134,20 @@ public class WorldGenerator {
 		);
 		addObject(planet);
 		return planet;
+	}
+
+	public static Asteroid createAsteroid(float mass, float density, PVector pos) {
+		AsteroidTerrain terrain = new AsteroidTerrain();
+		Asteroid asteroid = new Asteroid(
+				randomPlanetName(),
+				mass,
+				density,
+				terrain,
+				pos,
+				new PVector(),
+				randomPlanetColor());
+		addObject(asteroid);
+		return asteroid;
 	}
 
 	public static PVector randomSpawnPosition(PVector center) {

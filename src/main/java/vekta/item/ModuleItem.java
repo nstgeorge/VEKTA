@@ -1,6 +1,6 @@
 package vekta.item;
 
-import vekta.object.module.Module;
+import vekta.module.Module;
 
 public class ModuleItem extends Item {
 	private final Module module;

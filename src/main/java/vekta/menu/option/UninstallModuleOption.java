@@ -1,8 +1,8 @@
 package vekta.menu.option;
 
 import vekta.menu.Menu;
-import vekta.object.module.Module;
-import vekta.object.module.Upgrader;
+import vekta.module.Module;
+import vekta.module.Upgrader;
 
 public class UninstallModuleOption implements MenuOption {
 	private final Upgrader upgrader;
