@@ -5,10 +5,13 @@ import processing.core.PVector;
 import processing.sound.LowPass;
 import vekta.context.PauseMenuContext;
 import vekta.context.World;
+import vekta.item.Item;
+import vekta.item.ItemType;
 import vekta.item.ModuleItem;
-import vekta.mission.EquipModuleObjective;
-import vekta.mission.Mission;
 import vekta.mission.DockWithObjective;
+import vekta.mission.EquipModuleObjective;
+import vekta.mission.ItemReward;
+import vekta.mission.Mission;
 import vekta.module.*;
 import vekta.module.station.SolarArrayModule;
 import vekta.module.station.StationCoreModule;
@@ -109,15 +112,17 @@ public class Singleplayer implements World, PlayerListener {
 		playerShip.getInventory().add(new ModuleItem(new StructuralModule(3, 1)));
 
 		Mission mission2 = new Mission("Test Mission");
-		mission2.add(new DockWithObjective(station));
+		mission2.add(new DockWithObjective(station)
+			.then(new ));
 		mission2.start(player);
 
 		Mission mission = new Mission("Two-Option Mission");
 		mission.add(new DockWithObjective(station).optional());
 		mission.add(new EquipModuleObjective(new HyperdriveModule(1)).optional());
+		mission.add(new ItemReward(new Item("Extremely Valuable Thing", ItemType.LEGENDARY)));
 		mission.start(player);
 
-//		player.send("Test notification");///
+		//		player.send("Test notification");///
 	}
 
 	public Player getPlayer() {
@@ -294,6 +299,9 @@ public class Singleplayer implements World, PlayerListener {
 			SpaceObject s = (SpaceObject)object;
 			s.setID(nextID++);
 			markedForAddition.add(s);
+			if(object instanceof PlayerListener) {
+				getPlayer().addListener((PlayerListener)object);
+			}
 		}
 		else {
 			throw new RuntimeException("Cannot addFeature object: " + object);
@@ -304,6 +312,9 @@ public class Singleplayer implements World, PlayerListener {
 	public void removeObject(Object object) {
 		if(object instanceof SpaceObject) {
 			markedForDeath.add((SpaceObject)object);
+			if(object instanceof PlayerListener) {
+				getPlayer().removeListener((PlayerListener)object);
+			}
 		}
 		else {
 			throw new RuntimeException("Cannot remove object: " + object);
@@ -356,6 +367,7 @@ public class Singleplayer implements World, PlayerListener {
 
 	/**
 	 * Utility for drawing secondary details that will only appear after a certain zoom level.
+	 *
 	 * @param shape Shape to draw
 	 */
 	public void drawSecondary(PShape shape) {

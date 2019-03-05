@@ -10,6 +10,7 @@ import static vekta.Vekta.UI_COLOR;
 
 public class Mission {
 	private final List<Objective> objectives = new ArrayList<>();
+	private final List<Reward> rewards = new ArrayList<>();
 	private final List<MissionListener> listeners = new ArrayList<>();
 	private final List<Player> players = new ArrayList<>();
 
@@ -31,13 +32,22 @@ public class Mission {
 		return objectives;
 	}
 
-	public void add(Objective objective) {
-		getObjectives().add(objective);
-		addListener(objective);
+	public List<Reward> getRewards() {
+		return rewards;
 	}
 
-	public void addListener(MissionListener listener) {
+	public List<Player> getPlayers() {
+		return players;
+	}
+
+	public void add(MissionListener listener) {
 		listeners.add(listener);
+		if(listener instanceof Objective) {
+			getObjectives().add((Objective)listener);
+		}
+		if(listener instanceof Reward) {
+			getRewards().add((Reward)listener);
+		}
 	}
 
 	public Objective getCurrentObjective() {
@@ -51,7 +61,6 @@ public class Mission {
 
 		current = null;
 		boolean hasCompleted = false;
-		boolean optionCompleted = false;
 		for(Objective objective : getObjectives()) {
 			if(objective.getStatus() == MissionStatus.STARTED) {
 				if(current == null) {
@@ -99,7 +108,9 @@ public class Mission {
 		current = objectives.get(0);
 
 		player.emit(PlayerEvent.MISSION_STATUS, this);
-		player.send("Mission started: " + getName(), getStatus().getColor());
+		player.send("Mission started: " + getName())
+				.withColor(getStatus().getColor())
+				.withTime(2);
 	}
 
 	public void cancel() {
@@ -112,7 +123,9 @@ public class Mission {
 
 		for(Player p : players) {
 			p.emit(PlayerEvent.MISSION_STATUS, this);
-			p.send("Mission cancelled: " + getName(), getStatus().getColor());
+			p.send("Mission cancelled: " + getName())
+					.withColor(getStatus().getColor())
+					.withTime(2);
 		}
 	}
 
@@ -126,7 +139,9 @@ public class Mission {
 
 		for(Player p : players) {
 			p.emit(PlayerEvent.MISSION_STATUS, this);
-			p.send("Mission completed: " + getName(), UI_COLOR);
+			p.send("Mission completed: " + getName())
+					.withColor(UI_COLOR)
+					.withTime(2);
 		}
 	}
 }

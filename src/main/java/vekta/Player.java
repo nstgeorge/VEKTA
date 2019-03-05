@@ -99,15 +99,12 @@ public final class Player {
 		}
 	}
 
-	public void send(String notification) {
-		send(new Notification(notification));
+	public Notification send(String notification) {
+		return send(new Notification(notification));
 	}
 
-	public void send(String notification, int color) {
-		send(new Notification(notification, color));
-	}
-
-	public void send(Notification notification) {
+	public Notification send(Notification notification) {
 		emit(PlayerEvent.NOTIFICATION, notification);
+		return notification;
 	}
 }

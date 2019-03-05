@@ -46,7 +46,7 @@ public abstract class ShipModule implements ComponentModule {
 	}
 
 	protected final float chooseInclusive(float min, float max, float interval) {
-		return round(v.random(min, max) / interval) * interval;
+		return v.random(min * interval, max * interval) / interval;
 	}
 
 	public int getWidth() {

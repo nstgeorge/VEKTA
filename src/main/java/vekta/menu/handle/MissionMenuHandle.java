@@ -5,6 +5,7 @@ import vekta.menu.option.MenuOption;
 import vekta.menu.option.MissionOption;
 import vekta.mission.Mission;
 import vekta.mission.Objective;
+import vekta.mission.Reward;
 
 import java.util.List;
 
@@ -17,11 +18,6 @@ public class MissionMenuHandle extends MenuHandle {
 	public MissionMenuHandle(MenuOption defaultOption) {
 		super(defaultOption);
 	}
-
-	//	@Override
-	//	public int getSpacing() {
-	//		return 70;
-	//	}
 
 	@Override
 	public int getButtonWidth() {
@@ -64,6 +60,12 @@ public class MissionMenuHandle extends MenuHandle {
 			Objective objective = objectives.get(i);
 			v.fill(objective.getStatus().getColor());
 			v.text(objective.getDisplayText(), missionX + 20, getButtonY(i));
+		}
+		List<Reward> rewards = mission.getRewards();
+		for(int i = 0; i < rewards.size(); i++) {
+			Reward reward = rewards.get(i);
+			v.fill(reward.getColor());
+			v.text(reward.getDisplayText(), missionX + 20, getButtonY(objectives.size() + i));
 		}
 	}
 }

@@ -96,7 +96,7 @@ public abstract class SpaceObject {
 	}
 
 	/**
-	 * Gets the color of the object
+	 * Gets the withColor of the object
 	 */
 	public int getColor() {
 		return color;
@@ -178,7 +178,7 @@ public abstract class SpaceObject {
 			if(newPos == null) {
 				break;
 			}
-			// Set the color and render the line segment
+			// Set the withColor and render the line segment
 			v.stroke(v.lerpColor(getColor(), v.color(0), (float)i / trail.length));
 			v.line(oldPos.x, oldPos.y, newPos.x, newPos.y);
 		}

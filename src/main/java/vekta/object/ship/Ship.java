@@ -80,7 +80,7 @@ public abstract class Ship extends SpaceObject {
 		if(dock != null) {
 			PVector offset = getPosition().sub(dock.getPosition());
 			setVelocity(dock.getVelocity().add(offset.copy().mult(.1F)));
-			position.add(offset.setMag(getRadius() * 2 + dock.getRadius() - offset.mag()));
+			position.add(offset.setMag(getRadius() * 4 + dock.getRadius() - offset.mag()));
 			this.dock = null;
 			onDepart(dock);
 		}

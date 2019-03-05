@@ -60,7 +60,8 @@ public class TelescopeModule extends ShipModule {
 					setContext(menu);
 				}
 				else if(getShip().hasController()) {
-					getShip().getController().send("Out of range! (" + round(maxDist / dist * 100) + "% resolution)");
+					getShip().getController().send("Out of range! (" + round(maxDist / dist * 100) + "% resolution)")
+							.withTime(.5F);
 				}
 			}
 		}

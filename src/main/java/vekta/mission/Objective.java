@@ -4,6 +4,9 @@ import vekta.Player;
 import vekta.PlayerListener;
 import vekta.object.SpaceObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static vekta.Vekta.MISSION_COLOR;
 
 public abstract class Objective implements MissionListener, PlayerListener {
@@ -13,7 +16,7 @@ public abstract class Objective implements MissionListener, PlayerListener {
 	private MissionStatus status = MissionStatus.READY;
 
 	private boolean optional;
-	private Objective next;
+	private List<Objective> next = new ArrayList<>();
 
 	public boolean isOptional() {
 		return optional;
@@ -24,17 +27,8 @@ public abstract class Objective implements MissionListener, PlayerListener {
 		return this;
 	}
 
-	public Objective getNext() {
-		return next;
-	}
-
 	public Objective then(Objective next) {
-		if(this.next != null) {
-			this.next.then(next);
-		}
-		else {
-			this.next = next;
-		}
+		this.next.add(next);
 		return this;
 	}
 
@@ -68,16 +62,18 @@ public abstract class Objective implements MissionListener, PlayerListener {
 		}
 		this.status = status;
 		if(status == MissionStatus.CANCELLED) {
-			getPlayer().send("Objective cancelled: " + getDisplayText(), MISSION_COLOR);
+			getPlayer().send("Objective cancelled: " + getDisplayText())
+					.withColor(MISSION_COLOR);
 			if(isOptional()) {
 				getMission().cancel();
 			}
 		}
 		else if(status == MissionStatus.COMPLETED) {
-			getPlayer().send("Objective completed: " + getDisplayText(), MISSION_COLOR);
-			if(getNext() != null) {
-				getMission().add(getNext());
-				getNext().start();
+			getPlayer().send("Objective completed: " + getDisplayText())
+					.withColor(MISSION_COLOR);
+			for(Objective objective : next) {
+				getMission().add(objective);
+				objective.start();
 			}
 		}
 		getMission().updateCurrentObjective();

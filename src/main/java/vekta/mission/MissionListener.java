@@ -3,9 +3,12 @@ package vekta.mission;
 import vekta.Player;
 
 public interface MissionListener {
-	void onStart(Mission mission, Player player);
+	default void onStart(Mission mission, Player player) {
+	}
 
-	void onComplete(Mission mission);
+	default void onComplete(Mission mission) {
+	}
 
-	void onCancel(Mission mission);
+	default void onCancel(Mission mission) {
+	}
 }

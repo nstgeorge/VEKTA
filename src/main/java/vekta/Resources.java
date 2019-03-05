@@ -133,7 +133,7 @@ public class Resources {
 					sound.amp(volume);
 					sound.loop();
 				}
-				// Keep track for next time
+				// Keep track for next withTime
 				currentMusic = sound;
 			}
 		}
