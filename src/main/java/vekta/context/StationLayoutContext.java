@@ -219,12 +219,12 @@ public class StationLayoutContext implements Context, Upgrader {
 
 	private final class PlacementModule implements ComponentModule {
 		@Override
-		public float getWidth() {
+		public int getWidth() {
 			return 1;
 		}
 
 		@Override
-		public float getHeight() {
+		public int getHeight() {
 			return 1;
 		}
 

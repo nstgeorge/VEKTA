@@ -40,12 +40,12 @@ public class SolarArrayModule extends GeneratorModule {
 	}
 
 	@Override
-	public float getWidth() {
+	public int getWidth() {
 		return 10;
 	}
 
 	@Override
-	public float getHeight() {
+	public int getHeight() {
 		return 5;
 	}
 

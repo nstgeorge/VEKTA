@@ -33,12 +33,12 @@ public class StructuralModule extends ShipModule {
 	}
 
 	@Override
-	public float getWidth() {
+	public int getWidth() {
 		return width;
 	}
 
 	@Override
-	public float getHeight() {
+	public int getHeight() {
 		return height;
 	}
 }
