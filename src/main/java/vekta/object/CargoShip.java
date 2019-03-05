@@ -22,7 +22,7 @@ public class CargoShip extends Ship {
 
 	private final Counter steerCt = new Counter();
 
-	private final List<FighterShip> reinforcements = new ArrayList<>();
+	private final List<FighterShip> fighters = new ArrayList<>();
 
 	public CargoShip(String name, PVector heading, PVector position, PVector velocity, int color) {
 		super(name, heading, position, velocity, color, DEF_SPEED, DEF_TURN);
@@ -36,7 +36,7 @@ public class CargoShip extends Ship {
 					velocity,
 					getColor()
 			);
-			reinforcements.add(fighter);
+			fighters.add(fighter);
 			fighter.setTarget(this); // Follow cargo ship
 		}
 	}
@@ -64,9 +64,9 @@ public class CargoShip extends Ship {
 
 	@Override
 	public void setupDockingMenu(PlayerShip ship, Menu menu) {
-		menu.add(new LootMenuOption("Loot", getInventory(), ship.getInventory()));
+		menu.add(new LootMenuOption("Loot", ship.getInventory(), getInventory()));
 		
-		for(FighterShip fighter : reinforcements) {
+		for(FighterShip fighter : fighters) {
 			fighter.setTarget(ship);
 		}
 	}
