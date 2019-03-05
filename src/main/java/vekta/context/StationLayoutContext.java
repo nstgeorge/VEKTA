@@ -45,6 +45,7 @@ public class StationLayoutContext implements Context, Upgrader {
 		v.camera();
 		v.noLights();
 		v.hint(DISABLE_DEPTH_TEST);
+		v.strokeWeight(.5F);
 
 		float tileSize = station.getTileSize();
 		SpaceStation.Component core = station.getCore();
@@ -91,6 +92,7 @@ public class StationLayoutContext implements Context, Upgrader {
 		if(!cursor.hasChildren()) {
 			v.text("X to " + (isPlacing() ? "INSTALL" : "REMOVE"), v.width / 2F, v.height - 32);
 		}
+		v.strokeWeight(1);
 	}
 
 	public void moveCursor(SpaceStation.Direction dir) {

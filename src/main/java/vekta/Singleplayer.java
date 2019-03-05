@@ -13,6 +13,7 @@ import vekta.mission.EquipModuleObjective;
 import vekta.mission.ItemReward;
 import vekta.mission.Mission;
 import vekta.module.*;
+import vekta.module.station.SensorModule;
 import vekta.module.station.SolarArrayModule;
 import vekta.module.station.StationCoreModule;
 import vekta.module.station.StructuralModule;
@@ -100,7 +101,7 @@ public class Singleplayer implements World, PlayerListener {
 		SpaceStation.Component panel = struct.attach(SpaceStation.Direction.LEFT, new SolarArrayModule(1));
 		SpaceStation.Component panel2 = struct.attach(SpaceStation.Direction.DOWN, new SolarArrayModule(1));
 		SpaceStation.Component panel3 = struct2.attach(SpaceStation.Direction.RIGHT, new SolarArrayModule(1));
-		SpaceStation.Component panel4 = struct2.attach(SpaceStation.Direction.DOWN, new SolarArrayModule(1));
+		SpaceStation.Component sensor = struct2.attach(SpaceStation.Direction.LEFT, new SensorModule());
 		addObject(station);
 
 		playerShip.addModule(new AutopilotModule());

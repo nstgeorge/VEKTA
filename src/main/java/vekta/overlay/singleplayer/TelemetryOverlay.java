@@ -80,7 +80,7 @@ public class TelemetryOverlay implements Overlay {
 				targetString = "PLANET [1], SHIP [2], ASTEROID [3]";
 			}
 			else {
-				float mass = (float)round(target.getMass()) / 1000;
+				float mass = (float)round(target.getMass() * 1000) / 1000;
 				String unit = "tonnes";
 				if(mass >= SUN_MASS) {
 					mass = (float)round(target.getMass() / SUN_MASS * 1000) / 1000;
@@ -103,29 +103,14 @@ public class TelemetryOverlay implements Overlay {
 				v.stroke(target.getColor());
 			}
 			v.text("Target: " + targetString, 50, v.height - 100);
-
-			// Draw mission interface
 			Mission mission = player.getCurrentMission();
 			if(mission != null) {
-				List<Objective> objectives = mission.getObjectives();
 				Objective current = mission.getCurrentObjective();
 				SpaceObject objTarget = current.getSpaceObject();
-
 				// Draw objective direction dial
-				if(objTarget != null && objTarget != targeter.getTarget()) {
-					drawDial("Objective", objTarget.getPosition().sub(ship.getPosition()), 600, dialHeight, objTarget.getColor());
+				if (objTarget != null && objTarget != targeter.getTarget()) {
+					drawDial("Objective", objTarget.getPosition().sub(ship.getPosition()), v.width - 630, dialHeight, objTarget.getColor());
 					//				v.fill(objTarget.getColor());
-				}
-
-				// Draw mission/objective text
-				v.fill(MISSION_COLOR);
-				v.textSize(24);
-				v.text(mission.getName(), 700, v.height - 90);
-				for(int i = 0; i < objectives.size(); i++) {
-					Objective objective = objectives.get(i);
-					v.fill(objective == current ? MISSION_COLOR : objective.getStatus().getColor());
-					v.textSize(16);
-					v.text(objective.getDisplayText(), 700, v.height - 50 + i * 20);
 				}
 			}
 		}
