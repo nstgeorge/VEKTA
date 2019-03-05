@@ -44,7 +44,7 @@ public class HyperdriveModule extends ShipModule {
 
 	@Override
 	public Module getVariant() {
-		return new HyperdriveModule(chooseInclusive(1, 2, .5F));
+		return new HyperdriveModule(chooseInclusive(.1F, 1, .1F));
 	}
 
 	@Override

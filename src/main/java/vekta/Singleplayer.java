@@ -90,7 +90,7 @@ public class Singleplayer implements World {
 		playerShip.addModule(new AutopilotModule());
 		playerShip.getInventory().add(new ModuleItem(new DrillModule(2)));
 		playerShip.getInventory().add(new ModuleItem(new TorpedoModule(2)));
-		playerShip.getInventory().add(new ModuleItem(new HyperdriveModule(1)));
+		playerShip.getInventory().add(new ModuleItem(new HyperdriveModule(.5F)));
 		playerShip.getInventory().add(new ModuleItem(new TractorBeamModule(1)));
 		playerShip.getInventory().add(new ModuleItem(new StructuralModule(3, 1)));
 		////
