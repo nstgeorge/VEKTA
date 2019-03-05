@@ -63,7 +63,7 @@ public class HyperdriveModule extends ShipModule {
 		if(movingFast && thrust > 0) {
 			startHyperdrive();
 		}
-		if(!movingFast && thrust < 0) {
+		if((!movingFast && thrust < 0) || !ship.hasEnergy()) {
 			endHyperdrive();
 		}
 
