@@ -52,6 +52,16 @@ public final class Player {
 					break;
 				}
 			}
+
+			@Override
+			public void onKeyPress(char key) {
+				if(key == 'o' && getCurrentMission() != null) {
+					getCurrentMission().cycleObjective();
+				}
+				if(key == 'p') {
+					setCurrentMission(missions.get((missions.indexOf(getCurrentMission()) + 1) % missions.size()));
+				}
+			}
 		});
 	}
 
@@ -79,8 +89,8 @@ public final class Player {
 		this.listeners.add(listener);
 	}
 
-	public void removeListener(PlayerListener listener) {
-		this.listeners.remove(listener);
+	public boolean removeListener(PlayerListener listener) {
+		return this.listeners.remove(listener);
 	}
 
 	public void emit(PlayerEvent event, Object data) {

@@ -123,7 +123,7 @@ public class TelemetryOverlay implements Overlay {
 				v.text(mission.getName(), 700, v.height - 90);
 				for(int i = 0; i < objectives.size(); i++) {
 					Objective objective = objectives.get(i);
-					v.fill(objective.getStatus().getColor());
+					v.fill(objective == current ? MISSION_COLOR : objective.getStatus().getColor());
 					v.textSize(16);
 					v.text(objective.getDisplayText(), 700, v.height - 50 + i * 20);
 				}

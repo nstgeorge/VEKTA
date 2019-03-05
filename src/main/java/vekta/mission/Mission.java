@@ -74,6 +74,12 @@ public class Mission {
 		}
 	}
 
+	public void cycleObjective() {
+		if(objectives.size() > 0) {
+			current = objectives.get((objectives.indexOf(current) + 1) % objectives.size());
+		}
+	}
+
 	public MissionStatus getStatus() {
 		return status;
 	}
@@ -89,8 +95,8 @@ public class Mission {
 		}
 
 		players.add(player);
-		
-		current = getObjectives().get(0);
+
+		current = objectives.get(0);
 
 		player.emit(PlayerEvent.MISSION_STATUS, this);
 		player.send("Mission started: " + getName(), getStatus().getColor());
@@ -101,9 +107,9 @@ public class Mission {
 		for(MissionListener listener : listeners) {
 			listener.onCancel(this);
 		}
-		
+
 		current = null;
-		
+
 		for(Player p : players) {
 			p.emit(PlayerEvent.MISSION_STATUS, this);
 			p.send("Mission cancelled: " + getName(), getStatus().getColor());
@@ -117,7 +123,7 @@ public class Mission {
 		}
 
 		current = null;
-		
+
 		for(Player p : players) {
 			p.emit(PlayerEvent.MISSION_STATUS, this);
 			p.send("Mission completed: " + getName(), UI_COLOR);

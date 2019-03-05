@@ -1,10 +1,7 @@
 package vekta.object.ship;
 
 import processing.core.PVector;
-import vekta.Player;
-import vekta.PlayerEvent;
-import vekta.Resources;
-import vekta.Vekta;
+import vekta.*;
 import vekta.item.Item;
 import vekta.item.ModuleItem;
 import vekta.menu.Menu;
@@ -196,6 +193,9 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 		modules.add(module);
 		module.onInstall(this);
 		if(hasController()) {
+			if(module instanceof PlayerListener){
+				getController().addListener((PlayerListener)module);
+			}
 			getController().emit(PlayerEvent.INSTALL_MODULE, module);
 		}
 	}
@@ -206,6 +206,9 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 			getInventory().add(new ModuleItem(module));
 			module.onUninstall(this);
 			if(hasController()) {
+				if(module instanceof PlayerListener){
+					getController().removeListener((PlayerListener)module);
+				}
 				getController().emit(PlayerEvent.UNINSTALL_MODULE, module);
 			}
 		}
