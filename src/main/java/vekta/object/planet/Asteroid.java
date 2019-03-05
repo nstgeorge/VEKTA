@@ -14,7 +14,7 @@ public class Asteroid extends TerrestrialPlanet {
 		super(name, mass, density, terrain, position, velocity, color);
 
 		angle = v.random(TWO_PI);
-		skew = v.random(.25F, 1);
+		skew = v.random(.5F, 1);
 	}
 
 	@Override

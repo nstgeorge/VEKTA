@@ -113,8 +113,7 @@ public class Singleplayer implements World, PlayerListener {
 		playerShip.getInventory().add(new ModuleItem(new StructuralModule(3, 1)));
 
 		Mission mission2 = new Mission("Test Mission");
-		mission2.add(new DockWithObjective(station)
-			.then(new ));
+		mission2.add(new DockWithObjective(station));
 		mission2.start(player);
 
 		Mission mission = new Mission("Two-Option Mission");
