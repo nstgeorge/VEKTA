@@ -47,8 +47,21 @@ public class SensorModule implements ComponentModule {
         v.vertex(.4F * getWidth() * tileSize,   .3F * getHeight() * tileSize);
         v.vertex(.2F * getWidth() * tileSize,   .4F * getHeight() * tileSize);
         v.vertex(.1F * getWidth() * tileSize,   .4F * getHeight() * tileSize);
-        //Second Sensor
 
+        // Middle area
+        v.vertex(.2F * getWidth() * tileSize,   .4F * getHeight() * tileSize);
+        v.vertex(.2F * getWidth() * tileSize,   .5F * getHeight() * tileSize);
+        v.vertex(.1F * getWidth() * tileSize,   .5F * getHeight() * tileSize);
+        v.vertex(.2F * getWidth() * tileSize,   .5F * getHeight() * tileSize);
+        v.vertex(.2F * getWidth() * tileSize,   .6F * getHeight() * tileSize);
+
+        // Second sensor
+        v.vertex(.1F * getWidth() * tileSize,   .6F * getHeight() * tileSize);
+        v.vertex(.4F * getWidth() * tileSize,   .6F * getHeight() * tileSize);
+        v.vertex(.4F * getWidth() * tileSize,   .8F * getHeight() * tileSize);
+        v.vertex(.1F * getWidth() * tileSize,   .8F * getHeight() * tileSize);
+        v.vertex(.2F * getWidth() * tileSize,   .8F * getHeight() * tileSize);
+        v.vertex(.1F * getWidth() * tileSize,   1F * getHeight() * tileSize);
 
         v.endShape(CLOSE);
 
