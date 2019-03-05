@@ -1,17 +1,17 @@
 package vekta.object;
 
-import processing.core.PApplet;
 import processing.core.PVector;
 
 import static processing.core.PApplet.sqrt;
 import static processing.core.PConstants.CLOSE;
+import static processing.core.PConstants.HALF_PI;
 import static vekta.Vekta.v;
 
 public class HomingProjectile extends Projectile {
 	private static final float HOMING_ACCEL = .1F;
 	private static final float HOMING_DAMPEN = .98F;
 
-	private static final float RADIUS = 2;
+	private static final float RADIUS = 3;
 	private final SpaceObject target;
 	private final float speed;
 
@@ -44,18 +44,14 @@ public class HomingProjectile extends Projectile {
 
 	@Override
 	public void draw() {
-		float theta = velocity.heading() + PApplet.radians(90);
+		float theta = velocity.heading() + HALF_PI;
 		v.fill(0);
 		v.stroke(getColor());
-		v.pushMatrix();
-		v.translate(position.x, position.y);
 		v.rotate(theta);
 		v.beginShape();
 		v.vertex(0, -RADIUS);
 		v.vertex(-RADIUS, RADIUS);
 		v.vertex(RADIUS, RADIUS);
 		v.endShape(CLOSE);
-		v.popMatrix();
-
 	}
 }  

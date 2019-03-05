@@ -1,11 +1,11 @@
 package vekta.overlay.singleplayer;
 
 import processing.core.PVector;
-import vekta.object.Planet;
-import vekta.object.PlayerShip;
+import vekta.module.ModuleType;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
-import vekta.object.module.ModuleType;
+import vekta.object.planet.Planet;
+import vekta.object.ship.PlayerShip;
 import vekta.overlay.Overlay;
 
 import static processing.core.PApplet.*;
@@ -15,6 +15,9 @@ import static vekta.Vekta.UI_COLOR;
 import static vekta.Vekta.v;
 
 public class TelemetryOverlay implements Overlay {
+	private static final float EARTH_MASS = 5.9736e24F;
+	private static final float SUN_MASS = 1.989e30F;
+
 	private final PlayerShip ship;
 
 	private Targeter targeter;
@@ -41,6 +44,8 @@ public class TelemetryOverlay implements Overlay {
 			updateUIInformation();
 		}
 
+		float dialHeight = v.height - 70;
+
 		// Draw telemetry bar
 		v.fill(0);
 		v.stroke(UI_COLOR);
@@ -55,8 +60,8 @@ public class TelemetryOverlay implements Overlay {
 		if(velocity.magSq() == 0) {
 			velocity.set(heading);
 		}
-		drawDial("Heading", ship.getHeading(), v.width - 370, v.height - 65, v.color(0, 255, 0));
-		drawDial("Velocity", velocity, v.width - 500, v.height - 65, v.color(0, 255, 0));
+		drawDial("Heading", ship.getHeading(), v.width - 370, dialHeight, v.color(0, 255, 0));
+		drawDial("Velocity", velocity, v.width - 500, dialHeight, v.color(0, 255, 0));
 
 		// Targeter information
 		if(targeter != null) {
@@ -65,18 +70,18 @@ public class TelemetryOverlay implements Overlay {
 			if(target == null) {
 				v.fill(100, 100, 100);
 				v.stroke(UI_COLOR);
-				targetString = "planet [1], ship [2]";
+				targetString = "PLANET [1], SHIP [2], ASTEROID [3]";
 			}
 			else {
-				float mass;
-				String unit;
-				if(target.getMass() / 1.989e30 < .1) {
-					mass = (float)round(target.getMass() / 5.9736e24F * 1000) / 1000;
-					unit = "Earths";
-				}
-				else {
-					mass = (float)round(target.getMass() / 1.989e30F * 1000) / 1000;
+				float mass = (float)round(target.getMass()) / 1000;
+				String unit = "tonnes";
+				if(mass >= SUN_MASS) {
+					mass = (float)round(target.getMass() / SUN_MASS * 1000) / 1000;
 					unit = "Suns";
+				}
+				else if(mass >= EARTH_MASS) {
+					mass = (float)round(target.getMass() / EARTH_MASS * 1000) / 1000;
+					unit = "Earths";
 				}
 				if(target instanceof Planet) {
 					Planet closestPlanet = (Planet)target;
@@ -86,7 +91,7 @@ public class TelemetryOverlay implements Overlay {
 					targetString = target.getName() + " - " + distString + " AU \nSpeed: " + (float)round(target.getVelocity().mag() * 100) / 100 + "\nMass: " + mass + " " + unit;
 				}
 				// Closest object arrow
-				drawDial("Direction", target.getPosition().sub(ship.getPosition()), 450, v.height - 65, target.getColor());
+				drawDial("Direction", target.getPosition().sub(ship.getPosition()), 450, dialHeight, target.getColor());
 				v.fill(target.getColor());
 				v.stroke(target.getColor());
 			}
@@ -94,22 +99,24 @@ public class TelemetryOverlay implements Overlay {
 		}
 	}
 
-	private void drawDial(String name, PVector info, int locX, int locY, int c) {
-		int radius = 50;
+	private void drawDial(String name, PVector info, float locX, float locY, int c) {
+		v.strokeWeight(2);
+		float radius = 50;
 		v.fill(0);
 		v.stroke(c);
 		v.ellipse(locX, locY, radius, radius);
 		v.fill(100, 100, 100);
 		v.textAlign(CENTER);
 		v.textSize(14);
-		v.text(name, locX, locY + 25);
+		v.text(name, locX, locY + radius / 2);
 		v.textAlign(LEFT);
 		v.textSize(16);
 		v.stroke(c);
 		drawArrow(info, (int)(radius * .8), locX, locY);
+		v.strokeWeight(1);
 	}
 
-	private void drawArrow(PVector heading, int length, int locX, int locY) {
+	private void drawArrow(PVector heading, float length, float locX, float locY) {
 		heading.normalize().mult(length);
 		v.line(locX, locY, locX + heading.x, locY + heading.y);
 		float angle = heading.heading();

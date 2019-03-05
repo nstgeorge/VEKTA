@@ -4,12 +4,13 @@ import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.item.ItemType;
 import vekta.item.ModuleItem;
-import vekta.object.module.*;
-import vekta.object.module.station.SolarArrayModule;
-import vekta.object.module.station.StationCoreModule;
-import vekta.object.module.station.StructuralModule;
+import vekta.module.*;
+import vekta.module.station.SolarArrayModule;
+import vekta.module.station.StationCoreModule;
+import vekta.module.station.StructuralModule;
 
-import static vekta.Vekta.*;
+import static vekta.Vekta.round;
+import static vekta.Vekta.v;
 
 public class ItemGenerator {
 
@@ -99,4 +100,4 @@ public class ItemGenerator {
 		}
 		return name;
 	}
-}  
+}

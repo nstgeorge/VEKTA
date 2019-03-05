@@ -1,6 +1,6 @@
 package vekta.overlay.singleplayer;
 
-import vekta.object.PlayerShip;
+import vekta.object.ship.PlayerShip;
 import vekta.overlay.TextOverlay;
 
 import static vekta.Vekta.UI_COLOR;

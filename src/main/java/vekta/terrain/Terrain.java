@@ -1,7 +1,7 @@
 package vekta.terrain;
 
 import vekta.menu.Menu;
-import vekta.object.PlayerShip;
+import vekta.object.ship.PlayerShip;
 
 import java.util.ArrayList;
 import java.util.Collections;

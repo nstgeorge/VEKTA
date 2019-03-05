@@ -51,10 +51,7 @@ public class Projectile extends SpaceObject {
 
 	@Override
 	public void draw() {
-		v.stroke(getColor());
-		v.fill(0);
-		v.ellipseMode(RADIUS);
-		v.ellipse(position.x, position.y, radius, radius);
+		v.ellipse(0, 0, radius, radius);
 	}
 
 	@Override
@@ -63,13 +60,12 @@ public class Projectile extends SpaceObject {
 	}
 
 	/**
-	 * Override to always destroyBecause projectiles on impact
+	 * Override to always destroy projectiles on impact
 	 */
 	@Override
 	public void onCollide(SpaceObject s) {
-		//		super.onCollide(s);
 		destroyBecause(s);
-		s.destroyBecause(this); // TODO: switch out with imparting damage
+		s.destroyBecause(this); // TODO: switch to imparting damage
 		getWorld().playSound("explosion", getPosition());
 	}
 }  

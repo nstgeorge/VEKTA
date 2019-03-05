@@ -1,8 +1,8 @@
 package vekta.menu.option;
 
-import vekta.object.module.Upgrader;
+import vekta.module.Upgrader;
 import vekta.menu.Menu;
-import vekta.object.module.Module;
+import vekta.module.Module;
 
 import static vekta.Vekta.v;
 

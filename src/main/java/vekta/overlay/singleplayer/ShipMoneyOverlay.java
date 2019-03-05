@@ -1,6 +1,6 @@
 package vekta.overlay.singleplayer;
 
-import vekta.object.PlayerShip;
+import vekta.object.ship.PlayerShip;
 
 /**
  * Ship stats (energy, money, etc.)

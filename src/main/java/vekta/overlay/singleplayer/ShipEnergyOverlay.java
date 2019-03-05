@@ -1,6 +1,6 @@
 package vekta.overlay.singleplayer;
 
-import vekta.object.PlayerShip;
+import vekta.object.ship.PlayerShip;
 
 import static vekta.Vekta.v;
 

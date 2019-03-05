@@ -5,7 +5,7 @@ import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.menu.option.TradeMenuOption;
-import vekta.object.PlayerShip;
+import vekta.object.ship.PlayerShip;
 
 import java.util.HashMap;
 import java.util.Map;

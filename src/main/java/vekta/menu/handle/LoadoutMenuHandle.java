@@ -2,7 +2,7 @@ package vekta.menu.handle;
 
 import vekta.menu.Menu;
 import vekta.menu.option.MenuOption;
-import vekta.object.module.Module;
+import vekta.module.Module;
 
 import java.util.List;
 

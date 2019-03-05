@@ -48,14 +48,9 @@ public class CargoCrate extends SpaceObject {
 
 	@Override
 	public void draw() {
-		v.stroke(getColor());
-		v.fill(0);
-		v.pushMatrix();
-		v.translate(position.x, position.y);
 		v.rotate(angle);
 		float r = getRadius();
 		v.rect(0, 0, r, r);
-		v.popMatrix();
 	}
 
 	@Override

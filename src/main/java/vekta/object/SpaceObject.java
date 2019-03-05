@@ -61,6 +61,13 @@ public abstract class SpaceObject {
 	}
 
 	/**
+	 * Gets a reference to the object's position
+	 */
+	public final PVector getPositionReference() {
+		return position;
+	}
+
+	/**
 	 * Gets the velocity of the object
 	 */
 	public final PVector getVelocity() {

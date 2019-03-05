@@ -2,10 +2,10 @@ package vekta.menu.option;
 
 import vekta.menu.Menu;
 import vekta.menu.handle.LoadoutMenuHandle;
-import vekta.object.ModularShip;
-import vekta.object.module.Module;
-import vekta.object.module.Upgradeable;
-import vekta.object.module.Upgrader;
+import vekta.object.ship.ModularShip;
+import vekta.module.Module;
+import vekta.module.Upgradeable;
+import vekta.module.Upgrader;
 
 import static vekta.Vekta.setContext;
 
