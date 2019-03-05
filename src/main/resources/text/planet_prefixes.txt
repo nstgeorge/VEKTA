@@ -26,3 +26,5 @@ Noctu
 Juno
 Dune
 Compu
+Frodo
+Har

@@ -44,7 +44,7 @@ public class BatteryModule extends ShipModule {
 
 	@Override
 	public Module getVariant() {
-		BatteryModule battery = new BatteryModule(chooseInclusive(1, 20) * 10);
+		BatteryModule battery = new BatteryModule(chooseInclusive(1, 50) * 10);
 		battery.charge = choose(0, battery.getCapacity());
 		return battery;
 	}

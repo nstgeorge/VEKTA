@@ -62,7 +62,7 @@ public class WorldGenerator {
 		int planets = (int)v.random(1, 8);
 		for(int i = 0; i <= planets; i++) {
 			float power = (float)Math.pow(10, order - 1);
-			float radiusLoc = v.random(500, 5000);
+			float radiusLoc = v.random(1000, 8000);
 			float speed = sqrt(G * centerMass / radiusLoc) / SCALE;
 			float mass = v.random(0.05F, 0.5F) * power;
 			float density = v.random(4, 8);

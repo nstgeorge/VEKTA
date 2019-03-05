@@ -54,7 +54,7 @@ public class Singleplayer implements World {
 
 		Resources.setMusic("atmosphere");
 
-		WorldGenerator.createSystem(PVector.random2D().mult(v.random(5000, 10000)));
+		WorldGenerator.createSystem(PVector.random2D().mult(v.random(10000, 15000)));
 
 		playerShip = new PlayerShip(
 				"VEKTA I",
