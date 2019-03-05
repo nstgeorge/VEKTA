@@ -55,20 +55,17 @@ public class FighterShip extends Ship implements Targeter {
 
 	@Override
 	public boolean isValidTarget(SpaceObject obj) {
-		return obj instanceof Ship && obj.getColor() != getColor();
-		
-		// TEMP: prevent random off-screen shooting noises until we have a clean way to ignore distant sounds
-		//		return obj instanceof PlayerShip;
+		return obj instanceof Ship;
 	}
 
 	@Override
 	public boolean shouldUpdateTarget() {
-		return false;
+		return getTarget() == null;
 	}
 
 	@Override
 	public void onUpdate() {
-		if(target != null) {
+		if(target != null && target.getColor() != getColor()) {
 			PVector pos = target.getPosition().copy()
 					.add(target.getVelocity().sub(velocity).div(PROJECTILE_SPEED / 2));
 			PVector offset = pos.sub(position);

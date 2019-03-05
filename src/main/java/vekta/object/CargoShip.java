@@ -8,7 +8,7 @@ import vekta.menu.option.LootMenuOption;
 import java.util.ArrayList;
 import java.util.List;
 
-import static vekta.Vekta.v;
+import static vekta.Vekta.*;
 
 public class CargoShip extends Ship {
 	// CargoShip defaults
@@ -36,6 +36,7 @@ public class CargoShip extends Ship {
 					velocity,
 					getColor()
 			);
+			addObject(fighter);
 			fighters.add(fighter);
 			fighter.setTarget(this); // Follow cargo ship
 		}

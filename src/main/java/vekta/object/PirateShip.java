@@ -7,9 +7,4 @@ public class PirateShip extends FighterShip {
 	public PirateShip(String name, PVector heading, PVector position, PVector velocity, int color) {
 		super(name, heading, position, velocity, color);
 	}
-
-	@Override
-	public boolean shouldUpdateTarget() {
-		return getTarget() == null;
-	}
 }  
