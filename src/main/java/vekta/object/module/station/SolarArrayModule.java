@@ -40,12 +40,12 @@ public class SolarArrayModule extends GeneratorModule {
 	}
 
 	@Override
-	public int getWidth() {
+	public float getWidth() {
 		return 10;
 	}
 
 	@Override
-	public int getHeight() {
+	public float getHeight() {
 		return 5;
 	}
 
@@ -56,7 +56,7 @@ public class SolarArrayModule extends GeneratorModule {
 
 	@Override
 	public void draw(float tileSize) {
-		v.translate(-(getWidth() - 1) / 2F * tileSize, 0); // Fix center
+		v.translate(-(getWidth() - 1) / 2 * tileSize, 0); // Fix center
 
 		// Supports on station side of array
 		v.rectMode(CORNERS);

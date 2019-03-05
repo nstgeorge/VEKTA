@@ -44,11 +44,11 @@ public abstract class ShipModule implements ComponentModule {
 		return round(v.random(min, max) / interval) * interval;
 	}
 
-	public int getWidth() {
+	public float getWidth() {
 		return 1;
 	}
 
-	public int getHeight() {
+	public float getHeight() {
 		return 1;
 	}
 

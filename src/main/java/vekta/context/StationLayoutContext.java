@@ -96,10 +96,11 @@ public class StationLayoutContext implements Context, Upgrader {
 	public void moveCursor(SpaceStation.Direction dir) {
 		SpaceStation.Component prevCursor = cursor;
 		SpaceStation.Component component = cursor.getAttached(dir);
-//		if(isPlacing()) {
-//			cursor = cursor.getParent();
-//		}
-		/*else */if(component != null) {
+		//		if(isPlacing()) {
+		//			cursor = cursor.getParent();
+		//		}
+		/*else */
+		if(component != null) {
 			cursor = component;
 		}
 		else {
@@ -218,12 +219,12 @@ public class StationLayoutContext implements Context, Upgrader {
 
 	private final class PlacementModule implements ComponentModule {
 		@Override
-		public int getWidth() {
+		public float getWidth() {
 			return 1;
 		}
 
 		@Override
-		public int getHeight() {
+		public float getHeight() {
 			return 1;
 		}
 

@@ -7,12 +7,12 @@ public interface ComponentModule extends Module {
 	/**
 	 * Get the component width (in tiles)
 	 */
-	int getWidth();
+	float getWidth();
 
 	/**
 	 * Get the component height (in tiles)
 	 */
-	int getHeight();
+	float getHeight();
 
 	/**
 	 * Check if the attachment direction is valid
