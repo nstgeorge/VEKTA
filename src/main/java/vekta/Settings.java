@@ -15,6 +15,9 @@ public class Settings {
 		defaults = new JSONObject();
 		defaults.put("sound", 1);
 		defaults.put("music", 1);
+		for(ControlKey key : ControlKey.values()) {
+			defaults.put(getKeyProp(key), serializeKey(key.getDefaultKey()));
+		}
 
 		// Settings
 		try {
@@ -27,6 +30,28 @@ public class Settings {
 		}
 	}
 
+	private static String getKeyProp(ControlKey key) {
+		return "key." + key.name().toLowerCase();
+	}
+
+	// TODO: find a way to automatically do this for all keys
+	private static String serializeKey(char key) {
+		if(key == '\t') {
+			return "TAB";
+		}
+		return String.valueOf(key);
+	}
+
+	private static char deserializeKey(String key) {
+		if("TAB".equals(key)) {
+			return '\t';
+		}
+		else if(key.length() != 1) {
+			return 0; // Disable invalid keys
+		}
+		return key.charAt(0);
+	}
+
 	public static int get(String key) {
 		if(!settings.isNull(key)) {
 			return settings.getInt(key);
@@ -36,8 +61,36 @@ public class Settings {
 		}
 	}
 
+	public static ControlKey getControlKey(char c) {
+		// TODO: replace with array lookup
+		for(ControlKey key : ControlKey.values()) {
+			if(getCharacter(key) == c) {
+				return key;
+			}
+		}
+		return null;
+	}
+
+	public static char getCharacter(ControlKey key) {
+		String prop = getKeyProp(key);
+		String result;
+		if(!settings.isNull(prop)) {
+			result = settings.getString(prop);
+		}
+		else {
+			result = defaults.getString(prop, "");
+		}
+		return deserializeKey(result);
+	}
+
 	public static void set(String key, int value) {
 		settings.setInt(key, value);
+		save();
+	}
+
+	// TODO: call this to update keys in settings UI
+	public static void set(ControlKey key, char value) {
+		settings.setString(getKeyProp(key), serializeKey(value));
 		save();
 	}
 

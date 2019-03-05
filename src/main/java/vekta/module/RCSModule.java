@@ -1,5 +1,6 @@
 package vekta.module;
 
+import vekta.ControlKey;
 import vekta.object.ship.ModularShip;
 
 import static java.lang.Math.abs;
@@ -45,18 +46,18 @@ public class RCSModule extends ShipModule {
 	}
 
 	@Override
-	public void onKeyPress(char key) {
-		if(key == 'a') {
+	public void onKeyPress(ControlKey key) {
+		if(key == ControlKey.SHIP_LEFT) {
 			getShip().setTurnControl(-1);
 		}
-		if(key == 'd') {
+		if(key == ControlKey.SHIP_RIGHT) {
 			getShip().setTurnControl(1);
 		}
 	}
 
 	@Override
-	public void onKeyRelease(char key) {
-		if(key == 'a' || key == 'd') {
+	public void onKeyRelease(ControlKey key) {
+		if(key == ControlKey.SHIP_LEFT || key == ControlKey.SHIP_RIGHT) {
 			getShip().setTurnControl(0);
 		}
 	}

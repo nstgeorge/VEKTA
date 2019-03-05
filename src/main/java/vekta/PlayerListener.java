@@ -12,10 +12,10 @@ import vekta.terrain.LandingSite;
  * Player-related event listener
  */
 public interface PlayerListener {
-	default void onKeyPress(char key) {
+	default void onKeyPress(ControlKey key) {
 	}
 
-	default void onKeyRelease(char key) {
+	default void onKeyRelease(ControlKey key) {
 	}
 
 	default void onMenu(Menu menu) {

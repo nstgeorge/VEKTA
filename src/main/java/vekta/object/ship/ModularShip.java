@@ -221,35 +221,30 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 		}
 	}
 
-	public void onKeyPress(char key) {
+	public void onKeyPress(ControlKey key) {
 		for(Module module : getModules()) {
 			module.onKeyPress(key);
 		}
 
 		if(hasController()) {
 			// TODO: generalize inject shortcuts
-			if(key == 'v' || key == 'q' || key == 'e') {
+			if(key == ControlKey.SHIP_MENU || key == ControlKey.SHIP_MISSIONS || key == ControlKey.SHIP_LOADOUT) {
 				Menu menu = openMenu();
 				for(MenuOption option : menu.getOptions()) {
-					boolean autoSelect = (key == 'q' && option instanceof MissionMenuOption)
-							|| (key == 'e' && option instanceof LoadoutMenuOption);
+					boolean autoSelect = (key == ControlKey.SHIP_MISSIONS && option instanceof MissionMenuOption)
+							|| (key == ControlKey.SHIP_LOADOUT && option instanceof LoadoutMenuOption);
 					if(autoSelect) {
 						option.select(menu);
 						break;
 					}
 				}
 			}
-			getController().emit(PlayerEvent.KEY_PRESS, key);
 		}
 	}
 
-	public void onKeyRelease(char key) {
+	public void onKeyRelease(ControlKey key) {
 		for(Module module : getModules()) {
 			module.onKeyRelease(key);
-		}
-
-		if(hasController()) {
-			getController().emit(PlayerEvent.KEY_RELEASE, key);
 		}
 	}
 

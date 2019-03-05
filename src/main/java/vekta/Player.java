@@ -54,14 +54,20 @@ public final class Player {
 			}
 
 			@Override
-			public void onKeyPress(char key) {
-				if(key == 'o' && getCurrentMission() != null) {
+			public void onKeyPress(ControlKey key) {
+				if(key == ControlKey.OBJECTIVE_CYCLE && getCurrentMission() != null) {
 					getCurrentMission().cycleObjective();
 				}
-				if(key == 'p') {
+				if(key == ControlKey.MISSION_CYCLE) {
 					int index = missions.indexOf(getCurrentMission()) + 1;
 					setCurrentMission(index == getMissions().size() ? missions.get(index % missions.size()) : null);
 				}
+				getShip().onKeyPress(key);
+			}
+
+			@Override
+			public void onKeyRelease(ControlKey key) {
+				getShip().onKeyRelease(key);
 			}
 		});
 	}

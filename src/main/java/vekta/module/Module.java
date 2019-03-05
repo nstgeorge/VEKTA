@@ -1,5 +1,6 @@
 package vekta.module;
 
+import vekta.ControlKey;
 import vekta.menu.Menu;
 import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
@@ -32,10 +33,10 @@ public interface Module {
 	default void onDepart(SpaceObject s) {
 	}
 
-	default void onKeyPress(char key) {
+	default void onKeyPress(ControlKey key) {
 	}
 
-	default void onKeyRelease(char key) {
+	default void onKeyRelease(ControlKey key) {
 	}
 
 	default void onLandingMenu(LandingSite site, Menu menu) {

@@ -266,13 +266,20 @@ public class Singleplayer implements World, PlayerListener {
 			if(key == 'k') {
 				getPlayerShip().destroyBecause(getPlayerShip());
 			}
-			getPlayerShip().onKeyPress(key);
+
+			ControlKey ctrl = Settings.getControlKey(key);
+			if(ctrl != null) {
+				getPlayer().emit(PlayerEvent.KEY_PRESS, ctrl);
+			}
 		}
 	}
 
 	@Override
 	public void keyReleased(char key) {
-		getPlayerShip().onKeyRelease(key);
+		ControlKey ctrl = Settings.getControlKey(key);
+		if(ctrl != null) {
+			getPlayer().emit(PlayerEvent.KEY_RELEASE, ctrl);
+		}
 	}
 
 	@Override

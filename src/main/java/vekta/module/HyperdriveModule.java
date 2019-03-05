@@ -1,5 +1,6 @@
 package vekta.module;
 
+import vekta.ControlKey;
 import vekta.Resources;
 import vekta.object.ship.ModularShip;
 
@@ -78,8 +79,8 @@ public class HyperdriveModule extends ShipModule {
 	}
 
 	@Override
-	public void onKeyPress(char key) {
-		if(key == '`') {
+	public void onKeyPress(ControlKey key) {
+		if(key == ControlKey.SHIP_HYPERDRIVE) {
 			startHyperdrive();
 		}
 	}

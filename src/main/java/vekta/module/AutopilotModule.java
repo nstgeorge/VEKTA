@@ -1,8 +1,9 @@
 package vekta.module;
 
 import processing.core.PVector;
-import vekta.object.ship.ModularShip;
+import vekta.ControlKey;
 import vekta.object.SpaceObject;
+import vekta.object.ship.ModularShip;
 
 import static vekta.Vekta.*;
 
@@ -78,13 +79,13 @@ public class AutopilotModule extends TargetingModule {
 	}
 
 	@Override
-	public void onKeyPress(char key) {
+	public void onKeyPress(ControlKey key) {
 		super.onKeyPress(key);
 
-		if(key == '\t') {
+		if(key == ControlKey.SHIP_LAND) {
 			setActive(true);
 		}
-		else if(key == 'w' || key == 'a' || key == 's' || key == 'd')/* TODO: reference external key mapping */ {
+		else if(key == ControlKey.SHIP_FORWARD || key == ControlKey.SHIP_BACKWARD || key == ControlKey.SHIP_LEFT || key == ControlKey.SHIP_RIGHT) {
 			setActive(false);
 		}
 	}

@@ -6,6 +6,10 @@ import vekta.overlay.PositionOverlay;
 import java.util.ArrayList;
 import java.util.List;
 
+import static processing.core.PConstants.LEFT;
+import static processing.core.PConstants.RIGHT;
+import static vekta.Vekta.v;
+
 /**
  * Notification stream
  */
@@ -23,6 +27,7 @@ public class NotificationOverlay extends PositionOverlay {
 
 	@Override
 	public void render() {
+		v.textAlign(RIGHT);
 		for(int i = 0; i < notifications.size(); i++) {
 			Notification n = notifications.get(i);
 			n.draw(getX(), getNotificationY(n, i));
@@ -30,9 +35,10 @@ public class NotificationOverlay extends PositionOverlay {
 				notifications.remove(i--);
 			}
 		}
+		v.textAlign(LEFT);
 	}
 
 	private float getNotificationY(Notification n, int i) {
-		return getY() - (30 * i + 20 * n.getProgress());
+		return getY() + 30 * i - 20 * n.getProgress();
 	}
 }

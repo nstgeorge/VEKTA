@@ -102,7 +102,7 @@ public class TelemetryOverlay implements Overlay {
 				v.stroke(target.getColor());
 			}
 			v.text("Target: " + targetString, 50, v.height - 100);
-			
+
 			// Draw mission objective
 			Mission mission = player.getCurrentMission();
 			if(mission != null) {
@@ -110,7 +110,7 @@ public class TelemetryOverlay implements Overlay {
 				SpaceObject objTarget = current.getSpaceObject();
 				// Draw objective direction dial
 				if(objTarget != null && objTarget != targeter.getTarget()) {
-					drawDial("Objective", objTarget.getPosition().sub(ship.getPosition()), 500, dialHeight, objTarget.getColor());
+					drawDial("Objective", objTarget.getPosition().sub(ship.getPosition()), v.width / 2F, dialHeight, objTarget.getColor());
 				}
 			}
 		}

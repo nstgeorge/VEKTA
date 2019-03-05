@@ -1,5 +1,6 @@
 package vekta.module;
 
+import vekta.ControlKey;
 import vekta.object.ship.ModularShip;
 
 import static com.jogamp.opengl.math.FloatUtil.abs;
@@ -45,18 +46,18 @@ public class EngineModule extends ShipModule {
 	}
 
 	@Override
-	public void onKeyPress(char key) {
-		if(key == 'w') {
+	public void onKeyPress(ControlKey key) {
+		if(key == ControlKey.SHIP_FORWARD) {
 			getShip().setThrustControl(1);
 		}
-		if(key == 's') {
+		if(key == ControlKey.SHIP_BACKWARD) {
 			getShip().setThrustControl(-1);
 		}
 	}
 
 	@Override
-	public void onKeyRelease(char key) {
-		if(key == 'w' || key == 's') {
+	public void onKeyRelease(ControlKey key) {
+		if(key == ControlKey.SHIP_FORWARD || key == ControlKey.SHIP_BACKWARD) {
 			getShip().setThrustControl(0);
 		}
 	}

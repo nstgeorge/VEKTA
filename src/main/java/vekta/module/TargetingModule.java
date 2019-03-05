@@ -1,5 +1,6 @@
 package vekta.module;
 
+import vekta.ControlKey;
 import vekta.Vekta;
 import vekta.context.Context;
 import vekta.context.World;
@@ -87,18 +88,18 @@ public class TargetingModule extends ShipModule implements Targeter {
 	}
 
 	@Override
-	public void onKeyPress(char key) {
+	public void onKeyPress(ControlKey key) {
 		switch(key) {
-		case 't':
+		case SHIP_TARGET_CLEAR:
 			setMode(null);
 			break;
-		case '1':
+		case SHIP_TARGET_PLANET:
 			setMode(TargetingModule.TargetingMode.PLANET);
 			break;
-		case '2':
+		case SHIP_TARGET_SHIP:
 			setMode(TargetingModule.TargetingMode.SHIP);
 			break;
-		case '3':
+		case SHIP_TARGET_ASTEROID:
 			setMode(TargetingModule.TargetingMode.ASTEROID);
 			break;
 		}

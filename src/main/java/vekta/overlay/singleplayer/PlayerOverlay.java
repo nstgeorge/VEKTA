@@ -27,7 +27,7 @@ public class PlayerOverlay implements Overlay, PlayerListener {
 				new ShipComputerOverlay(50, -150, player.getShip()),
 				new ShipEnergyOverlay(-300, -75, player.getShip()),
 				new ShipMoneyOverlay(-300, -50, player.getShip()),
-				notifications = new NotificationOverlay(v.width - 500, -v.height + 50),
+				notifications = new NotificationOverlay(v.width - 20, 40),
 		};
 	}
 
