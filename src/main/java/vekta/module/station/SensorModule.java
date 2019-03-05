@@ -2,6 +2,8 @@ package vekta.module.station;
 
 import vekta.module.Module;
 import vekta.module.ModuleType;
+import vekta.object.SpaceObject;
+import vekta.object.ship.ModularShip;
 import vekta.object.ship.SpaceStation;
 
 import static processing.core.PConstants.*;
@@ -66,6 +68,11 @@ public class SensorModule implements ComponentModule {
     @Override
     public boolean isBetter(Module other) {
         return false;
+    }
+
+    @Override
+    public boolean isApplicable(ModularShip ship) {
+        return ship instanceof SpaceStation;
     }
 
     @Override

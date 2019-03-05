@@ -11,6 +11,12 @@ import vekta.terrain.LandingSite;
  * Player-related event listener
  */
 public interface PlayerListener {
+	default void onKeyPress(char key) {
+	}
+
+	default void onKeyRelease(char key) {
+	}
+
 	default void onEvent(PlayerEvent event) {
 	}
 
