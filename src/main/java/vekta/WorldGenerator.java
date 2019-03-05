@@ -76,7 +76,7 @@ public class WorldGenerator {
 		float r = v.random(1);
 		Terrain terrain;
 		boolean features = true;
-		if(r > .6) {
+		if(r > .5) {
 			InhabitedTerrain t = new InhabitedTerrain();
 			Inventory inv = t.getInventory();
 			inv.add((int)v.random(10, 500));

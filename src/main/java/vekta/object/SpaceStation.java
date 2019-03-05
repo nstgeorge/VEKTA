@@ -1,6 +1,9 @@
 package vekta.object;
 
 import processing.core.PVector;
+import vekta.context.StationLayoutContext;
+import vekta.menu.Menu;
+import vekta.menu.option.BasicOption;
 import vekta.object.module.ModuleType;
 import vekta.object.module.station.ComponentModule;
 
@@ -9,8 +12,7 @@ import java.util.List;
 import java.util.*;
 
 import static processing.core.PApplet.*;
-import static vekta.Vekta.distSq;
-import static vekta.Vekta.v;
+import static vekta.Vekta.*;
 
 public class SpaceStation extends ModularShip {
 	private static final float DEF_SPEED = .02F; // Base engine speed (much slower than player)
@@ -57,7 +59,6 @@ public class SpaceStation extends ModularShip {
 		return 1000 * getModules().size();
 	}
 
-	// TODO: compute
 	@Override
 	public float getRadius() {
 		return TILE_SIZE * sqrt(getModules().size());
@@ -90,6 +91,13 @@ public class SpaceStation extends ModularShip {
 			//			v.rectMode(CENTER);
 			//			v.stroke(getColor());
 		}
+	}
+
+	@Override
+	public void setupDockingMenu(PlayerShip ship, Menu menu) {
+		menu.add(new BasicOption("Customize", () -> {
+			setContext(new StationLayoutContext(menu, this, ship));
+		}));
 	}
 
 	public final class Component {
@@ -188,13 +196,13 @@ public class SpaceStation extends ModularShip {
 			Component nearest = this;
 			float minSq = Float.POSITIVE_INFINITY;
 			for(Component other : components) {
-				if(other != this){
+				if(other != this) {
 					float distSq = distSq(point, new PVector(other.getX(), other.getY()));
 					if(distSq < minSq) {
 						minSq = distSq;
 						nearest = other;
 					}
-					
+
 				}
 			}
 			return nearest;

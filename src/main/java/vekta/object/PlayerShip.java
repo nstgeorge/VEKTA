@@ -3,12 +3,13 @@ package vekta.object;
 import processing.core.PVector;
 import vekta.Resources;
 import vekta.Vekta;
-import vekta.context.StationLayoutContext;
-import vekta.item.Inventory;
 import vekta.menu.Menu;
 import vekta.menu.handle.LandingMenuHandle;
 import vekta.menu.handle.ObjectMenuHandle;
-import vekta.menu.option.*;
+import vekta.menu.option.BackOption;
+import vekta.menu.option.LoadoutMenuOption;
+import vekta.menu.option.ShipUndockOption;
+import vekta.menu.option.SurveyOption;
 import vekta.object.module.*;
 import vekta.overlay.singleplayer.Notification;
 import vekta.terrain.LandingSite;
@@ -103,15 +104,11 @@ public class PlayerShip extends ModularShip {
 	@Override
 	public void onDock(SpaceObject s) {
 		Resources.stopSound("engine");
-		if(s instanceof CargoShip) {
-			Inventory inv = ((CargoShip)s).getInventory();
+		if(s instanceof Ship) {
 			Menu menu = new Menu(new ObjectMenuHandle(new ShipUndockOption(this, getWorld()), s));
 			((Ship)s).setupDockingMenu(this, menu);
 			menu.addDefault();
 			setContext(menu);
-		}
-		else if(s instanceof SpaceStation && s.getColor() == getColor()) {
-			setContext(new StationLayoutContext(getWorld(), (SpaceStation)s, this));
 		}
 	}
 
