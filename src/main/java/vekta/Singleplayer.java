@@ -39,6 +39,7 @@ public class Singleplayer implements World {
 	private Counter spawnCt = new Counter(100); // Counter for periodically cleaning/spawning objects
 
 	private final List<SpaceObject> objects = new ArrayList<>();
+	private final List<SpaceObject> gravityObjects = new ArrayList<>();
 	private final List<SpaceObject> markedForDeath = new ArrayList<>();
 	private final List<SpaceObject> markedForAddition = new ArrayList<>();
 
@@ -53,7 +54,7 @@ public class Singleplayer implements World {
 
 		Resources.setMusic("atmosphere");
 
-		WorldGenerator.createSystem(PVector.random2D().mult(v.random(2000, 5000)));
+		WorldGenerator.createSystem(PVector.random2D().mult(v.random(5000, 10000)));
 
 		playerShip = new PlayerShip(
 				"VEKTA I",
@@ -126,10 +127,14 @@ public class Singleplayer implements World {
 		boolean targeting = targetCt.cycle();
 		boolean spawning = spawnCt.cycle();
 
+		for(SpaceObject obj : markedForAddition) {
+			if(obj instanceof Planet) {// TODO GravityObject interface
+				gravityObjects.add(obj);
+			}
+		}
 		objects.addAll(markedForAddition);
 		markedForAddition.clear();
 
-		int planetCount = 0;
 		for(SpaceObject s : objects) {
 			if(markedForDeath.contains(s)) {
 				continue;
@@ -155,10 +160,6 @@ public class Singleplayer implements World {
 				}
 			}
 
-			if(s instanceof Planet) {
-				planetCount++;
-			}
-
 			s.update();
 			s.applyInfluenceVector(objects);
 			for(SpaceObject other : objects) {
@@ -179,9 +180,10 @@ public class Singleplayer implements World {
 		}
 
 		objects.removeAll(markedForDeath);
+		gravityObjects.removeAll(markedForDeath);
 		markedForDeath.clear();
-
-		if(planetCount < MAX_PLANETS) {
+		
+		if(gravityObjects.size() < MAX_PLANETS) {
 			WorldGenerator.spawnOccasional(playerShip.getPosition());
 		}
 

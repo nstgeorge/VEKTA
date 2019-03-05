@@ -35,7 +35,8 @@ public class Vekta extends PApplet {
 	// Game-balancing variables and visual settings
 	public static final float G = 6.674e-11F;
 	public static final float SCALE = 3e7F;
-	public static final float MAX_G_DISTANCE = 2000;
+	//	public static final float MAX_G_DISTANCE = 5000;
+	public static final float MAX_G_DISTANCE = Float.POSITIVE_INFINITY; // Phasing out in favor of other optimizations
 	public static final float MAX_G_FORCE = 2F;
 	public static final int MAX_PLANETS = 5;
 	public static final float MAX_CAMERA_Y = 5000;
@@ -184,14 +185,14 @@ public class Vekta extends PApplet {
 
 	/**
 	 * Return the sign (-1, 0, or 1) of a number.
-	 * */
+	 */
 	public float sign(float f) {
 		return f == 0 ? 0 : f > 0 ? 1 : -1;
 	}
 
 	/**
 	 * Return the squared distance between two vectors.
-	 * */
+	 */
 	public static float distSq(PVector a, PVector b) {
 		float x = a.x - b.x;
 		float y = a.y - b.y;
