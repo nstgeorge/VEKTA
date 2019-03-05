@@ -45,4 +45,6 @@ public abstract class Terrain {
 	public abstract String getOverview();
 
 	public abstract void setupLandingMenu(PlayerShip ship, Menu menu);
+
+//	public abstract setupSurveyMenu(PlayerShip ship, Menu menu);
 }

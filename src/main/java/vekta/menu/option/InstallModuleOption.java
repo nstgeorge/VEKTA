@@ -45,7 +45,7 @@ public class InstallModuleOption implements MenuOption {
 	private enum ModuleStatus {
 		BETTER("[^]", v.color(255, 255, 0)),
 		DIFFERENT("[*]", v.color(200)),
-		WORSE("", v.color(100));
+		WORSE("[-]", v.color(100));
 
 		private final String tag;
 		private final int color;

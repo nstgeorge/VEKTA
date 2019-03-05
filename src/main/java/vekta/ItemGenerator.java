@@ -26,6 +26,7 @@ public class ItemGenerator {
 			new SolarArrayModule(1),
 			new StationCoreModule(),
 			new StructuralModule(1, 1),
+			new TelescopeModule(1),
 			new TargetingModule(),
 			new TorpedoModule(1),
 			new TractorBeamModule(1),

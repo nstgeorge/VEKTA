@@ -31,6 +31,10 @@ public abstract class Planet extends SpaceObject {
 		updateRadius();
 	}
 
+	public boolean impartsGravity() {
+		return getMass() >= MIN_GRAVITY_MASS;
+	}
+
 	@Override
 	public void draw() {
 		v.stroke(getColor());
@@ -48,7 +52,7 @@ public abstract class Planet extends SpaceObject {
 
 	@Override
 	public void onCollide(SpaceObject s) {
-		if(getMass() * 2 >= s.getMass()) {
+		if(getMass() >= s.getMass() * 2) {
 			s.destroyBecause(this);
 		}
 	}

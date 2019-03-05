@@ -8,7 +8,7 @@ import static vekta.Vekta.setContext;
 
 public class SurveyOption implements MenuOption {
 	private final LandingSite site;
-	
+
 	public SurveyOption(LandingSite site) {
 		this.site = site;
 	}
@@ -24,7 +24,7 @@ public class SurveyOption implements MenuOption {
 
 	@Override
 	public void select(Menu menu) {
-		Menu sub = new Menu(new SurveyMenuHandle(getSite(), new BackOption(menu)));
+		Menu sub = new Menu(new SurveyMenuHandle(new BackOption(menu), getSite()));
 		sub.addDefault();
 		setContext(sub);
 	}

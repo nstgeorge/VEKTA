@@ -21,7 +21,7 @@ public class SurveyMenuHandle extends MenuHandle {
 
 	private final float perspective;
 
-	public SurveyMenuHandle(LandingSite site, MenuOption def) {
+	public SurveyMenuHandle(MenuOption def, LandingSite site) {
 		super(def);
 
 		this.site = site;

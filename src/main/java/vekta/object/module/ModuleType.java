@@ -7,5 +7,6 @@ public enum ModuleType {
 	RCS,
 	WEAPON,
 	TARGET_COMPUTER,
+	TELESCOPE,
 	UTILITY,
 }

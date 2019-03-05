@@ -9,12 +9,10 @@ import vekta.terrain.Terrain;
  */
 public class TerrestrialPlanet extends Planet {
 	private final LandingSite site;
-	private final Terrain terrain;
 
 	public TerrestrialPlanet(String name, float mass, float density, Terrain terrain, PVector position, PVector velocity, int color) {
 		super(name, mass, density, position, velocity, color);
 
-		this.terrain = terrain;
 		this.site = new LandingSite(this, terrain);
 	}
 
@@ -22,9 +20,13 @@ public class TerrestrialPlanet extends Planet {
 		return site;
 	}
 
+	public Terrain getTerrain() {
+		return getLandingSite().getTerrain();
+	}
+
 	@Override
 	public boolean isHabitable() {
-		return terrain.hasFeature("Habitable");
+		return getTerrain().hasFeature("Habitable");
 	}
 
 	@Override

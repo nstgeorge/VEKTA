@@ -17,9 +17,8 @@ public class OceanicTerrain extends Terrain {
 		return "You can't find anywhere to land; a vast ocean covers this planet.";
 	}
 
-	
 	@Override
 	public void setupLandingMenu(PlayerShip ship, Menu menu) {
-		// TODO: scavenge option
+		
 	}
 }

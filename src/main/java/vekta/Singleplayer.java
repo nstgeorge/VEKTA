@@ -88,6 +88,7 @@ public class Singleplayer implements World {
 
 		//// TEMP
 		playerShip.addModule(new AutopilotModule());
+		playerShip.addModule(new TelescopeModule(2));
 		playerShip.getInventory().add(new ModuleItem(new DrillModule(2)));
 		playerShip.getInventory().add(new ModuleItem(new TorpedoModule(2)));
 		playerShip.getInventory().add(new ModuleItem(new HyperdriveModule(.5F)));
@@ -128,7 +129,7 @@ public class Singleplayer implements World {
 		boolean spawning = spawnCt.cycle();
 
 		for(SpaceObject obj : markedForAddition) {
-			if(obj instanceof Planet) {// TODO GravityObject interface
+			if(obj instanceof Planet && ((Planet)obj).impartsGravity()) {
 				gravityObjects.add(obj);
 			}
 		}
@@ -161,7 +162,7 @@ public class Singleplayer implements World {
 			}
 
 			s.update();
-			s.applyInfluenceVector(objects);
+			s.applyInfluenceVector(gravityObjects);
 			for(SpaceObject other : objects) {
 				if(s != other) {
 					// Check both collisions before firing events (prevents race conditions)
@@ -182,7 +183,7 @@ public class Singleplayer implements World {
 		objects.removeAll(markedForDeath);
 		gravityObjects.removeAll(markedForDeath);
 		markedForDeath.clear();
-		
+
 		if(gravityObjects.size() < MAX_PLANETS) {
 			WorldGenerator.spawnOccasional(playerShip.getPosition());
 		}

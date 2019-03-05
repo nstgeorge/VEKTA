@@ -3,10 +3,7 @@ package vekta.object.module;
 import vekta.Vekta;
 import vekta.context.Context;
 import vekta.context.World;
-import vekta.object.Planet;
-import vekta.object.Ship;
-import vekta.object.SpaceObject;
-import vekta.object.Targeter;
+import vekta.object.*;
 
 public class TargetingModule extends ShipModule implements Targeter {
 
@@ -45,9 +42,11 @@ public class TargetingModule extends ShipModule implements Targeter {
 		}
 		switch(mode) {
 		case PLANET:
-			return obj instanceof Planet;
+			return obj instanceof Planet && !(obj instanceof  Asteroid);
 		case SHIP:
 			return obj instanceof Ship;
+		case ASTEROID:
+			return obj instanceof Asteroid;
 		default:
 			return false;
 		}
@@ -95,11 +94,15 @@ public class TargetingModule extends ShipModule implements Targeter {
 		case '2':
 			setMode(TargetingModule.TargetingMode.SHIP);
 			break;
+		case '3':
+			setMode(TargetingModule.TargetingMode.ASTEROID);
+			break;
 		}
 	}
 
 	public enum TargetingMode {
 		PLANET,
 		SHIP,
+		ASTEROID,
 	}
 }

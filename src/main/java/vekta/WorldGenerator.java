@@ -34,7 +34,7 @@ public class WorldGenerator {
 		float order = v.random(29, 32);
 
 		// Create the center body
-		float centerPower = (float)Math.pow(10, order);
+		float centerPower = pow(10, order);
 		float centerMass = v.random(0.8F, 4) * centerPower;
 		float centerDensity = v.random(.7F, 2);
 		if(order >= 30) {
@@ -61,7 +61,7 @@ public class WorldGenerator {
 		// Generate planets around body
 		int planets = (int)v.random(1, 8);
 		for(int i = 0; i <= planets; i++) {
-			float power = (float)Math.pow(10, order - 1);
+			float power = pow(10, order - 1);
 			float radiusLoc = v.random(1000, 8000);
 			float speed = sqrt(G * centerMass / radiusLoc) / SCALE;
 			float mass = v.random(0.05F, 0.5F) * power;
@@ -69,6 +69,27 @@ public class WorldGenerator {
 			float angle = v.random(360);
 			Planet planet = createPlanet(mass, density, new PVector(radiusLoc, 0).rotate(angle).add(pos));
 			planet.addVelocity(new PVector(0, speed).rotate(angle));
+		}
+
+		int asteroids = (int)v.random(20);
+		for(int i = 0; i <= asteroids; i++) {
+			float power = pow(10, order - 4);
+			float radiusLoc = v.random(1000, 15000);
+			float speed = sqrt(G * centerMass / radiusLoc) / SCALE * v.random(.75F, 1.5F);
+			float mass = v.random(0.05F, 0.5F) * power;
+			float density = v.random(4, 8);
+			float angle = v.random(360);
+			Terrain terrain = new AsteroidTerrain();
+			Planet asteroid = new Asteroid(
+					randomPlanetName(),
+					mass,
+					density,
+					terrain,
+					new PVector(radiusLoc, 0).rotate(angle).add(pos),
+					new PVector(),
+					randomPlanetColor());
+			addObject(asteroid);
+			asteroid.addVelocity(new PVector(0, speed).rotate(angle));
 		}
 	}
 
