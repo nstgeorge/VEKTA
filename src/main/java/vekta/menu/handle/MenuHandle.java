@@ -1,12 +1,14 @@
 package vekta.menu.handle;
 
+import vekta.ControlKey;
 import vekta.Resources;
 import vekta.context.Context;
 import vekta.menu.Menu;
 import vekta.menu.option.BackOption;
 import vekta.menu.option.MenuOption;
 
-import static processing.core.PConstants.*;
+import static processing.core.PConstants.CENTER;
+import static processing.core.PConstants.DISABLE_DEPTH_TEST;
 import static vekta.Vekta.*;
 
 /**
@@ -43,8 +45,8 @@ public class MenuHandle {
 		return v.height / 2 - 64 + i * getSpacing();
 	}
 
-	public String getHelperText() {
-		return "X to select";
+	public String getSelectVerb() {
+		return "select";
 	}
 
 	public void focus(Menu menu) {
@@ -67,44 +69,51 @@ public class MenuHandle {
 		v.textAlign(CENTER, CENTER);
 		v.rectMode(CENTER);
 		for(int i = 0; i < menu.size(); i++) {
-			drawButton(menu.get(i), i, menu.getIndex() == i);
+			drawButton(menu, menu.get(i), i);
 		}
 
 		v.noStroke();
 		v.fill(255);
 		v.textAlign(CENTER);
-		v.text(getHelperText(), getButtonX(), getButtonY(menu.size()) + 100);
+
+		if(menu.getCursor().isEnabled(menu)) {
+			v.text("X to " + getSelectVerb(), getButtonX(), getButtonY(menu.size()) + 100);
+			// TODO: Update based on key binding
+		}
 	}
 
-	void drawButton(MenuOption opt, int index, boolean selected) {
+	void drawButton(Menu menu, MenuOption opt, int index) {
 		float yPos = getButtonY(index);
-		
+		boolean selected = menu.getIndex() == index;
+
 		// Draw border
 		v.stroke(selected ? 255 : UI_COLOR);
 		v.noFill();
 		v.rect(getButtonX(), yPos, getButtonWidth() + (selected ? 10 : 0), 50);
-		
+
 		// Draw text
 		v.fill(opt.getColor());
 		v.noStroke();
 		v.text(opt.getName(), getButtonX(), yPos - 3);
 	}
 
-	public void keyPressed(Menu menu, char key) {
-		if(key == ESC) {
+	public void keyPressed(Menu menu, ControlKey key) {
+		if(key == ControlKey.MENU_CLOSE) {
 			menu.close();
 		}
-		else if(key == 'w') {
+		else if(key == ControlKey.MENU_UP) {
 			Resources.playSound("change");
 			menu.scroll(-1);
 		}
-		else if(key == 's') {
+		else if(key == ControlKey.MENU_DOWN) {
 			Resources.playSound("change");
 			menu.scroll(1);
 		}
-		else if(key == 'x') {
-			Resources.playSound("select");
-			menu.getCursor().select(menu);
+		else if(key == ControlKey.MENU_SELECT) {
+			if(menu.getCursor().isEnabled(menu)) {
+				Resources.playSound("select");
+				menu.getCursor().select(menu);
+			}
 		}
 	}
 }

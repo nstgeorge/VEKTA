@@ -61,16 +61,6 @@ public class Settings {
 		}
 	}
 
-	public static ControlKey getControlKey(char c) {
-		// TODO: replace with array lookup
-		for(ControlKey key : ControlKey.values()) {
-			if(getCharacter(key) == c) {
-				return key;
-			}
-		}
-		return null;
-	}
-
 	public static char getCharacter(ControlKey key) {
 		String prop = getKeyProp(key);
 		String result;

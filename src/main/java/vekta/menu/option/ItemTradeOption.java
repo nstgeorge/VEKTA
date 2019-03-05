@@ -48,17 +48,20 @@ public class ItemTradeOption implements MenuOption {
 	}
 
 	@Override
+	public boolean isEnabled(Menu menu) {
+		return getTo().has(price) && getFrom().has(item);
+	}
+
+	@Override
 	public void select(Menu menu) {
 		Inventory from = getFrom();
 		Inventory to = getTo();
-		if(to.has(price) && from.has(item)) {
-			to.remove(price);
-			from.remove(item);
-			from.add(price);
-			if(transfer) {
-				to.add(item);
-			}
-			menu.remove(this);
+		to.remove(price);
+		from.remove(item);
+		from.add(price);
+		if(transfer) {
+			to.add(item);
 		}
+		menu.remove(this);
 	}
 }

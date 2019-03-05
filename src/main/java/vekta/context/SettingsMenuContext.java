@@ -2,6 +2,7 @@ package vekta.context;
 
 import processing.data.IntDict;
 import processing.data.StringDict;
+import vekta.ControlKey;
 import vekta.Resources;
 import vekta.Settings;
 import vekta.menu.handle.MainMenuHandle;
@@ -101,23 +102,23 @@ public class SettingsMenuContext implements Context {
 	}
 
 	@Override
-	public void keyPressed(char key) {
-		if(key == ESC) {
+	public void keyPressed(ControlKey key) {
+		if(key == ControlKey.MENU_CLOSE) {
 			setContext(parent);
 		}
-		if(key == 'w') {
+		if(key == ControlKey.MENU_UP) {
 			// Play the sound for changing inject selection
 			Resources.playSound("change");
 			selectedSetting = Math.max(selectedSetting - 1, 0);
 			v.redraw();
 		}
-		if(key == 's') {
+		if(key == ControlKey.MENU_DOWN) {
 			// Play the sound for changing inject selection
 			Resources.playSound("change");
 			selectedSetting = Math.min(selectedSetting + 1, settingsOptions.size());
 			v.redraw();
 		}
-		if(key == 'x') {
+		if(key == ControlKey.MENU_SELECT) {
 			// Play the sound for selection
 			Resources.playSound("change");
 			if(selectedSetting == settingsOptions.size()) {
@@ -132,7 +133,7 @@ public class SettingsMenuContext implements Context {
 	}
 
 	@Override
-	public void keyReleased(char key) {
+	public void keyReleased(ControlKey key) {
 	}
 
 	@Override

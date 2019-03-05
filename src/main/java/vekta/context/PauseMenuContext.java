@@ -1,5 +1,6 @@
 package vekta.context;
 
+import vekta.ControlKey;
 import vekta.Resources;
 
 import static vekta.Vekta.*;
@@ -69,21 +70,21 @@ public class PauseMenuContext implements Context {
 	}
 
 	@Override
-	public void keyPressed(char key) {
-		if(key == ESC) {
+	public void keyPressed(ControlKey key) {
+		if(key == ControlKey.MENU_CLOSE) {
 			setContext(world);
 		}
-		else if(key == 'w') {
+		else if(key == ControlKey.MENU_UP) {
 			// Play the sound for changing inject selection
 			Resources.playSound("change");
 			selected = Math.max(selected - 1, 0);
 		}
-		else if(key == 's') {
+		else if(key == ControlKey.MENU_DOWN) {
 			// Play the sound for changing inject selection
 			Resources.playSound("change");
 			selected = Math.min(selected + 1, pauseMenu.length - 1);
 		}
-		else if(key == 'x') {
+		else if(key == ControlKey.MENU_SELECT) {
 			//			Resources.stopMusic("theme");
 			Resources.playSound("select");
 			switch(selected) {
@@ -101,7 +102,7 @@ public class PauseMenuContext implements Context {
 	}
 
 	@Override
-	public void keyReleased(char key) {
+	public void keyReleased(ControlKey key) {
 	}
 
 	@Override

@@ -105,7 +105,11 @@ public class Vekta extends PApplet {
 	@Override
 	public void keyPressed() {
 		if(context != null) {
-			context.keyPressed(key);
+			for(ControlKey ctrl : ControlKey.values()){
+				if(Settings.getCharacter(ctrl) == key){
+					context.keyPressed(ctrl);
+				}
+			}
 			if(key == ESC) {
 				key = 0; // Suppress default behavior (exit)
 			}
@@ -115,21 +119,28 @@ public class Vekta extends PApplet {
 	@Override
 	public void keyReleased() {
 		if(context != null) {
-			context.keyReleased(key);
+			for(ControlKey ctrl : ControlKey.values()){
+				if(Settings.getCharacter(ctrl) == key){
+					context.keyReleased(ctrl);
+				}
+			}
 		}
 	}
 
 	@Override
 	public void mousePressed() {
 		if(context != null) {
-			context.keyPressed('x');
+			// TODO allow mouse events binding to user-specified keys
+			context.keyPressed(ControlKey.MENU_SELECT);
+			context.keyPressed(ControlKey.SHIP_FIRE);
 		}
 	}
 
 	@Override
 	public void mouseReleased() {
 		if(context != null) {
-			context.keyReleased('x');
+			context.keyReleased(ControlKey.MENU_SELECT);
+			context.keyReleased(ControlKey.SHIP_FIRE);
 		}
 	}
 
@@ -161,8 +172,8 @@ public class Vekta extends PApplet {
 
 	public static void startWorld(World world) {
 		Vekta.setContext(world);
-		Vekta.applyContext();
-		world.start();
+//		Vekta.applyContext();
+//		world.start();
 	}
 
 	public static void setContext(Context context) {

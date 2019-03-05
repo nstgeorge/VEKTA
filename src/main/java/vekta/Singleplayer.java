@@ -34,6 +34,8 @@ import static vekta.Vekta.*;
 public class Singleplayer implements World, PlayerListener {
 	private static int nextID = 0;
 
+	private boolean started;
+
 	// Low pass filter
 	private LowPass lowPass;
 
@@ -55,7 +57,6 @@ public class Singleplayer implements World, PlayerListener {
 
 	private PlayerOverlay overlay;
 
-	@Override
 	public void start() {
 		v.frameCount = 0;
 
@@ -135,6 +136,10 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public void focus() {
+		if(!started) {
+			started = true;
+			start();
+		}
 	}
 
 	@Override
@@ -248,38 +253,33 @@ public class Singleplayer implements World, PlayerListener {
 			v.stroke(0);
 			v.fill(255);
 			v.textFont(bodyFont);
+			// TODO: update based on key binding
 			v.text("X TO RETRY", v.width / 2F, (v.height / 2F) + 97);
 		}
 	}
 
 	@Override
-	public void keyPressed(char key) {
+	public void keyPressed(ControlKey key) {
 		if(getPlayerShip().isDestroyed()) {
-			if(key == 'x') {
+			if(key == ControlKey.MENU_SELECT) {
 				restart();
 			}
 		}
 		else {
-			if(key == ESC) {
+			if(key == ControlKey.MENU_CLOSE) {
 				setContext(new PauseMenuContext(this));
 			}
-			if(key == 'k') {
-				getPlayerShip().destroyBecause(getPlayerShip());
-			}
+			//			if(key == 'k') {
+			//				getPlayerShip().destroyBecause(getPlayerShip());
+			//			}
 
-			ControlKey ctrl = Settings.getControlKey(key);
-			if(ctrl != null) {
-				getPlayer().emit(PlayerEvent.KEY_PRESS, ctrl);
-			}
+			getPlayer().emit(PlayerEvent.KEY_PRESS, key);
 		}
 	}
 
 	@Override
-	public void keyReleased(char key) {
-		ControlKey ctrl = Settings.getControlKey(key);
-		if(ctrl != null) {
-			getPlayer().emit(PlayerEvent.KEY_RELEASE, ctrl);
-		}
+	public void keyReleased(ControlKey key) {
+		getPlayer().emit(PlayerEvent.KEY_RELEASE, key);
 	}
 
 	@Override

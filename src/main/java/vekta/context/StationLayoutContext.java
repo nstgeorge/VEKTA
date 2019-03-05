@@ -1,5 +1,6 @@
 package vekta.context;
 
+import vekta.ControlKey;
 import vekta.Player;
 import vekta.Resources;
 import vekta.item.Inventory;
@@ -129,53 +130,59 @@ public class StationLayoutContext implements Context, Upgrader {
 		}
 	}
 
-	@Override
-	public void keyPressed(char key) {
-		if(key == ESC) {
-			setContext(parent);
+	public void selectCursor() {
+		if(isCursorRemovable()) {
+			// Uninstall cursor
+			uninstallModule(cursor.getModule());
 		}
-		else if(key == 'w') {
-			moveCursor(SpaceStation.Direction.UP);
-		}
-		else if(key == 's') {
-			moveCursor(SpaceStation.Direction.DOWN);
-		}
-		else if(key == 'a') {
-			moveCursor(SpaceStation.Direction.LEFT);
-		}
-		else if(key == 'd') {
-			moveCursor(SpaceStation.Direction.RIGHT);
-		}
-		else if(key == 'x') {
-			if(isCursorRemovable()) {
-				// Uninstall cursor
-				uninstallModule(cursor.getModule());
-			}
-			else if(isPlacing()) {
-				Menu menu = new Menu(getPlayer(), new LoadoutMenuHandle(new BackOption(this), Collections.singletonList(cursor.getModule())));
-				for(Module module : getPlayer().getShip().findUpgrades()) {
-					if(module instanceof ComponentModule) {
-						ComponentModule m = (ComponentModule)module;
-						if(isPlacing() ? cursor.isAttachable(cursor) : cursor.isReplaceable(m)) {
-							menu.add(new InstallModuleOption(this, m));
-						}
+		else if(isPlacing()) {
+			Menu menu = new Menu(getPlayer(), new LoadoutMenuHandle(new BackOption(this), Collections.singletonList(cursor.getModule())));
+			for(Module module : getPlayer().getShip().findUpgrades()) {
+				if(module instanceof ComponentModule) {
+					ComponentModule m = (ComponentModule)module;
+					if(isPlacing() ? cursor.isAttachable(cursor) : cursor.isReplaceable(m)) {
+						menu.add(new InstallModuleOption(this, m));
 					}
 				}
-				//			if(isCursorRemovable()) {
-				//				inject.add(new UninstallModuleOption(this, cursor.getModule()));
-				//			}
-				menu.addDefault();
-				setContext(menu);
 			}
-			else {
-				return;
-			}
-			Resources.playSound("select");
+			//			if(isCursorRemovable()) {
+			//				inject.add(new UninstallModuleOption(this, cursor.getModule()));
+			//			}
+			menu.addDefault();
+			setContext(menu);
+		}
+		else {
+			return;
+		}
+		Resources.playSound("select");
+	}
+
+	@Override
+	public void keyPressed(ControlKey key) {
+		switch(key) {
+		case MENU_CLOSE:
+			setContext(parent);
+			break;
+		case MENU_UP:
+			moveCursor(SpaceStation.Direction.UP);
+			break;
+		case MENU_DOWN:
+			moveCursor(SpaceStation.Direction.DOWN);
+			break;
+		case MENU_LEFT:
+			moveCursor(SpaceStation.Direction.LEFT);
+			break;
+		case MENU_RIGHT:
+			moveCursor(SpaceStation.Direction.RIGHT);
+			break;
+		case MENU_SELECT:
+			selectCursor();
+			break;
 		}
 	}
 
 	@Override
-	public void keyReleased(char key) {
+	public void keyReleased(ControlKey key) {
 	}
 
 	@Override

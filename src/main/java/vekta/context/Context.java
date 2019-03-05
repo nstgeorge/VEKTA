@@ -1,5 +1,6 @@
 package vekta.context;
 
+import vekta.ControlKey;
 import vekta.overlay.Overlay;
 
 public interface Context extends Overlay {
@@ -11,12 +12,12 @@ public interface Context extends Overlay {
 	/**
 	 * What to do when a key is pressed
 	 */
-	void keyPressed(char key);
+	void keyPressed(ControlKey key);
 
 	/**
 	 * What to do when a key is released
 	 */
-	void keyReleased(char key);
+	void keyReleased(ControlKey key);
 
 	/**
 	 * What to do when the mouse wheel is scrolled

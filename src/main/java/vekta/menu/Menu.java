@@ -1,5 +1,6 @@
 package vekta.menu;// These will move into their own files once we migrate to Maven
 
+import vekta.ControlKey;
 import vekta.Player;
 import vekta.PlayerEvent;
 import vekta.context.Context;
@@ -95,12 +96,12 @@ public class Menu implements Context {
 	}
 
 	@Override
-	public void keyPressed(char key) {
+	public void keyPressed(ControlKey key) {
 		handle.keyPressed(this, key);
 	}
 
 	@Override
-	public void keyReleased(char key) {
+	public void keyReleased(ControlKey key) {
 	}
 
 	@Override

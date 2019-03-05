@@ -36,8 +36,8 @@ public class LoadoutMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public String getHelperText() {
-		return "X to install";
+	public String getSelectVerb() {
+		return "install";
 	}
 
 	@Override

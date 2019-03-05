@@ -1,7 +1,14 @@
 package vekta;
 
+import static processing.core.PConstants.ESC;
+
 public enum ControlKey {
-	// TODO: add menu keys
+	MENU_UP('w'),
+	MENU_DOWN('s'),
+	MENU_LEFT('a'),
+	MENU_RIGHT('d'),
+	MENU_SELECT('x'),
+	MENU_CLOSE(ESC),
 	SHIP_FORWARD('w'),
 	SHIP_BACKWARD('s'),
 	SHIP_LEFT('a'),
