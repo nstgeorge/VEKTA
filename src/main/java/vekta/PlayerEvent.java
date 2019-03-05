@@ -3,6 +3,8 @@ package vekta;
 import java.util.function.BiConsumer;
 
 public enum PlayerEvent {
+	KEY_PRESS(PlayerListener::onKeyPress),
+	KEY_RELEASE(PlayerListener::onKeyRelease),
 	CHANGE_SHIP(PlayerListener::onChangeShip),
 	NOTIFICATION(PlayerListener::onNotification),
 	LAND(PlayerListener::onLand),

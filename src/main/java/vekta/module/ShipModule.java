@@ -1,8 +1,8 @@
 package vekta.module;
 
+import vekta.module.station.ComponentModule;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.SpaceStation;
-import vekta.module.station.ComponentModule;
 
 import static vekta.Vekta.round;
 import static vekta.Vekta.v;
@@ -12,6 +12,11 @@ public abstract class ShipModule implements ComponentModule {
 
 	public final ModularShip getShip() {
 		return ship;
+	}
+
+	@Override
+	public boolean isApplicable(ModularShip ship) {
+		return true;
 	}
 
 	@Override

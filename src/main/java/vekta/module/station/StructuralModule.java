@@ -3,6 +3,8 @@ package vekta.module.station;
 import vekta.module.Module;
 import vekta.module.ModuleType;
 import vekta.module.ShipModule;
+import vekta.object.ship.ModularShip;
+import vekta.object.ship.SpaceStation;
 
 public class StructuralModule extends ShipModule {
 	private final int width, height;
@@ -30,6 +32,11 @@ public class StructuralModule extends ShipModule {
 	@Override
 	public Module getVariant() {
 		return new StructuralModule(chooseInclusive(1, 3), chooseInclusive(1, 3));
+	}
+
+	@Override
+	public boolean isApplicable(ModularShip ship) {
+		return ship instanceof SpaceStation;
 	}
 
 	@Override

@@ -163,7 +163,10 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 		List<Module> list = new ArrayList<>();
 		for(Item item : getInventory()) {
 			if(item instanceof ModuleItem) {
-				list.add(((ModuleItem)item).getModule());
+				Module module = ((ModuleItem)item).getModule();
+				if(module.isApplicable(this)) {
+					list.add(module);
+				}
 			}
 		}
 		return list;
@@ -233,6 +236,17 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 					}
 				}
 			}
+			getController().emit(PlayerEvent.KEY_PRESS, key);
+		}
+	}
+
+	public void onKeyRelease(char key) {
+		for(Module module : getModules()) {
+			module.onKeyRelease(key);
+		}
+
+		if(hasController()) {
+			getController().emit(PlayerEvent.KEY_RELEASE, key);
 		}
 	}
 
@@ -244,12 +258,6 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 		setContext(menu);
 
 		return menu;
-	}
-
-	public void onKeyRelease(char key) {
-		for(Module module : getModules()) {
-			module.onKeyRelease(key);
-		}
 	}
 
 	@Override

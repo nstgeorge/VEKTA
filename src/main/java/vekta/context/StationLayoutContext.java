@@ -5,12 +5,12 @@ import vekta.menu.Menu;
 import vekta.menu.handle.LoadoutMenuHandle;
 import vekta.menu.option.BackOption;
 import vekta.menu.option.InstallModuleOption;
-import vekta.object.ship.ModularShip;
-import vekta.object.ship.SpaceStation;
 import vekta.module.Module;
 import vekta.module.ModuleType;
 import vekta.module.Upgrader;
 import vekta.module.station.ComponentModule;
+import vekta.object.ship.ModularShip;
+import vekta.object.ship.SpaceStation;
 
 import java.util.Collections;
 
@@ -256,6 +256,11 @@ public class StationLayoutContext implements Context, Upgrader {
 		@Override
 		public Module getVariant() {
 			return null;
+		}
+
+		@Override
+		public boolean isApplicable(ModularShip ship) {
+			return false;
 		}
 	}
 }

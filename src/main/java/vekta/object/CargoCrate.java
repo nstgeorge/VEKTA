@@ -60,7 +60,7 @@ public class CargoCrate extends SpaceObject {
 		destroyBecause(s);
 		if(s instanceof ModularShip && ((ModularShip)s).hasController()) {
 			Player player = ((ModularShip)s).getController();
-			player.send("Picked up: " + getItem().getName());
+			player.send("Picked up: " + getItem().getName(), getItem().getType().getColor());
 		}
 	}
 }  

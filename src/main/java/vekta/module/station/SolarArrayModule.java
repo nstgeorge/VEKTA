@@ -3,10 +3,11 @@ package vekta.module.station;
 import vekta.Singleplayer;
 import vekta.Vekta;
 import vekta.context.World;
-import vekta.object.ship.SpaceStation;
 import vekta.module.GeneratorModule;
 import vekta.module.Module;
 import vekta.module.ModuleType;
+import vekta.object.ship.ModularShip;
+import vekta.object.ship.SpaceStation;
 
 import static processing.core.PConstants.*;
 import static vekta.Vekta.v;
@@ -40,6 +41,11 @@ public class SolarArrayModule extends GeneratorModule {
 	@Override
 	public Module getVariant() {
 		return new SolarArrayModule(chooseInclusive(.5F, 5, .5F));
+	}
+
+	@Override
+	public boolean isApplicable(ModularShip ship) {
+		return ship instanceof SpaceStation;
 	}
 
 	@Override

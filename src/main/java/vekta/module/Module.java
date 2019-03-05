@@ -1,8 +1,8 @@
 package vekta.module;
 
 import vekta.menu.Menu;
-import vekta.object.ship.ModularShip;
 import vekta.object.SpaceObject;
+import vekta.object.ship.ModularShip;
 import vekta.terrain.LandingSite;
 
 public interface Module {
@@ -17,6 +17,8 @@ public interface Module {
 	boolean isBetter(Module other);
 
 	Module getVariant();
+
+	boolean isApplicable(ModularShip ship);
 
 	default void onInstall(ModularShip ship) {
 	}
