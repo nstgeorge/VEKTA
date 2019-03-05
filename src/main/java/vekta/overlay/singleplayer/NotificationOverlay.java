@@ -22,7 +22,7 @@ public class NotificationOverlay extends PositionOverlay {
 	}
 
 	@Override
-	public void draw() {
+	public void render() {
 		for(int i = 0; i < notifications.size(); i++) {
 			Notification n = notifications.get(i);
 			n.draw(getX(), getNotificationY(n, i));

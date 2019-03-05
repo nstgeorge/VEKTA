@@ -6,7 +6,7 @@ import static vekta.Vekta.v;
 // TODO: convert to abstract class for more notification variants
 public class Notification {
 	private static final int DEF_COLOR = v.color(200);
-	private static final int MAX_AGE = 100;
+	private static final int MAX_AGE = 200;
 
 	private final String message;
 	private final int color;

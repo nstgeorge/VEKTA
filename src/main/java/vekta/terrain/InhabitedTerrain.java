@@ -5,7 +5,7 @@ import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.menu.option.TradeMenuOption;
-import vekta.object.ship.PlayerShip;
+import vekta.object.ship.ModularShip;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,7 +49,7 @@ public class InhabitedTerrain extends Terrain {
 	}
 
 	@Override
-	public void setupLandingMenu(PlayerShip ship, Menu menu) {
+	public void setupLandingMenu(ModularShip ship, Menu menu) {
 		computeOffers(ship.getInventory(), shipOffers, offers, 1 / ITEM_MARKUP);
 		computeOffers(getInventory(), offers, shipOffers, ITEM_MARKUP);
 

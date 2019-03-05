@@ -14,7 +14,7 @@ public class Asteroid extends TerrestrialPlanet {
 		super(name, mass, density, terrain, position, velocity, color);
 
 		angle = v.random(TWO_PI);
-		skew = v.random(.9F, 1.2F);
+		skew = v.random(.25F, 1);
 	}
 
 	@Override
@@ -25,7 +25,7 @@ public class Asteroid extends TerrestrialPlanet {
 	@Override
 	public void draw() {
 		v.rotate(angle);
-		
+
 		float radius = getRadius();
 		v.ellipse(0, 0, radius, radius * skew);
 	}

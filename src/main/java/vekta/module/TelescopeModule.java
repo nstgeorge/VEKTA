@@ -6,10 +6,11 @@ import vekta.menu.handle.SurveyMenuHandle;
 import vekta.menu.option.BackOption;
 import vekta.object.Targeter;
 import vekta.object.planet.TerrestrialPlanet;
-import vekta.overlay.singleplayer.Notification;
 import vekta.terrain.LandingSite;
 
-import static vekta.Vekta.*;
+import static processing.core.PApplet.round;
+import static vekta.Vekta.getWorld;
+import static vekta.Vekta.setContext;
 
 public class TelescopeModule extends ShipModule {
 	private static final float RANGE_SCALE = 1000;
@@ -58,8 +59,8 @@ public class TelescopeModule extends ShipModule {
 					menu.addDefault();
 					setContext(menu);
 				}
-				else {
-					addObject(new Notification("Out of range! (" + round(maxDist / dist * 100) + "% resolution)"));
+				else if(getShip().hasController()) {
+					getShip().getController().send("Out of range! (" + round(maxDist / dist * 100) + "% resolution)");
 				}
 			}
 		}

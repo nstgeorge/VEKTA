@@ -18,10 +18,10 @@ public class WorldGenerator {
 	public static void spawnOccasional(PVector around) {
 		PVector pos = randomSpawnPosition(around);
 		float r = v.random(1);
-		if(r > .3F) {
+		if(r > .6F) {
 			createSystem(pos);
 		}
-		else if(r > .1F) {
+		else if(r > .3F) {
 			Ship s = new CargoShip("TRAWLX", PVector.random2D(), pos, new PVector(), randomPlanetColor());
 			ItemGenerator.addLoot(s.getInventory(), 3);
 			addObject(s);

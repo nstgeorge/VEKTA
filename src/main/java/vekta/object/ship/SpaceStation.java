@@ -78,7 +78,7 @@ public class SpaceStation extends ModularShip {
 			component.getModule().draw(TILE_SIZE);
 			v.popMatrix();
 
-			//			// DEBUG: draw bounding boxes
+			//			// DEBUG: render bounding boxes
 			//			v.stroke(100);
 			//			Rectangle b = component.getBounds();
 			//			v.rectMode(CORNER);
@@ -89,7 +89,7 @@ public class SpaceStation extends ModularShip {
 	}
 
 	@Override
-	public void setupDockingMenu(PlayerShip ship, Menu menu) {
+	public void setupDockingMenu(ModularShip ship, Menu menu) {
 		menu.add(new BasicOption("Customize", () -> {
 			setContext(new StationLayoutContext(menu, this, ship));
 		}));

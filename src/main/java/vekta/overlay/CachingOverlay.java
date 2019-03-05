@@ -32,12 +32,12 @@ public abstract class CachingOverlay extends TextOverlay {
 	}
 
 	@Override
-	public void draw() {
+	public void render() {
 		if(getCounter().cycle()) {
 			text = getTextCache();
 			color = getColorCache();
 		}
-		super.draw();
+		super.render();
 	}
 
 	public abstract String getTextCache();

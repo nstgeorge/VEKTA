@@ -13,7 +13,7 @@ import static java.lang.Math.min;
 public class Menu implements Context {
 	private final MenuHandle handle;
 
-	private final List<MenuOption> items = new ArrayList<>();
+	private final List<MenuOption> options = new ArrayList<>();
 
 	private int index = 0;
 
@@ -22,7 +22,11 @@ public class Menu implements Context {
 	}
 
 	public MenuOption getCursor() {
-		return items.get(index);
+		return options.get(index);
+	}
+
+	public List<MenuOption> getOptions() {
+		return options;
 	}
 
 	public int getIndex() {
@@ -30,19 +34,23 @@ public class Menu implements Context {
 	}
 
 	public int size() {
-		return items.size();
+		return options.size();
 	}
 
 	public MenuOption get(int i) {
-		return items.get(i);
+		return options.get(i);
+	}
+
+	public MenuOption getDefault() {
+		return handle.getDefault();
 	}
 
 	public void clear() {
-		items.clear();
+		options.clear();
 	}
 
 	public void add(MenuOption item) {
-		items.add(item);
+		options.add(item);
 	}
 
 	public void addDefault() {
@@ -50,7 +58,7 @@ public class Menu implements Context {
 	}
 
 	public boolean remove(MenuOption item) {
-		return items.remove(item);
+		return options.remove(item);
 	}
 
 	public void scroll(int n) {

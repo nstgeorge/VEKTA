@@ -63,7 +63,7 @@ public class SurveyMenuHandle extends MenuHandle {
 			v.arc(0, 0, PLANET_SIZE * xScale, PLANET_SIZE, -HALF_PI, HALF_PI);
 		}
 		
-		// TODO: draw object info (mass, radius, etc.)
+		// TODO: render object info (mass, radius, etc.)
 
 		// Draw features
 		v.textAlign(LEFT, CENTER);

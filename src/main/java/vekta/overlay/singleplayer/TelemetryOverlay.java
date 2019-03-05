@@ -1,50 +1,57 @@
 package vekta.overlay.singleplayer;
 
 import processing.core.PVector;
+import vekta.Player;
+import vekta.mission.Mission;
+import vekta.mission.Objective;
 import vekta.module.ModuleType;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 import vekta.object.planet.Planet;
-import vekta.object.ship.PlayerShip;
+import vekta.object.ship.ModularShip;
 import vekta.overlay.Overlay;
+
+import java.util.List;
 
 import static processing.core.PApplet.*;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
-import static vekta.Vekta.UI_COLOR;
-import static vekta.Vekta.v;
+import static vekta.Vekta.*;
 
 public class TelemetryOverlay implements Overlay {
 	private static final float EARTH_MASS = 5.9736e24F;
 	private static final float SUN_MASS = 1.989e30F;
 
-	private final PlayerShip ship;
+	private final Player player;
 
 	private Targeter targeter;
 	private String distString;
 
-	public TelemetryOverlay(PlayerShip ship) {
-		this.ship = ship;
+	public TelemetryOverlay(Player player) {
+		this.player = player;
+
+		updateUIInformation();
 	}
 
 	private void updateUIInformation() {
-		targeter = ((Targeter)ship.getModule(ModuleType.TARGET_COMPUTER));
-
+		targeter = ((Targeter)player.getShip().getModule(ModuleType.TARGET_COMPUTER));
 		if(targeter != null) {
 			SpaceObject target = targeter.getTarget();
 			distString = String.valueOf(target != null
-					? (float)round(ship.getPosition().dist(target.getPosition()) * 100) / 100
+					? (float)round(player.getShip().getPosition().dist(target.getPosition()) * 100) / 100
 					: 0);
 		}
 	}
 
 	@Override
-	public void draw() {
+	public void render() {
 		if(v.frameCount % 10 == 0) {
 			updateUIInformation();
 		}
 
-		float dialHeight = v.height - 70;
+		ModularShip ship = player.getShip();
+
+		float dialHeight = v.height - 64;
 
 		// Draw telemetry bar
 		v.fill(0);
@@ -60,8 +67,8 @@ public class TelemetryOverlay implements Overlay {
 		if(velocity.magSq() == 0) {
 			velocity.set(heading);
 		}
-		drawDial("Heading", ship.getHeading(), v.width - 370, dialHeight, v.color(0, 255, 0));
-		drawDial("Velocity", velocity, v.width - 500, dialHeight, v.color(0, 255, 0));
+		drawDial("Heading", ship.getHeading(), v.width - 370, dialHeight, UI_COLOR);
+		drawDial("Velocity", velocity, v.width - 500, dialHeight, UI_COLOR);
 
 		// Targeter information
 		if(targeter != null) {
@@ -96,6 +103,31 @@ public class TelemetryOverlay implements Overlay {
 				v.stroke(target.getColor());
 			}
 			v.text("Target: " + targetString, 50, v.height - 100);
+
+			// Draw mission interface
+			Mission mission = player.getCurrentMission();
+			if(mission != null) {
+				List<Objective> objectives = mission.getObjectives();
+				Objective current = mission.getCurrentObjective();
+				SpaceObject objTarget = current.getSpaceObject();
+
+				// Draw objective direction dial
+				if(objTarget != null && objTarget != targeter.getTarget()) {
+					drawDial("Objective", objTarget.getPosition().sub(ship.getPosition()), 600, dialHeight, objTarget.getColor());
+					//				v.fill(objTarget.getColor());
+				}
+
+				// Draw mission/objective text
+				v.fill(MISSION_COLOR);
+				v.textSize(24);
+				v.text(mission.getName(), 700, v.height - 90);
+				for(int i = 0; i < objectives.size(); i++) {
+					Objective objective = objectives.get(i);
+					v.fill(objective.getStatus().getColor());
+					v.textSize(16);
+					v.text(objective.getDisplayText(), 700, v.height - 50 + i * 20);
+				}
+			}
 		}
 	}
 
@@ -126,7 +158,7 @@ public class TelemetryOverlay implements Overlay {
 		PVector arms = endpoint.copy();
 		endpoint.mult(length);
 		arms.mult(length * .8F); // scale the arms to a certain length
-		// draw the arms
+		// render the arms
 		v.line(locX + endpoint.x, locY + endpoint.y, locX + cos(angle - .3F) * (length * .8F), locY + sin(angle - .3F) * (length * .8F));
 		v.line(locX + endpoint.x, locY + endpoint.y, locX + cos(angle + .3F) * (length * .8F), locY + sin(angle + .3F) * (length * .8F));
 	}

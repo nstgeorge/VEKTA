@@ -3,7 +3,7 @@ package vekta.terrain;
 import vekta.item.Inventory;
 import vekta.menu.Menu;
 import vekta.menu.option.LootMenuOption;
-import vekta.object.ship.PlayerShip;
+import vekta.object.ship.ModularShip;
 
 public class AbandonedTerrain extends Terrain {
 	private final Inventory inventory = new Inventory();
@@ -24,7 +24,7 @@ public class AbandonedTerrain extends Terrain {
 	}
 
 	@Override
-	public void setupLandingMenu(PlayerShip ship, Menu menu) {
+	public void setupLandingMenu(ModularShip ship, Menu menu) {
 		menu.add(new LootMenuOption("Scavenge", ship.getInventory(), getInventory()));
 	}
 }

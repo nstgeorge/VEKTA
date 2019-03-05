@@ -1,7 +1,7 @@
 package vekta.terrain;
 
 import vekta.menu.Menu;
-import vekta.object.ship.PlayerShip;
+import vekta.object.ship.ModularShip;
 
 public class OceanicTerrain extends Terrain {
 
@@ -18,7 +18,7 @@ public class OceanicTerrain extends Terrain {
 	}
 
 	@Override
-	public void setupLandingMenu(PlayerShip ship, Menu menu) {
+	public void setupLandingMenu(ModularShip ship, Menu menu) {
 		
 	}
 }

@@ -41,6 +41,8 @@ public class Vekta extends PApplet {
 	public static final float MAX_CAMERA_Y = 5000;
 	public static float DEF_ZOOM;
 	public static int UI_COLOR;
+	public static int DANGER_COLOR;
+	public static int MISSION_COLOR;
 
 	// Fonts
 	public static PFont headerFont;
@@ -57,6 +59,8 @@ public class Vekta extends PApplet {
 
 		DEF_ZOOM = (height / 2.0F) / tan((PI * 30.0F / 180.0F)); // For some reason, this is the default eyeZ location for Processing
 		UI_COLOR = color(0, 255, 0);
+		DANGER_COLOR = color(255, 0, 0);
+		MISSION_COLOR = color(255, 255, 0);
 
 		Settings.init();
 		Resources.init();

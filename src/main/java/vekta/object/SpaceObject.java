@@ -178,7 +178,7 @@ public abstract class SpaceObject {
 			if(newPos == null) {
 				break;
 			}
-			// Set the color and draw the line segment
+			// Set the color and render the line segment
 			v.stroke(v.lerpColor(getColor(), v.color(0), (float)i / trail.length));
 			v.line(oldPos.x, oldPos.y, newPos.x, newPos.y);
 		}

@@ -5,6 +5,9 @@ import processing.sound.LowPass;
 import vekta.context.PauseMenuContext;
 import vekta.context.World;
 import vekta.item.ModuleItem;
+import vekta.mission.EquipModuleObjective;
+import vekta.mission.Mission;
+import vekta.mission.DockWithObjective;
 import vekta.module.*;
 import vekta.module.station.SolarArrayModule;
 import vekta.module.station.StationCoreModule;
@@ -12,12 +15,10 @@ import vekta.module.station.StructuralModule;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 import vekta.object.planet.Planet;
+import vekta.object.ship.ModularShip;
 import vekta.object.ship.PlayerShip;
 import vekta.object.ship.SpaceStation;
-import vekta.overlay.Overlay;
-import vekta.overlay.singleplayer.Notification;
-import vekta.overlay.singleplayer.NotificationOverlay;
-import vekta.overlay.singleplayer.ShipOverlay;
+import vekta.overlay.singleplayer.PlayerOverlay;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,7 +26,7 @@ import java.util.List;
 
 import static vekta.Vekta.*;
 
-public class Singleplayer implements World {
+public class Singleplayer implements World, PlayerListener {
 	private static int nextID = 0;
 
 	// Low pass filter
@@ -35,7 +36,7 @@ public class Singleplayer implements World {
 	private PVector cameraPos;
 	private float cameraSpd;
 
-	private PlayerShip playerShip;
+	private Player player;
 
 	private float zoom = 1; // Camera zoom factor
 
@@ -47,8 +48,7 @@ public class Singleplayer implements World {
 	private final List<SpaceObject> markedForDeath = new ArrayList<>();
 	private final List<SpaceObject> markedForAddition = new ArrayList<>();
 
-	private Overlay overlay;
-	private NotificationOverlay notifications; // TODO: combine this into `overlay`
+	private PlayerOverlay overlay;
 
 	@Override
 	public void start() {
@@ -60,7 +60,10 @@ public class Singleplayer implements World {
 
 		WorldGenerator.createSystem(PVector.random2D().mult(v.random(10000, 15000)));
 
-		playerShip = new PlayerShip(
+		player = new Player(UI_COLOR);
+		player.addListener(this);
+
+		PlayerShip playerShip = new PlayerShip(
 				"VEKTA I",
 				PVector.fromAngle(0), // Heading
 				new PVector(), // Position
@@ -69,7 +72,13 @@ public class Singleplayer implements World {
 		);
 		playerShip.getInventory().add(50); // Starting money
 		addObject(playerShip);
+		playerShip.setController(player);
 
+		// Configure UI overlay
+		overlay = new PlayerOverlay(player);
+		player.addListener(overlay);
+
+		//// Temporary things for testing
 		SpaceStation station = new SpaceStation(
 				"OUTPOST I",
 				new StationCoreModule(),
@@ -90,7 +99,6 @@ public class Singleplayer implements World {
 		SpaceStation.Component panel4 = struct2.attach(SpaceStation.Direction.DOWN, new SolarArrayModule(1));
 		addObject(station);
 
-		//// TEMP
 		playerShip.addModule(new AutopilotModule());
 		playerShip.addModule(new TelescopeModule(2));
 		playerShip.addModule(new DrillModule(2));
@@ -98,13 +106,25 @@ public class Singleplayer implements World {
 		playerShip.getInventory().add(new ModuleItem(new HyperdriveModule(.5F)));
 		playerShip.getInventory().add(new ModuleItem(new TractorBeamModule(1)));
 		playerShip.getInventory().add(new ModuleItem(new StructuralModule(3, 1)));
-		////
 
-		// Configure UI overlay
-		overlay = new ShipOverlay(playerShip);
-		notifications = new NotificationOverlay(600, -150);
+		Mission mission2 = new Mission("Test Mission");
+		mission2.add(new DockWithObjective(station));
+		mission2.start(player);
 
-		//		addObject(new Notification("Test notification"));///
+		Mission mission = new Mission("Two-Option Mission");
+		mission.add(new DockWithObjective(station).optional());
+		mission.add(new EquipModuleObjective(new HyperdriveModule(1)).optional());
+		mission.start(player);
+
+//		player.send("Test notification");///
+	}
+
+	public Player getPlayer() {
+		return player;
+	}
+
+	public ModularShip getPlayerShip() {
+		return player.getShip();
 	}
 
 	@Override
@@ -113,6 +133,7 @@ public class Singleplayer implements World {
 
 	@Override
 	public void render() {
+		ModularShip playerShip = getPlayerShip();
 		if(!playerShip.isDestroyed()) {
 			// Camera follow
 			cameraPos = playerShip.getPosition();
@@ -206,8 +227,7 @@ public class Singleplayer implements World {
 		v.noLights();
 		v.hint(DISABLE_DEPTH_TEST);
 		if(!playerShip.isDestroyed()) {
-			overlay.draw();
-			notifications.draw();
+			overlay.render();
 		}
 		else {
 			v.textFont(headerFont);
@@ -228,7 +248,7 @@ public class Singleplayer implements World {
 
 	@Override
 	public void keyPressed(char key) {
-		if(playerShip.isDestroyed()) {
+		if(getPlayerShip().isDestroyed()) {
 			if(key == 'x') {
 				restart();
 			}
@@ -238,15 +258,15 @@ public class Singleplayer implements World {
 				setContext(new PauseMenuContext(this));
 			}
 			if(key == 'k') {
-				playerShip.destroyBecause(playerShip);
+				getPlayerShip().destroyBecause(getPlayerShip());
 			}
-			playerShip.onKeyPress(key);
+			getPlayerShip().onKeyPress(key);
 		}
 	}
 
 	@Override
 	public void keyReleased(char key) {
-		playerShip.onKeyRelease(key);
+		getPlayerShip().onKeyRelease(key);
 	}
 
 	@Override
@@ -267,20 +287,12 @@ public class Singleplayer implements World {
 		startWorld(new Singleplayer());
 	}
 
-	public PlayerShip getPlayerShip() {
-		return playerShip;
-	}
-
 	@Override
 	public void addObject(Object object) {
 		if(object instanceof SpaceObject) {
 			SpaceObject s = (SpaceObject)object;
 			s.setID(nextID++);
 			markedForAddition.add(s);
-		}
-		else if(object instanceof Notification) {
-			// Add notification from string
-			notifications.add((Notification)object);
 		}
 		else {
 			throw new RuntimeException("Cannot addFeature object: " + object);

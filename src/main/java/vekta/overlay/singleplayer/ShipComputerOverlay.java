@@ -1,6 +1,6 @@
 package vekta.overlay.singleplayer;
 
-import vekta.object.ship.PlayerShip;
+import vekta.object.ship.ModularShip;
 import vekta.overlay.TextOverlay;
 
 import static vekta.Vekta.UI_COLOR;
@@ -9,9 +9,9 @@ import static vekta.Vekta.UI_COLOR;
  * Ship computer (autopilot, targeter, etc.)
  */
 public class ShipComputerOverlay extends TextOverlay {
-	private final PlayerShip ship;
+	private final ModularShip ship;
 
-	public ShipComputerOverlay(int x, int y, PlayerShip ship) {
+	public ShipComputerOverlay(int x, int y, ModularShip ship) {
 		super(x, y);
 
 		this.ship = ship;

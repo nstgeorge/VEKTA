@@ -12,7 +12,7 @@ public abstract class TextOverlay extends PositionOverlay {
 	public abstract int getColor();
 
 	@Override
-	public void draw() {
+	public void render() {
 		String text = getText();
 		if(text != null) {
 			v.fill(v.color(getColor()));

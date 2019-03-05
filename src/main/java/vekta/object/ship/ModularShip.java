@@ -1,19 +1,33 @@
 package vekta.object.ship;
 
 import processing.core.PVector;
+import vekta.Player;
+import vekta.PlayerEvent;
 import vekta.Resources;
+import vekta.Vekta;
 import vekta.item.Item;
 import vekta.item.ModuleItem;
+import vekta.menu.Menu;
+import vekta.menu.handle.LandingMenuHandle;
+import vekta.menu.handle.ObjectMenuHandle;
+import vekta.menu.option.*;
 import vekta.module.Module;
 import vekta.module.ModuleType;
 import vekta.module.Upgradeable;
+import vekta.object.SpaceObject;
 import vekta.object.Targeter;
+import vekta.terrain.LandingSite;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static vekta.Vekta.getWorld;
+import static vekta.Vekta.setContext;
+
 public abstract class ModularShip extends Ship implements Upgradeable {
+	private Player controller;
+
 	private boolean landing;
 	private float thrust;
 	private float turn;
@@ -26,6 +40,25 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 
 	public ModularShip(String name, PVector heading, PVector position, PVector velocity, int color, float speed, float turnSpeed) {
 		super(name, heading, position, velocity, color, speed, turnSpeed);
+	}
+
+	public final boolean hasController() {
+		return getController() != null;
+	}
+
+	public final Player getController() {
+		return controller;
+	}
+
+	public final void setController(Player player) {
+		if(player == getController()) {
+			return;
+		}
+		else if(hasController()) {
+			getController().emit(PlayerEvent.CHANGE_SHIP, null);
+		}
+		this.controller = player;
+		getController().emit(PlayerEvent.CHANGE_SHIP, this);
 	}
 
 	public boolean isLanding() {
@@ -159,14 +192,20 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 		}
 		modules.add(module);
 		module.onInstall(this);
+		if(hasController()) {
+			getController().emit(PlayerEvent.INSTALL_MODULE, module);
+		}
 	}
 
 	@Override
 	public void removeModule(Module module) {
 		if(modules.remove(module)) {
 			getInventory().add(new ModuleItem(module));
+			module.onUninstall(this);
+			if(hasController()) {
+				getController().emit(PlayerEvent.UNINSTALL_MODULE, module);
+			}
 		}
-		module.onUninstall(this);
 	}
 
 	@Override
@@ -180,11 +219,75 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 		for(Module module : getModules()) {
 			module.onKeyPress(key);
 		}
+
+		if(hasController()) {
+			// TODO: generalize menu shortcuts
+			if(key == 'v' || key == 'q' || key == 'e') {
+				Menu menu = openMenu();
+				for(MenuOption option : menu.getOptions()) {
+					boolean autoSelect = (key == 'q' && option instanceof MissionMenuOption)
+							|| (key == 'e' && option instanceof LoadoutMenuOption);
+					if(autoSelect) {
+						option.select(menu);
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	public Menu openMenu() {
+		Menu menu = new Menu(new ObjectMenuHandle(new BackOption(getWorld()), this));
+		menu.add(new LoadoutMenuOption(this));
+		menu.add(new MissionMenuOption(getController()));
+		menu.addDefault();
+		setContext(menu);
+
+		return menu;
 	}
 
 	public void onKeyRelease(char key) {
 		for(Module module : getModules()) {
 			module.onKeyRelease(key);
 		}
+	}
+
+	@Override
+	public void onLand(LandingSite site) {
+		if(hasController()) {
+			Menu menu = new Menu(new LandingMenuHandle(site, getWorld()));
+			for(Module m : getModules()) {
+				m.onLandingMenu(site, menu);
+			}
+			site.getTerrain().setupLandingMenu(this, menu);
+			menu.add(new SurveyOption(site));
+			menu.addDefault();
+			Resources.stopSound("engine");
+			Resources.playSound("land");
+			Vekta.setContext(menu);
+
+			getController().emit(PlayerEvent.LAND, site);
+		}
+	}
+
+	@Override
+	public void onDock(SpaceObject s) {
+		Resources.stopSound("engine");
+		if(hasController()) {
+			if(s instanceof Ship) {
+				Menu menu = new Menu(new ObjectMenuHandle(new ShipUndockOption(this, getWorld()), s));
+				((Ship)s).setupDockingMenu(this, menu);
+				menu.addDefault();
+				setContext(menu);
+			}
+
+			getController().emit(PlayerEvent.DOCK, s);
+		}
+	}
+
+	@Override
+	public void onDepart(SpaceObject obj) {
+		setThrustControl(0);
+		setTurnControl(0);
 	}
 }  

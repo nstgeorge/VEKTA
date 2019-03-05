@@ -2,8 +2,8 @@ package vekta.terrain;
 
 import processing.core.PVector;
 import vekta.Vekta;
-import vekta.object.ship.Ship;
 import vekta.object.SpaceObject;
+import vekta.object.ship.Ship;
 
 import static vekta.Vekta.G;
 import static vekta.Vekta.SCALE;

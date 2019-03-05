@@ -173,7 +173,7 @@ public abstract class Ship extends SpaceObject {
 		undock();
 	}
 
-	public void setupDockingMenu(PlayerShip ship, Menu menu) {
+	public void setupDockingMenu(ModularShip ship, Menu menu) {
 	}
 
 	public void onDepart(SpaceObject obj) {

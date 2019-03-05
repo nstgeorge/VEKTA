@@ -1,12 +1,12 @@
 package vekta.overlay.singleplayer;
 
-import vekta.object.ship.PlayerShip;
+import vekta.object.ship.ModularShip;
 
 /**
  * Ship stats (energy, money, etc.)
  */
 public class ShipMoneyOverlay extends ShipStatOverlay {
-	public ShipMoneyOverlay(int x, int y, PlayerShip ship) {
+	public ShipMoneyOverlay(int x, int y, ModularShip ship) {
 		super(x, y, ship);
 	}
 

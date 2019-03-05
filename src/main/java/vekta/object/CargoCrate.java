@@ -1,7 +1,9 @@
 package vekta.object;
 
 import processing.core.PVector;
+import vekta.Player;
 import vekta.item.Item;
+import vekta.object.ship.ModularShip;
 
 import static vekta.Vekta.PI;
 import static vekta.Vekta.v;
@@ -56,5 +58,9 @@ public class CargoCrate extends SpaceObject {
 	@Override
 	public void onCollide(SpaceObject s) {
 		destroyBecause(s);
+		if(s instanceof ModularShip && ((ModularShip)s).hasController()) {
+			Player player = ((ModularShip)s).getController();
+			player.send("Picked up: " + getItem().getName());
+		}
 	}
 }  

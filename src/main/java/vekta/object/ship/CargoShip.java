@@ -65,7 +65,7 @@ public class CargoShip extends Ship {
 	}
 
 	@Override
-	public void setupDockingMenu(PlayerShip ship, Menu menu) {
+	public void setupDockingMenu(ModularShip ship, Menu menu) {
 		menu.add(new LootMenuOption("Loot", ship.getInventory(), getInventory()));
 		
 		for(FighterShip fighter : fighters) {

@@ -2,7 +2,6 @@ package vekta.menu.option;
 
 import vekta.menu.Menu;
 import vekta.menu.handle.LoadoutMenuHandle;
-import vekta.object.ship.ModularShip;
 import vekta.module.Module;
 import vekta.module.Upgradeable;
 import vekta.module.Upgrader;
@@ -10,11 +9,11 @@ import vekta.module.Upgrader;
 import static vekta.Vekta.setContext;
 
 public class LoadoutMenuOption implements MenuOption, Upgrader {
-	private final ModularShip upgradeable;
+	private final Upgradeable upgradeable;
 
 	private Menu subMenu;
 
-	public LoadoutMenuOption(ModularShip upgradeable) {
+	public LoadoutMenuOption(Upgradeable upgradeable) {
 		this.upgradeable = upgradeable;
 	}
 
@@ -29,7 +28,7 @@ public class LoadoutMenuOption implements MenuOption, Upgrader {
 
 	@Override
 	public void select(Menu menu) {
-		subMenu = new Menu(new LoadoutMenuHandle(new BackOption(menu), upgradeable.getModules()));
+		subMenu = new Menu(new LoadoutMenuHandle(menu.getDefault(), upgradeable.getModules()));
 		updateMenu();
 		setContext(subMenu);
 	}

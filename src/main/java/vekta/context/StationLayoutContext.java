@@ -151,7 +151,7 @@ public class StationLayoutContext implements Context, Upgrader {
 					}
 				}
 				//			if(isCursorRemovable()) {
-				//				menu.add(new UninstallModuleOption(this, cursor.getModule()));
+				//				menu.addListener(new UninstallModuleOption(this, cursor.getModule()));
 				//			}
 				menu.addDefault();
 				setContext(menu);

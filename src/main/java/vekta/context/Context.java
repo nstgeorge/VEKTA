@@ -1,15 +1,12 @@
 package vekta.context;
 
-public interface Context {
+import vekta.overlay.Overlay;
+
+public interface Context extends Overlay {
 	/**
 	 * Called whenever the context is activated
 	 */
 	void focus();
-	
-	/**
-	 * Draws the context each loop
-	 */
-	void render();
 
 	/**
 	 * What to do when a key is pressed

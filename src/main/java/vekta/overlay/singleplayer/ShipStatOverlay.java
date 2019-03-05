@@ -1,6 +1,6 @@
 package vekta.overlay.singleplayer;
 
-import vekta.object.ship.PlayerShip;
+import vekta.object.ship.ModularShip;
 import vekta.overlay.TextOverlay;
 
 import static vekta.Vekta.UI_COLOR;
@@ -9,15 +9,15 @@ import static vekta.Vekta.UI_COLOR;
  * Ship stats (energy, money, etc.)
  */
 public abstract class ShipStatOverlay extends TextOverlay {
-	private final PlayerShip ship;
+	private final ModularShip ship;
 
-	public ShipStatOverlay(int x, int y, PlayerShip ship) {
+	public ShipStatOverlay(int x, int y, ModularShip ship) {
 		super(x, y);
 
 		this.ship = ship;
 	}
 
-	public PlayerShip getShip() {
+	public ModularShip getShip() {
 		return ship;
 	}
 

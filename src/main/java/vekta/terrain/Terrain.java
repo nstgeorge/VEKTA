@@ -1,7 +1,7 @@
 package vekta.terrain;
 
 import vekta.menu.Menu;
-import vekta.object.ship.PlayerShip;
+import vekta.object.ship.ModularShip;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,7 +44,7 @@ public abstract class Terrain {
 
 	public abstract String getOverview();
 
-	public abstract void setupLandingMenu(PlayerShip ship, Menu menu);
+	public abstract void setupLandingMenu(ModularShip ship, Menu menu);
 
-//	public abstract setupSurveyMenu(PlayerShip ship, Menu menu);
+//	public abstract setupSurveyMenu(ModularShip ship, Menu menu);
 }
