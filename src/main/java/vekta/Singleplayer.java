@@ -77,8 +77,8 @@ public class Singleplayer implements World {
 		SpaceStation.Component core = station.getCore();
 		SpaceStation.Component rcs = core.attach(SpaceStation.Direction.UP, new RCSModule(1));
 		SpaceStation.Component battery = core.attach(SpaceStation.Direction.RIGHT, new BatteryModule(1));
-		SpaceStation.Component struct = core.attach(SpaceStation.Direction.LEFT, new StructuralModule(4, 1));
-		SpaceStation.Component struct2 = core.attach(SpaceStation.Direction.DOWN, new StructuralModule(4, 1));
+		SpaceStation.Component struct = core.attach(SpaceStation.Direction.LEFT, new StructuralModule(10, 1));
+		SpaceStation.Component struct2 = core.attach(SpaceStation.Direction.DOWN, new StructuralModule(10, 1));
 		SpaceStation.Component panel = struct.attach(SpaceStation.Direction.LEFT, new SolarArrayModule(1));
 		SpaceStation.Component panel2 = struct.attach(SpaceStation.Direction.DOWN, new SolarArrayModule(1));
 		SpaceStation.Component panel3 = struct2.attach(SpaceStation.Direction.RIGHT, new SolarArrayModule(1));
