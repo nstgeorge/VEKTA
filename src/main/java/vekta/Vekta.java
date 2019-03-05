@@ -35,7 +35,7 @@ public class Vekta extends PApplet {
 	// Game-balancing variables and visual settings
 	public static final float G = 6.674e-11F;
 	public static final float SCALE = 3e7F;
-	public static final float MAX_G_DISTANCE = 2000;
+	public static final float MAX_G_DISTANCE = 200000;
 	public static final float MAX_G_FORCE = 2F;
 	public static final int MAX_PLANETS = 5;
 	public static final float MAX_CAMERA_Y = 5000;

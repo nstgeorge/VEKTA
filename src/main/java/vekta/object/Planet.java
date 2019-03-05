@@ -11,7 +11,7 @@ import static vekta.Vekta.*;
  * Model for a planet.
  */
 public abstract class Planet extends SpaceObject {
-	private static final float MIN_SPLIT_RADIUS = 6;
+	private static final float MIN_SPLIT_RADIUS = 100;
 	private static final float SPLIT_OFFSET_SCALE = .25F;
 	private static final float SPLIT_VELOCITY_SCALE = 1;
 	private static final float SPLIT_MASS_ABSORB = .5F; // Below 1.0 to prevent supermassive planets taking over the map
