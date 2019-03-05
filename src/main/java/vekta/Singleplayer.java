@@ -5,11 +5,12 @@ import processing.sound.LowPass;
 import vekta.context.PauseMenuContext;
 import vekta.context.World;
 import vekta.item.ModuleItem;
-import vekta.object.*;
 import vekta.module.*;
 import vekta.module.station.SolarArrayModule;
 import vekta.module.station.StationCoreModule;
 import vekta.module.station.StructuralModule;
+import vekta.object.SpaceObject;
+import vekta.object.Targeter;
 import vekta.object.planet.Planet;
 import vekta.object.ship.PlayerShip;
 import vekta.object.ship.SpaceStation;
@@ -127,8 +128,6 @@ public class Singleplayer implements World {
 		v.camera(cameraPos.x, cameraPos.y, min(MAX_CAMERA_Y, (.07F * cameraSpd + .7F) * (v.height / 2F) / tan(PI * 30 / 180) * zoom), cameraPos.x, cameraPos.y, 0F,
 				0F, 1F, 0F);
 
-		cameraPos = playerShip.getPosition();
-
 		boolean targeting = targetCt.cycle();
 		boolean spawning = spawnCt.cycle();
 
@@ -180,7 +179,7 @@ public class Singleplayer implements World {
 					}
 				}
 			}
-			
+
 			// Draw movement trail
 			s.drawTrail();
 

@@ -107,8 +107,8 @@ public class TelemetryOverlay implements Overlay {
 		v.ellipse(locX, locY, radius, radius);
 		v.fill(100, 100, 100);
 		v.textAlign(CENTER);
-		v.textSize(16);
-		v.text(name, locX, locY + radius + 16);
+		v.textSize(14);
+		v.text(name, locX, locY + radius / 2);
 		v.textAlign(LEFT);
 		v.textSize(16);
 		v.stroke(c);

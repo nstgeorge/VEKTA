@@ -54,11 +54,13 @@ public class PlayerShip extends ModularShip {
 
 	@Override
 	public void draw() {
+		v.pushMatrix();
 		drawShip(ShipModelType.DEFAULT);
+		v.popMatrix();
 
 		// Draw influence vector
 		v.stroke(255, 0, 0);
-		v.line(position.x, position.y, position.x + (influence.x * 100), position.y + (influence.y * 100));
+		v.line(0, 0, (influence.x * 100), (influence.y * 100));
 	}
 
 	@Override

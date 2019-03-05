@@ -39,7 +39,7 @@ public abstract class Planet extends SpaceObject {
 	@Override
 	public void draw() {
 		float radius = getRadius();
-		v.ellipse(position.x, position.y, radius, radius);
+		v.ellipse(0, 0, radius, radius);
 	}
 
 	@Override

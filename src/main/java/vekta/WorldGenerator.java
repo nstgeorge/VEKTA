@@ -76,7 +76,7 @@ public class WorldGenerator {
 
 		int asteroids = (int)v.random(20);
 		for(int i = 0; i <= asteroids; i++) {
-			float power = pow(10, order - v.random(3, 4));
+			float power = pow(10, v.random(26, 27));
 			float radiusLoc = v.random(1000, 15000);
 			float speed = sqrt(G * centerMass / radiusLoc) / SCALE * v.random(.75F, 1.5F);
 			float mass = v.random(0.05F, 0.5F) * power;

@@ -3,9 +3,10 @@ package vekta.module;
 import vekta.Vekta;
 import vekta.context.Context;
 import vekta.context.World;
-import vekta.object.*;
+import vekta.object.SpaceObject;
+import vekta.object.Targeter;
 import vekta.object.planet.Asteroid;
-import vekta.object.planet.Planet;
+import vekta.object.planet.TerrestrialPlanet;
 import vekta.object.ship.Ship;
 
 public class TargetingModule extends ShipModule implements Targeter {
@@ -45,7 +46,7 @@ public class TargetingModule extends ShipModule implements Targeter {
 		}
 		switch(mode) {
 		case PLANET:
-			return obj instanceof Planet && !(obj instanceof Asteroid);
+			return obj instanceof TerrestrialPlanet && !(obj instanceof Asteroid);
 		case SHIP:
 			return obj instanceof Ship;
 		case ASTEROID:
