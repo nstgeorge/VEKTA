@@ -11,12 +11,11 @@ import vekta.object.planet.Planet;
 import vekta.object.ship.ModularShip;
 import vekta.overlay.Overlay;
 
-import java.util.List;
-
 import static processing.core.PApplet.*;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
-import static vekta.Vekta.*;
+import static vekta.Vekta.UI_COLOR;
+import static vekta.Vekta.v;
 
 public class TelemetryOverlay implements Overlay {
 	private static final float EARTH_MASS = 5.9736e24F;
@@ -103,14 +102,15 @@ public class TelemetryOverlay implements Overlay {
 				v.stroke(target.getColor());
 			}
 			v.text("Target: " + targetString, 50, v.height - 100);
+			
+			// Draw mission objective
 			Mission mission = player.getCurrentMission();
 			if(mission != null) {
 				Objective current = mission.getCurrentObjective();
 				SpaceObject objTarget = current.getSpaceObject();
 				// Draw objective direction dial
-				if (objTarget != null && objTarget != targeter.getTarget()) {
-					drawDial("Objective", objTarget.getPosition().sub(ship.getPosition()), v.width - 630, dialHeight, objTarget.getColor());
-					//				v.fill(objTarget.getColor());
+				if(objTarget != null && objTarget != targeter.getTarget()) {
+					drawDial("Objective", objTarget.getPosition().sub(ship.getPosition()), 500, dialHeight, objTarget.getColor());
 				}
 			}
 		}
@@ -142,7 +142,7 @@ public class TelemetryOverlay implements Overlay {
 		PVector endpoint = new PVector(x, y);
 		PVector arms = endpoint.copy();
 		endpoint.mult(length);
-		arms.mult(length * .8F); // scale the arms to a certain length
+		arms.mult(length * .9F); // scale the arms to a certain length
 		// render the arms
 		v.line(locX + endpoint.x, locY + endpoint.y, locX + cos(angle - .3F) * (length * .8F), locY + sin(angle - .3F) * (length * .8F));
 		v.line(locX + endpoint.x, locY + endpoint.y, locX + cos(angle + .3F) * (length * .8F), locY + sin(angle + .3F) * (length * .8F));

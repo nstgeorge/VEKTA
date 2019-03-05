@@ -59,7 +59,8 @@ public final class Player {
 					getCurrentMission().cycleObjective();
 				}
 				if(key == 'p') {
-					setCurrentMission(missions.get((missions.indexOf(getCurrentMission()) + 1) % missions.size()));
+					int index = missions.indexOf(getCurrentMission()) + 1;
+					setCurrentMission(index == getMissions().size() ? missions.get(index % missions.size()) : null);
 				}
 			}
 		});
