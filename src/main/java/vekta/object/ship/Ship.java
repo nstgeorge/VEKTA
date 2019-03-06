@@ -13,8 +13,7 @@ import vekta.terrain.LandingSite;
 
 import static processing.core.PConstants.CLOSE;
 import static processing.core.PConstants.HALF_PI;
-import static vekta.Vekta.addObject;
-import static vekta.Vekta.v;
+import static vekta.Vekta.*;
 
 public abstract class Ship extends SpaceObject {
 	private static final float CRATE_SPEED = 1;
@@ -102,7 +101,7 @@ public abstract class Ship extends SpaceObject {
 
 	public void accelerate(float amount, PVector direction) {
 		if(amount != 0) {
-			addVelocity(direction.copy().setMag(amount * getSpeed()));
+			addVelocity(direction.copy().setMag(amount * getSpeed() * getWorld().getTimeScale()));
 		}
 	}
 

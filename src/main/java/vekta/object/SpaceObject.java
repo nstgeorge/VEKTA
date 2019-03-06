@@ -134,20 +134,19 @@ public abstract class SpaceObject {
 	}
 
 	public PVector getGravityAcceleration(List<SpaceObject> objects) {
-		float mass = getMass();
 		PVector influence = new PVector();
 		for(SpaceObject s : objects) {
 			float distSq = distSq(position, s.getPosition());
 			if(distSq == 0) {
 				continue; // If the planet being checked is itself (or directly on top), don't move
 			}
-			float force = (G * mass / distSq * s.getMass()); // Operation order affects precision
-			if(Float.isFinite(force)) {
-				influence.add(new PVector(s.getPosition().x - position.x, s.getPosition().y - position.y).setMag(force / mass));
+			float accel = G * s.getMass() / distSq; // Operation order affects precision
+			if(Float.isFinite(accel)) {
+				influence.add(new PVector(s.getPosition().x - position.x, s.getPosition().y - position.y).setMag(accel));
 			}
 		}
 		// Prevent insane acceleration
-		return influence.limit(MAX_G_FORCE);
+		return influence/*.limit(MAX_G_FORCE)*/.mult(getWorld().getTimeScale());
 	}
 
 	/**

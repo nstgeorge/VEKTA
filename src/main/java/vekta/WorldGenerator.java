@@ -166,7 +166,7 @@ public class WorldGenerator {
 			return;
 		}
 		PVector offset = parent.getPosition().sub(child.getPosition());
-		float speed = sqrt(G * parent.getMass() / offset.mag() / getWorld().getTimeScale());
+		float speed = sqrt(G * parent.getMass() / offset.mag());
 		if(variation > 0) {
 			offset.rotate(v.random(-QUARTER_PI, QUARTER_PI) * variation);
 		}

@@ -28,7 +28,7 @@ import static vekta.Vekta.*;
 public class Singleplayer implements World, PlayerListener {
 	private static final float ZOOM_EXPONENT = .2F;
 	private static final float ZOOM_SMOOTH_AMOUNT = .1F;
-	private static final float TIME_INCREASE_FACTOR = .2F;
+	private static final float ZOOM_TIME_FACTOR = 5e-5F;
 	private static final int MAX_OBJECTS_PER_DIST = 10;
 
 	private static int nextID = 0;
@@ -46,8 +46,8 @@ public class Singleplayer implements World, PlayerListener {
 
 	private Player player;
 
-	private float zoom = 1; // Camera zoom factor
-	private float smoothZoom = zoom; // Smooth zoom factor (converges toward `zoom`)
+	private float timeScale = 1; // Camera timeScale factor
+	private float smoothTimeScale = timeScale; // Smooth timeScale factor (converges toward `timeScale`)
 
 	private Counter targetCt = new Counter(30); // Counter for periodically updating Targeter instances
 	private Counter spawnCt = new Counter(100); // Counter for periodically cleaning/spawning objects
@@ -66,9 +66,9 @@ public class Singleplayer implements World, PlayerListener {
 
 		Resources.setMusic("atmosphere");
 
-		// Set zoom factor
-		zoom = STAR_LEVEL;
-		smoothZoom = zoom;
+		// Set timeScale factor
+		timeScale = sqrt(STAR_LEVEL);
+		smoothTimeScale = timeScale;
 
 		WorldGenerator.createSystem(PVector.random2D().mult(1 * AU_DISTANCE));
 
@@ -142,12 +142,16 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public RenderLevel getRenderLevel() {
-		return Vekta.getRenderDistance(smoothZoom);
+		return getRenderDistance(getZoom());
 	}
 
 	@Override
 	public float getTimeScale() {
-		return smoothZoom * TIME_INCREASE_FACTOR;
+		return smoothTimeScale;
+	}
+
+	public float getZoom() {
+		return smoothTimeScale / ZOOM_TIME_FACTOR;
 	}
 
 	@Override
@@ -167,8 +171,8 @@ public class Singleplayer implements World, PlayerListener {
 			//			cameraSpd = playerShip.getVelocity().mag();
 		}
 
-		// Update zoom factor
-		smoothZoom += (zoom - smoothZoom) * ZOOM_SMOOTH_AMOUNT;
+		// Update timeScale factor
+		smoothTimeScale += (timeScale - smoothTimeScale) * ZOOM_SMOOTH_AMOUNT;
 
 		v.clear();
 		v.rectMode(CENTER);
@@ -176,10 +180,10 @@ public class Singleplayer implements World, PlayerListener {
 
 		// Set up world camera
 		//		v.hint(ENABLE_DEPTH_TEST);
-		//		v.camera(cameraPos.x, cameraPos.y, min(MAX_CAMERA_Y, (.07F * cameraSpd + .7F) * (v.height / 2F) / tan(PI * 30 / 180) * zoom), cameraPos.x, cameraPos.y, 0F,
+		//		v.camera(cameraPos.x, cameraPos.y, min(MAX_CAMERA_Y, (.07F * cameraSpd + .7F) * (v.height / 2F) / tan(PI * 30 / 180) * timeScale), cameraPos.x, cameraPos.y, 0F,
 		//				0F, 1F, 0F);
 
-		//		println(gravityObjects.size(), zoom);
+		//		println(gravityObjects.size(), timeScale);
 
 		RenderLevel level = getRenderLevel();
 
@@ -249,7 +253,7 @@ public class Singleplayer implements World, PlayerListener {
 			// Draw object
 			v.pushMatrix();
 			PVector position = s.getPositionReference();
-			float scale = smoothZoom;
+			float scale = getZoom();
 			v.translate((position.x - cameraPos.x) / scale, (position.y - cameraPos.y) / scale);
 			if(s == playerShip || s.getRenderLevel().isVisibleTo(level)) {
 				s.drawTrail(scale);
@@ -325,7 +329,8 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public void mouseWheel(int amount) {
-		zoom = max(.1F, min(MAX_CAMERA_ZOOM, zoom * (1 + amount * ZOOM_EXPONENT)));
+		float maxTime = MAX_ZOOM_LEVEL * ZOOM_TIME_FACTOR;///
+		timeScale = max(1, min(maxTime, timeScale * (1 + amount * ZOOM_EXPONENT)));
 	}
 
 	public void setDead() {
