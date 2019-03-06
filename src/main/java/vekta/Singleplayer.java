@@ -306,8 +306,7 @@ public class Singleplayer implements World, PlayerListener {
 			v.stroke(0);
 			v.fill(255);
 			v.textFont(bodyFont);
-			// TODO: update based on key binding
-			v.text("X TO RETRY", v.width / 2F, (v.height / 2F) + 97);
+			v.text(Settings.getControlString(ControlKey.MENU_SELECT) + " TO RETRY", v.width / 2F, (v.height / 2F) + 97);
 		}
 	}
 

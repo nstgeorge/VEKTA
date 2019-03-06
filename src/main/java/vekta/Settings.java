@@ -36,6 +36,9 @@ public class Settings {
 
 	// TODO: find a way to automatically do this for all keys
 	private static String serializeKey(char key) {
+		if(key == ' ') {
+			return "SPACE";
+		}
 		if(key == '\t') {
 			return "TAB";
 		}
@@ -43,6 +46,9 @@ public class Settings {
 	}
 
 	private static char deserializeKey(String key) {
+		if("SPACE".equals(key)) {
+			return ' ';
+		}
 		if("TAB".equals(key)) {
 			return '\t';
 		}
@@ -71,6 +77,10 @@ public class Settings {
 			result = defaults.getString(prop, "");
 		}
 		return deserializeKey(result);
+	}
+
+	public static String getControlString(ControlKey key) {
+		return serializeKey(getCharacter(key));
 	}
 
 	public static void set(String key, int value) {

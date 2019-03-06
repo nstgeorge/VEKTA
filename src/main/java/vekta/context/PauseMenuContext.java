@@ -2,6 +2,7 @@ package vekta.context;
 
 import vekta.ControlKey;
 import vekta.Resources;
+import vekta.Settings;
 
 import static vekta.Vekta.*;
 
@@ -41,7 +42,7 @@ public class PauseMenuContext implements Context {
 		v.stroke(0);
 		v.fill(255);
 		v.textAlign(CENTER);
-		v.text("X to select", v.width / 8F, (v.height / 2) + (pauseMenu.length * 100) + 100);
+		v.text(Settings.getControlString(ControlKey.MENU_SELECT) + " to select", v.width / 8F, (v.height / 2) + (pauseMenu.length * 100) + 100);
 		v.hint(ENABLE_DEPTH_TEST);
 		//noLoop();
 	}

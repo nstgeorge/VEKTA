@@ -1,9 +1,6 @@
 package vekta.context;
 
-import vekta.ControlKey;
-import vekta.Player;
-import vekta.RenderLevel;
-import vekta.Resources;
+import vekta.*;
 import vekta.item.Inventory;
 import vekta.menu.Menu;
 import vekta.menu.handle.LoadoutMenuHandle;
@@ -103,7 +100,7 @@ public class StationLayoutContext implements Context, Upgrader {
 		v.textSize(24);
 		v.fill(255);
 		if(!cursor.hasChildren()) {
-			v.text("X to " + (isPlacing() ? "INSTALL" : "REMOVE"), v.width / 2F, v.height - 32);
+			v.text(Settings.getControlString(ControlKey.MENU_SELECT) + " to " + (isPlacing() ? "INSTALL" : "REMOVE"), v.width / 2F, v.height - 32);
 		}
 		v.strokeWeight(1);
 	}

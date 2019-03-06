@@ -2,6 +2,7 @@ package vekta.menu.handle;
 
 import vekta.ControlKey;
 import vekta.Resources;
+import vekta.Settings;
 import vekta.context.Context;
 import vekta.menu.Menu;
 import vekta.menu.option.BackOption;
@@ -54,8 +55,8 @@ public class MenuHandle {
 
 	public void beforeDraw() {
 		v.clear();
-//		v.camera();
-//		v.noLights();
+		//		v.camera();
+		//		v.noLights();
 		v.hint(DISABLE_DEPTH_TEST);
 	}
 
@@ -77,8 +78,7 @@ public class MenuHandle {
 		v.textAlign(CENTER);
 
 		if(menu.getCursor().isEnabled(menu)) {
-			v.text("X to " + getSelectVerb(), getButtonX(), getButtonY(menu.size()) + 100);
-			// TODO: Update based on key binding
+			v.text(Settings.getControlString(ControlKey.MENU_SELECT) + " to " + getSelectVerb(), getButtonX(), getButtonY(menu.size()) + 100);
 		}
 	}
 
