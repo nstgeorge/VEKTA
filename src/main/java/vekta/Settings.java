@@ -37,7 +37,7 @@ public class Settings {
 	// TODO: find a way to automatically do this for all keys
 	private static String serializeKey(char key) {
 		if(key == ' ') {
-			return "SPACE";
+			return "SPACEBAR";
 		}
 		if(key == '\t') {
 			return "TAB";
@@ -46,7 +46,7 @@ public class Settings {
 	}
 
 	private static char deserializeKey(String key) {
-		if("SPACE".equals(key)) {
+		if("SPACEBAR".equals(key)) {
 			return ' ';
 		}
 		if("TAB".equals(key)) {
