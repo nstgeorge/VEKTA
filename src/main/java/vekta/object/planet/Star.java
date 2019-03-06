@@ -1,6 +1,7 @@
 package vekta.object.planet;
 
 import processing.core.PVector;
+import vekta.RenderDistance;
 
 import static vekta.Vekta.v;
 
@@ -15,10 +16,10 @@ public class Star extends Planet {
 	}
 
 	@Override
-	public void draw() {
+	public void draw(RenderDistance dist) {
 		drawRadialGradient(getColor(), v.color(0), getRadius(), getRadius() * 1.3F);
 		v.fill(0);
-		super.draw();
+		super.draw(dist);
 	}
 	
 	// Draws radial gradient. This abstraction isn't necessary, but it helps readability

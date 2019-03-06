@@ -3,6 +3,7 @@ package vekta.object.ship;
 import processing.core.PVector;
 import vekta.Counter;
 import vekta.Player;
+import vekta.RenderDistance;
 import vekta.menu.Menu;
 import vekta.menu.option.LootMenuOption;
 
@@ -75,7 +76,7 @@ public class CargoShip extends Ship {
 	}
 
 	@Override
-	public void draw() {
-		drawShip(ShipModelType.CARGO_SHIP);
+	public void draw(RenderDistance dist) {
+		drawShip(dist, ShipModelType.CARGO_SHIP);
 	}
 }  

@@ -1,5 +1,6 @@
 package vekta.module.station;
 
+import vekta.RenderDistance;
 import vekta.module.Module;
 import vekta.module.ModuleType;
 import vekta.module.ShipModule;
@@ -39,7 +40,7 @@ public class StationCoreModule extends ShipModule {
 	}
 
 	@Override
-	public void draw(float tileSize) {
+	public void draw(RenderDistance dist, float tileSize) {
 		v.rect(0, 0, tileSize, tileSize);
 	}
 }

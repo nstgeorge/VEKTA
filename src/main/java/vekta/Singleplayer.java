@@ -1,6 +1,5 @@
 package vekta;
 
-import processing.core.PShape;
 import processing.core.PVector;
 import processing.sound.LowPass;
 import vekta.context.PauseMenuContext;
@@ -160,6 +159,8 @@ public class Singleplayer implements World, PlayerListener {
 		v.camera(cameraPos.x, cameraPos.y, min(MAX_CAMERA_Y, (.07F * cameraSpd + .7F) * (v.height / 2F) / tan(PI * 30 / 180) * zoom), cameraPos.x, cameraPos.y, 0F,
 				0F, 1F, 0F);
 
+		RenderDistance dist = RenderDistance.NEAR; // TODO define cutoff
+
 		boolean targeting = targetCt.cycle();
 		boolean spawning = spawnCt.cycle();
 
@@ -213,7 +214,7 @@ public class Singleplayer implements World, PlayerListener {
 			}
 
 			// Draw movement trail
-			s.drawTrail();
+			s.renderTrail();
 
 			// Draw object
 			v.pushMatrix();
@@ -221,7 +222,7 @@ public class Singleplayer implements World, PlayerListener {
 			v.translate(position.x, position.y);
 			v.stroke(s.getColor());
 			v.fill(0);
-			s.draw();
+			s.draw(RenderDistance.NEAR);
 			v.popMatrix();
 		}
 
@@ -306,9 +307,9 @@ public class Singleplayer implements World, PlayerListener {
 			SpaceObject s = (SpaceObject)object;
 			s.setID(nextID++);
 			markedForAddition.add(s);
-			if(object instanceof PlayerListener) {
-				getPlayer().addListener((PlayerListener)object);
-			}
+			//			if(object instanceof PlayerListener) {
+			//				getPlayer().addListener((PlayerListener)object);
+			//			}
 		}
 		else {
 			throw new RuntimeException("Cannot addFeature object: " + object);
@@ -319,9 +320,9 @@ public class Singleplayer implements World, PlayerListener {
 	public void removeObject(Object object) {
 		if(object instanceof SpaceObject) {
 			markedForDeath.add((SpaceObject)object);
-			if(object instanceof PlayerListener) {
-				getPlayer().removeListener((PlayerListener)object);
-			}
+			//			if(object instanceof PlayerListener) {
+			//				getPlayer().removeListener((PlayerListener)object);
+			//			}
 		}
 		else {
 			throw new RuntimeException("Cannot remove object: " + object);
@@ -370,26 +371,5 @@ public class Singleplayer implements World, PlayerListener {
 		Resources.setSoundPan(sound, pan);
 		Resources.playSound(sound);
 		Resources.resetSoundVolumeAndPan(sound);
-	}
-
-	/**
-	 * Utility for drawing secondary details that will only appear after a certain zoom level.
-	 *
-	 * @param shape Shape to draw
-	 */
-	public void drawSecondary(PShape shape) {
-		if(zoom < 2) {
-			shape.stroke(150, UI_COLOR);
-			shape.fill(0);
-			v.shape(shape);
-		}
-	}
-
-	public void drawSecondaryLine(float x1, float y1, float x2, float y2) {
-		if(zoom < 2) {
-			v.stroke(0, 150, 0);
-			v.line(x1, y1, x2, y2);
-			v.stroke(UI_COLOR);
-		}
 	}
 }

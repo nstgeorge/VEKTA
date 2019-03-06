@@ -21,7 +21,7 @@ public class NotificationOverlay extends PositionOverlay {
 	}
 
 	public void add(Notification n) {
-		Resources.playSound("change"); // TODO: custom notification sound
+		Resources.playSound("chirp");
 		notifications.add(0, n);
 	}
 

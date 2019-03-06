@@ -1,6 +1,7 @@
 package vekta.object;
 
 import processing.core.PVector;
+import vekta.RenderDistance;
 
 import java.util.Collection;
 import java.util.List;
@@ -10,6 +11,8 @@ import static vekta.Vekta.*;
 public abstract class SpaceObject {
 	private static final int TRAIL_LENGTH = 100;
 
+	private final PVector[] trail = new PVector[TRAIL_LENGTH];
+
 	private int id;
 	private boolean destroyed;
 
@@ -17,7 +20,7 @@ public abstract class SpaceObject {
 	protected final PVector velocity;
 	private final int color;
 
-	private final PVector[] trail = new PVector[TRAIL_LENGTH];
+	private float temperature;
 
 	public SpaceObject(int color) {
 		this(new PVector(), new PVector(), color);
@@ -52,6 +55,38 @@ public abstract class SpaceObject {
 	 * Gets the mass of the object
 	 */
 	public abstract float getMass();
+
+	/**
+	 * Gets the radius of the object (for collision purposes, not all objects are circular)
+	 */
+	public abstract float getRadius();
+
+	/**
+	 * Gets the color of the object
+	 */
+	public int getColor() {
+		return color;
+	}
+	
+	public abstract float getSpecificHeat();
+
+	/**
+	 * Gets the temerature emission of the object
+	 */
+	public float getTemperature() {
+		return temperature;
+	}
+	
+	public void addTemperature(float temperature) {
+		this.temperature += temperature;
+	}
+
+	/**
+	 * Exposes the object to a temperature over a specified period of time
+	 */
+	public void equalizeTemperature(float other, float duration) {
+		// TODO implement
+	}
 
 	/**
 	 * Gets the position of the object
@@ -94,18 +129,6 @@ public abstract class SpaceObject {
 	public final PVector addVelocity(PVector delta) {
 		return this.velocity.add(delta);
 	}
-
-	/**
-	 * Gets the withColor of the object
-	 */
-	public int getColor() {
-		return color;
-	}
-
-	/**
-	 * Gets the radius of the object (for collision purposes, not all objects are circular)
-	 */
-	public abstract float getRadius();
 
 	/**
 	 * Returns and applies the influence vector of another object on this
@@ -163,9 +186,9 @@ public abstract class SpaceObject {
 	public void onDestroy(SpaceObject s) {
 	}
 
-	public abstract void draw();
+	public abstract void draw(RenderDistance dist);
 
-	public void drawTrail() {
+	public void renderTrail() {
 		// Update trail vectors
 		for(int i = trail.length - 1; i > 0; i--) {
 			trail[i] = trail[i - 1];

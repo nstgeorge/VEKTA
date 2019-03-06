@@ -1,6 +1,7 @@
 package vekta.object;
 
 import processing.core.PVector;
+import vekta.RenderDistance;
 
 import static vekta.Vekta.*;
 
@@ -33,13 +34,18 @@ public class Projectile extends SpaceObject {
 	}
 
 	@Override
+	public float getMass() {
+		return mass;
+	}
+
+	@Override
 	public float getRadius() {
 		return radius;
 	}
 
 	@Override
-	public float getMass() {
-		return mass;
+	public float getSpecificHeat() {
+		return 1;
 	}
 
 	@Override
@@ -50,8 +56,10 @@ public class Projectile extends SpaceObject {
 	}
 
 	@Override
-	public void draw() {
-		v.ellipse(0, 0, radius, radius);
+	public void draw(RenderDistance dist) {
+		if(dist.isNearby()) {
+			v.ellipse(0, 0, radius, radius);
+		}
 	}
 
 	@Override

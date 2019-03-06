@@ -2,9 +2,7 @@ package vekta.module;
 
 import vekta.ControlKey;
 import vekta.menu.Menu;
-import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
-import vekta.terrain.LandingSite;
 
 public interface Module {
 	// Define per-second energy consumption rate
@@ -30,15 +28,12 @@ public interface Module {
 	default void onUpdate() {
 	}
 
-	default void onDepart(SpaceObject s) {
-	}
-
 	default void onKeyPress(ControlKey key) {
 	}
 
 	default void onKeyRelease(ControlKey key) {
 	}
 
-	default void onLandingMenu(LandingSite site, Menu menu) {
+	default void onMenu(Menu menu) {
 	}
 }

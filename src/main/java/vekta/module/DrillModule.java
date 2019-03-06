@@ -1,6 +1,7 @@
 package vekta.module;
 
 import vekta.menu.Menu;
+import vekta.menu.handle.LandingMenuHandle;
 import vekta.menu.option.ExtractMenuOption;
 import vekta.terrain.LandingSite;
 
@@ -38,9 +39,13 @@ public class DrillModule extends ShipModule {
 	}
 
 	@Override
-	public void onLandingMenu(LandingSite site, Menu menu) {
-		if(site.getTerrain().hasFeature("Mineable")) {
-			menu.add(new ExtractMenuOption(site, getShip().getInventory(), round(getEfficiency() * 2)));
+	public void onMenu(Menu menu) {
+		if(menu.getHandle() instanceof LandingMenuHandle) {
+			LandingSite site = ((LandingMenuHandle)menu.getHandle()).getSite();
+
+			if(site.getTerrain().hasFeature("Mineable")) {
+				menu.add(new ExtractMenuOption(site, getShip().getInventory(), round(getEfficiency() * 2)));
+			}
 		}
 	}
 }

@@ -1,6 +1,7 @@
 package vekta.object.planet;
 
 import processing.core.PVector;
+import vekta.RenderDistance;
 import vekta.terrain.Terrain;
 
 import static processing.core.PConstants.TWO_PI;
@@ -23,7 +24,7 @@ public class Asteroid extends TerrestrialPlanet {
 	}
 
 	@Override
-	public void draw() {
+	public void draw(RenderDistance dist) {
 		v.rotate(angle);
 
 		float radius = getRadius();

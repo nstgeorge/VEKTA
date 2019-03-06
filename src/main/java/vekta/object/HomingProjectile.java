@@ -1,6 +1,7 @@
 package vekta.object;
 
 import processing.core.PVector;
+import vekta.RenderDistance;
 
 import static processing.core.PApplet.sqrt;
 import static processing.core.PConstants.CLOSE;
@@ -43,15 +44,17 @@ public class HomingProjectile extends Projectile {
 	}
 
 	@Override
-	public void draw() {
-		float theta = velocity.heading() + HALF_PI;
-		v.fill(0);
-		v.stroke(getColor());
-		v.rotate(theta);
-		v.beginShape();
-		v.vertex(0, -RADIUS);
-		v.vertex(-RADIUS, RADIUS);
-		v.vertex(RADIUS, RADIUS);
-		v.endShape(CLOSE);
+	public void draw(RenderDistance dist) {
+		if(dist.isNearby()) {
+			float theta = velocity.heading() + HALF_PI;
+			v.fill(0);
+			v.stroke(getColor());
+			v.rotate(theta);
+			v.beginShape();
+			v.vertex(0, -RADIUS);
+			v.vertex(-RADIUS, RADIUS);
+			v.vertex(RADIUS, RADIUS);
+			v.endShape(CLOSE);
+		}
 	}
 }  

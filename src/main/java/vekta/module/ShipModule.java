@@ -1,5 +1,6 @@
 package vekta.module;
 
+import vekta.RenderDistance;
 import vekta.module.station.ComponentModule;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.SpaceStation;
@@ -49,20 +50,26 @@ public abstract class ShipModule implements ComponentModule {
 		return v.random(min * interval, max * interval) / interval;
 	}
 
+	@Override
 	public int getWidth() {
 		return 1;
 	}
 
+	@Override
 	public int getHeight() {
 		return 1;
 	}
 
+	@Override
 	public boolean hasAttachmentPoint(SpaceStation.Direction dir) {
 		return true;
 	}
 
-	public void draw(float tileSize) {
-		v.rect(0, 0, getWidth() * tileSize / 2, getHeight() * tileSize);
-		v.rect(0, 0, getWidth() * tileSize, getHeight() * tileSize / 2);
+	@Override
+	public void draw(RenderDistance dist, float tileSize) {
+		if(dist == RenderDistance.NEAR) {
+			v.rect(0, 0, getWidth() * tileSize / 2, getHeight() * tileSize);
+			v.rect(0, 0, getWidth() * tileSize, getHeight() * tileSize / 2);
+		}
 	}
 }

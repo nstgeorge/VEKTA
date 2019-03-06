@@ -1,6 +1,7 @@
 package vekta.object.planet;
 
 import processing.core.PVector;
+import vekta.RenderDistance;
 import vekta.WorldGenerator;
 import vekta.object.SpaceObject;
 import vekta.terrain.MoltenTerrain;
@@ -37,7 +38,12 @@ public abstract class Planet extends SpaceObject {
 	}
 
 	@Override
-	public void draw() {
+	public float getSpecificHeat() {
+		return 1; // TODO depend on planet properties
+	}
+
+	@Override
+	public void draw(RenderDistance dist) {
 		float radius = getRadius();
 		v.ellipse(0, 0, radius, radius);
 	}

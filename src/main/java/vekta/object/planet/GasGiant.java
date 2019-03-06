@@ -1,6 +1,7 @@
 package vekta.object.planet;
 
 import processing.core.PVector;
+import vekta.RenderDistance;
 
 import static vekta.Vekta.v;
 
@@ -30,8 +31,8 @@ public class GasGiant extends Planet {
 	}
 
 	@Override
-	public void draw() {
-		super.draw();
+	public void draw(RenderDistance dist) {
+		super.draw(dist);
 
 		v.stroke(v.color(50));
 		v.noFill();

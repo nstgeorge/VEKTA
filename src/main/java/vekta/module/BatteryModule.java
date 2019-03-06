@@ -1,6 +1,7 @@
 package vekta.module;
 
 import vekta.menu.Menu;
+import vekta.menu.handle.LandingMenuHandle;
 import vekta.menu.option.RechargeOption;
 import vekta.terrain.LandingSite;
 
@@ -62,9 +63,14 @@ public class BatteryModule extends ShipModule {
 	}
 
 	@Override
-	public void onLandingMenu(LandingSite site, Menu menu) {
-		if(site.getTerrain().hasFeature("Inhabited") && getCharge() <= getCapacity() * .9F) {
-			menu.add(new RechargeOption(getShip()));
+	public void onMenu(Menu menu) {
+		if(menu.getHandle() instanceof LandingMenuHandle) {
+			LandingSite site = ((LandingMenuHandle)menu.getHandle()).getSite();
+			
+			if(site.getTerrain().hasFeature("Inhabited") && getCharge() <= getCapacity() * .9F) {
+				menu.add(new RechargeOption(getShip()));
+			}
 		}
+
 	}
 }

@@ -1,5 +1,6 @@
 package vekta.module.station;
 
+import vekta.RenderDistance;
 import vekta.module.Module;
 import vekta.module.ModuleType;
 import vekta.object.ship.ModularShip;
@@ -46,11 +47,12 @@ public class SensorModule implements ComponentModule {
 
 	@Override
 	public boolean hasAttachmentPoint(SpaceStation.Direction direction) {
-		return direction == SpaceStation.Direction.LEFT;
+		//		return direction == SpaceStation.Direction.LEFT;
+		return false;
 	}
 
 	@Override
-	public void draw(float tileSize) {
+	public void draw(RenderDistance dist, float tileSize) {
 		v.rectMode(CORNERS);
 		v.translate(-.5F * tileSize, -(getHeight() / 2F) * tileSize);
 		v.beginShape();

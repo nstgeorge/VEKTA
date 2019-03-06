@@ -1,8 +1,6 @@
 package vekta.module.station;
 
-import vekta.Singleplayer;
-import vekta.Vekta;
-import vekta.context.World;
+import vekta.RenderDistance;
 import vekta.module.GeneratorModule;
 import vekta.module.Module;
 import vekta.module.ModuleType;
@@ -60,11 +58,12 @@ public class SolarArrayModule extends GeneratorModule {
 
 	@Override
 	public boolean hasAttachmentPoint(SpaceStation.Direction dir) {
-		return dir == SpaceStation.Direction.LEFT;
+		//		return dir == SpaceStation.Direction.LEFT;
+		return false;
 	}
 
 	@Override
-	public void draw(float tileSize) {
+	public void draw(RenderDistance dist, float tileSize) {
 		v.translate(-(getWidth() - 1) / 2F * tileSize, 0); // Fix center
 
 		// Supports on station side of array
@@ -104,28 +103,21 @@ public class SolarArrayModule extends GeneratorModule {
 		v.rect(0, getHeight() * tileSize, (getWidth() - 2) * tileSize, (float)Math.ceil(getHeight() / 2.0) * tileSize);
 		// Supports on
 
-		// Solar panel details (bottom) - only drawn when zoomed in closer
-		safeDrawSecondaryLine(0, (float)Math.floor(getHeight() / 2F) / 3F * tileSize, (getWidth() - 2) * tileSize, (float)Math.floor(getHeight() / 2F) / 3F * tileSize);
-		safeDrawSecondaryLine(0, (float)Math.floor(getHeight() / 2F) / 3F * 2 * tileSize, (getWidth() - 2) * tileSize, (float)Math.floor(getHeight() / 2F) / 3F * 2 * tileSize);
-		for(int i = 1; i < getWidth() * 2 - 4; i++) {
-			safeDrawSecondaryLine((tileSize / 2 * i), 0, (tileSize / 2 * i), (float)Math.floor(getHeight() / 2F) * tileSize);
-		}
-		//Solar panel details (top) - only drawn when zoomed in closer
-		safeDrawSecondaryLine(0, (float)(Math.ceil(getHeight() / 2F) + (Math.floor(getHeight() / 2F) / 3F)) * tileSize, (getWidth() - 2) * tileSize, (float)(Math.ceil(getHeight() / 2F) + (Math.floor(getHeight() / 2F) / 3F)) * tileSize);
-		safeDrawSecondaryLine(0, (float)(Math.ceil(getHeight() / 2F) + (Math.floor(getHeight() / 2F) / 3F) * 2) * tileSize, (getWidth() - 2) * tileSize, (float)(Math.ceil(getHeight() / 2F) + (Math.floor(getHeight() / 2F) / 3F) * 2) * tileSize);
-		for(int i = 1; i < getWidth() * 2 - 4; i++) {
-			safeDrawSecondaryLine((tileSize / 2 * i), (float)(Math.ceil(getHeight() / 2F) + Math.floor(getHeight() / 2F))  * tileSize, (tileSize / 2 * i), (float)Math.ceil(getHeight() / 2F) * tileSize);
+		if(dist.isDetail()) {
+			// Solar panel details (bottom) - only drawn when zoomed in closer
+			v.line(0, (float)Math.floor(getHeight() / 2F) / 3F * tileSize, (getWidth() - 2) * tileSize, (float)Math.floor(getHeight() / 2F) / 3F * tileSize);
+			v.line(0, (float)Math.floor(getHeight() / 2F) / 3F * 2 * tileSize, (getWidth() - 2) * tileSize, (float)Math.floor(getHeight() / 2F) / 3F * 2 * tileSize);
+			for(int i = 1; i < getWidth() * 2 - 4; i++) {
+				v.line((tileSize / 2 * i), 0, (tileSize / 2 * i), (float)Math.floor(getHeight() / 2F) * tileSize);
+			}
+			//Solar panel details (top) - only drawn when zoomed in closer
+			v.line(0, (float)(Math.ceil(getHeight() / 2F) + (Math.floor(getHeight() / 2F) / 3F)) * tileSize, (getWidth() - 2) * tileSize, (float)(Math.ceil(getHeight() / 2F) + (Math.floor(getHeight() / 2F) / 3F)) * tileSize);
+			v.line(0, (float)(Math.ceil(getHeight() / 2F) + (Math.floor(getHeight() / 2F) / 3F) * 2) * tileSize, (getWidth() - 2) * tileSize, (float)(Math.ceil(getHeight() / 2F) + (Math.floor(getHeight() / 2F) / 3F) * 2) * tileSize);
+			for(int i = 1; i < getWidth() * 2 - 4; i++) {
+				v.line((tileSize / 2 * i), (float)(Math.ceil(getHeight() / 2F) + Math.floor(getHeight() / 2F)) * tileSize, (tileSize / 2 * i), (float)Math.ceil(getHeight() / 2F) * tileSize);
+			}
 		}
 
 		v.rectMode(CENTER);
-	}
-
-	private void safeDrawSecondaryLine(float x1, float y1, float x2, float y2) {
-		if(Vekta.getContext() instanceof World) {
-			Singleplayer world = (Singleplayer) Vekta.getWorld();
-			world.drawSecondaryLine(x1, y1, x2, y2);
-		} else {
-			v.line(x1, y1, x2, y2);
-		}
 	}
 }

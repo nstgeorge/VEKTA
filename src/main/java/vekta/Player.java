@@ -62,12 +62,6 @@ public final class Player {
 					int index = missions.indexOf(getCurrentMission()) + 1;
 					setCurrentMission(index == getMissions().size() ? missions.get(index % missions.size()) : null);
 				}
-				getShip().onKeyPress(key);
-			}
-
-			@Override
-			public void onKeyRelease(ControlKey key) {
-				getShip().onKeyRelease(key);
 			}
 		});
 	}

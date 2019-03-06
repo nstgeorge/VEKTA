@@ -5,7 +5,8 @@ import vekta.menu.Menu;
 import vekta.menu.option.ShipTakeoffOption;
 import vekta.object.SpaceObject;
 import vekta.terrain.LandingSite;
-import static vekta.Vekta.*;
+
+import static vekta.Vekta.v;
 
 /**
  * Menu renderer for landing on planets
@@ -17,6 +18,10 @@ public class LandingMenuHandle extends MenuHandle {
 		super(new ShipTakeoffOption(site, world));
 
 		this.site = site;
+	}
+
+	public LandingSite getSite() {
+		return site;
 	}
 
 	@Override

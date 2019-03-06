@@ -2,6 +2,7 @@ package vekta.object.ship;
 
 import processing.core.PVector;
 import vekta.Player;
+import vekta.RenderDistance;
 import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;
@@ -36,8 +37,6 @@ public abstract class Ship extends SpaceObject {
 		this.turnSpeed = turnSpeed;
 	}
 
-	public abstract void draw();
-
 	public Inventory getInventory() {
 		return inventory;
 	}
@@ -45,6 +44,11 @@ public abstract class Ship extends SpaceObject {
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public float getSpecificHeat() {
+		return 1;
 	}
 
 	public PVector getHeading() {
@@ -133,7 +137,11 @@ public abstract class Ship extends SpaceObject {
 		super.onDestroy(s);
 	}
 
-	protected void drawShip(ShipModelType shape) {
+	protected void drawShip(RenderDistance dist, ShipModelType shape) {
+		if(!dist.isNearby()) {
+			return;// TODO draw indicator
+		}
+
 		float r = getRadius();
 		float theta = heading.heading() + HALF_PI;
 		v.rotate(theta);

@@ -22,7 +22,7 @@ import java.util.List;
 import static vekta.Vekta.getWorld;
 import static vekta.Vekta.setContext;
 
-public abstract class ModularShip extends Ship implements Upgradeable {
+public abstract class ModularShip extends Ship implements Upgradeable, PlayerListener {
 	private Player controller;
 
 	private boolean landing;
@@ -51,10 +51,11 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 		if(player == getController()) {
 			return;
 		}
-		else if(hasController()) {
+		if(hasController()) {
 			getController().emit(PlayerEvent.CHANGE_SHIP, null);
 		}
 		this.controller = player;
+		player.addListener(this);
 		getController().emit(PlayerEvent.CHANGE_SHIP, this);
 	}
 
@@ -193,9 +194,9 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 		modules.add(module);
 		module.onInstall(this);
 		if(hasController()) {
-			if(module instanceof PlayerListener) {
-				getController().addListener((PlayerListener)module);
-			}
+			//			if(module instanceof PlayerListener) {
+			//				getController().addListener((PlayerListener)module);
+			//			}
 			getController().emit(PlayerEvent.INSTALL_MODULE, module);
 		}
 	}
@@ -206,9 +207,9 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 			getInventory().add(new ModuleItem(module));
 			module.onUninstall(this);
 			if(hasController()) {
-				if(module instanceof PlayerListener) {
-					getController().removeListener((PlayerListener)module);
-				}
+				//				if(module instanceof PlayerListener) {
+				//					getController().removeListener((PlayerListener)module);
+				//				}
 				getController().emit(PlayerEvent.UNINSTALL_MODULE, module);
 			}
 		}
@@ -221,34 +222,7 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 		}
 	}
 
-	public void onKeyPress(ControlKey key) {
-		for(Module module : getModules()) {
-			module.onKeyPress(key);
-		}
-
-		if(hasController()) {
-			// TODO: generalize inject shortcuts
-			if(key == ControlKey.SHIP_MENU || key == ControlKey.SHIP_MISSIONS || key == ControlKey.SHIP_LOADOUT) {
-				Menu menu = openMenu();
-				for(MenuOption option : menu.getOptions()) {
-					boolean autoSelect = (key == ControlKey.SHIP_MISSIONS && option instanceof MissionMenuOption)
-							|| (key == ControlKey.SHIP_LOADOUT && option instanceof LoadoutMenuOption);
-					if(autoSelect) {
-						option.select(menu);
-						break;
-					}
-				}
-			}
-		}
-	}
-
-	public void onKeyRelease(ControlKey key) {
-		for(Module module : getModules()) {
-			module.onKeyRelease(key);
-		}
-	}
-
-	public Menu openMenu() {
+	public Menu openShipMenu() {
 		Menu menu = new Menu(getController(), new ObjectMenuHandle(new BackOption(getWorld()), this));
 		menu.add(new LoadoutMenuOption(this));
 		menu.add(new MissionMenuOption(getController()));
@@ -262,9 +236,6 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 	public void onLand(LandingSite site) {
 		if(hasController()) {
 			Menu menu = new Menu(getController(), new LandingMenuHandle(site, getWorld()));
-			for(Module m : getModules()) {
-				m.onLandingMenu(site, menu);
-			}
 			site.getTerrain().setupLandingMenu(this, menu);
 			menu.add(new SurveyOption(site));
 			menu.addDefault();
@@ -295,5 +266,46 @@ public abstract class ModularShip extends Ship implements Upgradeable {
 	public void onDepart(SpaceObject obj) {
 		setThrustControl(0);
 		setTurnControl(0);
+	}
+
+	//// PlayerListener hooks, active when hasController() == true
+
+	@Override
+	public void onChangeShip(ModularShip ship) {
+		getController().removeListener(this);
+	}
+
+	@Override
+	public void onMenu(Menu menu) {
+		for(Module module : getModules()) {
+			module.onMenu(menu);
+		}
+	}
+
+	@Override
+	public void onKeyPress(ControlKey key) {
+		for(Module module : getModules()) {
+			module.onKeyPress(key);
+		}
+
+		// TODO: generalize inject shortcuts
+		if(key == ControlKey.SHIP_MENU || key == ControlKey.SHIP_MISSIONS || key == ControlKey.SHIP_LOADOUT) {
+			Menu menu = openShipMenu();
+			for(MenuOption option : menu.getOptions()) {
+				boolean autoSelect = (key == ControlKey.SHIP_MISSIONS && option instanceof MissionMenuOption)
+						|| (key == ControlKey.SHIP_LOADOUT && option instanceof LoadoutMenuOption);
+				if(autoSelect) {
+					option.select(menu);
+					break;
+				}
+			}
+		}
+	}
+
+	@Override
+	public void onKeyRelease(ControlKey key) {
+		for(Module module : getModules()) {
+			module.onKeyRelease(key);
+		}
 	}
 }  

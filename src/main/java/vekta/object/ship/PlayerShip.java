@@ -1,6 +1,7 @@
 package vekta.object.ship;
 
 import processing.core.PVector;
+import vekta.RenderDistance;
 import vekta.module.*;
 import vekta.object.SpaceObject;
 
@@ -41,14 +42,16 @@ public class PlayerShip extends ModularShip {
 	}
 
 	@Override
-	public void draw() {
-		v.pushMatrix();
-		drawShip(ShipModelType.DEFAULT);
-		v.popMatrix();
+	public void draw(RenderDistance dist) {
+		if(dist.isNearby()) {
+			v.pushMatrix();
+			drawShip(dist, ShipModelType.DEFAULT);
+			v.popMatrix();
 
-		// Draw influence vector
-		v.stroke(255, 0, 0);
-		v.line(0, 0, (influence.x * 100), (influence.y * 100));
+			// Draw influence vector
+			v.stroke(255, 0, 0);
+			v.line(0, 0, (influence.x * 100), (influence.y * 100));
+		}
 	}
 
 	@Override

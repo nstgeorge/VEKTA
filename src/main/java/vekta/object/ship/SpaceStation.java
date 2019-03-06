@@ -2,6 +2,7 @@ package vekta.object.ship;
 
 import processing.core.PVector;
 import vekta.Player;
+import vekta.RenderDistance;
 import vekta.context.StationLayoutContext;
 import vekta.menu.Menu;
 import vekta.menu.option.BasicOption;
@@ -12,7 +13,8 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 
-import static processing.core.PApplet.*;
+import static processing.core.PApplet.HALF_PI;
+import static processing.core.PApplet.sqrt;
 import static vekta.Vekta.*;
 
 public class SpaceStation extends ModularShip {
@@ -66,17 +68,19 @@ public class SpaceStation extends ModularShip {
 	}
 
 	@Override
-	public void draw() {
-		v.rotate(heading.heading());
-		drawRelative();
+	public void draw(RenderDistance dist) {
+		if(dist.isNearby()) {
+			v.rotate(heading.heading());
+			drawRelative(dist);
+		}
 	}
 
-	public void drawRelative() {
+	public void drawRelative(RenderDistance dist) {
 		for(Component component : components) {
 			v.pushMatrix();
 			v.translate(component.getX(), component.getY());
 			v.rotate(component.getDirection()/*.rotate(component.getRotation())*/.getAngle());
-			component.getModule().draw(TILE_SIZE);
+			component.getModule().draw(dist, TILE_SIZE);
 			v.popMatrix();
 
 			//			// DEBUG: render bounding boxes

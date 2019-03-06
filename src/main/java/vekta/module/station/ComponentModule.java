@@ -1,5 +1,6 @@
 package vekta.module.station;
 
+import vekta.RenderDistance;
 import vekta.object.ship.SpaceStation;
 import vekta.module.Module;
 
@@ -22,5 +23,5 @@ public interface ComponentModule extends Module {
 	/**
 	 * Draw the component
 	 */
-	void draw(float tileSize);
+	void draw(RenderDistance dist, float tileSize);
 }

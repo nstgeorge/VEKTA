@@ -2,6 +2,7 @@ package vekta.object;
 
 import processing.core.PVector;
 import vekta.Player;
+import vekta.RenderDistance;
 import vekta.item.Item;
 import vekta.object.ship.ModularShip;
 
@@ -39,6 +40,11 @@ public class CargoCrate extends SpaceObject {
 		return DEF_RADIUS;
 	}
 
+	@Override
+	public float getSpecificHeat() {
+		return 1;
+	}
+
 	public Item getItem() {
 		return item;
 	}
@@ -49,10 +55,12 @@ public class CargoCrate extends SpaceObject {
 	}
 
 	@Override
-	public void draw() {
-		v.rotate(angle);
-		float r = getRadius();
-		v.rect(0, 0, r, r);
+	public void draw(RenderDistance dist) {
+		if(dist.isNearby()) {
+			v.rotate(angle);
+			float r = getRadius();
+			v.rect(0, 0, r, r);
+		}
 	}
 
 	@Override
