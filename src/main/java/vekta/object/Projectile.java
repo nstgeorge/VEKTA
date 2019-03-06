@@ -62,7 +62,7 @@ public class Projectile extends SpaceObject {
 
 	@Override
 	public void drawNearby(float r) {
-		v.ellipse(0, 0, radius, radius);
+		v.ellipse(0, 0, r, r);
 	}
 
 	@Override

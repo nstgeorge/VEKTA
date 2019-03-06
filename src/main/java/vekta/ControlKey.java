@@ -7,13 +7,13 @@ public enum ControlKey {
 	MENU_DOWN('s'),
 	MENU_LEFT('a'),
 	MENU_RIGHT('d'),
-	MENU_SELECT('x'),
+	MENU_SELECT(' '),
 	MENU_CLOSE(ESC),
 	SHIP_FORWARD('w'),
 	SHIP_BACKWARD('s'),
 	SHIP_LEFT('a'),
 	SHIP_RIGHT('d'),
-	SHIP_FIRE('x'),
+	SHIP_FIRE(' '),
 	SHIP_MENU('v'),
 	SHIP_LOADOUT('e'),
 	SHIP_MISSIONS('q'),
@@ -25,7 +25,7 @@ public enum ControlKey {
 	SHIP_TARGET_ASTEROID('2'),
 	SHIP_TARGET_SHIP('3'),
 	SHIP_TELESCOPE('r'),
-	SHIP_HYPERDRIVE(' ');
+	SHIP_HYPERDRIVE('f');
 
 	private final char defaultKey;
 
