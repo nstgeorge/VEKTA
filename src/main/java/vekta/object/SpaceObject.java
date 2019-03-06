@@ -225,7 +225,7 @@ public abstract class SpaceObject {
 
 	public void drawDistant(float r) {
 //		v.stroke(v.lerpColor(0, getColor(), 1 - getPosition().mag() / WorldGenerator.getRadius(getRenderLevel())));
-		drawMarker();
+//		drawMarker();
 	}
 	
 	public void drawMarker() {
