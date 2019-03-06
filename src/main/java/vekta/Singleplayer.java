@@ -159,7 +159,7 @@ public class Singleplayer implements World, PlayerListener {
 		v.camera(cameraPos.x, cameraPos.y, min(MAX_CAMERA_Y, (.07F * cameraSpd + .7F) * (v.height / 2F) / tan(PI * 30 / 180) * zoom), cameraPos.x, cameraPos.y, 0F,
 				0F, 1F, 0F);
 
-		RenderDistance dist = RenderDistance.NEAR; // TODO define cutoff
+		RenderDistance dist = RenderDistance.DETAIL; // TODO define cutoff
 
 		boolean targeting = targetCt.cycle();
 		boolean spawning = spawnCt.cycle();
