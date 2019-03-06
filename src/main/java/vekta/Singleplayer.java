@@ -12,7 +12,6 @@ import vekta.module.station.StationCoreModule;
 import vekta.module.station.StructuralModule;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
-import vekta.object.planet.Planet;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.PlayerShip;
 import vekta.object.ship.SpaceStation;
@@ -26,9 +25,10 @@ import java.util.List;
 import static vekta.Vekta.*;
 
 public class Singleplayer implements World, PlayerListener {
-	private static final float ZOOM_EXPONENT = .2F;
-	private static final float ZOOM_SMOOTH_AMOUNT = .1F;
-	private static final float ZOOM_TIME_FACTOR = 5e-5F;
+	private static final float ZOOM_EXPONENT = .3F;
+	private static final float ZOOM_SMOOTH = .1F;
+	private static final float TIME_SCALE = 5e-4F;
+	private static final float TIME_FALLOFF = 1;
 	private static final int MAX_OBJECTS_PER_DIST = 10;
 
 	private static int nextID = 0;
@@ -46,8 +46,9 @@ public class Singleplayer implements World, PlayerListener {
 
 	private Player player;
 
-	private float timeScale = 1; // Camera timeScale factor
-	private float smoothTimeScale = timeScale; // Smooth timeScale factor (converges toward `timeScale`)
+	private float zoom = 1; // Zoom factor
+	private float smoothZoom = zoom; // Smooth zoom factor (converges toward `zoom`)
+	private float timeScale = 1; // Camera time scale factor
 
 	private Counter targetCt = new Counter(30); // Counter for periodically updating Targeter instances
 	private Counter spawnCt = new Counter(100); // Counter for periodically cleaning/spawning objects
@@ -65,10 +66,6 @@ public class Singleplayer implements World, PlayerListener {
 		lowPass = new LowPass(v);
 
 		Resources.setMusic("atmosphere");
-
-		// Set timeScale factor
-		timeScale = 1 * ZOOM_TIME_FACTOR;
-		smoothTimeScale = timeScale;
 
 		WorldGenerator.createSystem(PVector.random2D().mult(1 * AU_DISTANCE));
 
@@ -112,7 +109,7 @@ public class Singleplayer implements World, PlayerListener {
 		addObject(station);
 
 		playerShip.addModule(new AutopilotModule());
-		playerShip.addModule(new TelescopeModule(2));
+		playerShip.addModule(new TelescopeModule(.5F));
 		playerShip.addModule(new DrillModule(2));
 		playerShip.getInventory().add(new ModuleItem(new TorpedoModule(2)));
 		playerShip.getInventory().add(new ModuleItem(new HyperdriveModule(.5F)));
@@ -147,11 +144,11 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public float getTimeScale() {
-		return smoothTimeScale;
+		return timeScale;
 	}
 
 	public float getZoom() {
-		return smoothTimeScale / ZOOM_TIME_FACTOR;
+		return smoothZoom;
 	}
 
 	@Override
@@ -170,9 +167,10 @@ public class Singleplayer implements World, PlayerListener {
 			cameraPos = playerShip.getPosition();
 			//			cameraSpd = playerShip.getVelocity().mag();
 		}
-
-		// Update timeScale factor
-		smoothTimeScale += (timeScale - smoothTimeScale) * ZOOM_SMOOTH_AMOUNT;
+		
+		// Update time factor
+		smoothZoom += (zoom - smoothZoom) * ZOOM_SMOOTH;
+		timeScale = max(1, smoothZoom * TIME_SCALE) / (1 + smoothZoom * TIME_SCALE * TIME_SCALE * TIME_FALLOFF);
 
 		v.clear();
 		v.rectMode(CENTER);
@@ -193,12 +191,14 @@ public class Singleplayer implements World, PlayerListener {
 		boolean targeting = targetCt.cycle();
 		boolean cleanup = spawnCt.cycle();
 
-		for(SpaceObject obj : markedForAddition) {
-			if(obj instanceof Planet && ((Planet)obj).impartsGravity()) {
-				gravityObjects.add(obj);
+		for(SpaceObject s : markedForAddition) {
+			if(!objects.contains(s)) {
+				objects.add(s);
+			}
+			if(s.impartsGravity() && !gravityObjects.contains(s)) {
+				gravityObjects.add(s);
 			}
 		}
-		objects.addAll(markedForAddition);
 		markedForAddition.clear();
 
 		// Reset object counts for each render distance
@@ -268,8 +268,16 @@ public class Singleplayer implements World, PlayerListener {
 		gravityObjects.removeAll(markedForDeath);
 		markedForDeath.clear();
 
+		if(cleanup) {
+			// Center around zero for improved floating-point precision
+			PVector newOrigin = playerShip.getPosition().mult(-1);
+			for(SpaceObject s : objects) {
+				s.updateOrigin(newOrigin);
+			}
+		}
+
 		RenderLevel spawnLevel = level;
-		if(spawnLevel.ordinal() > 0 && v.random(1) < .002F) {
+		while(spawnLevel.ordinal() > 0 && v.random(1) < .01F) {
 			spawnLevel = RenderLevel.values()[spawnLevel.ordinal() - 1];
 		}
 		if(objectCounts[spawnLevel.ordinal()] < MAX_OBJECTS_PER_DIST) {
@@ -325,9 +333,7 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public void mouseWheel(int amount) {
-		float minTime = MIN_ZOOM_LEVEL * ZOOM_TIME_FACTOR;
-		float maxTime = MAX_ZOOM_LEVEL * ZOOM_TIME_FACTOR;///
-		timeScale = max(minTime, min(maxTime, timeScale * (1 + amount * ZOOM_EXPONENT)));
+		zoom = max(MIN_ZOOM_LEVEL, min(MAX_ZOOM_LEVEL, zoom * (1 + amount * ZOOM_EXPONENT)));
 	}
 
 	public void setDead() {
@@ -351,7 +357,7 @@ public class Singleplayer implements World, PlayerListener {
 			markedForAddition.add(s);
 		}
 		else {
-			throw new RuntimeException("Cannot addFeature object: " + object);
+			throw new RuntimeException("Cannot add object: " + object);
 		}
 	}
 

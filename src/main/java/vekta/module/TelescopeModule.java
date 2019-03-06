@@ -10,11 +10,10 @@ import vekta.object.planet.TerrestrialPlanet;
 import vekta.terrain.LandingSite;
 
 import static processing.core.PApplet.round;
-import static vekta.Vekta.getWorld;
-import static vekta.Vekta.setContext;
+import static vekta.Vekta.*;
 
 public class TelescopeModule extends ShipModule {
-	private static final float RANGE_SCALE = 1000;
+	private static final float RANGE_SCALE = AU_DISTANCE;
 
 	private final float resolution;
 
@@ -43,7 +42,7 @@ public class TelescopeModule extends ShipModule {
 
 	@Override
 	public Module getVariant() {
-		return new TelescopeModule(chooseInclusive(1, 10));
+		return new TelescopeModule(chooseInclusive(.1F, 3, .1F));
 	}
 
 	@Override

@@ -106,7 +106,7 @@ public abstract class Ship extends SpaceObject {
 	}
 
 	public void turn(float amount) {
-		heading.rotate(amount * getTurnSpeed() / 360);
+		heading.rotate(amount * getTurnSpeed() * DEG_TO_RAD);
 	}
 
 	@Override

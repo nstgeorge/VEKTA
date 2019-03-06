@@ -25,7 +25,7 @@ public enum ControlKey {
 	SHIP_TARGET_ASTEROID('2'),
 	SHIP_TARGET_SHIP('3'),
 	SHIP_TELESCOPE('r'),
-	SHIP_HYPERDRIVE('~');
+	SHIP_HYPERDRIVE(' ');
 
 	private final char defaultKey;
 

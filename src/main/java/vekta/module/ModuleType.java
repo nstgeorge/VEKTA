@@ -11,5 +11,5 @@ public enum ModuleType {
 	DRILL,
 	UTILITY,
 	STRUCTURAL,
-	AESTHETIC
+	AESTHETIC,
 }

@@ -42,7 +42,7 @@ public class Vekta extends PApplet {
 	// Render/spawning distances (we might want to use kilometers due to limited floating-point precision)
 	public static final float DETAIL_LEVEL = 1e1F;
 	public static final float SHIP_LEVEL = 1e3F;
-	public static final float PLANET_LEVEL = 1e7F;
+	public static final float PLANET_LEVEL = 1e6F;
 	public static final float STAR_LEVEL = 3e8F;
 	
 	public static final float MIN_ZOOM_LEVEL = .5F;

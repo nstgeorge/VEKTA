@@ -7,6 +7,9 @@ import vekta.object.planet.Asteroid;
 import vekta.object.planet.Planet;
 import vekta.object.planet.Star;
 import vekta.object.planet.TerrestrialPlanet;
+import vekta.object.ship.CargoShip;
+import vekta.object.ship.PirateShip;
+import vekta.object.ship.Ship;
 import vekta.terrain.*;
 
 import static vekta.Vekta.*;
@@ -24,27 +27,30 @@ public class WorldGenerator {
 		case AROUND_PARTICLE:
 			break;
 		case AROUND_SHIP:
-			// Ships disabled temporarily
-			//			float r = v.random(1);
-			//			if(r > .4F) {
-			//				Ship s = new CargoShip("TRAWLX", PVector.random2D(), pos, new PVector(), randomPlanetColor());
-			//				ItemGenerator.addLoot(s.getInventory(), 3);
-			//				addObject(s);
-			//				orbit(orbit, s, .75F);
-			//			}
-			//			else {
-			//				Ship s = new PirateShip("YARRYACHT", PVector.random2D(), pos, new PVector(), v.color(220, 100, 0));
-			//				ItemGenerator.addLoot(s.getInventory(), 1);
-			//				addObject(s);
-			//				orbit(orbit, s, .75F);
-			//			}
+			if(orbit instanceof TerrestrialPlanet) {
+				float r = v.random(1);
+				if(r > .4F) {
+					Ship s = new CargoShip("TRAWLX", PVector.random2D(), pos, new PVector(), randomPlanetColor());
+					ItemGenerator.addLoot(s.getInventory(), 3);
+					addObject(s);
+					orbit(orbit, s, .75F);
+				}
+				else {
+					Ship s = new PirateShip("YARRYACHT", PVector.random2D(), pos, new PVector(), v.color(220, 100, 0));
+					ItemGenerator.addLoot(s.getInventory(), 1);
+					addObject(s);
+					orbit(orbit, s, .75F);
+				}
+			}
 			break;
 		case AROUND_PLANET:
-			Asteroid s = createAsteroid(pos);
-			orbit(orbit, s, .5F);
+			if(orbit != null) {
+				Asteroid s = createAsteroid(pos);
+				orbit(orbit, s, .5F);
+			}
 			break;
 		case AROUND_STAR:
-			//			createSystem(pos);
+			createSystem(pos);
 			break;
 		}
 	}
@@ -62,7 +68,6 @@ public class WorldGenerator {
 		//					randomPlanetColor() // Color
 		//			);
 		//		}
-		addObject(star);
 
 		// Generate planets around body
 		int planets = (int)v.random(1, 8);
@@ -162,9 +167,6 @@ public class WorldGenerator {
 	}
 
 	public static void orbit(SpaceObject parent, SpaceObject child, float variation) {
-		if(parent == null) {
-			return;
-		}
 		PVector offset = parent.getPosition().sub(child.getPosition());
 		float speed = sqrt(G * parent.getMass() / offset.mag());
 		if(variation > 0) {

@@ -229,11 +229,13 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 
 	@Override
 	public void draw(RenderLevel level, float r) {
-		float t = getWorld().getTimeScale();
-
-		// Draw acceleration vector
-		v.stroke(255, 0, 0);
-		v.line(0, 0, (acceleration.x * 100 / t), (acceleration.y * 100 / t));
+		if(hasController()) {
+			float t = getWorld().getTimeScale();
+			
+			// Draw acceleration vector
+			v.stroke(255, 0, 0);
+			v.line(0, 0, (acceleration.x * 100 / t), (acceleration.y * 100 / t));
+		}
 
 		v.stroke(getColor());
 		super.draw(level, r);

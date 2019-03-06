@@ -73,6 +73,10 @@ public abstract class SpaceObject {
 
 	public abstract float getSpecificHeat();
 
+	public boolean impartsGravity() {
+		return false;
+	}
+
 	/**
 	 * Gets the temerature emission of the object
 	 */
@@ -159,6 +163,18 @@ public abstract class SpaceObject {
 	}
 
 	/**
+	 * Update the object's position around a new global origin
+	 */
+	public void updateOrigin(PVector offset) {
+		position.add(offset);
+		for(int i = 0; i < trail.length; i++) {
+			if(trail[i] != null) {
+				trail[i].add(offset);
+			}
+		}
+	}
+
+	/**
 	 * Does this collide with that?
 	 */
 	public boolean collidesWith(RenderLevel level, SpaceObject s) {
@@ -198,7 +214,7 @@ public abstract class SpaceObject {
 		if(thisLevel.isVisibleTo(level)) {
 			drawNearby(r);
 		}
-		else/* if(thisLevel == level.getBelow())*/ {
+		else {
 			drawDistant(r);
 		}
 	}
@@ -208,6 +224,11 @@ public abstract class SpaceObject {
 	}
 
 	public void drawDistant(float r) {
+//		v.stroke(v.lerpColor(0, getColor(), 1 - getPosition().mag() / WorldGenerator.getRadius(getRenderLevel())));
+		drawMarker();
+	}
+	
+	public void drawMarker() {
 		float outer = MARKER_SIZE * getMarkerScale();
 		float inner = outer * .8F;
 		v.rect(0, 0, outer, outer);

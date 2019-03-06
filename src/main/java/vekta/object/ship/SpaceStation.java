@@ -19,7 +19,7 @@ import static vekta.Vekta.*;
 
 public class SpaceStation extends ModularShip {
 	private static final float DEF_SPEED = .02F; // Base engine speed (much slower than player)
-	private static final float DEF_TURN = 5; // Base turn speed (much slower than player)
+	private static final float DEF_TURN = 1; // Base turn speed (much slower than player)
 
 	private static final float TILE_SIZE = 20;
 
@@ -69,15 +69,12 @@ public class SpaceStation extends ModularShip {
 
 	@Override
 	public void draw(RenderLevel level, float r) {
+		super.draw(level, r);
+
 		if(getRenderLevel().isVisibleTo(level)) {
 			v.rotate(heading.heading());
 			drawRelative(level, r);
 		}
-		else {
-			drawDistant(r);
-		}
-		
-		// TODO: this overrides drawing acceleration vector
 	}
 
 	public void drawRelative(RenderLevel dist, float r) {
@@ -232,12 +229,16 @@ public class SpaceStation extends ModularShip {
 		}
 
 		public boolean isAttachable(Component hypothetical) {
+			ModuleType type = getModule().getType();
+			if(isModuleTypeExclusive(type) && SpaceStation.this.getModule(type) != null) {
+				return false; // Already has an exclusive module
+			}
 			if(!hasAttachmentPoint(hypothetical.getDirection())) {
-				return false;
+				return false; // Invalid attachment direction
 			}
 			for(Component component : components) {
 				if(component.collidesWith(hypothetical)) {
-					return false;
+					return false; // Module overlaps with an existing component
 				}
 			}
 			return true;
