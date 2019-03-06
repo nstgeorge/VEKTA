@@ -9,7 +9,7 @@ import java.util.List;
 import static vekta.Vekta.*;
 
 public abstract class SpaceObject {
-	private static final float MARKER_SIZE = 20;
+	private static final float MARKER_SIZE = 40;
 	private static final int TRAIL_LENGTH = 100;
 
 	private final PVector[] trail = new PVector[TRAIL_LENGTH];

@@ -67,7 +67,7 @@ public class Singleplayer implements World, PlayerListener {
 		Resources.setMusic("atmosphere");
 
 		// Set timeScale factor
-		timeScale = sqrt(STAR_LEVEL);
+		timeScale = 1 * ZOOM_TIME_FACTOR;
 		smoothTimeScale = timeScale;
 
 		WorldGenerator.createSystem(PVector.random2D().mult(1 * AU_DISTANCE));
@@ -314,10 +314,6 @@ public class Singleplayer implements World, PlayerListener {
 			if(key == ControlKey.MENU_CLOSE) {
 				setContext(new PauseMenuContext(this));
 			}
-			//			if(key == 'k') {
-			//				getPlayerShip().destroyBecause(getPlayerShip());
-			//			}
-
 			getPlayer().emit(PlayerEvent.KEY_PRESS, key);
 		}
 	}
@@ -329,8 +325,9 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public void mouseWheel(int amount) {
+		float minTime = MIN_ZOOM_LEVEL * ZOOM_TIME_FACTOR;
 		float maxTime = MAX_ZOOM_LEVEL * ZOOM_TIME_FACTOR;///
-		timeScale = max(1, min(maxTime, timeScale * (1 + amount * ZOOM_EXPONENT)));
+		timeScale = max(minTime, min(maxTime, timeScale * (1 + amount * ZOOM_EXPONENT)));
 	}
 
 	public void setDead() {

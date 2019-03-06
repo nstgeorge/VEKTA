@@ -21,7 +21,7 @@ public class SpaceStation extends ModularShip {
 	private static final float DEF_SPEED = .02F; // Base engine speed (much slower than player)
 	private static final float DEF_TURN = 5; // Base turn speed (much slower than player)
 
-	private static final float TILE_SIZE = 10;
+	private static final float TILE_SIZE = 20;
 
 	private final Component core;
 

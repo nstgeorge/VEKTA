@@ -44,6 +44,8 @@ public class Vekta extends PApplet {
 	public static final float SHIP_LEVEL = 1e3F;
 	public static final float PLANET_LEVEL = 1e7F;
 	public static final float STAR_LEVEL = 3e8F;
+	
+	public static final float MIN_ZOOM_LEVEL = 1e-1F;
 	public static final float MAX_ZOOM_LEVEL = STAR_LEVEL; // TODO: add modules to change max zoom level
 
 	// Reference constants
