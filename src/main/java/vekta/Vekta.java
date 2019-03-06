@@ -30,16 +30,27 @@ public class Vekta extends PApplet {
 	public static Menu mainMenu;
 
 	private static Context context;
+	private static World world; // Most recent world context
 	private static Context nextContext;
 
 	// Game-balancing variables and visual settings
 	public static final float G = 6.674e-11F;
 	public static final float SCALE = 3e7F;
 	public static final float MAX_G_FORCE = 2F;
-	public static final float MIN_GRAVITY_MASS = 1e20F;
-	public static final int MAX_PLANETS = 5;
-	public static final float MAX_CAMERA_Y = 5000;
-	public static float DEF_ZOOM;
+	public static final float MIN_GRAVITY_MASS = 1e18F;
+
+	// Render/spawning distances (we might want to use kilometers due to limited floating-point precision)
+	public static final float DETAIL_LEVEL = 1e1F;
+	public static final float SHIP_LEVEL = 1e3F;
+	public static final float PLANET_LEVEL = 1e7F;
+	public static final float STAR_LEVEL = 3e8F;
+	public static final float MAX_CAMERA_ZOOM = STAR_LEVEL; // TODO: add modules to change max zoom level
+
+	// Reference constants
+	public static final float EARTH_MASS = 5.9736e24F;
+	public static final float SUN_MASS = 1.989e30F;
+	public static final float AU_DISTANCE = 1.496e11F;
+
 	public static int UI_COLOR;
 	public static int DANGER_COLOR;
 	public static int MISSION_COLOR;
@@ -50,14 +61,14 @@ public class Vekta extends PApplet {
 
 	@Override
 	public void settings() {
-		fullScreen(P3D);
+		fullScreen(P2D);
 		pixelDensity(displayDensity());
 	}
 
 	public void setup() {
 		v = this;
 
-		DEF_ZOOM = (height / 2.0F) / tan((PI * 30.0F / 180.0F)); // For some reason, this is the default eyeZ location for Processing
+		//		DEF_ZOOM = (height / 2.0F) / tan((PI * 30.0F / 180.0F)); // For some reason, this is the default eyeZ location for Processing
 		UI_COLOR = color(0, 255, 0);
 		DANGER_COLOR = color(255, 0, 0);
 		MISSION_COLOR = color(255, 255, 0);
@@ -92,8 +103,8 @@ public class Vekta extends PApplet {
 		}
 
 		hint(DISABLE_DEPTH_TEST);
-		camera();
-		noLights();
+		//		camera();
+		//		noLights();
 
 		// FPS OVERLAY
 		fill(255);
@@ -105,8 +116,8 @@ public class Vekta extends PApplet {
 	@Override
 	public void keyPressed() {
 		if(context != null) {
-			for(ControlKey ctrl : ControlKey.values()){
-				if(Settings.getCharacter(ctrl) == key){
+			for(ControlKey ctrl : ControlKey.values()) {
+				if(Settings.getCharacter(ctrl) == key) {
 					context.keyPressed(ctrl);
 				}
 			}
@@ -119,8 +130,8 @@ public class Vekta extends PApplet {
 	@Override
 	public void keyReleased() {
 		if(context != null) {
-			for(ControlKey ctrl : ControlKey.values()){
-				if(Settings.getCharacter(ctrl) == key){
+			for(ControlKey ctrl : ControlKey.values()) {
+				if(Settings.getCharacter(ctrl) == key) {
 					context.keyReleased(ctrl);
 				}
 			}
@@ -164,16 +175,10 @@ public class Vekta extends PApplet {
 	}
 
 	public static World getWorld() {
-		if(!(context instanceof World)) {
-			throw new RuntimeException("Current context is not a World (" + context.getClass().getName() + ")");
+		if(world == null) {
+			throw new RuntimeException("No world was loaded");
 		}
-		return (World)context;
-	}
-
-	public static void startWorld(World world) {
-		Vekta.setContext(world);
-//		Vekta.applyContext();
-//		world.start();
+		return world;
 	}
 
 	public static void setContext(Context context) {
@@ -187,8 +192,36 @@ public class Vekta extends PApplet {
 		if(nextContext != null) {
 			context = nextContext;
 			nextContext = null;
+			if(context instanceof World) {
+				world = (World)context;
+			}
 			context.focus();
 		}
+	}
+
+	public static float getDistanceUnit(RenderLevel distance) {
+		switch(distance) {
+		case AROUND_PARTICLE:
+			return DETAIL_LEVEL;
+		case AROUND_SHIP:
+			return SHIP_LEVEL;
+		case AROUND_PLANET:
+			return PLANET_LEVEL;
+		case AROUND_STAR:
+			return STAR_LEVEL;
+		default:
+			throw new RuntimeException("Unknown distance unit: " + distance);
+		}
+	}
+
+	public static RenderLevel getRenderDistance(float unit) {
+		return unit <= DETAIL_LEVEL ?
+				RenderLevel.AROUND_PARTICLE :
+				unit <= SHIP_LEVEL ?
+						RenderLevel.AROUND_SHIP :
+						unit <= PLANET_LEVEL ?
+								RenderLevel.AROUND_PLANET :
+								RenderLevel.AROUND_STAR;
 	}
 
 	//// Utility methods ////

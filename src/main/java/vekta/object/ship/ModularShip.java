@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static vekta.Vekta.getWorld;
-import static vekta.Vekta.setContext;
+import static vekta.Vekta.*;
+import static vekta.Vekta.v;
 
 public abstract class ModularShip extends Ship implements Upgradeable, PlayerListener {
 	private Player controller;
@@ -31,6 +31,8 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 
 	private float energy;
 	private float maxEnergy;
+
+	private final PVector acceleration = new PVector();
 
 	// Upgradeable modules
 	private final List<Module> modules = new ArrayList<>();
@@ -109,6 +111,7 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 	}
 
 	public boolean consumeEnergy(float amount) {
+		// TODO: adjust rate-based consumption for time acceleration
 		energy -= amount;
 		if(energy < 0) {
 			energy = 0;
@@ -215,10 +218,37 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 		}
 	}
 
+	public PVector getAcceleration() {
+		return acceleration;
+	}
+
+	@Override
+	public PVector applyGravity(List<SpaceObject> objects) {
+		this.acceleration.set(super.applyGravity(objects));
+		return this.acceleration;
+	}
+
+	@Override
+	public void draw(RenderLevel level, float r) {
+		// Draw acceleration vector
+		v.stroke(255, 0, 0);
+		v.line(0, 0, (acceleration.x * 100), (acceleration.y * 100));
+
+		v.stroke(getColor());
+		super.draw(level, r);
+	}
+
 	@Override
 	public void onUpdate() {
 		for(Module module : getModules()) {
 			module.onUpdate();
+		}
+	}
+
+	@Override
+	public void onDestroy(SpaceObject s) {
+		if(hasController()) {
+			getWorld().setDead();// TODO: convert to event
 		}
 	}
 
@@ -233,7 +263,7 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 	}
 
 	@Override
-	public void onLand(LandingSite site) {
+	public void doLand(LandingSite site) {
 		if(hasController()) {
 			Menu menu = new Menu(getController(), new LandingMenuHandle(site, getWorld()));
 			site.getTerrain().setupLandingMenu(this, menu);
@@ -248,7 +278,7 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 	}
 
 	@Override
-	public void onDock(SpaceObject s) {
+	public void doDock(SpaceObject s) {
 		Resources.stopSound("engine");
 		if(hasController()) {
 			if(s instanceof Ship) {
@@ -272,7 +302,9 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 
 	@Override
 	public void onChangeShip(ModularShip ship) {
-		getController().removeListener(this);
+		if(ship != this) {
+			getController().removeListener(this);
+		}
 	}
 
 	@Override

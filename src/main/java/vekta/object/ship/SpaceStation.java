@@ -2,7 +2,7 @@ package vekta.object.ship;
 
 import processing.core.PVector;
 import vekta.Player;
-import vekta.RenderDistance;
+import vekta.RenderLevel;
 import vekta.context.StationLayoutContext;
 import vekta.menu.Menu;
 import vekta.menu.option.BasicOption;
@@ -68,19 +68,25 @@ public class SpaceStation extends ModularShip {
 	}
 
 	@Override
-	public void draw(RenderDistance dist) {
-		if(dist.isNearby()) {
+	public void draw(RenderLevel level, float r) {
+		if(getRenderLevel().isVisibleTo(level)) {
 			v.rotate(heading.heading());
-			drawRelative(dist);
+			drawRelative(level, r);
 		}
+		else {
+			drawDistant(r);
+		}
+		
+		// TODO: this overrides drawing acceleration vector
 	}
 
-	public void drawRelative(RenderDistance dist) {
+	public void drawRelative(RenderLevel dist, float r) {
+		float ratio = r / getRadius();
 		for(Component component : components) {
 			v.pushMatrix();
-			v.translate(component.getX(), component.getY());
+			v.translate(component.getX() * ratio, component.getY() * ratio);
 			v.rotate(component.getDirection()/*.rotate(component.getRotation())*/.getAngle());
-			component.getModule().draw(dist, TILE_SIZE);
+			component.getModule().draw(dist, TILE_SIZE * ratio);
 			v.popMatrix();
 
 			//			// DEBUG: render bounding boxes

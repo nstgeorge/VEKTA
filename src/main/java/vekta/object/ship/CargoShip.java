@@ -3,7 +3,6 @@ package vekta.object.ship;
 import processing.core.PVector;
 import vekta.Counter;
 import vekta.Player;
-import vekta.RenderDistance;
 import vekta.menu.Menu;
 import vekta.menu.option.LootMenuOption;
 
@@ -69,14 +68,14 @@ public class CargoShip extends Ship {
 	@Override
 	public void setupDockingMenu(Player player, Menu menu) {
 		menu.add(new LootMenuOption("Loot", player.getShip().getInventory(), getInventory()));
-		
+
 		for(FighterShip fighter : fighters) {
 			fighter.setTarget(player.getShip());
 		}
 	}
 
 	@Override
-	public void draw(RenderDistance dist) {
-		drawShip(dist, ShipModelType.CARGO_SHIP);
+	public void drawNearby(float r) {
+		drawShip(r, ShipModelType.CARGO_SHIP);
 	}
 }  

@@ -48,10 +48,10 @@ public class TargetingModule extends ShipModule implements Targeter {
 		switch(mode) {
 		case PLANET:
 			return obj instanceof TerrestrialPlanet && !(obj instanceof Asteroid);
-		case SHIP:
-			return obj instanceof Ship;
 		case ASTEROID:
 			return obj instanceof Asteroid;
+		case SHIP:
+		return obj instanceof Ship;
 		default:
 			return false;
 		}
@@ -96,18 +96,18 @@ public class TargetingModule extends ShipModule implements Targeter {
 		case SHIP_TARGET_PLANET:
 			setMode(TargetingModule.TargetingMode.PLANET);
 			break;
-		case SHIP_TARGET_SHIP:
-			setMode(TargetingModule.TargetingMode.SHIP);
-			break;
 		case SHIP_TARGET_ASTEROID:
 			setMode(TargetingModule.TargetingMode.ASTEROID);
 			break;
+		case SHIP_TARGET_SHIP:
+		setMode(TargetingModule.TargetingMode.SHIP);
+		break;
 		}
 	}
 
 	public enum TargetingMode {
 		PLANET,
-		SHIP,
 		ASTEROID,
+		SHIP,
 	}
 }

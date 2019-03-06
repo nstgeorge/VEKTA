@@ -1,10 +1,12 @@
 package vekta.object.planet;
 
 import processing.core.PVector;
-import vekta.object.ship.ModularShip;
 import vekta.object.SpaceObject;
+import vekta.object.ship.ModularShip;
 import vekta.terrain.LandingSite;
 import vekta.terrain.Terrain;
+
+import static processing.core.PApplet.println;
 
 /**
  * Terrestrial (landable) planet
@@ -16,6 +18,8 @@ public class TerrestrialPlanet extends Planet {
 		super(name, mass, density, position, velocity, color);
 
 		this.site = new LandingSite(this, terrain);
+
+		println("[Terrestrial] mass: " + getMass() + ", radius: " + getRadius());
 	}
 
 	public LandingSite getLandingSite() {
@@ -35,9 +39,10 @@ public class TerrestrialPlanet extends Planet {
 	public void onCollide(SpaceObject s) {
 		if(s instanceof ModularShip) {
 			ModularShip ship = (ModularShip)s;
-			if(ship.isLanding() && site.land(ship)) {
-				return; // Prevent ships from being destroyed after landing
-			}
+//			if(/*ship.isLanding() && */) {
+				site.land(ship);
+				return; // Prevent ship from being destroyed after landing
+//			}
 		}
 		super.onCollide(s); // Oof
 	}

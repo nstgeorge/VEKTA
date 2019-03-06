@@ -2,94 +2,129 @@ package vekta;
 
 import processing.core.PVector;
 import vekta.item.Inventory;
-import vekta.object.planet.*;
-import vekta.object.ship.CargoShip;
-import vekta.object.ship.PirateShip;
-import vekta.object.ship.Ship;
+import vekta.object.SpaceObject;
+import vekta.object.planet.Asteroid;
+import vekta.object.planet.Planet;
+import vekta.object.planet.Star;
+import vekta.object.planet.TerrestrialPlanet;
 import vekta.terrain.*;
 
 import static vekta.Vekta.*;
 
 public class WorldGenerator {
-	public static float getRadius() {
-		return 20000;
+	public static float getRadius(RenderLevel dist) {
+		return 10000 * getDistanceUnit(dist);
 	}
 
-	public static void spawnOccasional(PVector around) {
-		PVector pos = randomSpawnPosition(around);
-		float r = v.random(1);
-		if(r > .6F) {
-			createSystem(pos);
-		}
-		else if(r > .3F) {
-			Ship s = new CargoShip("TRAWLX", PVector.random2D(), pos, new PVector(), randomPlanetColor());
-			ItemGenerator.addLoot(s.getInventory(), 3);
-			addObject(s);
-		}
-		else {
-			Ship s = new PirateShip("YARRYACHT", PVector.random2D(), pos, new PVector(), v.color(220, 100, 0));
-			ItemGenerator.addLoot(s.getInventory(), 1);
-			addObject(s);
+	public static void spawnOccasional(RenderLevel dist, SpaceObject center) {
+		PVector pos = randomSpawnPosition(dist, center.getPosition());
+		SpaceObject orbit = getWorld().findOrbitObject(center);
+
+		switch(dist) {
+		case AROUND_PARTICLE:
+			break;
+		case AROUND_SHIP:
+			// Ships disabled temporarily
+			//			float r = v.random(1);
+			//			if(r > .4F) {
+			//				Ship s = new CargoShip("TRAWLX", PVector.random2D(), pos, new PVector(), randomPlanetColor());
+			//				ItemGenerator.addLoot(s.getInventory(), 3);
+			//				addObject(s);
+			//				orbit(orbit, s, .75F);
+			//			}
+			//			else {
+			//				Ship s = new PirateShip("YARRYACHT", PVector.random2D(), pos, new PVector(), v.color(220, 100, 0));
+			//				ItemGenerator.addLoot(s.getInventory(), 1);
+			//				addObject(s);
+			//				orbit(orbit, s, .75F);
+			//			}
+			break;
+		case AROUND_PLANET:
+			Asteroid s = createAsteroid(pos);
+			orbit(orbit, s, .5F);
+			break;
+		case AROUND_STAR:
+			//			createSystem(pos);
+			break;
 		}
 	}
 
 	public static void createSystem(PVector pos) {
-		float order = v.random(29, 32);
-
-		// Create the center body
-		float centerPower = pow(10, order);
-		float centerMass = v.random(0.8F, 4) * centerPower;
-		float centerDensity = v.random(.7F, 2);
-		if(order >= 30) {
-			addObject(new Star(
-					WorldGenerator.randomPlanetName(),
-					centerMass, // Mass
-					centerDensity, // Radius
-					pos, // Position
-					new PVector(), // Velocity
-					randomPlanetColor() // Color
-			));
-		}
-		else {
-			addObject(new GasGiant(
-					WorldGenerator.randomPlanetName(),
-					centerMass, // Mass
-					centerDensity, // Radius
-					pos, // Position
-					new PVector(), // Velocity
-					randomPlanetColor() // Color
-			));
-		}
+		Star star = createStar(pos);
+		//		else {
+		//			// TODO: spawn as part of a system rather than as a star alternative
+		//			star = new GasGiant(
+		//					WorldGenerator.randomPlanetName(),
+		//					centerMass, // Mass
+		//					centerDensity, // Radius
+		//					pos, // Position
+		//					new PVector(), // Velocity
+		//					randomPlanetColor() // Color
+		//			);
+		//		}
+		addObject(star);
 
 		// Generate planets around body
 		int planets = (int)v.random(1, 8);
 		for(int i = 0; i <= planets; i++) {
-			float power = pow(10, order - 1);
-			float radiusLoc = v.random(1000, 8000);
-			float speed = sqrt(G * centerMass / radiusLoc) / SCALE;
-			float mass = v.random(0.05F, 0.5F) * power;
-			float density = v.random(4, 8);
+			float distance = v.random(.5F, 4) * AU_DISTANCE;
 			float angle = v.random(360);
-			Planet planet = createPlanet(mass, density, new PVector(radiusLoc, 0).rotate(angle).add(pos));
-			planet.addVelocity(new PVector(0, speed).rotate(angle));
-		}
-
-		int asteroids = (int)v.random(20);
-		for(int i = 0; i <= asteroids; i++) {
-			float power = pow(10, v.random(26, 27));
-			float radiusLoc = v.random(1000, 15000);
-			float speed = sqrt(G * centerMass / radiusLoc) / SCALE * v.random(.75F, 1.5F);
-			float mass = v.random(0.05F, 0.5F) * power;
-			float density = v.random(2, 4);
-			float angle = v.random(360);
-			Asteroid asteroid = createAsteroid(mass, density, new PVector(radiusLoc, 0).rotate(angle).add(pos));
-			asteroid.addVelocity(new PVector(0, speed).rotate(angle));
+			Planet planet = createPlanet(new PVector(distance, 0).rotate(angle).add(pos));
+			orbit(star, planet, 0);
 		}
 	}
 
-	public static Planet createPlanet(float mass, float density, PVector pos) {
-		float r = v.random(1);
+	public static Star createStar(PVector pos) {
+		float power = pow(10, v.random(29, 31));
+		float mass = v.random(0.8F, 4) * power;
+		float density = v.random(.7F, 2);
+		Star star = new Star(
+				WorldGenerator.randomPlanetName(),
+				mass, // Mass
+				density, // Radius
+				pos, // Position
+				new PVector(), // Velocity
+				randomPlanetColor() // TODO: color based on star properties
+		);
+		addObject(star);
+		return star;
+	}
+
+	public static Planet createPlanet(PVector pos) {
+		float mass = pow(10, v.random(23, 25));
+		float density = v.random(2, 4);
+		TerrestrialPlanet planet = new TerrestrialPlanet(
+				randomPlanetName(),
+				mass, // Mass
+				density,   // Density
+				createTerrain(), // Terrain
+				pos,  // Coords
+				new PVector(),  // Velocity
+				randomPlanetColor() // Color
+		);
+		addObject(planet);
+		return planet;
+	}
+
+	public static Asteroid createAsteroid(PVector pos) {
+		float mass = pow(10, v.random(15, 20));
+		float density = v.random(1.5F, 2);
+		AsteroidTerrain terrain = new AsteroidTerrain();
+		Asteroid asteroid = new Asteroid(
+				randomPlanetName(),
+				mass,
+				density,
+				terrain,
+				pos,
+				new PVector(),
+				randomPlanetColor());
+		addObject(asteroid);
+		return asteroid;
+	}
+
+	public static Terrain createTerrain() {
 		Terrain terrain;
+		float r = v.random(1);
 		boolean features = true;
 		if(r > .5) {
 			InhabitedTerrain t = new InhabitedTerrain();
@@ -123,35 +158,24 @@ public class WorldGenerator {
 				}
 			}
 		}
-		TerrestrialPlanet planet = new TerrestrialPlanet(
-				randomPlanetName(),
-				mass, // Mass
-				density,   // Density
-				terrain, // Terrain
-				pos,  // Coords
-				new PVector(),  // Velocity
-				randomPlanetColor() // Color
-		);
-		addObject(planet);
-		return planet;
+		return terrain;
 	}
 
-	public static Asteroid createAsteroid(float mass, float density, PVector pos) {
-		AsteroidTerrain terrain = new AsteroidTerrain();
-		Asteroid asteroid = new Asteroid(
-				randomPlanetName(),
-				mass,
-				density,
-				terrain,
-				pos,
-				new PVector(),
-				randomPlanetColor());
-		addObject(asteroid);
-		return asteroid;
+	public static void orbit(SpaceObject parent, SpaceObject child, float variation) {
+		if(parent == null) {
+			return;
+		}
+		PVector offset = parent.getPosition().sub(child.getPosition());
+		float speed = sqrt(G * parent.getMass() / offset.mag() / getWorld().getTimeScale());
+		if(variation > 0) {
+			offset.rotate(v.random(-QUARTER_PI, QUARTER_PI) * variation);
+		}
+		child.setVelocity(offset.rotate(HALF_PI).setMag(speed).add(parent.getVelocity()));
 	}
 
-	public static PVector randomSpawnPosition(PVector center) {
-		return PVector.random2D().mult(v.random(getRadius() / 2, getRadius())).add(center);
+	public static PVector randomSpawnPosition(RenderLevel dist, PVector center) {
+		float radius = getRadius(dist);
+		return PVector.random2D().mult(v.random(radius / 2, radius)).add(center);
 	}
 
 	public static int randomPlanetColor() {

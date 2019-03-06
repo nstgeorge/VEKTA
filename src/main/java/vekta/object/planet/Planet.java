@@ -1,7 +1,7 @@
 package vekta.object.planet;
 
 import processing.core.PVector;
-import vekta.RenderDistance;
+import vekta.RenderLevel;
 import vekta.WorldGenerator;
 import vekta.object.SpaceObject;
 import vekta.terrain.MoltenTerrain;
@@ -13,7 +13,7 @@ import static vekta.Vekta.*;
  * Model for a planet.
  */
 public abstract class Planet extends SpaceObject {
-	private static final float MIN_SPLIT_RADIUS = 50;
+	private static final float MIN_SPLIT_RADIUS = 20 * SCALE; // TODO: improve cutoff
 	private static final float SPLIT_OFFSET_SCALE = .25F;
 	private static final float SPLIT_VELOCITY_SCALE = 1;
 	private static final float SPLIT_MASS_ABSORB = .5F;
@@ -38,20 +38,44 @@ public abstract class Planet extends SpaceObject {
 	}
 
 	@Override
+	public RenderLevel getRenderLevel() {
+		return RenderLevel.AROUND_STAR;
+	}
+
+	@Override
 	public float getSpecificHeat() {
 		return 1; // TODO depend on planet properties
 	}
 
 	@Override
-	public void draw(RenderDistance dist) {
-		float radius = getRadius();
-		v.ellipse(0, 0, radius, radius);
+	public void draw(RenderLevel level, float r) {
+		// Temp: fade out planet if zoomed in too much to render
+		float maxRadius = 1000;
+		if(r > maxRadius) {
+			return;
+		}
+		if(r > maxRadius * .9F) {
+			v.fill(v.lerpColor(0, getColor(), (maxRadius - r) / maxRadius));
+		}
+
+		super.draw(level, r);
 	}
 
 	@Override
-	public boolean collidesWith(SpaceObject s) {
+	public void drawNearby(float r) {
+		v.ellipse(0, 0, r, r);
+	}
+
+	@Override
+	public void drawDistant(float r) {
+		super.drawDistant(r);
+		drawNearby(r);// Draw both reticle and planet
+	}
+
+	@Override
+	public boolean collidesWith(RenderLevel level, SpaceObject s) {
 		// TODO: check getParent() once added to SpaceObject
-		return getColor() != s.getColor() && super.collidesWith(s);
+		return getColor() != s.getColor() && super.collidesWith(level, s);
 	}
 
 	@Override
@@ -63,7 +87,7 @@ public abstract class Planet extends SpaceObject {
 
 	@Override
 	public void onDestroy(SpaceObject s) {
-		//println("Planet destroyed with radius: " + getRadius());
+		//println("Planet destroyed with radius: " + getDistanceScale());
 
 		// If sufficiently large, split planet in half
 		if(getRadius() >= MIN_SPLIT_RADIUS) {
@@ -81,17 +105,17 @@ public abstract class Planet extends SpaceObject {
 			Terrain terrain = new MoltenTerrain();
 			Planet a = new TerrestrialPlanet(WorldGenerator.randomPlanetName(), newMass, getDensity(), terrain, getPosition().copy().add(offset), newVelocity.copy().add(splitVelocity), getColor());
 			Planet b = new TerrestrialPlanet(WorldGenerator.randomPlanetName(), newMass, getDensity(), terrain, getPosition().copy().sub(offset), newVelocity.copy().sub(splitVelocity), getColor());
-			if(!s.collidesWith(a)) {
+			if(!s.collidesWith(getRenderLevel(), a)) {
 				mass -= a.mass;
 				addObject(a);
 			}
-			if(!s.collidesWith(b)) {
+			if(!s.collidesWith(getRenderLevel(), b)) {
 				mass -= b.mass;
 				addObject(b);
 			}
 		}
 
-		// If this is a planetary collision, addFeature some additional mass to the other planet
+		// If this is a planetary collision, add some additional mass to the other planet
 		if(mass > 0 && s instanceof Planet) {
 			Planet p = (Planet)s;
 			p.setMass(p.getMass() + mass * SPLIT_MASS_ABSORB);
@@ -119,7 +143,7 @@ public abstract class Planet extends SpaceObject {
 	}
 
 	private void updateRadius() {
-		radiusCache = pow(getMass() / getDensity(), (float)1 / 3) / SCALE;
+		radiusCache = pow(getMass() / getDensity(), (float)1 / 3)/* / SCALE*/;
 	}
 
 	public float getDensity() {

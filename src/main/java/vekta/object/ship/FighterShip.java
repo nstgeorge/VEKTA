@@ -2,7 +2,6 @@ package vekta.object.ship;
 
 import processing.core.PVector;
 import vekta.Counter;
-import vekta.RenderDistance;
 import vekta.object.HomingProjectile;
 import vekta.object.Projectile;
 import vekta.object.SpaceObject;
@@ -87,8 +86,8 @@ public class FighterShip extends Ship implements Targeter {
 	}
 
 	@Override
-	public void draw(RenderDistance dist) {
-		drawShip(dist, ShipModelType.FIGHTER);
+	public void drawNearby(float r) {
+		drawShip(r, ShipModelType.FIGHTER);
 	}
 
 	public void fireProjectile() {

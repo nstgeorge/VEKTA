@@ -1,6 +1,6 @@
 package vekta.module.station;
 
-import vekta.RenderDistance;
+import vekta.RenderLevel;
 import vekta.module.Module;
 import vekta.module.ModuleType;
 import vekta.object.ship.ModularShip;
@@ -52,7 +52,7 @@ public class SensorModule implements ComponentModule {
 	}
 
 	@Override
-	public void draw(RenderDistance dist, float tileSize) {
+	public void draw(RenderLevel dist, float tileSize) {
 		v.rectMode(CORNERS);
 		v.translate(-.5F * tileSize, -(getHeight() / 2F) * tileSize);
 		v.beginShape();

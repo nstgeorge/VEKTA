@@ -4,13 +4,7 @@ import processing.core.PVector;
 import processing.sound.LowPass;
 import vekta.context.PauseMenuContext;
 import vekta.context.World;
-import vekta.item.Item;
-import vekta.item.ItemType;
 import vekta.item.ModuleItem;
-import vekta.mission.DockWithObjective;
-import vekta.mission.EquipModuleObjective;
-import vekta.mission.ItemReward;
-import vekta.mission.Mission;
 import vekta.module.*;
 import vekta.module.station.SensorModule;
 import vekta.module.station.SolarArrayModule;
@@ -26,12 +20,20 @@ import vekta.overlay.singleplayer.PlayerOverlay;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static vekta.Vekta.*;
 
 public class Singleplayer implements World, PlayerListener {
+	private static final float ZOOM_EXPONENT = .2F;
+	private static final float ZOOM_SMOOTH_AMOUNT = .1F;
+	private static final float TIME_INCREASE_FACTOR = .2F;
+	private static final int MAX_OBJECTS_PER_DIST = 10;
+
 	private static int nextID = 0;
+
+	private int[] objectCounts = new int[RenderLevel.values().length];
 
 	private boolean started;
 
@@ -40,11 +42,12 @@ public class Singleplayer implements World, PlayerListener {
 
 	// Camera position tracking
 	private PVector cameraPos;
-	private float cameraSpd;
+	//	private float cameraSpd;
 
 	private Player player;
 
 	private float zoom = 1; // Camera zoom factor
+	private float smoothZoom = zoom; // Smooth zoom factor (converges toward `zoom`)
 
 	private Counter targetCt = new Counter(30); // Counter for periodically updating Targeter instances
 	private Counter spawnCt = new Counter(100); // Counter for periodically cleaning/spawning objects
@@ -63,7 +66,11 @@ public class Singleplayer implements World, PlayerListener {
 
 		Resources.setMusic("atmosphere");
 
-		WorldGenerator.createSystem(PVector.random2D().mult(v.random(10000, 15000)));
+		// Set zoom factor
+		zoom = STAR_LEVEL;
+		smoothZoom = zoom;
+
+		WorldGenerator.createSystem(PVector.random2D().mult(1 * AU_DISTANCE));
 
 		player = new Player(UI_COLOR);
 		player.addListener(this);
@@ -112,17 +119,17 @@ public class Singleplayer implements World, PlayerListener {
 		playerShip.getInventory().add(new ModuleItem(new TractorBeamModule(1)));
 		playerShip.getInventory().add(new ModuleItem(new StructuralModule(3, 1)));
 
-		Mission mission2 = new Mission("Test Mission");
-		mission2.add(new DockWithObjective(station));
-		mission2.start(player);
-
-		Mission mission = new Mission("Two-Option Mission");
-		mission.add(new DockWithObjective(station).optional());
-		mission.add(new EquipModuleObjective(new HyperdriveModule(1)).optional());
-		mission.add(new ItemReward(new Item("Extremely Valuable Thing", ItemType.LEGENDARY)));
-		mission.start(player);
-
-		//		player.send("Test notification");///
+		//				Mission mission2 = new Mission("Test Mission");
+		//				mission2.add(new DockWithObjective(station));
+		//				mission2.start(player);
+		//
+		//				Mission mission = new Mission("Two-Option Mission");
+		//				mission.add(new DockWithObjective(station).optional());
+		//				mission.add(new EquipModuleObjective(new HyperdriveModule(1)).optional());
+		//				mission.add(new ItemReward(new Item("Extremely Valuable Thing", ItemType.LEGENDARY)));
+		//				mission.start(player);
+		//
+		//				player.send("Test notification");///
 	}
 
 	public Player getPlayer() {
@@ -131,6 +138,16 @@ public class Singleplayer implements World, PlayerListener {
 
 	public ModularShip getPlayerShip() {
 		return player.getShip();
+	}
+
+	@Override
+	public RenderLevel getRenderLevel() {
+		return Vekta.getRenderDistance(smoothZoom);
+	}
+
+	@Override
+	public float getTimeScale() {
+		return smoothZoom * TIME_INCREASE_FACTOR;
 	}
 
 	@Override
@@ -147,22 +164,30 @@ public class Singleplayer implements World, PlayerListener {
 		if(!playerShip.isDestroyed()) {
 			// Camera follow
 			cameraPos = playerShip.getPosition();
-			cameraSpd = playerShip.getVelocity().mag();
+			//			cameraSpd = playerShip.getVelocity().mag();
 		}
+
+		// Update zoom factor
+		smoothZoom += (zoom - smoothZoom) * ZOOM_SMOOTH_AMOUNT;
 
 		v.clear();
 		v.rectMode(CENTER);
 		v.ellipseMode(RADIUS);
 
 		// Set up world camera
-		v.hint(ENABLE_DEPTH_TEST);
-		v.camera(cameraPos.x, cameraPos.y, min(MAX_CAMERA_Y, (.07F * cameraSpd + .7F) * (v.height / 2F) / tan(PI * 30 / 180) * zoom), cameraPos.x, cameraPos.y, 0F,
-				0F, 1F, 0F);
+		//		v.hint(ENABLE_DEPTH_TEST);
+		//		v.camera(cameraPos.x, cameraPos.y, min(MAX_CAMERA_Y, (.07F * cameraSpd + .7F) * (v.height / 2F) / tan(PI * 30 / 180) * zoom), cameraPos.x, cameraPos.y, 0F,
+		//				0F, 1F, 0F);
 
-		RenderDistance dist = RenderDistance.DETAIL; // TODO define cutoff
+		//		println(gravityObjects.size(), zoom);
+
+		RenderLevel level = getRenderLevel();
+
+		v.pushMatrix();
+		v.translate(v.width / 2F, v.height / 2F);
 
 		boolean targeting = targetCt.cycle();
-		boolean spawning = spawnCt.cycle();
+		boolean cleanup = spawnCt.cycle();
 
 		for(SpaceObject obj : markedForAddition) {
 			if(obj instanceof Planet && ((Planet)obj).impartsGravity()) {
@@ -172,10 +197,17 @@ public class Singleplayer implements World, PlayerListener {
 		objects.addAll(markedForAddition);
 		markedForAddition.clear();
 
+		// Reset object counts for each render distance
+		for(int i = 0; i < objectCounts.length; i++) {
+			objectCounts[i] = 0;
+		}
+
 		for(SpaceObject s : objects) {
 			if(markedForDeath.contains(s)) {
 				continue;
 			}
+
+			objectCounts[s.getRenderLevel().ordinal()]++; // Increment count for object's render distance
 
 			// Run on targeting loop
 			if(targeting) {
@@ -189,21 +221,22 @@ public class Singleplayer implements World, PlayerListener {
 				}
 			}
 
-			// Run on spawning loop
-			if(spawning) {
-				if(playerShip.getPosition().sub(s.getPosition()).magSq() > WorldGenerator.getRadius() * WorldGenerator.getRadius()) {
+			if(cleanup) {
+				// Clean up distant objects
+				float despawnRadius = WorldGenerator.getRadius(s.getRenderLevel());
+				if(playerShip.getPosition().sub(s.getPosition()).magSq() >= sq(despawnRadius)) {
 					removeObject(s);
 					continue;
 				}
 			}
 
 			s.update();
-			s.applyInfluenceVector(gravityObjects);
+			s.applyGravity(gravityObjects);
 			for(SpaceObject other : objects) {
 				if(s != other) {
 					// Check both collisions before firing events (prevents race conditions)
-					boolean collides1 = s.collidesWith(other);
-					boolean collides2 = other.collidesWith(s);
+					boolean collides1 = s.collidesWith(level, other);
+					boolean collides2 = other.collidesWith(level, s);
 					if(collides1) {
 						s.onCollide(other);
 					}
@@ -213,16 +246,17 @@ public class Singleplayer implements World, PlayerListener {
 				}
 			}
 
-			// Draw movement trail
-			s.renderTrail();
-
 			// Draw object
 			v.pushMatrix();
 			PVector position = s.getPositionReference();
-			v.translate(position.x, position.y);
+			float scale = smoothZoom;
+			v.translate((position.x - cameraPos.x) / scale, (position.y - cameraPos.y) / scale);
+			if(s == playerShip || s.getRenderLevel().isVisibleTo(level)) {
+				s.drawTrail(scale);
+			}
 			v.stroke(s.getColor());
-			v.fill(0);
-			s.draw(RenderDistance.NEAR);
+			v.noFill();
+			s.draw(level, s.getRadius() / scale);
 			v.popMatrix();
 		}
 
@@ -230,13 +264,19 @@ public class Singleplayer implements World, PlayerListener {
 		gravityObjects.removeAll(markedForDeath);
 		markedForDeath.clear();
 
-		if(gravityObjects.size() < MAX_PLANETS) {
-			WorldGenerator.spawnOccasional(playerShip.getPosition());
+		RenderLevel spawnLevel = level;
+		if(spawnLevel.ordinal() > 0 && v.random(1) < .002F) {
+			spawnLevel = RenderLevel.values()[spawnLevel.ordinal() - 1];
+		}
+		if(objectCounts[spawnLevel.ordinal()] < MAX_OBJECTS_PER_DIST) {
+			WorldGenerator.spawnOccasional(spawnLevel, playerShip);
 		}
 
+		v.popMatrix();
+
 		// GUI setup
-		v.camera();
-		v.noLights();
+		//		v.camera();
+		//		v.noLights();
 		v.hint(DISABLE_DEPTH_TEST);
 		if(!playerShip.isDestroyed()) {
 			overlay.render();
@@ -285,7 +325,7 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public void mouseWheel(int amount) {
-		zoom = max(.1F, min(3, zoom * (1 + amount * .1F)));
+		zoom = max(.1F, min(MAX_CAMERA_ZOOM, zoom * (1 + amount * ZOOM_EXPONENT)));
 	}
 
 	public void setDead() {
@@ -298,7 +338,7 @@ public class Singleplayer implements World, PlayerListener {
 	@Override
 	public void restart() {
 		lowPass.stop();
-		startWorld(new Singleplayer());
+		setContext(new Singleplayer());
 	}
 
 	@Override
@@ -307,9 +347,6 @@ public class Singleplayer implements World, PlayerListener {
 			SpaceObject s = (SpaceObject)object;
 			s.setID(nextID++);
 			markedForAddition.add(s);
-			//			if(object instanceof PlayerListener) {
-			//				getPlayer().addListener((PlayerListener)object);
-			//			}
 		}
 		else {
 			throw new RuntimeException("Cannot addFeature object: " + object);
@@ -320,13 +357,26 @@ public class Singleplayer implements World, PlayerListener {
 	public void removeObject(Object object) {
 		if(object instanceof SpaceObject) {
 			markedForDeath.add((SpaceObject)object);
-			//			if(object instanceof PlayerListener) {
-			//				getPlayer().removeListener((PlayerListener)object);
-			//			}
 		}
 		else {
 			throw new RuntimeException("Cannot remove object: " + object);
 		}
+	}
+
+	@Override
+	public SpaceObject findOrbitObject(SpaceObject object) {
+		float maxAccelSq = 0;
+		SpaceObject bestOrbit = null;
+		for(SpaceObject s : gravityObjects) {
+			if(s != object) {
+				float accelSq = object.getGravityAcceleration(Collections.singletonList(s)).magSq();
+				if(accelSq > maxAccelSq) {
+					maxAccelSq = accelSq;
+					bestOrbit = s;
+				}
+			}
+		}
+		return bestOrbit;
 	}
 
 	@Override

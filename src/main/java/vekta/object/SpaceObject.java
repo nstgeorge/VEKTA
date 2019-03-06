@@ -1,7 +1,7 @@
 package vekta.object;
 
 import processing.core.PVector;
-import vekta.RenderDistance;
+import vekta.RenderLevel;
 
 import java.util.Collection;
 import java.util.List;
@@ -9,6 +9,7 @@ import java.util.List;
 import static vekta.Vekta.*;
 
 public abstract class SpaceObject {
+	private static final float MARKER_SIZE = 20;
 	private static final int TRAIL_LENGTH = 100;
 
 	private final PVector[] trail = new PVector[TRAIL_LENGTH];
@@ -67,7 +68,9 @@ public abstract class SpaceObject {
 	public int getColor() {
 		return color;
 	}
-	
+
+	public abstract RenderLevel getRenderLevel();
+
 	public abstract float getSpecificHeat();
 
 	/**
@@ -76,7 +79,7 @@ public abstract class SpaceObject {
 	public float getTemperature() {
 		return temperature;
 	}
-	
+
 	public void addTemperature(float temperature) {
 		this.temperature += temperature;
 	}
@@ -112,53 +115,58 @@ public abstract class SpaceObject {
 	/**
 	 * Sets the velocity of the object
 	 */
-	public final PVector setVelocity(PVector velocity) {
-		return this.velocity.set(velocity);
+	public final void setVelocity(PVector velocity) {
+		this.velocity.set(velocity);
+	}
+
+	/**
+	 * Adds velocity to the object
+	 */
+	public final void addVelocity(PVector delta) {
+		this.velocity.add(delta);
 	}
 
 	/**
 	 * Applies the given velocity to the object
 	 */
 	public final void applyVelocity(PVector velocity) {
-		this.position.add(velocity);
+		this.position.add(velocity.copy().mult(getWorld().getTimeScale()));
 	}
 
-	/**
-	 * Adds velocity to the object
-	 */
-	public final PVector addVelocity(PVector delta) {
-		return this.velocity.add(delta);
-	}
-
-	/**
-	 * Returns and applies the influence vector of another object on this
-	 */
-	public PVector applyInfluenceVector(List<SpaceObject> objects) {
+	public PVector getGravityAcceleration(List<SpaceObject> objects) {
 		float mass = getMass();
 		PVector influence = new PVector();
 		for(SpaceObject s : objects) {
 			float distSq = distSq(position, s.getPosition());
-			if(distSq == 0)
+			if(distSq == 0) {
 				continue; // If the planet being checked is itself (or directly on top), don't move
-			float force = (G * (mass / SCALE) * (s.getMass() / SCALE)) / (distSq); // G defined in orbit
-			influence.add(new PVector(s.getPosition().x - position.x, s.getPosition().y - position.y).setMag(force / mass));
+			}
+			float force = (G * mass / distSq * s.getMass()); // Operation order affects precision
+			if(Float.isFinite(force)) {
+				influence.add(new PVector(s.getPosition().x - position.x, s.getPosition().y - position.y).setMag(force / mass));
+			}
 		}
 		// Prevent insane acceleration
-		influence.limit(MAX_G_FORCE);
-		if(!Float.isFinite(influence.x) || !Float.isFinite(influence.y)) {
-			// This helps prevent the random blank screen of doom (NaN propagation)
-			return new PVector();
-		}
-		addVelocity(influence);
-		return influence;
+		return influence.limit(MAX_G_FORCE);
+	}
+
+	/**
+	 * Applies and returns the influence vector of another object on this
+	 */
+	public PVector applyGravity(List<SpaceObject> objects) {
+		PVector acceleration = getGravityAcceleration(objects);
+		addVelocity(acceleration);
+		return acceleration;
 	}
 
 	/**
 	 * Does this collide with that?
 	 */
-	public boolean collidesWith(SpaceObject s) {
-		double r = PVector.dist(getPosition(), s.getPosition());
-		return r < (getRadius() + s.getRadius());
+	public boolean collidesWith(RenderLevel level, SpaceObject s) {
+		if(!getRenderLevel().isVisibleTo(level)) {
+			return false;
+		}
+		return distSq(getPosition(), s.getPosition()) < sq(getRadius() + s.getRadius());
 	}
 
 	/**
@@ -186,14 +194,37 @@ public abstract class SpaceObject {
 	public void onDestroy(SpaceObject s) {
 	}
 
-	public abstract void draw(RenderDistance dist);
-
-	public void renderTrail() {
-		// Update trail vectors
-		for(int i = trail.length - 1; i > 0; i--) {
-			trail[i] = trail[i - 1];
+	public void draw(RenderLevel level, float r) {
+		RenderLevel thisLevel = getRenderLevel();
+		if(thisLevel.isVisibleTo(level)) {
+			drawNearby(r);
 		}
-		trail[0] = position.copy();
+		else/* if(thisLevel == level.getBelow())*/ {
+			drawDistant(r);
+		}
+	}
+
+	public void drawNearby(float r) {
+		drawDistant(r);
+	}
+
+	public void drawDistant(float r) {
+		float outer = MARKER_SIZE * getMarkerScale();
+		float inner = outer * .8F;
+		v.rect(0, 0, outer, outer);
+		v.rect(0, 0, inner, inner);
+	}
+
+	public float getMarkerScale() {
+		return 1;
+	}
+
+	public void drawTrail(float scale) {
+		// Update trail vectors
+		if(trail.length - 1 >= 0) {
+			System.arraycopy(trail, 0, trail, 1, trail.length - 1);
+		}
+		trail[0] = getPosition();
 
 		for(int i = 1; i < trail.length; i++) {
 			PVector oldPos = trail[i - 1];
@@ -201,9 +232,9 @@ public abstract class SpaceObject {
 			if(newPos == null) {
 				break;
 			}
-			// Set the withColor and render the line segment
+			// Set the color and draw the line segment
 			v.stroke(v.lerpColor(getColor(), v.color(0), (float)i / trail.length));
-			v.line(oldPos.x, oldPos.y, newPos.x, newPos.y);
+			v.line((oldPos.x - position.x) / scale, (oldPos.y - position.y) / scale, (newPos.x - position.x) / scale, (newPos.y - position.y) / scale);
 		}
 	}
 

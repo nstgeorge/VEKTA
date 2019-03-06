@@ -1,6 +1,6 @@
 package vekta.module;
 
-import vekta.RenderDistance;
+import vekta.RenderLevel;
 import vekta.module.station.ComponentModule;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.SpaceStation;
@@ -66,10 +66,8 @@ public abstract class ShipModule implements ComponentModule {
 	}
 
 	@Override
-	public void draw(RenderDistance dist, float tileSize) {
-		if(dist == RenderDistance.NEAR) {
-			v.rect(0, 0, getWidth() * tileSize / 2, getHeight() * tileSize);
-			v.rect(0, 0, getWidth() * tileSize, getHeight() * tileSize / 2);
-		}
+	public void draw(RenderLevel dist, float tileSize) {
+		v.rect(0, 0, getWidth() * tileSize / 2, getHeight() * tileSize);
+		v.rect(0, 0, getWidth() * tileSize, getHeight() * tileSize / 2);
 	}
 }

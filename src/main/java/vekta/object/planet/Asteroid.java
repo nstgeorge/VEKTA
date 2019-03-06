@@ -1,7 +1,7 @@
 package vekta.object.planet;
 
 import processing.core.PVector;
-import vekta.RenderDistance;
+import vekta.RenderLevel;
 import vekta.terrain.Terrain;
 
 import static processing.core.PConstants.TWO_PI;
@@ -19,15 +19,19 @@ public class Asteroid extends TerrestrialPlanet {
 	}
 
 	@Override
+	public RenderLevel getRenderLevel() {
+		return RenderLevel.AROUND_PLANET;
+	}
+
+	@Override
 	public boolean impartsGravity() {
 		return false;
 	}
 
 	@Override
-	public void draw(RenderDistance dist) {
+	public void drawNearby(float r) {
 		v.rotate(angle);
 
-		float radius = getRadius();
-		v.ellipse(0, 0, radius, radius * skew);
+		v.ellipse(0, 0, r, r * skew);
 	}
 }

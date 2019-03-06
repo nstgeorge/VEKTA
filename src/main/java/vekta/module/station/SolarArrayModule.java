@@ -1,6 +1,6 @@
 package vekta.module.station;
 
-import vekta.RenderDistance;
+import vekta.RenderLevel;
 import vekta.module.GeneratorModule;
 import vekta.module.Module;
 import vekta.module.ModuleType;
@@ -63,7 +63,7 @@ public class SolarArrayModule extends GeneratorModule {
 	}
 
 	@Override
-	public void draw(RenderDistance dist, float tileSize) {
+	public void draw(RenderLevel dist, float tileSize) {
 		v.translate(-(getWidth() - 1) / 2F * tileSize, 0); // Fix center
 
 		// Supports on station side of array
@@ -103,7 +103,7 @@ public class SolarArrayModule extends GeneratorModule {
 		v.rect(0, getHeight() * tileSize, (getWidth() - 2) * tileSize, (float)Math.ceil(getHeight() / 2.0) * tileSize);
 		// Supports on
 
-		if(dist.isDetail()) {
+		if(dist == RenderLevel.AROUND_PARTICLE) {
 			// Solar panel details (bottom) - only drawn when zoomed in closer
 			v.line(0, (float)Math.floor(getHeight() / 2F) / 3F * tileSize, (getWidth() - 2) * tileSize, (float)Math.floor(getHeight() / 2F) / 3F * tileSize);
 			v.line(0, (float)Math.floor(getHeight() / 2F) / 3F * 2 * tileSize, (getWidth() - 2) * tileSize, (float)Math.floor(getHeight() / 2F) / 3F * 2 * tileSize);

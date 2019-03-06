@@ -2,7 +2,7 @@ package vekta.object.ship;
 
 import processing.core.PVector;
 import vekta.Player;
-import vekta.RenderDistance;
+import vekta.RenderLevel;
 import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;
@@ -47,6 +47,11 @@ public abstract class Ship extends SpaceObject {
 	}
 
 	@Override
+	public RenderLevel getRenderLevel() {
+		return RenderLevel.AROUND_SHIP;
+	}
+
+	@Override
 	public float getSpecificHeat() {
 		return 1;
 	}
@@ -77,7 +82,7 @@ public abstract class Ship extends SpaceObject {
 
 	public void dock(SpaceObject s) {
 		dock = s;
-		onDock(s);
+		doDock(s);
 	}
 
 	public void undock() {
@@ -106,9 +111,8 @@ public abstract class Ship extends SpaceObject {
 	}
 
 	@Override
-	public boolean collidesWith(SpaceObject s) {
-		// TODO: generalize, perhaps by adding SpaceObject::getParent(..) and turnSpeed this case in SpaceObject
-		return !(s instanceof Projectile && ((Projectile)s).getParent() == this) && super.collidesWith(s);
+	public boolean collidesWith(RenderLevel level, SpaceObject s) {
+		return !(s instanceof Projectile && ((Projectile)s).getParent() == this) && super.collidesWith(level, s);
 	}
 
 	@Override
@@ -137,12 +141,7 @@ public abstract class Ship extends SpaceObject {
 		super.onDestroy(s);
 	}
 
-	protected void drawShip(RenderDistance dist, ShipModelType shape) {
-		if(!dist.isNearby()) {
-			return;// TODO draw indicator
-		}
-
-		float r = getRadius();
+	protected void drawShip(float r, ShipModelType shape) {
 		float theta = heading.heading() + HALF_PI;
 		v.rotate(theta);
 		v.beginShape();
@@ -174,11 +173,13 @@ public abstract class Ship extends SpaceObject {
 		v.endShape(CLOSE);
 	}
 
-	public void onLand(LandingSite site) {
+	// Named Ship::doLand() to distinguish from PlayerListener::onLand()
+	public void doLand(LandingSite site) {
 		site.takeoff();
 	}
 
-	public void onDock(SpaceObject obj) {
+	// Named Ship::doDock() to distinguish from PlayerListener::onDock()
+	public void doDock(SpaceObject obj) {
 		undock();
 	}
 

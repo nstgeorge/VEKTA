@@ -2,7 +2,7 @@ package vekta.context;
 
 import vekta.ControlKey;
 import vekta.Player;
-import vekta.RenderDistance;
+import vekta.RenderLevel;
 import vekta.Resources;
 import vekta.item.Inventory;
 import vekta.menu.Menu;
@@ -59,7 +59,7 @@ public class StationLayoutContext implements Context, Upgrader {
 		v.hint(DISABLE_DEPTH_TEST);
 		v.strokeWeight(.5F);
 
-		RenderDistance dist = RenderDistance.DETAIL;
+		RenderLevel dist = RenderLevel.AROUND_PARTICLE;
 
 		SpaceStation.Component core = station.getCore();
 		if(cursor == null) {
@@ -74,7 +74,7 @@ public class StationLayoutContext implements Context, Upgrader {
 		// Draw station components
 		v.noFill();
 		v.stroke(UI_COLOR);
-		station.drawRelative(dist);
+		station.drawRelative(dist, station.getRadius());
 
 		// Highlight cursor component
 		SpaceStation.Direction dir = cursor.getDirection();
@@ -250,7 +250,7 @@ public class StationLayoutContext implements Context, Upgrader {
 		}
 
 		@Override
-		public void draw(RenderDistance dist, float tileSize) {
+		public void draw(RenderLevel dist, float tileSize) {
 			v.ellipse(0, 0, tileSize / 3, tileSize / 3);
 		}
 

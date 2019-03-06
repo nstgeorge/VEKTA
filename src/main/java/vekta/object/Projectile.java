@@ -1,7 +1,7 @@
 package vekta.object;
 
 import processing.core.PVector;
-import vekta.RenderDistance;
+import vekta.RenderLevel;
 
 import static vekta.Vekta.*;
 
@@ -44,6 +44,11 @@ public class Projectile extends SpaceObject {
 	}
 
 	@Override
+	public RenderLevel getRenderLevel() {
+		return RenderLevel.AROUND_SHIP;
+	}
+
+	@Override
 	public float getSpecificHeat() {
 		return 1;
 	}
@@ -56,15 +61,18 @@ public class Projectile extends SpaceObject {
 	}
 
 	@Override
-	public void draw(RenderDistance dist) {
-		if(dist.isNearby()) {
-			v.ellipse(0, 0, radius, radius);
-		}
+	public void drawNearby(float r) {
+		v.ellipse(0, 0, radius, radius);
 	}
 
 	@Override
-	public boolean collidesWith(SpaceObject s) {
-		return s != getParent() && super.collidesWith(s);
+	public float getMarkerScale() {
+		return .2F;
+	}
+
+	@Override
+	public boolean collidesWith(RenderLevel level, SpaceObject s) {
+		return s != getParent() && super.collidesWith(getRenderLevel(), s); // Always collide regardless of render distance
 	}
 
 	/**

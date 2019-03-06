@@ -6,6 +6,7 @@ import processing.sound.SoundFile;
 import java.util.HashMap;
 import java.util.Map;
 
+import static processing.core.PApplet.println;
 import static vekta.Vekta.concat;
 import static vekta.Vekta.v;
 
@@ -94,6 +95,9 @@ public class Resources {
 				sound.stop(); // TODO: confirm whether this is needed
 				sound.play();
 			}
+			else {
+				println("Sound is not registered: " + key);
+			}
 		}
 	}
 
@@ -142,10 +146,12 @@ public class Resources {
 	public static void setSoundVolume(String key, float volume) {
 		SoundFile sound = getSound(key);
 		if(sound != null) {
-			sound.amp(volume);
-		}
-		else {
-			System.out.println("Sound dont exist");
+			if(volume > 0) {
+				sound.amp(volume);
+			}
+			else {
+				sound.stop();
+			}
 		}
 	}
 

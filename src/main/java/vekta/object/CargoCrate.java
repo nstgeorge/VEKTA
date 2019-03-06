@@ -2,7 +2,7 @@ package vekta.object;
 
 import processing.core.PVector;
 import vekta.Player;
-import vekta.RenderDistance;
+import vekta.RenderLevel;
 import vekta.item.Item;
 import vekta.object.ship.ModularShip;
 
@@ -41,6 +41,11 @@ public class CargoCrate extends SpaceObject {
 	}
 
 	@Override
+	public RenderLevel getRenderLevel() {
+		return RenderLevel.AROUND_SHIP;
+	}
+
+	@Override
 	public float getSpecificHeat() {
 		return 1;
 	}
@@ -55,12 +60,9 @@ public class CargoCrate extends SpaceObject {
 	}
 
 	@Override
-	public void draw(RenderDistance dist) {
-		if(dist.isNearby()) {
-			v.rotate(angle);
-			float r = getRadius();
-			v.rect(0, 0, r, r);
-		}
+	public void drawNearby(float r) {
+		v.rotate(angle);
+		v.rect(0, 0, r, r);
 	}
 
 	@Override

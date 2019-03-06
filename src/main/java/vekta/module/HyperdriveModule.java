@@ -73,7 +73,7 @@ public class HyperdriveModule extends ShipModule {
 		}
 
 		if(isActive() && ship.consumeEnergy(.1F * currentBoost * PER_SECOND)) {
-			ship.setVelocity(ship.getHeading().setMag(ship.getVelocity().mag()));
+//			ship.setVelocity(ship.getHeading().setMag(ship.getVelocity().mag()));
 			ship.accelerate(thrust * currentBoost, ship.getVelocity());
 		}
 	}

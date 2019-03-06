@@ -14,13 +14,9 @@ import vekta.overlay.Overlay;
 import static processing.core.PApplet.*;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
-import static vekta.Vekta.UI_COLOR;
-import static vekta.Vekta.v;
+import static vekta.Vekta.*;
 
 public class TelemetryOverlay implements Overlay {
-	private static final float EARTH_MASS = 5.9736e24F;
-	private static final float SUN_MASS = 1.989e30F;
-
 	private final Player player;
 
 	private Targeter targeter;
@@ -37,7 +33,7 @@ public class TelemetryOverlay implements Overlay {
 		if(targeter != null) {
 			SpaceObject target = targeter.getTarget();
 			distString = String.valueOf(target != null
-					? (float)round(player.getShip().getPosition().dist(target.getPosition()) * 100) / 100
+					? (float)round(player.getShip().getPosition().dist(target.getPosition()) / AU_DISTANCE * 100) / 100
 					: 0);
 		}
 	}
@@ -76,16 +72,16 @@ public class TelemetryOverlay implements Overlay {
 			if(target == null) {
 				v.fill(100, 100, 100);
 				v.stroke(UI_COLOR);
-				targetString = "PLANET [1], SHIP [2], ASTEROID [3]";
+				targetString = "PLANET [1], AROUND_SHIP [2], ASTEROID [3]";
 			}
 			else {
 				float mass = (float)round(target.getMass() * 1000) / 1000;
 				String unit = "tonnes";
-				if(mass >= SUN_MASS) {
+				if(mass >= SUN_MASS * .1F) {
 					mass = (float)round(target.getMass() / SUN_MASS * 1000) / 1000;
 					unit = "Suns";
 				}
-				else if(mass >= EARTH_MASS) {
+				else if(mass >= EARTH_MASS * .1F) {
 					mass = (float)round(target.getMass() / EARTH_MASS * 1000) / 1000;
 					unit = "Earths";
 				}
@@ -100,6 +96,8 @@ public class TelemetryOverlay implements Overlay {
 				drawDial("Direction", target.getPosition().sub(ship.getPosition()), 450, dialHeight, target.getColor());
 				v.fill(target.getColor());
 				v.stroke(target.getColor());
+
+				//				println(ship.getPosition().div(SCALE), target.getPosition().div(SCALE));////
 			}
 			v.text("Target: " + targetString, 50, v.height - 100);
 
