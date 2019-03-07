@@ -11,9 +11,9 @@ import static vekta.Vekta.*;
 
 public abstract class SpaceObject {
 	private static final float MARKER_SIZE = 40;
-	private static final int TRAIL_LENGTH = 100;
+	private static final int DEFAULT_TRAIL_LENGTH = 100;
 
-	private final PVector[] trail = new PVector[TRAIL_LENGTH];
+	protected final PVector[] trail;
 
 	private int id;
 	private boolean destroyed;
@@ -32,6 +32,8 @@ public abstract class SpaceObject {
 		this.position = position;
 		this.velocity = velocity;
 		this.color = color;
+
+		this.trail = new PVector[getTrailLength()];
 	}
 
 	/**
@@ -213,6 +215,10 @@ public abstract class SpaceObject {
 	 */
 	public void onDestroy(SpaceObject s) {
 	}
+	
+	public float getOnScreenRadius(float r) {
+		return r * 2;
+	}
 
 	public void draw(RenderLevel level, float r) {
 		RenderLevel thisLevel = getRenderLevel();
@@ -246,15 +252,22 @@ public abstract class SpaceObject {
 		return 1;
 	}
 
+	public int getTrailColor() {
+		return getColor();
+	}
+
+	public int getTrailLength() {
+		return DEFAULT_TRAIL_LENGTH;
+	}
+
 	public void updateTrail() {
 		// Update trail vectors
-		if(trail.length - 1 >= 0) {
-			System.arraycopy(trail, 0, trail, 1, trail.length - 1);
-		}
+		System.arraycopy(trail, 0, trail, 1, trail.length - 1);
 		trail[0] = getPosition();
 	}
 
 	public void drawTrail(float scale) {
+		int color = getTrailColor();
 		for(int i = 1; i < trail.length; i++) {
 			PVector oldPos = trail[i - 1];
 			PVector newPos = trail[i];
@@ -262,7 +275,7 @@ public abstract class SpaceObject {
 				break;
 			}
 			// Set the color and draw the line segment
-			v.stroke(v.lerpColor(getColor(), v.color(0), (float)i / trail.length));
+			v.stroke(v.lerpColor(color, 0, (float)i / trail.length));
 			v.line((oldPos.x - position.x) / scale, (oldPos.y - position.y) / scale, (newPos.x - position.x) / scale, (newPos.y - position.y) / scale);
 		}
 	}

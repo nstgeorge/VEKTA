@@ -7,6 +7,7 @@ import vekta.object.ship.CargoShip;
 import vekta.object.ship.PirateShip;
 import vekta.object.ship.Ship;
 import vekta.terrain.*;
+import vekta.terrain.settlement.AbandonedSettlement;
 import vekta.terrain.settlement.RuralSettlement;
 import vekta.terrain.settlement.Settlement;
 import vekta.terrain.settlement.UrbanSettlement;
@@ -76,7 +77,7 @@ public class WorldGenerator {
 	}
 
 	public static Star createStar(PVector pos) {
-		float power = pow(10, v.random(29, 32));
+		float power = pow(10, v.random(29, 31.5F));
 		float mass = v.random(0.8F, 4) * power;
 		float density = v.random(.7F, 2);
 		Star star = new Star(
@@ -124,9 +125,9 @@ public class WorldGenerator {
 				new PVector(), // Velocity
 				randomPlanetColor() // Color
 		);
-		int moonCt = (int)v.random(5, 10);
+		int moonCt = (int)v.random(3, 6);
 		for(int i = 0; i < moonCt; i++) {
-			float distance = v.random(1, 3) * LUNAR_DISTANCE;
+			float distance = v.random(1, 20) * LUNAR_DISTANCE;
 			Planet moon = createMoon(planet, distance);
 			orbit(planet, moon, 0);
 		}
@@ -136,7 +137,7 @@ public class WorldGenerator {
 
 	public static Moon createMoon(Planet planet, float distance) {
 		PVector pos = planet.getPosition().add(PVector.random2D().mult(planet.getRadius() + distance));
-		float mass = pow(10, v.random(21, 23));
+		float mass = pow(10, v.random(18, 23));
 		float density = v.random(3, 4);
 		Moon moon = new Moon(
 				planet,
@@ -200,11 +201,14 @@ public class WorldGenerator {
 
 	public static Settlement createSettlement(Planet planet) {
 		float r = v.random(1);
-		if(r > .4) {
+		if(r > .5) {
 			return new UrbanSettlement();
 		}
-		else {
+		else if(r > .2) {
 			return new RuralSettlement();
+		}
+		else {
+			return new AbandonedSettlement();
 		}
 	}
 

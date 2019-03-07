@@ -68,6 +68,11 @@ public class SpaceStation extends ModularShip {
 	}
 
 	@Override
+	public float getOnScreenRadius(float r) {
+		return r * 10; // Prevent disappearing near edge of screen
+	}
+
+	@Override
 	public void draw(RenderLevel level, float r) {
 		super.draw(level, r);
 

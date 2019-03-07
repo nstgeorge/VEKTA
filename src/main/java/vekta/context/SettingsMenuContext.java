@@ -46,8 +46,8 @@ public class SettingsMenuContext implements Context {
 
 		// Draw settings
 		v.hint(DISABLE_DEPTH_TEST);
-		v.camera();
-		v.noLights();
+//		v.camera();
+//		v.noLights();
 		v.textFont(bodyFont);
 		v.stroke(0);
 		v.fill(255);

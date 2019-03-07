@@ -254,14 +254,20 @@ public class Singleplayer implements World, PlayerListener {
 			v.pushMatrix();
 			PVector position = s.getPositionReference();
 			float scale = getZoom();
-			v.translate((position.x - cameraPos.x) / scale, (position.y - cameraPos.y) / scale);
+			float screenX = (position.x - cameraPos.x) / scale;
+			float screenY = (position.y - cameraPos.y) / scale;
+			v.translate(screenX, screenY);
 			s.updateTrail();
 			if(s == playerShip || s.getRenderLevel().isVisibleTo(level)) {
 				s.drawTrail(scale);
 			}
 			v.stroke(s.getColor());
 			v.noFill();
-			s.draw(level, s.getRadius() / scale);
+			float r = s.getRadius() / scale;
+			float onScreenRadius = s.getOnScreenRadius(r);
+			if(abs(screenX) - onScreenRadius <= v.width / 2 && abs(screenY) - onScreenRadius <= v.height / 2) {
+				s.draw(level, r);
+			}
 			v.popMatrix();
 		}
 

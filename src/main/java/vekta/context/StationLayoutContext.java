@@ -51,8 +51,8 @@ public class StationLayoutContext implements Context, Upgrader {
 	@Override
 	public void render() {
 		v.clear();
-		v.camera();
-		v.noLights();
+//		v.camera();
+//		v.noLights();
 		v.hint(DISABLE_DEPTH_TEST);
 		v.strokeWeight(.5F);
 

@@ -45,13 +45,13 @@ public class Vekta extends PApplet {
 	public static final float STAR_LEVEL = 3e8F;
 	
 	public static final float MIN_ZOOM_LEVEL = .5F;
-	public static final float MAX_ZOOM_LEVEL = 1e9F; // TODO: add modules to change max zoom level
+	public static final float MAX_ZOOM_LEVEL = STAR_LEVEL; // TODO: add modules to change max zoom level
 
 	// Reference constants
 	public static final float EARTH_MASS = 5.9736e24F;
 	public static final float SUN_MASS = 1.989e30F;
 	public static final float AU_DISTANCE = 1.496e11F;
-	public static final float LUNAR_DISTANCE = 3.844e9F;
+	public static final float LUNAR_DISTANCE = 3.844e8F;
 
 	public static int UI_COLOR;
 	public static int DANGER_COLOR;
