@@ -16,9 +16,19 @@ public class Resources {
 
 	private static SoundFile currentMusic;
 
-	public static PShape logo; // TODO: generalize SVG loading
+	public static PShape logo; // TODO: generalize SVG file loading
 
 	public static void init() {
+		String[] strings = v.loadStrings("resources.txt");
+		for(String file : strings) {
+			if(!file.isEmpty()) {
+				int dotIndex = file.lastIndexOf(".");
+				String name = file.substring(file.indexOf("/") + 1, dotIndex);
+				String ext = file.substring(dotIndex + 1);
+			}
+		}
+		//TODO remove
+
 		// Music
 		addSound("theme");
 		addSound("atmosphere");

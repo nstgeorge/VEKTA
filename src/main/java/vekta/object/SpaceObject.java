@@ -18,8 +18,8 @@ public abstract class SpaceObject {
 	private int id;
 	private boolean destroyed;
 
-	protected final PVector position;
-	protected final PVector velocity;
+	protected final PVector position = new PVector();
+	protected final PVector velocity = new PVector();
 	private final int color;
 
 	private float temperature;
@@ -29,8 +29,8 @@ public abstract class SpaceObject {
 	}
 
 	public SpaceObject(PVector position, PVector velocity, int color) {
-		this.position = position;
-		this.velocity = velocity;
+		this.position.set(position);
+		this.velocity.set(velocity);
 		this.color = color;
 
 		this.trail = new PVector[getTrailLength()];
