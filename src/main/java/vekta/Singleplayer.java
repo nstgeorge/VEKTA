@@ -123,7 +123,7 @@ public class Singleplayer implements World, PlayerListener {
 		// Testing out a mission sequence
 		Person person = PersonGenerator.randomPerson();
 		Mission mission = MissionGenerator.createMission(person);
-		Dialog dialog = new Dialog("Hey kiddo.", person);
+		Dialog dialog = new Dialog(Resources.generateString("dialog_visit"), person); // TODO: will generate in Player class
 		MissionGenerator.createMessenger(player, dialog)
 				.getInventory().add(ItemGenerator.randomMissionItem(mission));
 	}

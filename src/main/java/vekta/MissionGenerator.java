@@ -21,7 +21,7 @@ public class MissionGenerator {
 				PVector.random2D(),
 				pos,
 				player.getShip().getVelocity(),
-				WorldGenerator.randomPlanetColor());//TODO: use character/faction color
+				dialog != null ? dialog.getPerson().getColor() : WorldGenerator.randomPlanetColor());
 		addObject(ship);
 		player.send(ship.getName() + " approaches with a message!")
 				.withColor(ship.getColor());
