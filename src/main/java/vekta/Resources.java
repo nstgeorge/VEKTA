@@ -87,6 +87,10 @@ public class Resources {
 	public static String[] getStrings(String key, String... extra) {
 		return concat(getStrings(key), extra);
 	}
+	
+//	public static String resolveString(String type) {
+//		
+//	}
 
 	public static SoundFile getSound(String key) {
 		return SOUNDS.get(key);

@@ -4,6 +4,8 @@ import processing.core.PVector;
 import vekta.RenderLevel;
 import vekta.object.SpaceObject;
 
+import static vekta.Vekta.removeObject;
+
 public class Particle extends SpaceObject {
 
 	private float drag;          // Reduce the speed by this amount every draw cycle
@@ -24,15 +26,9 @@ public class Particle extends SpaceObject {
 		addVelocity(currentVelocity.setMag(-drag * .1F));
 		
 		lifetime--;
-	}
-
-	/**
-	 * Get the lifetime of the particle
-	 *
-	 * @return particle lifetime
-	 */
-	public boolean dead() {
-		return lifetime <= 0;
+		if(lifetime <= 0) {
+			removeObject(this);
+		}
 	}
 
 	@Override
@@ -52,7 +48,7 @@ public class Particle extends SpaceObject {
 
 	@Override
 	public RenderLevel getRenderLevel() {
-		return RenderLevel.AROUND_PARTICLE;
+		return RenderLevel.AROUND_SHIP;
 	}
 
 	@Override

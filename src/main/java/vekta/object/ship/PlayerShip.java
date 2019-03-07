@@ -3,9 +3,10 @@ package vekta.object.ship;
 import processing.core.PVector;
 import vekta.RenderLevel;
 import vekta.module.*;
-import vekta.particle.ParticleSystem;
+import vekta.particle.ParticleEmitter;
 
 import static processing.core.PConstants.PI;
+import static processing.core.PConstants.QUARTER_PI;
 import static vekta.Vekta.UI_COLOR;
 import static vekta.Vekta.v;
 
@@ -15,7 +16,7 @@ public class PlayerShip extends ModularShip {
 	private static final float DEF_SPEED = .1F; // Base speed (engine speed = 1)
 	private static final float DEF_TURN = 4; // Base turn speed (RCS turnSpeed = 1)
 
-	private ParticleSystem particleSystem;
+	private ParticleEmitter emitter;
 
 	public PlayerShip(String name, PVector heading, PVector position, PVector velocity, int color) {
 		super(name, heading, position, velocity, color, DEF_SPEED, DEF_TURN);
@@ -30,7 +31,7 @@ public class PlayerShip extends ModularShip {
 
 		setEnergy(getMaxEnergy());
 
-		particleSystem = new ParticleSystem(super.getPosition(), super.getHeading().copy().rotate(PI).setMag(3), PI / 4, 10, 1, UI_COLOR, v.color(255, 0, 0));
+		emitter = new ParticleEmitter(QUARTER_PI, 10, 1, UI_COLOR, v.color(255, 0, 0));
 	}
 
 	@Override
@@ -56,11 +57,11 @@ public class PlayerShip extends ModularShip {
 			}
 		}
 
-		particleSystem.setPosition(super.getPosition().copy());
-		particleSystem.setVelocity(super.getHeading().copy().rotate(PI).setMag(1));
-
-		particleSystem.loopEmit();
-
+		// Particle testing
+		if(getRenderLevel().isVisibleTo(level)) {
+			emitter.update(getPosition(), getVelocity().rotate(PI).normalize());
+		}
+		
 	}
 
 	@Override

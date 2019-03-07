@@ -41,7 +41,7 @@ public class Singleplayer implements World, PlayerListener {
 	private LowPass lowPass;
 
 	// Camera position tracking
-	private PVector cameraPos;
+	private final PVector cameraPos = new PVector();
 	//	private float cameraSpd;
 
 	private Player player;
@@ -164,7 +164,7 @@ public class Singleplayer implements World, PlayerListener {
 		ModularShip playerShip = getPlayerShip();
 		if(!playerShip.isDestroyed()) {
 			// Camera follow
-			cameraPos = playerShip.getPosition();
+			cameraPos.set(playerShip.getPosition());
 			//			cameraSpd = playerShip.getVelocity().mag();
 		}
 
@@ -248,6 +248,11 @@ public class Singleplayer implements World, PlayerListener {
 						other.onCollide(s);
 					}
 				}
+			}
+			
+			if(s == playerShip) {
+				// Fix camera position when zoomed in at high velocity
+				cameraPos.set(s.getPositionReference());
 			}
 
 			// Draw object
