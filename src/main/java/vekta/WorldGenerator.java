@@ -29,7 +29,6 @@ public class WorldGenerator {
 		case AROUND_PARTICLE:
 			break;
 		case AROUND_SHIP:
-			println(orbit);
 			if(orbit instanceof TerrestrialPlanet) {
 				float r = v.random(1);
 				if(r > .4F) {

@@ -25,10 +25,10 @@ public class PlayerOverlay implements Overlay, PlayerListener {
 				new TelemetryOverlay(player),
 				new MissionOverlay(player),
 				new ShipComputerOverlay(50, -150, player.getShip()),
-				new ShipEnergyOverlay(-300, -75, player.getShip()),
-				new ShipMoneyOverlay(-300, -50, player.getShip()),
-				new ShipTemperatureOverlay(-300, -25, player.getShip()),
-				notifications = new NotificationOverlay(v.width - 20, 40),
+				new ShipMoneyOverlay(-300, -90, player.getShip()),
+				new ShipEnergyOverlay(-300, -60, player.getShip()),
+				new ShipTemperatureOverlay(-300, -30, player.getShip()),
+				notifications = new NotificationOverlay(-20, 40),
 		};
 	}
 

@@ -38,6 +38,8 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 
 	public ModularShip(String name, PVector heading, PVector position, PVector velocity, int color, float speed, float turnSpeed) {
 		super(name, heading, position, velocity, color, speed, turnSpeed);
+
+		setTemperature(23);
 	}
 
 	public final boolean hasController() {
@@ -240,9 +242,9 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 		super.draw(level, r);
 
 		if(getThrustControl() > 0) {
-			float addition = v.random(4, 10);
-			v.line(-r / 2, r * 2, 0, (r * 2 + addition) / t);
-			v.line(r / 2, r * 2, 0, (r * 2 + addition) / t);
+			float addition = v.random(5, 7);
+			v.line(-r / 2, r * 2, 0, r / 2 * (1 + addition) / t);
+			v.line(r / 2, r * 2, 0, r / 2 * (1 + addition) / t);
 		}
 	}
 

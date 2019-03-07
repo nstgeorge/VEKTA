@@ -85,6 +85,10 @@ public abstract class SpaceObject {
 		return temperature;
 	}
 
+	public void setTemperature(float temperature) {
+		this.temperature = temperature;
+	}
+
 	public void addTemperature(float temperature) {
 		this.temperature += temperature;
 	}
@@ -231,7 +235,7 @@ public abstract class SpaceObject {
 	public void drawMarker() {
 		// Temp
 		v.stroke(v.lerpColor(0, getColor(), 1 - getPosition().mag() / WorldGenerator.getRadius(getRenderLevel())));
-		
+
 		float outer = MARKER_SIZE * getMarkerScale();
 		float inner = outer * .8F;
 		v.rect(0, 0, outer, outer);
