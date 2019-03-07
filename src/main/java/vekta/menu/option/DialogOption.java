@@ -24,6 +24,9 @@ public class DialogOption implements MenuOption {
 	@Override
 	public void select(Menu menu) {
 		Menu sub = new Menu(menu.getPlayer(), new DialogMenuHandle(new BackOption(menu), dialog));
+		for(MenuOption option : dialog.getOptions()) {
+			sub.add(option);
+		}
 		sub.addDefault();
 		setContext(sub);
 		applyContext();

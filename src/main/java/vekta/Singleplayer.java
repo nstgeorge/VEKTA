@@ -4,13 +4,8 @@ import processing.core.PVector;
 import processing.sound.LowPass;
 import vekta.context.PauseMenuContext;
 import vekta.context.World;
-import vekta.item.Item;
-import vekta.item.ItemType;
-import vekta.item.MissionItem;
 import vekta.item.ModuleItem;
 import vekta.menu.dialog.Dialog;
-import vekta.mission.ItemReward;
-import vekta.mission.LandAtObjective;
 import vekta.mission.Mission;
 import vekta.module.*;
 import vekta.module.station.SensorModule;
@@ -19,11 +14,11 @@ import vekta.module.station.StationCoreModule;
 import vekta.module.station.StructuralModule;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
-import vekta.object.planet.TerrestrialPlanet;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.PlayerShip;
 import vekta.object.ship.SpaceStation;
 import vekta.overlay.singleplayer.PlayerOverlay;
+import vekta.person.Person;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -125,13 +120,12 @@ public class Singleplayer implements World, PlayerListener {
 		playerShip.getInventory().add(new ModuleItem(new TractorBeamModule(1)));
 		playerShip.getInventory().add(new ModuleItem(new StructuralModule(3, 1)));
 
-		Mission mission = new Mission("A Dubious Journey");
-		mission.add(new LandAtObjective(getWorld().findRandomObject(TerrestrialPlanet.class)));
-		mission.add(new ItemReward(new Item("Somewhat Valuable Trinket", ItemType.LEGENDARY)));
-
 		// Testing out a mission sequence
-		Dialog dialog = new Dialog("Hey kiddo.");
-		MissionGenerator.createMessenger(player, dialog).getInventory().add(new MissionItem("Sketchy Coordinates", mission));
+		Person person = PersonGenerator.randomPerson();
+		Mission mission = MissionGenerator.createMission(person);
+		Dialog dialog = new Dialog("Hey kiddo.", person);
+		MissionGenerator.createMessenger(player, dialog)
+				.getInventory().add(ItemGenerator.randomMissionItem(mission));
 	}
 
 	public Player getPlayer() {

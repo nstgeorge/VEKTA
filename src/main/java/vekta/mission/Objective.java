@@ -16,7 +16,7 @@ public abstract class Objective implements MissionListener, PlayerListener {
 	private MissionStatus status = MissionStatus.READY;
 
 	private boolean optional;
-	private List<Objective> next = new ArrayList<>();
+	private final List<Runnable> next = new ArrayList<>();
 
 	public boolean isOptional() {
 		return optional;
@@ -27,8 +27,13 @@ public abstract class Objective implements MissionListener, PlayerListener {
 		return this;
 	}
 
-	public Objective then(Objective next) {
+	public Objective then(Runnable next) {
 		this.next.add(next);
+		return this;
+	}
+
+	public Objective then(Objective next) {
+		this.then(() -> getMission().add(next));
 		return this;
 	}
 
@@ -71,9 +76,8 @@ public abstract class Objective implements MissionListener, PlayerListener {
 		else if(status == MissionStatus.COMPLETED) {
 			getPlayer().send("Objective completed: " + getDisplayText())
 					.withColor(MISSION_COLOR);
-			for(Objective objective : next) {
-				getMission().add(objective);
-				objective.start();
+			for(Runnable next : this.next) {
+				next.run();
 			}
 		}
 		getMission().updateCurrentObjective();

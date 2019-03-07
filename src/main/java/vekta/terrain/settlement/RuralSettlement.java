@@ -4,8 +4,6 @@ import vekta.Resources;
 import vekta.terrain.Terrain;
 import vekta.terrain.building.MarketBuilding;
 
-import static vekta.Vekta.v;
-
 public class RuralSettlement extends Settlement {
 
 	public RuralSettlement() {
@@ -24,6 +22,6 @@ public class RuralSettlement extends Settlement {
 
 	@Override
 	public String createOverview() {
-		return v.random(Resources.getStrings("overview_rural"));
+		return Resources.generateString("overview_rural");
 	}
 }

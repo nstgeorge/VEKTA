@@ -6,6 +6,7 @@ import vekta.PlayerEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import static processing.core.PApplet.println;
 import static vekta.Vekta.UI_COLOR;
 
 public class Mission {
@@ -43,7 +44,11 @@ public class Mission {
 	public void add(MissionListener listener) {
 		listeners.add(listener);
 		if(listener instanceof Objective) {
-			getObjectives().add((Objective)listener);
+			Objective objective = (Objective)listener;
+			getObjectives().add(objective);
+			if(getStatus() == MissionStatus.STARTED) {
+				objective.start();
+			}
 		}
 		if(listener instanceof Reward) {
 			getRewards().add((Reward)listener);
@@ -97,6 +102,10 @@ public class Mission {
 		if(players.contains(player)) {
 			throw new RuntimeException("Player already started the mission");
 		}
+		if(objectives.isEmpty()) {
+			println("Mission has no objectives");
+			return;
+		}
 
 		status = MissionStatus.STARTED;
 		for(MissionListener listener : listeners) {
@@ -104,7 +113,7 @@ public class Mission {
 		}
 
 		players.add(player);
-
+		
 		current = objectives.get(0);
 
 		player.emit(PlayerEvent.MISSION_STATUS, this);

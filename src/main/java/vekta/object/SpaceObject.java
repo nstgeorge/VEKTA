@@ -1,7 +1,6 @@
 package vekta.object;
 
 import processing.core.PVector;
-import sun.jvm.hotspot.memory.Space;
 import vekta.RenderLevel;
 import vekta.WorldGenerator;
 

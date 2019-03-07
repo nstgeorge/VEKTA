@@ -23,7 +23,7 @@ import static vekta.Vekta.*;
 
 public abstract class ModularShip extends Ship implements Upgradeable, PlayerListener {
 	private static final float ENERGY_HEAT_SCALE = 1e4F;
-	
+
 	private Player controller;
 
 	private boolean landing;
@@ -306,15 +306,29 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 	//// InventoryListener hooks
 
 	@Override
+	public void onMoneyAdd(int amount) {
+		if(hasController()) {
+			getController().send("+ " + amount + " G").withTime(.5F);
+		}
+	}
+
+	@Override
+	public void onMoneyRemove(int amount) {
+		if(hasController()) {
+			getController().send("- " + amount + " G").withTime(.5F);
+		}
+	}
+
+	@Override
 	public void onItemAdd(Item item) {
-		if(hasController()){
+		if(hasController()) {
 			getController().emit(PlayerEvent.ADD_ITEM, item);
 		}
 	}
 
 	@Override
 	public void onItemRemove(Item item) {
-		if(hasController()){
+		if(hasController()) {
 			getController().emit(PlayerEvent.REMOVE_ITEM, item);
 		}
 	}

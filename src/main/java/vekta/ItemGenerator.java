@@ -1,9 +1,7 @@
 package vekta;
 
-import vekta.item.Inventory;
-import vekta.item.Item;
-import vekta.item.ItemType;
-import vekta.item.ModuleItem;
+import vekta.item.*;
+import vekta.mission.Mission;
 import vekta.module.*;
 import vekta.module.station.SensorModule;
 import vekta.module.station.SolarArrayModule;
@@ -38,12 +36,15 @@ public class ItemGenerator {
 
 	public static Item randomItem() {
 		float r = v.random(1);
-		if(r > .4) {
+		if(r > .5) {
 			ItemType type = randomItemType();
 			return new Item(randomItemName(type), type);
 		}
-		else if(r > .2) {
+		else if(r > .3) {
 			return new ModuleItem(v.random(modules).getVariant());
+		}
+		else if(r > .2) {
+			return randomMissionItem(MissionGenerator.createMission(PersonGenerator.randomPerson()));
 		}
 		else {
 			return randomOre(WorldGenerator.randomPlanetName());
@@ -53,6 +54,10 @@ public class ItemGenerator {
 	public static Item randomOre(String planetName) {
 		ItemType type = v.random(1) > .2F ? ItemType.COMMON : ItemType.RARE;
 		return new Item(randomOreName(planetName, type), type);
+	}
+
+	public static Item randomMissionItem(Mission mission) {
+		return new MissionItem(Resources.generateString("mission_item"), mission);
 	}
 
 	public static ItemType randomItemType() {
@@ -78,9 +83,9 @@ public class ItemGenerator {
 	}
 
 	public static String randomItemName(ItemType type) {
-		String name = v.random(Resources.getStrings("item_nouns"));
+		String name = Resources.generateString("item_noun");
 		if(v.random(1) < .5) {
-			name += " " + v.random(Resources.getStrings("item_modifiers"));
+			name += " " + Resources.generateString("item_modifier");
 		}
 
 		if(type == ItemType.LEGENDARY) {
@@ -88,7 +93,7 @@ public class ItemGenerator {
 		}
 		else {
 			if(v.random(1) < .5) {
-				String adj = v.random(Resources.getStrings(type == ItemType.COMMON ? "item_adj_common" : "item_adj_rare"));
+				String adj = Resources.generateString(type == ItemType.COMMON ? "item_adj_common" : "item_adj_rare");
 				name = adj + " " + name;
 			}
 		}
@@ -97,7 +102,7 @@ public class ItemGenerator {
 
 	public static String randomOreName(String planetName, ItemType type) {
 		String key = "ore_" + (type == ItemType.COMMON ? "common" : "rare");
-		String name = v.random(Resources.getStrings(key));
+		String name = Resources.generateString(key);
 		if(type == ItemType.LEGENDARY) {
 			name += " of " + planetName;
 		}

@@ -32,7 +32,11 @@ public class DialogMenuHandle extends MenuHandle {
 		super.render(menu);
 
 		v.textSize(32);
+		v.fill(dialog.getPerson().getColor());
+		v.text(dialog.getPerson().getDisplayName(), getButtonX(), getButtonY(-3));
+		
+		v.textSize(24);
 		v.fill(200);
-		v.text(dialog.getMessage(), getButtonX(), getButtonY(-2));
+		v.text(dialog.getMessage(), getButtonX(), getButtonY(-1));
 	}
 }

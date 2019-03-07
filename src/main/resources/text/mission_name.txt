@@ -1,0 +1,5 @@
+A Dubious {mission_noun}
+A Fool's {mission_noun}
+Grocery Shopping
+Hit and Run
+A Questionably Important {mission_noun}

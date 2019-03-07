@@ -6,7 +6,6 @@ import vekta.RenderLevel;
 import vekta.menu.Menu;
 import vekta.module.*;
 
-import static processing.core.PConstants.HALF_PI;
 import static vekta.Vekta.v;
 
 public class PlayerShip extends ModularShip {
@@ -43,10 +42,10 @@ public class PlayerShip extends ModularShip {
 	public void onUpdate(RenderLevel level) {
 		super.onUpdate(level);
 
-				// Test particle system
-				if(getRenderLevel().isVisibleTo(level)) {
-					emitter.update(getHeading().rotate(HALF_PI));
-				}
+//				// Test particle system
+//				if(getRenderLevel().isVisibleTo(level)) {
+//					emitter.update(getHeading().rotate(HALF_PI));
+//				}
 	}
 
 	@Override

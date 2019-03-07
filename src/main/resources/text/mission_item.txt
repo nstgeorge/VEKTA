@@ -1,0 +1,6 @@
+{item_adj_common} Map
+{item_adj_rare} Map
+Coordinate Chip
+Special {item_noun}
+Humming {item_noun}
+Unusual {item_noun}

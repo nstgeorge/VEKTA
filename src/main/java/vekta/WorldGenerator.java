@@ -190,7 +190,7 @@ public class WorldGenerator {
 		if(features) {
 			int featureCt = (int)v.random(1, 4);
 			for(int i = 0; i < featureCt; i++) {
-				String feature = v.random(Resources.getStrings("planet_features"));
+				String feature = Resources.generateString("planet_feature");
 				for(String s : feature.split(",")) {
 					terrain.addFeature(s.trim());
 				}
@@ -231,6 +231,6 @@ public class WorldGenerator {
 	}
 
 	public static String randomPlanetName() {
-		return v.random(Resources.getStrings("planet_prefixes")) + v.random(Resources.getStrings("planet_suffixes", ""));
+		return Resources.generateString("planet_prefix") + Resources.generateString("planet_suffix", "");
 	}
 }  
