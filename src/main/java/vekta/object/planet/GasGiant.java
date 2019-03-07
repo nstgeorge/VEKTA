@@ -25,6 +25,11 @@ public class GasGiant extends Planet {
 	}
 
 	@Override
+	public float getOnScreenRadius(float r) {
+		return r * 2;
+	}
+
+	@Override
 	public void drawNearby(float r) {
 		super.drawNearby(r);
 
