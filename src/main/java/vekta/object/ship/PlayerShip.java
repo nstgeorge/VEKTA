@@ -8,8 +8,7 @@ import vekta.object.particle.ConstantColor;
 import vekta.object.particle.ParticleEmitter;
 import vekta.object.particle.ParticleStyle;
 
-import static processing.core.PConstants.PI;
-import static processing.core.PConstants.QUARTER_PI;
+import static processing.core.PConstants.HALF_PI;
 import static vekta.Vekta.v;
 
 public class PlayerShip extends ModularShip {
@@ -35,8 +34,9 @@ public class PlayerShip extends ModularShip {
 
 		ParticleStyle style = new ParticleStyle()
 				.withStartColor(new ColorRange(v.color(255, 0, 0), v.color(255, 255, 0)))
-				.withEndColor(new ConstantColor(0));
-		emitter = new ParticleEmitter(style, QUARTER_PI, 1, 20, 1);
+				.withEndColor(new ConstantColor(0))
+				.withDrag(1e-2F);
+		emitter = new ParticleEmitter(this, new PVector(getRadius() * 2, 0), style, 30, 1, 20, 1);
 	}
 
 	@Override
@@ -47,6 +47,16 @@ public class PlayerShip extends ModularShip {
 	@Override
 	public float getRadius() {
 		return DEF_RADIUS;
+	}
+
+	@Override
+	public void onUpdate(RenderLevel level) {
+		super.onUpdate(level);
+
+		// Test particle system
+		if(getRenderLevel().isVisibleTo(level)) {
+			emitter.update(getHeading().rotate(HALF_PI));
+		}
 	}
 
 	@Override
@@ -61,12 +71,6 @@ public class PlayerShip extends ModularShip {
 				v.line(r / 2, r * 2, 0, r * (2 + addition));
 			}
 		}
-
-		// Test particle system
-		if(getRenderLevel().isVisibleTo(level)) {
-			emitter.update(getPosition(), getVelocity().rotate(PI).normalize());
-		}
-
 	}
 
 	@Override

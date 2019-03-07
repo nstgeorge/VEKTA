@@ -244,7 +244,7 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 	}
 
 	@Override
-	public void onUpdate() {
+	public void onUpdate(RenderLevel level) {
 		for(Module module : getModules()) {
 			module.onUpdate();
 		}

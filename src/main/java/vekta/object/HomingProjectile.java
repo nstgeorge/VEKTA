@@ -1,6 +1,7 @@
 package vekta.object;
 
 import processing.core.PVector;
+import vekta.RenderLevel;
 
 import static processing.core.PApplet.sqrt;
 import static processing.core.PConstants.CLOSE;
@@ -31,7 +32,7 @@ public class HomingProjectile extends Projectile {
 	}
 
 	@Override
-	public void onUpdate() {
+	public void onUpdate(RenderLevel level) {
 		if(!target.isDestroyed()) {
 			float speedSq = target.getVelocity().sub(getVelocity()).magSq();
 			float distSq = target.getPosition().sub(getPosition()).magSq();
@@ -39,7 +40,7 @@ public class HomingProjectile extends Projectile {
 			setVelocity(getVelocity().add(pos.sub(getPosition())
 					.setMag(getSpeed() * HOMING_ACCEL)).mult(HOMING_DAMPEN));
 		}
-		super.onUpdate();
+		super.onUpdate(level);
 	}
 
 	@Override

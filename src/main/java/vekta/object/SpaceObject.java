@@ -24,10 +24,6 @@ public abstract class SpaceObject {
 
 	private float temperature;
 
-	public SpaceObject(int color) {
-		this(new PVector(), new PVector(), color);
-	}
-
 	public SpaceObject(PVector position, PVector velocity, int color) {
 		this.position.set(position);
 		this.velocity.set(velocity);
@@ -71,7 +67,7 @@ public abstract class SpaceObject {
 	public int getColor() {
 		return color;
 	}
-
+	
 	public abstract RenderLevel getRenderLevel();
 
 	public abstract float getSpecificHeat();
@@ -135,6 +131,15 @@ public abstract class SpaceObject {
 	 */
 	public final void addVelocity(PVector delta) {
 		this.velocity.add(delta);
+	}
+
+	/**
+	 * Subtracts velocity from object
+	 *
+	 * @param delta
+	 */
+	public final void subVelocity(PVector delta) {
+		this.velocity.sub(delta);
 	}
 
 	/**
@@ -215,7 +220,7 @@ public abstract class SpaceObject {
 	 */
 	public void onDestroy(SpaceObject s) {
 	}
-	
+
 	public float getOnScreenRadius(float r) {
 		return r * 2;
 	}
@@ -283,12 +288,12 @@ public abstract class SpaceObject {
 	/**
 	 * Perform physics updates for this SpaceObject.
 	 */
-	public final void update() {
-		onUpdate();
+	public final void update(RenderLevel level) {
+		onUpdate(level);
 		applyVelocity(velocity);
 	}
 
-	public void onUpdate() {
+	public void onUpdate(RenderLevel level) {
 	}
 
 	public Collection<Targeter> getTargeters() {

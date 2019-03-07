@@ -7,13 +7,13 @@ import static vekta.Vekta.*;
 public class Hyperspace {
 	private PVector origin;
 	private float accel;
-	private Particle[] particles;
+	private HyperspaceParticle[] particles;
 	private final float INIT_VELOCITY = .2F;
 
 	public Hyperspace(PVector origin, float accel, int particleNum) {
 		this.origin = origin;
 		this.accel = accel;
-		particles = new Particle[particleNum];
+		particles = new HyperspaceParticle[particleNum];
 		// Generate a new set of particles all at once
 		int i = 0;
 		while(i < particleNum) {
@@ -22,24 +22,24 @@ public class Hyperspace {
 		}
 	}
 
-	public Particle newParticle(PVector loc) {
+	public HyperspaceParticle newParticle(PVector loc) {
 		// Create a new random PVector
 		PVector accelVector = loc.copy().sub(origin);
 		accelVector.setMag(accel);
-		return new Particle(loc.copy(), accelVector.copy().setMag(INIT_VELOCITY), accelVector.copy());
+		return new HyperspaceParticle(loc.copy(), accelVector.copy().setMag(INIT_VELOCITY), accelVector.copy());
 	}
 
-	public Particle newParticle() {
+	public HyperspaceParticle newParticle() {
 		// Create a new random PVector
 		PVector accelVector = PVector.random2D();
 		accelVector.setMag(accel);
-		return new Particle(origin.copy(), accelVector.copy().setMag(INIT_VELOCITY), accelVector.copy());
+		return new HyperspaceParticle(origin.copy(), accelVector.copy().setMag(INIT_VELOCITY), accelVector.copy());
 	}
 
 	public void render() {
 		v.hint(ENABLE_DEPTH_TEST);
 		update();
-		for(Particle p : particles) {
+		for(HyperspaceParticle p : particles) {
 			p.render();
 		}
 		v.hint(DISABLE_DEPTH_TEST);
@@ -47,7 +47,7 @@ public class Hyperspace {
 
 	public void update() {
 		for(int i = 0; i < particles.length; i++) {
-			Particle p = particles[i];
+			HyperspaceParticle p = particles[i];
 			particles[i].update();
 			if(p.getPosition().x > v.width + 300 || p.getPosition().y > v.height + 200 || p.getPosition().x < -300 || p.getPosition().y < -200) {
 				particles[i] = newParticle();
@@ -55,14 +55,14 @@ public class Hyperspace {
 		}
 	}
 
-	private static class Particle {
+	private static class HyperspaceParticle {
 		private PVector loc;
 		private PVector accel;
 		private PVector velocity;
 		private float dist;
 		private float time;
 	
-		public Particle(PVector loc, PVector initVelocity, PVector accel) {
+		public HyperspaceParticle(PVector loc, PVector initVelocity, PVector accel) {
 			this.loc = loc;
 			this.accel = accel;
 			dist = v.random(.2F, 2);

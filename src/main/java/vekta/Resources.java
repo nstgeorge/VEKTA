@@ -128,6 +128,12 @@ public class Resources {
 		}
 	}
 
+	public static void stopAllSoundsNotMusic() {
+		for(SoundFile sound : SOUNDS.values()) {
+			if(sound != getMusic()) sound.stop();
+		}
+	}
+
 	public static void loopSound(String key) {
 		if(Settings.get("sound") > 0) {
 			SoundFile sound = getSound(key);

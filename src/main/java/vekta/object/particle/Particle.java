@@ -4,21 +4,26 @@ import processing.core.PVector;
 import vekta.RenderLevel;
 import vekta.object.SpaceObject;
 
-import static vekta.Vekta.removeObject;
-import static vekta.Vekta.v;
+import static vekta.Vekta.*;
 
 public class Particle extends SpaceObject {
+	private final SpaceObject parent;
 	private final ParticleStyle style;
 
 	private final int endColor;
-	private float lifetime;
+	private float aliveTime;
 
-	public Particle(PVector position, PVector velocity, ParticleStyle style) {
+	public Particle(SpaceObject parent, PVector position, PVector velocity, ParticleStyle style) {
 		super(position, velocity, style.getStartColor().selectColor());
 
+		this.parent = parent;
 		this.style = style;
 
 		this.endColor = style.getEndColor().selectColor();
+	}
+
+	public SpaceObject getParent() {
+		return parent;
 	}
 
 	public final ParticleStyle getStyle() {
@@ -27,17 +32,16 @@ public class Particle extends SpaceObject {
 
 	@Override
 	public int getColor() {
-		return v.lerpColor(super.getColor(), endColor, lifetime / getStyle().getLifetime());
+		return v.lerpColor(super.getColor(), endColor, aliveTime / getStyle().getLifetime());
 	}
 
 	@Override
-	public void onUpdate() {
+	public void onUpdate(RenderLevel level) {
 		PVector currentVelocity = getVelocity();
-
 		addVelocity(currentVelocity.setMag(-getStyle().getDrag()));
 
-		lifetime += 1 / v.frameRate;
-		if(lifetime >= getStyle().getLifetime()) {
+		aliveTime += 1 / v.frameRate;
+		if(aliveTime >= getStyle().getLifetime()) {
 			removeObject(this);
 		}
 	}
@@ -49,12 +53,12 @@ public class Particle extends SpaceObject {
 
 	@Override
 	public float getMass() {
-		return .1F; // Prevents divide by zero
+		return 1;
 	}
 
 	@Override
 	public float getRadius() {
-		return .001F; // Practically not there. Prevents collision issues
+		return 1;
 	}
 
 	@Override
@@ -65,5 +69,18 @@ public class Particle extends SpaceObject {
 	@Override
 	public float getSpecificHeat() {
 		return 1;
+	}
+
+	@Override
+	public void updateTrail() {
+		super.updateTrail();
+
+		// Update relative to parent
+		PVector offset = parent.getVelocity().mult(getWorld().getTimeScale());
+		for(PVector pos : trail) {
+			if(pos != null) {
+				pos.add(offset);
+			}
+		}
 	}
 }

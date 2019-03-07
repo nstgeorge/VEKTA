@@ -3,6 +3,7 @@ package vekta.object.ship;
 import processing.core.PVector;
 import vekta.Counter;
 import vekta.Player;
+import vekta.RenderLevel;
 import vekta.menu.Menu;
 import vekta.menu.option.LootMenuOption;
 
@@ -55,7 +56,7 @@ public class CargoShip extends Ship {
 	}
 
 	@Override
-	public void onUpdate() {
+	public void onUpdate(RenderLevel level) {
 		if(steerCt.cycle()) {
 			steerCt.delay((int)v.random(10, 500));
 			thrust = v.random(-1, 1);

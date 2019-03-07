@@ -11,14 +11,15 @@ public class Projectile extends SpaceObject {
 	private static final float DEF_MASS = 1000;
 	private static final int DEF_RADIUS = 2;
 
-	private SpaceObject parent;
-	private float mass;
-	private float radius;
+	private final SpaceObject parent;
+	private final float mass;
+	private final float radius;
 
 	private int aliveTime = 0;
 
 	public Projectile(SpaceObject parent, PVector position, PVector velocity, int color) {
 		super(position, velocity, color);
+		
 		this.parent = parent;
 		this.mass = DEF_MASS;
 		this.radius = DEF_RADIUS;
@@ -54,7 +55,7 @@ public class Projectile extends SpaceObject {
 	}
 
 	@Override
-	public void onUpdate() {
+	public void onUpdate(RenderLevel level) {
 		if(++aliveTime >= DESPAWN_TIME) {
 			removeObject(this);
 		}

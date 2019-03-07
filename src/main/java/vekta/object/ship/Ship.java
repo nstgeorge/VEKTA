@@ -8,7 +8,6 @@ import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.module.RadiatorModule;
 import vekta.object.CargoCrate;
-import vekta.object.Projectile;
 import vekta.object.SpaceObject;
 import vekta.terrain.LandingSite;
 
@@ -110,11 +109,6 @@ public abstract class Ship extends SpaceObject {
 
 	public void turn(float amount) {
 		heading.rotate(amount * getTurnSpeed() * DEG_TO_RAD);
-	}
-
-	@Override
-	public boolean collidesWith(RenderLevel level, SpaceObject s) {
-		return !(s instanceof Projectile && ((Projectile)s).getParent() == this) && super.collidesWith(level, s);
 	}
 
 	@Override

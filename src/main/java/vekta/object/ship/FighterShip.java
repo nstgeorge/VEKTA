@@ -2,6 +2,7 @@ package vekta.object.ship;
 
 import processing.core.PVector;
 import vekta.Counter;
+import vekta.RenderLevel;
 import vekta.object.HomingProjectile;
 import vekta.object.Projectile;
 import vekta.object.SpaceObject;
@@ -68,7 +69,7 @@ public class FighterShip extends Ship implements Targeter {
 	}
 
 	@Override
-	public void onUpdate() {
+	public void onUpdate(RenderLevel level) {
 		if(target != null && target.getColor() != getColor()) {
 			PVector pos = target.getPosition().copy()
 					.add(target.getVelocity().sub(velocity).div(PROJECTILE_SPEED / 2));

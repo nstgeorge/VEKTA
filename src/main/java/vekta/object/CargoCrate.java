@@ -55,7 +55,7 @@ public class CargoCrate extends SpaceObject {
 	}
 
 	@Override
-	public void onUpdate() {
+	public void onUpdate(RenderLevel level) {
 		angle += spinSpeed;
 	}
 

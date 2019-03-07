@@ -234,7 +234,7 @@ public class Singleplayer implements World, PlayerListener {
 				}
 			}
 
-			s.update();
+			s.update(level);
 			s.applyGravity(gravityObjects);
 			for(SpaceObject other : objects) {
 				if(s != other) {
@@ -280,7 +280,7 @@ public class Singleplayer implements World, PlayerListener {
 		gravityObjects.removeAll(markedForDeath);
 		markedForDeath.clear();
 
-		if(cleanup && !playerShip.isDestroyed()) {
+		if(cleanup && !playerShip.isDestroyed() && !RenderLevel.AROUND_SHIP.isVisibleTo(level)) {
 			// Center around zero for improved floating-point precision
 			PVector newOrigin = playerShip.getPosition().mult(-1);
 			for(SpaceObject s : objects) {
@@ -350,7 +350,7 @@ public class Singleplayer implements World, PlayerListener {
 	public void setDead() {
 		if(Resources.getMusic() != null)
 			lowPass.process(Resources.getMusic(), 800);
-		Resources.stopAllSounds();
+		Resources.stopAllSoundsNotMusic();
 		Resources.playSound("death");
 	}
 

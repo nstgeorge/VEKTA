@@ -39,7 +39,7 @@ public class Moon extends TerrestrialPlanet {
 	}
 
 	@Override
-	public void onUpdate() {
+	public void onUpdate(RenderLevel level) {
 		if(orbitCt.cycle() && !getParent().isDestroyed()) {
 			// Ensure moon stays in orbit
 			PVector offset = getPosition().sub(getParent().getPosition());
@@ -58,14 +58,12 @@ public class Moon extends TerrestrialPlanet {
 
 	@Override
 	public void updateTrail() {
-		// Sets trail relative to parent. TODO: generalize
 		super.updateTrail();
 
 		float timeScale = getWorld().getTimeScale();
 		PVector parentPos = getParent().getPosition();
 		PVector offset = parentPos.copy().sub(lastParentPosition).mult(timeScale / lastTimeScale);
-		for(int i = 0; i < trail.length; i++) {
-			PVector pos = trail[i];
+		for(PVector pos : trail) {
 			if(pos != null) {
 				pos.add(offset);
 			}
