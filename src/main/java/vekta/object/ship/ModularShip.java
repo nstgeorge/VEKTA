@@ -22,6 +22,8 @@ import java.util.List;
 import static vekta.Vekta.*;
 
 public abstract class ModularShip extends Ship implements Upgradeable, PlayerListener {
+	private static final float ENERGY_HEAT_SCALE = 1e4F;
+	
 	private Player controller;
 
 	private boolean landing;
@@ -38,8 +40,6 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 
 	public ModularShip(String name, PVector heading, PVector position, PVector velocity, int color, float speed, float turnSpeed) {
 		super(name, heading, position, velocity, color, speed, turnSpeed);
-
-		setTemperature(23);
 	}
 
 	public final boolean hasController() {
@@ -113,6 +113,7 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 
 	public boolean consumeEnergy(float amount) {
 		// TODO: adjust rate-based consumption for time acceleration
+		addHeat(amount * ENERGY_HEAT_SCALE);
 		energy -= amount;
 		if(energy < 0) {
 			energy = 0;

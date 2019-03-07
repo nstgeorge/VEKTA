@@ -1,6 +1,7 @@
 package vekta.object.ship;
 
 import processing.core.PVector;
+import vekta.RenderLevel;
 import vekta.module.*;
 
 import static vekta.Vekta.v;
@@ -19,6 +20,7 @@ public class PlayerShip extends ModularShip {
 		addModule(new RCSModule(1));
 		addModule(new TargetingModule());
 		addModule(new BatteryModule(100));
+		addModule(new RadiatorModule(1));
 		addModule(new CannonModule());
 
 		setEnergy(getMaxEnergy());
@@ -35,14 +37,22 @@ public class PlayerShip extends ModularShip {
 	}
 
 	@Override
+	public void draw(RenderLevel level, float r) {
+		super.draw(level, r);
+
+		if(getRenderLevel().isVisibleTo(level)) {
+			// Draw engine emission
+			if(getThrustControl() > 0) {
+				float addition = v.random(1, 2);
+				v.line(-r / 2, r * 2, 0, r * (2 + addition));
+				v.line(r / 2, r * 2, 0, r * (2 + addition));
+			}
+		}
+	}
+
+	@Override
 	public void drawNearby(float r) {
 		drawShip(r, ShipModelType.DEFAULT);
-		
-		if(getThrustControl() > 0) {
-			float addition = v.random(2, 3);
-			v.line(-r / 2, r * 2, 0, r * (2 + addition));
-			v.line(r / 2, r * 2, 0, r * (2 + addition));
-		}
 	}
 
 	@Override

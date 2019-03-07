@@ -5,6 +5,7 @@ import vekta.item.Item;
 import vekta.item.ItemType;
 import vekta.item.ModuleItem;
 import vekta.module.*;
+import vekta.module.station.SensorModule;
 import vekta.module.station.SolarArrayModule;
 import vekta.module.station.StationCoreModule;
 import vekta.module.station.StructuralModule;
@@ -23,9 +24,11 @@ public class ItemGenerator {
 			new EngineModule(1),
 			new GeneratorModule(1),
 			new HyperdriveModule(1),
+			new RadiatorModule(1),
 			new RCSModule(1),
 			new SolarArrayModule(1),
 			new StationCoreModule(),
+			new SensorModule(),
 			new StructuralModule(1, 1),
 			new TelescopeModule(1),
 			new TargetingModule(),

@@ -19,7 +19,7 @@ public class ShipTemperatureOverlay extends ShipStatOverlay {
 
 	@Override
 	public String getValue() {
-		return getShip().getTemperature() + " Celsius";
+		return (float)Math.round(getShip().getTemperature() * 10) / 10 + " Celsius";
 	}
 
 	@Override

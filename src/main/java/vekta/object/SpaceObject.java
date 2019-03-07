@@ -89,8 +89,8 @@ public abstract class SpaceObject {
 		this.temperature = temperature;
 	}
 
-	public void addTemperature(float temperature) {
-		this.temperature += temperature;
+	public void addHeat(float heat) {
+		this.temperature += heat / getMass() / getSpecificHeat();
 	}
 
 	/**

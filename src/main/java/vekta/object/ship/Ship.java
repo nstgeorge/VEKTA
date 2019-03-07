@@ -6,6 +6,7 @@ import vekta.RenderLevel;
 import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;
+import vekta.module.RadiatorModule;
 import vekta.object.CargoCrate;
 import vekta.object.Projectile;
 import vekta.object.SpaceObject;
@@ -34,6 +35,8 @@ public abstract class Ship extends SpaceObject {
 		this.heading = heading;
 		this.speed = speed;
 		this.turnSpeed = turnSpeed;
+
+		setTemperature(RadiatorModule.TARGET_TEMP);
 	}
 
 	public Inventory getInventory() {
