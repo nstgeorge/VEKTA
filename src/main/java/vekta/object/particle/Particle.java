@@ -14,7 +14,7 @@ public class Particle extends SpaceObject {
 	private float aliveTime;
 
 	public Particle(SpaceObject parent, PVector position, PVector velocity, ParticleStyle style) {
-		super(position, velocity, style.getStartColor().selectColor(), 20);
+		super(position, velocity, style.getStartColor().selectColor());
 
 		this.parent = parent;
 		this.style = style;
@@ -82,5 +82,10 @@ public class Particle extends SpaceObject {
 				pos.add(offset);
 			}
 		}
+	}
+
+	@Override
+	public int getTrailLength() {
+		return 20;
 	}
 }

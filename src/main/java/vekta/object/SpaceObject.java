@@ -25,16 +25,12 @@ public abstract class SpaceObject {
 
 	private float temperature;
 
-	public SpaceObject(PVector position, PVector velocity, int color, int trailLength) {
+	public SpaceObject(PVector position, PVector velocity, int color) {
 		this.position.set(position);
 		this.velocity.set(velocity);
 		this.color = color;
 
-		this.trail = new PVector[trailLength];
-	}
-
-	public SpaceObject(PVector position, PVector velocity, int color) {
-		this(position, velocity, color, DEFAULT_TRAIL_LENGTH);
+		this.trail = new PVector[getTrailLength()];
 	}
 
 	/**
@@ -267,7 +263,7 @@ public abstract class SpaceObject {
 	}
 
 	public int getTrailLength() {
-		return trail.length;
+		return DEFAULT_TRAIL_LENGTH;
 	}
 
 	public void updateTrail() {
