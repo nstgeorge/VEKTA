@@ -46,7 +46,7 @@ public class TerrestrialPlanet extends Planet {
 		if(s instanceof ModularShip) {
 			ModularShip ship = (ModularShip)s;
 			//			if(/*ship.isLanding() && */) {
-			if(ship.canDock(this)) {
+			if(ship.isDockable(this)) {
 				site.land(ship);
 			}
 			return; // Prevent ship from being destroyed after landing

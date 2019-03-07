@@ -6,6 +6,7 @@ import processing.core.PVector;
 import processing.event.MouseEvent;
 import vekta.context.Context;
 import vekta.context.World;
+import vekta.item.ItemType;
 import vekta.menu.Menu;
 import vekta.menu.handle.MainMenuHandle;
 import vekta.menu.option.ExitGameOption;
@@ -74,7 +75,7 @@ public class Vekta extends PApplet {
 		//		DEF_ZOOM = (height / 2.0F) / tan((PI * 30.0F / 180.0F)); // For some reason, this is the default eyeZ location for Processing
 		UI_COLOR = color(0, 255, 0);
 		DANGER_COLOR = color(255, 0, 0);
-		MISSION_COLOR = color(255, 255, 0);
+		MISSION_COLOR = ItemType.MISSION.getColor();
 
 		Settings.init();
 		Resources.init();

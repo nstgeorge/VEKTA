@@ -38,7 +38,7 @@ public class Particle extends SpaceObject {
 	@Override
 	public void onUpdate(RenderLevel level) {
 		PVector currentVelocity = getVelocity();
-		addVelocity(currentVelocity.setMag(-getStyle().getDrag()));
+		addVelocity(currentVelocity.sub(getParent().getVelocity()).setMag(-getStyle().getDrag()));
 
 		aliveTime += 1 / v.frameRate;
 		if(aliveTime >= getStyle().getLifetime()) {

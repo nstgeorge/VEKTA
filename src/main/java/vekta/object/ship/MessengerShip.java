@@ -7,6 +7,7 @@ import vekta.menu.Menu;
 import vekta.menu.dialog.Dialog;
 import vekta.menu.option.DialogOption;
 import vekta.menu.option.LootMenuOption;
+import vekta.object.SpaceObject;
 
 public class MessengerShip extends Ship {
 	private static final float DEF_MASS = 1000;
@@ -66,6 +67,11 @@ public class MessengerShip extends Ship {
 		else {
 			addVelocity(offset.setMag(-getSpeed()));
 		}
+	}
+
+	@Override
+	public boolean isDockable(SpaceObject s) {
+		return s == getTargetShip();
 	}
 
 	@Override

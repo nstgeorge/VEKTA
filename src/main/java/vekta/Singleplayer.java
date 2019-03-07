@@ -244,6 +244,7 @@ public class Singleplayer implements World, PlayerListener {
 			for(SpaceObject other : objects) {
 				if(s != other) {
 					// Check both collisions before firing events (prevents race conditions)
+					// TODO: colliders should check each other rather than themselves
 					boolean collides1 = s.collidesWith(level, other);
 					boolean collides2 = other.collidesWith(level, s);
 					if(collides1) {

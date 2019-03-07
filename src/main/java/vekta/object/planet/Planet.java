@@ -75,7 +75,6 @@ public abstract class Planet extends SpaceObject {
 
 	@Override
 	public boolean collidesWith(RenderLevel level, SpaceObject s) {
-		// TODO: check getParent() once added to SpaceObject
 		return getColor() != s.getColor() && super.collidesWith(level, s);
 	}
 

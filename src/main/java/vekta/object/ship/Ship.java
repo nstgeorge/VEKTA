@@ -84,7 +84,7 @@ public abstract class Ship extends SpaceObject implements InventoryListener {
 		return dock;
 	}
 
-	public boolean canDock(SpaceObject s) {
+	public boolean isDockable(SpaceObject s) {
 		return v.frameCount - departTime >= DEPART_FRAMES;
 	}
 
@@ -129,7 +129,7 @@ public abstract class Ship extends SpaceObject implements InventoryListener {
 			Ship ship = (Ship)s;
 			//			if(ship.getVelocity().sub(velocity).magSq() <= MAX_DOCKING_SPEED * MAX_DOCKING_SPEED) {
 			// Board ship
-			if(canDock(s)) {
+			if(isDockable(s)) {
 				dock(s);
 			}
 			//			}
