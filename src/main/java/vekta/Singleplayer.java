@@ -280,7 +280,7 @@ public class Singleplayer implements World, PlayerListener {
 		gravityObjects.removeAll(markedForDeath);
 		markedForDeath.clear();
 
-		if(cleanup) {
+		if(cleanup && !playerShip.isDestroyed()) {
 			// Center around zero for improved floating-point precision
 			PVector newOrigin = playerShip.getPosition().mult(-1);
 			for(SpaceObject s : objects) {
@@ -289,7 +289,7 @@ public class Singleplayer implements World, PlayerListener {
 		}
 
 		RenderLevel spawnLevel = level;
-		while(spawnLevel.ordinal() > 0 && v.random(1) < .01F) {
+		while(spawnLevel.ordinal() > 0 && v.random(1) < .05F) {
 			spawnLevel = RenderLevel.values()[spawnLevel.ordinal() - 1];
 		}
 		if(objectCounts[spawnLevel.ordinal()] < MAX_OBJECTS_PER_DIST) {

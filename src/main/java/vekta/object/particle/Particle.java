@@ -1,32 +1,43 @@
-package vekta.particle;
+package vekta.object.particle;
 
 import processing.core.PVector;
 import vekta.RenderLevel;
 import vekta.object.SpaceObject;
 
 import static vekta.Vekta.removeObject;
+import static vekta.Vekta.v;
 
 public class Particle extends SpaceObject {
+	private final ParticleStyle style;
 
-	private float drag;          // Reduce the speed by this amount every draw cycle
-	private int lifetime;        // How long the particle should be visible for (ms)
+	private final int endColor;
+	private float lifetime;
 
-	public Particle(PVector position, PVector velocity, int color, float drag, int lifetime) {
-		super(position, velocity, color);
-		this.drag = drag;
-		this.lifetime = lifetime;
+	public Particle(PVector position, PVector velocity, ParticleStyle style) {
+		super(position, velocity, style.getStartColor().selectColor());
+
+		this.style = style;
+
+		this.endColor = style.getEndColor().selectColor();
+	}
+
+	public final ParticleStyle getStyle() {
+		return style;
+	}
+
+	@Override
+	public int getColor() {
+		return v.lerpColor(super.getColor(), endColor, lifetime / getStyle().getLifetime());
 	}
 
 	@Override
 	public void onUpdate() {
 		PVector currentVelocity = getVelocity();
-		//int currentColor = super.getColor();
-		//int newColor = v.lerpColor(currentColor, 0, (float)(initTime + System.currentTimeMillis()) / (initTime + lifetime));
 
-		addVelocity(currentVelocity.setMag(-drag * .1F));
-		
-		lifetime--;
-		if(lifetime <= 0) {
+		addVelocity(currentVelocity.setMag(-getStyle().getDrag()));
+
+		lifetime += 1 / v.frameRate;
+		if(lifetime >= getStyle().getLifetime()) {
 			removeObject(this);
 		}
 	}

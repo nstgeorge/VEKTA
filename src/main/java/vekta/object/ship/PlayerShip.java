@@ -3,11 +3,13 @@ package vekta.object.ship;
 import processing.core.PVector;
 import vekta.RenderLevel;
 import vekta.module.*;
-import vekta.particle.ParticleEmitter;
+import vekta.object.particle.ColorRange;
+import vekta.object.particle.ConstantColor;
+import vekta.object.particle.ParticleEmitter;
+import vekta.object.particle.ParticleStyle;
 
 import static processing.core.PConstants.PI;
 import static processing.core.PConstants.QUARTER_PI;
-import static vekta.Vekta.UI_COLOR;
 import static vekta.Vekta.v;
 
 public class PlayerShip extends ModularShip {
@@ -31,7 +33,10 @@ public class PlayerShip extends ModularShip {
 
 		setEnergy(getMaxEnergy());
 
-		emitter = new ParticleEmitter(QUARTER_PI, 10, 1, UI_COLOR, v.color(255, 0, 0));
+		ParticleStyle style = new ParticleStyle()
+				.withStartColor(new ColorRange(v.color(255, 0, 0), v.color(255, 255, 0)))
+				.withEndColor(new ConstantColor(0));
+		emitter = new ParticleEmitter(style, QUARTER_PI, 1, 20, 1);
 	}
 
 	@Override
@@ -57,11 +62,11 @@ public class PlayerShip extends ModularShip {
 			}
 		}
 
-		// Particle testing
+		// Test particle system
 		if(getRenderLevel().isVisibleTo(level)) {
 			emitter.update(getPosition(), getVelocity().rotate(PI).normalize());
 		}
-		
+
 	}
 
 	@Override
