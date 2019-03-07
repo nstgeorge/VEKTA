@@ -28,8 +28,8 @@ public class Singleplayer implements World, PlayerListener {
 	private static final float ZOOM_EXPONENT = .3F;
 	private static final float ZOOM_SMOOTH = .1F;
 	private static final float TIME_SCALE = 5e-4F;
-	private static final float TIME_FALLOFF = 1;
-	private static final int MAX_OBJECTS_PER_DIST = 10;
+	private static final float TIME_FALLOFF = .5F;
+	private static final int MAX_OBJECTS_PER_DIST = 5; // TODO: increase as we add more object types
 
 	private static int nextID = 0;
 
@@ -112,7 +112,7 @@ public class Singleplayer implements World, PlayerListener {
 		playerShip.addModule(new TelescopeModule(.5F));
 		playerShip.addModule(new DrillModule(2));
 		playerShip.getInventory().add(new ModuleItem(new TorpedoModule(2)));
-		playerShip.getInventory().add(new ModuleItem(new HyperdriveModule(.5F)));
+		playerShip.addModule(new HyperdriveModule(.2F));
 		playerShip.getInventory().add(new ModuleItem(new TractorBeamModule(1)));
 		playerShip.getInventory().add(new ModuleItem(new StructuralModule(3, 1)));
 
@@ -167,7 +167,7 @@ public class Singleplayer implements World, PlayerListener {
 			cameraPos = playerShip.getPosition();
 			//			cameraSpd = playerShip.getVelocity().mag();
 		}
-		
+
 		// Update time factor
 		smoothZoom += (zoom - smoothZoom) * ZOOM_SMOOTH;
 		timeScale = max(1, smoothZoom * TIME_SCALE) / (1 + smoothZoom * TIME_SCALE * TIME_SCALE * TIME_FALLOFF);
@@ -372,13 +372,13 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public SpaceObject findOrbitObject(SpaceObject object) {
-		float maxAccelSq = 0;
+		float maxSq = 0;
 		SpaceObject bestOrbit = null;
 		for(SpaceObject s : gravityObjects) {
 			if(s != object) {
-				float accelSq = object.getGravityAcceleration(Collections.singletonList(s)).magSq();
-				if(accelSq > maxAccelSq) {
-					maxAccelSq = accelSq;
+				float weightSq = object.getGravityAcceleration(Collections.singletonList(s)).magSq() / s.getMass();
+				if(weightSq > maxSq) {
+					maxSq = weightSq;
 					bestOrbit = s;
 				}
 			}

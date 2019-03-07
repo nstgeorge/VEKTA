@@ -2,6 +2,7 @@ package vekta.object;
 
 import processing.core.PVector;
 import vekta.RenderLevel;
+import vekta.WorldGenerator;
 
 import java.util.Collection;
 import java.util.List;
@@ -224,11 +225,13 @@ public abstract class SpaceObject {
 	}
 
 	public void drawDistant(float r) {
-//		v.stroke(v.lerpColor(0, getColor(), 1 - getPosition().mag() / WorldGenerator.getRadius(getRenderLevel())));
-//		drawMarker();
+		//		drawMarker();
 	}
-	
+
 	public void drawMarker() {
+		// Temp
+		v.stroke(v.lerpColor(0, getColor(), 1 - getPosition().mag() / WorldGenerator.getRadius(getRenderLevel())));
+		
 		float outer = MARKER_SIZE * getMarkerScale();
 		float inner = outer * .8F;
 		v.rect(0, 0, outer, outer);

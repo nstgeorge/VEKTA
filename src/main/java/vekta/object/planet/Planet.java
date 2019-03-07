@@ -57,8 +57,9 @@ public abstract class Planet extends SpaceObject {
 		if(r > maxRadius * .9F) {
 			v.fill(v.lerpColor(0, getColor(), (maxRadius - r) / maxRadius));
 		}
-
+		v.strokeWeight(2);
 		super.draw(level, r);
+		v.strokeWeight(1);
 	}
 
 	@Override
@@ -149,6 +150,4 @@ public abstract class Planet extends SpaceObject {
 	public float getDensity() {
 		return density;
 	}
-
-	public abstract boolean isHabitable();
 }

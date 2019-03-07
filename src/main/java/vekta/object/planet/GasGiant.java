@@ -25,11 +25,6 @@ public class GasGiant extends Planet {
 	}
 
 	@Override
-	public boolean isHabitable() {
-		return false;
-	}
-
-	@Override
 	public void drawDistant(float r) {
 		super.drawDistant(r);
 

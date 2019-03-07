@@ -1,7 +1,7 @@
 package vekta.terrain;
 
+import vekta.Player;
 import vekta.menu.Menu;
-import vekta.object.ship.ModularShip;
 
 public class AsteroidTerrain extends Terrain {
 	public AsteroidTerrain() {
@@ -20,7 +20,7 @@ public class AsteroidTerrain extends Terrain {
 	}
 
 	@Override
-	public void setupLandingMenu(ModularShip ship, Menu menu) {
-
+	public void setupLandingMenu(Player player, Menu menu) {
+		
 	}
 }

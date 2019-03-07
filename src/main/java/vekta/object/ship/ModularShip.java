@@ -231,7 +231,7 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 	public void draw(RenderLevel level, float r) {
 		if(hasController()) {
 			float t = getWorld().getTimeScale();
-			
+
 			// Draw acceleration vector
 			v.stroke(255, 0, 0);
 			v.line(0, 0, (acceleration.x * 100 / t), (acceleration.y * 100 / t));
@@ -269,7 +269,7 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 	public void doLand(LandingSite site) {
 		if(hasController()) {
 			Menu menu = new Menu(getController(), new LandingMenuHandle(site, getWorld()));
-			site.getTerrain().setupLandingMenu(this, menu);
+			site.getTerrain().setupLandingMenu(getController(), menu);
 			menu.add(new SurveyOption(site));
 			menu.addDefault();
 			Resources.stopSound("engine");

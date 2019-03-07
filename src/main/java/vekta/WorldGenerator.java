@@ -1,7 +1,6 @@
 package vekta;
 
 import processing.core.PVector;
-import vekta.item.Inventory;
 import vekta.object.SpaceObject;
 import vekta.object.planet.Asteroid;
 import vekta.object.planet.Planet;
@@ -11,6 +10,9 @@ import vekta.object.ship.CargoShip;
 import vekta.object.ship.PirateShip;
 import vekta.object.ship.Ship;
 import vekta.terrain.*;
+import vekta.terrain.settlement.RuralSettlement;
+import vekta.terrain.settlement.Settlement;
+import vekta.terrain.settlement.UrbanSettlement;
 
 import static vekta.Vekta.*;
 
@@ -27,10 +29,12 @@ public class WorldGenerator {
 		case AROUND_PARTICLE:
 			break;
 		case AROUND_SHIP:
+			println(orbit);
 			if(orbit instanceof TerrestrialPlanet) {
 				float r = v.random(1);
 				if(r > .4F) {
-					Ship s = new CargoShip("TRAWLX", PVector.random2D(), pos, new PVector(), randomPlanetColor());
+					int color = v.random(1) < .6F ? orbit.getColor() : randomPlanetColor();
+					Ship s = new CargoShip("TRAWLX", PVector.random2D(), pos, new PVector(), color);
 					ItemGenerator.addLoot(s.getInventory(), 3);
 					addObject(s);
 					orbit(orbit, s, .75F);
@@ -129,19 +133,10 @@ public class WorldGenerator {
 
 	public static Terrain createTerrain() {
 		Terrain terrain;
-		float r = v.random(1);
 		boolean features = true;
-		if(r > .5) {
-			InhabitedTerrain t = new InhabitedTerrain();
-			Inventory inv = t.getInventory();
-			inv.add((int)v.random(10, 500));
-			ItemGenerator.addLoot(inv, 2);
-			terrain = t;
-		}
-		else if(r > .3) {
-			AbandonedTerrain t = new AbandonedTerrain();
-			ItemGenerator.addLoot(t.getInventory(), 1);
-			terrain = t;
+		float r = v.random(1);
+		if(r > .3) {
+			terrain = new HabitableTerrain();
 		}
 		else if(r > .2) {
 			terrain = new MiningTerrain();
@@ -164,6 +159,16 @@ public class WorldGenerator {
 			}
 		}
 		return terrain;
+	}
+
+	public static Settlement createSettlement(Planet planet) {
+		float r = v.random(1);
+		if(r > .4) {
+			return new UrbanSettlement();
+		}
+		else {
+			return new RuralSettlement();
+		}
 	}
 
 	public static void orbit(SpaceObject parent, SpaceObject child, float variation) {

@@ -37,7 +37,7 @@ public class Vekta extends PApplet {
 	public static final float G = 6.674e-11F;
 	public static final float SCALE = 3e7F;
 	public static final float MAX_G_FORCE = 2F;
-	public static final float MIN_GRAVITY_MASS = 1e18F;
+	public static final float MIN_GRAVITY_MASS = 1e15F; // Minimum mass for gravity-imparting planets
 
 	// Render/spawning distances (we might want to use kilometers due to limited floating-point precision)
 	public static final float DETAIL_LEVEL = 1e1F;

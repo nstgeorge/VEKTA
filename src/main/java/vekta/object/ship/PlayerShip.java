@@ -39,7 +39,7 @@ public class PlayerShip extends ModularShip {
 
 	@Override
 	public void drawDistant(float r) {
-		drawMarker();
 		drawNearby(getRadius());
+//		drawMarker();
 	}
 }  

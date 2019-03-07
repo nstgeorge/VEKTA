@@ -5,6 +5,7 @@ import vekta.ControlKey;
 import vekta.menu.Menu;
 import vekta.menu.handle.SurveyMenuHandle;
 import vekta.menu.option.BackOption;
+import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.terrain.LandingSite;
@@ -49,8 +50,9 @@ public class TelescopeModule extends ShipModule {
 	public void onKeyPress(ControlKey key) {
 		if(key == ControlKey.SHIP_TELESCOPE) {
 			Targeter t = (Targeter)getShip().getModule(ModuleType.TARGET_COMPUTER);
-			if(t != null && t.getTarget() instanceof TerrestrialPlanet) {
-				TerrestrialPlanet planet = (TerrestrialPlanet)t.getTarget();
+			SpaceObject target = t != null ? t.getTarget() : getWorld().findOrbitObject(getShip());
+			if(target instanceof TerrestrialPlanet) {
+				TerrestrialPlanet planet = (TerrestrialPlanet)target;
 				float dist = PVector.dist(getShip().getPosition(), planet.getPosition());
 				float maxDist = getResolution() * RANGE_SCALE;
 				if(dist <= maxDist) {

@@ -15,11 +15,6 @@ public class Star extends Planet {
 	}
 
 	@Override
-	public boolean isHabitable() {
-		return false;
-	}
-
-	@Override
 	public void drawDistant(float r) {
 		drawRadialGradient(getColor(), v.color(0), r, r * 1.3F);
 		v.fill(0);

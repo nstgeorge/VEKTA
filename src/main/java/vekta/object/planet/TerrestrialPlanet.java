@@ -1,8 +1,10 @@
 package vekta.object.planet;
 
 import processing.core.PVector;
+import vekta.WorldGenerator;
 import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
+import vekta.terrain.HabitableTerrain;
 import vekta.terrain.LandingSite;
 import vekta.terrain.Terrain;
 
@@ -19,6 +21,10 @@ public class TerrestrialPlanet extends Planet {
 
 		this.site = new LandingSite(this, terrain);
 
+		if(terrain instanceof HabitableTerrain) {
+			((HabitableTerrain)terrain).setSettlement(WorldGenerator.createSettlement(this));
+		}
+
 		println("[Terrestrial] mass: " + getMass() + ", radius: " + getRadius());
 	}
 
@@ -30,8 +36,8 @@ public class TerrestrialPlanet extends Planet {
 		return getLandingSite().getTerrain();
 	}
 
-	@Override
 	public boolean isHabitable() {
+		// TODO: compute based on properties
 		return getTerrain().hasFeature("Habitable");
 	}
 
@@ -39,10 +45,10 @@ public class TerrestrialPlanet extends Planet {
 	public void onCollide(SpaceObject s) {
 		if(s instanceof ModularShip) {
 			ModularShip ship = (ModularShip)s;
-//			if(/*ship.isLanding() && */) {
-				site.land(ship);
-				return; // Prevent ship from being destroyed after landing
-//			}
+			//			if(/*ship.isLanding() && */) {
+			site.land(ship);
+			return; // Prevent ship from being destroyed after landing
+			//			}
 		}
 		super.onCollide(s); // Oof
 	}

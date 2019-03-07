@@ -140,6 +140,11 @@ public abstract class Ship extends SpaceObject {
 		super.onDestroy(s);
 	}
 
+	@Override
+	public void drawDistant(float r) {
+		drawMarker();///////
+	}
+
 	protected void drawShip(float r, ShipModelType shape) {
 		float theta = heading.heading() + HALF_PI;
 		v.rotate(theta);

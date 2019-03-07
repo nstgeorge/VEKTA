@@ -7,7 +7,7 @@ import vekta.mission.Objective;
 import vekta.module.ModuleType;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
-import vekta.object.planet.Planet;
+import vekta.object.planet.TerrestrialPlanet;
 import vekta.object.ship.ModularShip;
 import vekta.overlay.Overlay;
 
@@ -85,8 +85,8 @@ public class TelemetryOverlay implements Overlay {
 					mass = (float)round(target.getMass() / EARTH_MASS * 1000) / 1000;
 					unit = "Earths";
 				}
-				if(target instanceof Planet) {
-					Planet closestPlanet = (Planet)target;
+				if(target instanceof TerrestrialPlanet) {
+					TerrestrialPlanet closestPlanet = (TerrestrialPlanet)target;
 					targetString = target.getName() + " - " + distString + " AU \nHabitable: " + (closestPlanet.isHabitable() ? "YES" : "NO") + "\nMass: " + mass + " " + unit;
 				}
 				else {
