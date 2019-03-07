@@ -14,7 +14,7 @@ public class Particle extends SpaceObject {
 	private float aliveTime;
 
 	public Particle(SpaceObject parent, PVector position, PVector velocity, ParticleStyle style) {
-		super(position, velocity, style.getStartColor().selectColor());
+		super(position, velocity, style.getStartColor().selectColor(), 20);
 
 		this.parent = parent;
 		this.style = style;

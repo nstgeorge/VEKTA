@@ -14,7 +14,7 @@ public class ParticleEmitter {
 	private final SpaceObject relative;     // SpaceObject to use for relative velocity
 	private final PVector offset;        	// Offset from object position
 	private final ParticleStyle style;     // Style of emitted particles
-	private final float range;             // Range (in degrees) of the emitted particles
+	private final float range;             // Range (in radians) of the emitted particles
 	private final float speed;             // Speed (in meters/second) of the emitted particles
 	private final float emitPerSecond;     // Number of times to emit per second
 	private final int particlesPerEmit;    // Particles to emit for every emission
@@ -46,7 +46,7 @@ public class ParticleEmitter {
 	public void update(PVector heading) {
 		nextEmit += emitPerSecond/* / v.frameRate*/ / 60F; // Intentionally emit slightly slower when game is lagging
 		if(nextEmit >= 1) {
-			emit(heading);
+			emit(heading.copy().rotate(v.random(-range, range) * DEG_TO_RAD).setMag(speed));
 		}
 	}
 

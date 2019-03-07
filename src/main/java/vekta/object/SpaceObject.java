@@ -1,6 +1,7 @@
 package vekta.object;
 
 import processing.core.PVector;
+import sun.jvm.hotspot.memory.Space;
 import vekta.RenderLevel;
 import vekta.WorldGenerator;
 
@@ -24,12 +25,16 @@ public abstract class SpaceObject {
 
 	private float temperature;
 
-	public SpaceObject(PVector position, PVector velocity, int color) {
+	public SpaceObject(PVector position, PVector velocity, int color, int trailLength) {
 		this.position.set(position);
 		this.velocity.set(velocity);
 		this.color = color;
 
-		this.trail = new PVector[getTrailLength()];
+		this.trail = new PVector[trailLength];
+	}
+
+	public SpaceObject(PVector position, PVector velocity, int color) {
+		this(position, velocity, color, DEFAULT_TRAIL_LENGTH);
 	}
 
 	/**
@@ -262,7 +267,7 @@ public abstract class SpaceObject {
 	}
 
 	public int getTrailLength() {
-		return DEFAULT_TRAIL_LENGTH;
+		return trail.length;
 	}
 
 	public void updateTrail() {
