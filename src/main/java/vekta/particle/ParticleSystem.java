@@ -16,8 +16,6 @@ public class ParticleSystem {
     private int endColor;           // Second range indicator for colored particles
 
     private float nextEmit;
-    private Particle[] particles;
-    private int particleCount;
 
     public ParticleSystem(PVector position, PVector velocity, float range, float frequency, int particlePerEmit, int beginColor, int endColor) {
         this.position = position;
@@ -29,8 +27,6 @@ public class ParticleSystem {
         this.endColor = endColor;
 
         nextEmit = -1;
-        particleCount = 0;
-        particles = new Particle[particlePerEmit * (int)Math.ceil(frequency) * 100]; // Safe enough guess for maximum particles
     }
 
     public void emit() {
@@ -40,13 +36,10 @@ public class ParticleSystem {
                 PVector newVelocity = new PVector();
                 PVector.fromAngle(velocity.heading() + (v.random(-1, 1) * range), newVelocity);
                 newVelocity.setMag(velocity.mag());
-                particles[particleCount] = new Particle(position, newVelocity, v.lerpColor(beginColor, endColor, v.random(1)), 0.01F, 2000);
-                world.addObject(particles[particleCount]);
-                particleCount++;
+                world.addObject(new Particle(position, newVelocity, v.lerpColor(beginColor, endColor, v.random(1)), .1F, 2000));
             }
             nextEmit = v.frameCount + ((1/frequency) * v.frameRate);
         }
-        cleanParticleArray();
     }
 
     public void loopEmit() {
@@ -61,22 +54,5 @@ public class ParticleSystem {
 
     public void setVelocity(PVector velocity) {
         this.velocity = velocity;
-    }
-
-    private void cleanParticleArray() {
-        if(getContext() instanceof World) {
-            World world = getWorld();
-            for (int i = 0; i < particleCount; i++) {
-                if (particles[i] != null && particles[i].dead()) {
-                    world.removeObject(particles[i]);
-                    particles[i] = null;
-                    // Collapse array
-                    for(int j = particleCount - 1; j > i; j--) {
-                        particles[j] = particles[j - 1];
-                    }
-                    particleCount--;
-                }
-            }
-        }
     }
 }

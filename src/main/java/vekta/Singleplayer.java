@@ -345,7 +345,7 @@ public class Singleplayer implements World, PlayerListener {
 	public void setDead() {
 		if(Resources.getMusic() != null)
 			lowPass.process(Resources.getMusic(), 800);
-		Resources.stopAllSounds();
+		Resources.stopAllSoundsNotMusic();
 		Resources.playSound("death");
 	}
 

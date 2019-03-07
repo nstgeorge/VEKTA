@@ -58,7 +58,7 @@ public final class Player {
 				if(key == ControlKey.OBJECTIVE_CYCLE && getCurrentMission() != null) {
 					getCurrentMission().cycleObjective();
 				}
-				if(key == ControlKey.MISSION_CYCLE) {
+				if(key == ControlKey.MISSION_CYCLE && missions.size() > 0) {
 					int index = missions.indexOf(getCurrentMission()) + 1;
 					setCurrentMission(index == getMissions().size() ? missions.get(index % missions.size()) : null);
 				}

@@ -138,6 +138,14 @@ public abstract class SpaceObject {
 	}
 
 	/**
+	 * Subtracts velocity from object
+	 * @param delta
+	 */
+	public final void subVelocity(PVector delta) {
+		this.velocity.sub(delta);
+	}
+
+	/**
 	 * Applies the given velocity to the object
 	 */
 	public final void applyVelocity(PVector velocity) {

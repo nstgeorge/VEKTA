@@ -2,8 +2,10 @@ package vekta.particle;
 
 import processing.core.PVector;
 import vekta.RenderLevel;
+import vekta.context.World;
 import vekta.object.SpaceObject;
-import  static vekta.Vekta.v;
+
+import static vekta.Vekta.*;
 
 public class Particle extends SpaceObject {
 
@@ -23,8 +25,13 @@ public class Particle extends SpaceObject {
         //int currentColor = super.getColor();
         //int newColor = v.lerpColor(currentColor, 0, (float)(initTime + System.currentTimeMillis()) / (initTime + lifetime));
 
-        super.addVelocity(currentVelocity.normalize().rotate(180).mult(drag));
+        super.subVelocity(currentVelocity.mult(drag));
 
+        if(dead()) {
+            if(getContext() instanceof World) {
+                getWorld().removeObject(this);
+            }
+        }
         // Note: Nothing is drawn here because particles are nothing but trails. This just sets the color and velocity of the particle's head.
     }
 
@@ -32,7 +39,7 @@ public class Particle extends SpaceObject {
      * Get the lifetime of the particle
      * @return particle lifetime
      */
-    public boolean dead() { return initTime + lifetime < v.frameCount; }
+    public boolean dead() { return initTime + lifetime <= v.frameCount; }
 
     @Override
     public String getName() {
