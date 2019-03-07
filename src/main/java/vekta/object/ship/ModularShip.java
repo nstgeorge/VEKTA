@@ -240,12 +240,6 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 
 		v.stroke(getColor());
 		super.draw(level, r);
-
-		if(getThrustControl() > 0) {
-			float addition = v.random(5, 7);
-			v.line(-r / 2, r * 2, 0, r / 2 * (1 + addition) / t);
-			v.line(r / 2, r * 2, 0, r / 2 * (1 + addition) / t);
-		}
 	}
 
 	@Override

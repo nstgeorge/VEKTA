@@ -3,6 +3,8 @@ package vekta.object.ship;
 import processing.core.PVector;
 import vekta.module.*;
 
+import static vekta.Vekta.v;
+
 public class PlayerShip extends ModularShip {
 	private static final float DEF_MASS = 5000;
 	private static final float DEF_RADIUS = 5;
@@ -35,11 +37,17 @@ public class PlayerShip extends ModularShip {
 	@Override
 	public void drawNearby(float r) {
 		drawShip(r, ShipModelType.DEFAULT);
+		
+		if(getThrustControl() > 0) {
+			float addition = v.random(2, 3);
+			v.line(-r / 2, r * 2, 0, r * (2 + addition));
+			v.line(r / 2, r * 2, 0, r * (2 + addition));
+		}
 	}
 
 	@Override
 	public void drawDistant(float r) {
 		drawNearby(getRadius());
-//		drawMarker();
+		//		drawMarker();
 	}
 }  
