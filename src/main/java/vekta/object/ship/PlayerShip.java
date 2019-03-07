@@ -5,10 +5,6 @@ import vekta.Player;
 import vekta.RenderLevel;
 import vekta.menu.Menu;
 import vekta.module.*;
-import vekta.object.particle.ColorRange;
-import vekta.object.particle.ConstantColor;
-import vekta.object.particle.ParticleEmitter;
-import vekta.object.particle.ParticleStyle;
 
 import static processing.core.PConstants.HALF_PI;
 import static vekta.Vekta.v;
@@ -18,8 +14,6 @@ public class PlayerShip extends ModularShip {
 	private static final float DEF_RADIUS = 5;
 	private static final float DEF_SPEED = .1F; // Base speed (engine speed = 1)
 	private static final float DEF_TURN = 4; // Base turn speed (RCS turnSpeed = 1)
-
-	private ParticleEmitter emitter;
 
 	public PlayerShip(String name, PVector heading, PVector position, PVector velocity, int color) {
 		super(name, heading, position, velocity, color, DEF_SPEED, DEF_TURN);
@@ -33,12 +27,6 @@ public class PlayerShip extends ModularShip {
 		addModule(new CannonModule());
 
 		setEnergy(getMaxEnergy());
-
-		ParticleStyle style = new ParticleStyle()
-				.withStartColor(new ColorRange(v.color(255, 0, 0), v.color(255, 255, 0)))
-				.withEndColor(new ConstantColor(0))
-				.withDrag(1e-2F);
-		emitter = new ParticleEmitter(this, new PVector(getRadius() * 2, 0), style, 30, 1, 20, 1);
 	}
 
 	@Override

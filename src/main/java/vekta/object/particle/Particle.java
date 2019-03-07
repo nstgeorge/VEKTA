@@ -83,4 +83,9 @@ public class Particle extends SpaceObject {
 			}
 		}
 	}
+
+	@Override
+	public int getTrailLength() {
+		return 20;
+	}
 }
