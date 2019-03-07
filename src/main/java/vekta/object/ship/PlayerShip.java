@@ -3,7 +3,10 @@ package vekta.object.ship;
 import processing.core.PVector;
 import vekta.RenderLevel;
 import vekta.module.*;
+import vekta.particle.ParticleSystem;
 
+import static processing.core.PConstants.PI;
+import static vekta.Vekta.UI_COLOR;
 import static vekta.Vekta.v;
 
 public class PlayerShip extends ModularShip {
@@ -11,6 +14,8 @@ public class PlayerShip extends ModularShip {
 	private static final float DEF_RADIUS = 5;
 	private static final float DEF_SPEED = .1F; // Base speed (engine speed = 1)
 	private static final float DEF_TURN = 4; // Base turn speed (RCS turnSpeed = 1)
+
+	private ParticleSystem particleSystem;
 
 	public PlayerShip(String name, PVector heading, PVector position, PVector velocity, int color) {
 		super(name, heading, position, velocity, color, DEF_SPEED, DEF_TURN);
@@ -24,6 +29,8 @@ public class PlayerShip extends ModularShip {
 		addModule(new CannonModule());
 
 		setEnergy(getMaxEnergy());
+
+		particleSystem = new ParticleSystem(super.getPosition(), super.getHeading().copy().rotate(PI).setMag(3), PI / 4, 10, 1, UI_COLOR, v.color(255, 0, 0));
 	}
 
 	@Override
@@ -48,6 +55,12 @@ public class PlayerShip extends ModularShip {
 				v.line(r / 2, r * 2, 0, r * (2 + addition));
 			}
 		}
+
+		particleSystem.setPosition(super.getPosition().copy());
+		particleSystem.setVelocity(super.getHeading().copy().rotate(PI).setMag(1));
+
+		particleSystem.loopEmit();
+
 	}
 
 	@Override
