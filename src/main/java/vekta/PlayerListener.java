@@ -1,5 +1,6 @@
 package vekta;
 
+import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.mission.Mission;
 import vekta.module.Module;
@@ -43,5 +44,11 @@ public interface PlayerListener {
 	}
 
 	default void onUninstallModule(Module module) {
+	}
+
+	default void onAddItem(Item item) {
+	}
+
+	default void onRemoveItem(Item item) {
 	}
 }

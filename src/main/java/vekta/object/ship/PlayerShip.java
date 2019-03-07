@@ -1,14 +1,15 @@
 package vekta.object.ship;
 
 import processing.core.PVector;
+import vekta.Player;
 import vekta.RenderLevel;
+import vekta.menu.Menu;
 import vekta.module.*;
 import vekta.object.particle.ColorRange;
 import vekta.object.particle.ConstantColor;
 import vekta.object.particle.ParticleEmitter;
 import vekta.object.particle.ParticleStyle;
 
-import static processing.core.PConstants.HALF_PI;
 import static vekta.Vekta.v;
 
 public class PlayerShip extends ModularShip {
@@ -53,10 +54,10 @@ public class PlayerShip extends ModularShip {
 	public void onUpdate(RenderLevel level) {
 		super.onUpdate(level);
 
-		// Test particle system
-		if(getRenderLevel().isVisibleTo(level)) {
-			emitter.update(getHeading().rotate(HALF_PI));
-		}
+		//		// Test particle system
+		//		if(getRenderLevel().isVisibleTo(level)) {
+		//			emitter.update(getHeading().rotate(HALF_PI));
+		//		}
 	}
 
 	@Override
@@ -82,5 +83,10 @@ public class PlayerShip extends ModularShip {
 	public void drawDistant(float r) {
 		drawNearby(getRadius());
 		//		drawMarker();
+	}
+
+	@Override
+	public void setupDockingMenu(Player player, Menu menu) {
+		// TODO: add menu item to switch into ship
 	}
 }  

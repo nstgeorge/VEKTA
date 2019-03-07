@@ -221,8 +221,8 @@ public class WorldGenerator {
 		child.setVelocity(offset.rotate(HALF_PI).setMag(speed).add(parent.getVelocity()));
 	}
 
-	public static PVector randomSpawnPosition(RenderLevel dist, PVector center) {
-		float radius = getRadius(dist);
+	public static PVector randomSpawnPosition(RenderLevel level, PVector center) {
+		float radius = getRadius(level);
 		return PVector.random2D().mult(v.random(radius / 2, radius)).add(center);
 	}
 

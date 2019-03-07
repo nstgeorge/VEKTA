@@ -25,7 +25,9 @@ public interface World extends Context {
 	void addObject(Object object);
 
 	void removeObject(Object object);
-	
+
+	<T extends SpaceObject> T findRandomObject(Class<T> type); // TODO: add predicate parameter
+
 	SpaceObject findOrbitObject(SpaceObject object);
 
 	void updateTargeters(SpaceObject object);

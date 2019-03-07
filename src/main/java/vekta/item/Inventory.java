@@ -6,13 +6,19 @@ import java.util.Iterator;
 import java.util.List;
 
 public final class Inventory implements Iterable<Item> {
+	private final InventoryListener listener;
+
 	private final List<Item> items = new ArrayList<>();
 	private int money;
 
 	public Inventory() {
-
+		this(null);
 	}
-	
+
+	public Inventory(InventoryListener listener) {
+		this.listener = listener;
+	}
+
 	public int size() {
 		return getItems().size();
 	}
@@ -27,6 +33,9 @@ public final class Inventory implements Iterable<Item> {
 
 	public void add(int amount) {
 		money += amount;
+		if(listener != null) {
+			listener.onMoneyAdd(amount);
+		}
 	}
 
 	public boolean remove(int amount) {
@@ -34,11 +43,14 @@ public final class Inventory implements Iterable<Item> {
 			return false;
 		}
 		money -= amount;
+		if(listener != null) {
+			listener.onMoneyRemove(amount);
+		}
 		return true;
 	}
 
 	public List<Item> getItems() {
-		return items;
+		return new ArrayList<>(items);
 	}
 
 	public boolean has(Item item) {
@@ -48,15 +60,26 @@ public final class Inventory implements Iterable<Item> {
 	public void add(Item item) {
 		items.add(item);
 		Collections.sort(items);
+		if(listener != null) {
+			listener.onItemAdd(item);
+		}
 	}
 
 	public boolean remove(Item item) {
-		return items.remove(item);
+		if(items.remove(item)) {
+			if(listener != null) {
+				listener.onItemRemove(item);
+			}
+			return true;
+		}
+		return false;
 	}
-	
+
 	public void moveTo(Inventory other) {
-		other.items.addAll(items);
-		other.money += money;
+		other.add(money);
+		for(Item item : this) {
+			other.add(item);
+		}
 		items.clear();
 		money = 0;
 	}

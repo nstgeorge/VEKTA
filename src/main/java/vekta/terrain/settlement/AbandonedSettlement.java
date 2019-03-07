@@ -29,6 +29,6 @@ public class AbandonedSettlement extends Settlement {
 
 	@Override
 	public void onLandingMenu(Player player, Menu menu) {
-		menu.add(new LootMenuOption("Scavenge", player.getShip().getInventory(), getInventory()));
+		menu.add(new LootMenuOption("Scavenge", player.getInventory(), getInventory()));
 	}
 }

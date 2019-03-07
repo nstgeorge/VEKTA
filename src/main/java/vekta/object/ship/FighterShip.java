@@ -2,7 +2,9 @@ package vekta.object.ship;
 
 import processing.core.PVector;
 import vekta.Counter;
+import vekta.Player;
 import vekta.RenderLevel;
+import vekta.menu.Menu;
 import vekta.object.HomingProjectile;
 import vekta.object.Projectile;
 import vekta.object.SpaceObject;
@@ -18,8 +20,8 @@ public class FighterShip extends Ship implements Targeter {
 	private static final float DEF_MASS = 1000;
 	private static final float DEF_RADIUS = 5;
 	private static final float DEF_SPEED = .1F;
-	private static final float DEF_TURN = 20;
-	private static final float ATTACK_DIST = 1000;
+	private static final float DEF_TURN = 4;
+	private static final float DEF_ENGAGE_DIST = 1000;
 	private static final float PROJECTILE_SPEED = 10;
 	private static final float MIN_ATTACK = 10;
 	private static final float MAX_ATTACK = 200;
@@ -63,9 +65,8 @@ public class FighterShip extends Ship implements Targeter {
 		return obj instanceof Ship;
 	}
 
-	@Override
-	public boolean shouldUpdateTarget() {
-		return getTarget() == null;
+	public float getEngageDistance() {
+		return DEF_ENGAGE_DIST;
 	}
 
 	@Override
@@ -76,9 +77,10 @@ public class FighterShip extends Ship implements Targeter {
 			PVector offset = pos.sub(position);
 
 			heading.set(offset.copy().normalize());
-			float rangeFactor = ATTACK_DIST * ATTACK_DIST - offset.magSq();
+			float engageSq = sq(getEngageDistance());
+			float rangeFactor = engageSq - offset.magSq();
 			accelerate(max(-.5F, min(1F, -rangeFactor)));
-			if(rangeFactor >= -ATTACK_DIST * ATTACK_DIST / 16 && attackCt.cycle()) {
+			if(rangeFactor >= -engageSq / 16 && attackCt.cycle()) {
 				fireProjectile();
 				attackCt.delay((int)v.random(MIN_ATTACK, MAX_ATTACK));
 			}
@@ -89,6 +91,11 @@ public class FighterShip extends Ship implements Targeter {
 	@Override
 	public void drawNearby(float r) {
 		drawShip(r, ShipModelType.FIGHTER);
+	}
+
+	@Override
+	public void setupDockingMenu(Player player, Menu menu) {
+		// TODO: plausible reaction to some dude boarding their military spacecraft
 	}
 
 	public void fireProjectile() {

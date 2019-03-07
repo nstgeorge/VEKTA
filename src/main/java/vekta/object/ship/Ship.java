@@ -4,6 +4,7 @@ import processing.core.PVector;
 import vekta.Player;
 import vekta.RenderLevel;
 import vekta.item.Inventory;
+import vekta.item.InventoryListener;
 import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.module.RadiatorModule;
@@ -15,18 +16,20 @@ import static processing.core.PConstants.CLOSE;
 import static processing.core.PConstants.HALF_PI;
 import static vekta.Vekta.*;
 
-public abstract class Ship extends SpaceObject {
+public abstract class Ship extends SpaceObject implements InventoryListener {
 	private static final float CRATE_SPEED = 1;
 	private static final float MAX_DOCKING_SPEED = 10;
+	private static final float DEPART_FRAMES = 60; // Number of frames to wait before docking/landing again
 
 	private final String name;
 	protected final PVector heading;
 	private final float speed;  // Force of the vector added when engine is on
-	private final float turnSpeed; // Angular speed when turning
+	private final float turnSpeed; // Rotational speed when turning
 
-	private final Inventory inventory = new Inventory();
+	private final Inventory inventory = new Inventory(this);
 
 	private SpaceObject dock;
+	private int departTime; // Dock/land frame
 
 	public Ship(String name, PVector heading, PVector position, PVector velocity, int color, float speed, float turnSpeed) {
 		super(position, velocity, color);
@@ -81,6 +84,10 @@ public abstract class Ship extends SpaceObject {
 		return dock;
 	}
 
+	public boolean canDock(SpaceObject s) {
+		return v.frameCount - departTime >= DEPART_FRAMES;
+	}
+
 	public void dock(SpaceObject s) {
 		dock = s;
 		doDock(s);
@@ -90,11 +97,12 @@ public abstract class Ship extends SpaceObject {
 		SpaceObject dock = getDock();
 		if(dock != null) {
 			PVector offset = getPosition().sub(dock.getPosition());
-			setVelocity(dock.getVelocity().add(offset.copy().mult(.1F)));
-			position.add(offset.setMag(getRadius() * 4 + dock.getRadius() - offset.mag()));
+			setVelocity(dock.getVelocity().add(offset.mult(.05F)));
+			position.add(offset.setMag(getRadius() * 2 + dock.getRadius()));
 			this.dock = null;
 			onDepart(dock);
 		}
+		departTime = v.frameCount; // Calls to undock() start a docking/landing debounce
 	}
 
 	public void accelerate(float amount) {
@@ -119,13 +127,15 @@ public abstract class Ship extends SpaceObject {
 		}
 		else if(s instanceof Ship) {
 			Ship ship = (Ship)s;
-			if(ship.getVelocity().sub(velocity).magSq() <= MAX_DOCKING_SPEED * MAX_DOCKING_SPEED) {
-				// Board ship
-				ship.dock(this);
+			//			if(ship.getVelocity().sub(velocity).magSq() <= MAX_DOCKING_SPEED * MAX_DOCKING_SPEED) {
+			// Board ship
+			if(canDock(s)) {
+				dock(s);
 			}
-			else {
-				destroyBecause(s);
-			}
+			//			}
+			//			else {
+			//				destroyBecause(s);
+			//			}
 		}
 	}
 
@@ -184,8 +194,7 @@ public abstract class Ship extends SpaceObject {
 		undock();
 	}
 
-	public void setupDockingMenu(Player player, Menu menu) {
-	}
+	public abstract void setupDockingMenu(Player player, Menu menu);
 
 	public void onDepart(SpaceObject obj) {
 	}

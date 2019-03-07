@@ -6,7 +6,7 @@ public class ModuleItem extends Item {
 	private final Module module;
 
 	public ModuleItem(Module module) {
-		super(module.getName(), ItemType.SPECIAL);
+		super(module.getName(), ItemType.MODULE);
 		
 		this.module = module;
 	}

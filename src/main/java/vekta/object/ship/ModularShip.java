@@ -190,7 +190,7 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 			}
 		}
 		// Remove corresponding item if found in inventory
-		for(Item item : new ArrayList<>(getInventory().getItems())) {
+		for(Item item : getInventory()) {
 			if(item instanceof ModuleItem && ((ModuleItem)item).getModule() == module) {
 				getInventory().remove(item);
 				break;
@@ -303,6 +303,22 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 		setTurnControl(0);
 	}
 
+	//// InventoryListener hooks
+
+	@Override
+	public void onItemAdd(Item item) {
+		if(hasController()){
+			getController().emit(PlayerEvent.ADD_ITEM, item);
+		}
+	}
+
+	@Override
+	public void onItemRemove(Item item) {
+		if(hasController()){
+			getController().emit(PlayerEvent.REMOVE_ITEM, item);
+		}
+	}
+
 	//// PlayerListener hooks, active when hasController() == true
 
 	@Override
@@ -325,7 +341,7 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 			module.onKeyPress(key);
 		}
 
-		// TODO: generalize inject shortcuts
+		// TODO: generalize menu shortcuts
 		if(key == ControlKey.SHIP_MENU || key == ControlKey.SHIP_MISSIONS || key == ControlKey.SHIP_LOADOUT) {
 			Menu menu = openShipMenu();
 			for(MenuOption option : menu.getOptions()) {

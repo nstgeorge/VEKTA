@@ -55,7 +55,7 @@ public class Moon extends TerrestrialPlanet {
 			super.draw(level, r);
 		}
 	}
-
+	
 	@Override
 	public void updateTrail() {
 		super.updateTrail();

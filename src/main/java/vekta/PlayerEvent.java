@@ -12,7 +12,9 @@ public enum PlayerEvent {
 	DOCK(PlayerListener::onDock),
 	MISSION_STATUS(PlayerListener::onMissionStatus),
 	INSTALL_MODULE(PlayerListener::onInstallModule),
-	UNINSTALL_MODULE(PlayerListener::onUninstallModule);
+	UNINSTALL_MODULE(PlayerListener::onUninstallModule),
+	ADD_ITEM(PlayerListener::onAddItem),
+	REMOVE_ITEM(PlayerListener::onRemoveItem);
 
 	private final BiConsumer<PlayerListener, ?> action;
 

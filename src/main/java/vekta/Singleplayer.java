@@ -4,7 +4,14 @@ import processing.core.PVector;
 import processing.sound.LowPass;
 import vekta.context.PauseMenuContext;
 import vekta.context.World;
+import vekta.item.Item;
+import vekta.item.ItemType;
+import vekta.item.MissionItem;
 import vekta.item.ModuleItem;
+import vekta.menu.dialog.Dialog;
+import vekta.mission.ItemReward;
+import vekta.mission.LandAtObjective;
+import vekta.mission.Mission;
 import vekta.module.*;
 import vekta.module.station.SensorModule;
 import vekta.module.station.SolarArrayModule;
@@ -12,6 +19,7 @@ import vekta.module.station.StationCoreModule;
 import vekta.module.station.StructuralModule;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
+import vekta.object.planet.TerrestrialPlanet;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.PlayerShip;
 import vekta.object.ship.SpaceStation;
@@ -95,7 +103,8 @@ public class Singleplayer implements World, PlayerListener {
 				// PVector.random2D(), // Heading
 				new PVector(100, 100), // Position
 				new PVector(),    // Velocity
-				playerShip.getColor()
+				//				playerShip.getColor()
+				WorldGenerator.randomPlanetColor()
 		);
 		SpaceStation.Component core = station.getCore();
 		SpaceStation.Component rcs = core.attach(SpaceStation.Direction.UP, new RCSModule(1));
@@ -116,17 +125,13 @@ public class Singleplayer implements World, PlayerListener {
 		playerShip.getInventory().add(new ModuleItem(new TractorBeamModule(1)));
 		playerShip.getInventory().add(new ModuleItem(new StructuralModule(3, 1)));
 
-		//				Mission mission2 = new Mission("Test Mission");
-		//				mission2.add(new DockWithObjective(station));
-		//				mission2.start(player);
-		//
-		//				Mission mission = new Mission("Two-Option Mission");
-		//				mission.add(new DockWithObjective(station).optional());
-		//				mission.add(new EquipModuleObjective(new HyperdriveModule(1)).optional());
-		//				mission.add(new ItemReward(new Item("Extremely Valuable Thing", ItemType.LEGENDARY)));
-		//				mission.start(player);
-		//
-		//				player.send("Test notification");///
+		Mission mission = new Mission("A Dubious Journey");
+		mission.add(new LandAtObjective(getWorld().findRandomObject(TerrestrialPlanet.class)));
+		mission.add(new ItemReward(new Item("Somewhat Valuable Trinket", ItemType.LEGENDARY)));
+
+		// Testing out a mission sequence
+		Dialog dialog = new Dialog("Hey kiddo.");
+		MissionGenerator.createMessenger(player, dialog).getInventory().add(new MissionItem("Sketchy Coordinates", mission));
 	}
 
 	public Player getPlayer() {
@@ -249,7 +254,7 @@ public class Singleplayer implements World, PlayerListener {
 					}
 				}
 			}
-			
+
 			if(s == playerShip) {
 				// Fix camera position when zoomed in at high velocity
 				cameraPos.set(s.getPositionReference());
@@ -380,6 +385,24 @@ public class Singleplayer implements World, PlayerListener {
 		else {
 			throw new RuntimeException("Cannot remove object: " + object);
 		}
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T extends SpaceObject> T findRandomObject(Class<T> type) {
+		List<T> candidates = new ArrayList<>();
+		// TODO: find an efficient way to DRY these loops
+		for(SpaceObject s : this.objects) {
+			if(type.isInstance(s)) {
+				candidates.add((T)s);
+			}
+		}
+		for(SpaceObject s : this.markedForAddition) {
+			if(type.isInstance(s)) {
+				candidates.add((T)s);
+			}
+		}
+		return candidates.isEmpty() ? null : v.random(candidates);
 	}
 
 	@Override

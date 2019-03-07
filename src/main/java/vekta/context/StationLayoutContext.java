@@ -41,7 +41,7 @@ public class StationLayoutContext implements Context, Upgrader {
 	}
 
 	public Inventory getPlayerInventory() {
-		return player.getShip().getInventory();
+		return player.getInventory();
 	}
 
 	@Override

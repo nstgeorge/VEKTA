@@ -26,6 +26,6 @@ public class ItemReward extends Reward {
 
 	@Override
 	public void onReward(Mission mission, Player player) {
-		player.getShip().getInventory().add(getItem());
+		player.getInventory().add(getItem());
 	}
 }

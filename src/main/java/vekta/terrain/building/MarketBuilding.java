@@ -39,7 +39,7 @@ public class MarketBuilding implements SettlementPart {
 
 	@Override
 	public void setupLandingMenu(Player player, Menu menu) {
-		Inventory inv = player.getShip().getInventory();
+		Inventory inv = player.getInventory();
 
 		computeOffers(inv, shipOffers, offers, 1 / ITEM_MARKUP);
 		computeOffers(getInventory(), offers, shipOffers, ITEM_MARKUP);

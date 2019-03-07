@@ -1,5 +1,8 @@
 package vekta;
 
+import vekta.item.Inventory;
+import vekta.item.Item;
+import vekta.item.MissionItem;
 import vekta.mission.Mission;
 import vekta.object.ship.ModularShip;
 import vekta.overlay.singleplayer.Notification;
@@ -63,6 +66,13 @@ public final class Player {
 					setCurrentMission(index == getMissions().size() ? missions.get(index % missions.size()) : null);
 				}
 			}
+
+			@Override
+			public void onAddItem(Item item) {
+				if(item instanceof MissionItem) {
+					((MissionItem)item).getMission().start(Player.this);
+				}
+			}
 		});
 	}
 
@@ -72,6 +82,10 @@ public final class Player {
 
 	public ModularShip getShip() {
 		return currentShip;
+	}
+
+	public Inventory getInventory() {
+		return getShip().getInventory();
 	}
 
 	public List<Mission> getMissions() {

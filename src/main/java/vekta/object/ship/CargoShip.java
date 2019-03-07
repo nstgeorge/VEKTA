@@ -68,7 +68,7 @@ public class CargoShip extends Ship {
 
 	@Override
 	public void setupDockingMenu(Player player, Menu menu) {
-		menu.add(new LootMenuOption("Loot", player.getShip().getInventory(), getInventory()));
+		menu.add(new LootMenuOption("Loot", player.getInventory(), getInventory()));
 
 		for(FighterShip fighter : fighters) {
 			fighter.setTarget(player.getShip());

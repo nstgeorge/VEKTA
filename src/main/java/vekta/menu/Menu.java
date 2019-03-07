@@ -19,6 +19,9 @@ public class Menu implements Context {
 
 	private final List<MenuOption> options = new ArrayList<>();
 
+	private boolean hasAutoOption;
+	private MenuOption autoOption;
+
 	private int index = 0;
 
 	public Menu(Player player, MenuHandle handle) {
@@ -85,9 +88,29 @@ public class Menu implements Context {
 		}
 	}
 
+	public void setAuto(MenuOption option) {
+		if(autoOption != null) {
+			// Disambiguate multiple automatic options by adding both to the menu
+			add(autoOption);
+			this.autoOption = null;
+			hasAutoOption = true;
+		}
+		
+		if(!hasAutoOption) {
+			autoOption = option;
+		}
+		else {
+			add(option);
+		}
+	}
+
 	@Override
 	public void focus() {
 		handle.focus(this);
+		if(autoOption != null) {
+			autoOption.select(this);
+			autoOption = null;
+		}
 	}
 
 	@Override

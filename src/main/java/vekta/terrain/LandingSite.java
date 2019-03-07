@@ -59,6 +59,7 @@ public class LandingSite {
 		}
 
 		Vekta.addObject(landed);
+		landed.undock();/// Start landing debounce
 		landed.onDepart(getParent());
 		landed = null;
 	}

@@ -4,6 +4,7 @@ import vekta.menu.Menu;
 import vekta.menu.dialog.Dialog;
 import vekta.menu.handle.DialogMenuHandle;
 
+import static vekta.Vekta.applyContext;
 import static vekta.Vekta.setContext;
 
 public class DialogOption implements MenuOption {
@@ -25,5 +26,6 @@ public class DialogOption implements MenuOption {
 		Menu sub = new Menu(menu.getPlayer(), new DialogMenuHandle(new BackOption(menu), dialog));
 		sub.addDefault();
 		setContext(sub);
+		applyContext();
 	}
 }
