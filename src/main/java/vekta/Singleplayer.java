@@ -28,7 +28,7 @@ public class Singleplayer implements World, PlayerListener {
 	private static final float ZOOM_EXPONENT = .3F;
 	private static final float ZOOM_SMOOTH = .1F;
 	private static final float TIME_SCALE = 5e-4F;
-	private static final float TIME_FALLOFF = .5F;
+	private static final float TIME_FALLOFF = .2F;
 	private static final int MAX_OBJECTS_PER_DIST = 5; // TODO: increase as we add more object types
 
 	private static int nextID = 0;
@@ -255,6 +255,7 @@ public class Singleplayer implements World, PlayerListener {
 			PVector position = s.getPositionReference();
 			float scale = getZoom();
 			v.translate((position.x - cameraPos.x) / scale, (position.y - cameraPos.y) / scale);
+			s.updateTrail();
 			if(s == playerShip || s.getRenderLevel().isVisibleTo(level)) {
 				s.drawTrail(scale);
 			}

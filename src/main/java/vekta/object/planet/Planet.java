@@ -82,6 +82,9 @@ public abstract class Planet extends SpaceObject {
 	@Override
 	public void onCollide(SpaceObject s) {
 		if(getMass() >= s.getMass() * 2) {
+			if(s instanceof Moon && ((Moon)s).getParent() == this) {
+				return;
+			}
 			s.destroyBecause(this);
 		}
 	}

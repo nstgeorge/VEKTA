@@ -246,13 +246,15 @@ public abstract class SpaceObject {
 		return 1;
 	}
 
-	public void drawTrail(float scale) {
+	public void updateTrail() {
 		// Update trail vectors
 		if(trail.length - 1 >= 0) {
 			System.arraycopy(trail, 0, trail, 1, trail.length - 1);
 		}
 		trail[0] = getPosition();
+	}
 
+	public void drawTrail(float scale) {
 		for(int i = 1; i < trail.length; i++) {
 			PVector oldPos = trail[i - 1];
 			PVector newPos = trail[i];

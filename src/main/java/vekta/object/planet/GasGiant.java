@@ -17,7 +17,7 @@ public class GasGiant extends Planet {
 		super(name, mass, density, position, velocity, color);
 		ringAngle = v.random(360);
 		ringRatio = v.random(.1F, 1);
-		ringDistances = new float[(int)v.random(2, 7)];
+		ringDistances = new float[(int)v.random(1, 5) + 1];
 		float d = v.random(1.5F, 3);
 		for(int i = 0; i < ringDistances.length; i++) {
 			ringDistances[i] = d *= v.random(1.01F, 1.5F);
@@ -25,8 +25,8 @@ public class GasGiant extends Planet {
 	}
 
 	@Override
-	public void drawDistant(float r) {
-		super.drawDistant(r);
+	public void drawNearby(float r) {
+		super.drawNearby(r);
 
 		v.stroke(v.color(50));
 		v.noFill();

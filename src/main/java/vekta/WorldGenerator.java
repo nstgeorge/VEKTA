@@ -2,10 +2,7 @@ package vekta;
 
 import processing.core.PVector;
 import vekta.object.SpaceObject;
-import vekta.object.planet.Asteroid;
-import vekta.object.planet.Planet;
-import vekta.object.planet.Star;
-import vekta.object.planet.TerrestrialPlanet;
+import vekta.object.planet.*;
 import vekta.object.ship.CargoShip;
 import vekta.object.ship.PirateShip;
 import vekta.object.ship.Ship;
@@ -60,30 +57,26 @@ public class WorldGenerator {
 
 	public static void createSystem(PVector pos) {
 		Star star = createStar(pos);
-		//		else {
-		//			// TODO: spawn as part of a system rather than as a star alternative
-		//			star = new GasGiant(
-		//					WorldGenerator.randomPlanetName(),
-		//					centerMass, // Mass
-		//					centerDensity, // Radius
-		//					pos, // Position
-		//					new PVector(), // Velocity
-		//					randomPlanetColor() // Color
-		//			);
-		//		}
 
-		// Generate planets around body
-		int planets = (int)v.random(1, 8);
-		for(int i = 0; i <= planets; i++) {
+		// Generate terrestrial planets
+		int planetCt = (int)v.random(1, 8);
+		for(int i = 0; i <= planetCt; i++) {
 			float distance = v.random(.5F, 4) * AU_DISTANCE;
-			float angle = v.random(360);
-			Planet planet = createPlanet(new PVector(distance, 0).rotate(angle).add(pos));
+			Planet planet = createPlanet(star.getPosition().add(PVector.random2D().mult(distance)));
+			orbit(star, planet, 0);
+		}
+
+		// Generate gas giants
+		int gasGiantCt = (int)v.random(2);
+		for(int i = 0; i <= gasGiantCt; i++) {
+			float distance = v.random(3, 6) * AU_DISTANCE;
+			Planet planet = createGasGiant(star.getPosition().add(PVector.random2D().mult(distance)));
 			orbit(star, planet, 0);
 		}
 	}
 
 	public static Star createStar(PVector pos) {
-		float power = pow(10, v.random(29, 31));
+		float power = pow(10, v.random(29, 32));
 		float mass = v.random(0.8F, 4) * power;
 		float density = v.random(.7F, 2);
 		Star star = new Star(
@@ -100,7 +93,7 @@ public class WorldGenerator {
 
 	public static Planet createPlanet(PVector pos) {
 		float mass = pow(10, v.random(23, 25));
-		float density = v.random(2, 4);
+		float density = v.random(3.5F, 4);
 		TerrestrialPlanet planet = new TerrestrialPlanet(
 				randomPlanetName(),
 				mass, // Mass
@@ -110,8 +103,53 @@ public class WorldGenerator {
 				new PVector(),  // Velocity
 				randomPlanetColor() // Color
 		);
+		int moonCt = (int)v.random(3);
+		for(int i = 0; i < moonCt; i++) {
+			float distance = v.random(.3F, 2) * LUNAR_DISTANCE;
+			Planet moon = createMoon(planet, distance);
+			orbit(planet, moon, 0);
+		}
 		addObject(planet);
 		return planet;
+	}
+
+	public static GasGiant createGasGiant(PVector pos) {
+		float mass = pow(10, v.random(26, 28));
+		float density = v.random(1.3F, 2);
+		GasGiant planet = new GasGiant(
+				WorldGenerator.randomPlanetName(),
+				mass, // Mass
+				density, // Radius
+				pos, // Position
+				new PVector(), // Velocity
+				randomPlanetColor() // Color
+		);
+		int moonCt = (int)v.random(5, 10);
+		for(int i = 0; i < moonCt; i++) {
+			float distance = v.random(1, 3) * LUNAR_DISTANCE;
+			Planet moon = createMoon(planet, distance);
+			orbit(planet, moon, 0);
+		}
+		addObject(planet);
+		return planet;
+	}
+
+	public static Moon createMoon(Planet planet, float distance) {
+		PVector pos = planet.getPosition().add(PVector.random2D().mult(planet.getRadius() + distance));
+		float mass = pow(10, v.random(21, 23));
+		float density = v.random(3, 4);
+		Moon moon = new Moon(
+				planet,
+				randomPlanetName(),
+				mass, // Mass
+				density,   // Density
+				createTerrain(), // Terrain
+				pos,  // Coords
+				new PVector(),  // Velocity
+				randomPlanetColor() // Color
+		);
+		addObject(moon);
+		return moon;
 	}
 
 	public static Asteroid createAsteroid(PVector pos) {
