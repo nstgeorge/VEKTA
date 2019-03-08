@@ -3,10 +3,13 @@ package vekta.spawner.world;
 import processing.core.PVector;
 import vekta.RenderLevel;
 import vekta.Resources;
-import vekta.spawner.WorldGenerator;
 import vekta.object.SpaceObject;
 import vekta.object.planet.Asteroid;
+import vekta.spawner.WorldGenerator;
 import vekta.terrain.AsteroidTerrain;
+import vekta.terrain.HabitableTerrain;
+import vekta.terrain.Terrain;
+import vekta.terrain.settlement.OutpostSettlement;
 
 import static processing.core.PApplet.pow;
 import static vekta.Vekta.*;
@@ -36,7 +39,13 @@ public class AsteroidSpawner implements WorldGenerator.WorldSpawner {
 	public static Asteroid createAsteroid(PVector pos) {
 		float mass = pow(10, v.random(15, 20));
 		float density = v.random(1.5F, 2);
-		AsteroidTerrain terrain = new AsteroidTerrain();
+		Terrain terrain;
+		if(v.chance(.5F)) {
+			terrain = new AsteroidTerrain();
+		}
+		else {
+			terrain = new HabitableTerrain(new OutpostSettlement());
+		}
 		Asteroid asteroid = new Asteroid(
 				Resources.generateString("asteroid"),
 				mass,

@@ -74,7 +74,7 @@ public class Singleplayer implements World, PlayerListener {
 
 		Resources.setMusic("atmosphere");
 
-		StarSystemSpawner.createSystem(PVector.random2D().mult(3 * AU_DISTANCE));
+		StarSystemSpawner.createSystem(PVector.random2D().mult(2 * AU_DISTANCE));
 
 		player = new Player(UI_COLOR);
 		player.addListener(this);
@@ -288,7 +288,7 @@ public class Singleplayer implements World, PlayerListener {
 		if(RenderLevel.SHIP.isVisibleTo(level)) {
 			setVelocityRelativeTo(playerShip);
 		}
-		else if(level == RenderLevel.PLANET && prevLevel == RenderLevel.SHIP) {
+		else if(level.ordinal() == prevLevel.ordinal() - 1) {
 			setVelocityRelativeTo(findOrbitObject(playerShip));
 		}
 
@@ -326,7 +326,7 @@ public class Singleplayer implements World, PlayerListener {
 			v.text(Settings.getControlString(ControlKey.MENU_SELECT) + " to restart", v.width / 2F, (v.height / 2F) + 97);
 		}
 	}
-	
+
 	// Subject to change
 	private void setVelocityRelativeTo(SpaceObject obj) {
 		PVector relative = obj.getVelocity().mult(-1);
@@ -405,7 +405,7 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public Person findRandomPerson() {
-		return v.random(people);
+		return people.isEmpty() ? null : v.random(people);
 	}
 
 	@Override

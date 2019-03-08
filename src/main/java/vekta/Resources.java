@@ -29,6 +29,7 @@ public class Resources {
 
 	private static final Map<String, String[]> STRINGS = new HashMap<>();
 	private static final Map<String, SoundFile> SOUNDS = new HashMap<>();
+	private static final Map<String, PShape> SHAPES = new HashMap<>();
 
 	private static final char REF_BEFORE = '{';
 	private static final char REF_AFTER = '}';
@@ -38,9 +39,10 @@ public class Resources {
 	public static PShape logo; // TODO: generalize SVG file loading
 
 	public static void init() {
-
-		loadResources(Resources::addSound, "wav", "mp3");
+		
 		loadResources(Resources::addStrings, "txt");
+		loadResources(Resources::addShape, "obj");
+		loadResources(Resources::addSound, "wav", "mp3");
 
 		for(String key : STRINGS.keySet()) {
 			checkStrings(key, STRINGS.get(key));
@@ -114,7 +116,7 @@ public class Resources {
 			while((openIndex = string.indexOf(REF_BEFORE)) != -1 && (closeIndex = string.indexOf(REF_AFTER)) > openIndex) {
 				String ref = string.substring(openIndex + 1, closeIndex);
 				if(!STRINGS.containsKey(ref)) {
-					throw new RuntimeException("Missing string type: `" + key + "` (found in `" + key + "`)");
+					throw new RuntimeException("Missing string type: `" + ref + "` (found in `" + key + "`)");
 				}
 				string = string.substring(0, openIndex) + string.substring(closeIndex + 1);
 			}
@@ -135,6 +137,22 @@ public class Resources {
 			throw new RuntimeException("No sound exists with key: " + key);
 		}
 		return sound;
+	}
+
+	private static void addShape(String path, String key) {
+		PShape shape = v.loadShape(path);
+		if(SHAPES.containsKey(key)) {
+			throw new RuntimeException("Conflicting shapes for key: `" + key + "`");
+		}
+		SHAPES.put(key, shape);
+	}
+
+	public static PShape getShape(String key) {
+		PShape shape = SHAPES.get(key);
+		if(shape == null) {
+			throw new RuntimeException("No string array exists with key: " + key);
+		}
+		return shape;
 	}
 
 	public static SoundFile getMusic() {

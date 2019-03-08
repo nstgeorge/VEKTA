@@ -1,10 +1,10 @@
 package vekta.terrain.building;
 
-import vekta.spawner.ItemGenerator;
 import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;
-import vekta.menu.option.TradeMenuOption;
+import vekta.menu.option.MarketOption;
+import vekta.spawner.ItemGenerator;
 import vekta.terrain.Terrain;
 import vekta.terrain.settlement.SettlementPart;
 
@@ -18,13 +18,24 @@ public class MarketBuilding implements SettlementPart {
 	private final Map<Item, Integer> offers = new HashMap<>();
 	private final Map<Item, Integer> shipOffers = new HashMap<>();
 
-	public MarketBuilding(int shopLevel) {
-		ItemGenerator.addLoot(getInventory(), shopLevel);
+	private final String type;
+	private final ItemGenerator.ItemSpawner spawner;
+
+	public MarketBuilding(int shopTier, String type, ItemGenerator.ItemSpawner spawner) {
+		this.type = type;
+		this.spawner = spawner;
+
+		ItemGenerator.addLoot(getInventory(), shopTier, spawner);
 	}
 
 	@Override
 	public String getName() {
-		return "Marketplace";
+		return getTypeString();
+	}
+
+	@Override
+	public String getTypeString() {
+		return type;
 	}
 
 	public Inventory getInventory() {
@@ -37,14 +48,18 @@ public class MarketBuilding implements SettlementPart {
 	}
 
 	@Override
-	public void setupLandingMenu(Menu menu) {
+	public void setupSettlementMenu(Menu menu) {
 		Inventory inv = menu.getPlayer().getInventory();
 
 		computeOffers(inv, shipOffers, offers, 1 / ITEM_MARKUP);
 		computeOffers(getInventory(), offers, shipOffers, ITEM_MARKUP);
 
-		menu.add(new TradeMenuOption(true, inv, getInventory(), offers));
-		menu.add(new TradeMenuOption(false, inv, getInventory(), shipOffers));
+		menu.add(new MarketOption(this, true, inv/*, getInventory()*/, offers));
+		menu.add(new MarketOption(this, false, inv/*, getInventory()*/, shipOffers));
+	}
+
+	public boolean canSell(Item item) {
+		return spawner == null || spawner.isValid(item);
 	}
 
 	private void computeOffers(Inventory inv, Map<Item, Integer> thisSide, Map<Item, Integer> otherSide, float markup) {

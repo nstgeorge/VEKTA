@@ -1,0 +1,3 @@
+{settlement}
+{person}'s Refuge
+{person}'s Hideout

@@ -1,0 +1,4 @@
+{settlement}
+{settlement} City
+New {settlement}
+Greater {settlement}

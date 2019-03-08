@@ -107,9 +107,13 @@ public class MissionGenerator {
 		}
 	}
 
+	public static Person randomMissionPerson() {
+		return randomMissionPerson(null);
+	}
+
 	public static Person randomMissionPerson(Person exclude) {
 		Person person = getWorld().findRandomPerson();
-		if(person == null || v.chance(.1F)) {
+		if(person == null || person == exclude || v.chance(.1F)) {
 			person = PersonGenerator.createPerson();
 		}
 		updateHome(person);

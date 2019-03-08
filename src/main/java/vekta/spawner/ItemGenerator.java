@@ -15,14 +15,20 @@ public class ItemGenerator {
 	}
 
 	public static void addLoot(Inventory inv, int lootTier) {
+		addLoot(inv, lootTier, null);
+	}
+
+	public static void addLoot(Inventory inv, int lootTier, ItemSpawner spawner) {
 		int itemCt = round(v.random(lootTier - 1, lootTier * 2));
 		for(int i = 0; i < itemCt; i++) {
-			Item item = randomItem();
+			Item item = spawner != null ? spawner.create() : randomItem();
 			inv.add(item);
 		}
 	}
 
 	public interface ItemSpawner extends Weighted {
+		boolean isValid(Item item);
+		
 		Item create();
 	}
 }

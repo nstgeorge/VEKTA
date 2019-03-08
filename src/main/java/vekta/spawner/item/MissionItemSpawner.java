@@ -1,12 +1,12 @@
 package vekta.spawner.item;
 
 import vekta.Resources;
-import vekta.spawner.ItemGenerator;
-import vekta.spawner.MissionGenerator;
-import vekta.spawner.PersonGenerator;
 import vekta.item.Item;
+import vekta.item.ItemType;
 import vekta.item.MissionItem;
 import vekta.mission.Mission;
+import vekta.spawner.ItemGenerator;
+import vekta.spawner.MissionGenerator;
 
 public class MissionItemSpawner implements ItemGenerator.ItemSpawner {
 	@Override
@@ -15,8 +15,13 @@ public class MissionItemSpawner implements ItemGenerator.ItemSpawner {
 	}
 
 	@Override
+	public boolean isValid(Item item) {
+		return item.getType() == ItemType.MISSION;
+	}
+
+	@Override
 	public Item create() {
-		return randomMissionItem(MissionGenerator.createMission(PersonGenerator.createPerson()));
+		return randomMissionItem(MissionGenerator.createMission(MissionGenerator.randomMissionPerson()));
 	}
 
 	public static Item randomMissionItem(Mission mission) {

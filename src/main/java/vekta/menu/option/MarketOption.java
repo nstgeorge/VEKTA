@@ -4,26 +4,29 @@ import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.menu.handle.TradeMenuHandle;
+import vekta.terrain.building.MarketBuilding;
 
 import java.util.Map;
 
 import static vekta.Vekta.setContext;
 
-public class TradeMenuOption implements MenuOption {
+public class MarketOption implements MenuOption {
+	private final MarketBuilding building;
 	private final boolean buying;
 	private final Inventory you, them;
 	private final Map<Item, Integer> offers;
 
-	public TradeMenuOption(boolean buying, Inventory you, Inventory them, Map<Item, Integer> offers) {
+	public MarketOption(MarketBuilding building, boolean buying, Inventory you, Map<Item, Integer> offers) {
+		this.building = building;
 		this.buying = buying;
 		this.you = you;
-		this.them = them;
+		this.them = building.getInventory();
 		this.offers = offers;
 	}
 
 	@Override
 	public String getName() {
-		return (buying ? "Buy" : "Sell") + " Goods";
+		return (buying ? "Buy" : "Sell") + " " + building.getTypeString();
 	}
 
 	public Inventory getFrom() {
@@ -38,7 +41,7 @@ public class TradeMenuOption implements MenuOption {
 	public void select(Menu menu) {
 		Menu sub = new Menu(menu.getPlayer(), new TradeMenuHandle(new BackOption(menu), buying, getTo()));
 		for(Item item : offers.keySet()) {
-			if(getFrom().has(item)) {
+			if(getFrom().has(item) && (buying || building.canSell(item))) {
 				sub.add(new ItemTradeOption(buying, you, them, item, offers.get(item), true));
 			}
 		}

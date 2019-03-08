@@ -1,16 +1,27 @@
 package vekta.spawner.item;
 
 import vekta.Resources;
-import vekta.spawner.ItemGenerator;
 import vekta.item.Item;
 import vekta.item.ItemType;
+import vekta.spawner.ItemGenerator;
 
 import static vekta.Vekta.v;
 
 public class TradeItemSpawner implements ItemGenerator.ItemSpawner {
 	@Override
 	public float getWeight() {
-		return 3;
+		return 2;
+	}
+
+	@Override
+	public boolean isValid(Item item) {
+		switch(item.getType()) {
+		case COMMON:
+		case RARE:
+		case LEGENDARY:
+			return true;
+		}
+		return false;
 	}
 
 	@Override

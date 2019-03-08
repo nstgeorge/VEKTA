@@ -5,11 +5,14 @@ import vekta.RenderLevel;
 import vekta.Resources;
 import vekta.object.SpaceObject;
 import vekta.object.planet.Planet;
+import vekta.spawner.item.MissionItemSpawner;
+import vekta.spawner.item.ModuleItemSpawner;
 import vekta.terrain.*;
+import vekta.terrain.building.MarketBuilding;
 import vekta.terrain.settlement.AbandonedSettlement;
-import vekta.terrain.settlement.RuralSettlement;
+import vekta.terrain.settlement.CitySettlement;
 import vekta.terrain.settlement.Settlement;
-import vekta.terrain.settlement.UrbanSettlement;
+import vekta.terrain.settlement.TownSettlement;
 
 import java.util.Arrays;
 
@@ -73,13 +76,26 @@ public class WorldGenerator {
 	public static Settlement createSettlement(Planet planet) {
 		float r = v.random(1);
 		if(r > .5) {
-			return new UrbanSettlement();
+			return new CitySettlement();
 		}
 		else if(r > .2) {
-			return new RuralSettlement();
+			return new TownSettlement();
 		}
 		else {
-			return new AbandonedSettlement();
+			return new AbandonedSettlement(planet.getName());
+		}
+	}
+
+	public static MarketBuilding randomMarket(int shopTier) {
+		float r = v.random(1);
+		if(r > .5) {
+			return new MarketBuilding(shopTier, "Goods", null);
+		}
+		else if(r > .2) {
+			return new MarketBuilding(shopTier, "Trinkets", new MissionItemSpawner());
+		}
+		else {
+			return new MarketBuilding(shopTier, "Modules", new ModuleItemSpawner());
 		}
 	}
 

@@ -1,10 +1,10 @@
 package vekta.terrain.building;
 
-import vekta.spawner.MissionGenerator;
 import vekta.menu.Menu;
 import vekta.menu.option.DialogOption;
 import vekta.person.Dialog;
 import vekta.person.Person;
+import vekta.spawner.MissionGenerator;
 import vekta.terrain.Terrain;
 import vekta.terrain.settlement.SettlementPart;
 
@@ -25,12 +25,17 @@ public class HouseBuilding implements SettlementPart {
 	}
 
 	@Override
+	public String getTypeString() {
+		return "House";
+	}
+
+	@Override
 	public void setupTerrain(Terrain terrain) {
 	}
 
 	@Override
-	public void setupLandingMenu(Menu menu) {
-		if(getPerson().getOpinion(menu.getPlayer()).isPositive()) {
+	public void setupSettlementMenu(Menu menu) {
+		if(!getPerson().getOpinion(menu.getPlayer()).isNegative()) {
 			Dialog dialog = MissionGenerator.randomVisitDialog(menu.getPlayer(), getPerson());
 			menu.add(new DialogOption("Visit " + getPerson().getFullName(), dialog));
 		}

@@ -1,20 +1,23 @@
 package vekta.terrain.settlement;
 
-import vekta.spawner.ItemGenerator;
+import vekta.Resources;
 import vekta.item.Inventory;
 import vekta.menu.Menu;
 import vekta.menu.option.LootMenuOption;
+import vekta.spawner.ItemGenerator;
 
 public class AbandonedSettlement extends Settlement {
 	private final Inventory inventory = new Inventory();
 
-	public AbandonedSettlement() {
+	public AbandonedSettlement(String prevName) {
+		super(prevName + " Ruins", Resources.generateString("overview_ruins"));
+
 		ItemGenerator.addLoot(getInventory(), 1);
 	}
 
 	@Override
-	public String getName() {
-		return "Abandoned Settlement";
+	public String getTypeString() {
+		return "Ruins";
 	}
 
 	public Inventory getInventory() {
@@ -22,12 +25,7 @@ public class AbandonedSettlement extends Settlement {
 	}
 
 	@Override
-	public String createOverview() {
-		return "You find the crumbling remains of an abandoned civilization.";
-	}
-
-	@Override
-	public void onLandingMenu(Menu menu) {
+	public void onSettlementMenu(Menu menu) {
 		menu.add(new LootMenuOption("Scavenge", menu.getPlayer().getInventory(), getInventory()));
 	}
 }

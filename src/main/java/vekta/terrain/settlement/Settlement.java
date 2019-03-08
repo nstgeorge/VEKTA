@@ -1,5 +1,6 @@
 package vekta.terrain.settlement;
 
+import vekta.Resources;
 import vekta.menu.Menu;
 import vekta.terrain.Terrain;
 
@@ -13,11 +14,30 @@ public abstract class Settlement implements SettlementPart {
 		return parts;
 	}
 
+	private final String name;
+	private final String overview;
+
+	public Settlement(String key) {
+		this(Resources.generateString(key), Resources.generateString("overview_" + key));
+	}
+
+	public Settlement(String name, String overview) {
+		this.name = name;
+		this.overview = overview;
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	public String getOverview() {
+		return overview;
+	}
+
 	public void add(SettlementPart part) {
 		parts.add(part);
 	}
-
-	public abstract String createOverview();
 
 	@Override
 	public final void setupTerrain(Terrain terrain) {
@@ -31,13 +51,13 @@ public abstract class Settlement implements SettlementPart {
 	}
 
 	@Override
-	public final void setupLandingMenu(Menu menu) {
-		onLandingMenu(menu);
+	public final void setupSettlementMenu(Menu menu) {
+		onSettlementMenu(menu);
 		for(SettlementPart part : getParts()) {
-			part.setupLandingMenu(menu);
+			part.setupSettlementMenu(menu);
 		}
 	}
 
-	public void onLandingMenu(Menu menu) {
+	public void onSettlementMenu(Menu menu) {
 	}
 }
