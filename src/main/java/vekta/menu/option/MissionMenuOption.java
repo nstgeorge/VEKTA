@@ -28,7 +28,7 @@ public class MissionMenuOption implements MenuOption {
 	public void select(Menu menu) {
 		Menu sub = new Menu(menu.getPlayer(), new MissionMenuHandle(menu.getDefault()));
 		for(Mission mission : getPlayer().getMissions()) {
-			sub.add(new MissionOption(getPlayer(), mission));
+			sub.add(new MissionOption(mission));
 		}
 		sub.add(new BasicOption("Deselect", () -> {
 			getPlayer().setCurrentMission(null);

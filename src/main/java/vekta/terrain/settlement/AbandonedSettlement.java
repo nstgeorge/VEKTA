@@ -1,7 +1,6 @@
 package vekta.terrain.settlement;
 
 import vekta.ItemGenerator;
-import vekta.Player;
 import vekta.item.Inventory;
 import vekta.menu.Menu;
 import vekta.menu.option.LootMenuOption;
@@ -28,7 +27,7 @@ public class AbandonedSettlement extends Settlement {
 	}
 
 	@Override
-	public void onLandingMenu(Player player, Menu menu) {
-		menu.add(new LootMenuOption("Scavenge", player.getInventory(), getInventory()));
+	public void onLandingMenu(Menu menu) {
+		menu.add(new LootMenuOption("Scavenge", menu.getPlayer().getInventory(), getInventory()));
 	}
 }

@@ -13,10 +13,10 @@ public class Mission {
 	private final List<Objective> objectives = new ArrayList<>();
 	private final List<Reward> rewards = new ArrayList<>();
 	private final List<MissionListener> listeners = new ArrayList<>();
-	private final List<Player> players = new ArrayList<>();
 
 	private final String name;
 
+	private Player player;
 	private MissionStatus status = MissionStatus.READY;
 
 	private Objective current;
@@ -37,8 +37,8 @@ public class Mission {
 		return rewards;
 	}
 
-	public List<Player> getPlayers() {
-		return players;
+	public Player getPlayer() {
+		return player;
 	}
 
 	public void add(MissionListener listener) {
@@ -47,7 +47,7 @@ public class Mission {
 			Objective objective = (Objective)listener;
 			getObjectives().add(objective);
 			if(getStatus() == MissionStatus.STARTED) {
-				objective.start();
+				objective.onStart(this);
 			}
 		}
 		if(listener instanceof Reward) {
@@ -67,6 +67,10 @@ public class Mission {
 		current = null;
 		boolean hasCompleted = false;
 		for(Objective objective : getObjectives()) {
+			if(objective.getStatus() == MissionStatus.READY) {
+				objective.onStart();
+			}
+			
 			if(objective.getStatus() == MissionStatus.STARTED) {
 				if(current == null) {
 					current = objective;
@@ -99,58 +103,62 @@ public class Mission {
 	}
 
 	public void start(Player player) {
-		if(players.contains(player)) {
-			throw new RuntimeException("Player already started the mission");
+		if(getStatus() == MissionStatus.STARTED) {
+			throw new RuntimeException("Mission has already started");
 		}
 		if(objectives.isEmpty()) {
 			println("Mission has no objectives");
 			return;
 		}
 
+		this.player = player;
+
 		status = MissionStatus.STARTED;
 		for(MissionListener listener : listeners) {
-			listener.onStart(this, player);
+			listener.onStart(this);
 		}
 
-		players.add(player);
-		
 		current = objectives.get(0);
 
-		player.emit(PlayerEvent.MISSION_STATUS, this);
-		player.send("Mission started: " + getName())
+		getPlayer().emit(PlayerEvent.MISSION_STATUS, this);
+		getPlayer().send("Mission started: " + getName())
 				.withColor(getStatus().getColor())
 				.withTime(2);
 	}
 
 	public void cancel() {
+		if(getStatus() != MissionStatus.STARTED) {
+			println("Mission cannot be cancelled from state: " + getStatus());
+			return;
+		}
+
 		status = MissionStatus.CANCELLED;
 		for(MissionListener listener : listeners) {
 			listener.onCancel(this);
 		}
-
 		current = null;
 
-		for(Player p : players) {
-			p.emit(PlayerEvent.MISSION_STATUS, this);
-			p.send("Mission cancelled: " + getName())
-					.withColor(getStatus().getColor())
-					.withTime(2);
-		}
+		getPlayer().emit(PlayerEvent.MISSION_STATUS, this);
+		getPlayer().send("Mission cancelled: " + getName())
+				.withColor(getStatus().getColor())
+				.withTime(2);
 	}
 
 	public void complete() {
+		if(getStatus() != MissionStatus.STARTED) {
+			println("Mission cannot be completed from state: " + getStatus());
+			return;
+		}
+
 		status = MissionStatus.COMPLETED;
 		for(MissionListener listener : listeners) {
 			listener.onComplete(this);
 		}
-
 		current = null;
 
-		for(Player p : players) {
-			p.emit(PlayerEvent.MISSION_STATUS, this);
-			p.send("Mission completed: " + getName())
-					.withColor(UI_COLOR)
-					.withTime(2);
-		}
+		getPlayer().emit(PlayerEvent.MISSION_STATUS, this);
+		getPlayer().send("Mission completed: " + getName())
+				.withColor(UI_COLOR)
+				.withTime(2);
 	}
 }

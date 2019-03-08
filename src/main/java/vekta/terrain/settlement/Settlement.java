@@ -1,6 +1,5 @@
 package vekta.terrain.settlement;
 
-import vekta.Player;
 import vekta.menu.Menu;
 import vekta.terrain.Terrain;
 
@@ -32,13 +31,13 @@ public abstract class Settlement implements SettlementPart {
 	}
 
 	@Override
-	public final void setupLandingMenu(Player player, Menu menu) {
-		onLandingMenu(player, menu);
+	public final void setupLandingMenu(Menu menu) {
+		onLandingMenu(menu);
 		for(SettlementPart part : getParts()) {
-			part.setupLandingMenu(player, menu);
+			part.setupLandingMenu(menu);
 		}
 	}
 
-	public void onLandingMenu(Player player, Menu menu) {
+	public void onLandingMenu(Menu menu) {
 	}
 }

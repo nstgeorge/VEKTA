@@ -11,6 +11,12 @@ public class ItemTradeOption implements MenuOption {
 	private final int price;
 	private final boolean transfer;
 
+	public ItemTradeOption(Inventory inv, Item item, int price) {
+		this(true, inv, new Inventory(), item, price, true);
+
+		them.add(item);
+	}
+
 	public ItemTradeOption(boolean buying, Inventory you, Inventory them, Item item) {
 		this(buying, you, them, item, 0, true);
 	}

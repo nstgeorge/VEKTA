@@ -1,5 +1,6 @@
 package vekta;
 
+import processing.core.PApplet;
 import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.item.MissionItem;
@@ -38,6 +39,7 @@ public final class Player {
 
 			@Override
 			public void onMissionStatus(Mission mission) {
+				PApplet.println("::::", mission.getName(), mission.getStatus(), mission.getCurrentObjective() != null ? mission.getCurrentObjective().getName() : null);
 				switch(mission.getStatus()) {
 				case READY:
 				case STARTED:

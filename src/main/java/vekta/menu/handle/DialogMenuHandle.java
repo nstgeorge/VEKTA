@@ -1,8 +1,8 @@
 package vekta.menu.handle;
 
 import vekta.menu.Menu;
-import vekta.menu.dialog.Dialog;
 import vekta.menu.option.MenuOption;
+import vekta.person.Dialog;
 
 import static vekta.Vekta.v;
 
@@ -28,13 +28,18 @@ public class DialogMenuHandle extends MenuHandle {
 	}
 
 	@Override
+	public int getButtonY(int i) {
+		return super.getButtonY(i + 1);
+	}
+
+	@Override
 	public void render(Menu menu) {
 		super.render(menu);
 
 		v.textSize(64);
 		v.fill(dialog.getPerson().getColor());
 		v.text(dialog.getPerson().getDisplayName(), getButtonX(), getButtonY(-3));
-		
+
 		v.textSize(24);
 		v.fill(200);
 		v.text(dialog.getMessage(), getButtonX(), getButtonY(-2));

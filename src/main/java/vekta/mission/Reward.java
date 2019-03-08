@@ -6,11 +6,9 @@ public abstract class Reward implements MissionListener {
 
 	@Override
 	public final void onComplete(Mission mission) {
-		for(Player player : mission.getPlayers()) {
-			onReward(mission, player);
-			player.send("Received: " + getName())
-					.withColor(getColor());
-		}
+		onReward(mission, mission.getPlayer());
+		mission.getPlayer().send("Received: " + getName())
+				.withColor(getColor());
 	}
 
 	public abstract String getName();

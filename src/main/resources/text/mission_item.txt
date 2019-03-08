@@ -4,3 +4,7 @@ Coordinate Chip
 Special {item_noun}
 Humming {item_noun}
 Unusual {item_noun}
+Whispering {item_noun}
+Talkative {item_noun}
+Sentient {item_noun}
+Posessed {item_noun}

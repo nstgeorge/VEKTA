@@ -271,7 +271,7 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 	public void doLand(LandingSite site) {
 		if(hasController()) {
 			Menu menu = new Menu(getController(), new LandingMenuHandle(site, getWorld()));
-			site.getTerrain().setupLandingMenu(getController(), menu);
+			site.getTerrain().setupLandingMenu(menu);
 			menu.add(new SurveyOption(site));
 			menu.addDefault();
 			Resources.stopSound("engine");
@@ -307,16 +307,16 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 
 	@Override
 	public void onMoneyAdd(int amount) {
-		if(hasController()) {
-			getController().send("+ " + amount + " G").withTime(.5F);
-		}
+		//		if(hasController()) {
+		//			getController().send("+ " + amount + " G").withTime(.5F);
+		//		}
 	}
 
 	@Override
 	public void onMoneyRemove(int amount) {
-		if(hasController()) {
-			getController().send("- " + amount + " G").withTime(.5F);
-		}
+		//		if(hasController()) {
+		//			getController().send("- " + amount + " G").withTime(.5F);
+		//		}
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package vekta.terrain;
 
-import vekta.Player;
 import vekta.menu.Menu;
 
 public class MoltenTerrain extends Terrain {
@@ -16,7 +15,7 @@ public class MoltenTerrain extends Terrain {
 	}
 
 	@Override
-	public void setupLandingMenu(Player player, Menu menu) {
+	public void setupLandingMenu(Menu menu) {
 		
 	}
 }

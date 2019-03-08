@@ -1,7 +1,6 @@
 package vekta.terrain.building;
 
 import vekta.ItemGenerator;
-import vekta.Player;
 import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;
@@ -38,8 +37,8 @@ public class MarketBuilding implements SettlementPart {
 	}
 
 	@Override
-	public void setupLandingMenu(Player player, Menu menu) {
-		Inventory inv = player.getInventory();
+	public void setupLandingMenu(Menu menu) {
+		Inventory inv = menu.getPlayer().getInventory();
 
 		computeOffers(inv, shipOffers, offers, 1 / ITEM_MARKUP);
 		computeOffers(getInventory(), offers, shipOffers, ITEM_MARKUP);

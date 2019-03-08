@@ -3,6 +3,7 @@ package vekta.context;
 import processing.core.PVector;
 import vekta.RenderLevel;
 import vekta.object.SpaceObject;
+import vekta.person.Person;
 
 public interface World extends Context {
 	float MAX_AUDITORY_DISTANCE = 3000; // Used for calculating volume of sounds. Higher = hear more
@@ -25,6 +26,8 @@ public interface World extends Context {
 	void addObject(Object object);
 
 	void removeObject(Object object);
+	
+	Person findRandomPerson();
 
 	<T extends SpaceObject> T findRandomObject(Class<T> type); // TODO: add predicate parameter
 

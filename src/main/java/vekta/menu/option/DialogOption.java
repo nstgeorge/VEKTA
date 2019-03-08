@@ -1,8 +1,8 @@
 package vekta.menu.option;
 
 import vekta.menu.Menu;
-import vekta.menu.dialog.Dialog;
 import vekta.menu.handle.DialogMenuHandle;
+import vekta.person.Dialog;
 
 import static vekta.Vekta.applyContext;
 import static vekta.Vekta.setContext;
@@ -23,11 +23,15 @@ public class DialogOption implements MenuOption {
 
 	@Override
 	public void select(Menu menu) {
-		Menu sub = new Menu(menu.getPlayer(), new DialogMenuHandle(new BackOption(menu), dialog));
-		for(MenuOption option : dialog.getOptions()) {
-			sub.add(option);
+		Menu sub = new Menu(menu.getPlayer(), new DialogMenuHandle(menu.getDefault(), dialog));
+		if(dialog.getOptions().isEmpty()) {
+			sub.addDefault();
 		}
-		sub.addDefault();
+		else {
+			for(MenuOption option : dialog.getOptions()) {
+				sub.add(option);
+			}
+		}
 		setContext(sub);
 		applyContext();
 	}

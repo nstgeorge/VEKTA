@@ -1,6 +1,5 @@
 package vekta.terrain;
 
-import vekta.Player;
 import vekta.menu.Menu;
 
 import java.util.ArrayList;
@@ -44,7 +43,7 @@ public abstract class Terrain {
 
 	public abstract String getOverview();
 
-	public abstract void setupLandingMenu(Player player, Menu menu);
+	public abstract void setupLandingMenu(Menu menu);
 
 //	public abstract setupSurveyMenu(Player player, Menu menu);
 }

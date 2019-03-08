@@ -1,6 +1,5 @@
 package vekta.menu.option;
 
-import vekta.Player;
 import vekta.menu.Menu;
 import vekta.mission.Mission;
 import vekta.mission.MissionStatus;
@@ -8,16 +7,10 @@ import vekta.mission.MissionStatus;
 import static vekta.Vekta.MISSION_COLOR;
 
 public class MissionOption implements MenuOption {
-	private final Player player;
 	private final Mission mission;
 
-	public MissionOption(Player player, Mission mission) {
-		this.player = player;
+	public MissionOption(Mission mission) {
 		this.mission = mission;
-	}
-
-	public Player getPlayer() {
-		return player;
 	}
 
 	public Mission getMission() {
@@ -31,7 +24,7 @@ public class MissionOption implements MenuOption {
 
 	@Override
 	public int getColor() {
-		if(getPlayer().getCurrentMission() == getMission()) {
+		if(getMission().getPlayer() != null && getMission().getPlayer().getCurrentMission() == getMission()) {
 			return MISSION_COLOR;
 		}
 		return getMission().getStatus().getColor();
@@ -40,10 +33,10 @@ public class MissionOption implements MenuOption {
 	@Override
 	public void select(Menu menu) {
 		if(mission.getStatus() == MissionStatus.READY) {
-			getMission().start(getPlayer());
+			getMission().start(menu.getPlayer());
 		}
 		else if(mission.getStatus() == MissionStatus.STARTED) {
-			getPlayer().setCurrentMission(mission);
+			menu.getPlayer().setCurrentMission(mission);
 		}
 		menu.close();
 	}

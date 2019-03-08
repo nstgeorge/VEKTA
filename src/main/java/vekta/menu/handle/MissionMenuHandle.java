@@ -48,7 +48,7 @@ public class MissionMenuHandle extends MenuHandle {
 		v.textSize(32);
 		v.fill(v.color(100));
 		v.textAlign(v.CENTER);
-		v.text("Missions:", getButtonX(), getButtonY(-1));
+		v.text("Mission:", getButtonX(), getButtonY(-1));
 
 		v.textAlign(v.LEFT);
 		v.fill(100);
@@ -61,11 +61,12 @@ public class MissionMenuHandle extends MenuHandle {
 			v.fill(objective.getStatus().getColor());
 			v.text(objective.getDisplayText(), missionX + 20, getButtonY(i));
 		}
+		float rewardBasis = getButtonY(objectives.size());
 		List<Reward> rewards = mission.getRewards();
 		for(int i = 0; i < rewards.size(); i++) {
 			Reward reward = rewards.get(i);
 			v.fill(reward.getColor());
-			v.text(reward.getDisplayText(), missionX + 20, getButtonY(objectives.size() + i));
+			v.text(reward.getDisplayText(), missionX + 20, (rewardBasis + getButtonY(objectives.size() + i)) / 2);
 		}
 	}
 }

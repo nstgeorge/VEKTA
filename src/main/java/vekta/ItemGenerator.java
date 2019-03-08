@@ -44,7 +44,7 @@ public class ItemGenerator {
 			return new ModuleItem(v.random(modules).getVariant());
 		}
 		else if(r > .2) {
-			return randomMissionItem(MissionGenerator.createMission(PersonGenerator.randomPerson()));
+			return randomMissionItem(MissionGenerator.createMission(PersonGenerator.createPerson()));
 		}
 		else {
 			return randomOre(WorldGenerator.randomPlanetName());

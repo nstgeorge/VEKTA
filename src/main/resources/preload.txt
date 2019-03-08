@@ -13,6 +13,10 @@ sound/select.wav
 sound/theme.wav
 sound/tractorBeam.wav
 
+text/dialog/offer.txt
+text/dialog/greeting.txt
+text/dialog/request.txt
+
 text/mission_item.txt
 text/item_adj_common.txt
 text/item_adj_rare.txt

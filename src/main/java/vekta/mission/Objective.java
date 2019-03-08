@@ -11,7 +11,6 @@ import static vekta.Vekta.MISSION_COLOR;
 
 public abstract class Objective implements MissionListener, PlayerListener {
 	private Mission mission;
-	private Player player;
 
 	private MissionStatus status = MissionStatus.READY;
 
@@ -42,19 +41,11 @@ public abstract class Objective implements MissionListener, PlayerListener {
 	}
 
 	public Player getPlayer() {
-		return player;
+		return getMission().getPlayer();
 	}
 
 	public final MissionStatus getStatus() {
 		return status;
-	}
-
-	public void start() {
-		setStatus(MissionStatus.STARTED);
-	}
-
-	public void cancel() {
-		setStatus(MissionStatus.CANCELLED);
 	}
 
 	public void complete() {
@@ -92,26 +83,25 @@ public abstract class Objective implements MissionListener, PlayerListener {
 	public abstract SpaceObject getSpaceObject();
 
 	@Override
-	public final void onStart(Mission mission, Player player) {
+	public final void onStart(Mission mission) {
 		if(this.mission != null) {
 			throw new RuntimeException("Objective already started");
 		}
 		this.mission = mission;
-		this.player = player;
-		status = MissionStatus.STARTED;
-		player.addListener(this);
+		setStatus(MissionStatus.STARTED);
+		getPlayer().addListener(this);
 		onStart();
 	}
 
 	@Override
 	public final void onCancel(Mission mission) {
-		player.removeListener(this);
+		getPlayer().removeListener(this);
 		onCancel();
 	}
 
 	@Override
 	public final void onComplete(Mission mission) {
-		player.removeListener(this);
+		getPlayer().removeListener(this);
 		onComplete();
 	}
 

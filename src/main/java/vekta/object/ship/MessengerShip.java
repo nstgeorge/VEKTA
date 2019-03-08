@@ -4,10 +4,10 @@ import processing.core.PVector;
 import vekta.Player;
 import vekta.RenderLevel;
 import vekta.menu.Menu;
-import vekta.menu.dialog.Dialog;
 import vekta.menu.option.DialogOption;
 import vekta.menu.option.LootMenuOption;
 import vekta.object.SpaceObject;
+import vekta.person.Dialog;
 
 public class MessengerShip extends Ship {
 	private static final float DEF_MASS = 1000;

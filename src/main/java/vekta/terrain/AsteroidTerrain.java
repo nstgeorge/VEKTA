@@ -1,6 +1,5 @@
 package vekta.terrain;
 
-import vekta.Player;
 import vekta.menu.Menu;
 
 public class AsteroidTerrain extends Terrain {
@@ -20,7 +19,7 @@ public class AsteroidTerrain extends Terrain {
 	}
 
 	@Override
-	public void setupLandingMenu(Player player, Menu menu) {
-		
+	public void setupLandingMenu(Menu menu) {
+
 	}
 }

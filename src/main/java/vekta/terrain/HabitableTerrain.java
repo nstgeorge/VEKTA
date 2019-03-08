@@ -1,6 +1,5 @@
 package vekta.terrain;
 
-import vekta.Player;
 import vekta.menu.Menu;
 import vekta.terrain.settlement.Settlement;
 
@@ -32,7 +31,7 @@ public class HabitableTerrain extends Terrain {
 	}
 
 	@Override
-	public void setupLandingMenu(Player player, Menu menu) {
-		getSettlement().setupLandingMenu(player, menu);
+	public void setupLandingMenu(Menu menu) {
+		getSettlement().setupLandingMenu(menu);
 	}
 }

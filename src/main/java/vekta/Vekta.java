@@ -238,6 +238,10 @@ public class Vekta extends PApplet {
 		return list.get((int)random(list.size()));
 	}
 
+	public boolean chance(float chance) {
+		return chance > 0 && (chance >= 1 || v.random(1) < chance);
+	}
+
 	/**
 	 * Return the sign (-1, 0, or 1) of a number.
 	 */

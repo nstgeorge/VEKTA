@@ -1,9 +1,7 @@
 package vekta.mission;
 
-import vekta.Player;
-
 public interface MissionListener {
-	default void onStart(Mission mission, Player player) {
+	default void onStart(Mission mission) {
 	}
 
 	default void onComplete(Mission mission) {

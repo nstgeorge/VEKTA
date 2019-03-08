@@ -5,8 +5,6 @@ import processing.sound.LowPass;
 import vekta.context.PauseMenuContext;
 import vekta.context.World;
 import vekta.item.ModuleItem;
-import vekta.menu.dialog.Dialog;
-import vekta.mission.Mission;
 import vekta.module.*;
 import vekta.module.station.SensorModule;
 import vekta.module.station.SolarArrayModule;
@@ -60,6 +58,8 @@ public class Singleplayer implements World, PlayerListener {
 	private final List<SpaceObject> gravityObjects = new ArrayList<>();
 	private final List<SpaceObject> markedForDeath = new ArrayList<>();
 	private final List<SpaceObject> markedForAddition = new ArrayList<>();
+
+	private final List<Person> people = new ArrayList<>();
 
 	private PlayerOverlay overlay;
 
@@ -121,11 +121,9 @@ public class Singleplayer implements World, PlayerListener {
 		playerShip.getInventory().add(new ModuleItem(new StructuralModule(3, 1)));
 
 		// Testing out a mission sequence
-		Person person = PersonGenerator.randomPerson();
-		Mission mission = MissionGenerator.createMission(person);
-		Dialog dialog = new Dialog(Resources.generateString("dialog_visit"), person); // TODO: will generate in Player class
-		MissionGenerator.createMessenger(player, dialog)
-				.getInventory().add(ItemGenerator.randomMissionItem(mission));
+		Person person = PersonGenerator.createPerson();
+//		Mission mission = MissionGenerator.createMission(person);
+		MissionGenerator.createMessenger(player, MissionGenerator.randomInitiateDialog(player, person));
 	}
 
 	public Player getPlayer() {
@@ -318,7 +316,7 @@ public class Singleplayer implements World, PlayerListener {
 			v.stroke(0);
 			v.fill(255);
 			v.textFont(bodyFont);
-			v.text(Settings.getControlString(ControlKey.MENU_SELECT) + " TO RETRY", v.width / 2F, (v.height / 2F) + 97);
+			v.text(Settings.getControlString(ControlKey.MENU_SELECT) + " to restart", v.width / 2F, (v.height / 2F) + 97);
 		}
 	}
 
@@ -367,6 +365,10 @@ public class Singleplayer implements World, PlayerListener {
 			s.setID(nextID++);
 			markedForAddition.add(s);
 		}
+		else if(object instanceof Person && !people.contains(object)) {
+			people.add((Person)object);
+//			player.addListener((Person)object);
+		}
 		else {
 			throw new RuntimeException("Cannot add object: " + object);
 		}
@@ -377,9 +379,18 @@ public class Singleplayer implements World, PlayerListener {
 		if(object instanceof SpaceObject) {
 			markedForDeath.add((SpaceObject)object);
 		}
+		else if(object instanceof Person) {
+			people.remove(object);
+//			player.removeListener((Person)object);
+		}
 		else {
 			throw new RuntimeException("Cannot remove object: " + object);
 		}
+	}
+
+	@Override
+	public Person findRandomPerson() {
+		return v.random(people);
 	}
 
 	@Override

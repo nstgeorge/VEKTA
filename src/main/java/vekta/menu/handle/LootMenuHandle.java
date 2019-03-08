@@ -19,6 +19,10 @@ public class LootMenuHandle extends MenuHandle {
 		this.inv = inv;
 	}
 
+	public Inventory getInventory() {
+		return inv;
+	}
+
 	@Override
 	public int getSpacing() {
 		return 70;
