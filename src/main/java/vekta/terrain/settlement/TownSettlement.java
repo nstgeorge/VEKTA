@@ -1,12 +1,13 @@
 package vekta.terrain.settlement;
 
+import vekta.Faction;
 import vekta.spawner.WorldGenerator;
 import vekta.terrain.Terrain;
 
 public class TownSettlement extends Settlement {
 
-	public TownSettlement() {
-		super("town");
+	public TownSettlement(Faction faction) {
+		super(faction, "town");
 
 		add(WorldGenerator.randomMarket(2));
 	}

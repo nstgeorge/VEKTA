@@ -8,7 +8,7 @@ public class ModuleItem extends Item {
 
 	public ModuleItem(Module module) {
 		super(module.getName(), ItemType.MODULE);
-		
+
 		this.module = module;
 	}
 
@@ -18,6 +18,6 @@ public class ModuleItem extends Item {
 
 	@Override
 	public void setupActionMenu(Menu menu) {
-		getModule().onActionMenu(menu);
+		getModule().onActionMenu(this, menu);
 	}
 }

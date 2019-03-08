@@ -7,11 +7,11 @@ import vekta.spawner.WorldGenerator;
 
 import static vekta.Vekta.v;
 
-public class OutpostSettlement extends Settlement {
+public class ColonySettlement extends Settlement {
 	private final Inventory inventory = new Inventory();
 
-	public OutpostSettlement(Faction faction) {
-		super(faction, "outpost");
+	public ColonySettlement(Faction faction) {
+		super(faction, "colony");
 
 		if(v.chance(.5F)) {
 			add(WorldGenerator.randomMarket(1));
@@ -20,7 +20,7 @@ public class OutpostSettlement extends Settlement {
 
 	@Override
 	public String getTypeString() {
-		return "Outpost";
+		return "Colony";
 	}
 
 	public Inventory getInventory() {

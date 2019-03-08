@@ -1,10 +1,16 @@
 package vekta.person;
 
+import vekta.Player;
+import vekta.menu.Menu;
+import vekta.menu.handle.DialogMenuHandle;
 import vekta.menu.option.DialogOption;
 import vekta.menu.option.MenuOption;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static vekta.Vekta.applyContext;
+import static vekta.Vekta.setContext;
 
 public class Dialog {
 	private final String type;
@@ -56,5 +62,23 @@ public class Dialog {
 
 	public void add(String response, Dialog dialog) {
 		add(new DialogOption(response, dialog));
+	}
+
+	public void openMenu(Menu menu) {
+		openMenu(menu.getPlayer(), menu.getDefault());
+	}
+
+	public void openMenu(Player player, MenuOption def) {
+		Menu menu = new Menu(player, new DialogMenuHandle(def, this));
+		if(getOptions().isEmpty()) {
+			menu.addDefault();
+		}
+		else {
+			for(MenuOption option : getOptions()) {
+				menu.add(option);
+			}
+		}
+		setContext(menu);
+		applyContext();
 	}
 }

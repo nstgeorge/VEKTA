@@ -6,6 +6,9 @@ import vekta.menu.option.BackOption;
 import vekta.menu.option.BasicOption;
 import vekta.terrain.settlement.Settlement;
 
+import java.util.Collections;
+import java.util.List;
+
 import static vekta.Vekta.setContext;
 
 public class HabitableTerrain extends Terrain {
@@ -26,6 +29,11 @@ public class HabitableTerrain extends Terrain {
 		return settlement;
 	}
 
+	@Override
+	public List<Settlement> getSettlements() {
+		return Collections.singletonList(getSettlement());
+	}
+
 	public void setSettlement(Settlement settlement) {
 		if(settlement == null) {
 			throw new RuntimeException("Settlement cannot be null");
@@ -37,6 +45,16 @@ public class HabitableTerrain extends Terrain {
 	@Override
 	public String getOverview() {
 		return getSettlement().getOverview();
+	}
+
+	@Override
+	public boolean isHabitable() {
+		return true;
+	}
+
+	@Override
+	public boolean isInhabited() {
+		return getSettlement().isInhabited();
 	}
 
 	@Override

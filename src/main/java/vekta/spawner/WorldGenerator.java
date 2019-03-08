@@ -1,6 +1,7 @@
 package vekta.spawner;
 
 import processing.core.PVector;
+import vekta.Faction;
 import vekta.RenderLevel;
 import vekta.Resources;
 import vekta.object.SpaceObject;
@@ -9,10 +10,7 @@ import vekta.spawner.item.MissionItemSpawner;
 import vekta.spawner.item.ModuleItemSpawner;
 import vekta.terrain.*;
 import vekta.terrain.building.MarketBuilding;
-import vekta.terrain.settlement.AbandonedSettlement;
-import vekta.terrain.settlement.CitySettlement;
-import vekta.terrain.settlement.Settlement;
-import vekta.terrain.settlement.TownSettlement;
+import vekta.terrain.settlement.*;
 
 import java.util.Arrays;
 
@@ -74,15 +72,22 @@ public class WorldGenerator {
 	}
 
 	public static Settlement createSettlement(Planet planet) {
+		Faction faction = FactionGenerator.randomFaction();
 		float r = v.random(1);
-		if(r > .5) {
-			return new CitySettlement();
+		if(r > .7) {
+			return new CitySettlement(faction);
+		}
+		else if(r > .5) {
+			return new TownSettlement(faction);
 		}
 		else if(r > .2) {
-			return new TownSettlement();
+			return new ColonySettlement(faction);
+		}
+		else if(r > .1) {
+			return new OutpostSettlement(faction);
 		}
 		else {
-			return new AbandonedSettlement(planet.getName());
+			return new AbandonedSettlement(faction, planet.getName());
 		}
 	}
 

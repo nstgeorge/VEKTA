@@ -1,5 +1,6 @@
 package vekta.person;
 
+import vekta.Faction;
 import vekta.Player;
 import vekta.Resources;
 import vekta.mission.Mission;
@@ -14,21 +15,41 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Person implements MissionListener {
-	private final String name;
-	private final int color;
-
 	private final Map<Object, OpinionType> opinions = new HashMap<>();
 
+	private final String name;
+
+	private Faction faction;
 	private String title;
 	private LandingSite home;
 
-	public Person(String name, int color) {
+	public Person(String name, Faction faction) {
 		this.name = name;
-		this.color = color;
+
+		setFaction(faction);
+	}
+
+	public String getShortName() {
+		return name;
+	}
+
+	public String getFullName() {
+		return name + (title != null ? " " + title : "");
+	}
+
+	public Faction getFaction() {
+		return faction;
+	}
+
+	public void setFaction(Faction faction) {
+		if(faction == null) {
+			throw new RuntimeException("Faction cannot be null");
+		}
+		this.faction = faction;
 	}
 
 	public int getColor() {
-		return color;
+		return getFaction().getColor();
 	}
 
 	public void setTitle(String title) {
@@ -59,14 +80,6 @@ public class Person implements MissionListener {
 
 	public void setHome(LandingSite home) {
 		this.home = home;
-	}
-
-	public String getShortName() {
-		return name;
-	}
-
-	public String getFullName() {
-		return name + (title != null ? " " + title : "");
 	}
 
 	public Dialog createDialog(String type) {

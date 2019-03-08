@@ -1,6 +1,7 @@
 package vekta.module;
 
 import vekta.ControlKey;
+import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.object.ship.ModularShip;
 
@@ -34,7 +35,7 @@ public interface Module {
 	default void onKeyRelease(ControlKey key) {
 	}
 	
-	default void onActionMenu(Menu menu) {
+	default void onActionMenu(Item item, Menu menu) {
 	}
 
 	default void onMenu(Menu menu) {

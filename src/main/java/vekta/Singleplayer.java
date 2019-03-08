@@ -64,6 +64,7 @@ public class Singleplayer implements World, PlayerListener {
 	private final List<SpaceObject> markedForAddition = new ArrayList<>();
 
 	private final List<Person> people = new ArrayList<>();
+	private final List<Faction> factions = new ArrayList<>();
 
 	private PlayerOverlay overlay;
 
@@ -384,7 +385,9 @@ public class Singleplayer implements World, PlayerListener {
 		}
 		else if(object instanceof Person && !people.contains(object)) {
 			people.add((Person)object);
-			//			player.addListener((Person)object);
+		}
+		else if(object instanceof Faction && !factions.contains(object)) {
+			factions.add((Faction)object);
 		}
 		else {
 			throw new RuntimeException("Cannot add object: " + object);
@@ -398,7 +401,9 @@ public class Singleplayer implements World, PlayerListener {
 		}
 		else if(object instanceof Person) {
 			people.remove(object);
-			//			player.removeListener((Person)object);
+		}
+		else if(object instanceof Faction) {
+			factions.remove(object);
 		}
 		else {
 			throw new RuntimeException("Cannot remove object: " + object);
@@ -406,24 +411,38 @@ public class Singleplayer implements World, PlayerListener {
 	}
 
 	@Override
-	public Person findRandomPerson() {
-		return people.isEmpty() ? null : v.random(people);
-	}
-
-	@Override
 	@SuppressWarnings("unchecked")
-	public <T extends SpaceObject> T findRandomObject(Class<T> type) {
+	public <T> T findRandomObject(Class<T> type) {
 		List<T> candidates = new ArrayList<>();
 		// TODO: find an efficient way to DRY these loops
-		for(SpaceObject s : this.objects) {
-			if(type.isInstance(s)) {
-				candidates.add((T)s);
+		if(SpaceObject.class.isAssignableFrom(type)) {
+			for(SpaceObject s : this.objects) {
+				if(type.isInstance(s)) {
+					candidates.add((T)s);
+				}
+			}
+			for(SpaceObject s : this.markedForAddition) {
+				if(type.isInstance(s)) {
+					candidates.add((T)s);
+				}
 			}
 		}
-		for(SpaceObject s : this.markedForAddition) {
-			if(type.isInstance(s)) {
-				candidates.add((T)s);
+		else if(Person.class.isAssignableFrom(type)) {
+			for(Person p : people) {
+				if(type.isInstance(p)) {
+					candidates.add((T)p);
+				}
 			}
+		}
+		else if(Faction.class.isAssignableFrom(type)) {
+			for(Faction f : factions) {
+				if(type.isInstance(f)) {
+					candidates.add((T)f);
+				}
+			}
+		}
+		else {
+			throw new RuntimeException("Unrecognized object type: " + type.getName());
 		}
 		return candidates.isEmpty() ? null : v.random(candidates);
 	}

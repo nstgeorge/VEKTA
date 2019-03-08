@@ -1,6 +1,7 @@
 package vekta.terrain;
 
 import vekta.menu.Menu;
+import vekta.terrain.settlement.Settlement;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,9 +16,9 @@ public abstract class Terrain {
 	private final List<String> features = new ArrayList<>();
 
 	public Terrain() {
-		
+
 	}
-	
+
 	public List<String> getFeatures() {
 		return features;
 	}
@@ -36,14 +37,26 @@ public abstract class Terrain {
 	public void remove(String feature) {
 		getFeatures().remove(feature);
 	}
-	
+
 	protected boolean chance(float amount) {
 		return v.random(1) < amount;
+	}
+
+	public boolean isHabitable() {
+		return isInhabited();
+	}
+
+	public boolean isInhabited() {
+		return false;
+	}
+
+	public List<Settlement> getSettlements() {
+		return Collections.emptyList();
 	}
 
 	public abstract String getOverview();
 
 	public abstract void setupLandingMenu(Menu menu);
 
-//	public abstract setupSurveyMenu(Player player, Menu menu);
+	//	public abstract setupSurveyMenu(Player player, Menu menu);
 }

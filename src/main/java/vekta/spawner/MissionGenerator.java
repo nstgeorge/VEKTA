@@ -74,7 +74,8 @@ public class MissionGenerator {
 			LandingSite site = randomLandingSite(person);
 			float sr = v.random(1);
 			mission.add(new LandAtObjective(site.getParent()));
-			objective = new TaskObjective(Resources.generateString("task"), site.getParent());
+			String task = Resources.generateString(site.getTerrain().isInhabited() ? "settlement_task" : "planet_task");
+			objective = new TaskObjective(task, site.getParent());
 		}
 		else if(r > .4) {
 			Person target = randomMissionPerson(person);
@@ -113,7 +114,7 @@ public class MissionGenerator {
 	}
 
 	public static Person randomMissionPerson(Person exclude) {
-		Person person = getWorld().findRandomPerson();
+		Person person = getWorld().findRandomObject(Person.class);
 		if(person == null || person == exclude || v.chance(.1F)) {
 			person = PersonGenerator.createPerson();
 		}
@@ -168,9 +169,10 @@ public class MissionGenerator {
 				setContext(sub);
 			}));
 		}
-		Dialog greeting = person.createDialog("greeting");
-		greeting.add(dialog);
-		return greeting;
+//		Dialog greeting = person.createDialog("greeting");
+//		greeting.add(dialog);
+//		return greeting;
+		return dialog;
 	}
 
 	public static Dialog randomConfrontDialog(Person person, Person sender, Mission mission) {

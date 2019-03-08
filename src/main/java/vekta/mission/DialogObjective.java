@@ -47,7 +47,7 @@ public class DialogObjective extends Objective {
 		if(menu.getHandle() instanceof DialogMenuHandle) {
 			Dialog dialog = ((DialogMenuHandle)menu.getHandle()).getDialog();
 			if(dialog.getPerson() == getDialog().getPerson()) {
-				menu.setAuto(new DialogOption("(" + getMission().getName() + ")", dialog));
+				menu.setAuto(new DialogOption(getMission().getName(), dialog));
 			}
 		}
 	}

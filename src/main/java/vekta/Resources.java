@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
-import static vekta.Vekta.concat;
 import static vekta.Vekta.v;
 
 public class Resources {
@@ -39,7 +38,7 @@ public class Resources {
 	public static PShape logo; // TODO: generalize SVG file loading
 
 	public static void init() {
-		
+
 		loadResources(Resources::addStrings, "txt");
 		loadResources(Resources::addShape, "obj", "svg");
 		loadResources(Resources::addSound, "wav", "mp3");
@@ -95,12 +94,8 @@ public class Resources {
 		return array;
 	}
 
-	public static String[] getStrings(String key, String... extra) {
-		return concat(getStrings(key), extra);
-	}
-
-	public static String generateString(String type, String... extra) {
-		String string = v.random(getStrings(type, extra));
+	public static String generateString(String type) {
+		String string = v.random(getStrings(type));
 		int openIndex, closeIndex;
 		while((openIndex = string.indexOf(REF_BEFORE)) != -1 && (closeIndex = string.indexOf(REF_AFTER)) > openIndex) {
 			string = string.substring(0, openIndex)

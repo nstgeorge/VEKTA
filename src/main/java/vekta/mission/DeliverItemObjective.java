@@ -8,8 +8,6 @@ import vekta.object.SpaceObject;
 import vekta.person.Dialog;
 import vekta.person.Person;
 
-import static vekta.Vekta.setContext;
-
 public class DeliverItemObjective extends Objective {
 	private final Item item;
 	private final Person person;
@@ -46,9 +44,7 @@ public class DeliverItemObjective extends Objective {
 				menu.add(new BasicOption("Here's the " + getItem().getName() + ".", m -> {
 					m.getPlayer().getInventory().remove(getItem());
 					complete();
-					Dialog newDialog = dialog.getPerson().createDialog("receive");
-					Menu sub = new Menu(m.getPlayer(), new DialogMenuHandle(m.getDefault(), newDialog));
-					setContext(sub);
+					dialog.getPerson().createDialog("receive").openMenu(m);
 				}));
 			}
 		}

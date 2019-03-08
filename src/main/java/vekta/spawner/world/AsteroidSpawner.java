@@ -5,6 +5,7 @@ import vekta.RenderLevel;
 import vekta.Resources;
 import vekta.object.SpaceObject;
 import vekta.object.planet.Asteroid;
+import vekta.spawner.FactionGenerator;
 import vekta.spawner.WorldGenerator;
 import vekta.terrain.AsteroidTerrain;
 import vekta.terrain.HabitableTerrain;
@@ -44,7 +45,7 @@ public class AsteroidSpawner implements WorldGenerator.WorldSpawner {
 			terrain = new AsteroidTerrain();
 		}
 		else {
-			terrain = new HabitableTerrain(new OutpostSettlement());
+			terrain = new HabitableTerrain(new OutpostSettlement(FactionGenerator.randomFaction()));
 		}
 		Asteroid asteroid = new Asteroid(
 				Resources.generateString("asteroid"),

@@ -2,6 +2,7 @@ package vekta.module.station;
 
 import processing.core.PVector;
 import vekta.RenderLevel;
+import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.menu.option.DeployOption;
 import vekta.module.Module;
@@ -66,10 +67,10 @@ public class StationCoreModule extends ShipModule {
 	}
 
 	@Override
-	public void onActionMenu(Menu menu) {
+	public void onActionMenu(Item item, Menu menu) {
 		ModularShip ship = menu.getPlayer().getShip();
-		menu.add(new DeployOption("New Station", menu.getPlayer(), () -> new SpaceStation(
-				getName() + " Station",
+		menu.add(new DeployOption("New Station", menu.getPlayer(), item, () -> new SpaceStation(
+				getShip().getName() + " Station",
 				this,
 				ship.getPosition().add(ship.getHeading().setMag(ship.getRadius() * 2)),
 				ship.getVelocity(),

@@ -1,5 +1,6 @@
 package vekta.terrain.settlement;
 
+import vekta.Faction;
 import vekta.Resources;
 import vekta.menu.Menu;
 import vekta.terrain.Terrain;
@@ -14,16 +15,29 @@ public abstract class Settlement implements SettlementPart {
 		return parts;
 	}
 
+	private Faction faction;
 	private final String name;
 	private final String overview;
 
-	public Settlement(String key) {
-		this(Resources.generateString(key), Resources.generateString("overview_" + key));
+	public Settlement(Faction faction, String key) {
+		this(faction, Resources.generateString(key), Resources.generateString("overview_" + key));
 	}
 
-	public Settlement(String name, String overview) {
+	public Settlement(Faction faction, String name, String overview) {
+		this.faction = faction;
 		this.name = name;
 		this.overview = overview;
+	}
+
+	public Faction getFaction() {
+		return faction;
+	}
+
+	public void setFaction(Faction faction) {
+		if(faction == null) {
+			throw new RuntimeException("Settlement faction cannot be null");
+		}
+		this.faction = faction;
 	}
 
 	@Override
@@ -33,6 +47,10 @@ public abstract class Settlement implements SettlementPart {
 
 	public String getOverview() {
 		return overview;
+	}
+
+	public boolean isInhabited() {
+		return true;
 	}
 
 	public void add(SettlementPart part) {

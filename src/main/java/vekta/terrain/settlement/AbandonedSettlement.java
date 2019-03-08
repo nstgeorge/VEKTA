@@ -1,5 +1,6 @@
 package vekta.terrain.settlement;
 
+import vekta.Faction;
 import vekta.Resources;
 import vekta.item.Inventory;
 import vekta.menu.Menu;
@@ -9,8 +10,8 @@ import vekta.spawner.ItemGenerator;
 public class AbandonedSettlement extends Settlement {
 	private final Inventory inventory = new Inventory();
 
-	public AbandonedSettlement(String prevName) {
-		super(prevName + " Ruins", Resources.generateString("overview_ruins"));
+	public AbandonedSettlement(Faction faction, String prevName) {
+		super(faction, prevName + " Ruins", Resources.generateString("overview_ruins"));
 
 		ItemGenerator.addLoot(getInventory(), 1);
 	}
@@ -22,6 +23,11 @@ public class AbandonedSettlement extends Settlement {
 
 	public Inventory getInventory() {
 		return inventory;
+	}
+
+	@Override
+	public boolean isInhabited() {
+		return false;
 	}
 
 	@Override

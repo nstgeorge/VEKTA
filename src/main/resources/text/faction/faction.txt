@@ -1,0 +1,7 @@
+Pilgrims of {star}
+Voyagers of {star}
+{star} Occupation
+{settlement} Occupation
+{star} Empire
+{settlement} Empire
+{settlement}

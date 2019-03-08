@@ -72,7 +72,7 @@ public class BatteryModule extends ShipModule {
 			LandingSite site = ((LandingMenuHandle)menu.getHandle()).getSite();
 
 			if(site.getTerrain().hasFeature("Inhabited") && getCharge() <= getCapacity() * .9F) {
-				menu.add(new RechargeOption(getShip()));
+				menu.add(new RechargeOption(getShip(), .1F));
 			}
 		}
 
