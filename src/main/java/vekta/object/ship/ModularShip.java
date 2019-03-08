@@ -135,7 +135,6 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 		setEnergy(getMaxEnergy());
 	}
 
-
 	@Override
 	public List<Module> getModules() {
 		return modules;
@@ -261,6 +260,9 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 		Menu menu = new Menu(getController(), new ObjectMenuHandle(new BackOption(getWorld()), this));
 		menu.add(new LoadoutMenuOption(this));
 		menu.add(new MissionMenuOption(getController()));
+		for(Item item : getInventory()){
+			item.setupActionMenu(menu);
+		}
 		menu.addDefault();
 		setContext(menu);
 

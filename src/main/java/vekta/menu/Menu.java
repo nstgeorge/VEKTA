@@ -78,7 +78,13 @@ public class Menu implements Context {
 	}
 
 	public boolean remove(MenuOption item) {
-		return options.remove(item);
+		if(options.remove(item)) {
+			if(size() == 0) {
+				close();
+			}
+			return true;
+		}
+		return false;
 	}
 
 	public void scroll(int n) {
@@ -95,7 +101,7 @@ public class Menu implements Context {
 			this.autoOption = null;
 			hasAutoOption = true;
 		}
-		
+
 		if(!hasAutoOption) {
 			autoOption = option;
 		}

@@ -27,15 +27,10 @@ public class SettlementMenuHandle extends MenuHandle {
 		return v.width * 2 / 3;
 	}
 
-//	@Override
-//	public int getButtonY(int i) {
-//		return super.getButtonY(i - 2);
-//	}
-
-//	@Override
-//	public int getSpacing() {
-//		return 70;
-//	}
+	@Override
+	public int getButtonY(int i) {
+		return super.getButtonY(i - 1);
+	}
 
 	@Override
 	public void render(Menu menu) {

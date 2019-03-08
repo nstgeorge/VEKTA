@@ -1,7 +1,7 @@
 package vekta.module;
 
 public enum ModuleType {
-	HULL,
+	CORE,
 	BATTERY,
 	ENGINE,
 	RCS,

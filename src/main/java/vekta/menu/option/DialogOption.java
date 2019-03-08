@@ -22,6 +22,11 @@ public class DialogOption implements MenuOption {
 	}
 
 	@Override
+	public int getColor() {
+		return dialog.getPerson().getColor();// Temp?
+	}
+
+	@Override
 	public void select(Menu menu) {
 		Menu sub = new Menu(menu.getPlayer(), new DialogMenuHandle(menu.getDefault(), dialog));
 		if(dialog.getOptions().isEmpty()) {

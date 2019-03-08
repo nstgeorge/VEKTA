@@ -100,12 +100,19 @@ public class WorldGenerator {
 	}
 
 	public static void orbit(SpaceObject parent, SpaceObject child, float variation) {
+		PVector velocity = getOrbitVelocity(parent, child);
+		if(variation > 0) {
+			velocity.sub(parent.getVelocity())
+					.rotate(v.random(-QUARTER_PI, QUARTER_PI) * variation)
+					.add(parent.getVelocity());
+		}
+		child.setVelocity(velocity);
+	}
+
+	public static PVector getOrbitVelocity(SpaceObject parent, SpaceObject child) {
 		PVector offset = parent.getPosition().sub(child.getPosition());
 		float speed = sqrt(G * parent.getMass() / offset.mag());
-		if(variation > 0) {
-			offset.rotate(v.random(-QUARTER_PI, QUARTER_PI) * variation);
-		}
-		child.setVelocity(offset.rotate(HALF_PI).setMag(speed).add(parent.getVelocity()));
+		return offset.rotate(HALF_PI).setMag(speed).add(parent.getVelocity());
 	}
 
 	public static PVector randomSpawnPosition(RenderLevel level, PVector center) {

@@ -108,7 +108,7 @@ public class Singleplayer implements World, PlayerListener {
 		);
 		SpaceStation.Component core = station.getCore();
 		SpaceStation.Component rcs = core.attach(SpaceStation.Direction.UP, new RCSModule(1));
-		SpaceStation.Component battery = core.attach(SpaceStation.Direction.RIGHT, new BatteryModule(1));
+		SpaceStation.Component orbiter = core.attach(SpaceStation.Direction.RIGHT, new OrbitModule(1));
 		SpaceStation.Component struct = core.attach(SpaceStation.Direction.LEFT, new StructuralModule(10, 1));
 		SpaceStation.Component struct2 = core.attach(SpaceStation.Direction.DOWN, new StructuralModule(10, 1));
 		SpaceStation.Component panel = struct.attach(SpaceStation.Direction.LEFT, new SolarArrayModule(1));
@@ -124,6 +124,8 @@ public class Singleplayer implements World, PlayerListener {
 		playerShip.addModule(new HyperdriveModule(.2F));
 		playerShip.getInventory().add(new ModuleItem(new TractorBeamModule(1)));
 		playerShip.getInventory().add(new ModuleItem(new StructuralModule(3, 1)));
+		playerShip.getInventory().add(new ModuleItem(new StationCoreModule(1)));
+		playerShip.getInventory().add(new ModuleItem(new OrbitModule(1)));
 
 		// Testing out a mission sequence
 		Person person = PersonGenerator.createPerson();

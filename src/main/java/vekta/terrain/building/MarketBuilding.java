@@ -11,6 +11,8 @@ import vekta.terrain.settlement.SettlementPart;
 import java.util.HashMap;
 import java.util.Map;
 
+import static vekta.Vekta.v;
+
 public class MarketBuilding implements SettlementPart {
 	private static final float ITEM_MARKUP = 1.5F; // Price modifier after buying/selling to a landing terrain
 
@@ -25,6 +27,7 @@ public class MarketBuilding implements SettlementPart {
 		this.type = type;
 		this.spawner = spawner;
 
+		inventory.add((int)(50 * (v.random(shopTier) + 1)));
 		ItemGenerator.addLoot(getInventory(), shopTier, spawner);
 	}
 

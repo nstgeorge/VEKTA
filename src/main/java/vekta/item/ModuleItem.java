@@ -1,5 +1,6 @@
 package vekta.item;
 
+import vekta.menu.Menu;
 import vekta.module.Module;
 
 public class ModuleItem extends Item {
@@ -13,5 +14,10 @@ public class ModuleItem extends Item {
 
 	public Module getModule() {
 		return module;
+	}
+
+	@Override
+	public void setupActionMenu(Menu menu) {
+		getModule().onActionMenu(menu);
 	}
 }

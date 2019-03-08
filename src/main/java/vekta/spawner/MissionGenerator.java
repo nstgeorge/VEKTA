@@ -17,6 +17,7 @@ import vekta.object.ship.MessengerShip;
 import vekta.person.Dialog;
 import vekta.person.OpinionType;
 import vekta.person.Person;
+import vekta.spawner.item.MissionItemSpawner;
 import vekta.spawner.world.AsteroidSpawner;
 import vekta.terrain.LandingSite;
 
@@ -152,6 +153,11 @@ public class MissionGenerator {
 			dialog = person.createDialog("offer");
 			dialog.add(new ItemTradeOption(player.getInventory(), ItemGenerator.randomItem(), 0));
 			person.setOpinion(player, OpinionType.FRIENDLY);
+		}
+		else if(v.chance(.3F)) {
+			dialog = person.createDialog("offer");
+			Mission mission = MissionGenerator.createMission(person);
+			dialog.add(new ItemTradeOption(player.getInventory(), MissionItemSpawner.randomMissionItem(mission), 0));
 		}
 		else {
 			dialog = person.createDialog("request");

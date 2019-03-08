@@ -41,7 +41,7 @@ public class Resources {
 	public static void init() {
 		
 		loadResources(Resources::addStrings, "txt");
-		loadResources(Resources::addShape, "obj");
+		loadResources(Resources::addShape, "obj", "svg");
 		loadResources(Resources::addSound, "wav", "mp3");
 
 		for(String key : STRINGS.keySet()) {

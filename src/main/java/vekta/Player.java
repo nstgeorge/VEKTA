@@ -35,6 +35,7 @@ public final class Player {
 				}
 				currentShip = ship;
 				ship.setController(Player.this);
+				ship.setColor(getColor());
 			}
 
 			@Override

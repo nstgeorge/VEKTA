@@ -18,6 +18,10 @@ public class ObjectMenuHandle extends MenuHandle {
 		this.target = target;
 	}
 
+	public SpaceObject getSpaceObject() {
+		return target;
+	}
+
 	@Override
 	public void render(Menu menu) {
 		super.render(menu);

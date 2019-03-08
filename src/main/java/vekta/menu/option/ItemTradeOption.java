@@ -4,6 +4,8 @@ import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;
 
+import static vekta.Vekta.v;
+
 public class ItemTradeOption implements MenuOption {
 	private final boolean buying;
 	private final Inventory you, them;
@@ -38,7 +40,7 @@ public class ItemTradeOption implements MenuOption {
 
 	@Override
 	public int getColor() {
-		return getItem().getType().getColor();
+		return isEnabled() ? getItem().getType().getColor() : v.color(100);
 	}
 
 	public Item getItem() {
@@ -55,6 +57,10 @@ public class ItemTradeOption implements MenuOption {
 
 	@Override
 	public boolean isEnabled(Menu menu) {
+		return isEnabled();
+	}
+
+	public boolean isEnabled() {
 		return getTo().has(price) && getFrom().has(item);
 	}
 

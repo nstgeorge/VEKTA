@@ -19,7 +19,7 @@ public abstract class SpaceObject {
 
 	protected final PVector position = new PVector();
 	protected final PVector velocity = new PVector();
-	private final int color;
+	private int color;
 
 	private float temperature;
 
@@ -66,7 +66,11 @@ public abstract class SpaceObject {
 	public int getColor() {
 		return color;
 	}
-	
+
+	public void setColor(int color) {
+		this.color = color;
+	}
+
 	public abstract RenderLevel getRenderLevel();
 
 	public abstract float getSpecificHeat();
@@ -291,10 +295,20 @@ public abstract class SpaceObject {
 		onUpdate(level);
 		applyVelocity(velocity);
 	}
-	
+
 	public void updateTargets() {
 	}
 
 	public void onUpdate(RenderLevel level) {
+	}
+
+	// Convenience methodsss
+
+	public PVector relativePosition(SpaceObject other) {
+		return other.getPosition().sub(getPosition());
+	}
+
+	public PVector relativeVelocity(SpaceObject other) {
+		return other.getVelocity().sub(getVelocity());
 	}
 }  
