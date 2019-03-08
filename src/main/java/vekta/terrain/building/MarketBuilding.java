@@ -1,6 +1,6 @@
 package vekta.terrain.building;
 
-import vekta.ItemGenerator;
+import vekta.spawner.ItemGenerator;
 import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;

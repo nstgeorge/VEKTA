@@ -1,0 +1,4 @@
+{planet}
+{planet} Major
+{planet} Minor
+New {planet}

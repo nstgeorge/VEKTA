@@ -9,6 +9,10 @@ import vekta.object.ship.SpaceStation;
 public class StructuralModule extends ShipModule {
 	private final int width, height;
 
+	public StructuralModule() {
+		this(1, 1);
+	}
+
 	public StructuralModule(int width, int height) {
 		this.width = width;
 		this.height = height;

@@ -3,10 +3,8 @@ package vekta.object.planet;
 import processing.core.PVector;
 import vekta.Counter;
 import vekta.RenderLevel;
-import vekta.WorldGenerator;
+import vekta.spawner.WorldGenerator;
 import vekta.terrain.Terrain;
-
-import static vekta.Vekta.getWorld;
 
 public class Moon extends TerrestrialPlanet {
 
@@ -15,8 +13,8 @@ public class Moon extends TerrestrialPlanet {
 
 	private final Counter orbitCt = new Counter(10).randomize();
 
-	private final PVector lastParentPosition = new PVector();
-	private float lastTimeScale = 1;
+//	private final PVector lastParentPosition = new PVector();
+//	private float lastTimeScale = 1;
 
 	public Moon(Planet parent, String name, float mass, float density, Terrain terrain, PVector position, PVector velocity, int color) {
 		super(name, mass, density, terrain, position, velocity, color);
@@ -49,32 +47,36 @@ public class Moon extends TerrestrialPlanet {
 		}
 	}
 
-	@Override
-	public void draw(RenderLevel level, float r) {
-		if(RenderLevel.AROUND_PLANET.isVisibleTo(level)) {
-			super.draw(level, r);
-		}
-	}
-	
-	@Override
-	public void updateTrail() {
-		super.updateTrail();
-
-		float timeScale = getWorld().getTimeScale();
-		PVector parentPos = getParent().getPosition();
-		PVector offset = parentPos.copy().sub(lastParentPosition).mult(timeScale / lastTimeScale);
-		for(PVector pos : trail) {
-			if(pos != null) {
-				pos.add(offset);
-			}
-		}
-		lastParentPosition.set(parentPos);
-		lastTimeScale = timeScale;
-	}
+//	@Override
+//	public void draw(RenderLevel level, float r) {
+//		if(RenderLevel.PLANET.isVisibleTo(level)) {
+//			super.draw(level, r);
+//		}
+//	}
 
 	@Override
-	public void updateOrigin(PVector offset) {
-		super.updateOrigin(offset);
-		lastParentPosition.add(offset);
+	public int getTrailLength() {
+		return 1;
 	}
+
+//	@Override
+//	public void updateTrail() {
+//		super.updateTrail();
+//
+//		float timeScale = getWorld().getTimeScale();
+//		PVector parentPos = getParent().getPosition();
+//		PVector offset = parentPos.copy().sub(lastParentPosition).mult(timeScale / lastTimeScale);
+//		for(PVector pos : trail) {
+//			if(pos != null) {
+//				pos.add(offset);
+//			}
+//		}
+//		lastParentPosition.set(parentPos);
+//		lastTimeScale = timeScale;
+//	}
+//
+//	@Override
+//	public void updateOrigin(PVector offset) {
+//		lastParentPosition.add(offset);
+//	}
 }

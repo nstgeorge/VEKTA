@@ -1,6 +1,6 @@
 package vekta.terrain.settlement;
 
-import vekta.ItemGenerator;
+import vekta.spawner.ItemGenerator;
 import vekta.item.Inventory;
 import vekta.menu.Menu;
 import vekta.menu.option.LootMenuOption;

@@ -72,7 +72,7 @@ public class TelemetryOverlay implements Overlay {
 			if(target == null) {
 				v.fill(100, 100, 100);
 				v.stroke(UI_COLOR);
-				targetString = "PLANET [1], AROUND_SHIP [2], ASTEROID [3]";
+				targetString = "PLANET [1], SHIP [2], ASTEROID [3]" + (player.getCurrentMission() != null ? ", OBJECTIVE [4]" : "");
 			}
 			else {
 				float mass = (float)round(target.getMass() * 1000) / 1000;

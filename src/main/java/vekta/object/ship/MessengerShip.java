@@ -52,7 +52,7 @@ public class MessengerShip extends Ship {
 
 	@Override
 	public RenderLevel getRenderLevel() {
-		return RenderLevel.AROUND_PLANET; // Increase despawn radius compared to other ships
+		return RenderLevel.PLANET; // Increase despawn radius compared to other ships
 	}
 
 	@Override
@@ -65,19 +65,19 @@ public class MessengerShip extends Ship {
 			getPositionReference().add(offset.setMag(offset.mag() * getSpeed() * APPROACH_FACTOR));
 		}
 		else {
-			addVelocity(offset.setMag(-getSpeed()));
+			accelerate(-1, offset);
 		}
 	}
 
 	@Override
 	public boolean isDockable(SpaceObject s) {
-		return s == getTargetShip();
+		return !delivered && s == getTargetShip();
 	}
 
 	@Override
 	public void setupDockingMenu(Player player, Menu menu) {
 		delivered = true;
-		
+
 		menu.setAuto(new DialogOption("Talk to Pilot", getDialog()));
 		// Back and remove
 		if(getInventory().size() > 0) {

@@ -1,70 +1,94 @@
 package vekta;
 
+import org.reflections.Reflections;
+import org.reflections.scanners.ResourcesScanner;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
+import org.reflections.util.FilterBuilder;
 import processing.core.PShape;
 import processing.sound.SoundFile;
 
-import java.util.*;
+import java.lang.reflect.Array;
+import java.lang.reflect.Modifier;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.regex.Pattern;
 
-import static processing.core.PApplet.println;
 import static vekta.Vekta.concat;
 import static vekta.Vekta.v;
 
 public class Resources {
-	private static final Map<String, String[]> STRING_ARRAYS = new HashMap<>();
+	private static final String PACKAGE = "vekta";
+	private static final Reflections REFLECTIONS = new Reflections(new ConfigurationBuilder()
+			.setUrls(ClasspathHelper.forPackage(PACKAGE))
+			.setScanners(
+					new SubTypesScanner().filterResultsBy(new FilterBuilder().includePackage(PACKAGE)),
+					new ResourcesScanner()));
+
+	private static final Map<String, String[]> STRINGS = new HashMap<>();
 	private static final Map<String, SoundFile> SOUNDS = new HashMap<>();
+
+	private static final char REF_BEFORE = '{';
+	private static final char REF_AFTER = '}';
 
 	private static SoundFile currentMusic;
 
 	public static PShape logo; // TODO: generalize SVG file loading
-	
-	private static final Set<String> preload = new HashSet<>();
 
 	public static void init() {
-		preload.addAll(Arrays.asList(v.loadStrings("preload.txt")));
-		for(String path : preload) {
-			if(!path.isEmpty()) {
-				int dotIndex = path.lastIndexOf(".");
-				String name = path.substring(path.indexOf("/") + 1, dotIndex);
-				String ext = path.substring(dotIndex + 1);
-				if("wav".equals(ext)) {
-					addSound(path, name);
-				}
-				if("txt".equals(ext)) {
-					addStrings(path, name);
-				}
-			}
+
+		loadResources(Resources::addSound, "wav", "mp3");
+		loadResources(Resources::addStrings, "txt");
+
+		for(String key : STRINGS.keySet()) {
+			checkStrings(key, STRINGS.get(key));
 		}
 
 		logo = v.loadShape("VEKTA.svg");
 	}
 
-	private static String[] addStrings(String path, String key) {
-		checkPreload(path);
-		String[] strings = v.loadStrings(path);
-		STRING_ARRAYS.put(key, strings);
-		return strings;
-	}
-
-	private static SoundFile addSound(String path, String key) {
-		checkPreload(path);
-		SoundFile sound = new SoundFile(v, path);
-		SOUNDS.put(key, sound);
-		return sound;
-	}
-	
-	private static void checkPreload(String path) {
-		if(!preload.contains(path)) {
-			// TODO: do this automatically
-			println(":: Resource should be added to preload.txt: " + path);
+	private static void loadResources(BiConsumer<String, String> load, String... ext) {
+		for(String path : REFLECTIONS.getResources(Pattern.compile(".+\\.(" + String.join("|", ext) + ")$"))) {
+			load.accept(path, getResourceName(path));
 		}
 	}
 
+	private static String getResourceName(String path) {
+		return path.substring(path.lastIndexOf("/") + 1, path.lastIndexOf("."));
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T[] getSubclassInstances(Class<T> type) {
+		return REFLECTIONS.getSubTypesOf(type).stream()
+				.filter(t -> !t.isMemberClass() && !Modifier.isAbstract(t.getModifiers()))
+				.map(t -> {
+					try {
+						return t.newInstance();
+					}
+					catch(Exception e) {
+						throw new RuntimeException("Failed to instantiate subclass: " + t.getName(), e);
+					}
+				})
+				.toArray(i -> (T[])Array.newInstance(type, i));
+	}
+
+	private static void addStrings(String path, String key) {
+		String[] strings = v.loadStrings(path);
+		if(strings.length == 0) {
+			throw new RuntimeException("No strings defined in file: " + path);
+		}
+		if(STRINGS.containsKey(key)) {
+			throw new RuntimeException("Conflicting string arrays for key: `" + key + "`");
+		}
+		STRINGS.put(key, strings);
+	}
+
 	public static String[] getStrings(String key) {
-		String[] array = STRING_ARRAYS.get(key);
+		String[] array = STRINGS.get(key);
 		if(array == null) {
-			// Load default string file
-			array = addStrings("text/" + key + ".txt", key);
-			//			throw new RuntimeException("No string array with key: " + key);
+			throw new RuntimeException("No string array exists with key: " + key);
 		}
 		return array;
 	}
@@ -76,7 +100,7 @@ public class Resources {
 	public static String generateString(String type, String... extra) {
 		String string = v.random(getStrings(type, extra));
 		int openIndex, closeIndex;
-		while((openIndex = string.indexOf("{")) != -1 && (closeIndex = string.indexOf("}")) > openIndex) {
+		while((openIndex = string.indexOf(REF_BEFORE)) != -1 && (closeIndex = string.indexOf(REF_AFTER)) > openIndex) {
 			string = string.substring(0, openIndex)
 					+ generateString(string.substring(openIndex + 1, closeIndex))
 					+ string.substring(closeIndex + 1);
@@ -84,10 +108,31 @@ public class Resources {
 		return string;
 	}
 
+	public static void checkStrings(String key, String[] strings) {
+		for(String string : strings) {
+			int openIndex, closeIndex;
+			while((openIndex = string.indexOf(REF_BEFORE)) != -1 && (closeIndex = string.indexOf(REF_AFTER)) > openIndex) {
+				String ref = string.substring(openIndex + 1, closeIndex);
+				if(!STRINGS.containsKey(ref)) {
+					throw new RuntimeException("Missing string type: `" + key + "` (found in `" + key + "`)");
+				}
+				string = string.substring(0, openIndex) + string.substring(closeIndex + 1);
+			}
+		}
+	}
+
+	private static void addSound(String path, String key) {
+		SoundFile sound = new SoundFile(v, path);
+		if(STRINGS.containsKey(key)) {
+			throw new RuntimeException("Conflicting sounds for key: `" + key + "`");
+		}
+		SOUNDS.put(key, sound);
+	}
+
 	public static SoundFile getSound(String key) {
 		SoundFile sound = SOUNDS.get(key);
 		if(sound == null) {
-			sound = addSound("sounds" + key + ".wav", key);
+			throw new RuntimeException("No sound exists with key: " + key);
 		}
 		return sound;
 	}

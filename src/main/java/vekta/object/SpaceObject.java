@@ -2,9 +2,8 @@ package vekta.object;
 
 import processing.core.PVector;
 import vekta.RenderLevel;
-import vekta.WorldGenerator;
+import vekta.spawner.WorldGenerator;
 
-import java.util.Collection;
 import java.util.List;
 
 import static vekta.Vekta.*;
@@ -292,11 +291,10 @@ public abstract class SpaceObject {
 		onUpdate(level);
 		applyVelocity(velocity);
 	}
-
-	public void onUpdate(RenderLevel level) {
+	
+	public void updateTargets() {
 	}
 
-	public Collection<Targeter> getTargeters() {
-		return null;
+	public void onUpdate(RenderLevel level) {
 	}
 }  

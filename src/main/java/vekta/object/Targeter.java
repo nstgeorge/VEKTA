@@ -1,6 +1,8 @@
 package vekta.object;
 
 public interface Targeter {
+	SpaceObject getSpaceObject();
+	
 	SpaceObject getTarget();
 
 	void setTarget(SpaceObject target);

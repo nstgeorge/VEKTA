@@ -1,13 +1,14 @@
 package vekta.menu.option;
 
-import vekta.ItemGenerator;
+import vekta.spawner.item.OreItemSpawner;
 import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.menu.handle.LootMenuHandle;
 import vekta.terrain.LandingSite;
 
-import static vekta.Vekta.*;
+import static vekta.Vekta.setContext;
+import static vekta.Vekta.v;
 
 public class ExtractMenuOption implements MenuOption {
 	private final LandingSite site;
@@ -31,7 +32,7 @@ public class ExtractMenuOption implements MenuOption {
 		Menu sub = new Menu(menu.getPlayer(), new LootMenuHandle(new BackOption(menu), loot));
 		int ct = (int)v.random(amount) + 1;
 		for(int i = 0; i < ct; i++) {
-			Item item = ItemGenerator.randomOre(site.getParent().getName());
+			Item item = OreItemSpawner.randomOre(site.getParent().getName());
 			loot.add(item);
 			sub.add(new ItemTradeOption(true, inv, loot, item));
 		}

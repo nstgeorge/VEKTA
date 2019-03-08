@@ -2,15 +2,19 @@ package vekta.module;
 
 import processing.core.PVector;
 import vekta.object.HomingProjectile;
-import vekta.object.ship.ModularShip;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
+import vekta.object.ship.ModularShip;
 
 import static vekta.Vekta.addObject;
 import static vekta.Vekta.getWorld;
 
 public class TorpedoModule extends WeaponModule {
 	private final float speed;
+
+	public TorpedoModule() {
+		this(1);
+	}
 
 	public TorpedoModule(float speed) {
 		this.speed = speed;

@@ -46,7 +46,7 @@ public class Projectile extends SpaceObject {
 
 	@Override
 	public RenderLevel getRenderLevel() {
-		return RenderLevel.AROUND_SHIP;
+		return RenderLevel.SHIP;
 	}
 
 	@Override

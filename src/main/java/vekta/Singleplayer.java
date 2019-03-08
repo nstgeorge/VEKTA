@@ -17,9 +17,12 @@ import vekta.object.ship.PlayerShip;
 import vekta.object.ship.SpaceStation;
 import vekta.overlay.singleplayer.PlayerOverlay;
 import vekta.person.Person;
+import vekta.spawner.MissionGenerator;
+import vekta.spawner.PersonGenerator;
+import vekta.spawner.WorldGenerator;
+import vekta.spawner.world.StarSystemSpawner;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -50,6 +53,7 @@ public class Singleplayer implements World, PlayerListener {
 	private float zoom = 1; // Zoom factor
 	private float smoothZoom = zoom; // Smooth zoom factor (converges toward `zoom`)
 	private float timeScale = 1; // Camera time scale factor
+	private RenderLevel prevLevel = RenderLevel.PARTICLE;
 
 	private Counter targetCt = new Counter(30); // Counter for periodically updating Targeter instances
 	private Counter spawnCt = new Counter(100); // Counter for periodically cleaning/spawning objects
@@ -70,7 +74,7 @@ public class Singleplayer implements World, PlayerListener {
 
 		Resources.setMusic("atmosphere");
 
-		WorldGenerator.createSystem(PVector.random2D().mult(1 * AU_DISTANCE));
+		StarSystemSpawner.createSystem(PVector.random2D().mult(3 * AU_DISTANCE));
 
 		player = new Player(UI_COLOR);
 		player.addListener(this);
@@ -83,8 +87,10 @@ public class Singleplayer implements World, PlayerListener {
 				v.color(0, 255, 0)
 		);
 		playerShip.getInventory().add(50); // Starting money
-		addObject(playerShip);
 		playerShip.setController(player);
+		addObject(playerShip);
+
+		//		WorldGenerator.orbit(findOrbitObject(playerShip), playerShip,0);
 
 		// Configure UI overlay
 		overlay = new PlayerOverlay(player);
@@ -98,8 +104,7 @@ public class Singleplayer implements World, PlayerListener {
 				// PVector.random2D(), // Heading
 				new PVector(100, 100), // Position
 				new PVector(),    // Velocity
-				//				playerShip.getColor()
-				WorldGenerator.randomPlanetColor()
+				playerShip.getColor()
 		);
 		SpaceStation.Component core = station.getCore();
 		SpaceStation.Component rcs = core.attach(SpaceStation.Direction.UP, new RCSModule(1));
@@ -122,8 +127,8 @@ public class Singleplayer implements World, PlayerListener {
 
 		// Testing out a mission sequence
 		Person person = PersonGenerator.createPerson();
-//		Mission mission = MissionGenerator.createMission(person);
-		MissionGenerator.createMessenger(player, MissionGenerator.randomInitiateDialog(player, person));
+		//		Mission mission = MissionGenerator.createMission(person);
+		MissionGenerator.createMessenger(player, MissionGenerator.randomApproachDialog(player, person));
 	}
 
 	public Player getPlayer() {
@@ -212,14 +217,7 @@ public class Singleplayer implements World, PlayerListener {
 
 			// Run on targeting loop
 			if(targeting) {
-				Collection<Targeter> ts = s.getTargeters();
-				if(ts != null) {
-					for(Targeter t : ts) {
-						if(t.shouldUpdateTarget()) {
-							updateTargeters(s);
-						}
-					}
-				}
+				s.updateTargets();
 			}
 
 			if(cleanup) {
@@ -278,12 +276,20 @@ public class Singleplayer implements World, PlayerListener {
 		gravityObjects.removeAll(markedForDeath);
 		markedForDeath.clear();
 
-		if(cleanup && !playerShip.isDestroyed() && !RenderLevel.AROUND_SHIP.isVisibleTo(level)) {
+		if(RenderLevel.SHIP.isVisibleTo(level) && !playerShip.isDestroyed()) {
 			// Center around zero for improved floating-point precision
 			PVector newOrigin = playerShip.getPosition().mult(-1);
 			for(SpaceObject s : objects) {
 				s.updateOrigin(newOrigin);
 			}
+		}
+
+		// Change global relative velocity to player ship when zoomed in
+		if(RenderLevel.SHIP.isVisibleTo(level)) {
+			setVelocityRelativeTo(playerShip);
+		}
+		else if(level == RenderLevel.PLANET && prevLevel == RenderLevel.SHIP) {
+			setVelocityRelativeTo(findOrbitObject(playerShip));
 		}
 
 		RenderLevel spawnLevel = level;
@@ -294,6 +300,7 @@ public class Singleplayer implements World, PlayerListener {
 			WorldGenerator.spawnOccasional(spawnLevel, playerShip);
 		}
 
+		prevLevel = level;
 		v.popMatrix();
 
 		// GUI setup
@@ -317,6 +324,14 @@ public class Singleplayer implements World, PlayerListener {
 			v.fill(255);
 			v.textFont(bodyFont);
 			v.text(Settings.getControlString(ControlKey.MENU_SELECT) + " to restart", v.width / 2F, (v.height / 2F) + 97);
+		}
+	}
+	
+	// Subject to change
+	private void setVelocityRelativeTo(SpaceObject obj) {
+		PVector relative = obj.getVelocity().mult(-1);
+		for(SpaceObject s : objects) {
+			s.addVelocity(relative);
 		}
 	}
 
@@ -367,7 +382,7 @@ public class Singleplayer implements World, PlayerListener {
 		}
 		else if(object instanceof Person && !people.contains(object)) {
 			people.add((Person)object);
-//			player.addListener((Person)object);
+			//			player.addListener((Person)object);
 		}
 		else {
 			throw new RuntimeException("Cannot add object: " + object);
@@ -381,7 +396,7 @@ public class Singleplayer implements World, PlayerListener {
 		}
 		else if(object instanceof Person) {
 			people.remove(object);
-//			player.removeListener((Person)object);
+			//			player.removeListener((Person)object);
 		}
 		else {
 			throw new RuntimeException("Cannot remove object: " + object);
@@ -428,8 +443,9 @@ public class Singleplayer implements World, PlayerListener {
 	}
 
 	@Override
-	public void updateTargeters(SpaceObject s) {
-		for(Targeter t : s.getTargeters()) {
+	public void updateTargeter(Targeter t) {
+		if(t.shouldUpdateTarget()) {
+			SpaceObject s = t.getSpaceObject();
 			SpaceObject target = t.getTarget();
 			float minDistSq = Float.POSITIVE_INFINITY;
 			// Search for new targets

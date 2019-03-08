@@ -7,6 +7,9 @@ public class LandAtObjective extends Objective {
 	private final SpaceObject object;
 
 	public LandAtObjective(SpaceObject object) {
+		if(object == null) {
+			throw new RuntimeException("Landing target cannot be null");
+		}
 		this.object = object;
 	}
 

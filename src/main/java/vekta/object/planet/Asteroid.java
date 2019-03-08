@@ -20,7 +20,7 @@ public class Asteroid extends TerrestrialPlanet {
 
 	@Override
 	public RenderLevel getRenderLevel() {
-		return RenderLevel.AROUND_PLANET;
+		return RenderLevel.PLANET;
 	}
 
 	@Override

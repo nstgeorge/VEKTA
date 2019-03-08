@@ -1,0 +1,8 @@
+{firstname}
+{firstname} {firstname}
+{firstname} {firstname}{lastname_suffix}
+{person_adj} {firstname}
+Lord {firstname}
+Mr. {firstname}
+Ms. {firstname}
+{item_noun} {impersonal_name}

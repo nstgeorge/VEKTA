@@ -56,7 +56,7 @@ public class StationLayoutContext implements Context, Upgrader {
 		v.hint(DISABLE_DEPTH_TEST);
 		v.strokeWeight(.5F);
 
-		RenderLevel dist = RenderLevel.AROUND_PARTICLE;
+		RenderLevel dist = RenderLevel.PARTICLE;
 
 		SpaceStation.Component core = station.getCore();
 		if(cursor == null) {

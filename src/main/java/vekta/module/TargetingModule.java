@@ -1,9 +1,7 @@
 package vekta.module;
 
 import vekta.ControlKey;
-import vekta.Vekta;
-import vekta.context.Context;
-import vekta.context.World;
+import vekta.mission.Mission;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 import vekta.object.planet.Asteroid;
@@ -23,11 +21,13 @@ public class TargetingModule extends ShipModule implements Targeter {
 		this.mode = mode;
 		setTarget(null);
 
-		// Immediately update the target (except in menus)
-		Context context = Vekta.getContext();
-		if(context instanceof World) {
-			((World)context).updateTargeters(getShip());
-		}
+		// Immediately update ship's targeting instruments
+		getShip().updateTargets();
+	}
+
+	@Override
+	public SpaceObject getSpaceObject() {
+		return getShip();
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class TargetingModule extends ShipModule implements Targeter {
 	@Override
 	public boolean isValidTarget(SpaceObject obj) {
 		if(mode == null) {
-			return false;
+			return true; // Don't update targeter
 		}
 		switch(mode) {
 		case PLANET:
@@ -51,15 +51,10 @@ public class TargetingModule extends ShipModule implements Targeter {
 		case ASTEROID:
 			return obj instanceof Asteroid;
 		case SHIP:
-		return obj instanceof Ship;
+			return obj instanceof Ship;
 		default:
 			return false;
 		}
-	}
-
-	@Override
-	public boolean shouldUpdateTarget() {
-		return target == null;
 	}
 
 	@Override
@@ -100,8 +95,17 @@ public class TargetingModule extends ShipModule implements Targeter {
 			setMode(TargetingModule.TargetingMode.ASTEROID);
 			break;
 		case SHIP_TARGET_SHIP:
-		setMode(TargetingModule.TargetingMode.SHIP);
-		break;
+			setMode(TargetingModule.TargetingMode.SHIP);
+			break;
+		case SHIP_TARGET_OBJECTIVE:
+			setMode(null);
+			if(getShip().hasController()) {
+				Mission mission = getShip().getController().getCurrentMission();
+				if(mission != null) {
+					setTarget(mission.getCurrentObjective().getSpaceObject());
+				}
+			}
+			break;
 		}
 	}
 

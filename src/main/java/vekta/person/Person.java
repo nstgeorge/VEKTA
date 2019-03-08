@@ -61,16 +61,16 @@ public class Person implements MissionListener {
 		this.home = home;
 	}
 
-	public String getBirthName() {
+	public String getShortName() {
 		return name;
 	}
 
-	public String getDisplayName() {
+	public String getFullName() {
 		return name + (title != null ? " " + title : "");
 	}
 
-	public Dialog createDialog(DialogType type) {
-		String[] parts = Resources.generateString("dialog/" + type.name().toLowerCase()).split("\\*");
+	public Dialog createDialog(String type) {
+		String[] parts = Resources.generateString("dialog_" + type).split("\\*");
 		Dialog dialog = new Dialog(type, parts[0].trim(), this);
 		if(parts.length > 1) {
 			for(int i = 1; i < parts.length; i++) {

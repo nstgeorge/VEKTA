@@ -3,6 +3,10 @@ package vekta.module;
 public class GeneratorModule extends ShipModule {
 	private final float rate;
 
+	public GeneratorModule() {
+		this(1);
+	}
+
 	public GeneratorModule(float rate) {
 		this.rate = rate;
 	}

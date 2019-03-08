@@ -1,14 +1,12 @@
 package vekta.object.planet;
 
 import processing.core.PVector;
-import vekta.WorldGenerator;
 import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
+import vekta.spawner.WorldGenerator;
 import vekta.terrain.HabitableTerrain;
 import vekta.terrain.LandingSite;
 import vekta.terrain.Terrain;
-
-import static processing.core.PApplet.println;
 
 /**
  * Terrestrial (landable) planet
@@ -25,7 +23,7 @@ public class TerrestrialPlanet extends Planet {
 			((HabitableTerrain)terrain).setSettlement(WorldGenerator.createSettlement(this));
 		}
 
-		println("[Terrestrial] mass: " + getMass() + ", radius: " + getRadius());
+//		println("[Terrestrial] mass: " + getMass() + ", radius: " + getRadius());
 	}
 
 	public LandingSite getLandingSite() {

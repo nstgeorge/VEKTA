@@ -1,0 +1,26 @@
+A Dubious {mission_noun}
+A Fool's {mission_noun}
+A Questionable {mission_noun}
+A Legendary {mission_noun}
+A Valiant {mission_noun}
+A Swift {mission_noun}
+A Treacherous {mission_noun}
+An Inspiring {mission_noun}
+An Inconspicuous {mission_noun}
+An Uncertain {mission_noun}
+An Ominous {mission_noun}
+An Unexpected {mission_noun}
+A Worthwile {mission_noun}
+A Foretold {mission_noun}
+A New {mission_noun}
+A Hypothetical {mission_noun}
+The Latest {mission_noun}
+The Next {mission_noun}
+The {mission_noun}
+At least it's not {planet}
+By Command of {person}
+An Act Worthy of {person}
+{mission_noun} on the Side
+{mission_noun} for the Ages
+Grocery Shopping
+Hit and Run

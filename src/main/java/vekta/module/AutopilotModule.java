@@ -22,7 +22,7 @@ public class AutopilotModule extends TargetingModule {
 
 	public void setActive(boolean active) {
 		getShip().setLanding(active);
-		getWorld().updateTargeters(getShip());
+		getShip().updateTargets();
 	}
 
 	@Override
@@ -61,11 +61,11 @@ public class AutopilotModule extends TargetingModule {
 			float stoppingSpeed = sqrt(2 * ship.getSpeed() * dist);
 			float approachSpeed = min(
 					stoppingSpeed * SLOWDOWN_FACTOR + dot,
-					APPROACH_SCALE * (1 + target.getRadius() / dist));
+					APPROACH_SCALE * (1 + target.getRadius() / dist)) * getWorld().getTimeScale();
 
 			PVector desiredVelocity = target.getVelocity()
-					.add(relative.sub(offset.copy().setMag(dot)).mult(dist * .1F)) // Cancel tangential velocity
-					.add(offset.copy().mult(approachSpeed * getWorld().getTimeScale()/**/));
+					//					.add(relative.sub(offset.copy().setMag(dot)).setMag(.1F * getWorld().getTimeScale())) // Cancel tangential velocity
+					.add(offset.copy().mult(.5F * approachSpeed/* * getWorld().getTimeScale()*//**/));
 
 			// Choose direction to fire engines
 			float dir = heading.dot(velocity.copy().sub(desiredVelocity)) >= 0 ? 1 : -1;
@@ -73,7 +73,8 @@ public class AutopilotModule extends TargetingModule {
 
 			// Set heading and engine power
 			PVector newHeading = velocity.sub(desiredVelocity).setMag(dir).add(ship.getHeading());
-			ship.setHeading(PVector.lerp(heading, newHeading, ROTATE_SMOOTH));
+			//			ship.setHeading(PVector.lerp(heading, newHeading, ROTATE_SMOOTH));
+			ship.setHeading(newHeading);
 			ship.setThrustControl(Math.max(-1, Math.min(1, -dir * deltaV / ship.getSpeed())));
 		}
 	}

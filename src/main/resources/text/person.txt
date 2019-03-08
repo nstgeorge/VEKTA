@@ -1,8 +1,0 @@
-{firstname}
-{firstname} {firstname}
-{firstname} {firstname}{lastname_append}
-{person_adj} {firstname}
-Lord {firstname}
-Mr. {firstname}
-Ms. {firstname}
-The {item_noun} {impersonal_name}

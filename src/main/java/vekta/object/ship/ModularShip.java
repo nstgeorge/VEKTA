@@ -2,6 +2,7 @@ package vekta.object.ship;
 
 import processing.core.PVector;
 import vekta.*;
+import vekta.context.World;
 import vekta.item.Item;
 import vekta.item.ModuleItem;
 import vekta.menu.Menu;
@@ -16,7 +17,6 @@ import vekta.object.Targeter;
 import vekta.terrain.LandingSite;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import static vekta.Vekta.*;
@@ -135,16 +135,6 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 		setEnergy(getMaxEnergy());
 	}
 
-	@Override
-	public Collection<Targeter> getTargeters() {
-		ArrayList<Targeter> list = new ArrayList<>(); // TODO cache
-		for(Module m : getModules()) {
-			if(m instanceof Targeter) {
-				list.add((Targeter)m);
-			}
-		}
-		return list;
-	}
 
 	@Override
 	public List<Module> getModules() {
@@ -189,7 +179,7 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 				}
 			}
 		}
-		// Remove corresponding item if found in inventory
+		// Remove corresponding item_common.txt if found in inventory
 		for(Item item : getInventory()) {
 			if(item instanceof ModuleItem && ((ModuleItem)item).getModule() == module) {
 				getInventory().remove(item);
@@ -247,6 +237,16 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 	public void onUpdate(RenderLevel level) {
 		for(Module module : getModules()) {
 			module.onUpdate();
+		}
+	}
+
+	@Override
+	public void updateTargets() {
+		World world = getWorld();
+		for(Module m : getModules()) {
+			if(m instanceof Targeter) {
+				world.updateTargeter((Targeter)m);
+			}
 		}
 	}
 

@@ -52,7 +52,7 @@ public abstract class Ship extends SpaceObject implements InventoryListener {
 
 	@Override
 	public RenderLevel getRenderLevel() {
-		return RenderLevel.AROUND_SHIP;
+		return RenderLevel.SHIP;
 	}
 
 	@Override
@@ -122,14 +122,14 @@ public abstract class Ship extends SpaceObject implements InventoryListener {
 	@Override
 	public void onCollide(SpaceObject s) {
 		if(s instanceof CargoCrate) {
-			// Add item to ship's inventory
+			// Add item_common.txt to ship's inventory
 			getInventory().add(((CargoCrate)s).getItem());
 		}
 		else if(s instanceof Ship) {
 			Ship ship = (Ship)s;
 			//			if(ship.getVelocity().sub(velocity).magSq() <= MAX_DOCKING_SPEED * MAX_DOCKING_SPEED) {
 			// Board ship
-			if(isDockable(s)) {
+			if(isDockable(s) && ((Ship)s).isDockable(this)) {
 				dock(s);
 			}
 			//			}

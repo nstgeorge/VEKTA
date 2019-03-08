@@ -12,6 +12,10 @@ public class BatteryModule extends ShipModule {
 
 	private float charge;
 
+	public BatteryModule() {
+		this(1);
+	}
+
 	public BatteryModule(int capacity) {
 		this.capacity = capacity;
 	}
@@ -30,7 +34,7 @@ public class BatteryModule extends ShipModule {
 
 	@Override
 	public String getName() {
-		return "Battery v" + getCapacity() + " (" + round(getRatio() * 100) + "%)";
+		return "Battery v" + ((float)getCapacity() / 100) + " (" + round(getRatio() * 100) + "%)";
 	}
 
 	@Override
@@ -66,7 +70,7 @@ public class BatteryModule extends ShipModule {
 	public void onMenu(Menu menu) {
 		if(menu.getHandle() instanceof LandingMenuHandle) {
 			LandingSite site = ((LandingMenuHandle)menu.getHandle()).getSite();
-			
+
 			if(site.getTerrain().hasFeature("Inhabited") && getCharge() <= getCapacity() * .9F) {
 				menu.add(new RechargeOption(getShip()));
 			}

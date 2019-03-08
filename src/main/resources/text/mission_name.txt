@@ -1,9 +1,0 @@
-A Dubious {mission_noun}
-A Fool's {mission_noun}
-A Questionable {mission_noun}
-A Legendary {mission_noun}
-An Ominous {mission_noun}
-An Unexpected {mission_noun}
-{mission_noun} for the Ages
-Grocery Shopping
-Hit and Run

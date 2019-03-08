@@ -205,13 +205,13 @@ public class Vekta extends PApplet {
 
 	public static float getDistanceUnit(RenderLevel distance) {
 		switch(distance) {
-		case AROUND_PARTICLE:
+		case PARTICLE:
 			return DETAIL_LEVEL;
-		case AROUND_SHIP:
+		case SHIP:
 			return SHIP_LEVEL;
-		case AROUND_PLANET:
+		case PLANET:
 			return PLANET_LEVEL;
-		case AROUND_STAR:
+		case STAR:
 			return STAR_LEVEL;
 		default:
 			throw new RuntimeException("Unknown distance unit: " + distance);
@@ -220,12 +220,12 @@ public class Vekta extends PApplet {
 
 	public static RenderLevel getRenderDistance(float unit) {
 		return unit <= DETAIL_LEVEL ?
-				RenderLevel.AROUND_PARTICLE :
+				RenderLevel.PARTICLE :
 				unit <= SHIP_LEVEL ?
-						RenderLevel.AROUND_SHIP :
+						RenderLevel.SHIP :
 						unit <= PLANET_LEVEL ?
-								RenderLevel.AROUND_PLANET :
-								RenderLevel.AROUND_STAR;
+								RenderLevel.PLANET :
+								RenderLevel.STAR;
 	}
 
 	//// Utility methods ////
@@ -237,7 +237,7 @@ public class Vekta extends PApplet {
 	public <T> T random(List<T> list) {
 		return list.get((int)random(list.size()));
 	}
-
+	
 	public boolean chance(float chance) {
 		return chance > 0 && (chance >= 1 || v.random(1) < chance);
 	}

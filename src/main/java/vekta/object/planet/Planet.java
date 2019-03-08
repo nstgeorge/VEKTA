@@ -2,7 +2,7 @@ package vekta.object.planet;
 
 import processing.core.PVector;
 import vekta.RenderLevel;
-import vekta.WorldGenerator;
+import vekta.Resources;
 import vekta.object.SpaceObject;
 import vekta.terrain.MoltenTerrain;
 import vekta.terrain.Terrain;
@@ -39,7 +39,7 @@ public abstract class Planet extends SpaceObject {
 
 	@Override
 	public RenderLevel getRenderLevel() {
-		return RenderLevel.AROUND_STAR;
+		return RenderLevel.STAR;
 	}
 
 	@Override
@@ -106,8 +106,8 @@ public abstract class Planet extends SpaceObject {
 			PVector offset = base.copy().mult(getRadius() * SPLIT_OFFSET_SCALE);
 			PVector splitVelocity = base.copy().mult(SPLIT_VELOCITY_SCALE);
 			Terrain terrain = new MoltenTerrain();
-			Planet a = new TerrestrialPlanet(WorldGenerator.randomPlanetName(), newMass, getDensity(), terrain, getPosition().copy().add(offset), newVelocity.copy().add(splitVelocity), getColor());
-			Planet b = new TerrestrialPlanet(WorldGenerator.randomPlanetName(), newMass, getDensity(), terrain, getPosition().copy().sub(offset), newVelocity.copy().sub(splitVelocity), getColor());
+			Planet a = new TerrestrialPlanet(Resources.generateString("planet_debris"), newMass, getDensity(), terrain, getPosition().copy().add(offset), newVelocity.copy().add(splitVelocity), getColor());
+			Planet b = new TerrestrialPlanet(Resources.generateString("planet_debris"), newMass, getDensity(), terrain, getPosition().copy().sub(offset), newVelocity.copy().sub(splitVelocity), getColor());
 			if(!s.collidesWith(getRenderLevel(), a)) {
 				mass -= a.mass;
 				addObject(a);

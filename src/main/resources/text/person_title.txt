@@ -1,6 +1,0 @@
-the {person_adj}
-the {item_noun} {impersonal_name}
-from {planet_prefix}{planet_suffix}
-PhD.
-Strongman
-{item_noun}-{item_modifier}

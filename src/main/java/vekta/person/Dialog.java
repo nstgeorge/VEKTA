@@ -7,20 +7,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Dialog {
-	private final DialogType type;
+	private final String type;
 	private final String message;
 	private final Person person;
 
 	private final List<String> responses = new ArrayList<>();
 	private final List<MenuOption> options = new ArrayList<>();
 
-	public Dialog(DialogType type, String message, Person person) {
+	public Dialog(String type, String message, Person person) {
 		this.type = type;
 		this.message = message;
 		this.person = person;
 	}
 
-	public DialogType getType() {
+	public String getType() {
 		return type;
 	}
 

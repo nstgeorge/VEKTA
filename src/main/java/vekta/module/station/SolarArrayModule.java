@@ -12,6 +12,10 @@ import static vekta.Vekta.v;
 
 public class SolarArrayModule extends GeneratorModule {
 
+	public SolarArrayModule() {
+		this(1);
+	}
+
 	public SolarArrayModule(float rate) {
 		super(rate);
 	}
@@ -103,7 +107,7 @@ public class SolarArrayModule extends GeneratorModule {
 		v.rect(0, getHeight() * tileSize, (getWidth() - 2) * tileSize, (float)Math.ceil(getHeight() / 2.0) * tileSize);
 		// Supports on
 
-		if(dist == RenderLevel.AROUND_PARTICLE) {
+		if(dist == RenderLevel.PARTICLE) {
 			// Solar panel details (bottom) - only drawn when zoomed in closer
 			v.line(0, (float)Math.floor(getHeight() / 2F) / 3F * tileSize, (getWidth() - 2) * tileSize, (float)Math.floor(getHeight() / 2F) / 3F * tileSize);
 			v.line(0, (float)Math.floor(getHeight() / 2F) / 3F * 2 * tileSize, (getWidth() - 2) * tileSize, (float)Math.floor(getHeight() / 2F) / 3F * 2 * tileSize);

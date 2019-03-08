@@ -10,9 +10,6 @@ import vekta.object.Projectile;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import static vekta.Vekta.*;
 
 public class FighterShip extends Ship implements Targeter {
@@ -46,8 +43,8 @@ public class FighterShip extends Ship implements Targeter {
 	}
 
 	@Override
-	public Collection<Targeter> getTargeters() {
-		return Collections.singleton(this);
+	public SpaceObject getSpaceObject() {
+		return this;
 	}
 
 	@Override
@@ -86,6 +83,11 @@ public class FighterShip extends Ship implements Targeter {
 			}
 		}
 		velocity.mult(SPEED_DAMPEN);
+	}
+
+	@Override
+	public void updateTargets() {
+		getWorld().updateTargeter(this);
 	}
 
 	@Override

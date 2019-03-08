@@ -47,7 +47,7 @@ public abstract class ShipModule implements ComponentModule {
 	}
 
 	protected final float chooseInclusive(float min, float max, float interval) {
-		return chooseInclusive((int)(min * interval), (int)(max * interval)) / interval;
+		return chooseInclusive((int)(min / interval), (int)(max / interval)) * interval;
 	}
 
 	@Override

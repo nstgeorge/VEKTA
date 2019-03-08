@@ -2,9 +2,9 @@ package vekta.module;
 
 import processing.core.PVector;
 import vekta.object.CargoCrate;
-import vekta.object.ship.ModularShip;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
+import vekta.object.ship.ModularShip;
 
 import static vekta.Vekta.min;
 
@@ -16,6 +16,10 @@ public class TractorBeamModule extends ShipModule implements Targeter {
 	private final float force;
 
 	private SpaceObject target;
+
+	public TractorBeamModule() {
+		this(1);
+	}
 
 	public TractorBeamModule(float force) {
 		this.force = force;
@@ -43,6 +47,11 @@ public class TractorBeamModule extends ShipModule implements Targeter {
 	@Override
 	public Module getVariant() {
 		return new TractorBeamModule(chooseInclusive(1, 2));
+	}
+
+	@Override
+	public SpaceObject getSpaceObject() {
+		return getShip();
 	}
 
 	@Override

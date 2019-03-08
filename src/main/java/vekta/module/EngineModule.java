@@ -7,8 +7,12 @@ import static com.jogamp.opengl.math.FloatUtil.abs;
 
 public class EngineModule extends ShipModule {
 	public static final float HEAT_SCALE = 1;
-	
+
 	private final float speed;
+
+	public EngineModule() {
+		this(1);
+	}
 
 	public EngineModule(float speed) {
 		this.speed = speed;

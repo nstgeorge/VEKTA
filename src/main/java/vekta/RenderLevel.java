@@ -1,10 +1,10 @@
 package vekta;
 
 public enum RenderLevel {
-	AROUND_PARTICLE,
-	AROUND_SHIP,
-	AROUND_PLANET,
-	AROUND_STAR;
+	PARTICLE,
+	SHIP,
+	PLANET,
+	STAR;
 
 	public boolean isVisibleTo(RenderLevel dist) {
 		return ordinal() >= dist.ordinal();

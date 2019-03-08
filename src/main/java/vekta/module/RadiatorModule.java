@@ -8,6 +8,10 @@ public class RadiatorModule extends ShipModule {
 
 	private final float efficiency;
 
+	public RadiatorModule() {
+		this(1);
+	}
+
 	public RadiatorModule(float efficiency) {
 		this.efficiency = efficiency;
 	}

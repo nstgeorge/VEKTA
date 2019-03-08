@@ -3,6 +3,7 @@ package vekta.context;
 import processing.core.PVector;
 import vekta.RenderLevel;
 import vekta.object.SpaceObject;
+import vekta.object.Targeter;
 import vekta.person.Person;
 
 public interface World extends Context {
@@ -29,11 +30,11 @@ public interface World extends Context {
 	
 	Person findRandomPerson();
 
-	<T extends SpaceObject> T findRandomObject(Class<T> type); // TODO: add predicate parameter
+	<T extends SpaceObject> T findRandomObject(Class<T> type); // TODO: add predicate overload
 
 	SpaceObject findOrbitObject(SpaceObject object);
 
-	void updateTargeters(SpaceObject object);
+	void updateTargeter(Targeter t);
 
 	void playSound(String sound, PVector location);
 }  

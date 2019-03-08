@@ -75,6 +75,6 @@ public class PlayerShip extends ModularShip {
 
 	@Override
 	public void setupDockingMenu(Player player, Menu menu) {
-		// TODO: add menu item to switch into ship
+		// TODO: add menu item_common.txt to switch into ship
 	}
 }  

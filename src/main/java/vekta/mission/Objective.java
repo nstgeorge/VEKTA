@@ -48,6 +48,10 @@ public abstract class Objective implements MissionListener, PlayerListener {
 		return status;
 	}
 
+	public void cancel() {
+		setStatus(MissionStatus.CANCELLED);
+	}
+
 	public void complete() {
 		setStatus(MissionStatus.COMPLETED);
 	}

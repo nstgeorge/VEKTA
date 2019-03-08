@@ -10,6 +10,10 @@ import static processing.core.PApplet.round;
 public class DrillModule extends ShipModule {
 	private final float efficiency;
 
+	public DrillModule() {
+		this(1);
+	}
+
 	public DrillModule(float efficiency) {
 		this.efficiency = efficiency;
 	}

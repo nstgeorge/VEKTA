@@ -1,0 +1,7 @@
+the {person_adj}
+the {item_noun} {impersonal_name}
+from {planet_prefix}{planet_suffix}
+Jr.
+Sr.
+Strongman
+{item_noun}-{item_modifier}

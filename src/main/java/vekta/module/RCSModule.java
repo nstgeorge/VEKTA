@@ -8,6 +8,10 @@ import static java.lang.Math.abs;
 public class RCSModule extends ShipModule {
 	private final float turnSpeed;
 
+	public RCSModule() {
+		this(1);
+	}
+
 	public RCSModule(float turnSpeed) {
 		this.turnSpeed = turnSpeed;
 	}

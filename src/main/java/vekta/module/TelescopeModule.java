@@ -18,6 +18,10 @@ public class TelescopeModule extends ShipModule {
 
 	private final float resolution;
 
+	public TelescopeModule() {
+		this(1);
+	}
+
 	public TelescopeModule(float resolution) {
 		this.resolution = resolution;
 	}
