@@ -53,8 +53,8 @@ public class PauseMenuContext implements Context {
 	private void drawOption(String name, int yPos, boolean selected) {
 		// Shape ---------------------
 		v.hint(DISABLE_DEPTH_TEST);
-		v.camera();
-		v.noLights();
+//		v.camera();
+//		v.noLights();
 		if(selected)
 			v.stroke(255);
 		else

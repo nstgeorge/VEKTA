@@ -8,8 +8,9 @@ import vekta.object.ship.ModularShip;
 import static vekta.Vekta.*;
 
 public class AutopilotModule extends TargetingModule {
-	private static final float APPROACH_SCALE = .02F;
-	private static final float SLOWDOWN_FACTOR = .8F;
+	private static final float APPROACH_SCALE = 1F;
+	private static final float SLOWDOWN_FACTOR = 1F;
+	private static final float DIRECT_FACTOR = 4F;
 	private static final float ROTATE_SMOOTH = .1F;
 
 	public AutopilotModule() {
@@ -61,11 +62,11 @@ public class AutopilotModule extends TargetingModule {
 			float stoppingSpeed = sqrt(2 * ship.getSpeed() * dist);
 			float approachSpeed = min(
 					stoppingSpeed * SLOWDOWN_FACTOR + dot,
-					APPROACH_SCALE * (1 + target.getRadius() / dist)) * getWorld().getTimeScale();
+					APPROACH_SCALE * (1 + target.getRadius() / dist));
 
 			PVector desiredVelocity = target.getVelocity()
-					//					.add(relative.sub(offset.copy().setMag(dot)).setMag(.1F * getWorld().getTimeScale())) // Cancel tangential velocity
-					.add(offset.copy().mult(.5F * approachSpeed/* * getWorld().getTimeScale()*//**/));
+					.add(relative.sub(offset.copy().setMag(dot / dist)).mult(DIRECT_FACTOR * sqrt(dist) * getWorld().getTimeScale())) // Cancel tangential velocity
+					.add(offset.copy().mult(approachSpeed * getWorld().getTimeScale()));
 
 			// Choose direction to fire engines
 			float dir = heading.dot(velocity.copy().sub(desiredVelocity)) >= 0 ? 1 : -1;
@@ -73,8 +74,7 @@ public class AutopilotModule extends TargetingModule {
 
 			// Set heading and engine power
 			PVector newHeading = velocity.sub(desiredVelocity).setMag(dir).add(ship.getHeading());
-			//			ship.setHeading(PVector.lerp(heading, newHeading, ROTATE_SMOOTH));
-			ship.setHeading(newHeading);
+			ship.setHeading(PVector.lerp(heading, newHeading, ROTATE_SMOOTH));
 			ship.setThrustControl(Math.max(-1, Math.min(1, -dir * deltaV / ship.getSpeed())));
 		}
 	}

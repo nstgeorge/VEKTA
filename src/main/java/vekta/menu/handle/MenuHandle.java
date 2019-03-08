@@ -87,7 +87,7 @@ public class MenuHandle {
 		boolean selected = menu.getIndex() == index;
 
 		// Draw border
-		v.stroke(selected ? 220 : UI_COLOR);
+		v.stroke(selected ? 255 : UI_COLOR);
 		v.noFill();
 		v.rect(getButtonX(), yPos, getButtonWidth() + (selected ? 10 : 0), 50);
 
