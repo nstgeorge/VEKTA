@@ -17,7 +17,7 @@ public class EmptySettlement extends Settlement {
 
 	@Override
 	public String getTypeString() {
-		return "Territory";
+		return "Area";
 	}
 
 	public Inventory getInventory() {

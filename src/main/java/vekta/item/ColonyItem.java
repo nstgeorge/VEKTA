@@ -37,6 +37,7 @@ public class ColonyItem extends Item {
 				Faction faction = getFaction() != null ? getFaction() : menu.getPlayer().getFaction();
 				menu.add(new BasicOption("Colonize", m -> {
 					ColonySettlement settlement = new ColonySettlement(faction);
+					settlement.clear();
 					((HabitableTerrain)terrain).changeSettlement(settlement);
 					for(int i = 0; i < m.size(); i++) {
 						MenuOption other = menu.get(i);

@@ -70,6 +70,7 @@ public abstract class Objective implements MissionListener, PlayerListener {
 			if(isOptional()) {
 				getMission().cancel();
 			}
+			getPlayer().removeListener(this);
 		}
 		else if(status == MissionStatus.COMPLETED) {
 			getPlayer().send("Objective completed: " + getDisplayText())
@@ -77,6 +78,7 @@ public abstract class Objective implements MissionListener, PlayerListener {
 			for(Runnable next : this.next) {
 				next.run();
 			}
+			getPlayer().removeListener(this);
 		}
 		getMission().updateCurrentObjective();
 	}

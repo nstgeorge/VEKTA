@@ -1,7 +1,6 @@
 package vekta.spawner;
 
 import processing.core.PVector;
-import vekta.Faction;
 import vekta.Player;
 import vekta.RenderLevel;
 import vekta.Resources;
@@ -26,6 +25,7 @@ import vekta.person.Person;
 import vekta.spawner.item.MissionItemSpawner;
 import vekta.spawner.world.AsteroidSpawner;
 import vekta.terrain.LandingSite;
+import vekta.terrain.settlement.Settlement;
 
 import static vekta.Vekta.*;
 
@@ -75,13 +75,15 @@ public class MissionGenerator {
 			}
 		}
 		else if(r > .2) {
-			Faction faction = FactionGenerator.randomFaction(person);
-			//			if(faction.isNeutral(player)){
-			mission.add(new AllianceReward(faction));
-			//			}
+//			if(person.getFaction().isNeutral(player)) {}
+//			else {}
+			mission.add(new AllianceReward(person.getFaction()));
 		}
 		else {
-			mission.add(new SettlementReward(PersonGenerator.randomHome(person)));
+			Settlement settlement = PersonGenerator.randomHome(person);
+			if(person.getFaction().isAlly(settlement.getFaction())) {
+				mission.add(new SettlementReward(settlement));
+			}
 		}
 	}
 

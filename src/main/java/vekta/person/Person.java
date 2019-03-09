@@ -57,12 +57,12 @@ public class Person implements MissionListener {
 	}
 
 	public boolean hasHome() {
-		return home != null && !findHome().getSite().getParent().isDestroyed();
+		return home != null && !home.getSite().getParent().isDestroyed();
 	}
 
 	public Settlement findHome() {
 		if(!hasHome()) {
-			home = PersonGenerator.randomHome(this);
+			home = PersonGenerator.randomHome();
 		}
 		return home;
 	}

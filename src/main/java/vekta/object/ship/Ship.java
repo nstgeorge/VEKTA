@@ -19,7 +19,7 @@ import static vekta.Vekta.*;
 public abstract class Ship extends SpaceObject implements InventoryListener {
 	private static final float CRATE_SPEED = 1;
 	private static final float MAX_DOCKING_SPEED = 10;
-	private static final float DEPART_FRAMES = 60; // Number of frames to wait before docking/landing again
+	private static final float DEPART_FRAMES = 100; // Number of frames to wait before docking/landing again
 
 	private final String name;
 	protected final PVector heading;

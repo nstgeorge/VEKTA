@@ -52,10 +52,6 @@ public abstract class Settlement implements SettlementPart {
 		this.faction = faction;
 	}
 
-	public List<SettlementPart> getParts() {
-		return parts;
-	}
-
 	@Override
 	public String getName() {
 		return name;
@@ -69,12 +65,20 @@ public abstract class Settlement implements SettlementPart {
 		return true;
 	}
 
+	public List<SettlementPart> getParts() {
+		return parts;
+	}
+
 	public void add(SettlementPart part) {
 		parts.add(part);
 	}
 
 	public void remove(SettlementPart part) {
 		parts.remove(part);
+	}
+
+	public void clear() {
+		getParts().clear();
 	}
 
 	@Override
