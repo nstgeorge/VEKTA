@@ -33,8 +33,10 @@ import static vekta.Vekta.*;
 public class Singleplayer implements World, PlayerListener {
 	private static final float ZOOM_EXPONENT = .3F;
 	private static final float ZOOM_SMOOTH = .1F;
-	private static final float TIME_SCALE = 5e-4F;
-	private static final float TIME_FALLOFF = .2F;
+	//	private static final float TIME_SCALE = 5e-4F;
+	//	private static final float TIME_FALLOFF = .2F;
+	private static final float TIME_SCALE = .001F;
+	private static final float TIME_FALLOFF = .1F;
 	private static final int MAX_OBJECTS_PER_DIST = 5; // TODO: increase as we add more object types
 
 	private static int nextID = 0;
@@ -119,6 +121,7 @@ public class Singleplayer implements World, PlayerListener {
 		SpaceStation.Component sensor = struct2.attach(SpaceStation.Direction.LEFT, new SensorModule());
 		addObject(station);
 
+		playerShip.addModule(new EngineModule(2)); // Upgrade engine
 		playerShip.addModule(new AutopilotModule());
 		playerShip.addModule(new TelescopeModule(.5F));
 		playerShip.addModule(new DrillModule(2));
@@ -301,11 +304,11 @@ public class Singleplayer implements World, PlayerListener {
 			setVelocityRelativeTo(playerShip);
 		}
 		else if(level.ordinal() == prevLevel.ordinal() - 1) {
-			setVelocityRelativeTo(findOrbitObject(playerShip));
+			setVelocityRelativeTo(findLargestObject());
 		}
 
 		RenderLevel spawnLevel = level;
-		while(spawnLevel.ordinal() > 0 && v.random(1) < .05F) {
+		while(spawnLevel.ordinal() > 0 && v.chance(.05F)) {
 			spawnLevel = RenderLevel.values()[spawnLevel.ordinal() - 1];
 		}
 		if(objectCounts[spawnLevel.ordinal()] < MAX_OBJECTS_PER_DIST) {
@@ -419,13 +422,26 @@ public class Singleplayer implements World, PlayerListener {
 		}
 	}
 
+	public SpaceObject findLargestObject() {
+		float maxMass = 0;
+		SpaceObject max = null;
+		for(SpaceObject s : objects) {
+			float mass = s.getMass();
+			if(mass > maxMass) {
+				maxMass = mass;
+				max = s;
+			}
+		}
+		return max;
+	}
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T findRandomObject(Class<T> type) {
 		List<T> candidates = new ArrayList<>();
 		// TODO: find an efficient way to DRY these loops
 		if(SpaceObject.class.isAssignableFrom(type)) {
-			for(SpaceObject s : this.objects) {
+			for(SpaceObject s : objects) {
 				if(type.isInstance(s)) {
 					candidates.add((T)s);
 				}

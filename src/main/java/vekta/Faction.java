@@ -3,6 +3,8 @@ package vekta;
 import java.util.HashSet;
 import java.util.Set;
 
+import static java.lang.Float.max;
+
 public final class Faction {
 	private final String name;
 	private final int color;
@@ -37,6 +39,10 @@ public final class Faction {
 		}
 	}
 
+	public Set<Faction> getAllies() {
+		return allies;
+	}
+
 	public boolean isAlly(Faction faction) {
 		return faction == this || allies.contains(faction);
 	}
@@ -49,6 +55,10 @@ public final class Faction {
 		}
 	}
 
+	public Set<Faction> getEnemies() {
+		return enemies;
+	}
+
 	public boolean isEnemy(Faction faction) {
 		return enemies.contains(faction);
 	}
@@ -59,5 +69,9 @@ public final class Faction {
 			enemies.add(faction);
 			faction.enemies.add(this);
 		}
+	}
+
+	public float getValue() {
+		return max(1, allies.size() - enemies.size() * .5F);
 	}
 }

@@ -17,7 +17,7 @@ import static vekta.Vekta.*;
  */
 public class MenuHandle {
 	private final MenuOption defaultOption;
-	
+
 	public MenuHandle(Context parent) {
 		this(new BackOption(parent));
 	}
@@ -50,9 +50,9 @@ public class MenuHandle {
 		return "select";
 	}
 
-	public void init(Menu menu){
+	public void init(Menu menu) {
 	}
-	
+
 	public void focus(Menu menu) {
 	}
 
@@ -80,7 +80,7 @@ public class MenuHandle {
 		v.fill(255);
 		v.textAlign(CENTER);
 
-		if(menu.getCursor().isEnabled(menu)) {
+		if(menu.getCursor().isEnabled()) {
 			v.text(Settings.getControlString(ControlKey.MENU_SELECT) + " to " + getSelectVerb(), getButtonX(), getButtonY(menu.size()) + 100);
 		}
 	}
@@ -95,7 +95,7 @@ public class MenuHandle {
 		v.rect(getButtonX(), yPos, getButtonWidth() + (selected ? 10 : 0), 50);
 
 		// Draw text
-		v.fill(opt.getColor());
+		v.fill(opt.isEnabled() ? opt.getColor() : 100);
 		v.noStroke();
 		v.text(opt.getName(), getButtonX(), yPos - 3);
 	}
@@ -113,9 +113,9 @@ public class MenuHandle {
 			menu.scroll(1);
 		}
 		else if(key == ControlKey.MENU_SELECT) {
-			if(menu.getCursor().isEnabled(menu)) {
+			if(menu.getCursor().isEnabled()) {
 				Resources.playSound("select");
-				menu.getCursor().select(menu);
+				menu.select();
 			}
 		}
 	}

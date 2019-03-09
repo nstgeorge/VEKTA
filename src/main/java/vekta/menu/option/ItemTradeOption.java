@@ -4,7 +4,7 @@ import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;
 
-import static vekta.Vekta.v;
+import static vekta.Vekta.moneyString;
 
 public class ItemTradeOption implements MenuOption {
 	private final boolean buying;
@@ -34,13 +34,12 @@ public class ItemTradeOption implements MenuOption {
 
 	@Override
 	public String getName() {
-		String tag = price > 0 ? " [" + price + " G]" : "";
-		return item.getName() + tag;
+		return moneyString(item.getName(), price);
 	}
 
 	@Override
 	public int getColor() {
-		return isEnabled() ? getItem().getType().getColor() : v.color(100);
+		return getItem().getType().getColor();
 	}
 
 	public Item getItem() {
@@ -56,10 +55,6 @@ public class ItemTradeOption implements MenuOption {
 	}
 
 	@Override
-	public boolean isEnabled(Menu menu) {
-		return isEnabled();
-	}
-
 	public boolean isEnabled() {
 		return getTo().has(price) && getFrom().has(item);
 	}

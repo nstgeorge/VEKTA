@@ -4,6 +4,7 @@ import vekta.menu.Menu;
 import vekta.object.ship.ModularShip;
 
 import static processing.core.PApplet.ceil;
+import static vekta.Vekta.moneyString;
 
 public class RechargeOption implements MenuOption {
 	private final ModularShip ship;
@@ -16,8 +17,7 @@ public class RechargeOption implements MenuOption {
 
 	@Override
 	public String getName() {
-		int cost = getCost();
-		return "Recharge" + (cost > 0 ? " [" + cost + " G]" : "");
+		return moneyString("Recharge", getCost());
 	}
 
 	public int getCost() {
@@ -25,7 +25,7 @@ public class RechargeOption implements MenuOption {
 	}
 
 	@Override
-	public boolean isEnabled(Menu menu) {
+	public boolean isEnabled() {
 		return ship.getInventory().has(getCost());
 	}
 

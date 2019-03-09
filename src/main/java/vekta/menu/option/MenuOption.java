@@ -1,16 +1,17 @@
 package vekta.menu.option;
 
-import vekta.Vekta;
 import vekta.menu.Menu;
+
+import static vekta.Vekta.UI_COLOR;
 
 public interface MenuOption {
 	String getName();
 
 	default int getColor() {
-		return Vekta.UI_COLOR;
+		return UI_COLOR;
 	}
 
-	default boolean isEnabled(Menu menu) {
+	default boolean isEnabled() {
 		return true;
 	}
 

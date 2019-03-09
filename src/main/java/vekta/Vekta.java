@@ -42,7 +42,7 @@ public class Vekta extends PApplet {
 
 	// Render/spawning distances (we might want to use kilometers due to limited floating-point precision)
 	public static final float DETAIL_LEVEL = 1e1F;
-	public static final float SHIP_LEVEL = 1e3F;
+	public static final float SHIP_LEVEL = 1e2F;
 	public static final float PLANET_LEVEL = 1e7F;
 	public static final float STAR_LEVEL = 3e8F;
 
@@ -228,6 +228,12 @@ public class Vekta extends PApplet {
 								RenderLevel.STAR;
 	}
 
+	//// Misc. UI methods ////
+	
+	public static String moneyString(String text, int money) {
+		return text + (money == 0 ? "" : " [" + money + " G]");
+	}
+
 	//// Utility methods ////
 
 	public <T> T random(T[] array) {
@@ -237,7 +243,7 @@ public class Vekta extends PApplet {
 	public <T> T random(List<T> list) {
 		return list.get((int)random(list.size()));
 	}
-	
+
 	public boolean chance(float chance) {
 		return chance > 0 && (chance >= 1 || v.random(1) < chance);
 	}

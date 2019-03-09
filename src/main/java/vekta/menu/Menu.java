@@ -1,4 +1,4 @@
-package vekta.menu;// These will move into their own files once we migrate to Maven
+package vekta.menu;
 
 import vekta.ControlKey;
 import vekta.Player;
@@ -9,6 +9,7 @@ import vekta.menu.option.MenuOption;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -18,6 +19,7 @@ public class Menu implements Context {
 	private final MenuHandle handle;
 
 	private final List<MenuOption> options = new ArrayList<>();
+	private final List<MenuListener> listeners = new ArrayList<>();
 
 	private boolean hasAutoOption;
 	private MenuOption autoOption;
@@ -53,6 +55,14 @@ public class Menu implements Context {
 
 	public int getIndex() {
 		return index;
+	}
+
+	public void setIndex(int n) {
+		index = n;
+		MenuOption cursor = getCursor();
+		for(MenuListener listener : listeners) {
+			listener.onHover(cursor);
+		}
 	}
 
 	public int size() {
@@ -96,7 +106,7 @@ public class Menu implements Context {
 	public void scroll(int n) {
 		int next = max(0, min(size() - 1, index + n));
 		if(index != next) {
-			index = next;
+			setIndex(next);
 		}
 	}
 
@@ -116,12 +126,43 @@ public class Menu implements Context {
 		}
 	}
 
+	public void select() {
+		select(getCursor());
+	}
+
+	public void select(MenuOption option) {
+		option.select(this);
+		for(MenuListener listener : listeners) {
+			listener.onSelect(option);
+		}
+	}
+
+	public void addSelectListener(Consumer<MenuOption> callback) {
+		addListener(new MenuListener() {
+			@Override
+			public void onSelect(MenuOption option) {
+				callback.accept(option);
+			}
+		});
+	}
+
+	public void addListener(MenuListener listener) {
+		listeners.add(listener);
+	}
+
+	public boolean removeListener(MenuListener listener) {
+		return listeners.remove(listener);
+	}
+
 	@Override
 	public void focus() {
 		handle.focus(this);
 		if(autoOption != null) {
 			autoOption.select(this);
 			autoOption = null;
+		}
+		for(MenuListener listener : listeners) {
+			listener.onFocus();
 		}
 	}
 

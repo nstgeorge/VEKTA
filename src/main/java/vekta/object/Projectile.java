@@ -12,17 +12,13 @@ public class Projectile extends SpaceObject {
 	private static final int DEF_RADIUS = 2;
 
 	private final SpaceObject parent;
-	private final float mass;
-	private final float radius;
 
 	private int aliveTime = 0;
 
 	public Projectile(SpaceObject parent, PVector position, PVector velocity, int color) {
 		super(position, velocity, color);
-		
+
 		this.parent = parent;
-		this.mass = DEF_MASS;
-		this.radius = DEF_RADIUS;
 	}
 
 	public SpaceObject getParent() {
@@ -36,12 +32,12 @@ public class Projectile extends SpaceObject {
 
 	@Override
 	public float getMass() {
-		return mass;
+		return DEF_MASS;
 	}
 
 	@Override
 	public float getRadius() {
-		return radius;
+		return DEF_RADIUS;
 	}
 
 	@Override

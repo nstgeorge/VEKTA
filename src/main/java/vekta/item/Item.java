@@ -1,6 +1,9 @@
 package vekta.item;
 
+import vekta.Player;
 import vekta.menu.Menu;
+
+import static vekta.Vekta.v;
 
 public class Item implements Comparable<Item> {
 	private final String name;
@@ -17,6 +20,16 @@ public class Item implements Comparable<Item> {
 
 	public ItemType getType() {
 		return type;
+	}
+
+	public int randomPrice() {
+		return (int)(v.random(1, 10) * getType().getPriceModifier());
+	}
+
+	public void onAdd(Player player) {
+	}
+
+	public void onRemove(Player player) {
 	}
 
 	public void onMenu(Menu menu) {

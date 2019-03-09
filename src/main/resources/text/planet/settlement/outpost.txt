@@ -1,3 +1,5 @@
 {settlement}
 {person}'s Refuge
 {person}'s Hideout
+{faction} Emigrants
+{faction} Refugees

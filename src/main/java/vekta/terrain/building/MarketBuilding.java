@@ -77,7 +77,7 @@ public class MarketBuilding implements SettlementPart {
 				thisSide.put(item, price);
 			}
 			else if(!thisSide.containsKey(item)) {
-				int price = item.getType().randomPrice();
+				int price = item.randomPrice();
 				thisSide.put(item, price);
 			}
 		}

@@ -16,15 +16,20 @@ public class Mission {
 	private final List<Reward> rewards = new ArrayList<>();
 	private final List<MissionListener> listeners = new ArrayList<>();
 
+	private final Player player;
 	private final String name;
-
-	private Player player;
+	
 	private MissionStatus status = MissionStatus.READY;
 
 	private Objective current;
 
-	public Mission(String name) {
+	public Mission(Player player, String name) {
+		this.player = player;
 		this.name = name;
+	}
+
+	public Player getPlayer() {
+		return player;
 	}
 
 	public String getName() {
@@ -37,10 +42,6 @@ public class Mission {
 
 	public List<Reward> getRewards() {
 		return rewards;
-	}
-
-	public Player getPlayer() {
-		return player;
 	}
 
 	public void add(MissionListener listener) {
@@ -72,7 +73,7 @@ public class Mission {
 			if(objective.getStatus() == MissionStatus.READY) {
 				objective.onStart();
 			}
-			
+
 			if(objective.getStatus() == MissionStatus.STARTED) {
 				if(current == null) {
 					current = objective;
@@ -104,7 +105,7 @@ public class Mission {
 		return status;
 	}
 
-	public void start(Player player) {
+	public void start() {
 		if(getStatus() == MissionStatus.STARTED) {
 			throw new RuntimeException("Mission has already started");
 		}
@@ -112,8 +113,6 @@ public class Mission {
 			println("Mission has no objectives");
 			return;
 		}
-
-		this.player = player;
 
 		status = MissionStatus.STARTED;
 		for(MissionListener listener : listeners) {

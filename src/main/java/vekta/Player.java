@@ -3,7 +3,6 @@ package vekta;
 import processing.core.PApplet;
 import vekta.item.Inventory;
 import vekta.item.Item;
-import vekta.item.MissionItem;
 import vekta.mission.Mission;
 import vekta.object.ship.ModularShip;
 import vekta.overlay.singleplayer.Notification;
@@ -66,15 +65,18 @@ public final class Player {
 				}
 				if(key == ControlKey.MISSION_CYCLE && missions.size() > 0) {
 					int index = missions.indexOf(getCurrentMission()) + 1;
-					setCurrentMission(index == getMissions().size() ? missions.get(index % missions.size()) : null);
+					setCurrentMission(index == getMissions().size() ? null : missions.get(index % missions.size()));
 				}
 			}
 
 			@Override
 			public void onAddItem(Item item) {
-				if(item instanceof MissionItem) {
-					((MissionItem)item).getMission().start(Player.this);
-				}
+				item.onAdd(Player.this);
+			}
+
+			@Override
+			public void onRemoveItem(Item item) {
+				item.onRemove(Player.this);
 			}
 		});
 	}

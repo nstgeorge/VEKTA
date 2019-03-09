@@ -8,7 +8,7 @@ import static vekta.Vekta.addObject;
 import static vekta.Vekta.getWorld;
 
 public class CannonModule extends WeaponModule {
-	private static final float PROJECTILE_SPEED = 7;
+	private static final float PROJECTILE_SPEED = 20;
 
 	@Override
 	public String getName() {

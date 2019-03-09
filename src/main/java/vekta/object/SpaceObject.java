@@ -182,11 +182,11 @@ public abstract class SpaceObject {
 	 */
 	public void updateOrigin(PVector offset) {
 		position.add(offset);
-		for(int i = 0; i < trail.length; i++) {
-			if(trail[i] != null) {
-				trail[i].add(offset);
-			}
-		}
+		//		for(int i = 0; i < trail.length; i++) {
+		//			if(trail[i] != null) {
+		//				trail[i].add(offset);
+		//			}
+		//		}
 	}
 
 	/**
@@ -271,20 +271,23 @@ public abstract class SpaceObject {
 	public void updateTrail() {
 		// Update trail vectors
 		System.arraycopy(trail, 0, trail, 1, trail.length - 1);
-		trail[0] = getPosition();
+//		trail[0] = getPosition();
+		trail[0] = new PVector();
 	}
 
 	public void drawTrail(float scale) {
 		int color = getTrailColor();
+		PVector relative = getVelocity().mult(-getWorld().getTimeScale());
 		for(int i = 1; i < trail.length; i++) {
 			PVector oldPos = trail[i - 1];
 			PVector newPos = trail[i];
 			if(newPos == null) {
 				break;
 			}
+			newPos.add(relative);
 			// Set the color and draw the line segment
 			v.stroke(v.lerpColor(color, 0, (float)i / trail.length));
-			v.line((oldPos.x - position.x) / scale, (oldPos.y - position.y) / scale, (newPos.x - position.x) / scale, (newPos.y - position.y) / scale);
+			v.line((oldPos.x/* - position.x*/) / scale, (oldPos.y/* - position.y*/) / scale, (newPos.x/* - position.x*/) / scale, (newPos.y/* - position.y*/) / scale);
 		}
 	}
 
@@ -302,7 +305,7 @@ public abstract class SpaceObject {
 	public void onUpdate(RenderLevel level) {
 	}
 
-	// Convenience methodsss
+	//// Convenience methods
 
 	public PVector relativePosition(SpaceObject other) {
 		return other.getPosition().sub(getPosition());

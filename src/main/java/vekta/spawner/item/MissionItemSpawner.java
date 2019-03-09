@@ -1,21 +1,20 @@
 package vekta.spawner.item;
 
+import vekta.Player;
 import vekta.Resources;
 import vekta.item.Item;
 import vekta.item.ItemType;
 import vekta.item.MissionItem;
-import vekta.mission.objective.KeepItemObjective;
 import vekta.mission.Mission;
-import vekta.mission.objective.Objective;
 import vekta.spawner.ItemGenerator;
 import vekta.spawner.MissionGenerator;
 
-import static vekta.Vekta.v;
+import java.util.function.Function;
 
 public class MissionItemSpawner implements ItemGenerator.ItemSpawner {
 	@Override
 	public float getWeight() {
-		return 1;
+		return .5F;
 	}
 
 	@Override
@@ -25,16 +24,10 @@ public class MissionItemSpawner implements ItemGenerator.ItemSpawner {
 
 	@Override
 	public Item create() {
-		return randomMissionItem(MissionGenerator.createMission(MissionGenerator.randomMissionPerson()));
+		return randomMissionItem(p -> MissionGenerator.createMission(p, MissionGenerator.randomMissionPerson()));
 	}
 
-	public static Item randomMissionItem(Mission mission) {
-		MissionItem item = new MissionItem(Resources.generateString("item_mission"), mission);
-		Objective objective = new KeepItemObjective(item);
-		if(v.chance(.2F)) {
-			objective.optional();
-		}
-		mission.add(objective);
-		return item;
+	public static Item randomMissionItem(Function<Player, Mission> generator) {
+		return new MissionItem(Resources.generateString("item_mission"), generator);
 	}
 }

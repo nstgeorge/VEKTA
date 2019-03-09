@@ -47,12 +47,12 @@ public class MissionGenerator {
 		return ship;
 	}
 
-	public static Mission createMission(Person person) {
-		return createMission(person, (int)v.random(3) + 1);
+	public static Mission createMission(Player player, Person person) {
+		return createMission(player, person, (int)v.random(3) + 1);
 	}
 
-	public static Mission createMission(Person person, int lootTier) {
-		Mission mission = new Mission(randomMissionName());
+	public static Mission createMission(Player player, Person person, int lootTier) {
+		Mission mission = new Mission(player, randomMissionName());
 		mission.add(person);
 		addRewards(person, mission, lootTier);
 		addObjectives(person, mission, (int)v.random(lootTier + 1) + 1);
@@ -75,8 +75,8 @@ public class MissionGenerator {
 			}
 		}
 		else if(r > .2) {
-//			if(person.getFaction().isNeutral(player)) {}
-//			else {}
+			//			if(person.getFaction().isNeutral(player)) {}
+			//			else {}
 			mission.add(new AllianceReward(person.getFaction()));
 		}
 		else {
@@ -112,7 +112,7 @@ public class MissionGenerator {
 		else {
 			Person other = randomMissionPerson(person);
 			mission.add(new LandAtObjective(other.findHomeObject()));
-			objective = new DialogObjective("Confront", randomConfrontDialog(other, person, mission));
+			objective = new DialogObjective("Confront", randomConfrontDialog(mission.getPlayer(), other, person));
 		}
 
 		if(steps > 1) {
@@ -171,14 +171,13 @@ public class MissionGenerator {
 		}
 		else if(v.chance(.3F)) {
 			dialog = person.createDialog("offer");
-			Mission mission = MissionGenerator.createMission(person);
-			dialog.add(new ItemTradeOption(player.getInventory(), MissionItemSpawner.randomMissionItem(mission), 0));
+			dialog.add(new ItemTradeOption(player.getInventory(), MissionItemSpawner.randomMissionItem(p -> MissionGenerator.createMission(p, person)), 0));
 		}
 		else {
 			dialog = person.createDialog("request");
 			dialog.add(new BasicOption("Learn More", menu -> {
 				Menu sub = new Menu(menu.getPlayer(), new MissionMenuHandle(menu.getDefault()));
-				sub.add(new MissionOption(createMission(person)));
+				sub.add(new MissionOption(createMission(player, person)));
 				sub.addDefault();
 				setContext(sub);
 			}));
@@ -189,7 +188,7 @@ public class MissionGenerator {
 		return dialog;
 	}
 
-	public static Dialog randomConfrontDialog(Person person, Person sender, Mission mission) {
+	public static Dialog randomConfrontDialog(Player player, Person person, Person sender) {
 		Dialog dialog = person.createDialog("confronted");
 
 		if(v.chance(.5F)) {

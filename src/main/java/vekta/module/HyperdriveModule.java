@@ -9,7 +9,7 @@ import static vekta.Vekta.*;
 public class HyperdriveModule extends ShipModule {
 	//	private static final float AUTO_SUSTAIN = 100;
 	private static final float MIN_SPEED = 10;
-	private static final float MAX_SPEED = 20;
+	private static final float MAX_SPEED = 50;
 
 	private final float boost;
 

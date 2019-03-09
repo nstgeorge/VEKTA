@@ -4,9 +4,20 @@ import vekta.Faction;
 
 public class BondItem extends Item {
 
+	private final Faction faction;
+
 	public BondItem(Faction faction) {
 		super(faction.getName() + " Bonds", ItemType.COMMON);
+
+		this.faction = faction;
 	}
-	
-	// Todo: add market fluctuations based on player actions
+
+	public Faction getFaction() {
+		return faction;
+	}
+
+	@Override
+	public int randomPrice() {
+		return (int)(super.randomPrice() * getFaction().getValue());
+	}
 }

@@ -33,8 +33,4 @@ public enum ItemType {
 	public float getMarkupFactor() {
 		return markupFactor;
 	}
-
-	public int randomPrice() {
-		return (int)(v.random(1, 10) * getPriceModifier());
-	}
 }

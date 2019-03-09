@@ -12,7 +12,6 @@ public class HomingProjectile extends Projectile {
 	private static final float HOMING_ACCEL = .1F;
 	private static final float HOMING_DAMPEN = .98F;
 
-	private static final float RADIUS = 3;
 	private final SpaceObject target;
 	private final float speed;
 
@@ -21,6 +20,11 @@ public class HomingProjectile extends Projectile {
 
 		this.target = target;
 		this.speed = speed;
+	}
+
+	@Override
+	public float getRadius() {
+		return 3;
 	}
 
 	public SpaceObject getTarget() {
@@ -34,11 +38,12 @@ public class HomingProjectile extends Projectile {
 	@Override
 	public void onUpdate(RenderLevel level) {
 		if(!target.isDestroyed()) {
-			float speedSq = target.getVelocity().sub(getVelocity()).magSq();
-			float distSq = target.getPosition().sub(getPosition()).magSq();
+			float distSq = relativePosition(target).magSq();
+			float speedSq = relativeVelocity(target).magSq();
 			PVector pos = target.getPosition().add(target.getVelocity().mult(sqrt(distSq / speedSq)));
-			setVelocity(getVelocity().add(pos.sub(getPosition())
-					.setMag(getSpeed() * HOMING_ACCEL)).mult(HOMING_DAMPEN));
+			setVelocity(getVelocity()
+					.add(pos.sub(getPosition()).setMag(getSpeed() * HOMING_ACCEL))
+					.mult(HOMING_DAMPEN));
 		}
 		super.onUpdate(level);
 	}
@@ -50,9 +55,9 @@ public class HomingProjectile extends Projectile {
 		v.stroke(getColor());
 		v.rotate(theta);
 		v.beginShape();
-		v.vertex(0, -RADIUS);
-		v.vertex(-RADIUS, RADIUS);
-		v.vertex(RADIUS, RADIUS);
+		v.vertex(0, -r);
+		v.vertex(-r, r);
+		v.vertex(r, r);
 		v.endShape(CLOSE);
 	}
 }  

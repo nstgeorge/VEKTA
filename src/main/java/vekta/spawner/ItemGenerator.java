@@ -19,7 +19,7 @@ public class ItemGenerator {
 	}
 
 	public static void addLoot(Inventory inv, int lootTier, ItemSpawner spawner) {
-		int itemCt = round(v.random(lootTier - 1, lootTier * 2));
+		int itemCt = round(v.random(lootTier, lootTier * 2));
 		for(int i = 0; i < itemCt; i++) {
 			Item item = spawner != null ? spawner.create() : randomItem();
 			inv.add(item);

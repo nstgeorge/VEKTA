@@ -3,6 +3,7 @@ package vekta.terrain.settlement;
 import vekta.Faction;
 import vekta.Resources;
 import vekta.menu.Menu;
+import vekta.menu.option.UpgradeMenuOption;
 import vekta.object.SpaceObject;
 import vekta.terrain.LandingSite;
 import vekta.terrain.Terrain;
@@ -14,7 +15,7 @@ public abstract class Settlement implements SettlementPart {
 	private final List<SettlementPart> parts = new ArrayList<>();
 
 	private final String name;
-	private final String overview;
+	private String overview;
 	private LandingSite site;
 	private Faction faction;
 
@@ -61,6 +62,13 @@ public abstract class Settlement implements SettlementPart {
 		return overview;
 	}
 
+	public void setOverview(String overview) {
+		if(overview == null) {
+			throw new RuntimeException("Settlement overview cannot be null");
+		}
+		this.overview = overview;
+	}
+
 	public boolean isInhabited() {
 		return true;
 	}
@@ -79,6 +87,26 @@ public abstract class Settlement implements SettlementPart {
 
 	public void clear() {
 		getParts().clear();
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends SettlementPart> T find(Class<T> type) {
+		for(SettlementPart part : getParts()) {
+			if(type.isInstance(part)) {
+				return (T)part;
+			}
+		}
+		return null;
+	}
+
+	public int count(Class<? extends SettlementPart> type) {
+		int ct = 0;
+		for(SettlementPart part : getParts()) {
+			if(type.isInstance(part)) {
+				ct++;
+			}
+		}
+		return ct;
 	}
 
 	@Override
@@ -101,6 +129,9 @@ public abstract class Settlement implements SettlementPart {
 		onSettlementMenu(menu);
 		for(SettlementPart part : getParts()) {
 			part.setupSettlementMenu(menu);
+		}
+		if(menu.getPlayer().getFaction() == getFaction()) {
+			menu.add(new UpgradeMenuOption(menu.getPlayer(), this));
 		}
 	}
 

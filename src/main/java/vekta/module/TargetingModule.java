@@ -2,6 +2,7 @@ package vekta.module;
 
 import vekta.ControlKey;
 import vekta.mission.Mission;
+import vekta.object.CargoCrate;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 import vekta.object.planet.Asteroid;
@@ -51,7 +52,7 @@ public class TargetingModule extends ShipModule implements Targeter {
 		case ASTEROID:
 			return obj instanceof Asteroid;
 		case SHIP:
-			return obj instanceof Ship;
+			return obj instanceof Ship || obj instanceof CargoCrate;
 		default:
 			return false;
 		}

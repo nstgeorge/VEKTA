@@ -4,3 +4,10 @@ Town
 Farm
 District
 Province
+Sector
+Territory
+Requisition
+Camp
+Tribe
+Pit
+Enclave

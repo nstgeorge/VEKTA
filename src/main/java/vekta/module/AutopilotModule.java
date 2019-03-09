@@ -10,7 +10,7 @@ import static vekta.Vekta.*;
 public class AutopilotModule extends TargetingModule {
 	private static final float APPROACH_SCALE = 1F;
 	private static final float SLOWDOWN_FACTOR = 1F;
-	private static final float DIRECT_FACTOR = 4F;
+	private static final float CORRECT_FACTOR = 4F;
 	private static final float ROTATE_SMOOTH = .1F;
 
 	public AutopilotModule() {
@@ -64,8 +64,10 @@ public class AutopilotModule extends TargetingModule {
 					stoppingSpeed * SLOWDOWN_FACTOR + dot,
 					APPROACH_SCALE * (1 + target.getRadius() / dist));
 
+			PVector correct = relative.sub(offset.copy().setMag(dot / dist)); // Correction vector
+
 			PVector desiredVelocity = target.getVelocity()
-					.add(relative.sub(offset.copy().setMag(dot / dist)).mult(DIRECT_FACTOR * sqrt(dist) * getWorld().getTimeScale())) // Cancel tangential velocity
+					.add(correct.mult(CORRECT_FACTOR * sqrt(dist) * getWorld().getTimeScale())) // Cancel tangential velocity
 					.add(offset.copy().mult(approachSpeed * getWorld().getTimeScale()));
 
 			// Choose direction to fire engines

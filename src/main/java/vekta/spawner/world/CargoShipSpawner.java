@@ -2,11 +2,11 @@ package vekta.spawner.world;
 
 import processing.core.PVector;
 import vekta.RenderLevel;
-import vekta.spawner.WorldGenerator;
 import vekta.object.SpaceObject;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.object.ship.CargoShip;
 import vekta.object.ship.Ship;
+import vekta.spawner.WorldGenerator;
 
 import static vekta.Vekta.*;
 import static vekta.spawner.ItemGenerator.addLoot;
@@ -27,7 +27,7 @@ public class CargoShipSpawner implements WorldGenerator.WorldSpawner {
 	@Override
 	public void spawn(SpaceObject center, PVector pos) {
 		SpaceObject orbit = getWorld().findOrbitObject(center);
-		if(orbit instanceof TerrestrialPlanet) {
+		if(orbit instanceof TerrestrialPlanet && ((TerrestrialPlanet)orbit).isHabitable()) {
 			// Only spawn near terrestrial planets
 			int color = v.random(1) < .6F ? orbit.getColor() : randomPlanetColor();
 			Ship s = new CargoShip("TRAWLX", PVector.random2D(), pos, new PVector(), color);
@@ -35,7 +35,7 @@ public class CargoShipSpawner implements WorldGenerator.WorldSpawner {
 			orbit(orbit, s, .5F);
 
 			addLoot(s.getInventory(), 3);
-			
+
 		}
 	}
 }

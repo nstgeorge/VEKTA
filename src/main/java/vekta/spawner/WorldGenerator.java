@@ -29,14 +29,14 @@ public class WorldGenerator {
 				.toArray(WorldSpawner[][]::new);
 	}
 
-	public static float getRadius(RenderLevel dist) {
-		return 10000 * getDistanceUnit(dist);
+	public static float getRadius(RenderLevel level) {
+		return 10000 * getDistanceUnit(level);
 	}
 
-	public static void spawnOccasional(RenderLevel dist, SpaceObject center) {
-		PVector pos = randomSpawnPosition(dist, center.getPosition());
+	public static void spawnOccasional(RenderLevel level, SpaceObject center) {
+		PVector pos = randomSpawnPosition(level, center.getPosition());
 
-		WorldSpawner[] array = SPAWNERS[dist.ordinal()];
+		WorldSpawner[] array = SPAWNERS[level.ordinal()];
 		if(array.length > 0) {
 			Weighted.random(array).spawn(center, pos);
 		}
