@@ -18,11 +18,12 @@ import vekta.object.ship.PlayerShip;
 import vekta.object.ship.SpaceStation;
 import vekta.overlay.singleplayer.PlayerOverlay;
 import vekta.person.Person;
+import vekta.sound.SoundGroup;
+import vekta.sound.Tune;
 import vekta.spawner.MissionGenerator;
 import vekta.spawner.PersonGenerator;
 import vekta.spawner.WorldGenerator;
 import vekta.spawner.world.StarSystemSpawner;
-import vekta.tune.Tune;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,6 +39,8 @@ public class Singleplayer implements World, PlayerListener {
 	private static final float TIME_SCALE = .001F;
 	private static final float TIME_FALLOFF = .1F;
 	private static final int MAX_OBJECTS_PER_DIST = 5; // TODO: increase as we add more object types
+
+	private static final SoundGroup MUSIC = new SoundGroup("atmosphere");
 
 	private static int nextID = 0;
 
@@ -75,9 +78,9 @@ public class Singleplayer implements World, PlayerListener {
 	private Tune __tune;
 
 	public void start() {
-		v.frameCount = 0;
+		Resources.stopMusic();
 
-		Resources.setMusic("atmosphere");
+		v.frameCount = 0;
 
 		StarSystemSpawner.createSystem(PVector.random2D().mult(2 * AU_DISTANCE));
 
@@ -179,6 +182,10 @@ public class Singleplayer implements World, PlayerListener {
 			// Camera follow
 			cameraPos.set(playerShip.getPosition());
 			//			cameraSpd = playerShip.getVelocity().mag();
+		}
+
+		if(Resources.getMusic() == null) {
+			Resources.setMusic(MUSIC.random());
 		}
 
 		if(__tune != null) {

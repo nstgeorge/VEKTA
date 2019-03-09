@@ -5,7 +5,7 @@ import vekta.Vekta;
 import vekta.object.SpaceObject;
 import vekta.object.ship.Ship;
 import vekta.spawner.TuneGenerator;
-import vekta.tune.Tune;
+import vekta.sound.Tune;
 
 import static vekta.Vekta.G;
 import static vekta.Vekta.getWorld;

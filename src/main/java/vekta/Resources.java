@@ -158,10 +158,6 @@ public class Resources {
 		return shape;
 	}
 
-	public static SoundFile getMusic() {
-		return currentMusic;
-	}
-
 	// TODO: DRY up these sound methods a bit
 
 	public static void playSound(String key) {
@@ -201,10 +197,20 @@ public class Resources {
 		}
 	}
 
+	public static SoundFile getMusic() {
+		if(currentMusic != null && !currentMusic.isPlaying()) {
+			currentMusic = null;
+		}
+		return currentMusic;
+	}
+
 	public static void setMusic(String key) {
+		setMusic(getSound(key));
+	}
+
+	public static void setMusic(SoundFile sound) {
 		float volume = Settings.get("music");
 		if(volume > 0) {
-			SoundFile sound = getSound(key);
 			if(sound != currentMusic) {
 				// Stop previous music
 				if(currentMusic != null) {
@@ -213,9 +219,15 @@ public class Resources {
 				// Start new music
 				sound.amp(volume);
 				sound.loop();
-				// Keep track for next withTime
+				// Keep track for next time
 				currentMusic = sound;
 			}
+		}
+	}
+
+	public static void stopMusic() {
+		if(currentMusic != null) {
+			currentMusic.stop();
 		}
 	}
 

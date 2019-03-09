@@ -1,8 +1,8 @@
 package vekta.spawner;
 
 import vekta.Resources;
-import vekta.tune.Instrument;
-import vekta.tune.Tune;
+import vekta.sound.SoundGroup;
+import vekta.sound.Tune;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,9 +13,9 @@ import static processing.core.PApplet.round;
 import static vekta.Vekta.v;
 
 public class TuneGenerator {
-	private static final Instrument[] INSTRUMENTS = Arrays.stream(Resources.getStrings("instrument"))
-			.map(Instrument::new)
-			.toArray(Instrument[]::new);
+	private static final SoundGroup[] INSTRUMENTS = Arrays.stream(Resources.getStrings("instrument"))
+			.map(SoundGroup::new)
+			.toArray(SoundGroup[]::new);
 
 	private static final int[][] RHYTHMS = Arrays.stream(Resources.getStrings("rhythm"))
 			.map(s -> s.replace(" ", "")) // Remove whitespace
@@ -25,13 +25,13 @@ public class TuneGenerator {
 			.toArray(int[][]::new);
 
 	public static Tune randomTune() {
-		Instrument instrument = v.random(INSTRUMENTS);
+		SoundGroup instrument = v.random(INSTRUMENTS);
 
-		int offset = (int)v.random(instrument.getNoteRange());
+		int offset = (int)v.random(instrument.size());
 		Tune tune = new Tune(instrument, offset, v.random(.2F, .25F));
 
 		// Create a list of available notes
-		List<Integer> available = IntStream.range(0, instrument.getNoteRange()).boxed().collect(Collectors.toList());
+		List<Integer> available = IntStream.range(0, instrument.size()).boxed().collect(Collectors.toList());
 
 		int prev = 0;
 		for(int i : randomRhythm()) {
