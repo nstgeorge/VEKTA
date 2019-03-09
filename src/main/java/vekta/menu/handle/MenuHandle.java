@@ -17,7 +17,7 @@ import static vekta.Vekta.*;
  */
 public class MenuHandle {
 	private final MenuOption defaultOption;
-
+	
 	public MenuHandle(Context parent) {
 		this(new BackOption(parent));
 	}
@@ -50,6 +50,9 @@ public class MenuHandle {
 		return "select";
 	}
 
+	public void init(Menu menu){
+	}
+	
 	public void focus(Menu menu) {
 	}
 
@@ -87,7 +90,7 @@ public class MenuHandle {
 		boolean selected = menu.getIndex() == index;
 
 		// Draw border
-		v.stroke(selected ? 255 : UI_COLOR);
+		v.stroke(selected ? 220 : UI_COLOR);
 		v.noFill();
 		v.rect(getButtonX(), yPos, getButtonWidth() + (selected ? 10 : 0), 50);
 

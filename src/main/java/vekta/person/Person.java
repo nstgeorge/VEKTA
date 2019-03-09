@@ -6,9 +6,9 @@ import vekta.Resources;
 import vekta.mission.Mission;
 import vekta.mission.MissionListener;
 import vekta.object.SpaceObject;
-import vekta.terrain.HabitableTerrain;
+import vekta.spawner.PersonGenerator;
 import vekta.terrain.LandingSite;
-import vekta.terrain.Terrain;
+import vekta.terrain.building.HouseBuilding;
 import vekta.terrain.settlement.Settlement;
 
 import java.util.HashMap;
@@ -21,7 +21,7 @@ public class Person implements MissionListener {
 
 	private Faction faction;
 	private String title;
-	private LandingSite home;
+	private Settlement home;
 
 	public Person(String name, Faction faction) {
 		this.name = name;
@@ -57,29 +57,34 @@ public class Person implements MissionListener {
 	}
 
 	public boolean hasHome() {
-		return getHome() != null;
+		return home != null && !findHome().getSite().getParent().isDestroyed();
 	}
 
-	public LandingSite getHome() {
+	public Settlement findHome() {
+		if(!hasHome()) {
+			home = PersonGenerator.randomHome(this);
+		}
 		return home;
 	}
 
-	public SpaceObject getHomeObject() {
-		return getHome() != null ? getHome().getParent() : null;
+	public LandingSite findHomeSite() {
+		return hasHome() ? findHome().getSite() : null;
 	}
 
-	public Settlement getHomeSettlement() {
-		if(getHome() != null) {
-			Terrain terrain = getHome().getTerrain();
-			if(terrain instanceof HabitableTerrain) {
-				return ((HabitableTerrain)terrain).getSettlement();
-			}
+	public SpaceObject findHomeObject() {
+		LandingSite site = findHomeSite();
+		return site != null ? site.getParent() : null;
+	}
+
+	public void setHome(Settlement home) {
+		if(hasHome()) {
+			// Remove previous house if exists
+			home.remove(home.getParts().stream()
+					.filter(p -> p instanceof HouseBuilding && ((HouseBuilding)p).getPerson() == this)
+					.findFirst().orElse(null));
 		}
-		return null;
-	}
-
-	public void setHome(LandingSite home) {
 		this.home = home;
+		home.add(new HouseBuilding(this));
 	}
 
 	public Dialog createDialog(String type) {
@@ -87,12 +92,9 @@ public class Person implements MissionListener {
 		Dialog dialog = new Dialog(type, parts[0].trim(), this);
 		if(parts.length > 1) {
 			for(int i = 1; i < parts.length; i++) {
-				// Add response messages
+				// Add custom response messages
 				dialog.addResponse(parts[i].trim());
 			}
-		}
-		else {
-			dialog.addResponse("Next");
 		}
 		return dialog;
 	}

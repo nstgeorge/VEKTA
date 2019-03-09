@@ -1,14 +1,14 @@
 package vekta.terrain.settlement;
 
 import vekta.menu.Menu;
-import vekta.terrain.Terrain;
+import vekta.terrain.LandingSite;
 
 public interface SettlementPart {
 	String getName();
 
 	String getTypeString();
 	
-	void setupTerrain(Terrain terrain);
+	void setup(LandingSite site);
 
 	void setupSettlementMenu(Menu menu);
 }

@@ -86,6 +86,10 @@ public class Resources {
 		STRINGS.put(key, strings);
 	}
 
+	public static boolean hasStrings(String key) {
+		return STRINGS.containsKey(key);
+	}
+
 	public static String[] getStrings(String key) {
 		String[] array = STRINGS.get(key);
 		if(array == null) {
@@ -124,6 +128,10 @@ public class Resources {
 			throw new RuntimeException("Conflicting sounds for key: `" + key + "`");
 		}
 		SOUNDS.put(key, sound);
+	}
+
+	public static boolean hasSound(String key) {
+		return SOUNDS.containsKey(key);
 	}
 
 	public static SoundFile getSound(String key) {

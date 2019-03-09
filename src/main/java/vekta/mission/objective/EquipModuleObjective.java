@@ -1,4 +1,4 @@
-package vekta.mission;
+package vekta.mission.objective;
 
 import vekta.module.Module;
 import vekta.object.SpaceObject;

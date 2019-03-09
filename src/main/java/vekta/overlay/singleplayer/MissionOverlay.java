@@ -2,7 +2,7 @@ package vekta.overlay.singleplayer;
 
 import vekta.Player;
 import vekta.mission.Mission;
-import vekta.mission.Objective;
+import vekta.mission.objective.Objective;
 import vekta.overlay.Overlay;
 
 import java.util.List;

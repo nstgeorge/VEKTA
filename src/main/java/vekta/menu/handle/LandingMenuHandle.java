@@ -25,8 +25,15 @@ public class LandingMenuHandle extends MenuHandle {
 	}
 
 	@Override
+	public void init(Menu menu) {
+		site.getTune().reset();
+	}
+
+	@Override
 	public void render(Menu menu) {
 		super.render(menu);
+		
+		site.getTune().update();
 
 		SpaceObject s = site.getParent();
 		v.textSize(32);

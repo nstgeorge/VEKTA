@@ -1,6 +1,9 @@
-package vekta.mission;
+package vekta.mission.reward;
 
 import vekta.Player;
+import vekta.mission.Mission;
+import vekta.mission.MissionListener;
+import vekta.mission.MissionStatus;
 
 public abstract class Reward implements MissionListener {
 

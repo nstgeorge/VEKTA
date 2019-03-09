@@ -37,3 +37,5 @@ Composite
 Aerodynamic
 Advanced
 Mechanized
+Trusty
+Exotic

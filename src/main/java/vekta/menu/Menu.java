@@ -28,6 +28,8 @@ public class Menu implements Context {
 		this.player = player;
 		this.handle = handle;
 
+		handle.init(this);
+
 		if(getPlayer() != null) {
 			getPlayer().emit(PlayerEvent.MENU, this);
 		}
@@ -73,6 +75,10 @@ public class Menu implements Context {
 		options.add(item);
 	}
 
+	public void add(int index, MenuOption item) {
+		options.add(index, item);
+	}
+
 	public void addDefault() {
 		add(handle.getDefault());
 	}
@@ -95,8 +101,8 @@ public class Menu implements Context {
 	}
 
 	public void setAuto(MenuOption option) {
+		// Disambiguate multiple automatic options by adding both to the menu
 		if(autoOption != null) {
-			// Disambiguate multiple automatic options by adding both to the menu
 			add(autoOption);
 			this.autoOption = null;
 			hasAutoOption = true;

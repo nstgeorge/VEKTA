@@ -1,4 +1,4 @@
-package vekta.mission;
+package vekta.mission.objective;
 
 import vekta.menu.Menu;
 import vekta.menu.handle.LandingMenuHandle;
@@ -21,7 +21,7 @@ public class TaskObjective extends Objective {
 
 	@Override
 	public String getName() {
-		return name + " (" + (getSpaceObject() != null ? getSpaceObject().getName() : "anywhere") + ")";
+		return (getSpaceObject() != null ? "(" + getSpaceObject().getName() + ") " : "") + name;
 	}
 
 	@Override

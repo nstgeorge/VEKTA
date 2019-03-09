@@ -2,6 +2,8 @@ package vekta.mission;
 
 import vekta.Player;
 import vekta.PlayerEvent;
+import vekta.mission.objective.Objective;
+import vekta.mission.reward.Reward;
 
 import java.util.ArrayList;
 import java.util.List;

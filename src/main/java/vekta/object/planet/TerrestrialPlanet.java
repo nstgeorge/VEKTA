@@ -3,8 +3,6 @@ package vekta.object.planet;
 import processing.core.PVector;
 import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
-import vekta.spawner.WorldGenerator;
-import vekta.terrain.HabitableTerrain;
 import vekta.terrain.LandingSite;
 import vekta.terrain.Terrain;
 
@@ -18,12 +16,8 @@ public class TerrestrialPlanet extends Planet {
 		super(name, mass, density, position, velocity, color);
 
 		this.site = new LandingSite(this, terrain);
-
-		if(terrain instanceof HabitableTerrain) {
-			((HabitableTerrain)terrain).setSettlement(WorldGenerator.createSettlement(this));
-		}
-
-//		println("[Terrestrial] mass: " + getMass() + ", radius: " + getRadius());
+		
+		//		println("[Terrestrial] mass: " + getMass() + ", radius: " + getRadius());
 	}
 
 	public LandingSite getLandingSite() {

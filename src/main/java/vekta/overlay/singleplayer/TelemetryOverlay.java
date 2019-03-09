@@ -3,7 +3,7 @@ package vekta.overlay.singleplayer;
 import processing.core.PVector;
 import vekta.Player;
 import vekta.mission.Mission;
-import vekta.mission.Objective;
+import vekta.mission.objective.Objective;
 import vekta.module.ModuleType;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
@@ -30,11 +30,23 @@ public class TelemetryOverlay implements Overlay {
 
 	private void updateUIInformation() {
 		targeter = ((Targeter)player.getShip().getModule(ModuleType.TARGET_COMPUTER));
-		if(targeter != null) {
+		if(targeter != null && targeter.getTarget() != null) {
 			SpaceObject target = targeter.getTarget();
-			distString = String.valueOf(target != null
-					? (float)round(player.getShip().getPosition().dist(target.getPosition()) / AU_DISTANCE * 100) / 100
-					: 0);
+
+			float dist = player.getShip().getPosition().dist(target.getPosition());
+			String unit = "meters";
+			if(dist > AU_DISTANCE * .01F) {
+				dist /= AU_DISTANCE;
+				unit = "AU";
+			}
+			else if(dist > 100) {
+				dist /= 1000;
+				unit = "km";
+			}
+			distString = ((float)round(dist * 100) / 100) + " " + unit;
+		}
+		else {
+			distString = "--";
 		}
 	}
 
@@ -87,10 +99,10 @@ public class TelemetryOverlay implements Overlay {
 				}
 				if(target instanceof TerrestrialPlanet) {
 					TerrestrialPlanet closestPlanet = (TerrestrialPlanet)target;
-					targetString = target.getName() + " - " + distString + " AU \nHabitable: " + (closestPlanet.isHabitable() ? "YES" : "NO") + "\nMass: " + mass + " " + unit;
+					targetString = target.getName() + " - " + distString + " \nHabitable: " + (closestPlanet.isHabitable() ? "YES" : "NO") + "\nMass: " + mass + " " + unit;
 				}
 				else {
-					targetString = target.getName() + " - " + distString + " AU \nSpeed: " + (float)round(target.getVelocity().mag() * 100) / 100 + "\nMass: " + mass + " " + unit;
+					targetString = target.getName() + " - " + distString + " \nSpeed: " + (float)round(target.getVelocity().mag() * 100) / 100 + "\nMass: " + mass + " " + unit;
 				}
 				// Closest object arrow
 				drawDial("Direction", target.getPosition().sub(ship.getPosition()), 450, dialHeight, target.getColor());

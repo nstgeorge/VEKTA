@@ -25,3 +25,4 @@ Lubricant
 Detergent
 Repellent
 Fabricator
+Swiper

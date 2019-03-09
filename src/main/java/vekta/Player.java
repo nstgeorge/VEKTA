@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class Player {
-	private final int color;
+	private Faction faction;
 
 	private final List<PlayerListener> listeners = new ArrayList<>();
 
@@ -21,8 +21,8 @@ public final class Player {
 
 	private ModularShip currentShip;
 
-	public Player(int color) {
-		this.color = color;
+	public Player(Faction faction) {
+		setFaction(faction);
 
 		addListener(new PlayerListener() {
 			@Override
@@ -79,8 +79,19 @@ public final class Player {
 		});
 	}
 
+	public Faction getFaction() {
+		return faction;
+	}
+
+	public void setFaction(Faction faction) {
+		if(faction == null) {
+			throw new RuntimeException("Player faction cannot be null");
+		}
+		this.faction = faction;
+	}
+
 	public int getColor() {
-		return color;
+		return getFaction().getColor();
 	}
 
 	public ModularShip getShip() {

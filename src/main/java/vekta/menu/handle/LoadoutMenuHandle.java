@@ -51,12 +51,13 @@ public class LoadoutMenuHandle extends MenuHandle {
 		v.textAlign(v.LEFT);
 		v.text("Installed:", v.width - getButtonX() - 20, getButtonY(-2));
 
+		int basis = getButtonY(0);
+
 		v.textSize(24);
 		v.fill(v.color(200));
 		for(int i = 0; i < modules.size(); i++) {
 			Module m = modules.get(i);
-
-			v.text(m.getName(), v.width - getButtonX(), getButtonY(i));
+			v.text(m.getName(), v.width - getButtonX(), (basis + getButtonY(i)) / 2F);
 		}
 	}
 }

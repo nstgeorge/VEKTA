@@ -70,7 +70,7 @@ public class StarSystemSpawner implements WorldGenerator.WorldSpawner {
 				Resources.generateString("planet"),
 				mass, // Mass
 				density,   // Density
-				createTerrain(), // Terrain
+				randomTerrain(), // Terrain
 				pos,  // Coords
 				new PVector(),  // Velocity
 				randomPlanetColor() // Color
@@ -115,7 +115,7 @@ public class StarSystemSpawner implements WorldGenerator.WorldSpawner {
 				Resources.generateString("moon"),
 				mass, // Mass
 				density,   // Density
-				createTerrain(), // Terrain
+				randomTerrain(), // Terrain
 				pos,  // Coords
 				new PVector(),  // Velocity
 				randomPlanetColor() // Color

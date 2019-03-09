@@ -17,7 +17,7 @@ public class ModuleItem extends Item {
 	}
 
 	@Override
-	public void setupActionMenu(Menu menu) {
-		getModule().onActionMenu(this, menu);
+	public void onMenu(Menu menu) {
+		getModule().onItemMenu(this, menu);
 	}
 }

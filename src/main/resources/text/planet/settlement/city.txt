@@ -1,4 +1,5 @@
 {settlement}
 {settlement} City
+{settlement} Spaceport
 New {settlement}
 Greater {settlement}

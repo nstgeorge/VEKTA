@@ -3,6 +3,8 @@ package vekta.menu.option;
 import vekta.menu.Menu;
 import vekta.object.ship.ModularShip;
 
+import static processing.core.PApplet.ceil;
+
 public class RechargeOption implements MenuOption {
 	private final ModularShip ship;
 	private final float price;
@@ -19,7 +21,7 @@ public class RechargeOption implements MenuOption {
 	}
 
 	public int getCost() {
-		return Math.round(price * (1 - ship.getEnergy() / ship.getMaxEnergy()));
+		return ceil(price * (1 - ship.getEnergy() / ship.getMaxEnergy()));
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import processing.core.PVector;
 import processing.sound.LowPass;
 import vekta.context.PauseMenuContext;
 import vekta.context.World;
+import vekta.item.ColonyItem;
 import vekta.item.ModuleItem;
 import vekta.module.*;
 import vekta.module.station.SensorModule;
@@ -21,6 +22,7 @@ import vekta.spawner.MissionGenerator;
 import vekta.spawner.PersonGenerator;
 import vekta.spawner.WorldGenerator;
 import vekta.spawner.world.StarSystemSpawner;
+import vekta.tune.Tune;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,7 +44,7 @@ public class Singleplayer implements World, PlayerListener {
 	private boolean started;
 
 	// Low pass filter
-	private LowPass lowPass;
+	private LowPass lowPass = new LowPass(v);
 
 	// Camera position tracking
 	private final PVector cameraPos = new PVector();
@@ -68,20 +70,22 @@ public class Singleplayer implements World, PlayerListener {
 
 	private PlayerOverlay overlay;
 
+	private Tune __tune;
+
 	public void start() {
 		v.frameCount = 0;
-
-		lowPass = new LowPass(v);
 
 		Resources.setMusic("atmosphere");
 
 		StarSystemSpawner.createSystem(PVector.random2D().mult(2 * AU_DISTANCE));
 
-		player = new Player(UI_COLOR);
+		Faction playerFaction = new Faction("VEKTA I", UI_COLOR);
+
+		player = new Player(playerFaction);
 		player.addListener(this);
 
 		PlayerShip playerShip = new PlayerShip(
-				"VEKTA I",
+				player.getFaction().getName(),
 				PVector.fromAngle(0), // Heading
 				new PVector(), // Position
 				new PVector(),    // Velocity
@@ -90,8 +94,6 @@ public class Singleplayer implements World, PlayerListener {
 		playerShip.getInventory().add(50); // Starting money
 		playerShip.setController(player);
 		addObject(playerShip);
-
-		//		WorldGenerator.orbit(findOrbitObject(playerShip), playerShip,0);
 
 		// Configure UI overlay
 		overlay = new PlayerOverlay(player);
@@ -102,8 +104,7 @@ public class Singleplayer implements World, PlayerListener {
 				"OUTPOST I",
 				new StationCoreModule(),
 				new PVector(1, 0),
-				// PVector.random2D(), // Heading
-				new PVector(100, 100), // Position
+				new PVector(300, 100), // Position
 				new PVector(),    // Velocity
 				playerShip.getColor()
 		);
@@ -127,6 +128,7 @@ public class Singleplayer implements World, PlayerListener {
 		playerShip.getInventory().add(new ModuleItem(new StructuralModule(3, 1)));
 		playerShip.getInventory().add(new ModuleItem(new StationCoreModule(1)));
 		playerShip.getInventory().add(new ModuleItem(new OrbitModule(1)));
+		playerShip.getInventory().add(new ColonyItem());
 
 		// Testing out a mission sequence
 		Person person = PersonGenerator.createPerson();
@@ -162,6 +164,9 @@ public class Singleplayer implements World, PlayerListener {
 			started = true;
 			start();
 		}
+
+		// Uncomment for testing
+		// __tune = TuneGenerator.randomTune();
 	}
 
 	@Override
@@ -171,6 +176,10 @@ public class Singleplayer implements World, PlayerListener {
 			// Camera follow
 			cameraPos.set(playerShip.getPosition());
 			//			cameraSpd = playerShip.getVelocity().mag();
+		}
+
+		if(__tune != null) {
+			__tune.update();////temp
 		}
 
 		// Update time factor

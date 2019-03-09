@@ -1,6 +1,7 @@
-package vekta.mission;
+package vekta.mission.reward;
 
 import vekta.Player;
+import vekta.mission.Mission;
 
 import static vekta.Vekta.v;
 

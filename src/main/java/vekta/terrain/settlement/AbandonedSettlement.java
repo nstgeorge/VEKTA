@@ -6,6 +6,7 @@ import vekta.item.Inventory;
 import vekta.menu.Menu;
 import vekta.menu.option.LootMenuOption;
 import vekta.spawner.ItemGenerator;
+import vekta.terrain.LandingSite;
 
 public class AbandonedSettlement extends Settlement {
 	private final Inventory inventory = new Inventory();

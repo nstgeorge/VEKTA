@@ -4,6 +4,8 @@ import processing.core.PVector;
 import vekta.Vekta;
 import vekta.object.SpaceObject;
 import vekta.object.ship.Ship;
+import vekta.spawner.TuneGenerator;
+import vekta.tune.Tune;
 
 import static vekta.Vekta.G;
 import static vekta.Vekta.getWorld;
@@ -16,11 +18,15 @@ public class LandingSite {
 	private final SpaceObject parent;
 	private final Terrain terrain;
 
+	private final Tune tune = TuneGenerator.randomTune();
+
 	private Ship landed;
 
 	public LandingSite(SpaceObject parent, Terrain terrain) {
 		this.parent = parent;
 		this.terrain = terrain;
+		
+		terrain.setup(this);
 	}
 
 	public SpaceObject getParent() {
@@ -33,6 +39,10 @@ public class LandingSite {
 
 	public Ship getLanded() {
 		return landed;
+	}
+
+	public Tune getTune() {
+		return tune;
 	}
 
 	public void land(Ship ship) {

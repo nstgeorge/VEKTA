@@ -1,4 +1,4 @@
-package vekta.mission;
+package vekta.mission.objective;
 
 import vekta.item.Item;
 import vekta.menu.Menu;
@@ -32,7 +32,7 @@ public class DeliverItemObjective extends Objective {
 
 	@Override
 	public SpaceObject getSpaceObject() {
-		return getPerson().getHomeObject();
+		return getPerson().findHomeObject();
 	}
 
 	@Override

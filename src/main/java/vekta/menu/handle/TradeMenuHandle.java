@@ -28,7 +28,7 @@ public class TradeMenuHandle extends MenuHandle {
 
 	@Override
 	public int getButtonWidth() {
-		return v.width * 2 / 3;
+		return super.getButtonWidth() * 2;
 	}
 
 	@Override

@@ -7,10 +7,10 @@ import vekta.menu.option.DialogOption;
 import vekta.menu.option.MenuOption;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import static vekta.Vekta.applyContext;
-import static vekta.Vekta.setContext;
+import static vekta.Vekta.*;
 
 public class Dialog {
 	private final String type;
@@ -18,6 +18,7 @@ public class Dialog {
 	private final Person person;
 
 	private final List<String> responses = new ArrayList<>();
+	private final List<Dialog> continuations = new ArrayList<>();
 	private final List<MenuOption> options = new ArrayList<>();
 
 	public Dialog(String type, String message, Person person) {
@@ -50,10 +51,8 @@ public class Dialog {
 		return options;
 	}
 
-	public void add(Dialog dialog) {
-		for(String response : getResponses()) {
-			add(response, dialog);
-		}
+	public void addContinuation(Dialog dialog) {
+		continuations.add(dialog);
 	}
 
 	public void add(MenuOption option) {
@@ -70,13 +69,21 @@ public class Dialog {
 
 	public void openMenu(Player player, MenuOption def) {
 		Menu menu = new Menu(player, new DialogMenuHandle(def, this));
-		if(getOptions().isEmpty()) {
-			menu.addDefault();
+		if(!continuations.isEmpty()) {
+			Dialog next = v.random(continuations);
+			List<String> responses = getResponses().isEmpty() ? Collections.singletonList("Next") : getResponses();
+			for(String response : responses) {
+				menu.add(new DialogOption(response, next));
+			}
 		}
-		else {
+
+		if(!getOptions().isEmpty()) {
 			for(MenuOption option : getOptions()) {
 				menu.add(option);
 			}
+		}
+		else {
+			menu.addDefault();
 		}
 		setContext(menu);
 		applyContext();

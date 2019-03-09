@@ -1,8 +1,5 @@
-{settlement}
 {settlement}town
 {settlement}ville
-{settlement} Village
-{settlement} Hamlet
+{settlement} {town_noun}
 Little {settlement}
 Lesser {settlement}
-New {settlement}

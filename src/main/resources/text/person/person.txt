@@ -5,4 +5,6 @@
 Lord {firstname}
 Mr. {firstname}
 Ms. {firstname}
+Dr. {firstname}
+The {firstname}
 {item_noun} {impersonal_name}

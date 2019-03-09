@@ -8,7 +8,6 @@ import vekta.menu.option.BackOption;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 import vekta.object.planet.TerrestrialPlanet;
-import vekta.terrain.LandingSite;
 
 import static processing.core.PApplet.round;
 import static vekta.Vekta.*;
@@ -32,7 +31,7 @@ public class TelescopeModule extends ShipModule {
 
 	@Override
 	public String getName() {
-		return "Survey Telescope";
+		return "Survey Telescope v" + getResolution();
 	}
 
 	@Override
@@ -60,8 +59,7 @@ public class TelescopeModule extends ShipModule {
 				float dist = PVector.dist(getShip().getPosition(), planet.getPosition());
 				float maxDist = getResolution() * RANGE_SCALE;
 				if(dist <= maxDist) {
-					LandingSite site = ((TerrestrialPlanet)t.getTarget()).getLandingSite();
-					Menu menu = new Menu(getShip().getController(), new SurveyMenuHandle(new BackOption(getWorld()), site));
+					Menu menu = new Menu(getShip().getController(), new SurveyMenuHandle(new BackOption(getWorld()), planet.getLandingSite()));
 					menu.addDefault();
 					setContext(menu);
 				}

@@ -1,0 +1,6 @@
+Barrow
+Hamlet
+Town
+Farm
+District
+Province

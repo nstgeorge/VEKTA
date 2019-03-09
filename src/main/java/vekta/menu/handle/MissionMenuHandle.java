@@ -4,8 +4,8 @@ import vekta.menu.Menu;
 import vekta.menu.option.MenuOption;
 import vekta.menu.option.MissionOption;
 import vekta.mission.Mission;
-import vekta.mission.Objective;
-import vekta.mission.Reward;
+import vekta.mission.objective.Objective;
+import vekta.mission.reward.Reward;
 
 import java.util.List;
 

@@ -2,7 +2,6 @@ package vekta.terrain.settlement;
 
 import vekta.Faction;
 import vekta.spawner.WorldGenerator;
-import vekta.terrain.Terrain;
 
 public class CitySettlement extends Settlement {
 
@@ -19,8 +18,8 @@ public class CitySettlement extends Settlement {
 	}
 
 	@Override
-	public void onTerrain(Terrain terrain) {
-		terrain.addFeature("Urban");
+	public void onSetup() {
+		getTerrain().addFeature("Urban");
 	}
 
 }

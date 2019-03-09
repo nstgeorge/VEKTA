@@ -222,7 +222,7 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 	@Override
 	public void draw(RenderLevel level, float r) {
 		float t = getWorld().getTimeScale();
-		if(hasController()) {
+		if(!getRenderLevel().isVisibleTo(level) && hasController()) {
 			// Draw acceleration vector
 			v.stroke(255, 0, 0);
 			v.line(0, 0, (acceleration.x * 100 / t), (acceleration.y * 100 / t));
@@ -260,9 +260,6 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 		Menu menu = new Menu(getController(), new ObjectMenuHandle(new BackOption(getWorld()), this));
 		menu.add(new LoadoutMenuOption(this));
 		menu.add(new MissionMenuOption(getController()));
-		for(Item item : getInventory()){
-			item.setupActionMenu(menu);
-		}
 		menu.addDefault();
 		setContext(menu);
 
@@ -346,8 +343,11 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 
 	@Override
 	public void onMenu(Menu menu) {
+		for(Item item : getInventory()){
+			item.onMenu(menu);
+		}
 		for(Module module : getModules()) {
-			module.onMenu(menu);
+			module.onItemMenu(menu);
 		}
 	}
 

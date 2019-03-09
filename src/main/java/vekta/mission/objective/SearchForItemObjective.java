@@ -1,9 +1,10 @@
-package vekta.mission;
+package vekta.mission.objective;
 
 import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.menu.handle.LootMenuHandle;
+import vekta.menu.option.ItemTradeOption;
 import vekta.object.SpaceObject;
 
 import java.util.HashSet;
@@ -44,12 +45,14 @@ public class SearchForItemObjective extends Objective {
 	public void onMenu(Menu menu) {
 		if(menu.getHandle() instanceof LootMenuHandle) {
 			Inventory inv = ((LootMenuHandle)menu.getHandle()).getInventory();
-			if(!alreadyChecked.contains(inv) && v.chance(getRarity())) {
+			if(!alreadyChecked.contains(inv)) {
 				alreadyChecked.add(inv);
-				
-				getMission().add(new ObtainItemObjective(getItem()));
-				inv.add(getItem());
-				complete();
+
+				if(v.chance(getRarity())) {
+					getMission().add(new ObtainItemObjective(getItem()));
+					menu.add(new ItemTradeOption(inv, item, 0));
+					complete();
+				}
 			}
 		}
 	}

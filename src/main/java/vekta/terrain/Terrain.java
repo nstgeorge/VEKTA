@@ -41,11 +41,7 @@ public abstract class Terrain {
 	protected boolean chance(float amount) {
 		return v.random(1) < amount;
 	}
-
-	public boolean isHabitable() {
-		return isInhabited();
-	}
-
+	
 	public boolean isInhabited() {
 		return false;
 	}
@@ -55,6 +51,10 @@ public abstract class Terrain {
 	}
 
 	public abstract String getOverview();
+
+	public void setup(LandingSite site) {
+		
+	}
 
 	public abstract void setupLandingMenu(Menu menu);
 

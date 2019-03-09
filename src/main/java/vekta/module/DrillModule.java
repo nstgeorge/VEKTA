@@ -43,7 +43,7 @@ public class DrillModule extends ShipModule {
 	}
 
 	@Override
-	public void onMenu(Menu menu) {
+	public void onItemMenu(Menu menu) {
 		if(menu.getHandle() instanceof LandingMenuHandle) {
 			LandingSite site = ((LandingMenuHandle)menu.getHandle()).getSite();
 

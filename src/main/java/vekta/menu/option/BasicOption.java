@@ -8,6 +8,7 @@ public class BasicOption implements MenuOption {
 	private final String name;
 	private final Consumer<Menu> action;
 	private int color;
+	private boolean remove;
 
 	public BasicOption(String name, Runnable action) {
 		this(name, menu -> action.run());
@@ -34,8 +35,16 @@ public class BasicOption implements MenuOption {
 		return this;
 	}
 
+	public BasicOption withRemoval() {
+		this.remove = true;
+		return this;
+	}
+
 	@Override
 	public void select(Menu menu) {
 		action.accept(menu);
+		if(remove) {
+			menu.remove(this);
+		}
 	}
 }

@@ -17,10 +17,10 @@ public class DialogOption implements MenuOption {
 		return name;
 	}
 
-	@Override
-	public int getColor() {
-		return dialog.getPerson().getColor();
-	}
+//	@Override
+//	public int getColor() {
+//		return dialog.getPerson().getColor();
+//	}
 
 	@Override
 	public void select(Menu menu) {

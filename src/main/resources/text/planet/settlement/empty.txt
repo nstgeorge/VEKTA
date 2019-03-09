@@ -1,0 +1,3 @@
+Forgotten {town_noun}
+Quiet {town_noun} 
+Old {settlement}

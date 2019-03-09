@@ -1,4 +1,4 @@
-package vekta.mission;
+package vekta.mission.objective;
 
 import vekta.menu.Menu;
 import vekta.menu.handle.DialogMenuHandle;
@@ -39,7 +39,7 @@ public class DialogObjective extends Objective {
 
 	@Override
 	public SpaceObject getSpaceObject() {
-		return getPerson().getHomeObject();
+		return getPerson().findHomeObject();
 	}
 
 	@Override
@@ -47,6 +47,7 @@ public class DialogObjective extends Objective {
 		if(menu.getHandle() instanceof DialogMenuHandle) {
 			Dialog dialog = ((DialogMenuHandle)menu.getHandle()).getDialog();
 			if(dialog.getPerson() == getDialog().getPerson()) {
+				complete();
 				menu.setAuto(new DialogOption(getMission().getName(), dialog));
 			}
 		}

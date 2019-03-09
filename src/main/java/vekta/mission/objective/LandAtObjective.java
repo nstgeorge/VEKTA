@@ -1,4 +1,4 @@
-package vekta.mission;
+package vekta.mission.objective;
 
 import vekta.object.SpaceObject;
 import vekta.terrain.LandingSite;

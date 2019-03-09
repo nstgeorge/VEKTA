@@ -5,7 +5,8 @@ import vekta.Faction;
 import vekta.RenderLevel;
 import vekta.Resources;
 import vekta.object.SpaceObject;
-import vekta.object.planet.Planet;
+import vekta.spawner.item.BondItemSpawner;
+import vekta.spawner.item.ColonyItemSpawner;
 import vekta.spawner.item.MissionItemSpawner;
 import vekta.spawner.item.ModuleItemSpawner;
 import vekta.terrain.*;
@@ -41,12 +42,12 @@ public class WorldGenerator {
 		}
 	}
 
-	public static Terrain createTerrain() {
+	public static Terrain randomTerrain() {
 		Terrain terrain;
 		boolean features = true;
 		float r = v.random(1);
 		if(r > .3) {
-			terrain = new HabitableTerrain();
+			terrain = new HabitableTerrain(createSettlement());
 		}
 		else if(r > .2) {
 			terrain = new MiningTerrain();
@@ -71,7 +72,7 @@ public class WorldGenerator {
 		return terrain;
 	}
 
-	public static Settlement createSettlement(Planet planet) {
+	public static Settlement createSettlement() {
 		Faction faction = FactionGenerator.randomFaction();
 		float r = v.random(1);
 		if(r > .7) {
@@ -80,27 +81,36 @@ public class WorldGenerator {
 		else if(r > .5) {
 			return new TownSettlement(faction);
 		}
-		else if(r > .2) {
+		else if(r > .3) {
 			return new ColonySettlement(faction);
 		}
-		else if(r > .1) {
+		else if(r > .2) {
 			return new OutpostSettlement(faction);
 		}
+		else if(r > .1) {
+			return new EmptySettlement(faction);
+		}
 		else {
-			return new AbandonedSettlement(faction, planet.getName());
+			return new AbandonedSettlement(faction, Resources.generateString("settlement"));
 		}
 	}
 
 	public static MarketBuilding randomMarket(int shopTier) {
 		float r = v.random(1);
-		if(r > .5) {
+		if(r > .7) {
 			return new MarketBuilding(shopTier, "Goods", null);
 		}
-		else if(r > .2) {
+		else if(r > .4) {
 			return new MarketBuilding(shopTier, "Trinkets", new MissionItemSpawner());
 		}
-		else {
+		else if(r > .2) {
 			return new MarketBuilding(shopTier, "Modules", new ModuleItemSpawner());
+		}
+		else if(r > .1) {
+			return new MarketBuilding(shopTier, "Bonds", new BondItemSpawner());
+		}
+		else {
+			return new MarketBuilding(shopTier, "Supplies", new ColonyItemSpawner());
 		}
 	}
 

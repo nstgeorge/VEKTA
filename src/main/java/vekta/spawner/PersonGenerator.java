@@ -1,40 +1,26 @@
 package vekta.spawner;
 
-import vekta.Faction;
+import processing.core.PVector;
+import vekta.RenderLevel;
 import vekta.Resources;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.person.Person;
-import vekta.terrain.LandingSite;
-import vekta.terrain.building.HouseBuilding;
+import vekta.spawner.world.AsteroidSpawner;
+import vekta.terrain.HabitableTerrain;
+import vekta.terrain.settlement.OutpostSettlement;
 import vekta.terrain.settlement.Settlement;
 
-import java.util.Collections;
 import java.util.List;
 
 import static vekta.Vekta.*;
 
 public class PersonGenerator {
 	public static Person createPerson() {
-		TerrestrialPlanet home = getWorld().findRandomObject(TerrestrialPlanet.class);
-		if(home != null) {
-			Person person = createPerson(home.getLandingSite()); // TODO: set home to Settlement rather than LandingSite
-			List<Settlement> settlements = home.getTerrain().getSettlements();
-			if(!settlements.isEmpty()) {
-				Settlement settlement = v.random(settlements);
-				settlement.add(new HouseBuilding(person));
-			}
-			return person;
-		}
-		return createPerson(null);
+		return createPerson(randomHome());
 	}
 
-	public static Person createPerson(LandingSite home) {
-		List<Settlement> settlements = home != null ? home.getTerrain().getSettlements() : Collections.emptyList();
-		Faction faction = settlements.isEmpty()
-				? FactionGenerator.randomFaction()
-				: v.random(settlements).getFaction();
-
-		Person person = new Person(randomPersonName(), faction);
+	public static Person createPerson(Settlement home) {
+		Person person = new Person(randomPersonName(), FactionGenerator.randomFaction());
 		person.setHome(home);
 		if(v.random(1) < .5F) {
 			person.setTitle(randomPersonTitle(person));
@@ -49,11 +35,45 @@ public class PersonGenerator {
 
 	public static String randomPersonTitle(Person person) {
 		float r = v.random(1);
-		if(r > .5 && person.getHome() != null) {
-			return "of " + person.getHomeObject().getName();
+		if(r > .6 && person.hasHome()) {
+			return "of " + person.findHomeObject().getName();
+		}
+		if(r > .4) {
+			return "of " + person.getFaction().getName();
 		}
 		else {
 			return Resources.generateString("person_title");
 		}
+	}
+
+	public static void updateHome(Person person) {
+		if(!person.hasHome()) {
+			person.setHome(PersonGenerator.randomHome(person));
+		}
+	}
+
+	public static Settlement randomHome(Person person) {
+		if(person != null && person.hasHome() && v.chance(.2F)) {
+			// Use person's home settlement
+			return person.findHome();
+		}
+		return randomHome();
+	}
+
+	public static Settlement randomHome() {
+		TerrestrialPlanet planet = getWorld().findRandomObject(TerrestrialPlanet.class);
+		if(planet != null) {
+			// Find a suitable existing settlement
+			List<Settlement> settlements = planet.getLandingSite().getTerrain().getSettlements();
+			if(!settlements.isEmpty()) {
+				return v.random(settlements);
+			}
+		}
+
+		// If no candidate was found, create an asteroid with a new settlement
+		PVector pos = WorldGenerator.randomSpawnPosition(RenderLevel.PLANET, new PVector());
+		Settlement settlement = new OutpostSettlement(FactionGenerator.randomFaction());
+		AsteroidSpawner.createAsteroid(pos, new HabitableTerrain(settlement));
+		return settlement;
 	}
 }

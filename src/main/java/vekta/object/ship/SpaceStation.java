@@ -68,15 +68,14 @@ public class SpaceStation extends ModularShip {
 		return false;
 	}
 
-	// TODO: compute
 	@Override
 	public float getMass() {
-		return 1000 * getModules().size();
+		return 1000 * getModules().size(); // Estimate mass for now
 	}
 
 	@Override
 	public float getRadius() {
-		return TILE_SIZE * sqrt(getModules().size());
+		return TILE_SIZE * sqrt(5 * getModules().size()); // Estimate radius for now
 	}
 
 	@Override

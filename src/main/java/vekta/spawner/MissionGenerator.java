@@ -1,6 +1,7 @@
 package vekta.spawner;
 
 import processing.core.PVector;
+import vekta.Faction;
 import vekta.Player;
 import vekta.RenderLevel;
 import vekta.Resources;
@@ -11,7 +12,12 @@ import vekta.menu.handle.MissionMenuHandle;
 import vekta.menu.option.BasicOption;
 import vekta.menu.option.ItemTradeOption;
 import vekta.menu.option.MissionOption;
-import vekta.mission.*;
+import vekta.mission.Mission;
+import vekta.mission.objective.*;
+import vekta.mission.reward.AllianceReward;
+import vekta.mission.reward.ItemReward;
+import vekta.mission.reward.MoneyReward;
+import vekta.mission.reward.SettlementReward;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.object.ship.MessengerShip;
 import vekta.person.Dialog;
@@ -48,19 +54,35 @@ public class MissionGenerator {
 	public static Mission createMission(Person person, int lootTier) {
 		Mission mission = new Mission(randomMissionName());
 		mission.add(person);
-		Inventory inv = new Inventory();
-		inv.add((int)(10 * lootTier * v.random(1, lootTier) + 1));
-		if(v.chance(.3F)) {
-			inv.add(ItemGenerator.randomItem());
-		}
-		if(inv.getMoney() > 0) {
-			mission.add(new MoneyReward(inv.getMoney()));
-		}
-		for(Item item : inv) {
-			mission.add(new ItemReward(item));
-		}
+		addRewards(person, mission, lootTier);
 		addObjectives(person, mission, (int)v.random(lootTier + 1) + 1);
 		return mission;
+	}
+
+	public static void addRewards(Person person, Mission mission, int lootTier) {
+		float r = v.random(1);
+		if(r > .4) {
+			Inventory inv = new Inventory();
+			inv.add((int)(10 * lootTier * v.random(1, lootTier) + 1));
+			if(v.chance(.3F)) {
+				inv.add(ItemGenerator.randomItem());
+			}
+			if(inv.getMoney() > 0) {
+				mission.add(new MoneyReward(inv.getMoney()));
+			}
+			for(Item item : inv) {
+				mission.add(new ItemReward(item));
+			}
+		}
+		else if(r > .2) {
+			Faction faction = FactionGenerator.randomFaction(person);
+			//			if(faction.isNeutral(player)){
+			mission.add(new AllianceReward(faction));
+			//			}
+		}
+		else {
+			mission.add(new SettlementReward(PersonGenerator.randomHome(person)));
+		}
 	}
 
 	public static void addObjectives(Person person, Mission mission) {
@@ -71,8 +93,7 @@ public class MissionGenerator {
 		float r = v.random(1);
 		Objective objective;
 		if(r > .7) {
-			LandingSite site = randomLandingSite(person);
-			float sr = v.random(1);
+			LandingSite site = randomLandingSite();
 			mission.add(new LandAtObjective(site.getParent()));
 			String task = Resources.generateString(site.getTerrain().isInhabited() ? "settlement_task" : "planet_task");
 			objective = new TaskObjective(task, site.getParent());
@@ -88,7 +109,7 @@ public class MissionGenerator {
 		}
 		else {
 			Person other = randomMissionPerson(person);
-			mission.add(new LandAtObjective(other.getHomeObject()));
+			mission.add(new LandAtObjective(other.findHomeObject()));
 			objective = new DialogObjective("Confront", randomConfrontDialog(other, person, mission));
 		}
 
@@ -98,15 +119,12 @@ public class MissionGenerator {
 		mission.add(objective);
 	}
 
-	public static LandingSite randomLandingSite(Person person) {
+	public static LandingSite randomLandingSite() {
 		TerrestrialPlanet planet = getWorld().findRandomObject(TerrestrialPlanet.class);
-		if(planet != null && v.chance(.8F)) {
-			return planet.getLandingSite();
+		if(planet == null) {
+			planet = AsteroidSpawner.createAsteroid(WorldGenerator.randomSpawnPosition(RenderLevel.PLANET, new PVector()));
 		}
-		else {
-			PVector pos = WorldGenerator.randomSpawnPosition(RenderLevel.PLANET, new PVector());
-			return AsteroidSpawner.createAsteroid(pos).getLandingSite();
-		}
+		return planet.getLandingSite();
 	}
 
 	public static Person randomMissionPerson() {
@@ -118,14 +136,8 @@ public class MissionGenerator {
 		if(person == null || person == exclude || v.chance(.1F)) {
 			person = PersonGenerator.createPerson();
 		}
-		updateHome(person);
+		PersonGenerator.updateHome(person);
 		return person;
-	}
-
-	public static void updateHome(Person person) {
-		if(!person.hasHome()) {
-			person.setHome(randomLandingSite(person));
-		}
 	}
 
 	public static String randomMissionName() {
@@ -143,7 +155,7 @@ public class MissionGenerator {
 		}
 		Dialog greeting = person.createDialog("greeting");
 		if(dialog != null) {
-			greeting.add(dialog);
+			greeting.addContinuation(dialog);
 		}
 		return greeting;
 	}
@@ -169,14 +181,18 @@ public class MissionGenerator {
 				setContext(sub);
 			}));
 		}
-//		Dialog greeting = person.createDialog("greeting");
-//		greeting.add(dialog);
-//		return greeting;
+		//		Dialog greeting = person.createDialog("greeting");
+		//		greeting.add(dialog);
+		//		return greeting;
 		return dialog;
 	}
 
 	public static Dialog randomConfrontDialog(Person person, Person sender, Mission mission) {
 		Dialog dialog = person.createDialog("confronted");
+
+		if(v.chance(.5F)) {
+			dialog.addContinuation(person.createDialog("confession"));
+		}
 
 		if(v.chance(.75F)) {
 			Dialog greeting = person.createDialog("greeting");

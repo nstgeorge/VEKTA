@@ -35,9 +35,9 @@ public interface Module {
 	default void onKeyRelease(ControlKey key) {
 	}
 	
-	default void onActionMenu(Item item, Menu menu) {
+	default void onItemMenu(Item item, Menu menu) {
 	}
 
-	default void onMenu(Menu menu) {
+	default void onItemMenu(Menu menu) {
 	}
 }

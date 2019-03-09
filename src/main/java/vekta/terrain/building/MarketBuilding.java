@@ -5,7 +5,7 @@ import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.menu.option.MarketOption;
 import vekta.spawner.ItemGenerator;
-import vekta.terrain.Terrain;
+import vekta.terrain.LandingSite;
 import vekta.terrain.settlement.SettlementPart;
 
 import java.util.HashMap;
@@ -14,7 +14,7 @@ import java.util.Map;
 import static vekta.Vekta.v;
 
 public class MarketBuilding implements SettlementPart {
-	private static final float ITEM_MARKUP = 1.5F; // Price modifier after buying/selling to a landing terrain
+	//	private static final float ITEM_MARKUP = 1.5F; // Price modifier after buying/selling to a landing terrain
 
 	private final Inventory inventory = new Inventory();
 	private final Map<Item, Integer> offers = new HashMap<>();
@@ -46,16 +46,16 @@ public class MarketBuilding implements SettlementPart {
 	}
 
 	@Override
-	public void setupTerrain(Terrain terrain) {
-		terrain.addFeature("Roads");
+	public void setup(LandingSite site) {
+		site.getTerrain().addFeature("Roads");
 	}
 
 	@Override
 	public void setupSettlementMenu(Menu menu) {
 		Inventory inv = menu.getPlayer().getInventory();
 
-		computeOffers(inv, shipOffers, offers, 1 / ITEM_MARKUP);
-		computeOffers(getInventory(), offers, shipOffers, ITEM_MARKUP);
+		computeOffers(inv, shipOffers, offers, true);
+		computeOffers(getInventory(), offers, shipOffers, false);
 
 		menu.add(new MarketOption(this, true, inv/*, getInventory()*/, offers));
 		menu.add(new MarketOption(this, false, inv/*, getInventory()*/, shipOffers));
@@ -65,10 +65,14 @@ public class MarketBuilding implements SettlementPart {
 		return spawner == null || spawner.isValid(item);
 	}
 
-	private void computeOffers(Inventory inv, Map<Item, Integer> thisSide, Map<Item, Integer> otherSide, float markup) {
+	private void computeOffers(Inventory inv, Map<Item, Integer> thisSide, Map<Item, Integer> otherSide, boolean buying) {
 		// TODO: adjust based on economic system
 		for(Item item : inv) {
 			if(otherSide.containsKey(item)) {
+				float markup = item.getType().getMarkupFactor();
+				if(buying) {
+					markup = 1 / markup;
+				}
 				int price = (int)(otherSide.get(item) * markup);
 				thisSide.put(item, price);
 			}

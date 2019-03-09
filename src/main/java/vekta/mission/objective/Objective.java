@@ -1,7 +1,10 @@
-package vekta.mission;
+package vekta.mission.objective;
 
 import vekta.Player;
 import vekta.PlayerListener;
+import vekta.mission.Mission;
+import vekta.mission.MissionListener;
+import vekta.mission.MissionStatus;
 import vekta.object.SpaceObject;
 
 import java.util.ArrayList;

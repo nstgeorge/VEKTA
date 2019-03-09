@@ -3,9 +3,14 @@
 Coordinate Chip
 Special {item_noun}
 Humming {item_noun}
+Pulsing {item_noun}
+Entrancing {item_noun}
 Unusual {item_noun}
 Sentient {item_noun}
 Whispering {item_noun}
 Talkative {item_noun}
 Overemotional {item_noun}
 Posessed {item_noun}
+Timid {item_noun}
+Loud {item_noun}
+Sassy {item_noun}
