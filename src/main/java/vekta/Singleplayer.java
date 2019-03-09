@@ -184,6 +184,7 @@ public class Singleplayer implements World, PlayerListener {
 			//			cameraSpd = playerShip.getVelocity().mag();
 		}
 
+		// Cycle background music
 		if(Resources.getMusic() == null) {
 			Resources.setMusic(MUSIC.random());
 		}
