@@ -1,5 +1,7 @@
 package vekta.object.particle;
 
-public interface ColorSelector {
+import java.io.Serializable;
+
+public interface ColorSelector extends Serializable {
 	int selectColor();
 }

@@ -1,6 +1,8 @@
 package vekta.context;
 
-import vekta.ControlKey;
+import processing.event.KeyEvent;
+import vekta.KeyBinding;
+import vekta.Settings;
 import vekta.overlay.Overlay;
 
 public interface Context extends Overlay {
@@ -10,17 +12,48 @@ public interface Context extends Overlay {
 	void focus();
 
 	/**
-	 * What to do when a key is pressed
+	 * What to do when any key is pressed
 	 */
-	void keyPressed(ControlKey key);
+	default void keyPressed(KeyEvent event) {
+		for(KeyBinding ctrl : KeyBinding.values()) {
+			if(Settings.getKeyCode(ctrl) == event.getKeyCode()) {
+				keyPressed(ctrl);
+			}
+		}
+	}
 
 	/**
-	 * What to do when a key is released
+	 * What to do when a mapped KeyBinding is pressed
 	 */
-	void keyReleased(ControlKey key);
+	default void keyPressed(KeyBinding key) {
+	}
+
+	/**
+	 * What to do when any key is released
+	 */
+	default void keyReleased(KeyEvent event) {
+		for(KeyBinding ctrl : KeyBinding.values()) {
+			if(Settings.getKeyCode(ctrl) == event.getKeyCode()) {
+				keyReleased(ctrl);
+			}
+		}
+	}
+
+	/**
+	 * What to do when a mapped KeyBinding is released
+	 */
+	default void keyReleased(KeyBinding key) {
+	}
+
+	/**
+	 * What to do when any key is typed
+	 */
+	default void keyTyped(char key) {
+	}
 
 	/**
 	 * What to do when the mouse wheel is scrolled
 	 */
-	void mouseWheel(int amount);
+	default void mouseWheel(int amount) {
+	}
 }

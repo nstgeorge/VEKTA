@@ -3,21 +3,21 @@ package vekta.menu.option;
 import vekta.menu.Menu;
 import vekta.menu.handle.LoadoutMenuHandle;
 import vekta.module.Module;
-import vekta.module.Upgradeable;
-import vekta.module.Upgrader;
+import vekta.module.ModuleUpgradeable;
+import vekta.module.ModuleUpgrader;
 
 import static vekta.Vekta.setContext;
 
-public class LoadoutMenuOption implements MenuOption, Upgrader {
-	private final Upgradeable upgradeable;
+public class LoadoutMenuOption implements MenuOption, ModuleUpgrader {
+	private final ModuleUpgradeable upgradeable;
 
 	private Menu subMenu;
 
-	public LoadoutMenuOption(Upgradeable upgradeable) {
+	public LoadoutMenuOption(ModuleUpgradeable upgradeable) {
 		this.upgradeable = upgradeable;
 	}
 
-	public Upgradeable getUpgradeable() {
+	public ModuleUpgradeable getUpgradeable() {
 		return upgradeable;
 	}
 

@@ -1,6 +1,6 @@
 package vekta.module;
 
-import vekta.ControlKey;
+import vekta.KeyBinding;
 import vekta.mission.Mission;
 import vekta.object.CargoCrate;
 import vekta.object.SpaceObject;
@@ -84,7 +84,7 @@ public class TargetingModule extends ShipModule implements Targeter {
 	}
 
 	@Override
-	public void onKeyPress(ControlKey key) {
+	public void onKeyPress(KeyBinding key) {
 		switch(key) {
 		case SHIP_TARGET_CLEAR:
 			setMode(null);

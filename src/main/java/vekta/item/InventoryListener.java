@@ -1,6 +1,8 @@
 package vekta.item;
 
-public interface InventoryListener {
+import java.io.Serializable;
+
+public interface InventoryListener extends Serializable {
 	default void onMoneyAdd(int amount) {
 	}
 

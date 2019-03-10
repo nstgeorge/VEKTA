@@ -1,9 +1,11 @@
 package vekta.overlay.singleplayer;
 
+import java.io.Serializable;
+
 import static processing.core.PApplet.sq;
 import static vekta.Vekta.v;
 
-public class Notification {
+public class Notification implements Serializable {
 	private static final int DEF_COLOR = v.color(200);
 	private static final int MAX_AGE = 200;
 

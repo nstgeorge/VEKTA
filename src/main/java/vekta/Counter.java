@@ -1,8 +1,10 @@
 package vekta;
 
+import java.io.Serializable;
+
 import static vekta.Vekta.*;
 
-public final class Counter {
+public final class Counter implements Serializable {
 	private final int frames;
 	private int ct;
 

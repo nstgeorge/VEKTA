@@ -2,9 +2,11 @@ package vekta.menu.option;
 
 import vekta.menu.Menu;
 
+import java.io.Serializable;
+
 import static vekta.Vekta.UI_COLOR;
 
-public interface MenuOption {
+public interface MenuOption extends Serializable {
 	String getName();
 
 	default int getColor() {

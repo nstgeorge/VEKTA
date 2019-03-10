@@ -33,4 +33,15 @@ public enum ItemType {
 	public float getMarkupFactor() {
 		return markupFactor;
 	}
+
+	public ItemType getImproved() {
+		switch(this) {
+		case COMMON:
+			return RARE;
+		case RARE:
+			return LEGENDARY;
+		default:
+			return this;
+		}
+	}
 }

@@ -1,6 +1,6 @@
 package vekta.menu;
 
-import vekta.ControlKey;
+import vekta.KeyBinding;
 import vekta.Player;
 import vekta.PlayerEvent;
 import vekta.context.Context;
@@ -172,12 +172,12 @@ public class Menu implements Context {
 	}
 
 	@Override
-	public void keyPressed(ControlKey key) {
+	public void keyPressed(KeyBinding key) {
 		handle.keyPressed(this, key);
 	}
 
 	@Override
-	public void keyReleased(ControlKey key) {
+	public void keyReleased(KeyBinding key) {
 	}
 
 	@Override

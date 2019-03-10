@@ -69,7 +69,7 @@ public class Projectile extends SpaceObject {
 
 	@Override
 	public boolean collidesWith(RenderLevel level, SpaceObject s) {
-		return s != getParent() && super.collidesWith(getRenderLevel(), s); // Always collide regardless of render distance
+		return s.getColor() != getParent().getColor() && super.collidesWith(getRenderLevel(), s); // Always collide regardless of render distance
 	}
 
 	/**

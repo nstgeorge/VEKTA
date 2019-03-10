@@ -14,6 +14,7 @@ import vekta.object.particle.ParticleEmitter;
 import vekta.object.particle.ParticleStyle;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.List;
 import java.util.*;
 
@@ -126,7 +127,7 @@ public class SpaceStation extends ModularShip {
 		}));
 	}
 
-	public final class Component {
+	public final class Component implements Serializable {
 		private final Component parent;
 		private final Direction direction;
 

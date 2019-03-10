@@ -7,6 +7,7 @@ import vekta.mission.MissionListener;
 import vekta.mission.MissionStatus;
 import vekta.object.SpaceObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public abstract class Objective implements MissionListener, PlayerListener {
 	private MissionStatus status = MissionStatus.READY;
 
 	private boolean optional;
-	private final List<Runnable> next = new ArrayList<>();
+	private final List<ObjectiveCallback> next = new ArrayList<>();
 
 	public boolean isOptional() {
 		return optional;
@@ -29,7 +30,7 @@ public abstract class Objective implements MissionListener, PlayerListener {
 		return this;
 	}
 
-	public Objective then(Runnable next) {
+	public Objective then(ObjectiveCallback next) {
 		this.next.add(next);
 		return this;
 	}
@@ -75,8 +76,8 @@ public abstract class Objective implements MissionListener, PlayerListener {
 		else if(status == MissionStatus.COMPLETED) {
 			getPlayer().send("Objective completed: " + getDisplayText())
 					.withColor(MISSION_COLOR);
-			for(Runnable next : this.next) {
-				next.run();
+			for(ObjectiveCallback next : this.next) {
+				next.callback();
 			}
 			getPlayer().removeListener(this);
 		}
@@ -121,5 +122,9 @@ public abstract class Objective implements MissionListener, PlayerListener {
 	}
 
 	public void onComplete() {
+	}
+
+	public interface ObjectiveCallback extends Serializable {
+		void callback();
 	}
 }

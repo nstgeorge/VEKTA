@@ -1,6 +1,8 @@
 package vekta.module;
 
-public interface Upgrader {
+import java.io.Serializable;
+
+public interface ModuleUpgrader extends Serializable {
 	Module getRelevantModule(Module module);
 
 	void installModule(Module module);

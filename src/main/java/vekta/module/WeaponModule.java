@@ -1,6 +1,6 @@
 package vekta.module;
 
-import vekta.ControlKey;
+import vekta.KeyBinding;
 
 public abstract class WeaponModule extends ShipModule {
 
@@ -10,8 +10,8 @@ public abstract class WeaponModule extends ShipModule {
 	}
 
 	@Override
-	public void onKeyPress(ControlKey key) {
-		if(key == ControlKey.SHIP_FIRE) {
+	public void onKeyPress(KeyBinding key) {
+		if(key == KeyBinding.SHIP_FIRE) {
 			fireWeapon();
 		}
 	}

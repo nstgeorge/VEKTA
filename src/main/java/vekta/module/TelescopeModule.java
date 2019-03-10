@@ -1,7 +1,7 @@
 package vekta.module;
 
 import processing.core.PVector;
-import vekta.ControlKey;
+import vekta.KeyBinding;
 import vekta.menu.Menu;
 import vekta.menu.handle.SurveyMenuHandle;
 import vekta.menu.option.BackOption;
@@ -50,8 +50,8 @@ public class TelescopeModule extends ShipModule {
 	}
 
 	@Override
-	public void onKeyPress(ControlKey key) {
-		if(key == ControlKey.SHIP_TELESCOPE) {
+	public void onKeyPress(KeyBinding key) {
+		if(key == KeyBinding.SHIP_TELESCOPE) {
 			Targeter t = (Targeter)getShip().getModule(ModuleType.TARGET_COMPUTER);
 			SpaceObject target = t != null ? t.getTarget() : getWorld().findOrbitObject(getShip());
 			if(target instanceof TerrestrialPlanet) {

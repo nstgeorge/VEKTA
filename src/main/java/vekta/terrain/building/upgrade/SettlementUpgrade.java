@@ -3,7 +3,9 @@ package vekta.terrain.building.upgrade;
 import vekta.Player;
 import vekta.terrain.settlement.Settlement;
 
-public interface SettlementUpgrade {
+import java.io.Serializable;
+
+public interface SettlementUpgrade extends Serializable {
 	String getName();
 
 	int getCost(Player player, Settlement settlement);

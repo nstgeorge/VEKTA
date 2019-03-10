@@ -1,6 +1,6 @@
 package vekta.module;
 
-import vekta.ControlKey;
+import vekta.KeyBinding;
 import vekta.object.ship.ModularShip;
 
 import static java.lang.Math.abs;
@@ -50,18 +50,18 @@ public class RCSModule extends ShipModule {
 	}
 
 	@Override
-	public void onKeyPress(ControlKey key) {
-		if(key == ControlKey.SHIP_LEFT) {
+	public void onKeyPress(KeyBinding key) {
+		if(key == KeyBinding.SHIP_LEFT) {
 			getShip().setTurnControl(-1);
 		}
-		if(key == ControlKey.SHIP_RIGHT) {
+		if(key == KeyBinding.SHIP_RIGHT) {
 			getShip().setTurnControl(1);
 		}
 	}
 
 	@Override
-	public void onKeyRelease(ControlKey key) {
-		if(key == ControlKey.SHIP_LEFT || key == ControlKey.SHIP_RIGHT) {
+	public void onKeyRelease(KeyBinding key) {
+		if(key == KeyBinding.SHIP_LEFT || key == KeyBinding.SHIP_RIGHT) {
 			getShip().setTurnControl(0);
 		}
 	}

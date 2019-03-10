@@ -1,13 +1,14 @@
 package vekta;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 import static java.lang.Float.max;
 
-public final class Faction {
-	private final String name;
-	private final int color;
+public final class Faction implements Serializable, Renameable {
+	private String name;
+	private int color;
 
 	private final Set<Faction> allies = new HashSet<>();
 	private final Set<Faction> enemies = new HashSet<>();
@@ -15,15 +16,23 @@ public final class Faction {
 	public Faction(String name, int color) {
 		this.name = name;
 		this.color = color;
-
 	}
 
 	public String getName() {
 		return name;
 	}
 
+	@Override
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public int getColor() {
 		return color;
+	}
+
+	public void setColor(int color) {
+		this.color = color;
 	}
 
 	public boolean isNeutral(Faction faction) {
@@ -31,7 +40,7 @@ public final class Faction {
 	}
 
 	public void setNeutral(Faction faction) {
-		if(faction != null && faction != this) {
+		if(faction != this) {
 			allies.remove(faction);
 			enemies.remove(faction);
 			faction.allies.remove(this);
@@ -49,7 +58,7 @@ public final class Faction {
 
 	public void setAlly(Faction faction) {
 		setNeutral(faction);
-		if(faction != null && faction != this) {
+		if(faction != this) {
 			allies.add(faction);
 			faction.allies.add(this);
 		}
@@ -65,9 +74,16 @@ public final class Faction {
 
 	public void setEnemy(Faction faction) {
 		setNeutral(faction);
-		if(faction != null && faction != this) {
+		if(faction != this) {
 			enemies.add(faction);
 			faction.enemies.add(this);
+		}
+
+		for(Faction ally : getAllies()) {
+			ally.setEnemy(faction);
+		}
+		for(Faction ally : faction.getAllies()) {
+			ally.setEnemy(this);
 		}
 	}
 

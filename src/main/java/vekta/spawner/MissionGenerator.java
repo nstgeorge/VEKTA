@@ -18,7 +18,6 @@ import vekta.mission.reward.ItemReward;
 import vekta.mission.reward.MoneyReward;
 import vekta.mission.reward.SettlementReward;
 import vekta.object.planet.TerrestrialPlanet;
-import vekta.object.ship.MessengerShip;
 import vekta.person.Dialog;
 import vekta.person.OpinionType;
 import vekta.person.Person;
@@ -30,22 +29,6 @@ import vekta.terrain.settlement.Settlement;
 import static vekta.Vekta.*;
 
 public class MissionGenerator {
-	public static MessengerShip createMessenger(Player player, Dialog dialog) {
-		PVector pos = WorldGenerator.randomSpawnPosition(RenderLevel.SHIP, player.getShip().getPosition());
-		MessengerShip ship = new MessengerShip(
-				player,
-				dialog,
-				dialog != null ? dialog.getPerson().getFullName() : "HERMES II",
-				PVector.random2D(),
-				pos,
-				player.getShip().getVelocity(),
-				dialog != null ? dialog.getPerson().getColor() : WorldGenerator.randomPlanetColor());
-		addObject(ship);
-		player.send(ship.getName() + " approaches with a message!")
-				.withColor(ship.getColor())
-				.withTime(2);
-		return ship;
-	}
 
 	public static Mission createMission(Player player, Person person) {
 		return createMission(player, person, (int)v.random(3) + 1);
@@ -206,4 +189,4 @@ public class MissionGenerator {
 	public interface MissionSpawner extends Weighted {
 		void setup(Person person, Mission mission);
 	}
-}  
+}

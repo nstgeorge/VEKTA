@@ -1,6 +1,8 @@
 package vekta.mission;
 
-public interface MissionListener {
+import java.io.Serializable;
+
+public interface MissionListener extends Serializable {
 	default void onStart(Mission mission) {
 	}
 

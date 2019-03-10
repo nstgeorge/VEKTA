@@ -1,17 +1,17 @@
 package vekta.menu.option;
 
-import vekta.module.Upgrader;
+import vekta.module.ModuleUpgrader;
 import vekta.menu.Menu;
 import vekta.module.Module;
 
 import static vekta.Vekta.v;
 
 public class InstallModuleOption implements MenuOption {
-	private final Upgrader upgrader;
+	private final ModuleUpgrader upgrader;
 	private final Module module;
 	private final ModuleStatus status;
 
-	public InstallModuleOption(Upgrader upgrader, Module module) {
+	public InstallModuleOption(ModuleUpgrader upgrader, Module module) {
 		this.upgrader = upgrader;
 		this.module = module;
 

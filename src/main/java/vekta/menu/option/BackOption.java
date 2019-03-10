@@ -3,17 +3,19 @@ package vekta.menu.option;
 import vekta.context.Context;
 import vekta.menu.Menu;
 
+import java.io.Serializable;
+
 import static vekta.Vekta.setContext;
 
 public class BackOption implements MenuOption {
 	private final Context parent;
-	private final Runnable callback;
+	private final OptionCallback callback;
 
 	public BackOption(Context parent) {
 		this(parent, null);
 	}
 
-	public BackOption(Context parent, Runnable callback) {
+	public BackOption(Context parent, OptionCallback callback) {
 		this.parent = parent;
 		this.callback = callback;
 	}
@@ -27,8 +29,12 @@ public class BackOption implements MenuOption {
 	public void select(Menu menu) {
 		setContext(parent);
 		if(callback != null) {
-			callback.run();
+			callback.callback();
 		}
 		//		applyContext();
+	}
+	
+	public interface OptionCallback extends Serializable {
+		void callback();
 	}
 }

@@ -13,14 +13,14 @@ public class FactionGenerator {
 		return faction;
 	}
 
-	public static Faction randomFaction() {
-		return randomFaction(null);
-	}
-
 	public static Faction randomFaction(Person person) {
-		if(person != null && v.chance(.2F)) {
+		if(v.chance(.2F)) {
 			return person.getFaction();
 		}
+		return randomFaction();
+	}
+
+	public static Faction randomFaction() {
 		Faction f = getWorld().findRandomObject(Faction.class);
 		return f != null && v.chance(.9F) ? f : createFaction();
 	}

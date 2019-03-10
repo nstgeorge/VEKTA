@@ -3,6 +3,7 @@ package vekta;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PVector;
+import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 import vekta.context.Context;
 import vekta.context.World;
@@ -93,6 +94,7 @@ public class Vekta extends PApplet {
 		//		mainMenu = new SettingsMenuContext();
 		mainMenu = new Menu(null, new MainMenuHandle(new ExitGameOption("Quit")));
 		mainMenu.add(new WorldOption("Singleplayer", new Singleplayer()));
+		mainMenu.add(new WorldOption("Multiplayer", new Multiplayer()));
 		mainMenu.add(new SettingsMenuOption());
 		mainMenu.addDefault();
 		setContext(mainMenu);
@@ -106,7 +108,7 @@ public class Vekta extends PApplet {
 			context.render();
 		}
 
-		hint(DISABLE_DEPTH_TEST);
+		//		hint(DISABLE_DEPTH_TEST);
 		//		camera();
 		//		noLights();
 
@@ -118,13 +120,9 @@ public class Vekta extends PApplet {
 	}
 
 	@Override
-	public void keyPressed() {
+	public void keyPressed(KeyEvent event) {
 		if(context != null) {
-			for(ControlKey ctrl : ControlKey.values()) {
-				if(Settings.getCharacter(ctrl) == key) {
-					context.keyPressed(ctrl);
-				}
-			}
+			context.keyPressed(event);
 			if(key == ESC) {
 				key = 0; // Suppress default behavior (exit)
 			}
@@ -132,30 +130,33 @@ public class Vekta extends PApplet {
 	}
 
 	@Override
-	public void keyReleased() {
+	public void keyReleased(KeyEvent event) {
 		if(context != null) {
-			for(ControlKey ctrl : ControlKey.values()) {
-				if(Settings.getCharacter(ctrl) == key) {
-					context.keyReleased(ctrl);
-				}
-			}
+			context.keyReleased(event);
+		}
+	}
+
+	@Override
+	public void keyTyped(KeyEvent event) {
+		if(context != null) {
+			context.keyTyped(event.getKey());
 		}
 	}
 
 	@Override
 	public void mousePressed() {
 		if(context != null) {
-			// TODO allow mouse events binding to user-specified keys
-			context.keyPressed(ControlKey.MENU_SELECT);
-			context.keyPressed(ControlKey.SHIP_FIRE);
+			// TODO: allow mouse events binding to user-specified keys
+			context.keyPressed(KeyBinding.MENU_SELECT);
+			context.keyPressed(KeyBinding.SHIP_FIRE);
 		}
 	}
 
 	@Override
 	public void mouseReleased() {
 		if(context != null) {
-			context.keyReleased(ControlKey.MENU_SELECT);
-			context.keyReleased(ControlKey.SHIP_FIRE);
+			context.keyReleased(KeyBinding.MENU_SELECT);
+			context.keyReleased(KeyBinding.SHIP_FIRE);
 		}
 	}
 
@@ -229,7 +230,7 @@ public class Vekta extends PApplet {
 	}
 
 	//// Misc. UI methods ////
-	
+
 	public static String moneyString(String text, int money) {
 		return text + (money == 0 ? "" : " [" + money + " G]");
 	}

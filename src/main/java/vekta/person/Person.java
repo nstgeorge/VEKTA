@@ -11,10 +11,11 @@ import vekta.terrain.LandingSite;
 import vekta.terrain.building.HouseBuilding;
 import vekta.terrain.settlement.Settlement;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Person implements MissionListener {
+public class Person implements Serializable, MissionListener {
 	private final Map<Object, OpinionType> opinions = new HashMap<>();
 
 	private final String name;
@@ -68,7 +69,8 @@ public class Person implements MissionListener {
 	}
 
 	public LandingSite findHomeSite() {
-		return hasHome() ? findHome().getSite() : null;
+		Settlement home = findHome();
+		return home != null ? home.getSite() : null;
 	}
 
 	public SpaceObject findHomeObject() {

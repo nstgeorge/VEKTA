@@ -3,9 +3,11 @@ package vekta.item;
 import vekta.Player;
 import vekta.menu.Menu;
 
+import java.io.Serializable;
+
 import static vekta.Vekta.v;
 
-public class Item implements Comparable<Item> {
+public class Item implements Serializable, Comparable<Item> {
 	private final String name;
 	private final ItemType type;
 

@@ -16,7 +16,7 @@ public class TerrestrialPlanet extends Planet {
 		super(name, mass, density, position, velocity, color);
 
 		this.site = new LandingSite(this, terrain);
-		
+
 		//		println("[Terrestrial] mass: " + getMass() + ", radius: " + getRadius());
 	}
 
@@ -37,12 +37,10 @@ public class TerrestrialPlanet extends Planet {
 	public void onCollide(SpaceObject s) {
 		if(s instanceof ModularShip) {
 			ModularShip ship = (ModularShip)s;
-			//			if(/*ship.isLanding() && */) {
 			if(ship.isDockable(this)) {
 				site.land(ship);
 			}
 			return; // Prevent ship from being destroyed after landing
-			//			}
 		}
 		super.onCollide(s); // Oof
 	}

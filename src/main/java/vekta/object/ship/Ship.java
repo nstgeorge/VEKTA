@@ -2,6 +2,7 @@ package vekta.object.ship;
 
 import processing.core.PVector;
 import vekta.Player;
+import vekta.Renameable;
 import vekta.RenderLevel;
 import vekta.item.Inventory;
 import vekta.item.InventoryListener;
@@ -16,16 +17,15 @@ import static processing.core.PConstants.CLOSE;
 import static processing.core.PConstants.HALF_PI;
 import static vekta.Vekta.*;
 
-public abstract class Ship extends SpaceObject implements InventoryListener {
+public abstract class Ship extends SpaceObject implements Renameable, InventoryListener {
 	private static final float CRATE_SPEED = 1;
-	private static final float MAX_DOCKING_SPEED = 10;
 	private static final float DEPART_FRAMES = 100; // Number of frames to wait before docking/landing again
 
-	private final String name;
-	protected final PVector heading;
+	private String name;
 	private final float speed;  // Force of the vector added when engine is on
 	private final float turnSpeed; // Rotational speed when turning
 
+	protected final PVector heading = new PVector();
 	private final Inventory inventory = new Inventory(this);
 
 	private SpaceObject dock;
@@ -33,8 +33,9 @@ public abstract class Ship extends SpaceObject implements InventoryListener {
 
 	public Ship(String name, PVector heading, PVector position, PVector velocity, int color, float speed, float turnSpeed) {
 		super(position, velocity, color);
+
 		this.name = name;
-		this.heading = heading;
+		this.heading.set(heading);
 		this.speed = speed;
 		this.turnSpeed = turnSpeed;
 
@@ -48,6 +49,10 @@ public abstract class Ship extends SpaceObject implements InventoryListener {
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Override
@@ -125,17 +130,9 @@ public abstract class Ship extends SpaceObject implements InventoryListener {
 			// Add item_common.txt to ship's inventory
 			getInventory().add(((CargoCrate)s).getItem());
 		}
-		else if(s instanceof Ship) {
-			Ship ship = (Ship)s;
-			//			if(ship.getVelocity().sub(velocity).magSq() <= MAX_DOCKING_SPEED * MAX_DOCKING_SPEED) {
+		else if(s instanceof Ship && isDockable(s) && ((Ship)s).isDockable(this)) {
 			// Board ship
-			if(isDockable(s) && ((Ship)s).isDockable(this)) {
-				dock(s);
-			}
-			//			}
-			//			else {
-			//				destroyBecause(s);
-			//			}
+			dock(s);
 		}
 	}
 

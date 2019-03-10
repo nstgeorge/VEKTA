@@ -6,6 +6,8 @@ import vekta.context.PauseMenuContext;
 import vekta.context.World;
 import vekta.item.ColonyItem;
 import vekta.item.ModuleItem;
+import vekta.menu.Menu;
+import vekta.menu.handle.MainMenuHandle;
 import vekta.module.*;
 import vekta.module.station.SensorModule;
 import vekta.module.station.SolarArrayModule;
@@ -20,18 +22,23 @@ import vekta.overlay.singleplayer.PlayerOverlay;
 import vekta.person.Person;
 import vekta.sound.SoundGroup;
 import vekta.sound.Tune;
-import vekta.spawner.MissionGenerator;
-import vekta.spawner.PersonGenerator;
+import vekta.spawner.EventGenerator;
 import vekta.spawner.WorldGenerator;
 import vekta.spawner.world.StarSystemSpawner;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 import static vekta.Vekta.*;
 
 public class Singleplayer implements World, PlayerListener {
+	private static final File QUICKSAVE_FILE = new File("quicksave.vekta");
+	private static final File AUTOSAVE_FILE = new File("autosave.vekta");
+
 	private static final float ZOOM_EXPONENT = .3F;
 	private static final float ZOOM_SMOOTH = .1F;
 	//	private static final float TIME_SCALE = 5e-4F;
@@ -42,112 +49,129 @@ public class Singleplayer implements World, PlayerListener {
 
 	private static final SoundGroup MUSIC = new SoundGroup("atmosphere");
 
-	private static int nextID = 0;
-
 	private int[] objectCounts = new int[RenderLevel.values().length];
 
 	private boolean started;
 
 	// Low pass filter
-	private LowPass lowPass = new LowPass(v);
+	private final transient LowPass lowPass = new LowPass(v);
 
 	// Camera position tracking
 	private final PVector cameraPos = new PVector();
-	//	private float cameraSpd;
 
-	private Player player;
+	private final WorldState state;
+	private final boolean loaded;
 
 	private float zoom = 1; // Zoom factor
 	private float smoothZoom = zoom; // Smooth zoom factor (converges toward `zoom`)
 	private float timeScale = 1; // Camera time scale factor
 	private RenderLevel prevLevel = RenderLevel.PARTICLE;
 
-	private Counter targetCt = new Counter(30); // Counter for periodically updating Targeter instances
-	private Counter spawnCt = new Counter(100); // Counter for periodically cleaning/spawning objects
-
-	private final List<SpaceObject> objects = new ArrayList<>();
-	private final List<SpaceObject> gravityObjects = new ArrayList<>();
-	private final List<SpaceObject> markedForDeath = new ArrayList<>();
-	private final List<SpaceObject> markedForAddition = new ArrayList<>();
-
-	private final List<Person> people = new ArrayList<>();
-	private final List<Faction> factions = new ArrayList<>();
+	// TODO: move to WorldState
+	private final Counter targetCt = new Counter(30); // Counter for periodically updating Targeter instances
+	private final Counter spawnCt = new Counter(100); // Counter for periodically cleaning/spawning objects
+	private final Counter eventCt = new Counter(3600 * 5).randomize(); // Counter for random player events
 
 	private PlayerOverlay overlay;
 
 	private Tune __tune;
 
-	public void start() {
-		Resources.stopMusic();
-
-		v.frameCount = 0;
-
-		StarSystemSpawner.createSystem(PVector.random2D().mult(2 * AU_DISTANCE));
-
+	public Singleplayer() {
 		Faction playerFaction = new Faction("VEKTA I", UI_COLOR);
-
-		player = new Player(playerFaction);
+		Player player = new Player(playerFaction);
 		player.addListener(this);
 
-		PlayerShip playerShip = new PlayerShip(
-				player.getFaction().getName(),
-				PVector.fromAngle(0), // Heading
-				new PVector(), // Position
-				new PVector(),    // Velocity
-				v.color(0, 255, 0)
-		);
-		playerShip.getInventory().add(50); // Starting money
-		playerShip.setController(player);
-		addObject(playerShip);
+		this.state = new WorldState(player);
+		loaded = false;
+	}
+
+	public Singleplayer(WorldState state) {
+		this.state = state;
+		loaded = true;
+	}
+
+	public void start() {
+		v.frameCount = 0;
+		Resources.stopMusic();
+
+		Player player = getPlayer();
+
+		if(!loaded) {
+			StarSystemSpawner.createSystem(PVector.random2D().mult(2 * AU_DISTANCE));
+
+			PlayerShip playerShip = new PlayerShip(
+					player.getFaction().getName(),
+					PVector.fromAngle(0), // Heading
+					new PVector(), // Position
+					new PVector(),    // Velocity
+					v.color(0, 255, 0)
+			);
+			playerShip.getInventory().add(50); // Starting money
+			playerShip.setController(player);
+			addObject(playerShip);
+
+			setupTesting(); // Temporary
+		}
 
 		// Configure UI overlay
 		overlay = new PlayerOverlay(player);
 		player.addListener(overlay);
+	}
 
-		//// Temporary things for testing
-		SpaceStation station = new SpaceStation(
-				"OUTPOST I",
-				new StationCoreModule(),
-				new PVector(1, 0),
-				new PVector(300, 100), // Position
-				new PVector(),    // Velocity
-				playerShip.getColor()
-		);
-		SpaceStation.Component core = station.getCore();
-		SpaceStation.Component rcs = core.attach(SpaceStation.Direction.UP, new RCSModule(1));
-		SpaceStation.Component orbiter = core.attach(SpaceStation.Direction.RIGHT, new OrbitModule(1));
-		SpaceStation.Component struct = core.attach(SpaceStation.Direction.LEFT, new StructuralModule(10, 1));
-		SpaceStation.Component struct2 = core.attach(SpaceStation.Direction.DOWN, new StructuralModule(10, 1));
-		SpaceStation.Component panel = struct.attach(SpaceStation.Direction.LEFT, new SolarArrayModule(1));
-		SpaceStation.Component panel2 = struct.attach(SpaceStation.Direction.DOWN, new SolarArrayModule(1));
-		SpaceStation.Component panel3 = struct2.attach(SpaceStation.Direction.RIGHT, new SolarArrayModule(1));
-		SpaceStation.Component sensor = struct2.attach(SpaceStation.Direction.LEFT, new SensorModule());
-		addObject(station);
+	public void cleanup() {
+		// Cleanup behavior on exiting/restarting the world
+		lowPass.stop();
+	}
+
+	private void setupTesting() {
+		Player player = getPlayer();
+		ModularShip playerShip = getPlayerShip();
+
+		if(getClass() == Singleplayer.class) {
+			// Add station to singleplayer world
+			SpaceStation station = new SpaceStation(
+					"OUTPOST I",
+					new StationCoreModule(),
+					new PVector(1, 0),
+					new PVector(300, 100), // Position
+					new PVector(),    // Velocity
+					playerShip.getColor()
+			);
+			SpaceStation.Component core = station.getCore();
+			SpaceStation.Component rcs = core.attach(SpaceStation.Direction.UP, new RCSModule(1));
+			SpaceStation.Component orbiter = core.attach(SpaceStation.Direction.RIGHT, new OrbitModule(1));
+			SpaceStation.Component struct = core.attach(SpaceStation.Direction.LEFT, new StructuralModule(10, 1));
+			SpaceStation.Component struct2 = core.attach(SpaceStation.Direction.DOWN, new StructuralModule(10, 1));
+			SpaceStation.Component panel = struct.attach(SpaceStation.Direction.LEFT, new SolarArrayModule(1));
+			SpaceStation.Component panel2 = struct.attach(SpaceStation.Direction.DOWN, new SolarArrayModule(1));
+			SpaceStation.Component panel3 = struct2.attach(SpaceStation.Direction.RIGHT, new SolarArrayModule(1));
+			SpaceStation.Component sensor = struct2.attach(SpaceStation.Direction.LEFT, new SensorModule());
+			addObject(station);
+		}
 
 		playerShip.addModule(new EngineModule(2)); // Upgrade engine
 		playerShip.addModule(new AutopilotModule());
 		playerShip.addModule(new TelescopeModule(.5F));
 		playerShip.addModule(new DrillModule(2));
+		playerShip.addModule(new HyperdriveModule(.5F));
 		playerShip.getInventory().add(new ModuleItem(new TorpedoModule(2)));
-		playerShip.addModule(new HyperdriveModule(.2F));
 		playerShip.getInventory().add(new ModuleItem(new TractorBeamModule(1)));
 		playerShip.getInventory().add(new ModuleItem(new StructuralModule(3, 1)));
 		playerShip.getInventory().add(new ModuleItem(new StationCoreModule(1)));
 		playerShip.getInventory().add(new ModuleItem(new OrbitModule(1)));
 		playerShip.getInventory().add(new ColonyItem());
 
-		// Testing out a mission sequence
-		Person person = PersonGenerator.createPerson();
-		//		Mission mission = MissionGenerator.createMission(person);
-		MissionGenerator.createMessenger(player, MissionGenerator.randomApproachDialog(player, person));
+		//		// Testing out a mission sequence
+		//		Person person = PersonGenerator.createPerson();
+		//		MissionGenerator.createMessenger(player, MissionGenerator.randomApproachDialog(player, person));
 	}
 
 	public Player getPlayer() {
-		return player;
+		return state.getPlayer();
 	}
 
 	public ModularShip getPlayerShip() {
-		return player.getShip();
+		return getPlayer().getShip();
 	}
 
 	@Override
@@ -170,6 +194,8 @@ public class Singleplayer implements World, PlayerListener {
 			started = true;
 			start();
 		}
+
+		save(AUTOSAVE_FILE);
 
 		// Uncomment for testing
 		// __tune = TuneGenerator.randomTune();
@@ -216,23 +242,15 @@ public class Singleplayer implements World, PlayerListener {
 		boolean targeting = targetCt.cycle();
 		boolean cleanup = spawnCt.cycle();
 
-		for(SpaceObject s : markedForAddition) {
-			if(!objects.contains(s)) {
-				objects.add(s);
-			}
-			if(s.impartsGravity() && !gravityObjects.contains(s)) {
-				gravityObjects.add(s);
-			}
-		}
-		markedForAddition.clear();
+		state.startUpdate();
 
 		// Reset object counts for each render distance
 		for(int i = 0; i < objectCounts.length; i++) {
 			objectCounts[i] = 0;
 		}
 
-		for(SpaceObject s : objects) {
-			if(markedForDeath.contains(s)) {
+		for(SpaceObject s : state.getObjects()) {
+			if(state.isRemoving(s)) {
 				continue;
 			}
 
@@ -253,8 +271,8 @@ public class Singleplayer implements World, PlayerListener {
 			}
 
 			s.update(level);
-			s.applyGravity(gravityObjects);
-			for(SpaceObject other : objects) {
+			s.applyGravity(state.getGravityObjects());
+			for(SpaceObject other : state.getObjects()) {
 				if(s != other) {
 					// Check both collisions before firing events (prevents race conditions)
 					// TODO: colliders should check each other rather than themselves
@@ -295,14 +313,12 @@ public class Singleplayer implements World, PlayerListener {
 			v.popMatrix();
 		}
 
-		objects.removeAll(markedForDeath);
-		gravityObjects.removeAll(markedForDeath);
-		markedForDeath.clear();
+		state.endUpdate();
 
 		if(RenderLevel.SHIP.isVisibleTo(level) && !playerShip.isDestroyed()) {
 			// Center around zero for improved floating-point precision
 			PVector newOrigin = playerShip.getPosition().mult(-1);
-			for(SpaceObject s : objects) {
+			for(SpaceObject s : state.getObjects()) {
 				s.updateOrigin(newOrigin);
 			}
 		}
@@ -323,13 +339,18 @@ public class Singleplayer implements World, PlayerListener {
 			WorldGenerator.spawnOccasional(spawnLevel, playerShip);
 		}
 
+		if(eventCt.cycle()) {
+			eventCt.randomize();
+			EventGenerator.spawnEvent(getPlayer());
+		}
+
 		prevLevel = level;
 		v.popMatrix();
 
 		// GUI setup
 		//		v.camera();
 		//		v.noLights();
-		v.hint(DISABLE_DEPTH_TEST);
+		//		v.hint(DISABLE_DEPTH_TEST);
 		if(!playerShip.isDestroyed()) {
 			overlay.render();
 		}
@@ -346,27 +367,33 @@ public class Singleplayer implements World, PlayerListener {
 			v.stroke(0);
 			v.fill(255);
 			v.textFont(bodyFont);
-			v.text(Settings.getControlString(ControlKey.MENU_SELECT) + " to restart", v.width / 2F, (v.height / 2F) + 97);
+			v.text(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to load autosave", v.width / 2F, (v.height / 2F) + 97);
 		}
 	}
 
 	// Subject to change
 	private void setVelocityRelativeTo(SpaceObject obj) {
 		PVector relative = obj.getVelocity().mult(-1);
-		for(SpaceObject s : objects) {
+		for(SpaceObject s : state.getObjects()) {
 			s.addVelocity(relative);
 		}
 	}
 
 	@Override
-	public void keyPressed(ControlKey key) {
-		if(getPlayerShip().isDestroyed()) {
-			if(key == ControlKey.MENU_SELECT) {
+	public void keyPressed(KeyBinding key) {
+		if(key == KeyBinding.QUICK_LOAD) {
+			load(QUICKSAVE_FILE);
+		}
+		else if(getPlayerShip().isDestroyed()) {
+			if(key == KeyBinding.MENU_SELECT) {
 				restart();
 			}
 		}
 		else {
-			if(key == ControlKey.MENU_CLOSE) {
+			if(key == KeyBinding.QUICK_SAVE && save(QUICKSAVE_FILE)) {
+				getPlayer().send("Progress saved");
+			}
+			if(key == KeyBinding.MENU_CLOSE) {
 				setContext(new PauseMenuContext(this));
 			}
 			getPlayer().emit(PlayerEvent.KEY_PRESS, key);
@@ -374,7 +401,7 @@ public class Singleplayer implements World, PlayerListener {
 	}
 
 	@Override
-	public void keyReleased(ControlKey key) {
+	public void keyReleased(KeyBinding key) {
 		getPlayer().emit(PlayerEvent.KEY_RELEASE, key);
 	}
 
@@ -384,56 +411,38 @@ public class Singleplayer implements World, PlayerListener {
 	}
 
 	public void setDead() {
-		if(Resources.getMusic() != null)
+		// TODO: custom death soundtrack instead of low pass filter?
+		if(Resources.getMusic() != null) {
 			lowPass.process(Resources.getMusic(), 800);
+		}
 		Resources.stopAllSoundsNotMusic();
 		Resources.playSound("death");
 	}
 
 	@Override
 	public void restart() {
-		lowPass.stop();
-		setContext(new Singleplayer());
+		cleanup();
+		if(!load(AUTOSAVE_FILE)) {
+			Singleplayer world = new Singleplayer();
+			setContext(world);
+			applyContext();
+		}
 	}
 
 	@Override
 	public void addObject(Object object) {
-		if(object instanceof SpaceObject) {
-			SpaceObject s = (SpaceObject)object;
-			s.setID(nextID++);
-			markedForAddition.add(s);
-		}
-		else if(object instanceof Person && !people.contains(object)) {
-			people.add((Person)object);
-		}
-		else if(object instanceof Faction && !factions.contains(object)) {
-			factions.add((Faction)object);
-		}
-		else {
-			throw new RuntimeException("Cannot add object: " + object);
-		}
+		state.addObject(object);
 	}
 
 	@Override
 	public void removeObject(Object object) {
-		if(object instanceof SpaceObject) {
-			markedForDeath.add((SpaceObject)object);
-		}
-		else if(object instanceof Person) {
-			people.remove(object);
-		}
-		else if(object instanceof Faction) {
-			factions.remove(object);
-		}
-		else {
-			throw new RuntimeException("Cannot remove object: " + object);
-		}
+		state.removeObject(object);
 	}
 
 	public SpaceObject findLargestObject() {
 		float maxMass = 0;
 		SpaceObject max = null;
-		for(SpaceObject s : objects) {
+		for(SpaceObject s : state.getObjects()) {
 			float mass = s.getMass();
 			if(mass > maxMass) {
 				maxMass = mass;
@@ -449,26 +458,21 @@ public class Singleplayer implements World, PlayerListener {
 		List<T> candidates = new ArrayList<>();
 		// TODO: find an efficient way to DRY these loops
 		if(SpaceObject.class.isAssignableFrom(type)) {
-			for(SpaceObject s : objects) {
-				if(type.isInstance(s)) {
-					candidates.add((T)s);
-				}
-			}
-			for(SpaceObject s : this.markedForAddition) {
+			for(SpaceObject s : state.getObjects()) {
 				if(type.isInstance(s)) {
 					candidates.add((T)s);
 				}
 			}
 		}
 		else if(Person.class.isAssignableFrom(type)) {
-			for(Person p : people) {
+			for(Person p : state.getPeople()) {
 				if(type.isInstance(p)) {
 					candidates.add((T)p);
 				}
 			}
 		}
 		else if(Faction.class.isAssignableFrom(type)) {
-			for(Faction f : factions) {
+			for(Faction f : state.getFactions()) {
 				if(type.isInstance(f)) {
 					candidates.add((T)f);
 				}
@@ -484,7 +488,7 @@ public class Singleplayer implements World, PlayerListener {
 	public SpaceObject findOrbitObject(SpaceObject object) {
 		float maxSq = 0;
 		SpaceObject bestOrbit = null;
-		for(SpaceObject s : gravityObjects) {
+		for(SpaceObject s : state.getGravityObjects()) {
 			if(s != object) {
 				float weightSq = object.getGravityAcceleration(Collections.singletonList(s)).magSq() / s.getMass();
 				if(weightSq > maxSq) {
@@ -503,7 +507,7 @@ public class Singleplayer implements World, PlayerListener {
 			SpaceObject target = t.getTarget();
 			float minDistSq = Float.POSITIVE_INFINITY;
 			// Search for new targets
-			for(SpaceObject other : objects) {
+			for(SpaceObject other : state.getObjects()) {
 				if(s != other && t.isValidTarget(other)) {
 					float distSq = s.getPosition().sub(other.getPosition()).magSq();
 					if(distSq < minDistSq) {
@@ -539,5 +543,47 @@ public class Singleplayer implements World, PlayerListener {
 		Resources.setSoundPan(sound, pan);
 		Resources.playSound(sound);
 		Resources.resetSoundVolumeAndPan(sound);
+	}
+
+	public boolean load(File file) {
+		if(!file.exists()) {
+			return false;
+		}
+
+		try(ObjectInputStream input = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file)))) {
+			//			Input input = new Input(new FileInputStream(file));
+			//			setContext(new Singleplayer(format.readObject(input, WorldState.class)));
+			setContext(new Singleplayer((WorldState)input.readObject()));
+			applyContext();
+			println("Loaded from " + file);
+			return true;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public boolean save(File file) {
+		try(ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)))) {
+			output.writeObject(state);
+			println("Saved to " + file);
+			return true;
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+			getPlayer().send("Failed to save progress: " + e.getMessage())
+					.withColor(DANGER_COLOR);
+			return false;
+		}
+	}
+
+	// PlayerListener callbacks
+
+	@Override
+	public void onMenu(Menu menu) {
+		if(menu.getHandle() instanceof MainMenuHandle) {
+			cleanup();
+		}
 	}
 }

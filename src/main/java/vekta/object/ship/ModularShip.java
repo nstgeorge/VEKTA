@@ -11,7 +11,7 @@ import vekta.menu.handle.ObjectMenuHandle;
 import vekta.menu.option.*;
 import vekta.module.Module;
 import vekta.module.ModuleType;
-import vekta.module.Upgradeable;
+import vekta.module.ModuleUpgradeable;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 import vekta.terrain.LandingSite;
@@ -21,7 +21,7 @@ import java.util.List;
 
 import static vekta.Vekta.*;
 
-public abstract class ModularShip extends Ship implements Upgradeable, PlayerListener {
+public abstract class ModularShip extends Ship implements ModuleUpgradeable, PlayerListener {
 	private static final float ENERGY_HEAT_SCALE = 1e4F;
 
 	private Player controller;
@@ -35,7 +35,7 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 
 	private final PVector acceleration = new PVector();
 
-	// Upgradeable modules
+	// ModuleUpgradeable modules
 	private final List<Module> modules = new ArrayList<>();
 
 	public ModularShip(String name, PVector heading, PVector position, PVector velocity, int color, float speed, float turnSpeed) {
@@ -260,6 +260,7 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 		Menu menu = new Menu(getController(), new ObjectMenuHandle(new BackOption(getWorld()), this));
 		menu.add(new LoadoutMenuOption(this));
 		menu.add(new MissionMenuOption(getController()));
+		menu.add(new RenameOption(this));
 		menu.addDefault();
 		setContext(menu);
 
@@ -307,14 +308,14 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 	@Override
 	public void onMoneyAdd(int amount) {
 		//		if(hasController()) {
-		//			getController().send("+ " + amount + " G").withTime(.5F);
+		//			getController().broadcast("+ " + amount + " G").withTime(.5F);
 		//		}
 	}
 
 	@Override
 	public void onMoneyRemove(int amount) {
 		//		if(hasController()) {
-		//			getController().send("- " + amount + " G").withTime(.5F);
+		//			getController().broadcast("- " + amount + " G").withTime(.5F);
 		//		}
 	}
 
@@ -332,7 +333,7 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 		}
 	}
 
-	//// PlayerListener hooks, active when hasController() == true
+	//// PlayerListener callbacks, active when hasController() == true
 
 	@Override
 	public void onChangeShip(ModularShip ship) {
@@ -352,17 +353,17 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 	}
 
 	@Override
-	public void onKeyPress(ControlKey key) {
+	public void onKeyPress(KeyBinding key) {
 		for(Module module : getModules()) {
 			module.onKeyPress(key);
 		}
 
 		// TODO: generalize menu shortcuts
-		if(key == ControlKey.SHIP_MENU || key == ControlKey.SHIP_MISSIONS || key == ControlKey.SHIP_LOADOUT) {
+		if(key == KeyBinding.SHIP_MENU || key == KeyBinding.SHIP_MISSIONS || key == KeyBinding.SHIP_LOADOUT) {
 			Menu menu = openShipMenu();
 			for(MenuOption option : menu.getOptions()) {
-				boolean autoSelect = (key == ControlKey.SHIP_MISSIONS && option instanceof MissionMenuOption)
-						|| (key == ControlKey.SHIP_LOADOUT && option instanceof LoadoutMenuOption);
+				boolean autoSelect = (key == KeyBinding.SHIP_MISSIONS && option instanceof MissionMenuOption)
+						|| (key == KeyBinding.SHIP_LOADOUT && option instanceof LoadoutMenuOption);
 				if(autoSelect) {
 					option.select(menu);
 					break;
@@ -372,7 +373,7 @@ public abstract class ModularShip extends Ship implements Upgradeable, PlayerLis
 	}
 
 	@Override
-	public void onKeyRelease(ControlKey key) {
+	public void onKeyRelease(KeyBinding key) {
 		for(Module module : getModules()) {
 			module.onKeyRelease(key);
 		}

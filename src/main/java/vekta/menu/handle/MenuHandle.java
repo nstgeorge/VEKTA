@@ -1,6 +1,6 @@
 package vekta.menu.handle;
 
-import vekta.ControlKey;
+import vekta.KeyBinding;
 import vekta.Resources;
 import vekta.Settings;
 import vekta.context.Context;
@@ -8,14 +8,15 @@ import vekta.menu.Menu;
 import vekta.menu.option.BackOption;
 import vekta.menu.option.MenuOption;
 
+import java.io.Serializable;
+
 import static processing.core.PConstants.CENTER;
-import static processing.core.PConstants.DISABLE_DEPTH_TEST;
 import static vekta.Vekta.*;
 
 /**
  * Default inject renderer implementation; draws buttons and select text
  */
-public class MenuHandle {
+public class MenuHandle implements Serializable {
 	private final MenuOption defaultOption;
 
 	public MenuHandle(Context parent) {
@@ -60,7 +61,7 @@ public class MenuHandle {
 		v.clear();
 		//		v.camera();
 		//		v.noLights();
-		v.hint(DISABLE_DEPTH_TEST);
+		//		v.hint(DISABLE_DEPTH_TEST);
 	}
 
 	public void render(Menu menu) {
@@ -81,7 +82,7 @@ public class MenuHandle {
 		v.textAlign(CENTER);
 
 		if(menu.getCursor().isEnabled()) {
-			v.text(Settings.getControlString(ControlKey.MENU_SELECT) + " to " + getSelectVerb(), getButtonX(), getButtonY(menu.size()) + 100);
+			v.text(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to " + getSelectVerb(), getButtonX(), getButtonY(menu.size()) + 100);
 		}
 	}
 
@@ -89,30 +90,31 @@ public class MenuHandle {
 		float yPos = getButtonY(index);
 		boolean selected = menu.getIndex() == index;
 
+		String name = opt.getName();
+
 		// Draw border
 		v.stroke(selected ? 220 : UI_COLOR);
 		v.noFill();
-		v.rect(getButtonX(), yPos, getButtonWidth() + (selected ? 10 : 0), 50);
+		v.rect(getButtonX(), yPos, max(getButtonWidth() + (selected ? 10 : 0), v.textWidth(name) + 20), 50);
 
 		// Draw text
 		v.fill(opt.isEnabled() ? opt.getColor() : 100);
-		v.noStroke();
-		v.text(opt.getName(), getButtonX(), yPos - 3);
+		v.text(name, getButtonX(), yPos - 3);
 	}
 
-	public void keyPressed(Menu menu, ControlKey key) {
-		if(key == ControlKey.MENU_CLOSE) {
+	public void keyPressed(Menu menu, KeyBinding key) {
+		if(key == KeyBinding.MENU_CLOSE) {
 			menu.close();
 		}
-		else if(key == ControlKey.MENU_UP) {
+		else if(key == KeyBinding.MENU_UP) {
 			Resources.playSound("change");
 			menu.scroll(-1);
 		}
-		else if(key == ControlKey.MENU_DOWN) {
+		else if(key == KeyBinding.MENU_DOWN) {
 			Resources.playSound("change");
 			menu.scroll(1);
 		}
-		else if(key == ControlKey.MENU_SELECT) {
+		else if(key == KeyBinding.MENU_SELECT) {
 			if(menu.getCursor().isEnabled()) {
 				Resources.playSound("select");
 				menu.select();

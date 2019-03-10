@@ -26,7 +26,7 @@ public interface World extends Context {
 	void addObject(Object object);
 
 	void removeObject(Object object);
-	
+
 	<T> T findRandomObject(Class<T> type); // TODO: add predicate overload
 
 	SpaceObject findOrbitObject(SpaceObject object);

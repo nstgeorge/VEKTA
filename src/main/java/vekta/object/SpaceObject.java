@@ -4,17 +4,17 @@ import processing.core.PVector;
 import vekta.RenderLevel;
 import vekta.spawner.WorldGenerator;
 
+import java.io.Serializable;
 import java.util.List;
 
 import static vekta.Vekta.*;
 
-public abstract class SpaceObject {
+public abstract class SpaceObject implements Serializable {
 	private static final float MARKER_SIZE = 40;
 	private static final int DEFAULT_TRAIL_LENGTH = 100;
 
 	protected final PVector[] trail;
 
-	private int id;
 	private boolean destroyed;
 
 	protected final PVector position = new PVector();
@@ -29,20 +29,6 @@ public abstract class SpaceObject {
 		this.color = color;
 
 		this.trail = new PVector[getTrailLength()];
-	}
-
-	/**
-	 * Gets the unique ID of an object
-	 */
-	public final int getID() {
-		return id;
-	}
-
-	/**
-	 * Sets the unique ID of an object
-	 */
-	public final void setID(int id) {
-		this.id = id;
 	}
 
 	/**
@@ -271,7 +257,7 @@ public abstract class SpaceObject {
 	public void updateTrail() {
 		// Update trail vectors
 		System.arraycopy(trail, 0, trail, 1, trail.length - 1);
-//		trail[0] = getPosition();
+		//		trail[0] = getPosition();
 		trail[0] = new PVector();
 	}
 

@@ -1,8 +1,10 @@
 package vekta.spawner;
 
+import java.io.Serializable;
+
 import static vekta.Vekta.v;
 
-public interface Weighted {
+public interface Weighted extends Serializable {
 
 	// Calculate random spawner based on weights
 	static <T extends Weighted> T random(T[] spawners) {

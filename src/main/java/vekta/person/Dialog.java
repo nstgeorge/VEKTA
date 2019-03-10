@@ -6,13 +6,14 @@ import vekta.menu.handle.DialogMenuHandle;
 import vekta.menu.option.DialogOption;
 import vekta.menu.option.MenuOption;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import static vekta.Vekta.*;
 
-public class Dialog {
+public class Dialog implements Serializable {
 	private final String type;
 	private final String message;
 	private final Person person;

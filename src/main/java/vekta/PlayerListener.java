@@ -9,14 +9,16 @@ import vekta.object.ship.Ship;
 import vekta.overlay.singleplayer.Notification;
 import vekta.terrain.LandingSite;
 
+import java.io.Serializable;
+
 /**
  * Player-related event listener
  */
-public interface PlayerListener {
-	default void onKeyPress(ControlKey key) {
+public interface PlayerListener extends Serializable {
+	default void onKeyPress(KeyBinding key) {
 	}
 
-	default void onKeyRelease(ControlKey key) {
+	default void onKeyRelease(KeyBinding key) {
 	}
 
 	default void onMenu(Menu menu) {

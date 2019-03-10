@@ -1,5 +1,7 @@
 the {person_adj}
 the {item_noun} {impersonal_name}
+the {item_noun} {person_noun}
+the {person_noun} of {settlement}
 from {planet_prefix}{planet_suffix}
 Jr.
 Sr.

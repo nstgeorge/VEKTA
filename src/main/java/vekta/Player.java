@@ -7,10 +7,11 @@ import vekta.mission.Mission;
 import vekta.object.ship.ModularShip;
 import vekta.overlay.singleplayer.Notification;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class Player {
+public final class Player implements Serializable {
 	private Faction faction;
 
 	private final List<PlayerListener> listeners = new ArrayList<>();
@@ -59,11 +60,11 @@ public final class Player {
 			}
 
 			@Override
-			public void onKeyPress(ControlKey key) {
-				if(key == ControlKey.OBJECTIVE_CYCLE && getCurrentMission() != null) {
+			public void onKeyPress(KeyBinding key) {
+				if(key == KeyBinding.OBJECTIVE_CYCLE && getCurrentMission() != null) {
 					getCurrentMission().cycleObjective();
 				}
-				if(key == ControlKey.MISSION_CYCLE && missions.size() > 0) {
+				if(key == KeyBinding.MISSION_CYCLE && missions.size() > 0) {
 					int index = missions.indexOf(getCurrentMission()) + 1;
 					setCurrentMission(index == getMissions().size() ? null : missions.get(index % missions.size()));
 				}

@@ -1,11 +1,12 @@
 package vekta.item;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public final class Inventory implements Iterable<Item> {
+public final class Inventory implements Serializable, Iterable<Item> {
 	private final InventoryListener listener;
 
 	private final List<Item> items = new ArrayList<>();

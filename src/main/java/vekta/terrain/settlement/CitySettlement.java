@@ -2,6 +2,9 @@ package vekta.terrain.settlement;
 
 import vekta.Faction;
 import vekta.spawner.WorldGenerator;
+import vekta.terrain.building.RefineryBuilding;
+
+import static vekta.Vekta.*;
 
 public class CitySettlement extends Settlement {
 
@@ -10,6 +13,10 @@ public class CitySettlement extends Settlement {
 
 		// TODO: add District settlement parts
 		add(WorldGenerator.randomMarket(3));
+		
+		if(v.chance(.8F)) {
+			add(new RefineryBuilding());
+		}
 	}
 
 	@Override

@@ -3,10 +3,10 @@ package vekta.item;
 import vekta.Player;
 import vekta.mission.Mission;
 
-import java.util.function.Function;
+import java.io.Serializable;
 
 public class MissionItem extends Item {
-	private final Function<Player, Mission> generator;
+	private final MissionProvider provider;
 
 	private boolean activated;
 
@@ -14,10 +14,10 @@ public class MissionItem extends Item {
 		this(name, player -> mission);
 	}
 
-	public MissionItem(String name, Function<Player, Mission> generator) {
+	public MissionItem(String name, MissionProvider provider) {
 		super(name, ItemType.MISSION);
 
-		this.generator = generator;
+		this.provider = provider;
 	}
 
 	public boolean isActivated() {
@@ -26,11 +26,15 @@ public class MissionItem extends Item {
 
 	public Mission createMission(Player player) {
 		activated = true;
-		return generator.apply(player);
+		return provider.createMission(player);
 	}
 
 	@Override
 	public void onAdd(Player player) {
 		createMission(player).start();
+	}
+	
+	public interface MissionProvider extends Serializable {
+		Mission createMission(Player player);
 	}
 }

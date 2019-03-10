@@ -1,11 +1,13 @@
 package vekta.module;
 
-import vekta.ControlKey;
+import vekta.KeyBinding;
 import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.object.ship.ModularShip;
 
-public interface Module {
+import java.io.Serializable;
+
+public interface Module extends Serializable {
 	// Define per-second energy consumption rate
 	float PER_SECOND = 1 / 60F;
 	float PER_MINUTE = PER_SECOND / 60F;
@@ -29,10 +31,10 @@ public interface Module {
 	default void onUpdate() {
 	}
 
-	default void onKeyPress(ControlKey key) {
+	default void onKeyPress(KeyBinding key) {
 	}
 
-	default void onKeyRelease(ControlKey key) {
+	default void onKeyRelease(KeyBinding key) {
 	}
 	
 	default void onItemMenu(Item item, Menu menu) {

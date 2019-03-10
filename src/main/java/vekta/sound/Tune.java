@@ -1,12 +1,13 @@
 package vekta.sound;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 import static vekta.Vekta.v;
 
-public class Tune {
+public class Tune implements Serializable {
 	private final SoundGroup instrument;
 	private final List<Note> notes = new ArrayList<>();
 	private final int noteOffset;
@@ -44,7 +45,7 @@ public class Tune {
 		intervalProgress += 1 / v.frameRate;
 	}
 
-	private static class Note {
+	private static class Note implements Serializable {
 		private final int time;
 		private final int note;
 

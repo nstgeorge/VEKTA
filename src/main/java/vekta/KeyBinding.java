@@ -1,14 +1,19 @@
 package vekta;
 
+import java.awt.event.KeyEvent;
+
+import static java.awt.event.KeyEvent.*;
 import static processing.core.PConstants.ESC;
 
-public enum ControlKey {
+public enum KeyBinding {
 	MENU_UP('w'),
 	MENU_DOWN('s'),
 	MENU_LEFT('a'),
 	MENU_RIGHT('d'),
 	MENU_SELECT(' '),
 	MENU_CLOSE(ESC),
+	QUICK_SAVE(VK_NUMPAD5),
+	QUICK_LOAD(VK_NUMPAD9),
 	SHIP_FORWARD('w'),
 	SHIP_BACKWARD('s'),
 	SHIP_LEFT('a'),
@@ -28,13 +33,17 @@ public enum ControlKey {
 	SHIP_TELESCOPE('r'),
 	SHIP_HYPERDRIVE('f');
 
-	private final char defaultKey;
+	private final int defaultKeyCode;
 
-	ControlKey(char defaultKey) {
-		this.defaultKey = defaultKey;
+	KeyBinding(char c) {
+		this.defaultKeyCode = KeyEvent.getExtendedKeyCodeForChar(c);
 	}
 
-	public char getDefaultKey() {
-		return defaultKey;
+	KeyBinding(int code) {
+		this.defaultKeyCode = code;
+	}
+
+	public int getDefaultKeyCode() {
+		return defaultKeyCode;
 	}
 }

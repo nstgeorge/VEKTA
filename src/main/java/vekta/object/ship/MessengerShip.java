@@ -9,6 +9,8 @@ import vekta.menu.option.LootMenuOption;
 import vekta.object.SpaceObject;
 import vekta.person.Dialog;
 
+import static vekta.Vekta.getWorld;
+
 public class MessengerShip extends Ship {
 	private static final float DEF_MASS = 1000;
 	private static final float DEF_RADIUS = 5;
@@ -60,11 +62,11 @@ public class MessengerShip extends Ship {
 		PVector offset = getTargetShip().getPosition().sub(getPosition());
 
 		if(!delivered) {
-			// Approach without creating relative velocity
-			setVelocity(getTargetShip().getVelocity());
-			getPositionReference().add(offset.setMag(offset.mag() * getSpeed() * APPROACH_FACTOR));
+			// Approach target
+			setVelocity(getTargetShip().getVelocity().add(offset.mult(getSpeed() * APPROACH_FACTOR / getWorld().getTimeScale())));
 		}
 		else {
+			// Fly away
 			accelerate(-1, offset);
 		}
 	}

@@ -3,6 +3,8 @@ package vekta.object.particle;
 import processing.core.PVector;
 import vekta.object.SpaceObject;
 
+import java.io.Serializable;
+
 import static processing.core.PConstants.DEG_TO_RAD;
 import static vekta.Vekta.addObject;
 import static vekta.Vekta.v;
@@ -10,7 +12,7 @@ import static vekta.Vekta.v;
 /**
  * Abstraction for regularly emitting a specific particle type.
  */
-public class ParticleEmitter {
+public class ParticleEmitter implements Serializable {
 	private final SpaceObject relative;     // SpaceObject to use for relative velocity
 	private final PVector offset;        	// Offset from object position
 	private final ParticleStyle style;     // Style of emitted particles

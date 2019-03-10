@@ -8,7 +8,7 @@ import vekta.menu.option.BackOption;
 import vekta.menu.option.InstallModuleOption;
 import vekta.module.Module;
 import vekta.module.ModuleType;
-import vekta.module.Upgrader;
+import vekta.module.ModuleUpgrader;
 import vekta.module.station.ComponentModule;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.SpaceStation;
@@ -20,7 +20,7 @@ import static vekta.Vekta.*;
 /**
  * Context for modifying space stations.
  */
-public class StationLayoutContext implements Context, Upgrader {
+public class StationLayoutContext implements Context, ModuleUpgrader {
 	private static final float STATION_SCALE = 3;
 
 	private final Context parent;
@@ -53,10 +53,10 @@ public class StationLayoutContext implements Context, Upgrader {
 		v.clear();
 //		v.camera();
 //		v.noLights();
-		v.hint(DISABLE_DEPTH_TEST);
+//		v.hint(DISABLE_DEPTH_TEST);
 		v.strokeWeight(.5F);
 
-		RenderLevel dist = RenderLevel.PARTICLE;
+		RenderLevel level = RenderLevel.PARTICLE;
 
 		SpaceStation.Component core = station.getCore();
 		if(cursor == null) {
@@ -71,7 +71,7 @@ public class StationLayoutContext implements Context, Upgrader {
 		// Draw station components
 		v.noFill();
 		v.stroke(UI_COLOR);
-		station.drawRelative(dist, station.getRadius());
+		station.drawRelative(level, station.getRadius());
 
 		// Highlight cursor component
 		SpaceStation.Direction dir = cursor.getDirection();
@@ -79,7 +79,7 @@ public class StationLayoutContext implements Context, Upgrader {
 		v.pushMatrix();
 		v.translate(cursor.getX(), cursor.getY());
 		v.rotate(dir.getAngle());
-		cursor.getModule().draw(dist, station.getTileSize());
+		cursor.getModule().draw(level, station.getTileSize());
 		v.popMatrix();
 
 		// End station rendering
@@ -100,7 +100,7 @@ public class StationLayoutContext implements Context, Upgrader {
 		v.textSize(24);
 		v.fill(255);
 		if(!cursor.hasChildren()) {
-			v.text(Settings.getControlString(ControlKey.MENU_SELECT) + " to " + (isPlacing() ? "INSTALL" : "REMOVE"), v.width / 2F, v.height - 32);
+			v.text(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to " + (isPlacing() ? "INSTALL" : "REMOVE"), v.width / 2F, v.height - 32);
 		}
 		v.strokeWeight(1);
 	}
@@ -158,7 +158,7 @@ public class StationLayoutContext implements Context, Upgrader {
 	}
 
 	@Override
-	public void keyPressed(ControlKey key) {
+	public void keyPressed(KeyBinding key) {
 		switch(key) {
 		case MENU_CLOSE:
 			setContext(parent);
@@ -182,7 +182,7 @@ public class StationLayoutContext implements Context, Upgrader {
 	}
 
 	@Override
-	public void keyReleased(ControlKey key) {
+	public void keyReleased(KeyBinding key) {
 	}
 
 	@Override

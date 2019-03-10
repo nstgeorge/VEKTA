@@ -3,6 +3,7 @@ package vekta.terrain;
 import vekta.menu.Menu;
 import vekta.terrain.settlement.Settlement;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,7 +13,7 @@ import static vekta.Vekta.v;
 /**
  * An abstract representation of planetary terrain.
  */
-public abstract class Terrain {
+public abstract class Terrain implements Serializable {
 	private final List<String> features = new ArrayList<>();
 
 	public Terrain() {
@@ -41,7 +42,7 @@ public abstract class Terrain {
 	protected boolean chance(float amount) {
 		return v.random(1) < amount;
 	}
-	
+
 	public boolean isInhabited() {
 		return false;
 	}
@@ -53,7 +54,7 @@ public abstract class Terrain {
 	public abstract String getOverview();
 
 	public void setup(LandingSite site) {
-		
+
 	}
 
 	public abstract void setupLandingMenu(Menu menu);

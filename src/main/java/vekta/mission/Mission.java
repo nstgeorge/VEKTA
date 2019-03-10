@@ -5,13 +5,14 @@ import vekta.PlayerEvent;
 import vekta.mission.objective.Objective;
 import vekta.mission.reward.Reward;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import static processing.core.PApplet.println;
 import static vekta.Vekta.UI_COLOR;
 
-public class Mission {
+public class Mission implements Serializable {
 	private final List<Objective> objectives = new ArrayList<>();
 	private final List<Reward> rewards = new ArrayList<>();
 	private final List<MissionListener> listeners = new ArrayList<>();

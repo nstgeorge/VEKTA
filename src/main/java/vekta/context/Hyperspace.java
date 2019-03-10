@@ -37,12 +37,12 @@ public class Hyperspace {
 	}
 
 	public void render() {
-		v.hint(ENABLE_DEPTH_TEST);
+//		v.hint(ENABLE_DEPTH_TEST);
 		update();
 		for(HyperspaceParticle p : particles) {
 			p.render();
 		}
-		v.hint(DISABLE_DEPTH_TEST);
+//		v.hint(DISABLE_DEPTH_TEST);
 	}
 
 	public void update() {

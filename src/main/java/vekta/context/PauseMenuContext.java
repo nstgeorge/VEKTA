@@ -1,6 +1,6 @@
 package vekta.context;
 
-import vekta.ControlKey;
+import vekta.KeyBinding;
 import vekta.Resources;
 import vekta.Settings;
 
@@ -13,7 +13,7 @@ public class PauseMenuContext implements Context {
 	private final World world;
 
 	// Pause inject options
-	private final String[] pauseMenu = {"Continue", "Restart", "Quit to Menu"};
+	private final String[] options = {"Continue", "Restart", "Quit to Menu"};
 	private int selected = 0;
 
 	public PauseMenuContext(World world) {
@@ -35,14 +35,14 @@ public class PauseMenuContext implements Context {
 		v.shapeMode(CENTER);
 		v.shape(Resources.logo, v.width / 8F, 100, (v.width / 4F) - 100, ((v.width / 4F) - 100) / 3.392F);
 		// Options
-		for(int i = 0; i < pauseMenu.length; i++) {
-			drawOption(pauseMenu[i], (v.height / 2) + (i * 100), i == selected);
+		for(int i = 0; i < options.length; i++) {
+			drawOption(options[i], (v.height / 2) + (i * 100), i == selected);
 		}
 		v.textFont(bodyFont);
 		v.stroke(0);
 		v.fill(255);
 		v.textAlign(CENTER);
-		v.text(Settings.getControlString(ControlKey.MENU_SELECT) + " to select", v.width / 8F, (v.height / 2) + (pauseMenu.length * 100) + 100);
+		v.text(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to select", v.width / 8F, (v.height / 2) + (options.length * 100) + 100);
 		v.hint(ENABLE_DEPTH_TEST);
 		//noLoop();
 	}
@@ -52,9 +52,9 @@ public class PauseMenuContext implements Context {
 	 */
 	private void drawOption(String name, int yPos, boolean selected) {
 		// Shape ---------------------
-		v.hint(DISABLE_DEPTH_TEST);
-//		v.camera();
-//		v.noLights();
+//		v.hint(DISABLE_DEPTH_TEST);
+		//		v.camera();
+		//		v.noLights();
 		if(selected)
 			v.stroke(255);
 		else
@@ -71,21 +71,21 @@ public class PauseMenuContext implements Context {
 	}
 
 	@Override
-	public void keyPressed(ControlKey key) {
-		if(key == ControlKey.MENU_CLOSE) {
+	public void keyPressed(KeyBinding key) {
+		if(key == KeyBinding.MENU_CLOSE) {
 			setContext(world);
 		}
-		else if(key == ControlKey.MENU_UP) {
+		else if(key == KeyBinding.MENU_UP) {
 			// Play the sound for changing inject selection
 			Resources.playSound("change");
 			selected = Math.max(selected - 1, 0);
 		}
-		else if(key == ControlKey.MENU_DOWN) {
+		else if(key == KeyBinding.MENU_DOWN) {
 			// Play the sound for changing inject selection
 			Resources.playSound("change");
-			selected = Math.min(selected + 1, pauseMenu.length - 1);
+			selected = Math.min(selected + 1, options.length - 1);
 		}
-		else if(key == ControlKey.MENU_SELECT) {
+		else if(key == KeyBinding.MENU_SELECT) {
 			//			Resources.stopMusic("theme");
 			Resources.playSound("select");
 			switch(selected) {
@@ -103,10 +103,11 @@ public class PauseMenuContext implements Context {
 	}
 
 	@Override
-	public void keyReleased(ControlKey key) {
+	public void keyReleased(KeyBinding key) {
 	}
 
 	@Override
 	public void mouseWheel(int amount) {
+		selected = max(0, min(options.length - 1, selected + amount));
 	}
 }

@@ -4,8 +4,10 @@ import processing.core.PVector;
 import vekta.Vekta;
 import vekta.object.SpaceObject;
 import vekta.object.ship.Ship;
-import vekta.spawner.TuneGenerator;
 import vekta.sound.Tune;
+import vekta.spawner.TuneGenerator;
+
+import java.io.Serializable;
 
 import static vekta.Vekta.G;
 import static vekta.Vekta.getWorld;
@@ -14,7 +16,7 @@ import static vekta.Vekta.getWorld;
  * A landing terrain for one spacecraft-like object.
  * State management for landing sites should be handled or proxied through this class.
  */
-public class LandingSite {
+public class LandingSite implements Serializable {
 	private final SpaceObject parent;
 	private final Terrain terrain;
 

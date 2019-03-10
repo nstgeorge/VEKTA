@@ -1,6 +1,6 @@
 package vekta.module;
 
-import vekta.ControlKey;
+import vekta.KeyBinding;
 import vekta.Resources;
 import vekta.object.ship.ModularShip;
 
@@ -82,8 +82,8 @@ public class HyperdriveModule extends ShipModule {
 	}
 
 	@Override
-	public void onKeyPress(ControlKey key) {
-		if(key == ControlKey.SHIP_HYPERDRIVE) {
+	public void onKeyPress(KeyBinding key) {
+		if(key == KeyBinding.SHIP_HYPERDRIVE) {
 			if(!isActive()) {
 				startHyperdrive();
 			}

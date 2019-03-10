@@ -2,7 +2,7 @@ package vekta.context;
 
 import processing.data.IntDict;
 import processing.data.StringDict;
-import vekta.ControlKey;
+import vekta.KeyBinding;
 import vekta.Resources;
 import vekta.Settings;
 import vekta.menu.handle.MainMenuHandle;
@@ -13,8 +13,8 @@ public class SettingsMenuContext implements Context {
 	private final Context parent;
 
 	// Settings
-	private final StringDict settingsOptions;
-	private final IntDict settingsDefinitions;
+	private final transient StringDict settingsOptions = new StringDict();
+	private final transient IntDict settingsDefinitions = new IntDict();
 	private final int[] selectedOptions;
 	private int selectedSetting;
 
@@ -22,11 +22,9 @@ public class SettingsMenuContext implements Context {
 
 	public SettingsMenuContext(Context parent) {
 		this.parent = parent;
-
-		settingsOptions = new StringDict();
+		
 		settingsOptions.set("Music", "On,Off");
 		settingsOptions.set("Sound", "On,Off");
-		settingsDefinitions = new IntDict();
 		settingsDefinitions.set("On", 1);
 		settingsDefinitions.set("Off", 0);
 		selectedOptions = new int[settingsOptions.size()];
@@ -45,7 +43,7 @@ public class SettingsMenuContext implements Context {
 		MainMenuHandle.HYPERSPACE.render();
 
 		// Draw settings
-		v.hint(DISABLE_DEPTH_TEST);
+//		v.hint(DISABLE_DEPTH_TEST);
 //		v.camera();
 //		v.noLights();
 		v.textFont(bodyFont);
@@ -63,7 +61,7 @@ public class SettingsMenuContext implements Context {
 				v.fill(UI_COLOR);
 			v.text(key, 500, 200 + (optionIndex * SETTINGS_SPACING));
 			for(String option : options) {
-				if(Settings.get(key.toLowerCase()) == settingsDefinitions.get(option)) {
+				if(Settings.getInt(key.toLowerCase()) == settingsDefinitions.get(option)) {
 					v.text(option, v.width - 500, 200 + (optionIndex * SETTINGS_SPACING));
 					selectedOptions[optionIndex] = settingsDefinitions.get(option);
 				}
@@ -102,23 +100,23 @@ public class SettingsMenuContext implements Context {
 	}
 
 	@Override
-	public void keyPressed(ControlKey key) {
-		if(key == ControlKey.MENU_CLOSE) {
+	public void keyPressed(KeyBinding key) {
+		if(key == KeyBinding.MENU_CLOSE) {
 			setContext(parent);
 		}
-		if(key == ControlKey.MENU_UP) {
+		if(key == KeyBinding.MENU_UP) {
 			// Play the sound for changing inject selection
 			Resources.playSound("change");
 			selectedSetting = Math.max(selectedSetting - 1, 0);
 			v.redraw();
 		}
-		if(key == ControlKey.MENU_DOWN) {
+		if(key == KeyBinding.MENU_DOWN) {
 			// Play the sound for changing inject selection
 			Resources.playSound("change");
 			selectedSetting = Math.min(selectedSetting + 1, settingsOptions.size());
 			v.redraw();
 		}
-		if(key == ControlKey.MENU_SELECT) {
+		if(key == KeyBinding.MENU_SELECT) {
 			// Play the sound for selection
 			Resources.playSound("change");
 			if(selectedSetting == settingsOptions.size()) {
@@ -133,7 +131,7 @@ public class SettingsMenuContext implements Context {
 	}
 
 	@Override
-	public void keyReleased(ControlKey key) {
+	public void keyReleased(KeyBinding key) {
 	}
 
 	@Override

@@ -3,3 +3,4 @@
 {person}'s Hideout
 {faction} Emigrants
 {faction} Refugees
+{star} Embassy

@@ -2,6 +2,8 @@ package vekta;
 
 import processing.data.JSONObject;
 
+import javax.swing.*;
+
 import static vekta.Vekta.v;
 
 public class Settings {
@@ -15,8 +17,8 @@ public class Settings {
 		defaults = new JSONObject();
 		defaults.put("sound", 1);
 		defaults.put("music", 1);
-		for(ControlKey key : ControlKey.values()) {
-			defaults.put(getKeyProp(key), serializeKey(key.getDefaultKey()));
+		for(KeyBinding key : KeyBinding.values()) {
+			defaults.put(getKeyProp(key), serializeKeyCode(key.getDefaultKeyCode()));
 		}
 
 		// Settings
@@ -30,35 +32,19 @@ public class Settings {
 		}
 	}
 
-	private static String getKeyProp(ControlKey key) {
+	private static String getKeyProp(KeyBinding key) {
 		return "key." + key.name().toLowerCase();
 	}
 
-	// TODO: find a way to automatically do this for all keys
-	private static String serializeKey(char key) {
-		if(key == ' ') {
-			return "SPACEBAR";
-		}
-		if(key == '\t') {
-			return "TAB";
-		}
-		return String.valueOf(key);
+	private static String serializeKeyCode(int keyCode) {
+		return KeyStroke.getKeyStroke(keyCode, 0).toString().replace("pressed ", "");
 	}
 
-	private static char deserializeKey(String key) {
-		if("SPACEBAR".equals(key)) {
-			return ' ';
-		}
-		if("TAB".equals(key)) {
-			return '\t';
-		}
-		else if(key.length() != 1) {
-			return 0; // Disable invalid keys
-		}
-		return key.charAt(0);
+	private static int deserializeKeyCode(String keyText) {
+		return KeyStroke.getKeyStroke("pressed " + keyText).getKeyCode();
 	}
 
-	public static int get(String key) {
+	public static int getInt(String key) {
 		if(!settings.isNull(key)) {
 			return settings.getInt(key);
 		}
@@ -67,7 +53,16 @@ public class Settings {
 		}
 	}
 
-	public static char getCharacter(ControlKey key) {
+	public static String getString(String key, String def) {
+		if(!settings.isNull(key)) {
+			return settings.getString(key);
+		}
+		else {
+			return defaults.getString(key, def);
+		}
+	}
+
+	public static int getKeyCode(KeyBinding key) {
 		String prop = getKeyProp(key);
 		String result;
 		if(!settings.isNull(prop)) {
@@ -76,11 +71,16 @@ public class Settings {
 		else {
 			result = defaults.getString(prop, "");
 		}
-		return deserializeKey(result);
+		return deserializeKeyCode(result);
 	}
 
-	public static String getControlString(ControlKey key) {
-		return serializeKey(getCharacter(key));
+	public static String getKeyText(KeyBinding key) {
+		return serializeKeyCode(getKeyCode(key));
+	}
+
+	// TODO: call this to update keys in settings UI
+	public static void set(KeyBinding key, char value) {
+		set(getKeyProp(key), serializeKeyCode(value));
 	}
 
 	public static void set(String key, int value) {
@@ -88,9 +88,8 @@ public class Settings {
 		save();
 	}
 
-	// TODO: call this to update keys in settings UI
-	public static void set(ControlKey key, char value) {
-		settings.setString(getKeyProp(key), serializeKey(value));
+	public static void set(String key, String value) {
+		settings.setString(key, value);
 		save();
 	}
 

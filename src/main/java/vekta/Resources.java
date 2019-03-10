@@ -161,7 +161,7 @@ public class Resources {
 	// TODO: DRY up these sound methods a bit
 
 	public static void playSound(String key) {
-		if(Settings.get("sound") > 0) {
+		if(Settings.getInt("sound") > 0) {
 			SoundFile sound = getSound(key);
 			sound.stop();
 			sound.play();
@@ -189,7 +189,7 @@ public class Resources {
 	}
 
 	public static void loopSound(String key) {
-		if(Settings.get("sound") > 0) {
+		if(Settings.getInt("sound") > 0) {
 			SoundFile sound = getSound(key);
 			if(!sound.isPlaying()) {
 				sound.loop();
@@ -209,7 +209,7 @@ public class Resources {
 	}
 
 	public static void setMusic(SoundFile sound) {
-		float volume = Settings.get("music");
+		float volume = Settings.getInt("music");
 		if(volume > 0) {
 			if(sound != currentMusic) {
 				// Stop previous music
@@ -254,7 +254,7 @@ public class Resources {
 
 	public static void updateMusicVolume() {
 		if(currentMusic != null) {
-			currentMusic.amp(Settings.get("music"));
+			currentMusic.amp(Settings.getInt("music"));
 		}
 	}
 }

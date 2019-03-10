@@ -14,8 +14,6 @@ import java.util.Map;
 import static vekta.Vekta.v;
 
 public class MarketBuilding implements SettlementPart {
-	//	private static final float ITEM_MARKUP = 1.5F; // Price modifier after buying/selling to a landing terrain
-
 	private final Inventory inventory = new Inventory();
 	private final Map<Item, Integer> offers = new HashMap<>();
 	private final Map<Item, Integer> shipOffers = new HashMap<>();

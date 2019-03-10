@@ -1,8 +1,9 @@
 package vekta.module;
 
+import java.io.Serializable;
 import java.util.List;
 
-public interface Upgradeable {
+public interface ModuleUpgradeable extends Serializable {
 	List<Module> getModules();
 
 	Module getModule(ModuleType type);

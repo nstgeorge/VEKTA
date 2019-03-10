@@ -25,16 +25,21 @@ public class OreItemSpawner implements ItemGenerator.ItemSpawner {
 	}
 
 	public static Item randomOre(String planetName) {
-		ItemType type = v.random(1) > .2F ? ItemType.COMMON : ItemType.RARE;
-		return new OreItem(randomOreName(planetName, type), type);
-	}
-
-	public static String randomOreName(String planetName, ItemType type) {
+		ItemType type = v.chance(.8F) ? ItemType.COMMON : ItemType.RARE;
 		String key = "ore_" + (type == ItemType.COMMON ? "common" : "rare");
-		String name = Resources.generateString(key);
-		if(type == ItemType.LEGENDARY) {
-			name += " of " + planetName;
+
+		String[] split = Resources.generateString(key).split(":");
+		String name = split[0].trim();
+		String refined = split.length > 1 ? split[1].trim() : null;
+
+		if(v.chance(.1F)) {
+			type = ItemType.LEGENDARY;
+			name += " from " + planetName;
+			if(refined != null) {
+				refined = planetName + " " + refined;
+			}
 		}
-		return name;
+
+		return new OreItem(name, refined != null ? new Item(refined, type.getImproved()) : null, type);
 	}
 }
