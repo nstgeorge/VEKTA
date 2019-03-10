@@ -16,7 +16,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	private static final String SERVER_ADDRESS = "http://vekta-rvanasa.c9users.io"; // TODO: add to settings
 	private static final String DEFAULT_ROOM = "Test";
 
-	private final Map<Peer, Faction> playerFactions = new WeakHashMap<>();
+	private final transient Map<Peer, Faction> playerFactions = new WeakHashMap<>();
 
 	private transient Connection connection;
 
