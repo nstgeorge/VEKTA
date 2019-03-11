@@ -2,6 +2,7 @@ package vekta.context;
 
 import processing.core.PVector;
 import vekta.RenderLevel;
+import vekta.Syncable;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 
@@ -14,18 +15,34 @@ public interface World extends Context {
 	float getTimeScale();
 
 	/**
+	 * Add (or replace existing) Syncable object
+	 */
+	<T extends Syncable> T register(T object);
+	
+	/**
+	 * Remove Syncable object
+	 */
+	void remove(Syncable object);
+
+	/**
+	 * Called when an object should be synchronized
+	 */
+	void apply(Syncable object);
+
+	/**
 	 * Called when player dies
 	 */
 	void setDead();
 
 	/**
+	 * Called when the gamemode reloads from an autosave
+	 */
+	void reload();
+
+	/**
 	 * Called when the gamemode restarts
 	 */
 	void restart();
-
-	void addObject(Object object);
-
-	void removeObject(Object object);
 
 	<T> T findRandomObject(Class<T> type); // TODO: add predicate overload
 

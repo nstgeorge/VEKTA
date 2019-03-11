@@ -17,7 +17,8 @@ import vekta.terrain.settlement.OutpostSettlement;
 
 import static processing.core.PApplet.pow;
 import static vekta.Vekta.*;
-import static vekta.spawner.WorldGenerator.*;
+import static vekta.spawner.WorldGenerator.orbit;
+import static vekta.spawner.WorldGenerator.randomPlanetColor;
 
 public class AsteroidSpawner implements WorldGenerator.WorldSpawner {
 	@Override
@@ -61,15 +62,13 @@ public class AsteroidSpawner implements WorldGenerator.WorldSpawner {
 	public static Asteroid createAsteroid(PVector pos, Terrain terrain) {
 		float mass = pow(10, v.random(15, 20));
 		float density = v.random(1.5F, 2);
-		Asteroid asteroid = new Asteroid(
+		return register(new Asteroid(
 				Resources.generateString("asteroid"),
 				mass,
 				density,
 				terrain,
 				pos,
 				new PVector(),
-				randomPlanetColor());
-		addObject(asteroid);
-		return asteroid;
+				randomPlanetColor()));
 	}
 }

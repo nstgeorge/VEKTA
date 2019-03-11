@@ -98,12 +98,12 @@ public class Vekta extends PApplet {
 		mainMenu.add(new SettingsMenuOption());
 		mainMenu.addDefault();
 		setContext(mainMenu);
-		applyContext();
+		focusContext();
 	}
 
 	@Override
 	public void draw() {
-		applyContext();
+		focusContext();
 		if(context != null) {
 			context.render();
 		}
@@ -147,16 +147,16 @@ public class Vekta extends PApplet {
 	public void mousePressed() {
 		if(context != null) {
 			// TODO: allow mouse events binding to user-specified keys
-			context.keyPressed(KeyBinding.MENU_SELECT);
 			context.keyPressed(KeyBinding.SHIP_FIRE);
+			context.keyPressed(KeyBinding.MENU_SELECT);
 		}
 	}
 
 	@Override
 	public void mouseReleased() {
 		if(context != null) {
-			context.keyReleased(KeyBinding.MENU_SELECT);
 			context.keyReleased(KeyBinding.SHIP_FIRE);
+			context.keyReleased(KeyBinding.MENU_SELECT);
 		}
 	}
 
@@ -167,13 +167,13 @@ public class Vekta extends PApplet {
 		}
 	}
 
-	public static void addObject(Object object) {
-		getWorld().addObject(object);
-	}
-
-	public static void removeObject(Object object) {
-		getWorld().removeObject(object);
-	}
+	//	public static void addObject(Object object) {
+	//		getWorld().addObject(object);
+	//	}
+	//
+	//	public static void removeObject(Object object) {
+	//		getWorld().removeObject(object);
+	//	}
 
 	public static Context getContext() {
 		return context;
@@ -193,7 +193,7 @@ public class Vekta extends PApplet {
 		nextContext = context;
 	}
 
-	public static void applyContext() {
+	public static void focusContext() {
 		if(nextContext != null) {
 			context = nextContext;
 			nextContext = null;
@@ -227,6 +227,29 @@ public class Vekta extends PApplet {
 						unit <= PLANET_LEVEL ?
 								RenderLevel.PLANET :
 								RenderLevel.STAR;
+	}
+
+	//// Static world-related methods ////
+
+	/**
+	 * Convenience method: register object for the current world.
+	 */
+	public static <T extends Syncable> T register(T object) {
+		return getWorld().register(object);
+	}
+
+	/**
+	 * Convenience method: apply one Syncable data structure to the other.
+	 */
+	@SuppressWarnings("unchecked")
+	public static void register(Iterable<? extends Syncable> sync, Iterable<? extends Syncable> data) {
+		for(Syncable s : sync) {
+			for(Syncable d : data) {
+				if(s.getSyncKey().equals(d.getSyncKey())) {
+					s.onSync(d.getSyncData());
+				}
+			}
+		}
 	}
 
 	//// Misc. UI methods ////

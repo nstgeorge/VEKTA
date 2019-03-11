@@ -10,6 +10,8 @@ An Inconspicuous {mission_noun}
 An Uncertain {mission_noun}
 An Ominous {mission_noun}
 An Unexpected {mission_noun}
+An Unassuming {mission_noun}
+An Unprecedented {mission_noun}
 A Worthwile {mission_noun}
 A Foretold {mission_noun}
 A New {mission_noun}

@@ -53,7 +53,7 @@ public class Projectile extends SpaceObject {
 	@Override
 	public void onUpdate(RenderLevel level) {
 		if(++aliveTime >= DESPAWN_TIME) {
-			removeObject(this);
+			getWorld().remove(this);
 		}
 	}
 

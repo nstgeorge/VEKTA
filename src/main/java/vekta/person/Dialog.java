@@ -87,6 +87,6 @@ public class Dialog implements Serializable {
 			menu.addDefault();
 		}
 		setContext(menu);
-		applyContext();
+		focusContext();
 	}
 }

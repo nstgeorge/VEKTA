@@ -4,18 +4,19 @@ import vekta.object.SpaceObject;
 import vekta.person.Person;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
+import static processing.core.PApplet.println;
 
 /**
  * Serializable world information (.vekta format)
- * */
+ */
 public final class WorldState implements Serializable {
 	//	private float timeScale = 1;
 
 	private final Player player;
+
+	private final Map<String, Syncable> syncMap = new HashMap<>();
 
 	private final List<SpaceObject> objects = new ArrayList<>();
 	private final List<SpaceObject> gravityObjects = new ArrayList<>();
@@ -27,6 +28,7 @@ public final class WorldState implements Serializable {
 	private final List<Faction> factions = new ArrayList<>();
 
 	private boolean updating;
+	private int nextID;
 
 	public WorldState(Player player) {
 		this.player = player;
@@ -38,6 +40,10 @@ public final class WorldState implements Serializable {
 	//	public float getTimeScale() {
 	//		return timeScale;
 	//	}
+
+	public Collection<Syncable> getSyncableObjects() {
+		return syncMap.values();
+	}
 
 	public List<SpaceObject> getObjects() {
 		return objects;
@@ -83,9 +89,28 @@ public final class WorldState implements Serializable {
 		}
 	}
 
-	public void addObject(Object object) {
+	@SuppressWarnings("unchecked")
+	public <S extends Syncable> S register(S object) {
+		// Find already existing object with the same state key
+		String key = getKey(object);
+		if(syncMap.containsKey(key)) {
+			S other = (S)syncMap.get(key);
+			other.onSync(object.getSyncData());
+			println("<sync>", key);
+			return other;
+		}
+		else {
+			add(object);
+			syncMap.put(getKey(object), object);
+			println("<add>", key);
+			return object;
+		}
+	}
+
+	private void add(Syncable object) {
 		if(object instanceof SpaceObject) {
 			SpaceObject s = (SpaceObject)object;
+			s.setID(nextID++);
 			if(updating) {
 				objectsToAdd.add(s);
 			}
@@ -99,12 +124,11 @@ public final class WorldState implements Serializable {
 		else if(object instanceof Faction && !factions.contains(object)) {
 			factions.add((Faction)object);
 		}
-		else {
-			throw new RuntimeException("Cannot add object: " + object);
-		}
 	}
 
-	public void removeObject(Object object) {
+	public void remove(Syncable object) {
+		syncMap.remove(getKey(object));
+
 		if(object instanceof SpaceObject) {
 			objectsToRemove.add((SpaceObject)object);
 		}
@@ -116,6 +140,21 @@ public final class WorldState implements Serializable {
 		}
 		else {
 			throw new RuntimeException("Cannot remove object: " + object);
+		}
+	}
+
+	public String getKey(Syncable<?> object) {
+		return object.getClass().getSimpleName() + "[" + object.getSyncKey() + "]";
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends Serializable> Syncable<T> find(String key) {
+		Syncable<T> sync = syncMap.get(key);
+		if(sync != null) {
+			return sync;
+		}
+		else {
+			return null;
 		}
 	}
 }

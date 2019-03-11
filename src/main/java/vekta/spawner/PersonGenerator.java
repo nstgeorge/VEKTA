@@ -20,12 +20,11 @@ public class PersonGenerator {
 	}
 
 	public static Person createPerson(Settlement home) {
-		Person person = new Person(randomPersonName(), FactionGenerator.randomFaction());
+		Person person = register(new Person(randomPersonName(), FactionGenerator.randomFaction()));
 		person.setHome(home);
 		if(v.random(1) < .5F) {
 			person.setTitle(randomPersonTitle(person));
 		}
-		addObject(person);
 		return person;
 	}
 

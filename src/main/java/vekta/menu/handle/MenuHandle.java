@@ -95,7 +95,7 @@ public class MenuHandle implements Serializable {
 		// Draw border
 		v.stroke(selected ? 220 : UI_COLOR);
 		v.noFill();
-		v.rect(getButtonX(), yPos, max(getButtonWidth() + (selected ? 10 : 0), v.textWidth(name) + 20), 50);
+		v.rect(getButtonX(), yPos, max(getButtonWidth(), v.textWidth(name) + 20) + (selected ? 10 : 0), 50);
 
 		// Draw text
 		v.fill(opt.isEnabled() ? opt.getColor() : 100);

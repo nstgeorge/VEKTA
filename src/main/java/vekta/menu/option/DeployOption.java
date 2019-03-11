@@ -7,7 +7,7 @@ import vekta.object.SpaceObject;
 
 import java.util.function.Supplier;
 
-import static vekta.Vekta.addObject;
+import static vekta.Vekta.register;
 
 public class DeployOption implements MenuOption {
 	private final String name;
@@ -41,7 +41,7 @@ public class DeployOption implements MenuOption {
 
 	@Override
 	public void select(Menu menu) {
-		addObject(getSupplier().get());
+		register(getSupplier().get());
 		getPlayer().getInventory().remove(getItem());
 		menu.close();
 	}

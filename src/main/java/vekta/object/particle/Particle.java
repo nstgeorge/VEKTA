@@ -42,7 +42,7 @@ public class Particle extends SpaceObject {
 
 		aliveTime += 1 / v.frameRate;
 		if(aliveTime >= getStyle().getLifetime()) {
-			removeObject(this);
+			getWorld().remove(this);
 		}
 	}
 

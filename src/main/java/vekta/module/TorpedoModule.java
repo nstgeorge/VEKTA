@@ -6,8 +6,7 @@ import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 import vekta.object.ship.ModularShip;
 
-import static vekta.Vekta.addObject;
-import static vekta.Vekta.getWorld;
+import static vekta.Vekta.*;
 
 public class TorpedoModule extends WeaponModule {
 	private final float speed;
@@ -48,7 +47,7 @@ public class TorpedoModule extends WeaponModule {
 			if(target != null && ship.consumeEnergy(1)) {
 				getWorld().playSound("laser", ship.getPosition());
 				PVector velocity = ship.getHeading().add(PVector.random2D()).add(ship.getVelocity());
-				addObject(new HomingProjectile(ship, target, getSpeed(), ship.getPosition(), velocity, ship.getColor()));
+				register(new HomingProjectile(ship, target, getSpeed(), ship.getPosition(), velocity, ship.getColor()));
 			}
 		}
 	}

@@ -35,7 +35,7 @@ public class SpaceStationSpawner implements WorldGenerator.WorldSpawner {
 		if(orbit instanceof TerrestrialPlanet) {
 			// Only spawn near terrestrial planets
 			int color = v.random(1) < .6F ? orbit.getColor() : randomPlanetColor();
-			SpaceStation s = new SpaceStation("OUTPOST I", new StationCoreModule(), PVector.random2D(), pos, new PVector(), color);
+			SpaceStation s = register(new SpaceStation("OUTPOST I", new StationCoreModule(), PVector.random2D(), pos, new PVector(), color));
 
 			// TODO: randomize
 			SpaceStation.Component core = s.getCore();
@@ -48,7 +48,6 @@ public class SpaceStationSpawner implements WorldGenerator.WorldSpawner {
 			SpaceStation.Component panel3 = struct2.attach(SpaceStation.Direction.RIGHT, new SolarArrayModule(1));
 			SpaceStation.Component sensor = struct2.attach(SpaceStation.Direction.LEFT, new SensorModule());
 
-			addObject(s);
 			orbit(orbit, s, .5F);
 
 			addLoot(s.getInventory(), 3);

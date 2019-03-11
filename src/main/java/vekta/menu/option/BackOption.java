@@ -31,7 +31,7 @@ public class BackOption implements MenuOption {
 		if(callback != null) {
 			callback.callback();
 		}
-		//		applyContext();
+		//		focusContext();
 	}
 	
 	public interface OptionCallback extends Serializable {

@@ -5,8 +5,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static java.lang.Float.max;
+import static vekta.Vekta.register;
 
-public final class Faction implements Serializable, Renameable {
+public final class Faction implements Serializable, Renameable, Syncable<Faction> {
 	private String name;
 	private int color;
 
@@ -25,6 +26,7 @@ public final class Faction implements Serializable, Renameable {
 	@Override
 	public void setName(String name) {
 		this.name = name;
+		applyChanges();
 	}
 
 	public int getColor() {
@@ -33,6 +35,7 @@ public final class Faction implements Serializable, Renameable {
 
 	public void setColor(int color) {
 		this.color = color;
+		applyChanges();
 	}
 
 	public boolean isNeutral(Faction faction) {
@@ -45,6 +48,7 @@ public final class Faction implements Serializable, Renameable {
 			enemies.remove(faction);
 			faction.allies.remove(this);
 			faction.enemies.remove(this);
+			applyChanges();
 		}
 	}
 
@@ -61,6 +65,7 @@ public final class Faction implements Serializable, Renameable {
 		if(faction != this) {
 			allies.add(faction);
 			faction.allies.add(this);
+			applyChanges();
 		}
 	}
 
@@ -73,21 +78,43 @@ public final class Faction implements Serializable, Renameable {
 	}
 
 	public void setEnemy(Faction faction) {
-		setNeutral(faction);
-		if(faction != this) {
-			enemies.add(faction);
-			faction.enemies.add(this);
-		}
+		if(!isEnemy(faction)) {
+			setNeutral(faction);
+			if(faction != this) {
+				enemies.add(faction);
+				faction.enemies.add(this);
+			}
 
-		for(Faction ally : getAllies()) {
-			ally.setEnemy(faction);
-		}
-		for(Faction ally : faction.getAllies()) {
-			ally.setEnemy(this);
+			for(Faction ally : getAllies()) {
+				ally.setEnemy(faction);
+			}
+			for(Faction ally : faction.getAllies()) {
+				ally.setEnemy(this);
+			}
+
+			applyChanges();
 		}
 	}
 
 	public float getValue() {
 		return max(1, allies.size() - enemies.size() * .5F);
+	}
+
+	@Override
+	public String getSyncKey() {
+		return getName();
+	}
+
+	@Override
+	public Faction getSyncData() {
+		return this;
+	}
+
+	@Override
+	public void onSync(Faction data) {
+		this.name = data.name;
+		this.color = data.color;
+		register(allies, data.allies);
+		register(allies, data.enemies);
 	}
 }

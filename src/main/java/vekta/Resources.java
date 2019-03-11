@@ -204,11 +204,11 @@ public class Resources {
 		return currentMusic;
 	}
 
-	public static void setMusic(String key) {
-		setMusic(getSound(key));
+	public static void setMusic(String key, boolean loop) {
+		setMusic(getSound(key), loop);
 	}
 
-	public static void setMusic(SoundFile sound) {
+	public static void setMusic(SoundFile sound, boolean loop) {
 		float volume = Settings.getInt("music");
 		if(volume > 0) {
 			if(sound != currentMusic) {
@@ -218,7 +218,9 @@ public class Resources {
 				}
 				// Start new music
 				sound.amp(volume);
-				sound.loop();
+				if(loop) {
+					sound.loop();
+				}
 				// Keep track for next time
 				currentMusic = sound;
 			}

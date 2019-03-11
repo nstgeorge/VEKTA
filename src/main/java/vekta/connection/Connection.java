@@ -55,7 +55,7 @@ public class Connection {
 					Message message = (Message)args[1];
 					Peer peer = getPeer(id);
 					for(ConnectionListener listener : listeners) {
-						listener.onMessage(message);
+						listener.onMessage(peer, message);
 						message.receive(peer, listener);
 					}
 				}
@@ -99,8 +99,12 @@ public class Connection {
 	//		socket.emit("leave", new Object[] {}, a -> println("Left room"));
 	//	}
 
-	public void send(Message message) {
-		socket.send("msg", message);
+	public void broadcast(Message message) {
+		socket.emit("msg", message);
+	}
+
+	public void send(Peer peer, Message message) {
+		socket.emit("to", peer, message);
 	}
 
 	public void close() {

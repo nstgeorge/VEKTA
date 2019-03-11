@@ -1,7 +1,6 @@
 package vekta.terrain;
 
 import processing.core.PVector;
-import vekta.Vekta;
 import vekta.object.SpaceObject;
 import vekta.object.ship.Ship;
 import vekta.sound.Tune;
@@ -9,8 +8,7 @@ import vekta.spawner.TuneGenerator;
 
 import java.io.Serializable;
 
-import static vekta.Vekta.G;
-import static vekta.Vekta.getWorld;
+import static vekta.Vekta.*;
 
 /**
  * A landing terrain for one spacecraft-like object.
@@ -53,7 +51,7 @@ public class LandingSite implements Serializable {
 		}
 
 		landed = ship;
-		Vekta.removeObject(ship);
+		getWorld().remove(ship); // TODO: make sure this works properly in multiplayer
 
 		// Set position/velocity for takeoff
 		PVector offset = landed.getPosition().copy().sub(getParent().getPosition());
@@ -70,7 +68,7 @@ public class LandingSite implements Serializable {
 			return;
 		}
 
-		Vekta.addObject(landed);
+		register(landed);
 		landed.undock();/// Start landing debounce
 		landed.onDepart(getParent());
 		landed = null;

@@ -10,7 +10,7 @@ import vekta.menu.option.LootMenuOption;
 import java.util.ArrayList;
 import java.util.List;
 
-import static vekta.Vekta.addObject;
+import static vekta.Vekta.register;
 import static vekta.Vekta.v;
 
 public class CargoShip extends Ship {
@@ -32,14 +32,13 @@ public class CargoShip extends Ship {
 
 		int reinforcementCt = (int)v.random(1, 3);
 		for(int i = 0; i < reinforcementCt; i++) {
-			FighterShip fighter = new FighterShip(
+			FighterShip fighter = register(new FighterShip(
 					getName() + " Defender",
 					heading,
 					PVector.random2D().mult(getRadius() * 10).add(position),
 					velocity,
 					getColor()
-			);
-			addObject(fighter);
+			));
 			fighters.add(fighter);
 			fighter.setTarget(this); // Follow cargo ship
 		}

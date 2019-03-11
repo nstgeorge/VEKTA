@@ -1,6 +1,7 @@
 package vekta;
 
 import processing.core.PVector;
+import processing.event.KeyEvent;
 import processing.sound.LowPass;
 import vekta.context.PauseMenuContext;
 import vekta.context.World;
@@ -59,7 +60,7 @@ public class Singleplayer implements World, PlayerListener {
 	// Camera position tracking
 	private final PVector cameraPos = new PVector();
 
-	private final WorldState state;
+	protected final WorldState state;
 	private final boolean loaded;
 
 	private float zoom = 1; // Zoom factor
@@ -79,7 +80,6 @@ public class Singleplayer implements World, PlayerListener {
 	public Singleplayer() {
 		Faction playerFaction = new Faction("VEKTA I", UI_COLOR);
 		Player player = new Player(playerFaction);
-		player.addListener(this);
 
 		this.state = new WorldState(player);
 		loaded = false;
@@ -95,20 +95,20 @@ public class Singleplayer implements World, PlayerListener {
 		Resources.stopMusic();
 
 		Player player = getPlayer();
+		player.addListener(this);
 
 		if(!loaded) {
 			StarSystemSpawner.createSystem(PVector.random2D().mult(2 * AU_DISTANCE));
 
-			PlayerShip playerShip = new PlayerShip(
+			PlayerShip playerShip = register(new PlayerShip(
 					player.getFaction().getName(),
 					PVector.fromAngle(0), // Heading
 					new PVector(), // Position
 					new PVector(),    // Velocity
 					v.color(0, 255, 0)
-			);
+			));
 			playerShip.getInventory().add(50); // Starting money
 			playerShip.setController(player);
-			addObject(playerShip);
 
 			setupTesting(); // Temporary
 		}
@@ -124,19 +124,18 @@ public class Singleplayer implements World, PlayerListener {
 	}
 
 	private void setupTesting() {
-		Player player = getPlayer();
 		ModularShip playerShip = getPlayerShip();
 
 		if(getClass() == Singleplayer.class) {
 			// Add station to singleplayer world
-			SpaceStation station = new SpaceStation(
+			SpaceStation station = register(new SpaceStation(
 					"OUTPOST I",
 					new StationCoreModule(),
 					new PVector(1, 0),
 					new PVector(300, 100), // Position
 					new PVector(),    // Velocity
 					playerShip.getColor()
-			);
+			));
 			SpaceStation.Component core = station.getCore();
 			SpaceStation.Component rcs = core.attach(SpaceStation.Direction.UP, new RCSModule(1));
 			SpaceStation.Component orbiter = core.attach(SpaceStation.Direction.RIGHT, new OrbitModule(1));
@@ -146,7 +145,6 @@ public class Singleplayer implements World, PlayerListener {
 			SpaceStation.Component panel2 = struct.attach(SpaceStation.Direction.DOWN, new SolarArrayModule(1));
 			SpaceStation.Component panel3 = struct2.attach(SpaceStation.Direction.RIGHT, new SolarArrayModule(1));
 			SpaceStation.Component sensor = struct2.attach(SpaceStation.Direction.LEFT, new SensorModule());
-			addObject(station);
 		}
 
 		playerShip.addModule(new EngineModule(2)); // Upgrade engine
@@ -212,7 +210,7 @@ public class Singleplayer implements World, PlayerListener {
 
 		// Cycle background music
 		if(Resources.getMusic() == null) {
-			Resources.setMusic(MUSIC.random());
+			Resources.setMusic(MUSIC.random(), false);
 		}
 
 		if(__tune != null) {
@@ -265,7 +263,7 @@ public class Singleplayer implements World, PlayerListener {
 				// Clean up distant objects
 				float despawnRadius = WorldGenerator.getRadius(s.getRenderLevel());
 				if(playerShip.getPosition().sub(s.getPosition()).magSq() >= sq(despawnRadius)) {
-					removeObject(s);
+					remove(s);
 					continue;
 				}
 			}
@@ -371,12 +369,24 @@ public class Singleplayer implements World, PlayerListener {
 		}
 	}
 
-	// Subject to change
 	private void setVelocityRelativeTo(SpaceObject obj) {
 		PVector relative = obj.getVelocity().mult(-1);
 		for(SpaceObject s : state.getObjects()) {
 			s.addVelocity(relative);
 		}
+	}
+
+	// Temp: debug key listener
+	@Override
+	public void keyPressed(KeyEvent event) {
+		if(v.key == '`') {
+			println("====");
+			for(Syncable s : state.getSyncableObjects()) {
+				print(s.getSyncKey());
+			}
+			println("====");
+		}
+		World.super.keyPressed(event);
 	}
 
 	@Override
@@ -386,7 +396,7 @@ public class Singleplayer implements World, PlayerListener {
 		}
 		else if(getPlayerShip().isDestroyed()) {
 			if(key == KeyBinding.MENU_SELECT) {
-				restart();
+				reload();
 			}
 		}
 		else {
@@ -410,6 +420,23 @@ public class Singleplayer implements World, PlayerListener {
 		zoom = max(MIN_ZOOM_LEVEL, min(MAX_ZOOM_LEVEL, zoom * (1 + amount * ZOOM_EXPONENT)));
 	}
 
+	@Override
+	public <T extends Syncable> T register(T object) {
+		return state.register(object);
+	}
+
+	@Override
+	public void remove(Syncable object) {
+		state.remove(object);
+	}
+
+	@Override
+	public void apply(Syncable object) {
+		// Do nothing in singleplayer
+	}
+
+	// TODO: convert to player event callback
+	@Override
 	public void setDead() {
 		// TODO: custom death soundtrack instead of low pass filter?
 		if(Resources.getMusic() != null) {
@@ -420,23 +447,19 @@ public class Singleplayer implements World, PlayerListener {
 	}
 
 	@Override
-	public void restart() {
-		cleanup();
+	public void reload() {
 		if(!load(AUTOSAVE_FILE)) {
-			Singleplayer world = new Singleplayer();
-			setContext(world);
-			applyContext();
+			restart();
 		}
 	}
 
 	@Override
-	public void addObject(Object object) {
-		state.addObject(object);
-	}
+	public void restart() {
+		cleanup();
 
-	@Override
-	public void removeObject(Object object) {
-		state.removeObject(object);
+		Singleplayer world = new Singleplayer();
+		setContext(world);
+		focusContext();
 	}
 
 	public SpaceObject findLargestObject() {
@@ -554,9 +577,13 @@ public class Singleplayer implements World, PlayerListener {
 			//			Input input = new Input(new FileInputStream(file));
 			//			setContext(new Singleplayer(format.readObject(input, WorldState.class)));
 			setContext(new Singleplayer((WorldState)input.readObject()));
-			applyContext();
+			focusContext();
 			println("Loaded from " + file);
 			return true;
+		}
+		catch(InvalidClassException e) {
+			println("Outdated file format: " + file);
+			return false;
 		}
 		catch(Exception e) {
 			e.printStackTrace();

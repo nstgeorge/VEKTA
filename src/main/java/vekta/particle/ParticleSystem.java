@@ -31,12 +31,11 @@ public class ParticleSystem {
 
     public void emit() {
         if(getContext() instanceof World) {
-            World world = getWorld();
             for(int i = 0; i < particlePerEmit; i++) {
                 PVector newVelocity = new PVector();
                 PVector.fromAngle(velocity.heading() + (v.random(-1, 1) * range), newVelocity);
                 newVelocity.setMag(velocity.mag());
-                world.addObject(new Particle(position, newVelocity, v.lerpColor(beginColor, endColor, v.random(1)), .1F, 2000));
+                register(new Particle(position, newVelocity, v.lerpColor(beginColor, endColor, v.random(1)), .1F, 2000));
             }
             nextEmit = v.frameCount + ((1/frequency) * v.frameRate);
         }

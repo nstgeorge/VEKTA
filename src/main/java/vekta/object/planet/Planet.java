@@ -110,11 +110,11 @@ public abstract class Planet extends SpaceObject {
 			Planet b = new TerrestrialPlanet(Resources.generateString("planet_debris"), newMass, getDensity(), terrain, getPosition().copy().sub(offset), newVelocity.copy().sub(splitVelocity), getColor());
 			if(!s.collidesWith(getRenderLevel(), a)) {
 				mass -= a.mass;
-				addObject(a);
+				register(a);
 			}
 			if(!s.collidesWith(getRenderLevel(), b)) {
 				mass -= b.mass;
-				addObject(b);
+				register(b);
 			}
 		}
 

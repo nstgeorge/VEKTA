@@ -19,6 +19,6 @@ public class WorldOption implements MenuOption {
 
 	@Override
 	public void select(Menu menu) {
-		world.restart();
+		world.reload();
 	}
 }

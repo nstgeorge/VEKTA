@@ -1,8 +1,8 @@
 package vekta.person;
 
 import vekta.Faction;
-import vekta.Player;
 import vekta.Resources;
+import vekta.Syncable;
 import vekta.mission.Mission;
 import vekta.mission.MissionListener;
 import vekta.object.SpaceObject;
@@ -15,8 +15,10 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Person implements Serializable, MissionListener {
-	private final Map<Object, OpinionType> opinions = new HashMap<>();
+import static vekta.Vekta.register;
+
+public class Person implements Serializable, MissionListener, Syncable<Person> {
+	private final Map<Syncable, OpinionType> opinions = new HashMap<>();
 
 	private final String name;
 
@@ -47,6 +49,7 @@ public class Person implements Serializable, MissionListener {
 			throw new RuntimeException("Faction cannot be null");
 		}
 		this.faction = faction;
+		applyChanges();
 	}
 
 	public int getColor() {
@@ -87,6 +90,7 @@ public class Person implements Serializable, MissionListener {
 		}
 		this.home = home;
 		home.add(new HouseBuilding(this));
+		applyChanges();
 	}
 
 	public Dialog createDialog(String type) {
@@ -101,23 +105,45 @@ public class Person implements Serializable, MissionListener {
 		return dialog;
 	}
 
-	public OpinionType getOpinion(Player player) {
-		return opinions.getOrDefault(player, OpinionType.NEUTRAL);
+	public OpinionType getOpinion(Faction faction) {
+		return opinions.getOrDefault(faction, OpinionType.NEUTRAL);
 	}
 
-	public void setOpinion(Player player, OpinionType opinion) {
-		opinions.put(player, opinion);
+	public void setOpinion(Faction faction, OpinionType opinion) {
+		opinions.put(faction, opinion);
+		applyChanges();
 	}
 
 	@Override
 	public void onCancel(Mission mission) {
-		if(getOpinion(mission.getPlayer()).isPositive()) {
-			setOpinion(mission.getPlayer(), OpinionType.NEUTRAL);
+		Faction faction = mission.getPlayer().getFaction();
+		if(getOpinion(faction).isPositive()) {
+			setOpinion(faction, OpinionType.NEUTRAL);
+			applyChanges();
 		}
 	}
 
 	@Override
 	public void onComplete(Mission mission) {
-		setOpinion(mission.getPlayer(), OpinionType.GRATEFUL);
+		setOpinion(mission.getPlayer().getFaction(), OpinionType.GRATEFUL);
+	}
+
+	@Override
+	public String getSyncKey() {
+		return name;
+	}
+
+	@Override
+	public Person getSyncData() {
+		return this;
+	}
+
+	@Override
+	public void onSync(Person data) {
+		this.faction = data.faction;
+		this.title = data.title;
+//		this.home = register(data.home);
+
+		register(opinions.keySet(), data.opinions.keySet());
 	}
 }

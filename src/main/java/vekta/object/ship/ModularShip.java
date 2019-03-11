@@ -308,14 +308,14 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	@Override
 	public void onMoneyAdd(int amount) {
 		//		if(hasController()) {
-		//			getController().broadcast("+ " + amount + " G").withTime(.5F);
+		//			getController().send("+ " + amount + " G").withTime(.5F);
 		//		}
 	}
 
 	@Override
 	public void onMoneyRemove(int amount) {
 		//		if(hasController()) {
-		//			getController().broadcast("- " + amount + " G").withTime(.5F);
+		//			getController().send("- " + amount + " G").withTime(.5F);
 		//		}
 	}
 

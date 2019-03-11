@@ -147,10 +147,10 @@ public class MissionGenerator {
 
 	public static Dialog randomApproachDialog(Player player, Person person) {
 		Dialog dialog;
-		if(person.getOpinion(player) == OpinionType.GRATEFUL && v.chance(.4F)) {
+		if(person.getOpinion(player.getFaction()) == OpinionType.GRATEFUL && v.chance(.4F)) {
 			dialog = person.createDialog("offer");
 			dialog.add(new ItemTradeOption(player.getInventory(), ItemGenerator.randomItem(), 0));
-			person.setOpinion(player, OpinionType.FRIENDLY);
+			person.setOpinion(player.getFaction(), OpinionType.FRIENDLY);
 		}
 		else if(v.chance(.3F)) {
 			dialog = person.createDialog("offer");
@@ -174,7 +174,7 @@ public class MissionGenerator {
 	public static Dialog randomConfrontDialog(Player player, Person person, Person sender) {
 		Dialog dialog = person.createDialog("confronted");
 
-		if(v.chance(.5F)) {
+		if(v.chance(.75F)) {
 			dialog.addContinuation(person.createDialog("confession"));
 		}
 

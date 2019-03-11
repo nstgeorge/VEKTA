@@ -4,8 +4,7 @@ import processing.core.PVector;
 import vekta.object.ship.ModularShip;
 import vekta.object.Projectile;
 
-import static vekta.Vekta.addObject;
-import static vekta.Vekta.getWorld;
+import static vekta.Vekta.*;
 
 public class CannonModule extends WeaponModule {
 	private static final float PROJECTILE_SPEED = 20;
@@ -31,7 +30,7 @@ public class CannonModule extends WeaponModule {
 		if(ship.consumeEnergy(.5F)) {
 			getWorld().playSound("laser", ship.getPosition());
 			PVector velocity = ship.getVelocity().add(ship.getHeading().setMag(PROJECTILE_SPEED));
-			addObject(new Projectile(ship, ship.getPosition(), velocity, ship.getColor()));
+			register(new Projectile(ship, ship.getPosition(), velocity, ship.getColor()));
 		}
 	}
 }

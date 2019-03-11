@@ -29,7 +29,7 @@ public class Particle extends SpaceObject {
 
         if(dead()) {
             if(getContext() instanceof World) {
-                getWorld().removeObject(this);
+                getWorld().remove(this);
             }
         }
         // Note: Nothing is drawn here because particles are nothing but trails. This just sets the color and velocity of the particle's head.

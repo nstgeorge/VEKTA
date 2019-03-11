@@ -30,12 +30,10 @@ public class CargoShipSpawner implements WorldGenerator.WorldSpawner {
 		if(orbit instanceof TerrestrialPlanet && ((TerrestrialPlanet)orbit).isHabitable()) {
 			// Only spawn near terrestrial planets
 			int color = v.random(1) < .6F ? orbit.getColor() : randomPlanetColor();
-			Ship s = new CargoShip("TRAWLX", PVector.random2D(), pos, new PVector(), color);
-			addObject(s);
+			Ship s = register(new CargoShip("TRAWLX", PVector.random2D(), pos, new PVector(), color));
 			orbit(orbit, s, .5F);
 
 			addLoot(s.getInventory(), 3);
-
 		}
 	}
 }

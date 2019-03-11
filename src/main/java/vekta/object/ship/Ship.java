@@ -139,7 +139,7 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 	@Override
 	public void onDestroy(SpaceObject s) {
 		for(Item item : getInventory()) {
-			addObject(new CargoCrate(item, getPosition(), PVector.random2D().setMag(v.random(CRATE_SPEED))));
+			register(new CargoCrate(item, getPosition(), PVector.random2D().setMag(v.random(CRATE_SPEED))));
 		}
 		super.onDestroy(s);
 	}

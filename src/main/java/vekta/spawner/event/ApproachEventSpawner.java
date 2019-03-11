@@ -9,7 +9,7 @@ import vekta.spawner.EventGenerator;
 import vekta.spawner.MissionGenerator;
 import vekta.spawner.WorldGenerator;
 
-import static vekta.Vekta.addObject;
+import static vekta.Vekta.register;
 
 public class ApproachEventSpawner implements EventGenerator.EventSpawner {
 	@Override
@@ -24,15 +24,14 @@ public class ApproachEventSpawner implements EventGenerator.EventSpawner {
 
 	public static MessengerShip createMessenger(Player player, Dialog dialog) {
 		PVector pos = WorldGenerator.randomSpawnPosition(RenderLevel.SHIP, player.getShip().getPosition());
-		MessengerShip ship = new MessengerShip(
+		MessengerShip ship = register(new MessengerShip(
 				player,
 				dialog,
 				dialog != null ? dialog.getPerson().getFullName() : "HERMES II",
 				PVector.random2D(),
 				pos,
 				player.getShip().getVelocity(),
-				dialog != null ? dialog.getPerson().getColor() : WorldGenerator.randomPlanetColor());
-		addObject(ship);
+				dialog != null ? dialog.getPerson().getColor() : WorldGenerator.randomPlanetColor()));
 		player.send(ship.getName() + " approaches with a message!")
 				.withColor(ship.getColor())
 				.withTime(2);

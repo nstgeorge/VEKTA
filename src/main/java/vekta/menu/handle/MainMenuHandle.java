@@ -24,7 +24,7 @@ public class MainMenuHandle extends MenuHandle {
 
 	@Override
 	public void focus(Menu menu) {
-		Resources.setMusic("theme");
+		Resources.setMusic("theme", false);
 	}
 
 	@Override

@@ -110,6 +110,6 @@ public class FighterShip extends Ship implements Targeter {
 		SpaceObject projectile = v.random(1) < .2F
 				? new HomingProjectile(this, getTarget(), 1.5F, getPosition(), getVelocity(), getColor())
 				: new Projectile(this, getPosition(), vel, getColor());
-		addObject(projectile);
+		register(projectile);
 	}
 }  

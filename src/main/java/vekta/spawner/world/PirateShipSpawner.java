@@ -28,8 +28,7 @@ public class PirateShipSpawner implements WorldGenerator.WorldSpawner {
 		SpaceObject orbit = getWorld().findOrbitObject(center);
 		if(orbit instanceof TerrestrialPlanet && ((TerrestrialPlanet)orbit).isHabitable()) {
 			// Only spawn near terrestrial planets
-			Ship s = new PirateShip("YARRYACHT", PVector.random2D(), pos, new PVector(), v.color(220, 100, 0));
-			addObject(s);
+			Ship s = register(new PirateShip("YARRYACHT", PVector.random2D(), pos, new PVector(), v.color(220, 100, 0)));
 			orbit(orbit, s, .5F);
 
 			addLoot(s.getInventory(), 1);

@@ -6,8 +6,7 @@ import vekta.object.SpaceObject;
 import java.io.Serializable;
 
 import static processing.core.PConstants.DEG_TO_RAD;
-import static vekta.Vekta.addObject;
-import static vekta.Vekta.v;
+import static vekta.Vekta.*;
 
 /**
  * Abstraction for regularly emitting a specific particle type.
@@ -41,7 +40,7 @@ public class ParticleEmitter implements Serializable {
 			PVector emitPosition = relative.getPosition().add(offset.copy().rotate(heading.heading()));
 			PVector emitVelocity = heading.copy().rotate(v.random(-range, range) * DEG_TO_RAD).setMag(speed);
 			emitVelocity.add(relative.getVelocity());
-			addObject(createParticle(emitPosition, emitVelocity));
+			register(createParticle(emitPosition, emitVelocity));
 		}
 	}
 

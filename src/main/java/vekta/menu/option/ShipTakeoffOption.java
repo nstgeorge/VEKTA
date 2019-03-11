@@ -4,7 +4,6 @@ import vekta.menu.Menu;
 import vekta.terrain.LandingSite;
 import vekta.context.World;
 
-import static vekta.Vekta.applyContext;
 import static vekta.Vekta.setContext;
 
 public class ShipTakeoffOption implements MenuOption {
@@ -24,7 +23,7 @@ public class ShipTakeoffOption implements MenuOption {
 	@Override
 	public void select(Menu menu) {
 		setContext(world);
-//		applyContext();
+//		focusContext();
 		site.takeoff();
 	}
 }
