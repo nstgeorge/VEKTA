@@ -85,8 +85,8 @@ public class Singleplayer implements World, PlayerListener {
 			Faction playerFaction = new Faction("VEKTA I", UI_COLOR);
 			Player player = new Player(playerFaction);
 
-			state = new WorldState(player);
-			register(player);///
+			state = new WorldState();
+			state.setPlayer(player);
 
 			//			StarSystemSpawner.createSystem(PVector.random2D().mult(2 * AU_DISTANCE));
 
@@ -210,18 +210,11 @@ public class Singleplayer implements World, PlayerListener {
 		smoothZoom += (zoom - smoothZoom) * ZOOM_SMOOTH;
 		timeScale = max(1, smoothZoom * TIME_SCALE) / (1 + smoothZoom * TIME_SCALE * TIME_SCALE * TIME_FALLOFF);
 
+		RenderLevel level = getRenderLevel();
+
 		v.clear();
 		v.rectMode(CENTER);
 		v.ellipseMode(RADIUS);
-
-		// Set up world camera
-		//		v.hint(ENABLE_DEPTH_TEST);
-		//		v.camera(cameraPos.x, cameraPos.y, min(MAX_CAMERA_Y, (.07F * cameraSpd + .7F) * (v.height / 2F) / tan(PI * 30 / 180) * timeScale), cameraPos.x, cameraPos.y, 0F,
-		//				0F, 1F, 0F);
-
-		//		println(gravityObjects.size(), timeScale);
-
-		RenderLevel level = getRenderLevel();
 
 		v.pushMatrix();
 		v.translate(v.width / 2F, v.height / 2F);
@@ -302,18 +295,19 @@ public class Singleplayer implements World, PlayerListener {
 
 		state.endUpdate();
 
-		//		if(level.ordinal() == prevLevel.ordinal() - 1 && !playerShip.isDestroyed()) {
-		//			// Center around zero for improved floating-point precision
-		//			state.addRelativePosition(playerShip.getPosition());
-		//		}
-		//
-		//		// Change global relative velocity to player ship when zoomed in
-		//		if(RenderLevel.SHIP.isVisibleTo(level)) {
-		//			state.addRelativeVelocity(playerShip.getVelocity());
-		//		}
-		//		else if(level.ordinal() == prevLevel.ordinal() + 1) {
-		//			state.resetRelativeVelocity();
-		//		}
+//		if(level.ordinal() == prevLevel.ordinal() - 1 && !playerShip.isDestroyed()) {
+//			// Center around zero for improved floating-point precision
+//			state.addRelativePosition(playerShip.getPosition());
+//		}
+
+		// Change global relative velocity to player ship when zoomed in
+		if(RenderLevel.SHIP.isVisibleTo(level)) {
+			state.addRelativeVelocity(playerShip.getVelocity());
+		}
+		else if(level.ordinal() == prevLevel.ordinal() + 1) {
+			state.resetRelativeVelocity();
+		}
+		state.updateGlobalCoords(getTimeScale());
 
 		RenderLevel spawnLevel = level;
 		while(spawnLevel.ordinal() > 0 && v.chance(.05F)) {
@@ -401,12 +395,7 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public <T extends Syncable> T register(T object) {
-		if(object == null) {
-			return null;
-		}
-		object = state.register(object);
-		//		apply(object);
-		return object;
+		return state.register(object);
 	}
 
 	@Override

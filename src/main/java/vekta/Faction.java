@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static java.lang.Float.max;
-import static vekta.Vekta.register;
 
 public final class Faction extends Syncable<Faction> implements Serializable, Renameable {
 	private String name;
@@ -100,11 +99,11 @@ public final class Faction extends Syncable<Faction> implements Serializable, Re
 		return max(1, allies.size() - enemies.size() * .5F);
 	}
 
-	@Override
-	public void onSync(Faction data) {
-		this.name = data.name;
-		this.color = data.color;
-		register(allies, data.allies);
-		register(allies, data.enemies);
-	}
+//	@Override
+//	public void onSync(Faction data) {
+//		this.name = data.name;
+//		this.color = data.color;
+//		syncAll(allies, data.allies);
+//		syncAll(allies, data.enemies);
+//	}
 }

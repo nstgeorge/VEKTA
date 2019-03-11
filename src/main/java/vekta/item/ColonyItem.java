@@ -34,6 +34,7 @@ public class ColonyItem extends Item {
 			LandingSite site = ((LandingMenuHandle)menu.getHandle()).getSite();
 			Terrain terrain = site.getTerrain();
 			if(terrain instanceof HabitableTerrain && !terrain.isInhabited()) {
+				menu.getPlayer().getInventory().remove(this);
 				Faction faction = getFaction() != null ? getFaction() : menu.getPlayer().getFaction();
 				menu.add(new BasicOption("Colonize", m -> {
 					ColonySettlement settlement = new ColonySettlement(faction);

@@ -332,6 +332,13 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			getController().emit(PlayerEvent.REMOVE_ITEM, item);
 		}
 	}
+	
+	//// Syncable overrides
+
+//	@Override
+	//	public boolean shouldSyncField(Field field) {
+	//		return !"controller".equals(field.getName()); //// TODO: prevent cycles differently
+	//	}
 
 	//// PlayerListener callbacks, active when hasController() == true
 

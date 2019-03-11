@@ -94,7 +94,7 @@ public class Vekta extends PApplet {
 		headerFont = createFont(FONTNAME, 72);
 		bodyFont = createFont(FONTNAME, 24);
 		v.textFont(bodyFont);
-		
+
 		//		mainMenu = new SettingsMenuContext();
 		mainMenu = new Menu(null, new MainMenuHandle(new ExitGameOption("Quit")));
 		mainMenu.add(new WorldOption("Singleplayer", Singleplayer::new));
@@ -236,6 +236,9 @@ public class Vekta extends PApplet {
 	 * Convenience method: register object for the current world.
 	 */
 	public static <T extends Syncable> T register(T object) {
+		if(object == null) {
+			return null;
+		}
 		return getWorld().register(object);
 	}
 
@@ -243,7 +246,10 @@ public class Vekta extends PApplet {
 	 * Convenience method: apply one Syncable data structure to the other.
 	 */
 	@SuppressWarnings("unchecked")
-	public static void register(Iterable<? extends Syncable> sync, Iterable<? extends Syncable> data) {
+	public static void syncAll(Iterable<? extends Syncable> sync, Iterable<? extends Syncable> data) {
+		if(sync == null || data == null) {
+			return;
+		}
 		for(Syncable s : sync) {
 			for(Syncable d : data) {
 				if(s.getSyncID() == d.getSyncID()) {

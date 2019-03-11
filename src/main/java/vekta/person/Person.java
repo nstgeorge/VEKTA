@@ -14,8 +14,6 @@ import vekta.terrain.settlement.Settlement;
 import java.util.HashMap;
 import java.util.Map;
 
-import static vekta.Vekta.register;
-
 public class Person extends Syncable<Person> implements MissionListener {
 
 	private final Map<Syncable, OpinionType> opinions = new HashMap<>();
@@ -129,12 +127,12 @@ public class Person extends Syncable<Person> implements MissionListener {
 		setOpinion(mission.getPlayer().getFaction(), OpinionType.GRATEFUL);
 	}
 
-	@Override
-	public void onSync(Person data) {
-		this.faction = data.faction;
-		this.title = data.title;
-		//		this.home = register(data.home);
-
-		register(opinions.keySet(), data.opinions.keySet());
-	}
+//	@Override
+//	public void onSync(Person data) {
+//		this.faction = data.faction;
+//		this.title = data.title;
+//		//		this.home = register(data.home);
+//
+//		syncAll(opinions.keySet(), data.opinions.keySet());
+//	}
 }

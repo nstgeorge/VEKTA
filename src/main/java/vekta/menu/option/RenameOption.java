@@ -20,7 +20,7 @@ public class RenameOption implements MenuOption {
 
 	@Override
 	public void select(Menu menu) {
-		TextInputContext context = new TextInputContext(menu, "Rename:", renameable::setName);
+		TextInputContext context = new TextInputContext(menu, "Rename:", renameable.getName(), renameable::setName);
 		setContext(context);
 	}
 }

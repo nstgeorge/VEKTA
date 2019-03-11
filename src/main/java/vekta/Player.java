@@ -10,8 +10,6 @@ import vekta.overlay.singleplayer.Notification;
 import java.util.ArrayList;
 import java.util.List;
 
-import static vekta.Vekta.register;
-
 public final class Player extends Syncable<Player> {
 	private Faction faction;
 	private ModularShip currentShip;
@@ -146,11 +144,11 @@ public final class Player extends Syncable<Player> {
 		return notification;
 	}
 
-	@Override
-	public void onSync(Player data) {
-		faction = register(data.faction);
-		currentShip = register(data.currentShip);
-
-		// TODO: other fields
-	}
+//	@Override
+//	public void onSync(Player data) {
+//		faction = register(data.faction);
+//		currentShip = register(data.currentShip);
+//		
+//		// TODO: other fields
+//	}
 }

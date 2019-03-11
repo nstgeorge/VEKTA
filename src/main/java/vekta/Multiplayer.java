@@ -54,23 +54,8 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 			connection.joinRoom(DEFAULT_ROOM);
 			setContext(this);
 			applyContext();
-
+			
 			connection.send(new PlayerJoinMessage(getPlayer()));
-
-			//						// Simulate another player
-			//						new Thread(() -> {
-			//							try {
-			//								Thread.sleep(100);
-			//							}
-			//							catch(InterruptedException ignored) {
-			//							}
-			//
-			//							// Simulate another player
-			//							Connection other = new Connection(SERVER_ADDRESS);
-			//							other.joinRoom(DEFAULT_ROOM);
-			//							other.send(new PlayerJoinMessage(new Faction(Resources.generateString("person"), WorldGenerator.randomPlanetColor())));
-			//							other.send(new RegisterMessage(new PirateShip("Yarr", PVector.random2D(), new PVector(-500, -500), new PVector(), WorldGenerator.randomPlanetColor())));
-			//						}).start();
 		}));
 		applyContext();
 	}
@@ -93,7 +78,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		boolean existed = playerMap.containsKey(peer);
 		Player player = msg.getPlayer();
 		println("<player>", "[" + Long.toHexString(player.getSyncID()) + "]");
-		playerMap.put(peer, register(player));
+		playerMap.put(peer, state.register(player, true));
 		if(!existed) {
 			getPlayer().send(player.getName() + " joined the world");
 			peer.send(new PlayerJoinMessage(getPlayer()));
@@ -124,7 +109,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 
 	@Override
 	public void onRegister(Peer peer, RegisterMessage msg) {
-		state.register(msg.getObject());
+		state.register(msg.getObject(), true);
 	}
 
 	@Override
@@ -144,12 +129,11 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 
 	@Override
 	public void apply(Syncable object) {
-		if(object.shouldSync()) {
+		super.apply(object);
+		if(object.shouldPropagate()) {
 			println("<broadcast>", object.getClass().getSimpleName() + "[" + Long.toHexString(object.getSyncID()) + "]");
 			connection.send(new SyncMessage(object));
 		}
-
-		super.apply(object);
 	}
 
 	@Override

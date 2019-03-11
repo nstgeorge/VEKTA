@@ -13,17 +13,17 @@ public abstract class Syncable<T extends Syncable> implements Serializable {
 	private final long id = randomID();
 
 	/**
-	 * Check whether this object should be synced when modified.
-	 */
-	public boolean shouldSync() {
-		return true;
-	}
-
-	/**
 	 * Return an immutable key corresponding to this object.
 	 */
 	public final long getSyncID() {
 		return id;
+	}
+
+	/**
+	 * Determine whether changes to this object should be propagated to other clients.
+	 */
+	public boolean shouldPropagate() {
+		return true;
 	}
 
 	/**
@@ -32,6 +32,10 @@ public abstract class Syncable<T extends Syncable> implements Serializable {
 	@SuppressWarnings("unchecked")
 	public T getSyncData() {
 		return (T)this;
+	}
+
+	public void onAddRemote() {
+		onSync(getSyncData());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -43,8 +47,8 @@ public abstract class Syncable<T extends Syncable> implements Serializable {
 
 			// Brute-force update for now
 			for(Field field : ReflectionUtils.getAllFields(getClass())) {
-				// Skip id field (convention)
-				if("id".equals(field.getName())) {
+				// Skip id field
+				if(!shouldSyncField(field)) {
 					continue;
 				}
 
@@ -62,12 +66,13 @@ public abstract class Syncable<T extends Syncable> implements Serializable {
 					List buffer = new ArrayList(collection);
 					collection.clear();
 					for(Object elem : buffer) {
+						// TODO: onSync() rather than register()
 						collection.add(elem instanceof Syncable ? register((Syncable)elem) : elem);
 					}
 				}
 				else if(object instanceof Map) {
 					Map map = (Map)object;
-					Map buffer = new HashMap<>(map);
+					Map buffer = new HashMap(map);
 					map.clear();
 					for(Object key : map.keySet()) {
 						Object value = buffer.get(key);
@@ -80,6 +85,10 @@ public abstract class Syncable<T extends Syncable> implements Serializable {
 		catch(Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public boolean shouldSyncField(Field field) {
+		return true;
 	}
 
 	public void syncChanges() {

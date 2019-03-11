@@ -15,9 +15,9 @@ import static processing.core.PApplet.println;
 public final class WorldState implements Serializable {
 	//	private float timeScale = 1;
 
-	private final Player player;
+	private Player player;
 
-	private final Map<Long, Syncable> syncMap = new HashMap<>();
+	private final Map<Long, Syncable> syncMap = new HashMap<>(); // All client-syncable objects
 
 	private final List<SpaceObject> objects = new ArrayList<>();
 	private final List<SpaceObject> gravityObjects = new ArrayList<>();
@@ -31,15 +31,21 @@ public final class WorldState implements Serializable {
 	private final GlobalVector globalPosition = new GlobalVector();
 	private final PVector globalVelocity = new PVector();
 
+	private final Set<Syncable> registerScope = new HashSet<>();
+
 	private boolean updating;
 
-	public WorldState(Player player) {
-		this.player = player;
+	public WorldState() {
 	}
 
 	public Player getPlayer() {
 		return player;
 	}
+
+	public void setPlayer(Player player) {
+		this.player = register(player);//
+	}
+
 	//	public float getTimeScale() {
 	//		return timeScale;
 	//	}
@@ -83,6 +89,10 @@ public final class WorldState implements Serializable {
 		objectsToRemove.clear();
 	}
 
+	public void updateGlobalCoords(float timeScale) {
+		globalPosition.add(globalVelocity.x * timeScale, globalVelocity.y * timeScale);
+	}
+
 	public double getGlobalX(float x) {
 		return globalPosition.x + x;
 	}
@@ -96,19 +106,19 @@ public final class WorldState implements Serializable {
 	}
 
 	public PVector getGlobalVelocity(PVector velocity) {
-		return velocity.copy().sub(globalVelocity);
+		return velocity.copy().add(globalVelocity);
 	}
 
 	public PVector getLocalVelocity(PVector velocity) {
-		return velocity.copy().add(globalVelocity);
+		return velocity.copy().sub(globalVelocity);
 	}
 
 	public void addRelativePosition(PVector offset) {
 		PVector relative = offset.mult(-1);
 		for(SpaceObject s : getObjects()) {
-			s.updateOrigin(offset);
+			s.updateOrigin(relative);
 		}
-		globalPosition.add(relative.x, relative.y);
+		globalPosition.add(offset.x, offset.y);
 	}
 
 	public void addRelativeVelocity(PVector velocity) {
@@ -116,7 +126,7 @@ public final class WorldState implements Serializable {
 		for(SpaceObject s : getObjects()) {
 			s.addVelocity(relative);
 		}
-		globalVelocity.add(relative);
+		globalVelocity.add(velocity);
 	}
 
 	public void resetRelativeVelocity() {
@@ -130,25 +140,39 @@ public final class WorldState implements Serializable {
 		return objectsToRemove.contains(s);
 	}
 
-	@SuppressWarnings("unchecked")
 	public <S extends Syncable> S register(S object) {
-		// Find already existing object with the same state key
-		long id = object.getSyncID();
-		if(syncMap.containsKey(id)) {
-			S other = (S)syncMap.get(id);
-			other.onSync(object.getSyncData());
-			println("<sync>", object.getClass().getSimpleName() + "[" + Long.toHexString(id) + "]");
-			return other;
+		return register(object, false);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <S extends Syncable> S register(S object, boolean remote) {
+		if(registerScope.contains(object)) {
+			return object; // Prevents infinite recursion
 		}
-		else {
-			add(object);
-			syncMap.put(object.getSyncID(), object);
-			println("<add>", object.getClass().getSimpleName() + "[" + Long.toHexString(id) + "]");
-			return object;
+
+		registerScope.add(object);
+		try {
+			// Find already existing object with the same state key
+			long id = object.getSyncID();
+			if(syncMap.containsKey(id)) {
+				S other = (S)syncMap.get(id);
+				other.onSync(object.getSyncData());
+				println("<sync>", object.getClass().getSimpleName() + "[" + Long.toHexString(id) + "]");
+				return other;
+			}
+			else {
+				add(object, remote);
+				syncMap.put(object.getSyncID(), object);
+				println("<add>", object.getClass().getSimpleName() + "[" + Long.toHexString(id) + "]");
+				return object;
+			}
+		}
+		finally {
+			registerScope.remove(object);
 		}
 	}
 
-	private void add(Syncable object) {
+	private void add(Syncable object, boolean remote) {
 		if(object instanceof SpaceObject) {
 			SpaceObject s = (SpaceObject)object;
 			if(updating) {
@@ -163,6 +187,10 @@ public final class WorldState implements Serializable {
 		}
 		else if(object instanceof Faction && !factions.contains(object)) {
 			factions.add((Faction)object);
+		}
+
+		if(remote) {
+			object.onAddRemote();
 		}
 	}
 
