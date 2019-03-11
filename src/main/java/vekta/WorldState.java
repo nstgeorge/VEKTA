@@ -32,7 +32,6 @@ public final class WorldState implements Serializable {
 	private final PVector globalVelocity = new PVector();
 
 	private boolean updating;
-	//	private int nextID;
 
 	public WorldState(Player player) {
 		this.player = player;
@@ -194,7 +193,7 @@ public final class WorldState implements Serializable {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends Serializable> Syncable<T> find(long id) {
+	public <T extends Syncable> Syncable<T> find(long id) {
 		Syncable<T> sync = syncMap.get(id);
 		if(sync != null) {
 			return sync;

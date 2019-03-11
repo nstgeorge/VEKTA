@@ -10,7 +10,7 @@ import java.util.List;
 
 import static vekta.Vekta.*;
 
-public abstract class SpaceObject implements Serializable, Syncable<SpaceObject> {
+public abstract class SpaceObject extends Syncable<SpaceObject> implements Serializable {
 	private static final float MARKER_SIZE = 40;
 	private static final int DEFAULT_TRAIL_LENGTH = 100;
 
@@ -300,18 +300,6 @@ public abstract class SpaceObject implements Serializable, Syncable<SpaceObject>
 	}
 
 	public void onUpdate(RenderLevel level) {
-	}
-
-	//// Synchronization methods
-
-	@Override
-	public long getSyncID() {
-		return id;
-	}
-
-	@Override
-	public SpaceObject getSyncData() {
-		return this;
 	}
 
 	//// Convenience methods

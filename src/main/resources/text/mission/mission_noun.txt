@@ -24,3 +24,6 @@ Perspective
 Visit
 Motive
 Opportunity
+Arrangement
+Predicament
+Deal

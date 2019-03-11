@@ -7,24 +7,19 @@ import vekta.mission.Mission;
 import vekta.object.ship.ModularShip;
 import vekta.overlay.singleplayer.Notification;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static vekta.Vekta.randomID;
 import static vekta.Vekta.register;
 
-public final class Player implements Serializable, Syncable<Player> {
-	private final long id = randomID();
-
+public final class Player extends Syncable<Player> {
 	private Faction faction;
+	private ModularShip currentShip;
 
 	private final List<PlayerListener> listeners = new ArrayList<>();
 
 	private final List<Mission> missions = new ArrayList<>();
 	private Mission currentMission;
-
-	private ModularShip currentShip;
 
 	public Player(Faction faction) {
 		setFaction(faction);
@@ -152,20 +147,10 @@ public final class Player implements Serializable, Syncable<Player> {
 	}
 
 	@Override
-	public long getSyncID() {
-		return id;
-	}
-
-	@Override
-	public Player getSyncData() {
-		return this;
-	}
-
-	@Override
 	public void onSync(Player data) {
 		faction = register(data.faction);
 		currentShip = register(data.currentShip);
-		
+
 		// TODO: other fields
 	}
 }

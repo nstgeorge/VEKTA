@@ -16,6 +16,8 @@ A Worthwile {mission_noun}
 A Foretold {mission_noun}
 A New {mission_noun}
 A Hypothetical {mission_noun}
+A Shady {mission_noun}
+A Better {mission_noun}
 The Latest {mission_noun}
 The Next {mission_noun}
 The {mission_noun}

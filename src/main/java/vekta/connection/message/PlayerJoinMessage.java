@@ -4,10 +4,10 @@ import vekta.Player;
 import vekta.connection.MessageListener;
 import vekta.connection.Peer;
 
-public class PlayerMessage implements Message {
+public class PlayerJoinMessage implements Message {
 	private final Player player;
 
-	public PlayerMessage(Player player) {
+	public PlayerJoinMessage(Player player) {
 		this.player = player;
 	}
 
@@ -17,6 +17,6 @@ public class PlayerMessage implements Message {
 
 	@Override
 	public void receive(Peer peer, MessageListener listener) {
-		listener.onPlayer(peer, this);
+		listener.onPlayerJoin(peer, this);
 	}
 }

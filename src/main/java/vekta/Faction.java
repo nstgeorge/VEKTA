@@ -5,12 +5,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static java.lang.Float.max;
-import static vekta.Vekta.randomID;
 import static vekta.Vekta.register;
 
-public final class Faction implements Serializable, Renameable, Syncable<Faction> {
-	private final long id = randomID();
-	
+public final class Faction extends Syncable<Faction> implements Serializable, Renameable {
 	private String name;
 	private int color;
 
@@ -101,16 +98,6 @@ public final class Faction implements Serializable, Renameable, Syncable<Faction
 
 	public float getValue() {
 		return max(1, allies.size() - enemies.size() * .5F);
-	}
-
-	@Override
-	public long getSyncID() {
-		return id;
-	}
-
-	@Override
-	public Faction getSyncData() {
-		return this;
 	}
 
 	@Override

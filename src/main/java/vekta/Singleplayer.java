@@ -24,7 +24,6 @@ import vekta.person.Person;
 import vekta.sound.SoundGroup;
 import vekta.spawner.EventGenerator;
 import vekta.spawner.WorldGenerator;
-import vekta.spawner.world.StarSystemSpawner;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -87,8 +86,9 @@ public class Singleplayer implements World, PlayerListener {
 			Player player = new Player(playerFaction);
 
 			state = new WorldState(player);
+			register(player);///
 
-			StarSystemSpawner.createSystem(PVector.random2D().mult(2 * AU_DISTANCE));
+			//			StarSystemSpawner.createSystem(PVector.random2D().mult(2 * AU_DISTANCE));
 
 			PlayerShip playerShip = register(new PlayerShip(
 					player.getFaction().getName(),
@@ -401,6 +401,9 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public <T extends Syncable> T register(T object) {
+		if(object == null) {
+			return null;
+		}
 		object = state.register(object);
 		//		apply(object);
 		return object;

@@ -11,15 +11,12 @@ import vekta.terrain.LandingSite;
 import vekta.terrain.building.HouseBuilding;
 import vekta.terrain.settlement.Settlement;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import static vekta.Vekta.randomID;
 import static vekta.Vekta.register;
 
-public class Person implements Serializable, MissionListener, Syncable<Person> {
-	private final long id = randomID();
+public class Person extends Syncable<Person> implements MissionListener {
 
 	private final Map<Syncable, OpinionType> opinions = new HashMap<>();
 
@@ -130,16 +127,6 @@ public class Person implements Serializable, MissionListener, Syncable<Person> {
 	@Override
 	public void onComplete(Mission mission) {
 		setOpinion(mission.getPlayer().getFaction(), OpinionType.GRATEFUL);
-	}
-
-	@Override
-	public long getSyncID() {
-		return id;
-	}
-
-	@Override
-	public Person getSyncData() {
-		return this;
 	}
 
 	@Override

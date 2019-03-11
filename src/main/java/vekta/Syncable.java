@@ -7,34 +7,35 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
 
-import static vekta.Vekta.getWorld;
-import static vekta.Vekta.register;
+import static vekta.Vekta.*;
 
-public interface Syncable<T extends Serializable> {
+public abstract class Syncable<T extends Syncable> implements Serializable {
+	private final long id = randomID();
+
 	/**
 	 * Check whether this object should be synced when modified.
 	 */
-	default boolean shouldSync() {
+	public boolean shouldSync() {
 		return true;
 	}
 
 	/**
 	 * Return an immutable key corresponding to this object.
 	 */
-	long getSyncID();
+	public final long getSyncID() {
+		return id;
+	}
 
 	/**
 	 * Return a data object used for synchronization.
 	 */
-	T getSyncData();
-
-	//	/**
-	//	 * Synchromize based on the given data object.
-	//	 */
-	//	void onSync(T data);
+	@SuppressWarnings("unchecked")
+	public T getSyncData() {
+		return (T)this;
+	}
 
 	@SuppressWarnings("unchecked")
-	default void onSync(T data) {
+	public void onSync(T data) {
 		try {
 			// TODO: refactor
 			Field modifierField = Field.class.getDeclaredField("modifiers");
@@ -81,11 +82,7 @@ public interface Syncable<T extends Serializable> {
 		}
 	}
 
-	default void syncChanges() {
+	public void syncChanges() {
 		getWorld().apply(this);
-		//		Context context = getContext();
-		//		if(context instanceof World) {
-		//			((World)context).apply(this);
-		//		}
 	}
 }
