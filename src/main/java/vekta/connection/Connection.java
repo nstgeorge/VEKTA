@@ -2,8 +2,13 @@ package vekta.connection;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
+import vekta.Format;
 import vekta.connection.message.Message;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -52,8 +57,9 @@ public class Connection {
 			socket.on("msg", args -> {
 				try {
 					String id = String.valueOf(args[0]);
-					Message message = (Message)args[1];
+					Message message = deserialize(args[1]);
 					Peer peer = getPeer(id);
+					println(id, message);
 					for(ConnectionListener listener : listeners) {
 						listener.onMessage(peer, message);
 						message.receive(peer, listener);
@@ -74,7 +80,7 @@ public class Connection {
 	private Peer getPeer(String id) {
 		Peer peer = peers.get(id);
 		if(peer == null) {
-			peer = new Peer(id);
+			peer = new Peer(this, id);
 			peers.put(id, peer);
 			for(ConnectionListener listener : listeners) {
 				listener.onConnect(peer);
@@ -95,16 +101,16 @@ public class Connection {
 		socket.emit("join", new Object[] {room}, a -> println("Joined room: " + room));
 	}
 
-	//	public void leaveRoom() {
-	//		socket.emit("leave", new Object[] {}, a -> println("Left room"));
-	//	}
+	public void leaveRoom() {
+		socket.emit("leave", new Object[] {}, a -> println("Left room"));
+	}
 
-	public void broadcast(Message message) {
-		socket.emit("msg", message);
+	public void send(Message message) {
+		socket.emit("msg", serialize(message));
 	}
 
 	public void send(Peer peer, Message message) {
-		socket.emit("to", peer, message);
+		socket.emit("to", peer.getID(), serialize(message));
 	}
 
 	public void close() {
@@ -113,5 +119,32 @@ public class Connection {
 			listener.onDisconnect();
 		}
 		println("Connection closed");
+	}
+
+	private <T extends Serializable> T deserialize(Object data) {
+		byte[] bytes = Base64.getDecoder().decode(String.valueOf(data));
+		if(bytes.length == 0) {
+			throw new RuntimeException("Empty deserialization string");
+		}
+
+		try(InputStream input = new ByteArrayInputStream(bytes)) {
+			return Format.read(input);
+		}
+		catch(ClassNotFoundException e) {
+			throw new RuntimeException("Client version mismatch");
+		}
+		catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private Object serialize(Serializable object) {
+		try(ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+			Format.write(object, output);
+			return Base64.getEncoder().encodeToString(output.toByteArray());
+		}
+		catch(Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

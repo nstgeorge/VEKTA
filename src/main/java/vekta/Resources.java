@@ -11,14 +11,13 @@ import processing.sound.SoundFile;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
 import static vekta.Vekta.v;
 
-public class Resources {
+public final class Resources {
 	private static final String PACKAGE = "vekta";
 	private static final Reflections REFLECTIONS = new Reflections(new ConfigurationBuilder()
 			.setUrls(ClasspathHelper.forPackage(PACKAGE))
@@ -76,7 +75,10 @@ public class Resources {
 	}
 
 	private static void addStrings(String path, String key) {
-		String[] strings = v.loadStrings(path);
+		String[] strings = Arrays.stream(v.loadStrings(path))
+				.map(String::trim)
+				.filter(s -> !s.isEmpty() && !s.startsWith("#"))
+				.toArray(String[]::new);
 		if(strings.length == 0) {
 			throw new RuntimeException("No strings defined in file: " + path);
 		}
@@ -96,6 +98,19 @@ public class Resources {
 			throw new RuntimeException("No string array exists with key: " + key);
 		}
 		return array;
+	}
+
+	public static Map<String, Set<String>> getStringMap(String key, boolean reverse) {
+		Map<String, Set<String>> map = new HashMap<>();
+		for(String s : getStrings(key)) {
+			String[] split = s.split(":", 2);
+			String id = split[split.length > 1 && reverse ? 1 : 0].trim();
+			Set<String> set = map.computeIfAbsent(id, k -> new HashSet<>());
+			if(split.length > 1) {
+				set.add(split[reverse ? 0 : 1].trim());
+			}
+		}
+		return map;
 	}
 
 	public static String generateString(String type) {

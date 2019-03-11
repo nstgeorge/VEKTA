@@ -99,7 +99,8 @@ public class Person implements Serializable, MissionListener, Syncable<Person> {
 		if(parts.length > 1) {
 			for(int i = 1; i < parts.length; i++) {
 				// Add custom response messages
-				dialog.addResponse(parts[i].trim());
+				String response = parts[i].trim();
+				dialog.addResponse(response);
 			}
 		}
 		return dialog;
@@ -142,7 +143,7 @@ public class Person implements Serializable, MissionListener, Syncable<Person> {
 	public void onSync(Person data) {
 		this.faction = data.faction;
 		this.title = data.title;
-//		this.home = register(data.home);
+		//		this.home = register(data.home);
 
 		register(opinions.keySet(), data.opinions.keySet());
 	}

@@ -6,7 +6,7 @@ import javax.swing.*;
 
 import static vekta.Vekta.v;
 
-public class Settings {
+public final class Settings {
 	private static final String PATH = System.getProperty("user.dir") + "/settings.json";
 
 	private static JSONObject defaults;

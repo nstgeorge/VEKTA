@@ -1,11 +1,10 @@
 package vekta;
 
+import processing.core.PVector;
 import vekta.connection.Connection;
 import vekta.connection.ConnectionListener;
 import vekta.connection.Peer;
-import vekta.connection.message.Message;
-import vekta.connection.message.PlayerFactionMessage;
-import vekta.connection.message.SyncMessage;
+import vekta.connection.message.*;
 import vekta.context.TextInputContext;
 import vekta.spawner.WorldGenerator;
 
@@ -25,38 +24,58 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	private final transient Map<Peer, Faction> playerFactions = new WeakHashMap<>();
 
 	private transient Connection connection;
-
+	
 	@Override
 	public void start() {
 		connection = new Connection(SERVER_ADDRESS);
 		connection.addListener(this);
-		
+
 		super.start();
 
-		setContext(new TextInputContext(mainMenu, "Choose a Name:", Settings.getString("multiplayer.name", Resources.generateString("person")), name -> {
-			getPlayer().getFaction().setName(name);
+		setContext(new TextInputContext(mainMenu, "Choose a Name:", Resources.generateString("person") /*Settings.getString("multiplayer.name", Resources.generateString("person"))*/, name -> {
+			getPlayer().getFaction().setName(name.trim());
 			getPlayer().getFaction().setColor(0xFF000000 & Integer.parseInt(Settings.getString("multiplayer.color", String.valueOf(WorldGenerator.randomPlanetColor()))));
 
 			Settings.set("multiplayer.name", name);
 			Settings.set("multiplayer.color", Integer.toHexString(0x00FFFFFF & getPlayer().getFaction().getColor()));
 
+			getPlayer().getShip().getPositionReference().add(PVector.random2D().mult(v.random(200, 1000)));
+
 			connection.joinRoom(DEFAULT_ROOM);
 			setContext(this);
 
 			send(new PlayerFactionMessage(getPlayer().getFaction()));
+			send(new ObjectMessage(getPlayer().getShip()));
+
+//			// Simulate another player
+//			new Thread(() -> {
+//				try {
+//					Thread.sleep(100);
+//				}
+//				catch(InterruptedException ignored) {
+//				}
+//
+//				// Simulate another player
+//				Connection other = new Connection(SERVER_ADDRESS);
+//				other.joinRoom(DEFAULT_ROOM);
+//				other.send(new PlayerFactionMessage(new Faction(Resources.generateString("person"), WorldGenerator.randomPlanetColor())));
+//				other.send(new ObjectMessage(new PirateShip("Yarr", PVector.random2D(), new PVector(-500, -500), new PVector(), WorldGenerator.randomPlanetColor())));
+//			}).start();
 		}));
-		focusContext();
+		switchContext();
 	}
 
 	@Override
 	public void cleanup() {
 		super.cleanup();
 
-		connection.close();
+		if(connection != null) {
+			connection.close();
+		}
 	}
 
 	public void send(Message message) {
-		handleErrors(() -> connection.broadcast(message),
+		handleErrors(() -> connection.send(message),
 				"Error occurred while broadcasting " + message.getClass().getSimpleName());
 	}
 
@@ -83,7 +102,8 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		playerFactions.put(peer, faction);
 		if(!existed) {
 			getPlayer().send(faction.getName() + " joined the world");
-			send(peer, new PlayerFactionMessage(getPlayer().getFaction()));
+			peer.send(new PlayerFactionMessage(getPlayer().getFaction()));
+			peer.send(new ObjectMessage(getPlayer().getShip()));
 		}
 	}
 
@@ -106,16 +126,38 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	public void apply(Syncable object) {
 		if(object.shouldSync()) {
 			println("<broadcast>", state.getKey(object));
-			connection.broadcast(new SyncMessage(state.getKey(object), object.getSyncData()));
+			connection.send(new SyncMessage(state.getKey(object), object.getSyncData()));
 		}
 
 		super.apply(object);
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public void onSync(Peer peer, String key, Serializable data) {
+		println("<receive>", key);
+		Syncable object = state.getSyncableObject(key);
+		if(object != null) {
+			object.onSync(data);
+		}
+		else {
+			peer.send(new ObjectUnknownMessage(key));
+		}
 	}
-	
+
+	@Override
+	public void onObjectRequest(Peer peer, String key) {
+		Syncable object = state.getSyncableObject(key);
+		if(object != null) {
+			peer.send(new ObjectMessage(object));
+		}
+	}
+
+	@Override
+	public void onObject(Peer peer, Syncable object) {
+		state.register(object);
+	}
+
 	@Override
 	public void render() {
 		super.render();
@@ -123,16 +165,18 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 
 	@Override
 	public void restart() {
+		cleanup();
+
 		setContext(new Multiplayer());
 	}
 
-//	@Override
-//	public void keyPressed(KeyBinding key) {
-//		if(key == KeyBinding.QUICK_SAVE || key == KeyBinding.QUICK_LOAD) {
-//			return; // Prevent quick-saving/loading in multiplayer
-//		}
-//		super.keyPressed(key);
-//	}
+	//	@Override
+	//	public void keyPressed(KeyBinding key) {
+	//		if(key == KeyBinding.QUICK_SAVE || key == KeyBinding.QUICK_LOAD) {
+	//			return; // Prevent quick-saving/loading in multiplayer
+	//		}
+	//		super.keyPressed(key);
+	//	}
 
 	@Override
 	public boolean load(File file) {

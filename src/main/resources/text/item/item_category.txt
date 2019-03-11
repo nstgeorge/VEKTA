@@ -1,0 +1,7 @@
+# <item name substring> : <item category>
+
+AI : High Tech
+Robot : High Tech
+Graphics Card : High Tech
+CPU : High Tech
+Circuit : High Tech

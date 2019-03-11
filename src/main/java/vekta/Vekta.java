@@ -97,13 +97,14 @@ public class Vekta extends PApplet {
 		mainMenu.add(new WorldOption("Multiplayer", new Multiplayer()));
 		mainMenu.add(new SettingsMenuOption());
 		mainMenu.addDefault();
-		setContext(mainMenu);
-		focusContext();
+//		setContext(mainMenu);
+		setContext(new Multiplayer());///
+		switchContext();
 	}
 
 	@Override
 	public void draw() {
-		focusContext();
+		switchContext();
 		if(context != null) {
 			context.render();
 		}
@@ -193,7 +194,7 @@ public class Vekta extends PApplet {
 		nextContext = context;
 	}
 
-	public static void focusContext() {
+	public static void switchContext() {
 		if(nextContext != null) {
 			context = nextContext;
 			nextContext = null;

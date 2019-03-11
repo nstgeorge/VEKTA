@@ -28,7 +28,7 @@ public final class WorldState implements Serializable {
 	private final List<Faction> factions = new ArrayList<>();
 
 	private boolean updating;
-	private int nextID;
+	//	private int nextID;
 
 	public WorldState(Player player) {
 		this.player = player;
@@ -43,6 +43,10 @@ public final class WorldState implements Serializable {
 
 	public Collection<Syncable> getSyncableObjects() {
 		return syncMap.values();
+	}
+
+	public Syncable getSyncableObject(String key) {
+		return syncMap.get(key);
 	}
 
 	public List<SpaceObject> getObjects() {
@@ -110,7 +114,10 @@ public final class WorldState implements Serializable {
 	private void add(Syncable object) {
 		if(object instanceof SpaceObject) {
 			SpaceObject s = (SpaceObject)object;
-			s.setID(nextID++);
+			//			s.setID(nextID++);
+			if(s.getID() == 0) {
+				s.setID(new Random().nextInt());
+			}
 			if(updating) {
 				objectsToAdd.add(s);
 			}

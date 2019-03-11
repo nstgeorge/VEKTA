@@ -31,8 +31,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
 import static vekta.Vekta.*;
 
@@ -313,21 +311,23 @@ public class Singleplayer implements World, PlayerListener {
 
 		state.endUpdate();
 
-		if(RenderLevel.SHIP.isVisibleTo(level) && !playerShip.isDestroyed()) {
-			// Center around zero for improved floating-point precision
-			PVector newOrigin = playerShip.getPosition().mult(-1);
-			for(SpaceObject s : state.getObjects()) {
-				s.updateOrigin(newOrigin);
-			}
-		}
-
-		// Change global relative velocity to player ship when zoomed in
-		if(RenderLevel.SHIP.isVisibleTo(level)) {
-			setVelocityRelativeTo(playerShip);
-		}
-		else if(level.ordinal() == prevLevel.ordinal() - 1) {
-			setVelocityRelativeTo(findLargestObject());
-		}
+		// Origin/velocity centering disabled while working on multiplayer
+		
+//		if((RenderLevel.SHIP.isVisibleTo(level) || level.ordinal() == prevLevel.ordinal() - 1) && !playerShip.isDestroyed()) {
+//			// Center around zero for improved floating-point precision
+//			PVector newOrigin = playerShip.getPosition().mult(-1);
+//			for(SpaceObject s : state.getObjects()) {
+//				s.updateOrigin(newOrigin);
+//			}
+//		}
+//
+//		// Change global relative velocity to player ship when zoomed in
+//		if(RenderLevel.SHIP.isVisibleTo(level)) {
+//			setVelocityRelativeTo(playerShip);
+//		}
+//		else if(level.ordinal() == prevLevel.ordinal() + 1) {
+//			setVelocityRelativeTo(findLargestObject());
+//		}
 
 		RenderLevel spawnLevel = level;
 		while(spawnLevel.ordinal() > 0 && v.chance(.05F)) {
@@ -459,7 +459,7 @@ public class Singleplayer implements World, PlayerListener {
 
 		Singleplayer world = new Singleplayer();
 		setContext(world);
-		focusContext();
+		switchContext();
 	}
 
 	public SpaceObject findLargestObject() {
@@ -573,11 +573,9 @@ public class Singleplayer implements World, PlayerListener {
 			return false;
 		}
 
-		try(ObjectInputStream input = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file)))) {
-			//			Input input = new Input(new FileInputStream(file));
-			//			setContext(new Singleplayer(format.readObject(input, WorldState.class)));
-			setContext(new Singleplayer((WorldState)input.readObject()));
-			focusContext();
+		try {
+			setContext(new Singleplayer(Format.read(new FileInputStream(file))));
+			switchContext();
 			println("Loaded from " + file);
 			return true;
 		}
@@ -592,8 +590,8 @@ public class Singleplayer implements World, PlayerListener {
 	}
 
 	public boolean save(File file) {
-		try(ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)))) {
-			output.writeObject(state);
+		try {
+			Format.write(state, new FileOutputStream(file));
 			println("Saved to " + file);
 			return true;
 		}
