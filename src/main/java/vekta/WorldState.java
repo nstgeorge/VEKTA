@@ -94,23 +94,23 @@ public final class WorldState implements Serializable {
 	}
 
 	public double getGlobalX(float x) {
-		return globalPosition.x + x;
+		return x - globalPosition.x;
 	}
 
 	public double getGlobalY(float y) {
-		return globalPosition.y + y;
+		return y - globalPosition.y;
 	}
 
 	public PVector getLocalPosition(double x, double y) {
-		return new PVector((float)(x - globalPosition.x), (float)(y - globalPosition.y));
+		return new PVector((float)(x + globalPosition.x), (float)(y + globalPosition.y));
 	}
 
 	public PVector getGlobalVelocity(PVector velocity) {
-		return velocity.copy().add(globalVelocity);
+		return velocity.copy().sub(globalVelocity);
 	}
 
 	public PVector getLocalVelocity(PVector velocity) {
-		return velocity.copy().sub(globalVelocity);
+		return velocity.copy().add(globalVelocity);
 	}
 
 	public void addRelativePosition(PVector offset) {
