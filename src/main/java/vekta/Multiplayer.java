@@ -95,7 +95,12 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public void onSync(Peer peer, SyncMessage msg) {
+	public void onSyncObject(Peer peer, SyncMessage msg) {
+		if(msg.getData() instanceof SpaceObject) {
+			println("Warning: received SpaceObject in a SyncMessage");
+			return;
+		}
+
 		long id = msg.getID();
 		println("<receive>", msg.getData().getClass().getSimpleName() + "[" + Long.toHexString(id) + "]");
 		Syncable object = state.getSyncable(id);
@@ -108,20 +113,24 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	}
 
 	@Override
-	public void onRequest(Peer peer, RequestMessage msg) {
+	public void onRequestObject(Peer peer, RequestMessage msg) {
 		Syncable object = state.getSyncable(msg.getID());
 		if(object != null) {
-			peer.send(new AddMessage(object));
+			peer.send(new CreateMessage(object, state.getGlobalOffset()));
 		}
 	}
 
 	@Override
-	public void onAdd(Peer peer, AddMessage msg) {
-		state.register(msg.getObject(), true);
+	public void onCreateObject(Peer peer, CreateMessage msg) {
+		Syncable object = state.register(msg.getObject(), true);
+		if(object instanceof SpaceObject) {
+			SpaceObject s = (SpaceObject)object;
+			s.getPositionReference().add(state.getGlobalOffset().relativePosition(msg.getOffset()));
+		}
 	}
 
 	@Override
-	public void onMove(Peer peer, MoveMessage msg) {
+	public void onMoveObject(Peer peer, MoveMessage msg) {
 		Syncable object = state.getSyncable(msg.getID());
 		if(object instanceof SpaceObject) {
 			SpaceObject s = ((SpaceObject)object);
@@ -145,8 +154,8 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		boolean isNew = state.find(object.getSyncID()) == null;
 		object = super.register(object);
 		if(isNew && !object.isRemote()) {
-//			new Exception().printStackTrace();
-			connection.send(new AddMessage(object));
+			//			new Exception().printStackTrace();
+			connection.send(new CreateMessage(object, state.getGlobalOffset()));
 		}
 		return object;
 	}

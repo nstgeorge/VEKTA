@@ -26,8 +26,10 @@ public final class WorldState implements Serializable {
 	private final List<Person> people = new ArrayList<>();
 	private final List<Faction> factions = new ArrayList<>();
 
-	private final GlobalVector globalPosition = new GlobalVector();
-	private final PVector globalVelocity = new PVector();
+	//	private final GlobalVector globalPosition = new GlobalVector();
+	//	private final PVector globalVelocity = new PVector();
+
+	private final GlobalOffset globalOffset = new GlobalOffset();
 
 	private final Set<Syncable> registerScope = new HashSet<>();
 	private boolean remoteFlag;
@@ -84,28 +86,32 @@ public final class WorldState implements Serializable {
 		objectsToRemove.clear();
 	}
 
-	public void updateGlobalCoords(float timeScale) {
-		globalPosition.add(globalVelocity.x * timeScale, globalVelocity.y * timeScale);
+	public GlobalOffset getGlobalOffset() {
+		return globalOffset;
 	}
 
 	public double getGlobalX(float x) {
-		return x - globalPosition.x;
+		return x - globalOffset.px;
 	}
 
 	public double getGlobalY(float y) {
-		return y - globalPosition.y;
+		return y - globalOffset.py;
 	}
 
 	public PVector getLocalPosition(double x, double y) {
-		return new PVector((float)(x + globalPosition.x), (float)(y + globalPosition.y));
+		return new PVector((float)(x + globalOffset.px), (float)(y + globalOffset.py));
 	}
 
 	public PVector getGlobalVelocity(PVector velocity) {
-		return velocity.copy().sub(globalVelocity);
+		return velocity.copy().sub(globalOffset.vx, globalOffset.vy);
 	}
 
 	public PVector getLocalVelocity(PVector velocity) {
-		return velocity.copy().add(globalVelocity);
+		return velocity.copy().add(globalOffset.vx, globalOffset.vy);
+	}
+
+	public void updateGlobalCoords(float timeScale) {
+		globalOffset.update(timeScale);
 	}
 
 	public void addRelativePosition(PVector offset) {
@@ -113,7 +119,7 @@ public final class WorldState implements Serializable {
 		for(SpaceObject s : getObjects()) {
 			s.updateOrigin(relative);
 		}
-		globalPosition.add(offset.x, offset.y);
+		globalOffset.addPosition(offset.x, offset.y);
 	}
 
 	public void addRelativeVelocity(PVector velocity) {
@@ -121,14 +127,15 @@ public final class WorldState implements Serializable {
 		for(SpaceObject s : getObjects()) {
 			s.addVelocity(relative);
 		}
-		globalVelocity.add(velocity);
+		globalOffset.addVelocity(velocity.x, velocity.y);
 	}
 
 	public void resetRelativeVelocity() {
+		PVector velocity = new PVector(globalOffset.vx, globalOffset.vy);
 		for(SpaceObject s : getObjects()) {
-			s.addVelocity(globalVelocity);
+			s.addVelocity(velocity);
 		}
-		globalVelocity.set(0, 0);
+		globalOffset.setVelocity(0, 0);
 	}
 
 	public boolean isRemoving(SpaceObject s) {
@@ -192,7 +199,7 @@ public final class WorldState implements Serializable {
 		else if(object instanceof Faction && !factions.contains(object) && ((Faction)object).getType() != FactionType.PLAYER) {
 			factions.add((Faction)object);
 		}
-		
+
 		if(remoteFlag) {
 			object.setRemote(true);
 			object.onAddRemote();

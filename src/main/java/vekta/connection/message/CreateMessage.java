@@ -1,22 +1,29 @@
 package vekta.connection.message;
 
+import vekta.GlobalOffset;
 import vekta.Syncable;
 import vekta.connection.MessageListener;
 import vekta.connection.Peer;
 
-public class AddMessage implements Message {
+public class CreateMessage implements Message {
 	private final Syncable object;
+	private final GlobalOffset offset;
 
-	public AddMessage(Syncable object) {
+	public CreateMessage(Syncable object, GlobalOffset offset) {
 		this.object = object;
+		this.offset = offset;
 	}
 
 	public Syncable getObject() {
 		return object;
 	}
 
+	public GlobalOffset getOffset() {
+		return offset;
+	}
+
 	@Override
 	public void receive(Peer peer, MessageListener listener) {
-		listener.onAdd(peer, this);
+		listener.onCreateObject(peer, this);
 	}
 }

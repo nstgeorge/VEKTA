@@ -16,6 +16,6 @@ public class RequestMessage implements Message {
 
 	@Override
 	public void receive(Peer peer, MessageListener listener) {
-		listener.onRequest(peer, this);
+		listener.onRequestObject(peer, this);
 	}
 }

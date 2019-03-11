@@ -7,7 +7,7 @@ import vekta.connection.Peer;
 public class SyncMessage implements Message {
 	private final long id;
 	private final Syncable data;
-
+	
 	public SyncMessage(Syncable s) {
 		this(s.getSyncID(), s.getSyncData());
 	}
@@ -27,6 +27,6 @@ public class SyncMessage implements Message {
 
 	@Override
 	public void receive(Peer peer, MessageListener listener) {
-		listener.onSync(peer, this);
+		listener.onSyncObject(peer, this);
 	}
 }
