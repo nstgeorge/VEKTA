@@ -13,8 +13,6 @@ import static processing.core.PApplet.println;
  * Serializable world information (.vekta format)
  */
 public final class WorldState implements Serializable {
-	//	private float timeScale = 1;
-
 	private Player player;
 
 	private final Map<Long, Syncable> syncMap = new HashMap<>(); // All client-syncable objects
@@ -32,6 +30,7 @@ public final class WorldState implements Serializable {
 	private final PVector globalVelocity = new PVector();
 
 	private final Set<Syncable> registerScope = new HashSet<>();
+	private boolean remoteFlag;
 
 	private boolean updating;
 
@@ -43,12 +42,8 @@ public final class WorldState implements Serializable {
 	}
 
 	public void setPlayer(Player player) {
-		this.player = register(player);//
+		this.player = register(player);///
 	}
-
-	//	public float getTimeScale() {
-	//		return timeScale;
-	//	}
 
 	public Collection<Syncable> getSyncables() {
 		return syncMap.values();
@@ -146,33 +141,42 @@ public final class WorldState implements Serializable {
 
 	@SuppressWarnings("unchecked")
 	public <S extends Syncable> S register(S object, boolean remote) {
+		// Check if an object's sync logic has a circular reference
 		if(registerScope.contains(object)) {
-			return object; // Prevents infinite recursion
+			return object;
 		}
-
 		registerScope.add(object);
+
+		// If the objects are being registered remotely, set a flag to resolve recursively
+		boolean flagging = remote && !remoteFlag;
+		if(flagging) {
+			remoteFlag = true;
+		}
 		try {
 			// Find already existing object with the same state key
 			long id = object.getSyncID();
 			if(syncMap.containsKey(id)) {
 				S other = (S)syncMap.get(id);
 				other.onSync(object.getSyncData());
-				println("<sync>", object.getClass().getSimpleName() + "[" + Long.toHexString(id) + "]");
+				println("<sync>", object.getClass().getSimpleName() + "[" + Long.toHexString(id) + "]", remoteFlag);
 				return other;
 			}
 			else {
-				add(object, remote);
+				add(object);
 				syncMap.put(object.getSyncID(), object);
-				println("<add>", object.getClass().getSimpleName() + "[" + Long.toHexString(id) + "]");
+				println("<add>", object.getClass().getSimpleName() + "[" + Long.toHexString(id) + "]", remoteFlag);
 				return object;
 			}
 		}
 		finally {
 			registerScope.remove(object);
+			if(flagging) {
+				remoteFlag = false;
+			}
 		}
 	}
 
-	private void add(Syncable object, boolean remote) {
+	private void add(Syncable object) {
 		if(object instanceof SpaceObject) {
 			SpaceObject s = (SpaceObject)object;
 			if(updating) {
@@ -185,11 +189,12 @@ public final class WorldState implements Serializable {
 		else if(object instanceof Person && !people.contains(object)) {
 			people.add((Person)object);
 		}
-		else if(object instanceof Faction && !factions.contains(object)) {
+		else if(object instanceof Faction && !factions.contains(object) && ((Faction)object).getType() != FactionType.PLAYER) {
 			factions.add((Faction)object);
 		}
-
-		if(remote) {
+		
+		if(remoteFlag) {
+			object.setRemote(true);
 			object.onAddRemote();
 		}
 	}

@@ -8,7 +8,6 @@ import vekta.item.Inventory;
 import vekta.item.InventoryListener;
 import vekta.item.Item;
 import vekta.menu.Menu;
-import vekta.module.RadiatorModule;
 import vekta.object.CargoCrate;
 import vekta.object.SpaceObject;
 import vekta.terrain.LandingSite;
@@ -39,7 +38,11 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 		this.speed = speed;
 		this.turnSpeed = turnSpeed;
 
-		setTemperature(RadiatorModule.TARGET_TEMP);
+		setTemperature(getOptimalTemperature());
+	}
+
+	public float getOptimalTemperature() {
+		return 23;
 	}
 
 	public Inventory getInventory() {
@@ -150,6 +153,11 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 	}
 
 	protected void drawShip(float r, ShipModelType shape) {
+		// Estimate heading for multiplayer TODO: refactor
+		if(isRemote() && velocity.magSq() > 1) {
+			setHeading(getVelocity());
+		}
+
 		float theta = heading.heading() + HALF_PI;
 		v.rotate(theta);
 		v.beginShape();

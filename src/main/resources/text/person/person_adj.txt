@@ -1,3 +1,5 @@
+{item_adj_common}
+{item_adj_rare}
 Wise
 Astute
 Oblivious
@@ -8,5 +10,3 @@ Three-Legged
 Four-Legged
 Five-Legged
 Eight-Legged
-{item_adj_common}
-{item_adj_rare}

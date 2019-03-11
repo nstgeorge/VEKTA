@@ -7,15 +7,21 @@ import java.util.Set;
 import static java.lang.Float.max;
 
 public final class Faction extends Syncable<Faction> implements Serializable, Renameable {
+	private final FactionType type;
 	private String name;
 	private int color;
 
 	private final Set<Faction> allies = new HashSet<>();
 	private final Set<Faction> enemies = new HashSet<>();
 
-	public Faction(String name, int color) {
+	public Faction(FactionType type, String name, int color) {
+		this.type = type;
 		this.name = name;
 		this.color = color;
+	}
+
+	public FactionType getType() {
+		return type;
 	}
 
 	public String getName() {
@@ -99,11 +105,11 @@ public final class Faction extends Syncable<Faction> implements Serializable, Re
 		return max(1, allies.size() - enemies.size() * .5F);
 	}
 
-//	@Override
-//	public void onSync(Faction data) {
-//		this.name = data.name;
-//		this.color = data.color;
-//		syncAll(allies, data.allies);
-//		syncAll(allies, data.enemies);
-//	}
+	//	@Override
+	//	public void onSync(Faction data) {
+	//		this.name = data.name;
+	//		this.color = data.color;
+	//		syncAll(allies, data.allies);
+	//		syncAll(allies, data.enemies);
+	//	}
 }

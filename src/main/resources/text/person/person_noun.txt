@@ -1,4 +1,5 @@
 {impersonal_name}
+Baron
 Wanderer
 Traveler
 Ranger
@@ -22,3 +23,10 @@ Watcher
 Doctor
 Warrior
 Defender
+Dreamer
+Vagabond
+Vigilante
+Thief
+Gangster
+Accountant
+Engineer

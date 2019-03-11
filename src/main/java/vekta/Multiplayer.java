@@ -7,6 +7,8 @@ import vekta.connection.Peer;
 import vekta.connection.message.*;
 import vekta.context.TextInputContext;
 import vekta.object.SpaceObject;
+import vekta.object.ship.ModularShip;
+import vekta.object.ship.Ship;
 import vekta.spawner.WorldGenerator;
 
 import java.io.File;
@@ -22,7 +24,8 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	private static final String DEFAULT_ROOM =
 			Settings.getString("multiplayer.room", "Test");
 
-	private static final int PLAYER_POSITION_FRAMES = 10;
+	private static final int PLAYER_INTERVAL_CLOSE = 20;
+	private static final int PLAYER_INTERVAL_FAR = 60 * 5;
 
 	private final transient Map<Peer, Player> playerMap = new WeakHashMap<>();
 
@@ -45,17 +48,22 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 			getPlayer().getFaction().setColor(0xFF000000 | Integer.parseInt(Settings.getString("multiplayer.color", String.valueOf(WorldGenerator.randomPlanetColor()))));
 			getPlayer().getShip().setName(getPlayer().getFaction().getName());
 			getPlayer().getShip().setColor(getPlayer().getFaction().getColor());
-			
-//			Settings.set("multiplayer.name", name);
-//			Settings.set("multiplayer.color", Integer.toHexString(0x00FFFFFF & getPlayer().getFaction().getColor()));
+
+			//			Settings.set("multiplayer.name", name);
+			//			Settings.set("multiplayer.color", Integer.toHexString(0x00FFFFFF & getPlayer().getFaction().getColor()));
 
 			getPlayer().getShip().getPositionReference().add(PVector.random2D().mult(v.random(200, 1000)));
 
 			connection.joinRoom(DEFAULT_ROOM);
 			setContext(this);
 			applyContext();
-			
+
 			connection.send(new PlayerJoinMessage(getPlayer()));
+
+			if(!connection.isConnected()) {
+				getPlayer().send("Server is not currently available")
+						.withColor(DANGER_COLOR);
+			}
 		}));
 		applyContext();
 	}
@@ -103,33 +111,49 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	public void onRequest(Peer peer, RequestMessage msg) {
 		Syncable object = state.getSyncable(msg.getID());
 		if(object != null) {
-			peer.send(new RegisterMessage(object));
+			peer.send(new AddMessage(object));
 		}
 	}
 
 	@Override
-	public void onRegister(Peer peer, RegisterMessage msg) {
+	public void onAdd(Peer peer, AddMessage msg) {
 		state.register(msg.getObject(), true);
 	}
 
 	@Override
-	public void onObjectMove(Peer peer, MoveMessage msg) {
+	public void onMove(Peer peer, MoveMessage msg) {
 		Syncable object = state.getSyncable(msg.getID());
 		if(object instanceof SpaceObject) {
 			SpaceObject s = ((SpaceObject)object);
 			PVector pos = state.getLocalPosition(msg.getX(), msg.getY());
 			PVector vel = state.getLocalVelocity(msg.getVelocity());
-			s.getPositionReference().set(pos);
-			s.setVelocity(vel);
-			s.simulateForward((int)(System.currentTimeMillis() - msg.getTimestamp()));
+			float delay = (System.currentTimeMillis() - msg.getTimestamp()) / 1000F * v.frameRate;
+			int interval = getMoveInterval(s);
+			s.syncMovement(pos, vel, delay, interval);
 		}
+	}
+
+	@Override
+	public void onRenderLevel(Peer peer, RenderLevelMessage msg) {
+		///
 	}
 
 	//// World methods
 
 	@Override
-	public void apply(Syncable object) {
-		super.apply(object);
+	public <T extends Syncable> T register(T object) {
+		boolean isNew = state.find(object.getSyncID()) == null;
+		object = super.register(object);
+		if(isNew && !object.isRemote()) {
+//			new Exception().printStackTrace();
+			connection.send(new AddMessage(object));
+		}
+		return object;
+	}
+
+	@Override
+	public void syncChanges(Syncable object) {
+		super.syncChanges(object);
 		if(object.shouldPropagate()) {
 			println("<broadcast>", object.getClass().getSimpleName() + "[" + Long.toHexString(object.getSyncID()) + "]");
 			connection.send(new SyncMessage(object));
@@ -145,21 +169,38 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		}
 	}
 
+	private int getMoveInterval(SpaceObject s) {
+		if(s instanceof ModularShip && ((ModularShip)s).hasController()) {
+			return RenderLevel.SHIP.isVisibleTo(getRenderLevel()) ? PLAYER_INTERVAL_CLOSE : PLAYER_INTERVAL_FAR;
+		}
+		return 300;
+	}
+
 	@Override
 	public void render() {
 		super.render();
 
-		if(v.frameCount % PLAYER_POSITION_FRAMES == 0) {
-			connection.send(new MoveMessage(getPlayerShip(), state));
+		for(int i = 0; i < state.getObjects().size(); i++) {
+			SpaceObject s = state.getObjects().get(i);
+			if(!s.isRemote()) {
+				// Send periodic movement updates for locally owned objects
+				if((v.frameCount + i) % getMoveInterval(s) == 0) {
+					connection.send(new MoveMessage(s, state));
+				}
+			}
 		}
 
+		// Periodically print debug info
 		if(v.frameCount % 300 == 0) {
-			// Periodically print debug info
 			println("----");
 			println("Remote Players: " + playerMap.size());
 			println("Player Objects: " + state.getSyncables().stream()
 					.filter(s -> s instanceof Player)
 					.map(s -> ((Player)s).getName())
+					.collect(Collectors.joining(", ")));
+			println("Ship Objects: " + state.getSyncables().stream()
+					.filter(s -> s instanceof Ship)
+					.map(s -> ((Ship)s).getName() + ((Ship)s).getPosition())
 					.collect(Collectors.joining(", ")));
 		}
 	}

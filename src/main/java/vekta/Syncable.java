@@ -10,7 +10,42 @@ import java.util.*;
 import static vekta.Vekta.*;
 
 public abstract class Syncable<T extends Syncable> implements Serializable {
+	private static final Field MODIFIER_FIELD;
+	private static final Field ID_FIELD;
+	private static final Field REMOTE_FIELD;
+
+	static {
+		try {
+			// Provide access to updating field modifiers (to remove `final`)
+			MODIFIER_FIELD = Field.class.getDeclaredField("modifiers");
+			MODIFIER_FIELD.setAccessible(true);
+
+			// Define fields to ignore during sync
+			ID_FIELD = Syncable.class.getDeclaredField("id");
+			REMOTE_FIELD = Syncable.class.getDeclaredField("remote");
+		}
+		catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	private final long id = randomID();
+
+	private boolean remote = false;
+
+	/**
+	 * Determine whether this object was provided by a remote client.
+	 */
+	public final boolean isRemote() {
+		return remote;
+	}
+
+	/**
+	 * Indicate that this object is being managed remotely.
+	 */
+	public void setRemote(boolean remote) {
+		this.remote = remote;
+	}
 
 	/**
 	 * Return an immutable key corresponding to this object.
@@ -20,7 +55,7 @@ public abstract class Syncable<T extends Syncable> implements Serializable {
 	}
 
 	/**
-	 * Determine whether changes to this object should be propagated to other clients.
+	 * Determine whether changes to this object should be propagated to remote clients.
 	 */
 	public boolean shouldPropagate() {
 		return true;
@@ -41,20 +76,16 @@ public abstract class Syncable<T extends Syncable> implements Serializable {
 	@SuppressWarnings("unchecked")
 	public void onSync(T data) {
 		try {
-			// TODO: refactor
-			Field modifierField = Field.class.getDeclaredField("modifiers");
-			modifierField.setAccessible(true);
-
 			// Brute-force update for now
 			for(Field field : ReflectionUtils.getAllFields(getClass())) {
-				// Skip id field
-				if(!shouldSyncField(field)) {
+				// Skip undesired fields
+				if(!shouldSyncField(field) && !field.equals(ID_FIELD) && !field.equals(REMOTE_FIELD)) {
 					continue;
 				}
 
 				// Beat the devil out of the field
 				field.setAccessible(true);
-				modifierField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+				MODIFIER_FIELD.setInt(field, field.getModifiers() & ~Modifier.FINAL);
 
 				// Recursively replace Syncable objects
 				Object object = field.get(data);
@@ -66,7 +97,7 @@ public abstract class Syncable<T extends Syncable> implements Serializable {
 					List buffer = new ArrayList(collection);
 					collection.clear();
 					for(Object elem : buffer) {
-						// TODO: onSync() rather than register()
+						// TODO: refactor to distinguish between sync and register
 						collection.add(elem instanceof Syncable ? register((Syncable)elem) : elem);
 					}
 				}
@@ -92,6 +123,6 @@ public abstract class Syncable<T extends Syncable> implements Serializable {
 	}
 
 	public void syncChanges() {
-		getWorld().apply(this);
+		getWorld().syncChanges(this);
 	}
 }

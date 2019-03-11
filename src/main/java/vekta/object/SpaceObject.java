@@ -181,9 +181,18 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	/**
 	 * Simulate the object's movement over a certain time interval (used to account for server latency).
 	 */
-	public void simulateForward(int millis) {
-		float amount = (float)millis * 60 / 1000;
-		applyVelocity(getVelocity().setMag(amount));
+	public void syncMovement(PVector position, PVector velocity, float delay, int interval) {
+		this.velocity.set(velocity);
+		if(interval != 0) {
+			this.velocity
+					.add(position.add(velocity.mult(delay)))
+					.sub(getPositionReference()).div(interval);
+			//			this.position.set(position.sub(getPositionReference()).mult(.5F));
+		}
+		else {
+			this.position.set(position);
+			//		applyVelocity(velocity.mult(delay));
+		}
 	}
 
 	/**

@@ -27,7 +27,7 @@ public interface World extends Context {
 	/**
 	 * Called when an object should be synchronized
 	 */
-	void apply(Syncable object);
+	void syncChanges(Syncable object);
 
 	/**
 	 * Called when player dies

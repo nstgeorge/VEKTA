@@ -82,7 +82,7 @@ public class Singleplayer implements World, PlayerListener {
 		Resources.stopMusic();
 
 		if(state == null) {
-			Faction playerFaction = new Faction("VEKTA I", UI_COLOR);
+			Faction playerFaction = new Faction(FactionType.PLAYER, "VEKTA I", UI_COLOR);
 			Player player = new Player(playerFaction);
 
 			state = new WorldState();
@@ -299,7 +299,7 @@ public class Singleplayer implements World, PlayerListener {
 			// Center around zero for improved floating-point precision
 			state.addRelativePosition(playerShip.getPosition());
 		}
-		
+
 		// Change global relative velocity to player ship when zoomed in
 		if(RenderLevel.SHIP.isVisibleTo(level)) {
 			state.addRelativeVelocity(playerShip.getVelocity());
@@ -404,7 +404,7 @@ public class Singleplayer implements World, PlayerListener {
 	}
 
 	@Override
-	public void apply(Syncable object) {
+	public void syncChanges(Syncable object) {
 		// Do nothing in singleplayer
 	}
 

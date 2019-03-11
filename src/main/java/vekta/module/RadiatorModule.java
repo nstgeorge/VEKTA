@@ -1,9 +1,6 @@
 package vekta.module;
 
 public class RadiatorModule extends ShipModule {
-	// Stable temperature for ships
-	public static final float TARGET_TEMP = 23;
-
 	private static final float EFFICIENCY_SCALE = 1e3F;
 
 	private final float efficiency;
@@ -42,12 +39,13 @@ public class RadiatorModule extends ShipModule {
 
 	@Override
 	public void onUpdate() {
-		if(getShip().getTemperature() > TARGET_TEMP) {
+		float optimal = getShip().getOptimalTemperature();
+		if(getShip().getTemperature() > optimal) {
 			getShip().addHeat(-getEfficiency() * EFFICIENCY_SCALE * PER_SECOND);
 
 			// Round to target temperature
-			if(getShip().getTemperature() < TARGET_TEMP) {
-				getShip().setTemperature(TARGET_TEMP);
+			if(getShip().getTemperature() < optimal) {
+				getShip().setTemperature(optimal);
 			}
 		}
 	}

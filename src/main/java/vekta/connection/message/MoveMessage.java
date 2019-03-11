@@ -50,6 +50,6 @@ public class MoveMessage implements Message {
 
 	@Override
 	public void receive(Peer peer, MessageListener listener) {
-		listener.onObjectMove(peer, this);
+		listener.onMove(peer, this);
 	}
 }

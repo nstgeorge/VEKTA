@@ -59,7 +59,7 @@ public class Connection {
 					String id = String.valueOf(args[0]);
 					Message message = deserialize(args[1]);
 					Peer peer = getPeer(id);
-//					println(id, message.getClass().getSimpleName());
+					//					println(id, message.getClass().getSimpleName());
 					for(ConnectionListener listener : listeners) {
 						listener.onMessage(peer, message);
 						message.receive(peer, listener);
@@ -75,6 +75,10 @@ public class Connection {
 		catch(Exception e) {
 			throw new RuntimeException("Failed to connect to multiplayer server", e);
 		}
+	}
+
+	public boolean isConnected() {
+		return socket.connected();
 	}
 
 	private Peer getPeer(String id) {

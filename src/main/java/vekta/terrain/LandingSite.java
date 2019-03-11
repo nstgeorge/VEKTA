@@ -59,7 +59,8 @@ public class LandingSite implements Serializable {
 		landed.setVelocity(velocity);
 		landed.getPositionReference().add(velocity.mult(getWorld().getTimeScale()));
 		//		landed.applyVelocity(velocity); // Boost the ship away from the planet
-
+		
+		ship.setTemperature(ship.getOptimalTemperature()); // TODO: adjust based on planet temperature
 		ship.doLand(this);
 	}
 

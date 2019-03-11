@@ -12,9 +12,12 @@ public interface MessageListener {
 	default void onRequest(Peer peer, RequestMessage msg) {
 	}
 
-	default void onRegister(Peer peer, RegisterMessage msg) {
+	default void onAdd(Peer peer, AddMessage msg) {
 	}
 
-	default void onObjectMove(Peer peer, MoveMessage msg) {
+	default void onMove(Peer peer, MoveMessage msg) {
+	}
+
+	default void onRenderLevel(Peer peer, RenderLevelMessage msg) {
 	}
 }

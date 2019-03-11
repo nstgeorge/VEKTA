@@ -1,4 +1,6 @@
 the {person_adj}
+the {person_noun}
+the {person_adj} {person_noun}
 the {item_noun} {impersonal_name}
 the {item_noun} {person_noun}
 the {person_noun} of {settlement}

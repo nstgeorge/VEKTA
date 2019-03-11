@@ -1,6 +1,5 @@
 package vekta;
 
-import processing.core.PApplet;
 import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.mission.Mission;
@@ -9,6 +8,8 @@ import vekta.overlay.singleplayer.Notification;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static processing.core.PApplet.println;
 
 public final class Player extends Syncable<Player> {
 	private Faction faction;
@@ -38,7 +39,7 @@ public final class Player extends Syncable<Player> {
 
 			@Override
 			public void onMissionStatus(Mission mission) {
-				PApplet.println("::::", mission.getName(), mission.getStatus(), mission.getCurrentObjective() != null ? mission.getCurrentObjective().getName() : null);
+				println("::::", mission.getName(), mission.getStatus(), mission.getCurrentObjective() != null ? mission.getCurrentObjective().getName() : null);
 				switch(mission.getStatus()) {
 				case READY:
 				case STARTED:
