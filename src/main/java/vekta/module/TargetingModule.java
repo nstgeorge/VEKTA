@@ -44,7 +44,7 @@ public class TargetingModule extends ShipModule implements Targeter {
 	@Override
 	public boolean isValidTarget(SpaceObject obj) {
 		if(mode == null) {
-			return true; // Don't update targeter
+			return obj == getTarget(); // Don't update targeter
 		}
 		switch(mode) {
 		case PLANET:

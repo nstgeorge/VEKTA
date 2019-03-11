@@ -15,6 +15,7 @@ import vekta.menu.option.SettingsMenuOption;
 import vekta.menu.option.WorldOption;
 
 import java.util.List;
+import java.util.Random;
 import java.util.logging.LogManager;
 
 /**
@@ -29,6 +30,8 @@ public class Vekta extends PApplet {
 	public static Vekta v; // Global access to Vekta instance
 
 	public static final String FONTNAME = "font/undefined-medium.ttf";
+
+	private static final Random RANDOM = new Random();
 
 	public static Menu mainMenu;
 
@@ -90,21 +93,22 @@ public class Vekta extends PApplet {
 		// Fonts
 		headerFont = createFont(FONTNAME, 72);
 		bodyFont = createFont(FONTNAME, 24);
-
+		v.textFont(bodyFont);
+		
 		//		mainMenu = new SettingsMenuContext();
 		mainMenu = new Menu(null, new MainMenuHandle(new ExitGameOption("Quit")));
-		mainMenu.add(new WorldOption("Singleplayer", new Singleplayer()));
-		mainMenu.add(new WorldOption("Multiplayer", new Multiplayer()));
+		mainMenu.add(new WorldOption("Singleplayer", Singleplayer::new));
+		mainMenu.add(new WorldOption("Multiplayer", Multiplayer::new));
 		mainMenu.add(new SettingsMenuOption());
 		mainMenu.addDefault();
-		setContext(mainMenu);
-//		setContext(new Multiplayer());///
-		switchContext();
+		//		setContext(mainMenu);
+		setContext(new Multiplayer());///
+		applyContext();
 	}
 
 	@Override
 	public void draw() {
-		switchContext();
+		applyContext();
 		if(context != null) {
 			context.render();
 		}
@@ -168,14 +172,6 @@ public class Vekta extends PApplet {
 		}
 	}
 
-	//	public static void addObject(Object object) {
-	//		getWorld().addObject(object);
-	//	}
-	//
-	//	public static void removeObject(Object object) {
-	//		getWorld().removeObject(object);
-	//	}
-
 	public static Context getContext() {
 		return context;
 	}
@@ -194,7 +190,7 @@ public class Vekta extends PApplet {
 		nextContext = context;
 	}
 
-	public static void switchContext() {
+	public static void applyContext() {
 		if(nextContext != null) {
 			context = nextContext;
 			nextContext = null;
@@ -232,6 +228,10 @@ public class Vekta extends PApplet {
 
 	//// Static world-related methods ////
 
+	public static long randomID() {
+		return RANDOM.nextLong();
+	}
+
 	/**
 	 * Convenience method: register object for the current world.
 	 */
@@ -246,7 +246,7 @@ public class Vekta extends PApplet {
 	public static void register(Iterable<? extends Syncable> sync, Iterable<? extends Syncable> data) {
 		for(Syncable s : sync) {
 			for(Syncable d : data) {
-				if(s.getSyncKey().equals(d.getSyncKey())) {
+				if(s.getSyncID() == d.getSyncID()) {
 					s.onSync(d.getSyncData());
 				}
 			}

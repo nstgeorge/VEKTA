@@ -3,13 +3,18 @@ package vekta.menu.option;
 import vekta.context.World;
 import vekta.menu.Menu;
 
+import java.io.Serializable;
+
+import static vekta.Vekta.applyContext;
+import static vekta.Vekta.setContext;
+
 public class WorldOption implements MenuOption {
 	private final String name;
-	private final World world;
+	private final WorldProvider provider;
 
-	public WorldOption(String name, World world) {
+	public WorldOption(String name, WorldProvider provider) {
 		this.name = name;
-		this.world = world;
+		this.provider = provider;
 	}
 
 	@Override
@@ -19,6 +24,11 @@ public class WorldOption implements MenuOption {
 
 	@Override
 	public void select(Menu menu) {
-		world.reload();
+		setContext(provider.provide());
+		applyContext();
+	}
+
+	public interface WorldProvider extends Serializable {
+		World provide();
 	}
 }

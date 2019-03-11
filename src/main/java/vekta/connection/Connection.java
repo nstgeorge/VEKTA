@@ -59,7 +59,7 @@ public class Connection {
 					String id = String.valueOf(args[0]);
 					Message message = deserialize(args[1]);
 					Peer peer = getPeer(id);
-					println(id, message);
+//					println(id, message.getClass().getSimpleName());
 					for(ConnectionListener listener : listeners) {
 						listener.onMessage(peer, message);
 						message.receive(peer, listener);

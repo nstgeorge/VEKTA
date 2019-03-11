@@ -11,7 +11,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class Player implements Serializable {
+import static vekta.Vekta.randomID;
+import static vekta.Vekta.register;
+
+public final class Player implements Serializable, Syncable<Player> {
+	private final long id = randomID();
+
 	private Faction faction;
 
 	private final List<PlayerListener> listeners = new ArrayList<>();
@@ -91,6 +96,11 @@ public final class Player implements Serializable {
 			throw new RuntimeException("Player faction cannot be null");
 		}
 		this.faction = faction;
+		syncChanges();
+	}
+
+	public String getName() {
+		return getFaction().getName();
 	}
 
 	public int getColor() {
@@ -115,14 +125,15 @@ public final class Player implements Serializable {
 
 	public void setCurrentMission(Mission currentMission) {
 		this.currentMission = currentMission;
+		syncChanges();
 	}
 
 	public void addListener(PlayerListener listener) {
 		this.listeners.add(listener);
 	}
 
-	public boolean removeListener(PlayerListener listener) {
-		return this.listeners.remove(listener);
+	public void removeListener(PlayerListener listener) {
+		this.listeners.remove(listener);
 	}
 
 	public void emit(PlayerEvent event, Object data) {
@@ -138,5 +149,23 @@ public final class Player implements Serializable {
 	public Notification send(Notification notification) {
 		emit(PlayerEvent.NOTIFICATION, notification);
 		return notification;
+	}
+
+	@Override
+	public long getSyncID() {
+		return id;
+	}
+
+	@Override
+	public Player getSyncData() {
+		return this;
+	}
+
+	@Override
+	public void onSync(Player data) {
+		faction = register(data.faction);
+		currentShip = register(data.currentShip);
+		
+		// TODO: other fields
 	}
 }

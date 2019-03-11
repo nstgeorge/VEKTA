@@ -17,7 +17,7 @@ public final class WorldState implements Serializable {
 
 	private final Player player;
 
-	private final Map<String, Syncable> syncMap = new HashMap<>();
+	private final Map<Long, Syncable> syncMap = new HashMap<>();
 
 	private final List<SpaceObject> objects = new ArrayList<>();
 	private final List<SpaceObject> gravityObjects = new ArrayList<>();
@@ -49,7 +49,7 @@ public final class WorldState implements Serializable {
 		return syncMap.values();
 	}
 
-	public Syncable getSyncable(String key) {
+	public Syncable getSyncable(long key) {
 		return syncMap.get(key);
 	}
 
@@ -134,17 +134,17 @@ public final class WorldState implements Serializable {
 	@SuppressWarnings("unchecked")
 	public <S extends Syncable> S register(S object) {
 		// Find already existing object with the same state key
-		String key = getKey(object);
-		if(syncMap.containsKey(key)) {
-			S other = (S)syncMap.get(key);
+		long id = object.getSyncID();
+		if(syncMap.containsKey(id)) {
+			S other = (S)syncMap.get(id);
 			other.onSync(object.getSyncData());
-			println("<sync>", key);
+			println("<sync>", object.getClass().getSimpleName() + "[" + Long.toHexString(id) + "]");
 			return other;
 		}
 		else {
 			add(object);
-			syncMap.put(getKey(object), object);
-			println("<add>", key);
+			syncMap.put(object.getSyncID(), object);
+			println("<add>", object.getClass().getSimpleName() + "[" + Long.toHexString(id) + "]");
 			return object;
 		}
 	}
@@ -152,10 +152,6 @@ public final class WorldState implements Serializable {
 	private void add(Syncable object) {
 		if(object instanceof SpaceObject) {
 			SpaceObject s = (SpaceObject)object;
-			//			s.setID(nextID++);
-			if(s.getID() == 0) {
-				s.setID(new Random().nextInt());
-			}
 			if(updating) {
 				objectsToAdd.add(s);
 			}
@@ -181,7 +177,7 @@ public final class WorldState implements Serializable {
 	}
 
 	public void remove(Syncable object) {
-		syncMap.remove(getKey(object));
+		syncMap.remove(object.getSyncID());
 
 		if(object instanceof SpaceObject) {
 			objectsToRemove.add((SpaceObject)object);
@@ -197,13 +193,9 @@ public final class WorldState implements Serializable {
 		}
 	}
 
-	public String getKey(Syncable<?> object) {
-		return object.getClass().getSimpleName() + "[" + object.getSyncKey() + "]";
-	}
-
 	@SuppressWarnings("unchecked")
-	public <T extends Serializable> Syncable<T> find(String key) {
-		Syncable<T> sync = syncMap.get(key);
+	public <T extends Serializable> Syncable<T> find(long id) {
+		Syncable<T> sync = syncMap.get(id);
 		if(sync != null) {
 			return sync;
 		}

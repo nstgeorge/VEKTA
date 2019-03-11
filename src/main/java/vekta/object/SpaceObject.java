@@ -1,15 +1,12 @@
 package vekta.object;
 
-import org.reflections.ReflectionUtils;
 import processing.core.PVector;
 import vekta.RenderLevel;
 import vekta.Syncable;
 import vekta.spawner.WorldGenerator;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.List;
 
 import static vekta.Vekta.*;
 
@@ -17,9 +14,10 @@ public abstract class SpaceObject implements Serializable, Syncable<SpaceObject>
 	private static final float MARKER_SIZE = 40;
 	private static final int DEFAULT_TRAIL_LENGTH = 100;
 
+	private final long id = randomID();
+
 	protected final PVector[] trail;
 
-	private int id;
 	private boolean destroyed;
 
 	protected final PVector position = new PVector();
@@ -34,20 +32,6 @@ public abstract class SpaceObject implements Serializable, Syncable<SpaceObject>
 		this.color = color;
 
 		this.trail = new PVector[getTrailLength()];
-	}
-
-	/**
-	 * Gets the unique ID of an object
-	 */
-	public final int getID() {
-		return id;
-	}
-
-	/**
-	 * Sets the unique ID of an object
-	 */
-	public final void setID(int id) {
-		this.id = id;
 	}
 
 	/**
@@ -193,16 +177,15 @@ public abstract class SpaceObject implements Serializable, Syncable<SpaceObject>
 		//			}
 		//		}
 	}
-	
+
 	/**
 	 * Simulate the object's movement over a certain time interval (used to account for server latency).
-	 * */
+	 */
 	public void simulateForward(int millis) {
-		println(millis);
 		float amount = (float)millis * 60 / 1000;
 		applyVelocity(getVelocity().setMag(amount));
 	}
-	
+
 	/**
 	 * Does this collide with that?
 	 */
@@ -322,67 +305,13 @@ public abstract class SpaceObject implements Serializable, Syncable<SpaceObject>
 	//// Synchronization methods
 
 	@Override
-	public String getSyncKey() {
-		return String.valueOf(getID());
+	public long getSyncID() {
+		return id;
 	}
 
 	@Override
 	public SpaceObject getSyncData() {
 		return this;
-	}
-
-	// Temp
-	private static Field MODIFIER_FIELD;
-
-	static {
-		try {
-			MODIFIER_FIELD = Field.class.getDeclaredField("modifiers");
-			MODIFIER_FIELD.setAccessible(true);
-		}
-		catch(Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public void onSync(SpaceObject data) {
-		try {
-			// TODO: refactor
-			// Brute-force update for now
-			for(Field field : ReflectionUtils.getAllFields(getClass())) {
-				// Beat the devil out of the field
-				field.setAccessible(true);
-				MODIFIER_FIELD.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-
-				// Recursively replace Syncable objects
-				Object object = field.get(data);
-				if(object instanceof Syncable) {
-					field.set(this, register((Syncable)object));
-				}
-				else if(object instanceof Collection) {
-					Collection collection = (Collection)object;
-					List buffer = new ArrayList(collection);
-					collection.clear();
-					for(Object elem : buffer) {
-						collection.add(elem instanceof Syncable ? register((Syncable)elem) : elem);
-					}
-				}
-				else if(object instanceof Map) {
-					Map map = (Map)object;
-					Map buffer = new HashMap<>(map);
-					map.clear();
-					for(Object key : map.keySet()) {
-						Object value = buffer.get(key);
-						map.put(key instanceof Syncable ? register((Syncable)key) : key,
-								value instanceof Syncable ? register((Syncable)value) : value);
-					}
-				}
-			}
-		}
-		catch(Exception e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	//// Convenience methods

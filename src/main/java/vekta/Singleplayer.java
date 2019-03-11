@@ -22,7 +22,6 @@ import vekta.object.ship.SpaceStation;
 import vekta.overlay.singleplayer.PlayerOverlay;
 import vekta.person.Person;
 import vekta.sound.SoundGroup;
-import vekta.sound.Tune;
 import vekta.spawner.EventGenerator;
 import vekta.spawner.WorldGenerator;
 import vekta.spawner.world.StarSystemSpawner;
@@ -58,8 +57,7 @@ public class Singleplayer implements World, PlayerListener {
 	// Camera position tracking
 	private final PVector cameraPos = new PVector();
 
-	protected final WorldState state;
-	private final boolean loaded;
+	protected WorldState state;
 
 	private float zoom = 1; // Zoom factor
 	private float smoothZoom = zoom; // Smooth zoom factor (converges toward `zoom`)
@@ -73,29 +71,23 @@ public class Singleplayer implements World, PlayerListener {
 
 	private PlayerOverlay overlay;
 
-	private Tune __tune;
-
 	public Singleplayer() {
-		Faction playerFaction = new Faction("VEKTA I", UI_COLOR);
-		Player player = new Player(playerFaction);
-
-		this.state = new WorldState(player);
-		loaded = false;
 	}
 
 	public Singleplayer(WorldState state) {
 		this.state = state;
-		loaded = true;
 	}
 
 	public void start() {
 		v.frameCount = 0;
 		Resources.stopMusic();
 
-		Player player = getPlayer();
-		player.addListener(this);
+		if(state == null) {
+			Faction playerFaction = new Faction("VEKTA I", UI_COLOR);
+			Player player = new Player(playerFaction);
 
-		if(!loaded) {
+			state = new WorldState(player);
+
 			StarSystemSpawner.createSystem(PVector.random2D().mult(2 * AU_DISTANCE));
 
 			PlayerShip playerShip = register(new PlayerShip(
@@ -110,6 +102,9 @@ public class Singleplayer implements World, PlayerListener {
 
 			setupTesting(); // Temporary
 		}
+
+		Player player = getPlayer();
+		player.addListener(this);
 
 		// Configure UI overlay
 		overlay = new PlayerOverlay(player);
@@ -211,10 +206,6 @@ public class Singleplayer implements World, PlayerListener {
 			Resources.setMusic(MUSIC.random(), false);
 		}
 
-		if(__tune != null) {
-			__tune.update();////temp
-		}
-
 		// Update time factor
 		smoothZoom += (zoom - smoothZoom) * ZOOM_SMOOTH;
 		timeScale = max(1, smoothZoom * TIME_SCALE) / (1 + smoothZoom * TIME_SCALE * TIME_SCALE * TIME_FALLOFF);
@@ -311,18 +302,18 @@ public class Singleplayer implements World, PlayerListener {
 
 		state.endUpdate();
 
-//		if(level.ordinal() == prevLevel.ordinal() - 1 && !playerShip.isDestroyed()) {
-//			// Center around zero for improved floating-point precision
-//			state.addRelativePosition(playerShip.getPosition());
-//		}
-//
-//		// Change global relative velocity to player ship when zoomed in
-//		if(RenderLevel.SHIP.isVisibleTo(level)) {
-//			state.addRelativeVelocity(playerShip.getVelocity());
-//		}
-//		else if(level.ordinal() == prevLevel.ordinal() + 1) {
-//			state.resetRelativeVelocity();
-//		}
+		//		if(level.ordinal() == prevLevel.ordinal() - 1 && !playerShip.isDestroyed()) {
+		//			// Center around zero for improved floating-point precision
+		//			state.addRelativePosition(playerShip.getPosition());
+		//		}
+		//
+		//		// Change global relative velocity to player ship when zoomed in
+		//		if(RenderLevel.SHIP.isVisibleTo(level)) {
+		//			state.addRelativeVelocity(playerShip.getVelocity());
+		//		}
+		//		else if(level.ordinal() == prevLevel.ordinal() + 1) {
+		//			state.resetRelativeVelocity();
+		//		}
 
 		RenderLevel spawnLevel = level;
 		while(spawnLevel.ordinal() > 0 && v.chance(.05F)) {
@@ -370,7 +361,7 @@ public class Singleplayer implements World, PlayerListener {
 		if(v.key == '`') {
 			println("====");
 			for(Syncable s : state.getSyncables()) {
-				print(s.getSyncKey());
+				print(s.getSyncID());
 			}
 			println("====");
 		}
@@ -410,7 +401,9 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public <T extends Syncable> T register(T object) {
-		return state.register(object);
+		object = state.register(object);
+		//		apply(object);
+		return object;
 	}
 
 	@Override
@@ -447,7 +440,7 @@ public class Singleplayer implements World, PlayerListener {
 
 		Singleplayer world = new Singleplayer();
 		setContext(world);
-		switchContext();
+		applyContext();
 	}
 
 	public SpaceObject findLargestObject() {
@@ -563,7 +556,7 @@ public class Singleplayer implements World, PlayerListener {
 
 		try {
 			setContext(new Singleplayer(Format.read(new FileInputStream(file))));
-			switchContext();
+			applyContext();
 			println("Loaded from " + file);
 			return true;
 		}

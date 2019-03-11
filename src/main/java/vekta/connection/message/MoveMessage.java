@@ -1,25 +1,35 @@
 package vekta.connection.message;
 
 import processing.core.PVector;
+import vekta.WorldState;
 import vekta.connection.MessageListener;
 import vekta.connection.Peer;
+import vekta.object.SpaceObject;
 
 public class MoveMessage implements Message {
-	private final String key;
+	private final long id;
 	private final double x, y;
 	private final PVector velocity;
 	private final long timestamp;
 
-	public MoveMessage(String key, double x, double y, PVector velocity, long timestamp) {
-		this.key = key;
+	public MoveMessage(SpaceObject s, WorldState state) {
+		this(s.getSyncID(),
+				state.getGlobalX(s.getPositionReference().x),
+				state.getGlobalY(s.getPositionReference().y),
+				state.getGlobalVelocity(s.getVelocity()),
+				System.currentTimeMillis());
+	}
+
+	public MoveMessage(long id, double x, double y, PVector velocity, long timestamp) {
+		this.id = id;
 		this.x = x;
 		this.y = y;
 		this.velocity = velocity;
 		this.timestamp = timestamp;
 	}
 
-	public String getKey() {
-		return key;
+	public long getID() {
+		return id;
 	}
 
 	public double getX() {

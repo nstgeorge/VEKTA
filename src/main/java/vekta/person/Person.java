@@ -15,9 +15,12 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import static vekta.Vekta.randomID;
 import static vekta.Vekta.register;
 
 public class Person implements Serializable, MissionListener, Syncable<Person> {
+	private final long id = randomID();
+
 	private final Map<Syncable, OpinionType> opinions = new HashMap<>();
 
 	private final String name;
@@ -49,7 +52,7 @@ public class Person implements Serializable, MissionListener, Syncable<Person> {
 			throw new RuntimeException("Faction cannot be null");
 		}
 		this.faction = faction;
-		applyChanges();
+		syncChanges();
 	}
 
 	public int getColor() {
@@ -90,7 +93,7 @@ public class Person implements Serializable, MissionListener, Syncable<Person> {
 		}
 		this.home = home;
 		home.add(new HouseBuilding(this));
-		applyChanges();
+		syncChanges();
 	}
 
 	public Dialog createDialog(String type) {
@@ -112,7 +115,7 @@ public class Person implements Serializable, MissionListener, Syncable<Person> {
 
 	public void setOpinion(Faction faction, OpinionType opinion) {
 		opinions.put(faction, opinion);
-		applyChanges();
+		syncChanges();
 	}
 
 	@Override
@@ -120,7 +123,7 @@ public class Person implements Serializable, MissionListener, Syncable<Person> {
 		Faction faction = mission.getPlayer().getFaction();
 		if(getOpinion(faction).isPositive()) {
 			setOpinion(faction, OpinionType.NEUTRAL);
-			applyChanges();
+			syncChanges();
 		}
 	}
 
@@ -130,8 +133,8 @@ public class Person implements Serializable, MissionListener, Syncable<Person> {
 	}
 
 	@Override
-	public String getSyncKey() {
-		return name;
+	public long getSyncID() {
+		return id;
 	}
 
 	@Override

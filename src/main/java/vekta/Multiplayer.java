@@ -23,7 +23,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 
 	private static final int PLAYER_POSITION_FRAMES = 10;
 
-	private final transient Map<Peer, Faction> playerFactions = new WeakHashMap<>();
+	private final transient Map<Peer, Player> playerMap = new WeakHashMap<>();
 
 	private transient Connection connection;
 
@@ -41,6 +41,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 
 		setContext(new TextInputContext(mainMenu, "Choose a Name:", Resources.generateString("person") /*Settings.getString("multiplayer.name", Resources.generateString("person"))*/, name -> {
 			getPlayer().getFaction().setName(name.trim());
+			getPlayer().getShip().setName(name.trim());
 			getPlayer().getFaction().setColor(0xFF000000 & Integer.parseInt(Settings.getString("multiplayer.color", String.valueOf(WorldGenerator.randomPlanetColor()))));
 
 			Settings.set("multiplayer.name", name);
@@ -50,26 +51,26 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 
 			connection.joinRoom(DEFAULT_ROOM);
 			setContext(this);
+			applyContext();
 
-			send(new PlayerFactionMessage(getPlayer().getFaction()));
-			send(new RegisterMessage(getPlayer().getShip()));
+			send(new PlayerMessage(getPlayer()));
 
-			//			// Simulate another player
-			//			new Thread(() -> {
-			//				try {
-			//					Thread.sleep(100);
-			//				}
-			//				catch(InterruptedException ignored) {
-			//				}
+			//						// Simulate another player
+			//						new Thread(() -> {
+			//							try {
+			//								Thread.sleep(100);
+			//							}
+			//							catch(InterruptedException ignored) {
+			//							}
 			//
-			//				// Simulate another player
-			//				Connection other = new Connection(SERVER_ADDRESS);
-			//				other.joinRoom(DEFAULT_ROOM);
-			//				other.send(new PlayerFactionMessage(new Faction(Resources.generateString("person"), WorldGenerator.randomPlanetColor())));
-			//				other.send(new RegisterMessage(new PirateShip("Yarr", PVector.random2D(), new PVector(-500, -500), new PVector(), WorldGenerator.randomPlanetColor())));
-			//			}).start();
+			//							// Simulate another player
+			//							Connection other = new Connection(SERVER_ADDRESS);
+			//							other.joinRoom(DEFAULT_ROOM);
+			//							other.send(new PlayerMessage(new Faction(Resources.generateString("person"), WorldGenerator.randomPlanetColor())));
+			//							other.send(new RegisterMessage(new PirateShip("Yarr", PVector.random2D(), new PVector(-500, -500), new PVector(), WorldGenerator.randomPlanetColor())));
+			//						}).start();
 		}));
-		switchContext();
+		applyContext();
 	}
 
 	public void send(Message message) {
@@ -87,10 +88,8 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 			runnable.run();
 		}
 		catch(Exception e) {
-			//			setContext(mainMenu);
 			e.printStackTrace();
-			getPlayer().send(message)
-					.withColor(DANGER_COLOR);
+			getPlayer().send(message).withColor(DANGER_COLOR);
 		}
 	}
 
@@ -98,43 +97,43 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 
 	@Override
 	public void onDisconnect(Peer peer) {
-		Faction faction = playerFactions.remove(peer);
-		if(faction != null) {
-			getPlayer().send(faction.getName() + " left the world");
+		Player player = playerMap.remove(peer);
+		if(player != null) {
+			remove(player);
+			getPlayer().send(player.getName() + " left the world");
 		}
 	}
 
 	//// Message listeners
 
 	@Override
-	public void onPlayerFaction(Peer peer, PlayerFactionMessage msg) {
-		boolean existed = playerFactions.containsKey(peer);
-		Faction faction = msg.getFaction();
-		playerFactions.put(peer, register(faction));
+	public void onPlayer(Peer peer, PlayerMessage msg) {
+		boolean existed = playerMap.containsKey(peer);
+		Player player = msg.getPlayer();
+		playerMap.put(peer, register(player));
 		if(!existed) {
-			getPlayer().send(faction.getName() + " joined the world");
-			peer.send(new PlayerFactionMessage(getPlayer().getFaction()));
-			peer.send(new RegisterMessage(getPlayer().getShip()));
+			getPlayer().send(player.getName() + " joined the world");
+			peer.send(new PlayerMessage(getPlayer()));
 		}
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public void onSync(Peer peer, SyncMessage msg) {
-		String key = msg.getKey();
-		println("<receive>", key);
-		Syncable object = state.getSyncable(key);
+		long id = msg.getID();
+		println("<receive>", msg.getData().getClass().getSimpleName() + "[" + Long.toHexString(id) + "]");
+		Syncable object = state.getSyncable(id);
 		if(object != null) {
 			object.onSync(msg.getData());
 		}
 		else {
-			peer.send(new RequestMessage(key));
+			peer.send(new RequestMessage(id));
 		}
 	}
 
 	@Override
 	public void onRequest(Peer peer, RequestMessage msg) {
-		Syncable object = state.getSyncable(msg.getKey());
+		Syncable object = state.getSyncable(msg.getID());
 		if(object != null) {
 			peer.send(new RegisterMessage(object));
 		}
@@ -147,7 +146,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 
 	@Override
 	public void onObjectMove(Peer peer, MoveMessage msg) {
-		Syncable object = state.getSyncable(msg.getKey()); // TODO: lookup by SpaceObject ID
+		Syncable object = state.getSyncable(msg.getID()); // TODO: lookup by SpaceObject ID
 		if(object instanceof SpaceObject) {
 			SpaceObject s = ((SpaceObject)object);
 			PVector pos = state.getLocalPosition(msg.getX(), msg.getY());
@@ -163,15 +162,14 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	@Override
 	public <T extends Syncable> T register(T object) {
 		object = super.register(object);
-		apply(object);
 		return object;
 	}
 
 	@Override
 	public void apply(Syncable object) {
 		if(object.shouldSync()) {
-			println("<broadcast>", state.getKey(object));
-			connection.send(new SyncMessage(state.getKey(object), object.getSyncData()));
+			println("<broadcast>", object.getClass().getSimpleName() + "[" + Long.toHexString(object.getSyncID()) + "]");
+			connection.send(new SyncMessage(object));
 		}
 
 		super.apply(object);
@@ -191,14 +189,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		super.render();
 
 		if(v.frameCount % PLAYER_POSITION_FRAMES == 0) {
-			PVector pos = getPlayerShip().getPosition();
-			PVector vel = getPlayerShip().getVelocity();
-			send(new MoveMessage(
-					state.getKey(getPlayerShip()),
-					state.getGlobalX(pos.x),
-					state.getGlobalY(pos.y),
-					state.getGlobalVelocity(vel),
-					System.currentTimeMillis()));
+			send(new MoveMessage(getPlayerShip(), state));
 		}
 	}
 

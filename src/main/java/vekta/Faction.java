@@ -5,9 +5,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static java.lang.Float.max;
+import static vekta.Vekta.randomID;
 import static vekta.Vekta.register;
 
 public final class Faction implements Serializable, Renameable, Syncable<Faction> {
+	private final long id = randomID();
+	
 	private String name;
 	private int color;
 
@@ -26,7 +29,7 @@ public final class Faction implements Serializable, Renameable, Syncable<Faction
 	@Override
 	public void setName(String name) {
 		this.name = name;
-		applyChanges();
+		syncChanges();
 	}
 
 	public int getColor() {
@@ -35,7 +38,7 @@ public final class Faction implements Serializable, Renameable, Syncable<Faction
 
 	public void setColor(int color) {
 		this.color = color;
-		applyChanges();
+		syncChanges();
 	}
 
 	public boolean isNeutral(Faction faction) {
@@ -48,7 +51,7 @@ public final class Faction implements Serializable, Renameable, Syncable<Faction
 			enemies.remove(faction);
 			faction.allies.remove(this);
 			faction.enemies.remove(this);
-			applyChanges();
+			syncChanges();
 		}
 	}
 
@@ -65,7 +68,7 @@ public final class Faction implements Serializable, Renameable, Syncable<Faction
 		if(faction != this) {
 			allies.add(faction);
 			faction.allies.add(this);
-			applyChanges();
+			syncChanges();
 		}
 	}
 
@@ -92,7 +95,7 @@ public final class Faction implements Serializable, Renameable, Syncable<Faction
 				ally.setEnemy(this);
 			}
 
-			applyChanges();
+			syncChanges();
 		}
 	}
 
@@ -101,8 +104,8 @@ public final class Faction implements Serializable, Renameable, Syncable<Faction
 	}
 
 	@Override
-	public String getSyncKey() {
-		return getName();
+	public long getSyncID() {
+		return id;
 	}
 
 	@Override

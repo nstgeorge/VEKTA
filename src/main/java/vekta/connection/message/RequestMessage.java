@@ -4,14 +4,14 @@ import vekta.connection.MessageListener;
 import vekta.connection.Peer;
 
 public class RequestMessage implements Message {
-	private final String key;
+	private final long id;
 
-	public RequestMessage(String key) {
-		this.key = key;
+	public RequestMessage(long id) {
+		this.id = id;
 	}
 
-	public String getKey() {
-		return key;
+	public long getID() {
+		return id;
 	}
 
 	@Override

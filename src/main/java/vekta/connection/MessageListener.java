@@ -3,7 +3,7 @@ package vekta.connection;
 import vekta.connection.message.*;
 
 public interface MessageListener {
-	default void onPlayerFaction(Peer peer, PlayerFactionMessage msg) {
+	default void onPlayer(Peer peer, PlayerMessage msg) {
 	}
 
 	default void onSync(Peer peer, SyncMessage msg) {
