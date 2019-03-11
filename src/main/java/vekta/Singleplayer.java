@@ -311,22 +311,17 @@ public class Singleplayer implements World, PlayerListener {
 
 		state.endUpdate();
 
-		// Origin/velocity centering disabled while working on multiplayer
-		
-//		if((RenderLevel.SHIP.isVisibleTo(level) || level.ordinal() == prevLevel.ordinal() - 1) && !playerShip.isDestroyed()) {
+//		if(level.ordinal() == prevLevel.ordinal() - 1 && !playerShip.isDestroyed()) {
 //			// Center around zero for improved floating-point precision
-//			PVector newOrigin = playerShip.getPosition().mult(-1);
-//			for(SpaceObject s : state.getObjects()) {
-//				s.updateOrigin(newOrigin);
-//			}
+//			state.addRelativePosition(playerShip.getPosition());
 //		}
 //
 //		// Change global relative velocity to player ship when zoomed in
 //		if(RenderLevel.SHIP.isVisibleTo(level)) {
-//			setVelocityRelativeTo(playerShip);
+//			state.addRelativeVelocity(playerShip.getVelocity());
 //		}
 //		else if(level.ordinal() == prevLevel.ordinal() + 1) {
-//			setVelocityRelativeTo(findLargestObject());
+//			state.resetRelativeVelocity();
 //		}
 
 		RenderLevel spawnLevel = level;
@@ -369,19 +364,12 @@ public class Singleplayer implements World, PlayerListener {
 		}
 	}
 
-	private void setVelocityRelativeTo(SpaceObject obj) {
-		PVector relative = obj.getVelocity().mult(-1);
-		for(SpaceObject s : state.getObjects()) {
-			s.addVelocity(relative);
-		}
-	}
-
 	// Temp: debug key listener
 	@Override
 	public void keyPressed(KeyEvent event) {
 		if(v.key == '`') {
 			println("====");
-			for(Syncable s : state.getSyncableObjects()) {
+			for(Syncable s : state.getSyncables()) {
 				print(s.getSyncKey());
 			}
 			println("====");

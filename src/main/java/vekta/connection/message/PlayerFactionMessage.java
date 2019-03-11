@@ -17,6 +17,6 @@ public class PlayerFactionMessage implements Message {
 
 	@Override
 	public void receive(Peer peer, MessageListener listener) {
-		listener.onPlayerFaction(peer, getFaction());
+		listener.onPlayerFaction(peer, this);
 	}
 }

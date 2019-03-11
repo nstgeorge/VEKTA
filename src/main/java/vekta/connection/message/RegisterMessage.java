@@ -4,10 +4,10 @@ import vekta.Syncable;
 import vekta.connection.MessageListener;
 import vekta.connection.Peer;
 
-public class ObjectMessage implements Message {
+public class RegisterMessage implements Message {
 	private final Syncable object;
 
-	public ObjectMessage(Syncable object) {
+	public RegisterMessage(Syncable object) {
 		this.object = object;
 	}
 
@@ -17,6 +17,6 @@ public class ObjectMessage implements Message {
 
 	@Override
 	public void receive(Peer peer, MessageListener listener) {
-		listener.onObject(peer, getObject());
+		listener.onRegister(peer, this);
 	}
 }

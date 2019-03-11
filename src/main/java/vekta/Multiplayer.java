@@ -6,10 +6,10 @@ import vekta.connection.ConnectionListener;
 import vekta.connection.Peer;
 import vekta.connection.message.*;
 import vekta.context.TextInputContext;
+import vekta.object.SpaceObject;
 import vekta.spawner.WorldGenerator;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -21,10 +21,17 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	private static final String DEFAULT_ROOM =
 			Settings.getString("multiplayer.room", "Test");
 
+	private static final int PLAYER_POSITION_FRAMES = 10;
+
 	private final transient Map<Peer, Faction> playerFactions = new WeakHashMap<>();
 
 	private transient Connection connection;
-	
+
+	@Override
+	public float getTimeScale() {
+		return 1;
+	}
+
 	@Override
 	public void start() {
 		connection = new Connection(SERVER_ADDRESS);
@@ -45,33 +52,24 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 			setContext(this);
 
 			send(new PlayerFactionMessage(getPlayer().getFaction()));
-			send(new ObjectMessage(getPlayer().getShip()));
+			send(new RegisterMessage(getPlayer().getShip()));
 
-//			// Simulate another player
-//			new Thread(() -> {
-//				try {
-//					Thread.sleep(100);
-//				}
-//				catch(InterruptedException ignored) {
-//				}
-//
-//				// Simulate another player
-//				Connection other = new Connection(SERVER_ADDRESS);
-//				other.joinRoom(DEFAULT_ROOM);
-//				other.send(new PlayerFactionMessage(new Faction(Resources.generateString("person"), WorldGenerator.randomPlanetColor())));
-//				other.send(new ObjectMessage(new PirateShip("Yarr", PVector.random2D(), new PVector(-500, -500), new PVector(), WorldGenerator.randomPlanetColor())));
-//			}).start();
+			//			// Simulate another player
+			//			new Thread(() -> {
+			//				try {
+			//					Thread.sleep(100);
+			//				}
+			//				catch(InterruptedException ignored) {
+			//				}
+			//
+			//				// Simulate another player
+			//				Connection other = new Connection(SERVER_ADDRESS);
+			//				other.joinRoom(DEFAULT_ROOM);
+			//				other.send(new PlayerFactionMessage(new Faction(Resources.generateString("person"), WorldGenerator.randomPlanetColor())));
+			//				other.send(new RegisterMessage(new PirateShip("Yarr", PVector.random2D(), new PVector(-500, -500), new PVector(), WorldGenerator.randomPlanetColor())));
+			//			}).start();
 		}));
 		switchContext();
-	}
-
-	@Override
-	public void cleanup() {
-		super.cleanup();
-
-		if(connection != null) {
-			connection.close();
-		}
 	}
 
 	public void send(Message message) {
@@ -96,16 +94,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		}
 	}
 
-	@Override
-	public void onPlayerFaction(Peer peer, Faction faction) {
-		boolean existed = playerFactions.containsKey(peer);
-		playerFactions.put(peer, faction);
-		if(!existed) {
-			getPlayer().send(faction.getName() + " joined the world");
-			peer.send(new PlayerFactionMessage(getPlayer().getFaction()));
-			peer.send(new ObjectMessage(getPlayer().getShip()));
-		}
-	}
+	//// Connection listeners
 
 	@Override
 	public void onDisconnect(Peer peer) {
@@ -114,6 +103,62 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 			getPlayer().send(faction.getName() + " left the world");
 		}
 	}
+
+	//// Message listeners
+
+	@Override
+	public void onPlayerFaction(Peer peer, PlayerFactionMessage msg) {
+		boolean existed = playerFactions.containsKey(peer);
+		Faction faction = msg.getFaction();
+		playerFactions.put(peer, register(faction));
+		if(!existed) {
+			getPlayer().send(faction.getName() + " joined the world");
+			peer.send(new PlayerFactionMessage(getPlayer().getFaction()));
+			peer.send(new RegisterMessage(getPlayer().getShip()));
+		}
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public void onSync(Peer peer, SyncMessage msg) {
+		String key = msg.getKey();
+		println("<receive>", key);
+		Syncable object = state.getSyncable(key);
+		if(object != null) {
+			object.onSync(msg.getData());
+		}
+		else {
+			peer.send(new RequestMessage(key));
+		}
+	}
+
+	@Override
+	public void onRequest(Peer peer, RequestMessage msg) {
+		Syncable object = state.getSyncable(msg.getKey());
+		if(object != null) {
+			peer.send(new RegisterMessage(object));
+		}
+	}
+
+	@Override
+	public void onRegister(Peer peer, RegisterMessage msg) {
+		state.register(msg.getObject());
+	}
+
+	@Override
+	public void onObjectMove(Peer peer, MoveMessage msg) {
+		Syncable object = state.getSyncable(msg.getKey()); // TODO: lookup by SpaceObject ID
+		if(object instanceof SpaceObject) {
+			SpaceObject s = ((SpaceObject)object);
+			PVector pos = state.getLocalPosition(msg.getX(), msg.getY());
+			PVector vel = state.getLocalVelocity(msg.getVelocity());
+			s.getPositionReference().set(pos);
+			s.setVelocity(vel);
+			s.simulateForward((int)(System.currentTimeMillis() - msg.getTimestamp()));
+		}
+	}
+
+	//// World methods
 
 	@Override
 	public <T extends Syncable> T register(T object) {
@@ -133,34 +178,28 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
-	public void onSync(Peer peer, String key, Serializable data) {
-		println("<receive>", key);
-		Syncable object = state.getSyncableObject(key);
-		if(object != null) {
-			object.onSync(data);
-		}
-		else {
-			peer.send(new ObjectUnknownMessage(key));
-		}
-	}
+	public void cleanup() {
+		super.cleanup();
 
-	@Override
-	public void onObjectRequest(Peer peer, String key) {
-		Syncable object = state.getSyncableObject(key);
-		if(object != null) {
-			peer.send(new ObjectMessage(object));
+		if(connection != null) {
+			connection.close();
 		}
-	}
-
-	@Override
-	public void onObject(Peer peer, Syncable object) {
-		state.register(object);
 	}
 
 	@Override
 	public void render() {
 		super.render();
+
+		if(v.frameCount % PLAYER_POSITION_FRAMES == 0) {
+			PVector pos = getPlayerShip().getPosition();
+			PVector vel = getPlayerShip().getVelocity();
+			send(new MoveMessage(
+					state.getKey(getPlayerShip()),
+					state.getGlobalX(pos.x),
+					state.getGlobalY(pos.y),
+					state.getGlobalVelocity(vel),
+					System.currentTimeMillis()));
+		}
 	}
 
 	@Override

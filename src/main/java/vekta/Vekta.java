@@ -97,8 +97,8 @@ public class Vekta extends PApplet {
 		mainMenu.add(new WorldOption("Multiplayer", new Multiplayer()));
 		mainMenu.add(new SettingsMenuOption());
 		mainMenu.addDefault();
-//		setContext(mainMenu);
-		setContext(new Multiplayer());///
+		setContext(mainMenu);
+//		setContext(new Multiplayer());///
 		switchContext();
 	}
 

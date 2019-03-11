@@ -1,5 +1,6 @@
 package vekta;
 
+import processing.core.PVector;
 import vekta.object.SpaceObject;
 import vekta.person.Person;
 
@@ -27,6 +28,9 @@ public final class WorldState implements Serializable {
 	private final List<Person> people = new ArrayList<>();
 	private final List<Faction> factions = new ArrayList<>();
 
+	private final GlobalVector globalPosition = new GlobalVector();
+	private final PVector globalVelocity = new PVector();
+
 	private boolean updating;
 	//	private int nextID;
 
@@ -41,11 +45,11 @@ public final class WorldState implements Serializable {
 	//		return timeScale;
 	//	}
 
-	public Collection<Syncable> getSyncableObjects() {
+	public Collection<Syncable> getSyncables() {
 		return syncMap.values();
 	}
 
-	public Syncable getSyncableObject(String key) {
+	public Syncable getSyncable(String key) {
 		return syncMap.get(key);
 	}
 
@@ -80,17 +84,51 @@ public final class WorldState implements Serializable {
 		objectsToRemove.clear();
 	}
 
-	public boolean isRemoving(SpaceObject s) {
-		return objectsToRemove.contains(s);
+	public double getGlobalX(float x) {
+		return globalPosition.x + x;
 	}
 
-	public void addImmediately(SpaceObject s) {
-		if(!objects.contains(s)) {
-			objects.add(s);
+	public double getGlobalY(float y) {
+		return globalPosition.y + y;
+	}
+
+	public PVector getLocalPosition(double x, double y) {
+		return new PVector((float)(x - globalPosition.x), (float)(y - globalPosition.y));
+	}
+
+	public PVector getGlobalVelocity(PVector velocity) {
+		return velocity.copy().sub(globalVelocity);
+	}
+
+	public PVector getLocalVelocity(PVector velocity) {
+		return velocity.copy().add(globalVelocity);
+	}
+
+	public void addRelativePosition(PVector offset) {
+		PVector relative = offset.mult(-1);
+		for(SpaceObject s : getObjects()) {
+			s.updateOrigin(offset);
 		}
-		if(s.impartsGravity() && !gravityObjects.contains(s)) {
-			gravityObjects.add(s);
+		globalPosition.add(relative.x, relative.y);
+	}
+
+	public void addRelativeVelocity(PVector velocity) {
+		PVector relative = velocity.mult(-1);
+		for(SpaceObject s : getObjects()) {
+			s.addVelocity(relative);
 		}
+		globalVelocity.add(relative);
+	}
+
+	public void resetRelativeVelocity() {
+		for(SpaceObject s : getObjects()) {
+			s.addVelocity(globalVelocity);
+		}
+		globalVelocity.set(0, 0);
+	}
+
+	public boolean isRemoving(SpaceObject s) {
+		return objectsToRemove.contains(s);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -130,6 +168,15 @@ public final class WorldState implements Serializable {
 		}
 		else if(object instanceof Faction && !factions.contains(object)) {
 			factions.add((Faction)object);
+		}
+	}
+
+	private void addImmediately(SpaceObject s) {
+		if(!objects.contains(s)) {
+			objects.add(s);
+		}
+		if(s.impartsGravity() && !gravityObjects.contains(s)) {
+			gravityObjects.add(s);
 		}
 	}
 

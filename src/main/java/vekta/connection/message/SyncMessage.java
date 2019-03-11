@@ -24,6 +24,6 @@ public class SyncMessage implements Message {
 
 	@Override
 	public void receive(Peer peer, MessageListener listener) {
-		listener.onSync(peer, getKey(), getData());
+		listener.onSync(peer, this);
 	}
 }

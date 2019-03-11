@@ -193,7 +193,16 @@ public abstract class SpaceObject implements Serializable, Syncable<SpaceObject>
 		//			}
 		//		}
 	}
-
+	
+	/**
+	 * Simulate the object's movement over a certain time interval (used to account for server latency).
+	 * */
+	public void simulateForward(int millis) {
+		println(millis);
+		float amount = (float)millis * 60 / 1000;
+		applyVelocity(getVelocity().setMag(amount));
+	}
+	
 	/**
 	 * Does this collide with that?
 	 */

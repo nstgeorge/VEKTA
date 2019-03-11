@@ -1,20 +1,20 @@
 package vekta.connection;
 
-import vekta.Faction;
-import vekta.Syncable;
-
-import java.io.Serializable;
+import vekta.connection.message.*;
 
 public interface MessageListener {
-	default void onPlayerFaction(Peer peer, Faction faction) {
+	default void onPlayerFaction(Peer peer, PlayerFactionMessage msg) {
 	}
 
-	default void onSync(Peer peer, String key, Serializable data) {
+	default void onSync(Peer peer, SyncMessage msg) {
 	}
 
-	default void onObjectRequest(Peer peer, String key) {
+	default void onRequest(Peer peer, RequestMessage msg) {
 	}
 
-	default void onObject(Peer peer, Syncable object) {
+	default void onRegister(Peer peer, RegisterMessage msg) {
+	}
+
+	default void onObjectMove(Peer peer, MoveMessage msg) {
 	}
 }
