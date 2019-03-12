@@ -34,7 +34,7 @@ public class StationCoreModule extends ShipModule {
 		return 10 * getTier();
 	}
 
-	public int getModuleTypeLimit() {
+	public int getPartLimitPerType() {
 		return getTier();
 	}
 

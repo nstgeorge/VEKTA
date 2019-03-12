@@ -10,6 +10,7 @@ import vekta.module.Module;
 import vekta.module.ModuleType;
 import vekta.module.ModuleUpgrader;
 import vekta.module.station.ComponentModule;
+import vekta.module.station.StationCoreModule;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.SpaceStation;
 
@@ -51,9 +52,9 @@ public class StationLayoutContext implements Context, ModuleUpgrader {
 	@Override
 	public void render() {
 		v.clear();
-//		v.camera();
-//		v.noLights();
-//		v.hint(DISABLE_DEPTH_TEST);
+		//		v.camera();
+		//		v.noLights();
+		//		v.hint(DISABLE_DEPTH_TEST);
 		v.strokeWeight(.5F);
 
 		RenderLevel level = RenderLevel.PARTICLE;
@@ -84,12 +85,22 @@ public class StationLayoutContext implements Context, ModuleUpgrader {
 
 		// End station rendering
 		v.popMatrix();
+		
+		v.textAlign(CENTER);
 
 		// Draw title
 		v.textSize(48);
-		v.textAlign(CENTER);
+		v.fill(station.getColor());
+		v.text(station.getName(), v.width / 2F, 100);
+
+		StationCoreModule module = station.getCoreModule();
+
+		// Draw module statistics
+		v.textSize(24);
 		v.fill(100);
-		v.text(station.getName(), v.width / 2F, 200);
+		v.text("Core Level: " + module.getTier(), v.width / 2F, 200);
+		v.text("Modules: " + station.getModules().size() + " / " + module.getPartLimit(), v.width / 2F, 250);
+		v.text("Modules/Type: " + module.getPartLimitPerType(), v.width / 2F, 300);
 
 		// Draw current module name
 		v.textSize(32);
@@ -136,14 +147,11 @@ public class StationLayoutContext implements Context, ModuleUpgrader {
 			for(Module module : getPlayer().getShip().findUpgrades()) {
 				if(module instanceof ComponentModule) {
 					ComponentModule m = (ComponentModule)module;
-					if(isPlacing() ? cursor.isAttachable(cursor) : cursor.isReplaceable(m)) {
+					if((isPlacing() ? cursor.isAttachable(cursor) : cursor.isReplaceable(m)) && station.canEquip(m)) {
 						menu.add(new InstallModuleOption(this, m));
 					}
 				}
 			}
-			//			if(isCursorRemovable()) {
-			//				inject.add(new UninstallModuleOption(this, cursor.getModule()));
-			//			}
 			menu.addDefault();
 			setContext(menu);
 		}

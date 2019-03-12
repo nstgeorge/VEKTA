@@ -64,7 +64,6 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	@Override
 	public RenderLevel getDespawnLevel() {
-		//		return hasController();
 		return RenderLevel.STAR;
 	}
 

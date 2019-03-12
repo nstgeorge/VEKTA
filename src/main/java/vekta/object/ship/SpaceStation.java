@@ -6,8 +6,10 @@ import vekta.RenderLevel;
 import vekta.context.StationLayoutContext;
 import vekta.menu.Menu;
 import vekta.menu.option.BasicOption;
+import vekta.module.Module;
 import vekta.module.ModuleType;
 import vekta.module.station.ComponentModule;
+import vekta.module.station.StationCoreModule;
 import vekta.object.particle.ColorRange;
 import vekta.object.particle.ConstantColor;
 import vekta.object.particle.ParticleEmitter;
@@ -34,7 +36,7 @@ public class SpaceStation extends ModularShip {
 
 	private final List<Component> components = new ArrayList<>();
 
-	public SpaceStation(String name, ComponentModule coreModule, PVector heading, PVector position, PVector velocity, int color) {
+	public SpaceStation(String name, StationCoreModule coreModule, PVector heading, PVector position, PVector velocity, int color) {
 		super(name, heading, position, velocity, color, DEF_SPEED, DEF_TURN);
 
 		this.core = new Component(null, Direction.RIGHT, coreModule);
@@ -65,8 +67,29 @@ public class SpaceStation extends ModularShip {
 		return core;
 	}
 
+	public StationCoreModule getCoreModule() {
+		return (StationCoreModule)core.getModule();
+	}
+
+	@Override
 	public boolean isModuleTypeExclusive(ModuleType type) {
 		return false;
+	}
+
+	public int countModules(ModuleType type) {
+		int ct = 0;
+		for(Module m : getModules()) {
+			if(m.getType() == type) {
+				ct++;
+			}
+		}
+		return ct;
+	}
+
+	public boolean canEquip(ComponentModule module) {
+		println(module);///
+		return getModules().size() < getCoreModule().getPartLimit()
+				&& countModules(module.getType()) < getCoreModule().getPartLimitPerType();
 	}
 
 	@Override

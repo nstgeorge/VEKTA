@@ -7,6 +7,7 @@ import vekta.module.ShipModule;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.SpaceStation;
 
+import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CORNERS;
 import static vekta.Vekta.v;
 
@@ -78,6 +79,6 @@ public class StructuralModule extends ShipModule {
 		v.rect(0, 0, getWidth() * tileSize, (getHeight() * .1F) * tileSize);
 		v.rect(0, getHeight() * tileSize, getWidth() * tileSize, (getHeight() - (getHeight() * .1F)) * tileSize);
 
-
+		v.rectMode(CENTER);
 	}
 }
