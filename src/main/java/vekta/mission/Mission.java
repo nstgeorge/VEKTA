@@ -2,6 +2,7 @@ package vekta.mission;
 
 import vekta.Player;
 import vekta.PlayerEvent;
+import vekta.Resources;
 import vekta.mission.objective.Objective;
 import vekta.mission.reward.Reward;
 import vekta.util.RomanNumerals;
@@ -172,6 +173,7 @@ public class Mission implements Serializable {
 		current = null;
 
 		getPlayer().emit(PlayerEvent.MISSION_STATUS, this);
+		Resources.playSound("missionComplete");
 		getPlayer().send("Mission completed: " + getName())
 				.withColor(UI_COLOR)
 				.withTime(2);
