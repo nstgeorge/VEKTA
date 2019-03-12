@@ -13,8 +13,7 @@ import static vekta.Vekta.*;
 public abstract class SpaceObject extends Syncable<SpaceObject> implements Serializable {
 	private static final float MARKER_SIZE = 40;
 	private static final int DEFAULT_TRAIL_LENGTH = 100;
-
-	private final long id = randomID();
+	private static final float MOTION_SYNC_FACTOR = .2F; // How much to over/undercorrect object motion
 
 	protected final PVector[] trail;
 
@@ -62,15 +61,16 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 
 	public abstract RenderLevel getRenderLevel();
 
-	public abstract float getSpecificHeat();
+	public RenderLevel getDespawnLevel() {
+		return getRenderLevel();
+	}
 
 	public boolean impartsGravity() {
 		return false;
 	}
 
-	/**
-	 * Gets the temerature emission of the object
-	 */
+	public abstract float getSpecificHeat();
+
 	public float getTemperature() {
 		return temperature;
 	}
@@ -86,7 +86,7 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	/**
 	 * Exposes the object to a temperature over a specified period of time
 	 */
-	public void equalizeTemperature(float other, float duration) {
+	public void transferTemperature(float other, float duration) {
 		// TODO implement
 	}
 
@@ -182,17 +182,16 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	 * Simulate the object's movement over a certain time interval (used to account for server latency).
 	 */
 	public void syncMovement(PVector position, PVector velocity, float delay, int interval) {
+		//		PVector velocityChange = velocity.copy().sub(this.velocity);
+
+		// Update baseline velocity
 		this.velocity.set(velocity);
-		if(interval != 0) {
-			this.velocity
-					.add(position.add(velocity.mult(delay)))
-					.sub(getPositionReference()).div(interval);
-			//			this.position.set(position.sub(getPositionReference()).mult(.5F));
-		}
-		else {
-			this.position.set(position);
-			//		applyVelocity(velocity.mult(delay));
-		}
+
+		// Add velocity towards intended object position
+		this.velocity.add(position.copy().sub(this.position).mult(MOTION_SYNC_FACTOR / interval / getWorld().getTimeScale()));
+
+		// Correct for latency
+		//		applyVelocity(velocityChange.mult(delay));
 	}
 
 	/**

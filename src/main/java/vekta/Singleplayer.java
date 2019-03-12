@@ -1,7 +1,6 @@
 package vekta;
 
 import processing.core.PVector;
-import processing.event.KeyEvent;
 import processing.sound.LowPass;
 import vekta.context.PauseMenuContext;
 import vekta.context.World;
@@ -84,6 +83,7 @@ public class Singleplayer implements World, PlayerListener {
 		if(state == null) {
 			Faction playerFaction = new Faction(FactionType.PLAYER, "VEKTA I", UI_COLOR);
 			Player player = new Player(playerFaction);
+			player.addListener(this);
 
 			state = new WorldState();
 			state.setPlayer(player);
@@ -104,14 +104,15 @@ public class Singleplayer implements World, PlayerListener {
 		}
 
 		Player player = getPlayer();
-		player.addListener(this);
-
+		
 		// Configure UI overlay
 		overlay = new PlayerOverlay(player);
-		player.addListener(overlay);
+		player.addListener(overlay); // TODO: listener might be getting serialized
 	}
 
 	public void cleanup() {
+		getPlayer().removeListener(this);
+		
 		// Cleanup behavior on exiting/restarting the world
 		lowPass.stop();
 	}
@@ -243,7 +244,7 @@ public class Singleplayer implements World, PlayerListener {
 
 			if(cleanup) {
 				// Clean up distant objects
-				float despawnRadius = WorldGenerator.getRadius(s.getRenderLevel());
+				float despawnRadius = WorldGenerator.getRadius(s.getDespawnLevel());
 				if(playerShip.getPosition().sub(s.getPosition()).magSq() >= sq(despawnRadius)) {
 					remove(s);
 					continue;
@@ -295,19 +296,23 @@ public class Singleplayer implements World, PlayerListener {
 
 		state.endUpdate();
 
-		if(level.ordinal() == prevLevel.ordinal() - 1 && !playerShip.isDestroyed()) {
-			// Center around zero for improved floating-point precision
-			state.addRelativePosition(playerShip.getPosition());
-		}
+//		if(level.ordinal() == prevLevel.ordinal() - 1 && !playerShip.isDestroyed()) {
+//			// Center around zero for improved floating-point precision
+//			state.addRelativePosition(playerShip.getPosition());
+//		}
+//
+//		// Change global relative velocity to player ship when zoomed in
+//		if(RenderLevel.SHIP.isVisibleTo(level)) {
+//			state.addRelativeVelocity(playerShip.getVelocity());
+//		}
+//		else if(level.ordinal() == prevLevel.ordinal() + 1) {
+//			state.resetRelativeVelocity();
+//		}
+//		state.updateGlobalCoords(getTimeScale());
 
-		// Change global relative velocity to player ship when zoomed in
-		if(RenderLevel.SHIP.isVisibleTo(level)) {
-			state.addRelativeVelocity(playerShip.getVelocity());
+		if(level != prevLevel) {
+			onRenderLevelChange(level);
 		}
-		else if(level.ordinal() == prevLevel.ordinal() + 1) {
-			state.resetRelativeVelocity();
-		}
-		state.updateGlobalCoords(getTimeScale());
 
 		RenderLevel spawnLevel = level;
 		while(spawnLevel.ordinal() > 0 && v.chance(.05F)) {
@@ -349,18 +354,22 @@ public class Singleplayer implements World, PlayerListener {
 		}
 	}
 
-	// Temp: debug key listener
-	@Override
-	public void keyPressed(KeyEvent event) {
-		if(v.key == '`') {
-			println("====");
-			for(Syncable s : state.getSyncables()) {
-				print(s.getSyncID());
-			}
-			println("====");
-		}
-		World.super.keyPressed(event);
+	protected void onRenderLevelChange(RenderLevel level) {
+		// Overridden by Multiplayer
 	}
+
+	//	// Temp: debug key listener
+	//	@Override
+	//	public void keyPressed(KeyEvent event) {
+	//		if(v.key == '`') {
+	//			println("====");
+	//			for(Syncable s : state.getSyncables()) {
+	//				print(s.getSyncID());
+	//			}
+	//			println("====");
+	//		}
+	//		World.super.keyPressed(event);
+	//	}
 
 	@Override
 	public void keyPressed(KeyBinding key) {

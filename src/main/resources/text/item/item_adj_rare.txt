@@ -39,3 +39,4 @@ Advanced
 Mechanized
 Trusty
 Exotic
+Abstract

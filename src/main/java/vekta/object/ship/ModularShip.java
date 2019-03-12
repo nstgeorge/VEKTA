@@ -62,6 +62,12 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		getController().emit(PlayerEvent.CHANGE_SHIP, this);
 	}
 
+	@Override
+	public RenderLevel getDespawnLevel() {
+		//		return hasController();
+		return RenderLevel.STAR;
+	}
+
 	public boolean isLanding() {
 		return landing;
 	}

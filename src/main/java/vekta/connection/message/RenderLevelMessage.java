@@ -17,6 +17,6 @@ public class RenderLevelMessage implements Message {
 
 	@Override
 	public void receive(Peer peer, MessageListener listener) {
-		listener.onRenderLevel(peer, this);
+		listener.onChangeRenderLevel(peer, this);
 	}
 }

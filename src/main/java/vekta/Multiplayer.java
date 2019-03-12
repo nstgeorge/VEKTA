@@ -6,6 +6,7 @@ import vekta.connection.ConnectionListener;
 import vekta.connection.Peer;
 import vekta.connection.message.*;
 import vekta.context.TextInputContext;
+import vekta.menu.Menu;
 import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.Ship;
@@ -24,16 +25,31 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	private static final String DEFAULT_ROOM =
 			Settings.getString("multiplayer.room", "Test");
 
-	private static final int PLAYER_INTERVAL_CLOSE = 20;
-	private static final int PLAYER_INTERVAL_FAR = 60 * 5;
-
-	private final transient Map<Peer, Player> playerMap = new WeakHashMap<>();
+	private static final int PLAYER_INTERVAL_CLOSE = 10;
+	private static final int PLAYER_INTERVAL_FAR = 60;
 
 	private transient Connection connection;
 
+	private final transient Map<Peer, Player> playerMap = new WeakHashMap<>();
+	private final transient Map<Peer, RenderLevel> levelMap = new WeakHashMap<>();
+
+	private RenderLevel timeLevel = getRenderLevel();
+
 	@Override
 	public float getTimeScale() {
-		return 1;
+		// Hard-coded time scales for now
+		switch(timeLevel) {
+		case PARTICLE:
+			return 1;
+		case SHIP:
+			return 10;
+		case PLANET:
+			return 1000;
+		case STAR:
+			return 10000;
+		default:
+			return 1;
+		}
 	}
 
 	@Override
@@ -77,6 +93,9 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 			remove(player);
 			getPlayer().send(player.getName() + " left the world");
 		}
+		if(levelMap.remove(peer) != null) {
+			recomputeTimeLevel();// use broadcastTimeLevel()?
+		}
 	}
 
 	//// Message listeners
@@ -91,6 +110,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 			getPlayer().send(player.getName() + " joined the world");
 			peer.send(new PlayerJoinMessage(getPlayer()));
 		}
+		peer.send(new RenderLevelMessage(getRenderLevel()));
 	}
 
 	@Override
@@ -126,6 +146,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		if(object instanceof SpaceObject) {
 			SpaceObject s = (SpaceObject)object;
 			s.getPositionReference().add(state.getGlobalOffset().relativePosition(msg.getOffset()));
+//			s.addVelocity(state.getGlobalOffset().relativeVelocity(msg.getOffset()));
 		}
 	}
 
@@ -140,11 +161,16 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 			int interval = getMoveInterval(s);
 			s.syncMovement(pos, vel, delay, interval);
 		}
+		else if(object == null) {
+			peer.send(new RequestMessage(msg.getID()));
+		}
 	}
 
 	@Override
-	public void onRenderLevel(Peer peer, RenderLevelMessage msg) {
-		///
+	public void onChangeRenderLevel(Peer peer, RenderLevelMessage msg) {
+		RenderLevel level = msg.getLevel();
+		levelMap.put(peer, level);
+		recomputeTimeLevel();
 	}
 
 	//// World methods
@@ -185,6 +211,36 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		return 300;
 	}
 
+	// Notify remote clients of new time level
+	private void broadcastTimeLevel() {
+		connection.send(new RenderLevelMessage(getRenderLevel()));
+		recomputeTimeLevel();
+	}
+
+	// Compute time level based on other player's states
+	private void recomputeTimeLevel() {
+		RenderLevel level = getRenderLevel();
+		for(RenderLevel other : levelMap.values()) {
+			if(other.ordinal() < level.ordinal()) {
+				level = other;
+			}
+		}
+		timeLevel = level;
+	}
+
+	@Override
+	public void focus() {
+		super.focus();
+		broadcastTimeLevel();
+	}
+
+	@Override
+	public void onMenu(Menu menu) {
+		super.onMenu(menu);
+
+		connection.send(new RenderLevelMessage(RenderLevel.STAR));
+	}
+
 	@Override
 	public void render() {
 		super.render();
@@ -202,7 +258,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		// Periodically print debug info
 		if(v.frameCount % 300 == 0) {
 			println("----");
-			println("Remote Players: " + playerMap.size());
+			println("Time Scale: " + getTimeScale() + " (" + timeLevel + ")");
 			println("Player Objects: " + state.getSyncables().stream()
 					.filter(s -> s instanceof Player)
 					.map(s -> ((Player)s).getName())
@@ -215,19 +271,17 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	}
 
 	@Override
+	protected void onRenderLevelChange(RenderLevel level) {
+		super.onRenderLevelChange(level);
+		broadcastTimeLevel();
+	}
+
+	@Override
 	public void restart() {
 		cleanup();
 
 		setContext(new Multiplayer());
 	}
-
-	//	@Override
-	//	public void keyPressed(KeyBinding key) {
-	//		if(key == KeyBinding.QUICK_SAVE || key == KeyBinding.QUICK_LOAD) {
-	//			return; // Prevent quick-saving/loading in multiplayer
-	//		}
-	//		super.keyPressed(key);
-	//	}
 
 	@Override
 	public boolean load(File file) {

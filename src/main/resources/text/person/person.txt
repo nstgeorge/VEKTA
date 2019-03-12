@@ -7,4 +7,5 @@ Mr. {firstname}
 Ms. {firstname}
 Dr. {firstname}
 The {firstname}
+Some {person_adj} {impersonal_name}
 {item_noun} {impersonal_name}

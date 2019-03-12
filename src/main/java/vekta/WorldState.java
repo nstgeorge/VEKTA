@@ -227,9 +227,9 @@ public final class WorldState implements Serializable {
 		else if(object instanceof Faction) {
 			factions.remove(object);
 		}
-		else {
-			throw new RuntimeException("Cannot remove object: " + object);
-		}
+//		else {
+//			throw new RuntimeException("Cannot remove object: " + object);
+//		}
 	}
 
 	@SuppressWarnings("unchecked")
