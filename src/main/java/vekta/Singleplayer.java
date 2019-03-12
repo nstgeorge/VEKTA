@@ -1,6 +1,7 @@
 package vekta;
 
 import processing.core.PVector;
+import processing.event.KeyEvent;
 import processing.sound.LowPass;
 import vekta.context.PauseMenuContext;
 import vekta.context.World;
@@ -22,6 +23,7 @@ import vekta.overlay.singleplayer.PlayerOverlay;
 import vekta.person.Person;
 import vekta.sound.SoundGroup;
 import vekta.spawner.EventGenerator;
+import vekta.spawner.MissionGenerator;
 import vekta.spawner.WorldGenerator;
 
 import java.io.*;
@@ -322,7 +324,7 @@ public class Singleplayer implements World, PlayerListener {
 			eventCt.randomize();
 			EventGenerator.spawnEvent(getPlayer());
 		}
-		
+
 		if(situationCt.cycle()) {
 			EventGenerator.updateSituations(getPlayer());
 		}
@@ -358,18 +360,14 @@ public class Singleplayer implements World, PlayerListener {
 		// Overridden by Multiplayer
 	}
 
-	//	// Temp: debug key listener
-	//	@Override
-	//	public void keyPressed(KeyEvent event) {
-	//		if(v.key == '`') {
-	//			println("====");
-	//			for(Syncable s : state.getSyncables()) {
-	//				print(s.getSyncID());
-	//			}
-	//			println("====");
-	//		}
-	//		World.super.keyPressed(event);
-	//	}
+	// Temp: debug key listener
+	@Override
+	public void keyPressed(KeyEvent event) {
+		if(v.key == '`') {
+			MissionGenerator.createMission(getPlayer(), MissionGenerator.randomMissionPerson()).start();
+		}
+		World.super.keyPressed(event);
+	}
 
 	@Override
 	public void keyPressed(KeyBinding key) {

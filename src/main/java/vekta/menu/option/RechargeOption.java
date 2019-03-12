@@ -32,8 +32,9 @@ public class RechargeOption implements MenuOption {
 
 	@Override
 	public void select(Menu menu) {
+		float rechargeAmount = getCost() / price;
 		if(ship.getInventory().remove(getCost())) {
-			ship.addEnergy(getCost() / price);
+			ship.addEnergy(rechargeAmount);
 			menu.remove(this);
 		}
 	}

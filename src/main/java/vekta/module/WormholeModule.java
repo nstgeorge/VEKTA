@@ -90,7 +90,7 @@ public class WormholeModule extends ShipModule {
 
 		float temp = ship.getTemperature();
 		if(ship.hasEnergy() && ship.getEnergy() >= getEnergyConsumption()) {
-			ship.consumeEnergy(getEnergyConsumption());
+			ship.consumeEnergyImmediate(getEnergyConsumption());
 			ship.setTemperature(temp);
 			PVector offset = PVector.random2D().mult((ship.getRadius() + target.getRadius()) * 2);
 			ship.getPositionReference().set(target.getPosition().add(offset));

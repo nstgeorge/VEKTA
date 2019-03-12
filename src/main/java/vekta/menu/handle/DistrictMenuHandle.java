@@ -20,10 +20,10 @@ public class DistrictMenuHandle extends MenuHandle {
 		return district;
 	}
 
-	@Override
-	public int getSpacing() {
-		return 70;
-	}
+//	@Override
+//	public int getSpacing() {
+//		return 70;
+//	}
 
 	@Override
 	public int getButtonY(int i) {

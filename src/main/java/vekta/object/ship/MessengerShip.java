@@ -80,7 +80,7 @@ public class MessengerShip extends Ship {
 	public void setupDockingMenu(Player player, Menu menu) {
 		delivered = true;
 
-		menu.setAuto(new DialogOption("Talk to Pilot", getDialog()));
+		menu.setAuto(new DialogOption("Talk to Pilot", getDialog(), menu.getDefault()));
 		// Back and remove
 		if(getInventory().size() > 0) {
 			menu.add(new LootMenuOption("Collect Item" + (getInventory().size() == 1 ? "s" : ""), player.getInventory(), getInventory()));

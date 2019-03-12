@@ -47,7 +47,7 @@ public final class Player extends Syncable<Player> {
 				case READY:
 				case STARTED:
 					if(!missions.contains(mission)) {
-						missions.add(mission);
+						missions.add(0, mission);
 						setCurrentMission(mission);
 					}
 					break;

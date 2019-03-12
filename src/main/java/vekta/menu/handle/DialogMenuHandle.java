@@ -12,6 +12,8 @@ import static vekta.Vekta.v;
 public class DialogMenuHandle extends MenuHandle {
 	private final Dialog dialog;
 
+	private boolean visited;
+
 	public DialogMenuHandle(MenuOption def, Dialog dialog) {
 		super(def);
 
@@ -30,6 +32,18 @@ public class DialogMenuHandle extends MenuHandle {
 	@Override
 	public int getButtonY(int i) {
 		return super.getButtonY(i + 1);
+	}
+
+	@Override
+	public void focus(Menu menu) {
+		super.focus(menu);
+
+		if(!visited) {
+			visited = true;
+		}
+		else {
+			dialog.openMenu(menu.getPlayer(), menu.getDefault());
+		}
 	}
 
 	@Override

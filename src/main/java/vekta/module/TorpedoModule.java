@@ -44,7 +44,7 @@ public class TorpedoModule extends WeaponModule {
 		Module m = ship.getModule(ModuleType.TARGET_COMPUTER);
 		if(m instanceof Targeter) {
 			SpaceObject target = ((Targeter)m).getTarget();
-			if(target != null && ship.consumeEnergy(1)) {
+			if(target != null && ship.consumeEnergyImmediate(1)) {
 				getWorld().playSound("laser", ship.getPosition());
 				PVector velocity = ship.getHeading().add(PVector.random2D()).add(ship.getVelocity());
 				register(new HomingProjectile(ship, target, getSpeed(), ship.getPosition(), velocity, ship.getColor()));

@@ -24,6 +24,8 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 	private Faction faction;
 	private String title;
 	private Settlement home;
+	
+	private boolean busy;
 
 	public Person(String name, Faction faction) {
 		this.name = name;
@@ -104,7 +106,7 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 				String response = parts[i].trim();
 				if(response.startsWith(":")) {
 					String[] args = response.split(" ", 2);
-					Dialog next = createDialog(args[0].trim());
+					Dialog next = createDialog(args[0].substring(1).trim());
 					dialog.add(new DialogOption(args[1].trim(), next));
 					next.addContinuation(dialog); // TODO: inherit continuations rather than continue to `dialog` itself
 				}
@@ -125,8 +127,18 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 		syncChanges();
 	}
 
+	public boolean isBusy() {
+		return busy;
+	}
+
+	@Override
+	public void onStart(Mission mission) {
+		busy = true;
+	}
+
 	@Override
 	public void onCancel(Mission mission) {
+		busy = false;
 		Faction faction = mission.getPlayer().getFaction();
 		if(getOpinion(faction).isPositive()) {
 			setOpinion(faction, OpinionType.NEUTRAL);
@@ -136,6 +148,7 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 
 	@Override
 	public void onComplete(Mission mission) {
+		busy = false;
 		setOpinion(mission.getPlayer().getFaction(), OpinionType.GRATEFUL);
 	}
 

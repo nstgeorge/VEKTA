@@ -45,7 +45,7 @@ public class ActiveTCSModule extends PassiveTCSModule {
 		if(getShip().getTemperature() >= getShip().getCooldownTemperature()) {
 			active = true;
 		}
-		applyCooling(active && getShip().consumeEnergy(1 * getEfficiency() * PER_SECOND) ? EFFICIENCY_BOOST : 1);
+		applyCooling(active && getShip().consumeEnergyOverTime(1 * getEfficiency() * PER_SECOND) ? EFFICIENCY_BOOST : 1);
 		if(getShip().getTemperature() <= getShip().getOptimalTemperature()) {
 			active = false;
 		}

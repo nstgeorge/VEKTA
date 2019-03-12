@@ -44,7 +44,7 @@ public class RCSModule extends ShipModule {
 	public void onUpdate() {
 		ModularShip ship = getShip();
 		float turn = ship.getTurnControl();
-		if(ship.consumeEnergy(5 * getTurnSpeed() * abs(turn) * PER_MINUTE)) {
+		if(ship.consumeEnergyOverTime(5 * getTurnSpeed() * abs(turn) * PER_MINUTE)) {
 			ship.turn(turn * getTurnSpeed());
 		}
 	}

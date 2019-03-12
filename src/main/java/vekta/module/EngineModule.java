@@ -44,7 +44,7 @@ public class EngineModule extends ShipModule {
 	public void onUpdate() {
 		ModularShip ship = getShip();
 		float thrust = ship.getThrustControl();
-		if(ship.consumeEnergy(20 * getSpeed() * abs(thrust) * PER_MINUTE)) {
+		if(ship.consumeEnergyOverTime(20 * getSpeed() * abs(thrust) * PER_MINUTE)) {
 			ship.accelerate(thrust * getSpeed());
 		}
 	}

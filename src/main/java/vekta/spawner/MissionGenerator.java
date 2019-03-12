@@ -88,13 +88,15 @@ public class MissionGenerator {
 	}
 
 	public static Dialog randomVisitDialog(Player player, Person person) {
-		Dialog dialog;
-		float r = v.random(1);
-		if(r > .4) {
-			dialog = randomApproachDialog(player, person);
+		Dialog dialog = null;
+		if(person.isBusy()) {
+			dialog = person.createDialog("busy");
 		}
 		else {
-			dialog = null;
+			float r = v.random(1);
+			if(r > .4) {
+				dialog = randomApproachDialog(player, person);
+			}
 		}
 		Dialog greeting = person.createDialog("greeting");
 		if(dialog != null) {
