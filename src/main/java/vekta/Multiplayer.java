@@ -23,7 +23,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	private static final String SERVER_ADDRESS =
 			Settings.getString("multiplayer.server", "http://vekta-rvanasa.c9users.io");
 	private static final String DEFAULT_ROOM =
-			Settings.getString("multiplayer.room", "Test");
+			Settings.getString("multiplayer.room", "Default");
 
 	private static final int PLAYER_INTERVAL_CLOSE = 10;
 	private static final int PLAYER_INTERVAL_FAR = 60;
@@ -31,25 +31,13 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	private transient Connection connection;
 
 	private final transient Map<Peer, Player> playerMap = new WeakHashMap<>();
-	private final transient Map<Peer, RenderLevel> levelMap = new WeakHashMap<>();
+	private final transient Map<Peer, Float> timeMap = new WeakHashMap<>();
 
-	private RenderLevel timeLevel = getRenderLevel();
+	private float timeScale = 1;
 
 	@Override
 	public float getTimeScale() {
-		// Hard-coded time scales for now
-		switch(timeLevel) {
-		case PARTICLE:
-			return 1;
-		case SHIP:
-			return 10;
-		case PLANET:
-			return 100;
-		case STAR:
-			return 1000;
-		default:
-			return 1;
-		}
+		return timeScale;
 	}
 
 	@Override
@@ -94,8 +82,8 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 			remove(player.getShip());
 			getPlayer().send(player.getName() + " left the world");
 		}
-		if(levelMap.remove(peer) != null) {
-			recomputeTimeLevel();// use broadcastTimeLevel()?
+		if(timeMap.remove(peer) != null) {
+			recomputeTimeScale();
 		}
 	}
 
@@ -111,7 +99,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 			getPlayer().send(player.getName() + " joined the world");
 			peer.send(new PlayerJoinMessage(getPlayer()));
 		}
-		peer.send(new RenderLevelMessage(getRenderLevel()));
+		peer.send(new TimeScaleMessage(getTimeScale()));
 	}
 
 	@Override
@@ -168,10 +156,10 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	}
 
 	@Override
-	public void onChangeRenderLevel(Peer peer, RenderLevelMessage msg) {
-		RenderLevel level = msg.getLevel();
-		levelMap.put(peer, level);
-		recomputeTimeLevel();
+	public void onChangeRenderLevel(Peer peer, TimeScaleMessage msg) {
+		float scale = msg.getTimeScale();
+		timeMap.put(peer, scale);
+		recomputeTimeScale();
 	}
 
 	//// World methods
@@ -213,26 +201,26 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	}
 
 	// Notify remote clients of new time level
-	private void broadcastTimeLevel() {
-		connection.send(new RenderLevelMessage(getRenderLevel()));
-		recomputeTimeLevel();
+	private void broadcastTimeScale() {
+		connection.send(new TimeScaleMessage(super.getTimeScale()));
+		recomputeTimeScale();
 	}
 
 	// Compute time level based on other player's states
-	private void recomputeTimeLevel() {
-		RenderLevel level = getRenderLevel();
-		for(RenderLevel other : levelMap.values()) {
-			if(other.ordinal() < level.ordinal()) {
-				level = other;
+	private void recomputeTimeScale() {
+		float scale = super.getTimeScale();
+		for(float other : timeMap.values()) {
+			if(other < scale) {
+				scale = other;
 			}
 		}
-		timeLevel = level;
+		timeScale = scale;
 	}
 
 	@Override
 	public void focus() {
 		super.focus();
-		broadcastTimeLevel();
+		broadcastTimeScale();
 	}
 
 	@Override
@@ -240,7 +228,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		super.onMenu(menu);
 
 		if(connection != null) {// TEMP conditional
-			connection.send(new RenderLevelMessage(RenderLevel.STAR));
+			connection.send(new TimeScaleMessage(Float.POSITIVE_INFINITY));
 		}
 	}
 
@@ -261,7 +249,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		// Periodically print debug info
 		if(v.frameCount % 300 == 0) {
 			println("----");
-			println("Time Scale: " + getTimeScale() + " (" + timeLevel + ")");
+			println("Time Scale: " + getTimeScale());
 			println("Player Objects: " + state.getSyncables().stream()
 					.filter(s -> s instanceof Player)
 					.map(s -> ((Player)s).getName())
@@ -274,9 +262,9 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	}
 
 	@Override
-	protected void onRenderLevelChange(RenderLevel level) {
-		super.onRenderLevelChange(level);
-		broadcastTimeLevel();
+	protected void onZoomChange(float zoom) {
+		super.onZoomChange(zoom);
+		broadcastTimeScale();
 	}
 
 	@Override

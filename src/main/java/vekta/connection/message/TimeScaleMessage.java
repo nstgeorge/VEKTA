@@ -1,18 +1,17 @@
 package vekta.connection.message;
 
-import vekta.RenderLevel;
 import vekta.connection.MessageListener;
 import vekta.connection.Peer;
 
-public class RenderLevelMessage implements Message {
-	private final RenderLevel level;
+public class TimeScaleMessage implements Message {
+	private final float timeScale;
 
-	public RenderLevelMessage(RenderLevel level) {
-		this.level=level;
+	public TimeScaleMessage(float timeScale) {
+		this.timeScale = timeScale;
 	}
 
-	public RenderLevel getLevel() {
-		return level;
+	public float getTimeScale() {
+		return timeScale;
 	}
 
 	@Override

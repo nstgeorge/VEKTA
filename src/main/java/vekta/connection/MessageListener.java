@@ -18,6 +18,6 @@ public interface MessageListener {
 	default void onMoveObject(Peer peer, MoveMessage msg) {
 	}
 
-	default void onChangeRenderLevel(Peer peer, RenderLevelMessage msg) {
+	default void onChangeRenderLevel(Peer peer, TimeScaleMessage msg) {
 	}
 }

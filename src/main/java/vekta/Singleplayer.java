@@ -309,11 +309,7 @@ public class Singleplayer implements World, PlayerListener {
 			state.resetRelativeVelocity();
 		}
 		state.updateGlobalCoords(getTimeScale());
-
-		if(level != prevLevel) {
-			onRenderLevelChange(level);
-		}
-
+		
 		RenderLevel spawnLevel = level;
 		while(spawnLevel.ordinal() > 0 && v.chance(.05F)) {
 			spawnLevel = RenderLevel.values()[spawnLevel.ordinal() - 1];
@@ -354,7 +350,7 @@ public class Singleplayer implements World, PlayerListener {
 		}
 	}
 
-	protected void onRenderLevelChange(RenderLevel level) {
+	protected void onZoomChange(float zoom) {
 		// Overridden by Multiplayer
 	}
 
@@ -400,6 +396,7 @@ public class Singleplayer implements World, PlayerListener {
 	@Override
 	public void mouseWheel(int amount) {
 		zoom = max(MIN_ZOOM_LEVEL, min(MAX_ZOOM_LEVEL, zoom * (1 + amount * ZOOM_EXPONENT)));
+		onZoomChange(zoom);
 	}
 
 	@Override
