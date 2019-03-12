@@ -40,6 +40,6 @@ public interface Module extends Serializable {
 	default void onItemMenu(Item item, Menu menu) {
 	}
 
-	default void onItemMenu(Menu menu) {
+	default void onMenu(Menu menu) {
 	}
 }

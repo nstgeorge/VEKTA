@@ -22,7 +22,7 @@ public class OreRefineOption implements MenuOption {
 
 	@Override
 	public int getColor() {
-		return getItem().getType().getColor();
+		return getItem().getColor();
 	}
 
 	@Override

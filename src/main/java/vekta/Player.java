@@ -7,7 +7,9 @@ import vekta.object.ship.ModularShip;
 import vekta.overlay.singleplayer.Notification;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static processing.core.PApplet.println;
 
@@ -16,6 +18,7 @@ public final class Player extends Syncable<Player> {
 	private ModularShip currentShip;
 
 	private final List<PlayerListener> listeners = new ArrayList<>();
+	private final Set<String> attributes = new HashSet<>();
 
 	private final List<Mission> missions = new ArrayList<>();
 	private Mission currentMission;
@@ -44,7 +47,7 @@ public final class Player extends Syncable<Player> {
 				case READY:
 				case STARTED:
 					if(!missions.contains(mission)) {
-						missions.add(mission);
+						missions.add(0, mission);
 						setCurrentMission(mission);
 					}
 					break;
@@ -130,6 +133,20 @@ public final class Player extends Syncable<Player> {
 		this.listeners.remove(listener);
 	}
 
+	public boolean has(String attribute) {
+		return attributes.contains(attribute);
+	}
+
+	public void add(String attribute) {
+		attributes.add(attribute);
+		syncChanges();
+	}
+
+	public void remove(String attribute) {
+		attributes.remove(attribute);
+		syncChanges();
+	}
+
 	public void emit(PlayerEvent event, Object data) {
 		for(PlayerListener listener : new ArrayList<>(listeners)) {
 			event.handle(listener, data);
@@ -145,11 +162,11 @@ public final class Player extends Syncable<Player> {
 		return notification;
 	}
 
-//	@Override
-//	public void onSync(Player data) {
-//		faction = register(data.faction);
-//		currentShip = register(data.currentShip);
-//		
-//		// TODO: other fields
-//	}
+	//	@Override
+	//	public void onSync(Player data) {
+	//		faction = register(data.faction);
+	//		currentShip = register(data.currentShip);
+	//		
+	//		// TODO: other fields
+	//	}
 }

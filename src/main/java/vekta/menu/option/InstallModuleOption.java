@@ -29,7 +29,7 @@ public class InstallModuleOption implements MenuOption {
 
 	@Override
 	public String getName() {
-		return module.getName() + status.tag;
+		return module.getName() + " " + status.tag;
 	}
 
 	@Override

@@ -22,6 +22,7 @@ import java.util.List;
 import static vekta.Vekta.*;
 
 public abstract class ModularShip extends Ship implements ModuleUpgradeable, PlayerListener {
+	private static final float ENERGY_TIME_SCALE = 1e-4F;
 	private static final float ENERGY_HEAT_SCALE = 1e4F;
 
 	private Player controller;
@@ -30,6 +31,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	private float thrust;
 	private float turn;
 
+	private boolean overheated;
 	private float energy;
 	private float maxEnergy;
 
@@ -97,8 +99,20 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		this.turn = turn;
 	}
 
+	public float getOverheatTemperature() {
+		return 50;
+	}
+
+	public float getCooldownTemperature() {
+		return 45;
+	}
+
+	public boolean isOverheated() {
+		return overheated;
+	}
+
 	public boolean hasEnergy() {
-		return energy > 0;
+		return energy > 0 && !isOverheated();
 	}
 
 	public float getEnergy() {
@@ -116,8 +130,19 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		setEnergy(energy + amount);
 	}
 
-	public boolean consumeEnergy(float amount) {
-		// TODO: adjust rate-based consumption for time acceleration
+	public boolean consumeEnergyOverTime(float amount) {
+		return consumeEnergyImmediate(amount * ENERGY_TIME_SCALE * getWorld().getTimeScale());
+	}
+	
+	public boolean consumeEnergyImmediate(float amount) {
+		if(getTemperature() >= getOverheatTemperature()) {
+			overheated = true;
+			return false;
+		}
+		else if(overheated && getTemperature() <= getCooldownTemperature()) {
+			overheated = false;
+		}
+
 		addHeat(amount * ENERGY_HEAT_SCALE);
 		energy -= amount;
 		if(energy < 0) {
@@ -136,9 +161,9 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		maxEnergy += amount;
 	}
 
-	public void recharge() {
-		setEnergy(getMaxEnergy());
-	}
+//	public void recharge() {
+//		setEnergy(getMaxEnergy());
+//	}
 
 	@Override
 	public List<Module> getModules() {
@@ -337,10 +362,10 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			getController().emit(PlayerEvent.REMOVE_ITEM, item);
 		}
 	}
-	
+
 	//// Syncable overrides
 
-//	@Override
+	//	@Override
 	//	public boolean shouldSyncField(Field field) {
 	//		return !"controller".equals(field.getName()); //// TODO: prevent cycles differently
 	//	}
@@ -356,11 +381,11 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	@Override
 	public void onMenu(Menu menu) {
-		for(Item item : getInventory()){
+		for(Item item : getInventory()) {
 			item.onMenu(menu);
 		}
 		for(Module module : getModules()) {
-			module.onItemMenu(menu);
+			module.onMenu(menu);
 		}
 	}
 

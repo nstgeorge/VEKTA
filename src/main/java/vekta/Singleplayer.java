@@ -1,6 +1,7 @@
 package vekta;
 
 import processing.core.PVector;
+import processing.event.KeyEvent;
 import processing.sound.LowPass;
 import vekta.context.PauseMenuContext;
 import vekta.context.World;
@@ -22,6 +23,7 @@ import vekta.overlay.singleplayer.PlayerOverlay;
 import vekta.person.Person;
 import vekta.sound.SoundGroup;
 import vekta.spawner.EventGenerator;
+import vekta.spawner.MissionGenerator;
 import vekta.spawner.WorldGenerator;
 
 import java.io.*;
@@ -66,6 +68,7 @@ public class Singleplayer implements World, PlayerListener {
 	private final Counter targetCt = new Counter(30); // Counter for periodically updating Targeter instances
 	private final Counter spawnCt = new Counter(100); // Counter for periodically cleaning/spawning objects
 	private final Counter eventCt = new Counter(3600 * 5).randomize(); // Counter for random player events
+	private final Counter situationCt = new Counter(100).randomize(); // Counter for situational events
 
 	private PlayerOverlay overlay;
 
@@ -104,7 +107,7 @@ public class Singleplayer implements World, PlayerListener {
 		}
 
 		Player player = getPlayer();
-		
+
 		// Configure UI overlay
 		overlay = new PlayerOverlay(player);
 		player.addListener(overlay); // TODO: listener might be getting serialized
@@ -112,7 +115,7 @@ public class Singleplayer implements World, PlayerListener {
 
 	public void cleanup() {
 		getPlayer().removeListener(this);
-		
+
 		// Cleanup behavior on exiting/restarting the world
 		lowPass.stop();
 	}
@@ -146,16 +149,15 @@ public class Singleplayer implements World, PlayerListener {
 		playerShip.addModule(new TelescopeModule(.5F));
 		playerShip.addModule(new DrillModule(2));
 		playerShip.addModule(new HyperdriveModule(.5F));
+		playerShip.getInventory().add(new ModuleItem(new WormholeModule()));
+		playerShip.getInventory().add(new ModuleItem(new ActiveTCSModule(5)));
+		playerShip.getInventory().add(new ModuleItem(new BatteryModule(1)));
 		playerShip.getInventory().add(new ModuleItem(new TorpedoModule(2)));
 		playerShip.getInventory().add(new ModuleItem(new TractorBeamModule(1)));
 		playerShip.getInventory().add(new ModuleItem(new StructuralModule(3, 1)));
 		playerShip.getInventory().add(new ModuleItem(new StationCoreModule(1)));
 		playerShip.getInventory().add(new ModuleItem(new OrbitModule(1)));
 		playerShip.getInventory().add(new ColonyItem());
-
-		//		// Testing out a mission sequence
-		//		Person person = PersonGenerator.createPerson();
-		//		MissionGenerator.createMessenger(player, MissionGenerator.randomApproachDialog(player, person));
 	}
 
 	public Player getPlayer() {
@@ -309,7 +311,7 @@ public class Singleplayer implements World, PlayerListener {
 			state.resetRelativeVelocity();
 		}
 		state.updateGlobalCoords(getTimeScale());
-		
+
 		RenderLevel spawnLevel = level;
 		while(spawnLevel.ordinal() > 0 && v.chance(.05F)) {
 			spawnLevel = RenderLevel.values()[spawnLevel.ordinal() - 1];
@@ -321,6 +323,10 @@ public class Singleplayer implements World, PlayerListener {
 		if(eventCt.cycle()) {
 			eventCt.randomize();
 			EventGenerator.spawnEvent(getPlayer());
+		}
+
+		if(situationCt.cycle()) {
+			EventGenerator.updateSituations(getPlayer());
 		}
 
 		prevLevel = level;
@@ -354,18 +360,14 @@ public class Singleplayer implements World, PlayerListener {
 		// Overridden by Multiplayer
 	}
 
-	//	// Temp: debug key listener
-	//	@Override
-	//	public void keyPressed(KeyEvent event) {
-	//		if(v.key == '`') {
-	//			println("====");
-	//			for(Syncable s : state.getSyncables()) {
-	//				print(s.getSyncID());
-	//			}
-	//			println("====");
-	//		}
-	//		World.super.keyPressed(event);
-	//	}
+	// Temp: debug key listener
+	@Override
+	public void keyPressed(KeyEvent event) {
+		if(v.key == '`') {
+			MissionGenerator.createMission(getPlayer(), MissionGenerator.randomMissionPerson()).start();
+		}
+		World.super.keyPressed(event);
+	}
 
 	@Override
 	public void keyPressed(KeyBinding key) {

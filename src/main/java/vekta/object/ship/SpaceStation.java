@@ -115,7 +115,7 @@ public class SpaceStation extends ModularShip {
 			drawRelative(level, r);
 		}
 
-		emitter.update(new PVector(1, 0));
+//		emitter.update(new PVector(1, 0));
 	}
 
 	@Override

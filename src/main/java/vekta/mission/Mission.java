@@ -5,6 +5,7 @@ import vekta.PlayerEvent;
 import vekta.Resources;
 import vekta.mission.objective.Objective;
 import vekta.mission.reward.Reward;
+import vekta.util.RomanNumerals;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,14 +21,18 @@ public class Mission implements Serializable {
 
 	private final Player player;
 	private final String name;
-	
+	private final MissionIssuer issuer;
+	private final int tier;
+
 	private MissionStatus status = MissionStatus.READY;
 
 	private Objective current;
 
-	public Mission(Player player, String name) {
+	public Mission(Player player, String name, MissionIssuer issuer, int tier) {
 		this.player = player;
-		this.name = name;
+		this.name = "(" + RomanNumerals.toRoman(tier) + ") " + name; // Add mission tier directly to name
+		this.issuer = issuer;
+		this.tier = tier;
 	}
 
 	public Player getPlayer() {
@@ -36,6 +41,14 @@ public class Mission implements Serializable {
 
 	public String getName() {
 		return name;
+	}
+
+	public MissionIssuer getIssuer() {
+		return issuer;
+	}
+
+	public int getTier() {
+		return tier;
 	}
 
 	public List<Objective> getObjectives() {

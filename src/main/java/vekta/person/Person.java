@@ -3,8 +3,9 @@ package vekta.person;
 import vekta.Faction;
 import vekta.Resources;
 import vekta.Syncable;
+import vekta.menu.option.DialogOption;
 import vekta.mission.Mission;
-import vekta.mission.MissionListener;
+import vekta.mission.MissionIssuer;
 import vekta.object.SpaceObject;
 import vekta.spawner.PersonGenerator;
 import vekta.terrain.LandingSite;
@@ -14,7 +15,7 @@ import vekta.terrain.settlement.Settlement;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Person extends Syncable<Person> implements MissionListener {
+public class Person extends Syncable<Person> implements MissionIssuer {
 
 	private final Map<Syncable, OpinionType> opinions = new HashMap<>();
 
@@ -23,6 +24,8 @@ public class Person extends Syncable<Person> implements MissionListener {
 	private Faction faction;
 	private String title;
 	private Settlement home;
+	
+	private boolean busy;
 
 	public Person(String name, Faction faction) {
 		this.name = name;
@@ -30,7 +33,8 @@ public class Person extends Syncable<Person> implements MissionListener {
 		setFaction(faction);
 	}
 
-	public String getShortName() {
+	@Override
+	public String getName() {
 		return name;
 	}
 
@@ -38,6 +42,7 @@ public class Person extends Syncable<Person> implements MissionListener {
 		return name + (title != null ? " " + title : "");
 	}
 
+	@Override
 	public Faction getFaction() {
 		return faction;
 	}
@@ -74,6 +79,7 @@ public class Person extends Syncable<Person> implements MissionListener {
 		return home != null ? home.getSite() : null;
 	}
 
+	@Override
 	public SpaceObject findHomeObject() {
 		LandingSite site = findHomeSite();
 		return site != null ? site.getParent() : null;
@@ -93,12 +99,20 @@ public class Person extends Syncable<Person> implements MissionListener {
 
 	public Dialog createDialog(String type) {
 		String[] parts = Resources.generateString("dialog_" + type).split("\\*");
-		Dialog dialog = new Dialog(type, parts[0].trim(), this);
+		Dialog dialog = new Dialog(this, parts[0].trim());
 		if(parts.length > 1) {
 			for(int i = 1; i < parts.length; i++) {
 				// Add custom response messages
 				String response = parts[i].trim();
-				dialog.addResponse(response);
+				if(response.startsWith(":")) {
+					String[] args = response.split(" ", 2);
+					Dialog next = createDialog(args[0].substring(1).trim());
+					dialog.add(new DialogOption(args[1].trim(), next));
+					next.addContinuation(dialog); // TODO: inherit continuations rather than continue to `dialog` itself
+				}
+				else {
+					dialog.addResponse(response);
+				}
 			}
 		}
 		return dialog;
@@ -113,8 +127,18 @@ public class Person extends Syncable<Person> implements MissionListener {
 		syncChanges();
 	}
 
+	public boolean isBusy() {
+		return busy;
+	}
+
+	@Override
+	public void onStart(Mission mission) {
+		busy = true;
+	}
+
 	@Override
 	public void onCancel(Mission mission) {
+		busy = false;
 		Faction faction = mission.getPlayer().getFaction();
 		if(getOpinion(faction).isPositive()) {
 			setOpinion(faction, OpinionType.NEUTRAL);
@@ -124,15 +148,16 @@ public class Person extends Syncable<Person> implements MissionListener {
 
 	@Override
 	public void onComplete(Mission mission) {
+		busy = false;
 		setOpinion(mission.getPlayer().getFaction(), OpinionType.GRATEFUL);
 	}
 
-//	@Override
-//	public void onSync(Person data) {
-//		this.faction = data.faction;
-//		this.title = data.title;
-//		//		this.home = register(data.home);
-//
-//		syncAll(opinions.keySet(), data.opinions.keySet());
-//	}
+	//	@Override
+	//	public void onSync(Person data) {
+	//		this.faction = data.faction;
+	//		this.title = data.title;
+	//		//		this.home = register(data.home);
+	//
+	//		syncAll(opinions.keySet(), data.opinions.keySet());
+	//	}
 }

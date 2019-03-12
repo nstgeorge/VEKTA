@@ -34,7 +34,7 @@ public class DialogObjective extends Objective {
 
 	@Override
 	public String getName() {
-		return getVerb() + " " + getPerson().getShortName() + (getSpaceObject() != null ? " at " + getSpaceObject().getName() : "");
+		return getVerb() + " " + getPerson().getName() + (getSpaceObject() != null ? " at " + getSpaceObject().getName() : "");
 	}
 
 	@Override

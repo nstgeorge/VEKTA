@@ -50,7 +50,7 @@ public class OrbitModule extends ShipModule {
 
 	@Override
 	public void onUpdate() {
-		if(!getShip().isLanding() && getShip().consumeEnergy(10 * getSpeed() * PER_MINUTE)) {
+		if(!getShip().isLanding() && getShip().consumeEnergyOverTime(10 * getSpeed() * PER_MINUTE)) {
 			if(retargetCt.cycle()) {
 				orbit = getWorld().findOrbitObject(getShip());
 			}

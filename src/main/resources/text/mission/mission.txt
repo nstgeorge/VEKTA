@@ -12,12 +12,16 @@ An Ominous {mission_noun}
 An Unexpected {mission_noun}
 An Unassuming {mission_noun}
 An Unprecedented {mission_noun}
+A Procrastinated {mission_noun}
 A Worthwile {mission_noun}
 A Foretold {mission_noun}
 A New {mission_noun}
 A Hypothetical {mission_noun}
 A Shady {mission_noun}
 A Better {mission_noun}
+A Real {mission_noun}
+A True {mission_noun}
+An Undeniable {mission_noun}
 The Latest {mission_noun}
 The Next {mission_noun}
 The {mission_noun}

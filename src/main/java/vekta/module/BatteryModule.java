@@ -68,12 +68,12 @@ public class BatteryModule extends ShipModule {
 	}
 
 	@Override
-	public void onItemMenu(Menu menu) {
+	public void onMenu(Menu menu) {
 		if(menu.getHandle() instanceof LandingMenuHandle) {
 			LandingSite site = ((LandingMenuHandle)menu.getHandle()).getSite();
 
 			if(site.getTerrain().isInhabited() && getCharge() <= getCapacity() * .9F) {
-				float price = .5F;
+				float price = .2F;
 				for(Settlement settlement : site.getTerrain().getSettlements()) {
 					if(settlement.getFaction().isAlly(menu.getPlayer().getFaction())) {
 						price = 0;

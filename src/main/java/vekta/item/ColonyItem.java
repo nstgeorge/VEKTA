@@ -9,6 +9,7 @@ import vekta.menu.option.SettlementOption;
 import vekta.terrain.HabitableTerrain;
 import vekta.terrain.LandingSite;
 import vekta.terrain.Terrain;
+import vekta.terrain.building.CapitalBuilding;
 import vekta.terrain.settlement.ColonySettlement;
 
 public class ColonyItem extends Item {
@@ -40,6 +41,7 @@ public class ColonyItem extends Item {
 					ColonySettlement settlement = new ColonySettlement(faction);
 					settlement.setOverview("You land close to your recently established colony.");
 					settlement.clear();
+					settlement.add(new CapitalBuilding(settlement));
 					((HabitableTerrain)terrain).changeSettlement(settlement);
 					for(int i = 0; i < m.size(); i++) {
 						MenuOption other = menu.get(i);

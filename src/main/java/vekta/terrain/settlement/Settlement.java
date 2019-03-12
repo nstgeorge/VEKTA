@@ -2,8 +2,8 @@ package vekta.terrain.settlement;
 
 import vekta.Faction;
 import vekta.Resources;
+import vekta.Syncable;
 import vekta.menu.Menu;
-import vekta.menu.option.UpgradeMenuOption;
 import vekta.object.SpaceObject;
 import vekta.terrain.LandingSite;
 import vekta.terrain.Terrain;
@@ -11,7 +11,7 @@ import vekta.terrain.Terrain;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Settlement implements SettlementPart {
+public abstract class Settlement extends Syncable<Settlement> implements SettlementPart {
 	private final List<SettlementPart> parts = new ArrayList<>();
 
 	private final String name;
@@ -51,6 +51,7 @@ public abstract class Settlement implements SettlementPart {
 			throw new RuntimeException("Settlement faction cannot be null");
 		}
 		this.faction = faction;
+		syncChanges();
 	}
 
 	@Override
@@ -67,6 +68,7 @@ public abstract class Settlement implements SettlementPart {
 			throw new RuntimeException("Settlement overview cannot be null");
 		}
 		this.overview = overview;
+		syncChanges();
 	}
 
 	public boolean isInhabited() {
@@ -79,14 +81,17 @@ public abstract class Settlement implements SettlementPart {
 
 	public void add(SettlementPart part) {
 		parts.add(part);
+		syncChanges();
 	}
 
 	public void remove(SettlementPart part) {
 		parts.remove(part);
+		syncChanges();
 	}
 
 	public void clear() {
 		getParts().clear();
+		syncChanges();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -129,9 +134,6 @@ public abstract class Settlement implements SettlementPart {
 		onSettlementMenu(menu);
 		for(SettlementPart part : getParts()) {
 			part.setupSettlementMenu(menu);
-		}
-		if(menu.getPlayer().getFaction() == getFaction()) {
-			menu.add(new UpgradeMenuOption(menu.getPlayer(), this));
 		}
 	}
 

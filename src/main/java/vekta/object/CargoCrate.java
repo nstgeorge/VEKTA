@@ -21,7 +21,7 @@ public class CargoCrate extends SpaceObject {
 	private float spinSpeed = v.random(-1, 1) * SPIN_SCALE;
 
 	public CargoCrate(Item item, PVector position, PVector velocity) {
-		super(position, velocity, item.getType().getColor());
+		super(position, velocity, item.getColor());
 		this.item = item;
 	}
 
@@ -71,7 +71,7 @@ public class CargoCrate extends SpaceObject {
 		if(s instanceof ModularShip && ((ModularShip)s).hasController()) {
 			Player player = ((ModularShip)s).getController();
 			player.send("Picked up: " + getItem().getName())
-					.withColor(getItem().getType().getColor());
+					.withColor(getItem().getColor());
 		}
 	}
 }  

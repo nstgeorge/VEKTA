@@ -4,19 +4,14 @@ import processing.core.PVector;
 import vekta.Player;
 import vekta.RenderLevel;
 import vekta.Resources;
-import vekta.item.Inventory;
-import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.menu.handle.MissionMenuHandle;
 import vekta.menu.option.BasicOption;
 import vekta.menu.option.ItemTradeOption;
 import vekta.menu.option.MissionOption;
 import vekta.mission.Mission;
-import vekta.mission.objective.*;
-import vekta.mission.reward.AllianceReward;
-import vekta.mission.reward.ItemReward;
-import vekta.mission.reward.MoneyReward;
-import vekta.mission.reward.SettlementReward;
+import vekta.mission.MissionIssuer;
+import vekta.mission.objective.Objective;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.person.Dialog;
 import vekta.person.OpinionType;
@@ -24,84 +19,47 @@ import vekta.person.Person;
 import vekta.spawner.item.MissionItemSpawner;
 import vekta.spawner.world.AsteroidSpawner;
 import vekta.terrain.LandingSite;
-import vekta.terrain.settlement.Settlement;
+
+import java.util.Arrays;
 
 import static vekta.Vekta.*;
 
 public class MissionGenerator {
+	private static final ObjectiveSpawner[] OBJECTIVE_SPAWNERS = Resources.getSubclassInstances(ObjectiveSpawner.class);
+	private static final RewardSpawner[] REWARD_SPAWNERS = Resources.getSubclassInstances(RewardSpawner.class);
 
-	public static Mission createMission(Player player, Person person) {
-		return createMission(player, person, (int)v.random(3) + 1);
+	public static Mission createMission(Player player, MissionIssuer issuer) {
+		return createMission(player, issuer, (int)v.random(3) + 1);
 	}
 
-	public static Mission createMission(Player player, Person person, int lootTier) {
-		Mission mission = new Mission(player, randomMissionName());
-		mission.add(person);
-		addRewards(person, mission, lootTier);
-		addObjectives(person, mission, (int)v.random(lootTier + 1) + 1);
+	public static Mission createMission(Player player, MissionIssuer issuer, int tier) {
+		Mission mission = new Mission(player, randomMissionName(), issuer, tier);
+		mission.add(issuer);
+		addRewards(mission);
+		addObjectives(mission);
 		return mission;
 	}
 
-	public static void addRewards(Person person, Mission mission, int lootTier) {
-		float r = v.random(1);
-		if(r > .4) {
-			Inventory inv = new Inventory();
-			inv.add((int)(10 * lootTier * v.random(1, lootTier) + 1));
-			if(v.chance(.3F)) {
-				inv.add(ItemGenerator.randomItem());
-			}
-			if(inv.getMoney() > 0) {
-				mission.add(new MoneyReward(inv.getMoney()));
-			}
-			for(Item item : inv) {
-				mission.add(new ItemReward(item));
-			}
-		}
-		else if(r > .2) {
-			//			if(person.getFaction().isNeutral(player)) {}
-			//			else {}
-			mission.add(new AllianceReward(person.getFaction()));
-		}
-		else {
-			Settlement settlement = PersonGenerator.randomHome(person);
-			if(person.getFaction().isAlly(settlement.getFaction())) {
-				mission.add(new SettlementReward(settlement));
-			}
-		}
+	public static void addRewards(Mission mission) {
+		RewardSpawner spawner = Weighted.random(Arrays.stream(REWARD_SPAWNERS)
+				.filter(s -> s.isValid(mission))
+				.toArray(RewardSpawner[]::new));
+		spawner.setup(mission);
 	}
 
-	public static void addObjectives(Person person, Mission mission) {
-		addObjectives(person, mission, 1);
+	public static void addObjectives(Mission mission) {
+		addObjectives(mission, (int)v.random(mission.getTier() + 1) + 1);
 	}
 
-	public static void addObjectives(Person person, Mission mission, int steps) {
-		float r = v.random(1);
-		Objective objective;
-		if(r > .7) {
-			LandingSite site = randomLandingSite();
-			mission.add(new LandAtObjective(site.getParent()));
-			String task = Resources.generateString(site.getTerrain().isInhabited() ? "settlement_task" : "planet_task");
-			objective = new TaskObjective(task, site.getParent());
-		}
-		else if(r > .4) {
-			Person target = randomMissionPerson(person);
-			objective = new DeliverItemObjective(ItemGenerator.randomItem(), target);
-		}
-		else if(r > .2) {
-			Item item = ItemGenerator.randomItem();
-			mission.add(new SearchForItemObjective(item, v.random(.1F, .5F)));
-			objective = new DeliverItemObjective(item, v.chance(.8F) ? person : randomMissionPerson(person));
-		}
-		else {
-			Person other = randomMissionPerson(person);
-			mission.add(new LandAtObjective(other.findHomeObject()));
-			objective = new DialogObjective("Confront", randomConfrontDialog(mission.getPlayer(), other, person));
-		}
-
+	public static void addObjectives(Mission mission, int steps) {
+		ObjectiveSpawner spawner = Weighted.random(Arrays.stream(OBJECTIVE_SPAWNERS)
+				.filter(s -> s.isValid(mission))
+				.toArray(ObjectiveSpawner[]::new));
+		Objective main = spawner.getMainObjective(mission);
 		if(steps > 1) {
-			objective.then(() -> addObjectives(person, mission, steps - 1));
+			main.then(() -> addObjectives(mission, steps - 1));
 		}
-		mission.add(objective);
+		mission.add(main);
 	}
 
 	public static LandingSite randomLandingSite() {
@@ -116,7 +74,7 @@ public class MissionGenerator {
 		return randomMissionPerson(null);
 	}
 
-	public static Person randomMissionPerson(Person exclude) {
+	public static Person randomMissionPerson(MissionIssuer exclude) {
 		Person person = getWorld().findRandomObject(Person.class);
 		if(person == null || person == exclude || v.chance(.1F)) {
 			person = PersonGenerator.createPerson();
@@ -130,13 +88,15 @@ public class MissionGenerator {
 	}
 
 	public static Dialog randomVisitDialog(Player player, Person person) {
-		Dialog dialog;
-		float r = v.random(1);
-		if(r > .4) {
-			dialog = randomApproachDialog(player, person);
+		Dialog dialog = null;
+		if(person.isBusy()) {
+			dialog = person.createDialog("busy");
 		}
 		else {
-			dialog = null;
+			float r = v.random(1);
+			if(r > .4) {
+				dialog = randomApproachDialog(player, person);
+			}
 		}
 		Dialog greeting = person.createDialog("greeting");
 		if(dialog != null) {
@@ -171,22 +131,15 @@ public class MissionGenerator {
 		return dialog;
 	}
 
-	public static Dialog randomConfrontDialog(Player player, Person person, Person sender) {
-		Dialog dialog = person.createDialog("confronted");
+	public interface ObjectiveSpawner extends Weighted {
+		boolean isValid(Mission mission);
 
-		if(v.chance(.75F)) {
-			dialog.addContinuation(person.createDialog("confession"));
-		}
-
-		if(v.chance(.75F)) {
-			Dialog greeting = person.createDialog("greeting");
-			greeting.add(sender.getShortName() + " sent me to talk to you.", dialog);
-			dialog = greeting;
-		}
-		return dialog;
+		Objective getMainObjective(Mission mission);
 	}
 
-	public interface MissionSpawner extends Weighted {
-		void setup(Person person, Mission mission);
+	public interface RewardSpawner extends Weighted {
+		boolean isValid(Mission mission);
+
+		void setup(Mission mission);
 	}
 }

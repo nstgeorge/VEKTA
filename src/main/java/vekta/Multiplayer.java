@@ -69,7 +69,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 						.withColor(DANGER_COLOR);
 			}
 		}));
-//		applyContext();
+		//		applyContext();
 	}
 
 	//// Connection listeners

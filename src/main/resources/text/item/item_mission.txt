@@ -14,3 +14,5 @@ Posessed {item_noun}
 Timid {item_noun}
 Loud {item_noun}
 Sassy {item_noun}
+Helpful {item_noun}
+Polite {item_noun}

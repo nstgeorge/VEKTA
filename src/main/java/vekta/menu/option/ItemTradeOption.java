@@ -39,7 +39,7 @@ public class ItemTradeOption implements MenuOption {
 
 	@Override
 	public int getColor() {
-		return getItem().getType().getColor();
+		return getItem().getColor();
 	}
 
 	public Item getItem() {

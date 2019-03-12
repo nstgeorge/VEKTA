@@ -22,7 +22,7 @@ public class ItemReward extends Reward {
 
 	@Override
 	public int getColor() {
-		return getItem().getType().getColor();
+		return getItem().getColor();
 	}
 
 	@Override

@@ -37,7 +37,7 @@ public class HouseBuilding implements SettlementPart {
 	public void setupSettlementMenu(Menu menu) {
 		if(!getPerson().getOpinion(menu.getPlayer().getFaction()).isNegative()) {
 			Dialog dialog = MissionGenerator.randomVisitDialog(menu.getPlayer(), getPerson());
-			menu.add(new DialogOption("Visit " + getPerson().getShortName(), dialog));
+			menu.add(new DialogOption("Visit " + getPerson().getName(), dialog));
 		}
 	}
 }

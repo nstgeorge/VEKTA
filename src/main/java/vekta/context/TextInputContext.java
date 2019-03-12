@@ -112,8 +112,6 @@ public class TextInputContext implements Context {
 		if(value != null) {
 			callback.accept(value);
 		}
-		else {
-			setContext(back);
-		}
+		setContext(back);
 	}
 }

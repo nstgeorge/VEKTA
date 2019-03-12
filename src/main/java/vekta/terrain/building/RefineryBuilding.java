@@ -11,6 +11,7 @@ import vekta.terrain.LandingSite;
 import vekta.terrain.settlement.SettlementPart;
 
 import static vekta.Vekta.setContext;
+import static vekta.Vekta.v;
 
 public class RefineryBuilding implements SettlementPart {
 	public RefineryBuilding() {
@@ -29,6 +30,10 @@ public class RefineryBuilding implements SettlementPart {
 	@Override
 	public void setup(LandingSite site) {
 		site.getTerrain().addFeature("Industrial");
+		
+		if(v.chance(.25F)) {
+			site.getTerrain().addFeature("Smog");
+		}
 	}
 
 	@Override

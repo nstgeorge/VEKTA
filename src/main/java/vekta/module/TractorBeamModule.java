@@ -78,7 +78,7 @@ public class TractorBeamModule extends ShipModule implements Targeter {
 	public void onUpdate() {
 		ModularShip ship = getShip();
 		SpaceObject t = getTarget();
-		if(t != null && ship.consumeEnergy(.2F * PER_SECOND)) {
+		if(t != null && ship.consumeEnergyOverTime(.2F * PER_SECOND)) {
 			float force = getForce() / t.getMass() * BASE_STRENGTH;
 			PVector dir = ship.getPosition().sub(t.getPosition());
 			PVector vel = dir.mult(min(MAX_FORCE, force / dir.magSq()));

@@ -17,6 +17,11 @@ public class BondItem extends Item {
 	}
 
 	@Override
+	public int getColor() {
+		return getFaction().getColor();
+	}
+
+	@Override
 	public int randomPrice() {
 		return (int)(super.randomPrice() * getFaction().getValue());
 	}

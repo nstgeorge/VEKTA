@@ -27,7 +27,7 @@ public class CannonModule extends WeaponModule {
 	@Override
 	public void fireWeapon() {
 		ModularShip ship = getShip();
-		if(ship.consumeEnergy(.5F)) {
+		if(ship.consumeEnergyImmediate(.5F)) {
 			getWorld().playSound("laser", ship.getPosition());
 			PVector velocity = ship.getVelocity().add(ship.getHeading().setMag(PROJECTILE_SPEED));
 			register(new Projectile(ship, ship.getPosition(), velocity, ship.getColor()));
