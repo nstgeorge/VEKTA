@@ -211,7 +211,7 @@ public class Singleplayer implements World, PlayerListener {
 
 		// Update time factor
 		smoothZoom += (zoom - smoothZoom) * ZOOM_SMOOTH;
-		timeScale = max(1, zoom * TIME_SCALE) / (1 + zoom * TIME_SCALE * TIME_SCALE * TIME_FALLOFF);
+		timeScale = max(1, smoothZoom * TIME_SCALE) / (1 + smoothZoom * TIME_SCALE * TIME_SCALE * TIME_FALLOFF);
 
 		RenderLevel level = getRenderLevel();
 

@@ -17,7 +17,7 @@ public class OreRefineOption implements MenuOption {
 
 	@Override
 	public String getName() {
-		return getItem().getName();
+		return selected ? getItem().getRefined().getName() : getItem().getName();
 	}
 
 	@Override

@@ -21,6 +21,8 @@ public class Dialog implements Serializable {
 	private final List<MenuOption> options = new ArrayList<>();
 	private Dialog next;
 
+	private boolean visited;
+
 	public Dialog(Person person, String message) {
 		this.person = person;
 		this.message = message;
@@ -32,6 +34,10 @@ public class Dialog implements Serializable {
 
 	public String getMessage() {
 		return message;
+	}
+
+	public boolean isVisited() {
+		return visited;
 	}
 
 	public List<String> getResponses() {
@@ -85,13 +91,17 @@ public class Dialog implements Serializable {
 	//	}
 
 	public void openMenu(Player player, MenuOption def) {
+		if(visited && hasNext()) {
+			getNext().openMenu(player, def);
+			return;
+		}
+		visited = true;
+
 		Menu menu = new Menu(player, new DialogMenuHandle(def, this));
-		if(hasNext()) {
-			List<String> responses = new ArrayList<>(getResponses().isEmpty() ? Collections.singletonList("Next") : getResponses());
-			Collections.shuffle(responses);
-			for(String response : responses) {
-				menu.add(new DialogOption(response, getNext()));
-			}
+		List<String> responses = new ArrayList<>(getResponses().isEmpty() ? Collections.singletonList("Next") : getResponses());
+		Collections.shuffle(responses);
+		for(String response : responses) {
+			menu.add(hasNext() ? new DialogOption(response, getNext()) : menu.getDefault());
 		}
 
 		if(!getOptions().isEmpty()) {
