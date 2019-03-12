@@ -58,9 +58,9 @@ public class Dialog implements Serializable {
 		add(new DialogOption(response, dialog));
 	}
 
-	public void openMenu(Menu menu) {
-		openMenu(menu.getPlayer(), menu.getDefault());
-	}
+//	public void openMenu(Menu menu) {
+//		openMenu(menu.getPlayer(), new BackOption(menu));
+//	}
 
 	public void openMenu(Player player, MenuOption def) {
 		Menu menu = new Menu(player, new DialogMenuHandle(def, this));

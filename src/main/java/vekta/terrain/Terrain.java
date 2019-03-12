@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static vekta.Vekta.v;
-
 /**
  * An abstract representation of planetary terrain.
  */
@@ -37,10 +35,6 @@ public abstract class Terrain implements Serializable {
 
 	public void remove(String feature) {
 		getFeatures().remove(feature);
-	}
-
-	protected boolean chance(float amount) {
-		return v.random(1) < amount;
 	}
 
 	public boolean isInhabited() {

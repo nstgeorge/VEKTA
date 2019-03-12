@@ -27,7 +27,7 @@ public class DeliverItemObjective extends Objective {
 
 	@Override
 	public String getName() {
-		return "Deliver " + getItem().getName() + " to " + getPerson().getShortName();
+		return "Deliver " + getItem().getName() + " to " + getPerson().getName();
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class DeliverItemObjective extends Objective {
 				menu.add(new BasicOption("Here's the " + getItem().getName() + ".", m -> {
 					m.getPlayer().getInventory().remove(getItem());
 					complete();
-					dialog.getPerson().createDialog("receive").openMenu(m);
+					dialog.getPerson().createDialog("receive").openMenu(m.getPlayer(), m.getDefault());
 				}));
 			}
 		}

@@ -13,7 +13,9 @@ import vekta.terrain.*;
 import vekta.terrain.building.MarketBuilding;
 import vekta.terrain.settlement.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static vekta.Vekta.*;
 
@@ -96,22 +98,27 @@ public class WorldGenerator {
 	}
 
 	public static MarketBuilding randomMarket(int shopTier) {
-		float r = v.random(1);
-		if(r > .7) {
-			return new MarketBuilding(shopTier, "Goods", null);
+		return v.random(randomMarkets(shopTier, 1));
+	}
+
+	public static List<MarketBuilding> randomMarkets(int shopTier, float chance) {
+		List<MarketBuilding> buildings = new ArrayList<>();
+		if(v.chance(chance)) {
+			buildings.add(new MarketBuilding(shopTier, "Goods", null));
 		}
-		else if(r > .4) {
-			return new MarketBuilding(shopTier, "Trinkets", new MissionItemSpawner());
+		if(v.chance(chance)) {
+			buildings.add(new MarketBuilding(shopTier, "Trinkets", new MissionItemSpawner()));
 		}
-		else if(r > .2) {
-			return new MarketBuilding(shopTier, "Modules", new ModuleItemSpawner());
+		if(v.chance(chance)) {
+			buildings.add(new MarketBuilding(shopTier, "Modules", new ModuleItemSpawner()));
 		}
-		else if(r > .1) {
-			return new MarketBuilding(shopTier, "Bonds", new BondItemSpawner());
+		if(v.chance(chance)) {
+			buildings.add(new MarketBuilding(shopTier, "Bonds", new BondItemSpawner()));
 		}
-		else {
-			return new MarketBuilding(shopTier, "Supplies", new ColonyItemSpawner());
+		if(v.chance(chance)) {
+			buildings.add(new MarketBuilding(shopTier, "Supplies", new ColonyItemSpawner()));
 		}
+		return buildings;
 	}
 
 	public static void orbit(SpaceObject parent, SpaceObject child, float variation) {

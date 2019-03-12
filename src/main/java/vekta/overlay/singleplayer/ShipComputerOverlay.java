@@ -20,7 +20,7 @@ public class ShipComputerOverlay extends TextOverlay {
 	@Override
 	public String getText() {
 		if(!ship.hasEnergy()) {
-			String reason = ship.isOverheated() ? "Overheated!" : "Emergy Power";
+			String reason = ship.isOverheated() ? "Overheated!" : "Emergency Power";
 			return ":: Override: " + reason + " ::";
 		}
 		if(ship.isLanding()) {

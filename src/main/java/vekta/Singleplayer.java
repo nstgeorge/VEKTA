@@ -66,6 +66,7 @@ public class Singleplayer implements World, PlayerListener {
 	private final Counter targetCt = new Counter(30); // Counter for periodically updating Targeter instances
 	private final Counter spawnCt = new Counter(100); // Counter for periodically cleaning/spawning objects
 	private final Counter eventCt = new Counter(3600 * 5).randomize(); // Counter for random player events
+	private final Counter situationCt = new Counter(100).randomize(); // Counter for situational events
 
 	private PlayerOverlay overlay;
 
@@ -79,7 +80,7 @@ public class Singleplayer implements World, PlayerListener {
 	public void start() {
 		v.frameCount = 0;
 		Resources.stopMusic();
-		
+
 		if(state == null) {
 			Faction playerFaction = new Faction(FactionType.PLAYER, "VEKTA I", UI_COLOR);
 			Player player = new Player(playerFaction);
@@ -148,6 +149,7 @@ public class Singleplayer implements World, PlayerListener {
 		playerShip.addModule(new HyperdriveModule(.5F));
 		playerShip.getInventory().add(new ModuleItem(new WormholeModule()));
 		playerShip.getInventory().add(new ModuleItem(new ActiveTCSModule(5)));
+		playerShip.getInventory().add(new ModuleItem(new BatteryModule(1)));
 		playerShip.getInventory().add(new ModuleItem(new TorpedoModule(2)));
 		playerShip.getInventory().add(new ModuleItem(new TractorBeamModule(1)));
 		playerShip.getInventory().add(new ModuleItem(new StructuralModule(3, 1)));
@@ -319,6 +321,10 @@ public class Singleplayer implements World, PlayerListener {
 		if(eventCt.cycle()) {
 			eventCt.randomize();
 			EventGenerator.spawnEvent(getPlayer());
+		}
+		
+		if(situationCt.cycle()) {
+			EventGenerator.updateSituations(getPlayer());
 		}
 
 		prevLevel = level;

@@ -23,6 +23,10 @@ public class Item implements Serializable, Comparable<Item> {
 	public ItemType getType() {
 		return type;
 	}
+	
+	public int getColor() {
+		return getType().getColor();
+	}
 
 	public int randomPrice() {
 		return (int)(v.random(1, 10) * getType().getPriceModifier());

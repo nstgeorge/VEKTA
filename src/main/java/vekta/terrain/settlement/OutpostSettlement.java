@@ -4,7 +4,6 @@ import vekta.Faction;
 import vekta.item.Inventory;
 import vekta.menu.Menu;
 import vekta.spawner.WorldGenerator;
-import vekta.terrain.LandingSite;
 
 import static vekta.Vekta.v;
 

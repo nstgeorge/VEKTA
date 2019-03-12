@@ -1,5 +1,6 @@
 package vekta.spawner.item;
 
+import vekta.item.ColonyItem;
 import vekta.item.Item;
 import vekta.item.ItemType;
 import vekta.spawner.ItemGenerator;
@@ -17,7 +18,11 @@ public class ColonyItemSpawner implements ItemGenerator.ItemSpawner {
 
 	@Override
 	public Item create() {
-		// TODO: add colony building items
-		return ItemGenerator.randomItem();
+		return randomColonyItem();
+	}
+
+	public static Item randomColonyItem() {
+		// TODO: add more items
+		return new ColonyItem();
 	}
 }

@@ -9,9 +9,7 @@ import java.util.List;
 
 public class HabitableTerrain extends Terrain {
 	private Settlement settlement;
-
-	private LandingSite site;
-
+	
 	public HabitableTerrain(Settlement settlement) {
 		this.settlement = settlement;
 

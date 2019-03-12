@@ -3,8 +3,9 @@ package vekta.person;
 import vekta.Faction;
 import vekta.Resources;
 import vekta.Syncable;
+import vekta.menu.option.DialogOption;
 import vekta.mission.Mission;
-import vekta.mission.MissionListener;
+import vekta.mission.MissionIssuer;
 import vekta.object.SpaceObject;
 import vekta.spawner.PersonGenerator;
 import vekta.terrain.LandingSite;
@@ -14,7 +15,7 @@ import vekta.terrain.settlement.Settlement;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Person extends Syncable<Person> implements MissionListener {
+public class Person extends Syncable<Person> implements MissionIssuer {
 
 	private final Map<Syncable, OpinionType> opinions = new HashMap<>();
 
@@ -30,7 +31,8 @@ public class Person extends Syncable<Person> implements MissionListener {
 		setFaction(faction);
 	}
 
-	public String getShortName() {
+	@Override
+	public String getName() {
 		return name;
 	}
 
@@ -38,6 +40,7 @@ public class Person extends Syncable<Person> implements MissionListener {
 		return name + (title != null ? " " + title : "");
 	}
 
+	@Override
 	public Faction getFaction() {
 		return faction;
 	}
@@ -74,6 +77,7 @@ public class Person extends Syncable<Person> implements MissionListener {
 		return home != null ? home.getSite() : null;
 	}
 
+	@Override
 	public SpaceObject findHomeObject() {
 		LandingSite site = findHomeSite();
 		return site != null ? site.getParent() : null;
@@ -99,7 +103,10 @@ public class Person extends Syncable<Person> implements MissionListener {
 				// Add custom response messages
 				String response = parts[i].trim();
 				if(response.startsWith(":")) {
-					//					dialog.addResponse(response);
+					String[] args = response.split(" ", 2);
+					Dialog next = createDialog(args[0].trim());
+					dialog.add(new DialogOption(args[1].trim(), next));
+					next.addContinuation(dialog); // TODO: inherit continuations rather than continue to `dialog` itself
 				}
 				else {
 					dialog.addResponse(response);

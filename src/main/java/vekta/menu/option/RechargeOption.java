@@ -4,6 +4,7 @@ import vekta.menu.Menu;
 import vekta.object.ship.ModularShip;
 
 import static processing.core.PApplet.ceil;
+import static processing.core.PApplet.min;
 import static vekta.Vekta.moneyString;
 
 public class RechargeOption implements MenuOption {
@@ -21,7 +22,7 @@ public class RechargeOption implements MenuOption {
 	}
 
 	public int getCost() {
-		return ceil(price * (1 - ship.getEnergy() / ship.getMaxEnergy()));
+		return min(ship.getInventory().getMoney(), ceil(price * (ship.getMaxEnergy() - ship.getEnergy())));
 	}
 
 	@Override
@@ -31,8 +32,8 @@ public class RechargeOption implements MenuOption {
 
 	@Override
 	public void select(Menu menu) {
-		ship.recharge();
-		if(ship.getEnergy() == ship.getMaxEnergy()) {
+		if(ship.getInventory().remove(getCost())) {
+			ship.addEnergy(getCost() / price);
 			menu.remove(this);
 		}
 	}

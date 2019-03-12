@@ -30,7 +30,10 @@ public class WormholeModule extends ShipModule {
 		return target != null && !target.isDestroyed();
 	}
 
-	public SpaceObject getTarget() {
+	public SpaceObject findTarget() {
+		if(!hasTarget()) {
+			target = null;
+		}
 		return target;
 	}
 
@@ -44,12 +47,12 @@ public class WormholeModule extends ShipModule {
 
 	@Override
 	public String getName() {
-		return "Wormhole Drive (" + (hasTarget() ? target.getName() : "untargeted") + ")";
+		return "Wormhole Drive (" + (hasTarget() ? findTarget().getName() : "untargeted") + ")";
 	}
 
 	@Override
 	public ModuleType getType() {
-		return ModuleType.UTILITY;
+		return ModuleType.HYPERDRIVE;
 	}
 
 	@Override
@@ -71,7 +74,7 @@ public class WormholeModule extends ShipModule {
 				setTarget(targeter.getTarget());
 				if(getShip().hasController()) {
 					getShip().getController().send("Wormhole target "
-							+ (getTarget() != null ? "updated to " + getTarget().getName() : "cleared"));
+							+ (hasTarget() ? "updated to " + findTarget().getName() : "cleared"));
 				}
 			}
 		}
@@ -81,7 +84,7 @@ public class WormholeModule extends ShipModule {
 	}
 
 	public void teleport(ModularShip ship) {
-		if(getTarget() == null) {
+		if(!hasTarget()) {
 			return;
 		}
 
@@ -89,9 +92,9 @@ public class WormholeModule extends ShipModule {
 		if(ship.hasEnergy() && ship.getEnergy() >= getEnergyConsumption()) {
 			ship.consumeEnergy(getEnergyConsumption());
 			ship.setTemperature(temp);
-			PVector offset = PVector.random2D().mult((ship.getRadius() + getTarget().getRadius()) * 2);
-			ship.getPositionReference().set(getTarget().getPosition().add(offset));
-			ship.setVelocity(getTarget().getVelocity());
+			PVector offset = PVector.random2D().mult((ship.getRadius() + target.getRadius()) * 2);
+			ship.getPositionReference().set(target.getPosition().add(offset));
+			ship.setVelocity(target.getVelocity());
 			Resources.playSound("hyperdriveHit");
 			getShip().setLanding(true);
 		}
@@ -112,7 +115,7 @@ public class WormholeModule extends ShipModule {
 		}
 
 		if(menu.getHandle() instanceof ObjectMenuHandle && ((ObjectMenuHandle)menu.getHandle()).getSpaceObject() == menu.getPlayer().getShip()) {
-			menu.add(new BasicOption("Teleport (" + getTarget().getName() + ")", m -> {
+			menu.add(new BasicOption("Teleport (" + findTarget().getName() + ")", m -> {
 				m.close();
 				teleport(m.getPlayer().getShip());
 			}));

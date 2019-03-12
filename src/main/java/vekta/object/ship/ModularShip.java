@@ -156,9 +156,9 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		maxEnergy += amount;
 	}
 
-	public void recharge() {
-		setEnergy(getMaxEnergy());
-	}
+//	public void recharge() {
+//		setEnergy(getMaxEnergy());
+//	}
 
 	@Override
 	public List<Module> getModules() {

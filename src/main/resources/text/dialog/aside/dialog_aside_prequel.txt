@@ -1,0 +1,2 @@
+You fool! I've been trained in your {item_adj_common} arts by {person}. *So uncivilized. *I have waited a long time for this moment. *I don't understand. 
+Back away; I will deal with this {item_adj_common} slime myself. *So uncivilized. *I have waited a long time for this moment. *I don't understand.
