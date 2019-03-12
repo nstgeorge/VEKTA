@@ -296,19 +296,19 @@ public class Singleplayer implements World, PlayerListener {
 
 		state.endUpdate();
 
-//		if(level.ordinal() == prevLevel.ordinal() - 1 && !playerShip.isDestroyed()) {
-//			// Center around zero for improved floating-point precision
-//			state.addRelativePosition(playerShip.getPosition());
-//		}
-//
-//		// Change global relative velocity to player ship when zoomed in
-//		if(RenderLevel.SHIP.isVisibleTo(level)) {
-//			state.addRelativeVelocity(playerShip.getVelocity());
-//		}
-//		else if(level.ordinal() == prevLevel.ordinal() + 1) {
-//			state.resetRelativeVelocity();
-//		}
-//		state.updateGlobalCoords(getTimeScale());
+		if(level.ordinal() == prevLevel.ordinal() - 1 && !playerShip.isDestroyed()) {
+			// Center around zero for improved floating-point precision
+			state.addRelativePosition(playerShip.getPosition());
+		}
+
+		// Change global relative velocity to player ship when zoomed in
+		if(RenderLevel.SHIP.isVisibleTo(level)) {
+			state.addRelativeVelocity(playerShip.getVelocity());
+		}
+		else if(level.ordinal() == prevLevel.ordinal() + 1) {
+			state.resetRelativeVelocity();
+		}
+		state.updateGlobalCoords(getTimeScale());
 
 		if(level != prevLevel) {
 			onRenderLevelChange(level);

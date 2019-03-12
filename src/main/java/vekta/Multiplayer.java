@@ -44,9 +44,9 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		case SHIP:
 			return 10;
 		case PLANET:
-			return 1000;
+			return 100;
 		case STAR:
-			return 10000;
+			return 1000;
 		default:
 			return 1;
 		}
@@ -91,6 +91,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		Player player = playerMap.remove(peer);
 		if(player != null) {
 			remove(player);
+			remove(player.getShip());
 			getPlayer().send(player.getName() + " left the world");
 		}
 		if(levelMap.remove(peer) != null) {
@@ -146,7 +147,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		if(object instanceof SpaceObject) {
 			SpaceObject s = (SpaceObject)object;
 			s.getPositionReference().add(state.getGlobalOffset().relativePosition(msg.getOffset()));
-//			s.addVelocity(state.getGlobalOffset().relativeVelocity(msg.getOffset()));
+			s.addVelocity(state.getGlobalOffset().relativeVelocity(msg.getOffset()));
 		}
 	}
 
@@ -238,7 +239,9 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	public void onMenu(Menu menu) {
 		super.onMenu(menu);
 
-		connection.send(new RenderLevelMessage(RenderLevel.STAR));
+		if(connection != null) {// TEMP conditional
+			connection.send(new RenderLevelMessage(RenderLevel.STAR));
+		}
 	}
 
 	@Override
