@@ -34,10 +34,8 @@ public class TaskObjective extends Objective {
 		if(menu.getHandle() instanceof LandingMenuHandle) {
 			LandingSite site = ((LandingMenuHandle)menu.getHandle()).getSite();
 			if(getSpaceObject() == null || site.getParent() == getSpaceObject()) {
-				menu.add(new BasicOption(name, m -> {
-					complete();
-					m.close();
-				}));
+				menu.add(new BasicOption(name, m -> complete())
+						.withRemoval());
 			}
 		}
 	}

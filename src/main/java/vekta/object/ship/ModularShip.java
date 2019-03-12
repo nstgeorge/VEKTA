@@ -23,7 +23,7 @@ import static vekta.Vekta.*;
 
 public abstract class ModularShip extends Ship implements ModuleUpgradeable, PlayerListener {
 	private static final float ENERGY_TIME_SCALE = 1e-4F;
-	private static final float ENERGY_HEAT_SCALE = 1e4F;
+	private static final float ENERGY_HEAT_SCALE = 1;
 
 	private Player controller;
 
@@ -133,7 +133,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	public boolean consumeEnergyOverTime(float amount) {
 		return consumeEnergyImmediate(amount * ENERGY_TIME_SCALE * getWorld().getTimeScale());
 	}
-	
+
 	public boolean consumeEnergyImmediate(float amount) {
 		if(getTemperature() >= getOverheatTemperature()) {
 			overheated = true;
@@ -143,7 +143,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			overheated = false;
 		}
 
-		addHeat(amount * ENERGY_HEAT_SCALE);
+		addHeat(amount * ENERGY_HEAT_SCALE / ENERGY_TIME_SCALE);
 		energy -= amount;
 		if(energy < 0) {
 			energy = 0;
@@ -161,9 +161,9 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		maxEnergy += amount;
 	}
 
-//	public void recharge() {
-//		setEnergy(getMaxEnergy());
-//	}
+	//	public void recharge() {
+	//		setEnergy(getMaxEnergy());
+	//	}
 
 	@Override
 	public List<Module> getModules() {

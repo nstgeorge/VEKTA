@@ -100,7 +100,7 @@ public class MissionGenerator {
 		}
 		Dialog greeting = person.createDialog("greeting");
 		if(dialog != null) {
-			greeting.addContinuation(dialog);
+			greeting.then(dialog);
 		}
 		return greeting;
 	}

@@ -131,6 +131,8 @@ public class SpaceStation extends ModularShip {
 			v.rotate(component.getDirection()/*.rotate(component.getRotation())*/.getAngle());
 			component.getModule().draw(dist, TILE_SIZE * ratio);
 			v.popMatrix();
+			
+			v.noFill(); // Component models assume no fill by default
 
 			//			// DEBUG: render bounding boxes
 			//			v.stroke(100);

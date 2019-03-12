@@ -9,7 +9,14 @@ public interface Context extends Overlay {
 	/**
 	 * Called whenever the context is activated
 	 */
-	void focus();
+	default void focus() {
+	}
+
+	/**
+	 * Called whenever the context is replaced
+	 */
+	default void unfocus() {
+	}
 
 	/**
 	 * What to do when any key is pressed

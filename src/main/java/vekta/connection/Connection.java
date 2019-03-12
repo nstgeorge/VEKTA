@@ -35,8 +35,14 @@ public class Connection {
 				}
 			});
 			socket.on(Socket.EVENT_DISCONNECT, args -> {
+				println("Disconnected from server");
 				for(ConnectionListener listener : listeners) {
 					listener.onDisconnect();
+				}
+			});
+			socket.on(Socket.EVENT_CONNECT_ERROR, args -> {
+				for(ConnectionListener listener : listeners) {
+					listener.onConnectError();
 				}
 			});
 			socket.on(Socket.EVENT_ERROR, args -> {

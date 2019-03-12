@@ -30,5 +30,7 @@ public class DialogOption implements MenuOption {
 		dialog.openMenu(menu.getPlayer(), useMenuDefault
 				? menu.getDefault()
 				: defaultOption != null ? defaultOption : new BackOption(menu));
+		
+		menu.remove(this);
 	}
 }

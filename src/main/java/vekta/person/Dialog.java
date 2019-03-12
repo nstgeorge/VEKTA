@@ -18,8 +18,8 @@ public class Dialog implements Serializable {
 	private final String message;
 
 	private final List<String> responses = new ArrayList<>();
-	private final List<Dialog> continuations = new ArrayList<>();
 	private final List<MenuOption> options = new ArrayList<>();
+	private Dialog next;
 
 	public Dialog(Person person, String message) {
 		this.person = person;
@@ -46,8 +46,30 @@ public class Dialog implements Serializable {
 		return options;
 	}
 
-	public void addContinuation(Dialog dialog) {
-		continuations.add(dialog);
+	public Dialog getNext() {
+		return next;
+	}
+
+	public boolean hasNext() {
+		return next != null;
+	}
+
+	public Dialog then(String next) {
+		return then(getPerson().createDialog(next));
+	}
+
+	public Dialog then(String next, float chance) {
+		return v.chance(chance) ? then(next) : this;
+	}
+
+	public Dialog then(Dialog dialog) {
+		if(next == null) {
+			next = dialog;
+		}
+		else {
+			next.then(dialog);
+		}
+		return this;
 	}
 
 	public void add(MenuOption option) {
@@ -58,18 +80,17 @@ public class Dialog implements Serializable {
 		add(new DialogOption(response, dialog));
 	}
 
-//	public void openMenu(Menu menu) {
-//		openMenu(menu.getPlayer(), new BackOption(menu));
-//	}
+	//	public void openMenu(Menu menu) {
+	//		openMenu(menu.getPlayer(), new BackOption(menu));
+	//	}
 
 	public void openMenu(Player player, MenuOption def) {
 		Menu menu = new Menu(player, new DialogMenuHandle(def, this));
-		if(!continuations.isEmpty()) {
-			Dialog next = v.random(continuations);
+		if(hasNext()) {
 			List<String> responses = new ArrayList<>(getResponses().isEmpty() ? Collections.singletonList("Next") : getResponses());
 			Collections.shuffle(responses);
 			for(String response : responses) {
-				menu.add(new DialogOption(response, next));
+				menu.add(new DialogOption(response, getNext()));
 			}
 		}
 

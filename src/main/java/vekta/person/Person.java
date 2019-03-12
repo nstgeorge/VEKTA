@@ -108,7 +108,7 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 					String[] args = response.split(" ", 2);
 					Dialog next = createDialog(args[0].substring(1).trim());
 					dialog.add(new DialogOption(args[1].trim(), next));
-					next.addContinuation(dialog); // TODO: inherit continuations rather than continue to `dialog` itself
+					next.then(dialog);
 				}
 				else {
 					dialog.addResponse(response);

@@ -29,6 +29,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	private static final int PLAYER_INTERVAL_FAR = 60;
 
 	private transient Connection connection;
+	private boolean unableToConnect = false;
 
 	private final transient Map<Peer, Player> playerMap = new WeakHashMap<>();
 	private final transient Map<Peer, Float> timeMap = new WeakHashMap<>();
@@ -63,16 +64,25 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 			applyContext();
 
 			connection.send(new PlayerJoinMessage(getPlayer()));
-
-			if(!connection.isConnected()) {
-				getPlayer().send("Server is not currently available")
-						.withColor(DANGER_COLOR);
-			}
 		}));
 		//		applyContext();
 	}
 
 	//// Connection listeners
+
+	@Override
+	public void onConnect() {
+		unableToConnect = false;
+	}
+
+	@Override
+	public void onConnectError() {
+		if(!unableToConnect) {
+			unableToConnect = true;
+			getPlayer().send("Server is not currently available")
+					.withColor(DANGER_COLOR);
+		}
+	}
 
 	@Override
 	public void onDisconnect(Peer peer) {
@@ -224,12 +234,16 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	}
 
 	@Override
+	public void unfocus() {
+		super.unfocus();
+//		if(connection != null) {// TEMP conditional
+			connection.send(new TimeScaleMessage(Float.POSITIVE_INFINITY));
+//		}
+	}
+
+	@Override
 	public void onMenu(Menu menu) {
 		super.onMenu(menu);
-
-		if(connection != null) {// TEMP conditional
-			connection.send(new TimeScaleMessage(Float.POSITIVE_INFINITY));
-		}
 	}
 
 	@Override

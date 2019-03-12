@@ -29,19 +29,14 @@ public class AdviceObjectiveSpawner implements ObjectiveSpawner {
 	}
 
 	public static Dialog randomAdviceDialog(Player player, Person person) {
-		Dialog dialog = null;
-		int dialogCt = (int)v.random(2) + 1;
-		for(int i = 0; i < dialogCt; i++) {
-			if(dialog != null) {
-				Dialog next = person.createDialog("continue");
-				next.addContinuation(dialog);
-				Dialog appreciate = person.createDialog("appreciate");
-				appreciate.addContinuation(next);
-				dialog = appreciate;
+		Dialog dialog = person.createDialog("advice");
+		int adviceCt = (int)v.random(2) + 1;
+		while(adviceCt-- > 0) {
+			dialog.then("appreciate");
+			// Add continuation dialog for subsequent advice
+			if(adviceCt > 0) {
+				dialog.then("continue").then("advice");
 			}
-			Dialog advice = person.createDialog("advice");
-			advice.addContinuation(dialog);
-			dialog = advice;
 		}
 		return dialog;
 	}

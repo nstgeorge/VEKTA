@@ -9,6 +9,9 @@ public interface ConnectionListener extends MessageListener {
 	default void onDisconnect() {
 	}
 
+	default void onConnectError() {
+	}
+
 	default void onConnect(Peer peer) {
 	}
 

@@ -109,9 +109,9 @@ public class TextInputContext implements Context {
 	}
 
 	public void close(String value) {
+		setContext(back);
 		if(value != null) {
 			callback.accept(value);
 		}
-		setContext(back);
 	}
 }

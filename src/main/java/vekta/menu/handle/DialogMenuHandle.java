@@ -41,8 +41,11 @@ public class DialogMenuHandle extends MenuHandle {
 		if(!visited) {
 			visited = true;
 		}
+		else if(getDialog().hasNext()){
+			getDialog().getNext().openMenu(menu.getPlayer(), getDefault());
+		}
 		else {
-			dialog.openMenu(menu.getPlayer(), menu.getDefault());
+			dialog.openMenu(menu.getPlayer(), getDefault());
 		}
 	}
 
