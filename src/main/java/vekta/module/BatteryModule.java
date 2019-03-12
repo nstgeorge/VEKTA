@@ -68,7 +68,7 @@ public class BatteryModule extends ShipModule {
 	}
 
 	@Override
-	public void onItemMenu(Menu menu) {
+	public void onMenu(Menu menu) {
 		if(menu.getHandle() instanceof LandingMenuHandle) {
 			LandingSite site = ((LandingMenuHandle)menu.getHandle()).getSite();
 

@@ -79,7 +79,7 @@ public class Singleplayer implements World, PlayerListener {
 	public void start() {
 		v.frameCount = 0;
 		Resources.stopMusic();
-
+		
 		if(state == null) {
 			Faction playerFaction = new Faction(FactionType.PLAYER, "VEKTA I", UI_COLOR);
 			Player player = new Player(playerFaction);
@@ -104,7 +104,7 @@ public class Singleplayer implements World, PlayerListener {
 		}
 
 		Player player = getPlayer();
-		
+
 		// Configure UI overlay
 		overlay = new PlayerOverlay(player);
 		player.addListener(overlay); // TODO: listener might be getting serialized
@@ -112,7 +112,7 @@ public class Singleplayer implements World, PlayerListener {
 
 	public void cleanup() {
 		getPlayer().removeListener(this);
-		
+
 		// Cleanup behavior on exiting/restarting the world
 		lowPass.stop();
 	}
@@ -146,16 +146,14 @@ public class Singleplayer implements World, PlayerListener {
 		playerShip.addModule(new TelescopeModule(.5F));
 		playerShip.addModule(new DrillModule(2));
 		playerShip.addModule(new HyperdriveModule(.5F));
+		playerShip.getInventory().add(new ModuleItem(new WormholeModule()));
+		playerShip.getInventory().add(new ModuleItem(new ActiveTCSModule(5)));
 		playerShip.getInventory().add(new ModuleItem(new TorpedoModule(2)));
 		playerShip.getInventory().add(new ModuleItem(new TractorBeamModule(1)));
 		playerShip.getInventory().add(new ModuleItem(new StructuralModule(3, 1)));
 		playerShip.getInventory().add(new ModuleItem(new StationCoreModule(1)));
 		playerShip.getInventory().add(new ModuleItem(new OrbitModule(1)));
 		playerShip.getInventory().add(new ColonyItem());
-
-		//		// Testing out a mission sequence
-		//		Person person = PersonGenerator.createPerson();
-		//		MissionGenerator.createMessenger(player, MissionGenerator.randomApproachDialog(player, person));
 	}
 
 	public Player getPlayer() {
@@ -309,7 +307,7 @@ public class Singleplayer implements World, PlayerListener {
 			state.resetRelativeVelocity();
 		}
 		state.updateGlobalCoords(getTimeScale());
-		
+
 		RenderLevel spawnLevel = level;
 		while(spawnLevel.ordinal() > 0 && v.chance(.05F)) {
 			spawnLevel = RenderLevel.values()[spawnLevel.ordinal() - 1];

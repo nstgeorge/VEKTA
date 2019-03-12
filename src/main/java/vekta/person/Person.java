@@ -93,12 +93,17 @@ public class Person extends Syncable<Person> implements MissionListener {
 
 	public Dialog createDialog(String type) {
 		String[] parts = Resources.generateString("dialog_" + type).split("\\*");
-		Dialog dialog = new Dialog(type, parts[0].trim(), this);
+		Dialog dialog = new Dialog(this, parts[0].trim());
 		if(parts.length > 1) {
 			for(int i = 1; i < parts.length; i++) {
 				// Add custom response messages
 				String response = parts[i].trim();
-				dialog.addResponse(response);
+				if(response.startsWith(":")) {
+					//					dialog.addResponse(response);
+				}
+				else {
+					dialog.addResponse(response);
+				}
 			}
 		}
 		return dialog;
@@ -127,12 +132,12 @@ public class Person extends Syncable<Person> implements MissionListener {
 		setOpinion(mission.getPlayer().getFaction(), OpinionType.GRATEFUL);
 	}
 
-//	@Override
-//	public void onSync(Person data) {
-//		this.faction = data.faction;
-//		this.title = data.title;
-//		//		this.home = register(data.home);
-//
-//		syncAll(opinions.keySet(), data.opinions.keySet());
-//	}
+	//	@Override
+	//	public void onSync(Person data) {
+	//		this.faction = data.faction;
+	//		this.title = data.title;
+	//		//		this.home = register(data.home);
+	//
+	//		syncAll(opinions.keySet(), data.opinions.keySet());
+	//	}
 }

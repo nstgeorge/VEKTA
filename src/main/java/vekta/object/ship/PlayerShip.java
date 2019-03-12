@@ -22,7 +22,7 @@ public class PlayerShip extends ModularShip {
 		addModule(new RCSModule(1));
 		addModule(new TargetingModule());
 		addModule(new BatteryModule(100));
-		addModule(new RadiatorModule(1));
+		addModule(new PassiveTCSModule(1));
 		addModule(new CannonModule());
 
 		setEnergy(getMaxEnergy());

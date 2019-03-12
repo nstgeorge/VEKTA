@@ -2,6 +2,7 @@ package vekta.terrain.settlement;
 
 import vekta.Faction;
 import vekta.Resources;
+import vekta.Syncable;
 import vekta.menu.Menu;
 import vekta.menu.option.UpgradeMenuOption;
 import vekta.object.SpaceObject;
@@ -11,7 +12,7 @@ import vekta.terrain.Terrain;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Settlement implements SettlementPart {
+public abstract class Settlement extends Syncable<Settlement> implements SettlementPart {
 	private final List<SettlementPart> parts = new ArrayList<>();
 
 	private final String name;

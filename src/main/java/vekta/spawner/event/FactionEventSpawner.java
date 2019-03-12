@@ -17,21 +17,19 @@ public class FactionEventSpawner implements EventGenerator.EventSpawner {
 	public void spawn(Player player) {
 		Faction a = FactionGenerator.randomFaction();
 		Faction b = FactionGenerator.randomFaction();
-		boolean withPlayer = false;
-		if(b == null || b == a || v.chance(.1F)) {
-			b = player.getFaction();
-			withPlayer = true;
+		if(b == a) {
+			b = FactionGenerator.createFaction();
 		}
 
 		if(a.isAlly(b)) {
 			a.setNeutral(b);
 			player.send(a.getName() + " has withdrawn from their alliance with " + b.getName());
 		}
-		else if(a.isEnemy(b) && !withPlayer) {
+		else if(a.isEnemy(b)) {
 			a.setNeutral(b);
 			player.send(a.getName() + " has negotiated peace with " + b.getName());
 		}
-		else if(v.chance(.7F) && !withPlayer) {
+		else if(v.chance(.7F)) {
 			a.setAlly(b);
 			player.send(a.getName() + " has formed an alliance with " + b.getName());
 		}

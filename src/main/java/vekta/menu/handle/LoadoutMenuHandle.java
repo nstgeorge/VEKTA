@@ -36,6 +36,11 @@ public class LoadoutMenuHandle extends MenuHandle {
 	}
 
 	@Override
+	public int getButtonY(int i) {
+		return super.getButtonY(i - 1);
+	}
+
+	@Override
 	public String getSelectVerb() {
 		return "install";
 	}

@@ -15,7 +15,6 @@ public class HyperdriveModule extends ShipModule {
 
 	private boolean active;
 	private float currentBoost;
-	//	private int sustain = 0;
 
 	public HyperdriveModule() {
 		this(1);
@@ -40,7 +39,7 @@ public class HyperdriveModule extends ShipModule {
 
 	@Override
 	public ModuleType getType() {
-		return ModuleType.UTILITY;
+		return ModuleType.HYPERDRIVE;
 	}
 
 	@Override

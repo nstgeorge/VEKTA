@@ -16,7 +16,7 @@ public class MessengerShip extends Ship {
 	private static final float DEF_RADIUS = 5;
 	private static final float DEF_SPEED = .2F;
 	private static final float DEF_TURN = 4;
-	private static final float APPROACH_FACTOR = .1F;
+	private static final float APPROACH_FACTOR = .2F;
 
 	private final Player player;
 	private final Dialog dialog;

@@ -14,30 +14,24 @@ import java.util.List;
 import static vekta.Vekta.*;
 
 public class Dialog implements Serializable {
-	private final String type;
-	private final String message;
 	private final Person person;
+	private final String message;
 
 	private final List<String> responses = new ArrayList<>();
 	private final List<Dialog> continuations = new ArrayList<>();
 	private final List<MenuOption> options = new ArrayList<>();
 
-	public Dialog(String type, String message, Person person) {
-		this.type = type;
-		this.message = message;
+	public Dialog(Person person, String message) {
 		this.person = person;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public String getMessage() {
-		return message;
+		this.message = message;
 	}
 
 	public Person getPerson() {
 		return person;
+	}
+
+	public String getMessage() {
+		return message;
 	}
 
 	public List<String> getResponses() {
@@ -72,7 +66,8 @@ public class Dialog implements Serializable {
 		Menu menu = new Menu(player, new DialogMenuHandle(def, this));
 		if(!continuations.isEmpty()) {
 			Dialog next = v.random(continuations);
-			List<String> responses = getResponses().isEmpty() ? Collections.singletonList("Next") : getResponses();
+			List<String> responses = new ArrayList<>(getResponses().isEmpty() ? Collections.singletonList("Next") : getResponses());
+			Collections.shuffle(responses);
 			for(String response : responses) {
 				menu.add(new DialogOption(response, next));
 			}

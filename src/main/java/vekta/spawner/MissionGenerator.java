@@ -77,31 +77,47 @@ public class MissionGenerator {
 	public static void addObjectives(Person person, Mission mission, int steps) {
 		float r = v.random(1);
 		Objective objective;
-		if(r > .7) {
+		if(r > .8) {
 			LandingSite site = randomLandingSite();
 			mission.add(new LandAtObjective(site.getParent()));
 			String task = Resources.generateString(site.getTerrain().isInhabited() ? "settlement_task" : "planet_task");
 			objective = new TaskObjective(task, site.getParent());
 		}
-		else if(r > .4) {
+		else if(r > .6) {
 			Person target = randomMissionPerson(person);
 			objective = new DeliverItemObjective(ItemGenerator.randomItem(), target);
 		}
-		else if(r > .2) {
+		else if(r > .4) {
 			Item item = ItemGenerator.randomItem();
 			mission.add(new SearchForItemObjective(item, v.random(.1F, .5F)));
 			objective = new DeliverItemObjective(item, v.chance(.8F) ? person : randomMissionPerson(person));
 		}
+		else if(r > .2) {
+			Person other = randomMissionPerson(person);
+			mission.add(new LandAtObjective(other.findHomeObject()));
+			String[] parts = Resources.generateString("topic").split(":");
+			objective = new AskAboutObjective(parts[0].trim(), parts[1].trim(), v.random(.1F, .5F));
+		}
 		else {
 			Person other = randomMissionPerson(person);
 			mission.add(new LandAtObjective(other.findHomeObject()));
-			objective = new DialogObjective("Confront", randomConfrontDialog(mission.getPlayer(), other, person));
+			objective = randomDialogObjective(other, person, mission);
 		}
 
 		if(steps > 1) {
 			objective.then(() -> addObjectives(person, mission, steps - 1));
 		}
 		mission.add(objective);
+	}
+
+	public static Objective randomDialogObjective(Person person, Person other, Mission mission) {
+		float r = v.random(1);
+		if(r > .5F) {
+			return new DialogObjective("Confront", randomConfrontDialog(mission.getPlayer(), other, person));
+		}
+		else {
+			return new DialogObjective("Advise", randomAdviceDialog(mission.getPlayer(), other));
+		}
 	}
 
 	public static LandingSite randomLandingSite() {
@@ -182,6 +198,24 @@ public class MissionGenerator {
 			Dialog greeting = person.createDialog("greeting");
 			greeting.add(sender.getShortName() + " sent me to talk to you.", dialog);
 			dialog = greeting;
+		}
+		return dialog;
+	}
+
+	public static Dialog randomAdviceDialog(Player player, Person person) {
+		Dialog dialog = null;
+		int dialogCt = (int)v.random(2) + 1;
+		for(int i = 0; i < dialogCt; i++) {
+			if(dialog != null) {
+				Dialog next = person.createDialog("continue");
+				next.addContinuation(dialog);
+				Dialog appreciate = person.createDialog("appreciate");
+				appreciate.addContinuation(next);
+				dialog = appreciate;
+			}
+			Dialog advice = person.createDialog("advice");
+			advice.addContinuation(dialog);
+			dialog = advice;
 		}
 		return dialog;
 	}

@@ -38,17 +38,17 @@ public class MissionMenuHandle extends MenuHandle {
 	public void render(Menu menu) {
 		super.render(menu);
 
+		v.textSize(32);
+		v.fill(v.color(100));
+		v.textAlign(v.CENTER);
+		v.text("Mission:", getButtonX(), getButtonY(-1));
+		
 		if(!(menu.getCursor() instanceof MissionOption)) {
 			return;
 		}
 		Mission mission = ((MissionOption)menu.getCursor()).getMission();
 
 		float missionX = getButtonX() + getButtonWidth() * .75F;
-
-		v.textSize(32);
-		v.fill(v.color(100));
-		v.textAlign(v.CENTER);
-		v.text("Mission:", getButtonX(), getButtonY(-1));
 
 		v.textAlign(v.LEFT);
 		v.fill(100);

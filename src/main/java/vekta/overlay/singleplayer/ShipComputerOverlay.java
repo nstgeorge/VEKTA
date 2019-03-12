@@ -20,7 +20,8 @@ public class ShipComputerOverlay extends TextOverlay {
 	@Override
 	public String getText() {
 		if(!ship.hasEnergy()) {
-			return ":: Override: Emergency Landing ::";
+			String reason = ship.isOverheated() ? "Overheated!" : "Emergy Power";
+			return ":: Override: " + reason + " ::";
 		}
 		if(ship.isLanding()) {
 			return ":: Autopilot: Engaged ::"; // TODO: split into two Overlays, one for landing/docking mode and the other for autopilot messages
