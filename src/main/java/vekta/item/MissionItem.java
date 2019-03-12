@@ -22,7 +22,7 @@ public class MissionItem extends Item implements MissionIssuer {
 	public MissionItem(String name, Mission mission) {
 		this(name, player -> mission);
 	}
-
+	
 	public MissionItem(String name, MissionProvider provider) {
 		super(name, ItemType.MISSION);
 

@@ -32,7 +32,7 @@ public class ConfrontObjectiveSpawner implements MissionGenerator.ObjectiveSpawn
 	public static Dialog randomConfrontDialog(Player player, Person person, MissionIssuer sender) {
 		Dialog dialog = person.createDialog("confronted");
 
-		dialog.then("confession", .75F);
+		dialog.then("confession");
 
 		if(v.chance(.75F)) {
 			Dialog greeting = person.createDialog("greeting");

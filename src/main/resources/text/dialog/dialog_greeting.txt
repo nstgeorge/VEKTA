@@ -6,4 +6,4 @@ How are you today? *I'm fine, thanks. *Good. *Yes.
 Hey! What are you doing flying out here? *Just snooping around. *Nice to see you again, old friend.
 It seems the stories are true...
 You... *Yes? *Me.
-Hey there, Sunny Jim. *Greetings! *What did you just call me?
+Get over here, you {item_adj_common} little {item_noun}. *Okay! *What did you just call me?

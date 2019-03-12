@@ -227,6 +227,24 @@ public class Singleplayer implements World, PlayerListener {
 
 		state.startUpdate();
 
+		////
+
+		if(level.ordinal() == prevLevel.ordinal() - 1 && !playerShip.isDestroyed()) {
+			// Center around zero for improved floating-point precision
+			state.addRelativePosition(playerShip.getPosition());
+		}
+		
+		// Change global relative velocity to player ship when zoomed in
+		if(RenderLevel.SHIP.isVisibleTo(level)) {
+			state.addRelativeVelocity(playerShip.getVelocity());
+		}
+		else if(level.ordinal() == prevLevel.ordinal() + 1) {
+			state.resetRelativeVelocity();
+		}
+		state.updateGlobalCoords(getTimeScale());
+		
+		////
+
 		// Reset object counts for each render distance
 		for(int i = 0; i < objectCounts.length; i++) {
 			objectCounts[i] = 0;
@@ -297,20 +315,6 @@ public class Singleplayer implements World, PlayerListener {
 		}
 
 		state.endUpdate();
-
-		if(level.ordinal() == prevLevel.ordinal() - 1 && !playerShip.isDestroyed()) {
-			// Center around zero for improved floating-point precision
-			state.addRelativePosition(playerShip.getPosition());
-		}
-
-		// Change global relative velocity to player ship when zoomed in
-		if(RenderLevel.SHIP.isVisibleTo(level)) {
-			state.addRelativeVelocity(playerShip.getVelocity());
-		}
-		else if(level.ordinal() == prevLevel.ordinal() + 1) {
-			state.resetRelativeVelocity();
-		}
-		state.updateGlobalCoords(getTimeScale());
 
 		RenderLevel spawnLevel = level;
 		while(spawnLevel.ordinal() > 0 && v.chance(.05F)) {

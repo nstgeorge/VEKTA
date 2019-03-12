@@ -16,10 +16,10 @@ public class BondItem extends Item {
 		return faction;
 	}
 
-	@Override
-	public int getColor() {
-		return getFaction().getColor();
-	}
+//	@Override
+//	public int getColor() {
+//		return getFaction().getColor();
+//	}
 
 	@Override
 	public int randomPrice() {

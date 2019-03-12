@@ -27,7 +27,7 @@ public class DistrictMenuHandle extends MenuHandle {
 
 	@Override
 	public int getButtonY(int i) {
-		return super.getButtonY(i - 2);
+		return super.getButtonY(i - 1);
 	}
 
 	@Override
