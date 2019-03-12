@@ -108,10 +108,6 @@ public class StationLayoutContext implements Context, ModuleUpgrader {
 	public void moveCursor(SpaceStation.Direction dir) {
 		SpaceStation.Component prevCursor = cursor;
 		SpaceStation.Component component = cursor.getAttached(dir);
-		//		if(isPlacing()) {
-		//			cursor = cursor.getParent();
-		//		}
-		/*else */
 		if(component != null) {
 			cursor = component;
 		}
