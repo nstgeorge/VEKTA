@@ -3,18 +3,18 @@ package vekta.mission;
 import vekta.Player;
 import vekta.PlayerEvent;
 import vekta.Resources;
+import vekta.Syncable;
 import vekta.mission.objective.Objective;
 import vekta.mission.reward.Reward;
 import vekta.util.RomanNumerals;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import static processing.core.PApplet.println;
 import static vekta.Vekta.UI_COLOR;
 
-public class Mission implements Serializable {
+public class Mission extends Syncable<Mission> {
 	private final List<Objective> objectives = new ArrayList<>();
 	private final List<Reward> rewards = new ArrayList<>();
 	private final List<MissionListener> listeners = new ArrayList<>();
@@ -86,7 +86,7 @@ public class Mission implements Serializable {
 		boolean hasCompleted = false;
 		for(Objective objective : getObjectives()) {
 			if(objective.getStatus() == MissionStatus.READY) {
-				objective.onStart();
+				objective.onStart(this);
 			}
 
 			if(objective.getStatus() == MissionStatus.STARTED) {
@@ -140,6 +140,8 @@ public class Mission implements Serializable {
 		getPlayer().send("Mission started: " + getName())
 				.withColor(getStatus().getColor())
 				.withTime(2);
+
+		syncChanges();
 	}
 
 	public void cancel() {
@@ -148,16 +150,18 @@ public class Mission implements Serializable {
 			return;
 		}
 
-		status = MissionStatus.CANCELLED;
 		for(MissionListener listener : listeners) {
 			listener.onCancel(this);
 		}
+		status = MissionStatus.CANCELLED;
 		current = null;
 
 		getPlayer().emit(PlayerEvent.MISSION_STATUS, this);
 		getPlayer().send("Mission cancelled: " + getName())
 				.withColor(getStatus().getColor())
 				.withTime(2);
+
+		syncChanges();
 	}
 
 	public void complete() {
@@ -166,10 +170,10 @@ public class Mission implements Serializable {
 			return;
 		}
 
-		status = MissionStatus.COMPLETED;
 		for(MissionListener listener : listeners) {
 			listener.onComplete(this);
 		}
+		status = MissionStatus.COMPLETED;
 		current = null;
 
 		getPlayer().emit(PlayerEvent.MISSION_STATUS, this);
@@ -177,5 +181,7 @@ public class Mission implements Serializable {
 		getPlayer().send("Mission completed: " + getName())
 				.withColor(UI_COLOR)
 				.withTime(2);
+
+		syncChanges();
 	}
 }

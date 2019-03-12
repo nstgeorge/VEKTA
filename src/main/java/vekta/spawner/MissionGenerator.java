@@ -57,7 +57,7 @@ public class MissionGenerator {
 				.toArray(ObjectiveSpawner[]::new));
 		Objective main = spawner.getMainObjective(mission);
 		if(steps > 1) {
-			main.then(() -> addObjectives(mission, steps - 1));
+			main.then(m -> addObjectives(m, steps - 1));
 		}
 		mission.add(main);
 	}

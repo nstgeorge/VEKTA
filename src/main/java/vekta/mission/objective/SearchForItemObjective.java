@@ -49,7 +49,7 @@ public class SearchForItemObjective extends Objective {
 				alreadyChecked.add(inv);
 
 				if(v.chance(getRarity())) {
-					getMission().add(new ObtainItemObjective(getItem()));
+					then(new ObtainItemObjective(getItem()));
 					menu.add(new ItemTradeOption(inv, item, 0));
 					complete();
 				}

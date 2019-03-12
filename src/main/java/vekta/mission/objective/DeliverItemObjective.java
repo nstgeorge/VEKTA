@@ -4,6 +4,7 @@ import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.menu.handle.DialogMenuHandle;
 import vekta.menu.option.BasicOption;
+import vekta.mission.Mission;
 import vekta.object.SpaceObject;
 import vekta.person.Dialog;
 import vekta.person.Person;
@@ -36,8 +37,8 @@ public class DeliverItemObjective extends Objective {
 	}
 
 	@Override
-	public void onStart() {
-		getMission().getPlayer().getInventory().add(item);
+	public void onStartFirst(Mission mission) {
+		mission.getPlayer().getInventory().add(item);
 	}
 
 	@Override

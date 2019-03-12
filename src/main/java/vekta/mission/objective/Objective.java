@@ -1,7 +1,7 @@
 package vekta.mission.objective;
 
-import vekta.Player;
 import vekta.PlayerListener;
+import vekta.Syncable;
 import vekta.mission.Mission;
 import vekta.mission.MissionListener;
 import vekta.mission.MissionStatus;
@@ -9,12 +9,14 @@ import vekta.object.SpaceObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static vekta.Vekta.MISSION_COLOR;
 
-public abstract class Objective implements MissionListener, PlayerListener {
-	private Mission mission;
+public abstract class Objective extends Syncable<Objective> implements MissionListener, PlayerListener {
+	private final Set<Mission> missions = new HashSet<>();
 
 	private MissionStatus status = MissionStatus.READY;
 
@@ -35,53 +37,56 @@ public abstract class Objective implements MissionListener, PlayerListener {
 		return this;
 	}
 
-	public Objective then(Objective next) {
-		this.then(() -> getMission().add(next));
-		return this;
-	}
-
-	public final Mission getMission() {
-		return mission;
-	}
-
-	public Player getPlayer() {
-		return getMission().getPlayer();
+	public Objective then(Objective objective) {
+		return then(mission -> mission.add(objective));
 	}
 
 	public final MissionStatus getStatus() {
 		return status;
 	}
 
+	public Set<Mission> getMissions() {
+		return missions;
+	}
+
 	public void cancel() {
-		setStatus(MissionStatus.CANCELLED);
+		for(Mission mission : missions) {
+			setStatus(MissionStatus.CANCELLED, mission);
+		}
 	}
 
 	public void complete() {
-		setStatus(MissionStatus.COMPLETED);
+		for(Mission mission : missions) {
+			setStatus(MissionStatus.COMPLETED, mission);
+		}
 	}
 
-	private void setStatus(MissionStatus status) {
+	private void setStatus(MissionStatus status, Mission mission) {
 		if(this.status == status) {
 			return;
 		}
 		this.status = status;
 		if(status == MissionStatus.CANCELLED) {
-			getPlayer().send("Objective cancelled: " + getDisplayText())
+			mission.getPlayer().send("Objective cancelled: " + getDisplayText())
 					.withColor(MISSION_COLOR);
 			if(isOptional()) {
-				getMission().cancel();
+				mission.cancel();
 			}
-			getPlayer().removeListener(this);
+			mission.getPlayer().removeListener(this);
+			next.clear();
 		}
 		else if(status == MissionStatus.COMPLETED) {
-			getPlayer().send("Objective completed: " + getDisplayText())
+			mission.getPlayer().send("Objective completed: " + getDisplayText())
 					.withColor(MISSION_COLOR);
 			for(ObjectiveCallback next : this.next) {
-				next.callback();
+				next.callback(mission);
 			}
-			getPlayer().removeListener(this);
+			mission.getPlayer().removeListener(this);
+			next.clear();
 		}
-		getMission().updateCurrentObjective();
+		mission.updateCurrentObjective();
+
+		syncChanges();
 	}
 
 	public String getDisplayText() {
@@ -94,37 +99,43 @@ public abstract class Objective implements MissionListener, PlayerListener {
 
 	@Override
 	public final void onStart(Mission mission) {
-		if(this.mission != null) {
+		if(missions.contains(mission)) {
 			throw new RuntimeException("Objective already started");
 		}
-		this.mission = mission;
-		setStatus(MissionStatus.STARTED);
-		getPlayer().addListener(this);
-		onStart();
+		missions.add(mission);
+		mission.getPlayer().addListener(this);
+		if(getStatus() != MissionStatus.STARTED) {
+			onStartFirst(mission);
+		}
+		setStatus(MissionStatus.STARTED, mission);
 	}
 
 	@Override
 	public final void onCancel(Mission mission) {
-		getPlayer().removeListener(this);
-		onCancel();
+		mission.getPlayer().removeListener(this);
+		if(getStatus() != MissionStatus.CANCELLED) {
+			onCancelFirst(mission);
+		}
 	}
 
 	@Override
 	public final void onComplete(Mission mission) {
-		getPlayer().removeListener(this);
-		onComplete();
+		mission.getPlayer().removeListener(this);
+		if(getStatus() != MissionStatus.COMPLETED) {
+			onCompleteFirst(mission);
+		}
 	}
 
-	public void onStart() {
+	public void onStartFirst(Mission mission) {
 	}
 
-	public void onCancel() {
+	public void onCancelFirst(Mission mission) {
 	}
 
-	public void onComplete() {
+	public void onCompleteFirst(Mission mission) {
 	}
 
 	public interface ObjectiveCallback extends Serializable {
-		void callback();
+		void callback(Mission mission);
 	}
 }
