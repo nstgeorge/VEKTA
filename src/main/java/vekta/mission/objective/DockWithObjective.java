@@ -1,7 +1,6 @@
 package vekta.mission.objective;
 
 import vekta.object.SpaceObject;
-import vekta.object.ship.Ship;
 
 public class DockWithObjective extends Objective {
 	private final SpaceObject object;
@@ -21,8 +20,8 @@ public class DockWithObjective extends Objective {
 	}
 
 	@Override
-	public void onDock(Ship ship) {
-		if(ship == getSpaceObject()) {
+	public void onDock(SpaceObject object) {
+		if(object == getSpaceObject()) {
 			complete();
 		}
 	}

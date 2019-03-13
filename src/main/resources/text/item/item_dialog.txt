@@ -1,4 +1,5 @@
 Worm-o Spray Can advice::react_worm Hit it with some Worm-o.
+Worm-o Spray Can advice::react_worm Try using my Worm-o.
 Worm-o Spray Can advice::react_worm You could try the Worm-o.
 Worm-o Spray Can advice::react_worm Use the Worm-o.
 Worm-o Spray Can advice::react_worm How about using a bit of Worm-o?

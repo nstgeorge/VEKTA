@@ -5,6 +5,8 @@ import vekta.menu.option.MenuOption;
 public interface MenuListener {
 	default void onFocus() {
 	}
+	default void onClose() {
+	}
 
 	default void onHover(MenuOption option) {
 	}

@@ -48,6 +48,8 @@ public class Singleplayer implements World, PlayerListener {
 	private static final float TIME_FALLOFF = .1F;
 	private static final int MAX_OBJECTS_PER_DIST = 5; // TODO: increase as we add more object types
 
+	private static final float MIN_PLANET_TIME_SCALE = 10; // Make traveling between ship-level objects much faster
+
 	private static final SoundGroup MUSIC = new SoundGroup("atmosphere");
 
 	private int[] objectCounts = new int[RenderLevel.values().length];
@@ -167,7 +169,7 @@ public class Singleplayer implements World, PlayerListener {
 		playerShip.addModule(new HyperdriveModule(.5F));
 		playerShip.addModule(new ActiveTCSModule(2));
 		playerShip.getInventory().add(new ModuleItem(new WormholeModule()));
-		playerShip.getInventory().add(new ModuleItem(new BatteryModule(1)));
+		playerShip.getInventory().add(new ModuleItem(new BatteryModule()));
 		playerShip.getInventory().add(new ModuleItem(new TorpedoModule(2)));
 		playerShip.getInventory().add(new ModuleItem(new TractorBeamModule(1)));
 		playerShip.getInventory().add(new ModuleItem(new StructuralModule(3, 1)));
@@ -223,11 +225,34 @@ public class Singleplayer implements World, PlayerListener {
 			Resources.setMusic(MUSIC.random(), false);
 		}
 
+		RenderLevel level = getRenderLevel();
+
+		////
+
+		if(level.ordinal() == prevLevel.ordinal() - 1 && !playerShip.isDestroyed()) {
+			// Center around zero for improved floating-point precision
+			state.addRelativePosition(playerShip.getPosition());
+		}
+
+		// Set global velocity relative to player ship when zoomed in
+		if(RenderLevel.SHIP.isVisibleTo(level)) {
+			state.addRelativeVelocity(playerShip.getVelocity());
+		}
+		else if(level.ordinal() == prevLevel.ordinal() + 1) {
+			state.resetRelativeVelocity();
+			state.addRelativeVelocity(findLargestObject().getVelocity());
+		}
+		state.updateGlobalCoords(getTimeScale());
+
+		////
+
 		// Update time factor
 		smoothZoom += (zoom - smoothZoom) * ZOOM_SMOOTH;
 		timeScale = max(1, zoom * TIME_SCALE) / (1 + zoom * TIME_SCALE * TIME_SCALE * TIME_FALLOFF);
 
-		RenderLevel level = getRenderLevel();
+		if(level == RenderLevel.PLANET && timeScale < MIN_PLANET_TIME_SCALE) {
+			timeScale = MIN_PLANET_TIME_SCALE;
+		}
 
 		v.clear();
 		v.rectMode(CENTER);
@@ -240,25 +265,6 @@ public class Singleplayer implements World, PlayerListener {
 		boolean cleanup = spawnCt.cycle();
 
 		state.startUpdate();
-
-		////
-
-		if(level.ordinal() == prevLevel.ordinal() - 1 && !playerShip.isDestroyed()) {
-			// Center around zero for improved floating-point precision
-			state.addRelativePosition(playerShip.getPosition());
-		}
-
-		// Change global relative velocity to player ship when zoomed in
-		if(RenderLevel.SHIP.isVisibleTo(level)) {
-			state.addRelativeVelocity(playerShip.getVelocity());
-		}
-		else if(level.ordinal() == prevLevel.ordinal() + 1) {
-			state.resetRelativeVelocity();
-			state.addRelativeVelocity(findLargestObject().getVelocity());
-		}
-		state.updateGlobalCoords(getTimeScale());
-
-		////
 
 		// Reset object counts for each render distance
 		for(int i = 0; i < objectCounts.length; i++) {
@@ -586,7 +592,7 @@ public class Singleplayer implements World, PlayerListener {
 			println("Loaded from " + file);
 			return true;
 		}
-		catch(InvalidClassException e) {
+		catch(InvalidClassException | ClassNotFoundException e) {
 			println("Outdated file format: " + file);
 			return false;
 		}

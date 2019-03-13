@@ -31,11 +31,11 @@ public class DialogItemSpawner implements ItemGenerator.ItemSpawner {
 
 	@Override
 	public Item create() {
-		return new Item(v.random(DIALOG_ITEMS), ItemType.RARE);
+		return new DialogItem(v.random(DIALOG_ITEMS), ItemType.RARE);
 	}
 
 	public static String randomDialogResponse(String itemName, String dialogType) {
 		Set<String> strings = DIALOGS.get(itemName + " " + dialogType);
-		return strings.isEmpty() ? null : v.random(strings.toArray(new String[0]));
+		return strings != null && !strings.isEmpty() ? v.random(strings.toArray(new String[0])) : null;
 	}
 }

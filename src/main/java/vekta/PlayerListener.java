@@ -4,8 +4,8 @@ import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.mission.Mission;
 import vekta.module.Module;
+import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
-import vekta.object.ship.Ship;
 import vekta.overlay.singleplayer.Notification;
 import vekta.terrain.LandingSite;
 
@@ -36,7 +36,7 @@ public interface PlayerListener extends Serializable {
 	default void onLand(LandingSite site) {
 	}
 
-	default void onDock(Ship ship) {
+	default void onDock(SpaceObject object) {
 	}
 
 	default void onMissionStatus(Mission mission) {

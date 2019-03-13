@@ -14,7 +14,7 @@ public class BatteryModule extends ShipModule {
 	private float charge;
 
 	public BatteryModule() {
-		this(1);
+		this(100);
 	}
 
 	public BatteryModule(int capacity) {

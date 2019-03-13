@@ -27,7 +27,7 @@ public class WorldGenerator {
 		WorldSpawner[] options = Resources.getSubclassInstances(WorldSpawner.class);
 		// Create spawner array for each RenderLevel, indexed by ordinal()
 		SPAWNERS = Arrays.stream(RenderLevel.values())
-				.map(level -> Arrays.stream(options).filter(s -> s.getRenderLevel() == level).toArray(WorldSpawner[]::new))
+				.map(level -> Arrays.stream(options).filter(s -> s.getSpawnLevel() == level).toArray(WorldSpawner[]::new))
 				.toArray(WorldSpawner[][]::new);
 	}
 
@@ -115,7 +115,7 @@ public class WorldGenerator {
 		if(v.chance(chance * .5F)) {
 			buildings.add(new MarketBuilding(shopTier, "Bonds", new BondItemSpawner()));
 		}
-		if(v.chance(chance * .5F)) {
+		if(v.chance(chance * .25F)) {
 			buildings.add(new MarketBuilding(shopTier, "Supplies", new ColonyItemSpawner()));
 		}
 		return buildings;
@@ -139,7 +139,7 @@ public class WorldGenerator {
 
 	public static PVector randomSpawnPosition(RenderLevel level, PVector center) {
 		float radius = getRadius(level);
-		return PVector.random2D().mult(v.random(radius / 2, radius)).add(center);
+		return PVector.random2D().mult(v.random(radius / 4, radius)).add(center);
 	}
 
 	public static int randomPlanetColor() {
@@ -147,7 +147,7 @@ public class WorldGenerator {
 	}
 
 	public interface WorldSpawner extends Weighted {
-		RenderLevel getRenderLevel();
+		RenderLevel getSpawnLevel();
 
 		void spawn(SpaceObject center, PVector pos);
 	}

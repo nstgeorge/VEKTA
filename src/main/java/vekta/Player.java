@@ -127,7 +127,6 @@ public final class Player extends Syncable<Player> {
 
 	public void addListener(PlayerListener listener) {
 		this.listeners.add(listener);
-		println(getName(), listeners);///
 	}
 
 	public void removeListener(PlayerListener listener) {
@@ -138,16 +137,16 @@ public final class Player extends Syncable<Player> {
 		this.listeners.removeIf(type::isInstance);
 	}
 
-	public boolean has(String attribute) {
+	public boolean hasAttribute(String attribute) {
 		return attributes.contains(attribute);
 	}
 
-	public void add(String attribute) {
+	public void addAttribute(String attribute) {
 		attributes.add(attribute);
 		sendChanges();
 	}
 
-	public void remove(String attribute) {
+	public void removeAttribute(String attribute) {
 		attributes.remove(attribute);
 		sendChanges();
 	}

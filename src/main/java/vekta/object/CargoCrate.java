@@ -6,18 +6,17 @@ import vekta.RenderLevel;
 import vekta.item.Item;
 import vekta.object.ship.ModularShip;
 
-import static vekta.Vekta.PI;
+import static processing.core.PConstants.TWO_PI;
 import static vekta.Vekta.v;
 
 public class CargoCrate extends SpaceObject {
-	// Default settings
 	private static final float DEF_MASS = 10;
 	private static final int DEF_RADIUS = 4;
 	private static final float SPIN_SCALE = .1F;
 
 	private final Item item;
 
-	private float angle = v.random(2 * PI);
+	private float angle = v.random(TWO_PI);
 	private float spinSpeed = v.random(-1, 1) * SPIN_SCALE;
 
 	public CargoCrate(Item item, PVector position, PVector velocity) {

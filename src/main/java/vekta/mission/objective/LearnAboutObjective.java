@@ -12,14 +12,14 @@ import java.util.Set;
 
 import static vekta.Vekta.v;
 
-public class AskAboutObjective extends Objective {
+public class LearnAboutObjective extends Objective {
 	private final String topic;
 	private final String info;
 	private final float rarity;
 
 	private final Set<Person> alreadyAsked = new HashSet<>();
 
-	public AskAboutObjective(String topic, String info, float rarity) {
+	public LearnAboutObjective(String topic, String info, float rarity) {
 		this.topic = topic;
 		this.info = info;
 		this.rarity = rarity;

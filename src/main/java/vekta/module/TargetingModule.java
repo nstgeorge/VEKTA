@@ -3,6 +3,7 @@ package vekta.module;
 import vekta.KeyBinding;
 import vekta.mission.Mission;
 import vekta.object.CargoCrate;
+import vekta.object.RingDebris;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 import vekta.object.planet.Asteroid;
@@ -52,7 +53,7 @@ public class TargetingModule extends ShipModule implements Targeter {
 		case ASTEROID:
 			return obj instanceof Asteroid;
 		case SHIP:
-			return obj instanceof Ship || obj instanceof CargoCrate;
+			return obj instanceof Ship || obj instanceof CargoCrate || obj instanceof RingDebris;
 		default:
 			return false;
 		}

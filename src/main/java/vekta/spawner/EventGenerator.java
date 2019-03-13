@@ -17,13 +17,13 @@ public class EventGenerator {
 	public static void updateSituations(Player player) {
 		Situation situation = v.random(SITUATIONS);
 		String attr = situation.getClass().getSimpleName();
-		boolean has = player.has(attr);
+		boolean has = player.hasAttribute(attr);
 		if(!has && situation.isHappening(player)) {
-			player.add(attr);
+			player.addAttribute(attr);
 			situation.start(player);
 		}
 		else if(has && !situation.isHappening(player)) {
-			player.remove(attr);
+			player.removeAttribute(attr);
 			situation.end(player);
 		}
 	}

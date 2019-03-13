@@ -11,10 +11,10 @@ import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 import vekta.object.ship.ModularShip;
 
-import static vekta.Vekta.getWorld;
-import static vekta.Vekta.v;
+import static vekta.Vekta.*;
 
 public class WormholeModule extends ShipModule {
+	private static final float MIN_DISTANCE = AU_DISTANCE; // Min teleport distance (prevents accidental teleportation)
 	private static final float ENERGY = 50;
 
 	private SpaceObject target;
@@ -85,6 +85,13 @@ public class WormholeModule extends ShipModule {
 
 	public void teleport(ModularShip ship) {
 		if(!hasTarget()) {
+			return;
+		}
+
+		if(ship.relativePosition(target).magSq() < MIN_DISTANCE * MIN_DISTANCE) {
+			if(ship.hasController()) {
+				ship.getController().send("Wormhole Drive target is too close!");
+			}
 			return;
 		}
 

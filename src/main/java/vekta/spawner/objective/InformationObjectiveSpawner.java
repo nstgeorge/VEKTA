@@ -2,7 +2,7 @@ package vekta.spawner.objective;
 
 import vekta.Resources;
 import vekta.mission.Mission;
-import vekta.mission.objective.AskAboutObjective;
+import vekta.mission.objective.LearnAboutObjective;
 import vekta.mission.objective.LandAtObjective;
 import vekta.mission.objective.Objective;
 import vekta.person.Person;
@@ -25,8 +25,8 @@ public class InformationObjectiveSpawner implements MissionGenerator.ObjectiveSp
 	@Override
 	public Objective getMainObjective(Mission mission) {
 		Person other = randomMissionPerson(mission.getIssuer());
-		mission.add(new LandAtObjective(other.findHomeObject()));
+		mission.add(new LandAtObjective(other.findHomeObject()).optional());
 		String[] parts = Resources.generateString("topic").split(":");
-		return new AskAboutObjective(parts[0].trim(), parts[1].trim(), v.random(.1F, .5F));
+		return new LearnAboutObjective(parts[0].trim(), parts[1].trim(), v.random(.1F, .5F));
 	}
 }

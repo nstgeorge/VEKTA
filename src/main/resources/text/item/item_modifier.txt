@@ -28,4 +28,4 @@ Fabricator
 Swiper
 Assembler
 Disassembler
-Compensator
+Compressor

@@ -112,6 +112,9 @@ public class MissionGenerator {
 			dialog.add(new ItemTradeOption(player.getInventory(), ItemGenerator.randomItem(), 0));
 			person.setOpinion(player.getFaction(), OpinionType.FRIENDLY);
 		}
+		else if(v.chance(.3F)){
+			return person.createDialog("greeting").then("busy");
+		}
 		else if(v.chance(.3F)) {
 			dialog = person.createDialog("offer");
 			dialog.add(new ItemTradeOption(player.getInventory(), MissionItemSpawner.randomMissionItem(p -> MissionGenerator.createMission(p, person)), 0));
@@ -125,9 +128,6 @@ public class MissionGenerator {
 				setContext(sub);
 			}));
 		}
-		//		Dialog greeting = person.createDialog("greeting");
-		//		greeting.add(dialog);
-		//		return greeting;
 		return dialog;
 	}
 

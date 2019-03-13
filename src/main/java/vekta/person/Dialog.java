@@ -64,7 +64,7 @@ public class Dialog implements Serializable {
 	}
 
 	public boolean hasNext() {
-		return next != null;
+		return next != null && (!next.isVisited() || next.hasNext());
 	}
 
 	public Dialog then(String next) {
@@ -110,34 +110,40 @@ public class Dialog implements Serializable {
 	//	}
 
 	public void openMenu(Player player, MenuOption def) {
-		if(visited && hasNext()) {
+		if(visited && next != null) {
 			getNext().openMenu(player, def);
 			return;
 		}
 		visited = true;
 
 		Menu menu = new Menu(player, new DialogMenuHandle(def, this));
-		boolean hasResponses = !getResponses().isEmpty();
-		List<String> responses = new ArrayList<>(hasResponses ? getResponses() : Collections.singletonList("Next"));
-		Collections.shuffle(responses);
-		for(String response : responses) {
-			if(hasNext()) {
+
+		for(MenuOption option : getOptions()) {
+			menu.add(option);
+		}
+
+		if(hasNext()) {
+			// Add custom responses leading to next dialog
+			List<String> responses = !getResponses().isEmpty() ? getResponses() : Collections.singletonList("Next");
+			for(String response : responses) {
 				menu.add(new DialogOption(response, getNext()));
 			}
-			else if(hasResponses) {
-				// Use custom responses for the default option text
-				menu.add(new BasicOption(response, menu.getDefault()));
+		}
+		else {
+			// Add custom responses for exiting dialog
+			for(String response : getResponses()) {
+				menu.add(new BasicOption(response, m -> m.getDefault().select(m)));
 			}
 		}
 
-		if(!getOptions().isEmpty()) {
-			for(MenuOption option : getOptions()) {
-				menu.add(option);
-			}
+		// Randomize and ensure at least one option is available
+		if(menu.size() > 0) {
+			Collections.shuffle(menu.getOptions());
 		}
 		else {
 			menu.addDefault();
 		}
+
 		setContext(menu);
 		applyContext();
 	}

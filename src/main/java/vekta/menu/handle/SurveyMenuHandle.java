@@ -29,6 +29,10 @@ public class SurveyMenuHandle extends MenuHandle {
 		perspective = v.random(PI);
 	}
 
+	public LandingSite getSite() {
+		return site;
+	}
+
 	@Override
 	public int getButtonY(int i) {
 		return super.getButtonY(i) + PLANET_SIZE;

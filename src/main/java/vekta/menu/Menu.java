@@ -31,8 +31,8 @@ public class Menu implements Context {
 		this.player = player;
 		this.handle = handle;
 
-		handle.init(this);
 		Resources.stopAllSoundsExceptMusic();
+		handle.init(this);
 
 		if(getPlayer() != null) {
 			getPlayer().emit(PlayerEvent.MENU, this);
@@ -148,6 +148,15 @@ public class Menu implements Context {
 		});
 	}
 
+	public void addCloseListener(Runnable callback) {
+		addListener(new MenuListener() {
+			@Override
+			public void onClose() {
+				callback.run();
+			}
+		});
+	}
+
 	public void addListener(MenuListener listener) {
 		listeners.add(listener);
 	}
@@ -167,7 +176,7 @@ public class Menu implements Context {
 			listener.onFocus();
 		}
 	}
-
+	
 	@Override
 	public void render() {
 		handle.render(this);
@@ -190,6 +199,9 @@ public class Menu implements Context {
 	public void close() {
 		if(handle.getDefault() != null) {
 			handle.getDefault().select(this);
+		}
+		for(MenuListener listener : listeners) {
+			listener.onClose();
 		}
 	}
 }

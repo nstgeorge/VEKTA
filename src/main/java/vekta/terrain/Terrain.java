@@ -1,6 +1,5 @@
 package vekta.terrain;
 
-import vekta.Syncable;
 import vekta.menu.Menu;
 import vekta.terrain.settlement.Settlement;
 
@@ -12,7 +11,7 @@ import java.util.List;
 /**
  * An abstract representation of planetary terrain.
  */
-public abstract class Terrain extends Syncable<Terrain> implements Serializable {
+public abstract class Terrain implements Serializable {
 	private final List<String> features = new ArrayList<>();
 
 	public Terrain() {

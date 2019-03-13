@@ -20,7 +20,7 @@ public final class Inventory implements Serializable, Iterable<Item> {
 		this.listener = listener;
 	}
 
-	public int size() {
+	public int itemCount() {
 		return getItems().size();
 	}
 
