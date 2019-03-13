@@ -17,7 +17,7 @@ public class SurveyFeatureObjective extends Objective {
 
 	@Override
 	public String getName() {
-		return "Perform a survey (required feature: " + getFeature() + ")";
+		return "Perform a survey (" + getFeature() + ")";
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public class SurveyFeatureObjective extends Objective {
 	public void onMenu(Menu menu) {
 		if(menu.getHandle() instanceof SurveyMenuHandle) {
 			if(((SurveyMenuHandle)menu.getHandle()).getSite().getTerrain().hasFeature(feature)) {
-				
+
 			}
 		}
 	}

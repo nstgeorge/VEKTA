@@ -51,9 +51,9 @@ public class TargetingModule extends ShipModule implements Targeter {
 		case PLANET:
 			return obj instanceof TerrestrialPlanet && !(obj instanceof Asteroid);
 		case ASTEROID:
-			return obj instanceof Asteroid;
+			return obj instanceof Asteroid || obj instanceof RingDebris;
 		case SHIP:
-			return obj instanceof Ship || obj instanceof CargoCrate || obj instanceof RingDebris;
+			return obj instanceof Ship || obj instanceof CargoCrate;
 		default:
 			return false;
 		}

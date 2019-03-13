@@ -1,4 +1,4 @@
-{letter}{letter}-{number}{number}{number}{number}
-{letter} {number}{number}{number}-{letter}
-{number}{number}{number}-{letter}{number}{number}{number}{number}
 {number}{number}{number}{number} {letter}
+{letter}{letter}-{number}{number}{number}{number}
+{letter}{letter} {number}{number}{number}-{letter}
+{number}{number}{number}-{letter}{number}{number}{number}{number}

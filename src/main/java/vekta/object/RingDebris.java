@@ -21,7 +21,7 @@ public class RingDebris extends Planet {
 	private final Inventory inventory = new Inventory();
 
 	private float angle;
-	private float spinSpeed = v.random(-1, 1) * SPIN_SCALE;
+	private float spinSpeed = sq(v.random(-1, 1)) * SPIN_SCALE;
 
 	private final float[][] positions = new float[(int)v.random(4) + 1][5];
 

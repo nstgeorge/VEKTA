@@ -58,9 +58,6 @@ public class Singleplayer implements World, PlayerListener {
 	// Low pass filter
 	private final transient LowPass lowPass = new LowPass(v);
 
-	// Camera position tracking
-	private final PVector cameraPos = new PVector();
-
 	protected WorldState state;
 
 	private float zoom = 1; // Zoom factor
@@ -159,7 +156,7 @@ public class Singleplayer implements World, PlayerListener {
 			SpaceStation.Component sensor = struct2.attach(SpaceStation.Direction.LEFT, new SensorModule());
 		}
 
-//		playerShip.getInventory().add(new DialogItemSpawner().create());////
+		//		playerShip.getInventory().add(new DialogItemSpawner().create());////
 
 		playerShip.addModule(new EngineModule(2)); // Upgrade engine
 		playerShip.addModule(new AutopilotModule());
@@ -213,11 +210,6 @@ public class Singleplayer implements World, PlayerListener {
 	@Override
 	public void render() {
 		ModularShip playerShip = getPlayerShip();
-		if(!playerShip.isDestroyed()) {
-			// Camera follow
-			cameraPos.set(playerShip.getPosition());
-			//			cameraSpd = playerShip.getVelocity().mag();
-		}
 
 		// Cycle background music
 		if(Resources.getMusic() == null) {
@@ -237,31 +229,8 @@ public class Singleplayer implements World, PlayerListener {
 		if(level == RenderLevel.PLANET && timeScale < MIN_PLANET_TIME_SCALE) {
 			timeScale = MIN_PLANET_TIME_SCALE;
 		}
-
-		// Hotfix: counteract velocity mismatch on player zoom
-		if(prevTimeScale != timeScale) {
-			playerShip.getPositionReference()
-					.add(playerShip.getVelocity().mult(timeScale - prevTimeScale));
-		}
-
-		//// Global coordinate logic
-
-		if(level.ordinal() == prevLevel.ordinal() - 1 && !playerShip.isDestroyed()) {
-			// Center around zero for improved floating-point precision
-			state.addRelativePosition(playerShip.getPosition());
-		}
-
-		// Set global velocity relative to player ship when zoomed in
-		if(RenderLevel.SHIP.isVisibleTo(level)) {
-			state.addRelativeVelocity(playerShip.getVelocity());
-		}
-		else if(level.ordinal() == prevLevel.ordinal() + 1) {
-			state.resetRelativeVelocity();
-			state.addRelativeVelocity(findLargestObject().getVelocity());
-		}
-		state.updateGlobalCoords(getTimeScale());
-
-		////
+		
+		updateGlobalCoords(level);
 
 		v.clear();
 		v.rectMode(CENTER);
@@ -319,16 +288,12 @@ public class Singleplayer implements World, PlayerListener {
 				}
 			}
 
-			if(s == playerShip) {
-				// Fix camera position when zoomed in at high velocity
-				cameraPos.set(s.getPositionReference());
-			}
-
 			// Start drawing object
 			v.pushMatrix();
 
 			// Set up object position
 			PVector position = s.getPositionReference();
+			PVector cameraPos = playerShip.getPositionReference();
 			float scale = getZoom();
 			float screenX = (position.x - cameraPos.x) / scale;
 			float screenY = (position.y - cameraPos.y) / scale;
@@ -396,6 +361,25 @@ public class Singleplayer implements World, PlayerListener {
 			v.fill(255);
 			v.textFont(bodyFont);
 			v.text(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to load autosave", v.width / 2F, (v.height / 2F) + 97);
+		}
+	}
+
+	private void updateGlobalCoords(RenderLevel level) {
+		ModularShip playerShip = getPlayerShip();
+
+		// Set global velocity relative to player ship when zoomed in
+		if(RenderLevel.SHIP.isVisibleTo(level)) {
+			state.addRelativeVelocity(playerShip.getVelocity());
+		}
+		else if(level.ordinal() == prevLevel.ordinal() + 1) {
+			state.resetRelativeVelocity();
+			state.addRelativeVelocity(findLargestObject().getVelocity());
+		}
+		state.updateGlobalCoords(getTimeScale());
+
+		if(level.ordinal() == prevLevel.ordinal() - 1 && !playerShip.isDestroyed()) {
+			// Center around zero for improved floating-point precision
+			state.addRelativePosition(playerShip.getPosition());
 		}
 	}
 

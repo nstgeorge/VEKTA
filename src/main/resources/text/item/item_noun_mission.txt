@@ -1,6 +1,6 @@
 Map
-Globe
 Files
+Encrypted Drive
 Tablet
 Coordinates
 Compass
