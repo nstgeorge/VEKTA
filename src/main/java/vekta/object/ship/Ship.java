@@ -27,8 +27,8 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 	protected final PVector heading = new PVector();
 	private final Inventory inventory = new Inventory(this);
 
-	private SpaceObject dock;
-	private int departTime; // Dock/land frame
+	private transient SpaceObject dock;
+	private transient int departTime; // Dock/land frame
 
 	public Ship(String name, PVector heading, PVector position, PVector velocity, int color, float speed, float turnSpeed) {
 		super(position, velocity, color);
@@ -153,7 +153,7 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 	}
 
 	protected void drawShip(float r, ShipModelType shape) {
-		// Estimate heading for multiplayer TODO: refactor
+		// Estimate heading for multiplayer
 		if(isRemote() && velocity.magSq() > 1) {
 			setHeading(getVelocity());
 		}

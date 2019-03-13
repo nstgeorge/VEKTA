@@ -1,0 +1,12 @@
+Map
+Globe
+Files
+Tablet
+Coordinates
+Compass
+Book
+Diary
+Journal
+Radio
+Instructions
+Leaflet

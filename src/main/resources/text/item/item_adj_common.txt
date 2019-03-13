@@ -7,13 +7,14 @@ Thrifty
 Lumpy
 Space
 Alien
-Ancient
 Factory
 Grumpy
 Funky
 Scruffy
 Single-Use
 Flappy
+Used
+Useless
 Lightly Used
 Backfiring
 Moist
@@ -27,6 +28,7 @@ Slippery
 Unlucky
 Toxic
 Secondhand
+Thirdhand
 Pokey
 Sticky
 Unpleasant
@@ -35,3 +37,12 @@ Rat-Infested
 Barely Usable
 Creaky
 Squeaky
+Janky
+Wispy
+Stringy
+Disassembled
+Bent
+Hazardous
+Deformed
+Crude
+Rough-Edged

@@ -55,7 +55,7 @@ public class AskAboutObjective extends Objective {
 				alreadyAsked.add(dialog.getPerson());
 
 				Dialog next = v.chance(getRarity())
-						? new Dialog(dialog.getPerson(), getInfo())
+						? new Dialog("topic", dialog.getPerson(), getInfo())
 						: dialog.getPerson().createDialog("unknown_topic");
 				next.addResponse("Thanks for the help!");
 				menu.add(new DialogOption("Ask about " + getTopic(), next));

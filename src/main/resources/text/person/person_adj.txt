@@ -1,5 +1,6 @@
 {item_adj_common}
 {item_adj_rare}
+{item_adj_mission}
 Wise
 Astute
 Oblivious

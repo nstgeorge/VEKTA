@@ -20,4 +20,7 @@ public interface MessageListener {
 
 	default void onChangeRenderLevel(Peer peer, TimeScaleMessage msg) {
 	}
+
+	default void onShareMission(Peer peer, ShareMissionMessage msg) {
+	}
 }

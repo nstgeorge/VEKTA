@@ -1,8 +1,10 @@
 package vekta.context;
 
 import processing.core.PVector;
+import vekta.Player;
 import vekta.RenderLevel;
 import vekta.Syncable;
+import vekta.connection.message.Message;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 
@@ -18,7 +20,7 @@ public interface World extends Context {
 	 * Add (or replace existing) Syncable object
 	 */
 	<T extends Syncable> T register(T object);
-	
+
 	/**
 	 * Remove Syncable object
 	 */
@@ -27,7 +29,9 @@ public interface World extends Context {
 	/**
 	 * Called when an object should be synchronized
 	 */
-	void syncChanges(Syncable object);
+	void sendChanges(Syncable object);
+
+	void sendMessage(Player player, Message message);
 
 	/**
 	 * Called when player dies

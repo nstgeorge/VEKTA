@@ -93,7 +93,7 @@ public final class Player extends Syncable<Player> {
 			throw new RuntimeException("Player faction cannot be null");
 		}
 		this.faction = faction;
-		syncChanges();
+		sendChanges();
 	}
 
 	public String getName() {
@@ -122,15 +122,20 @@ public final class Player extends Syncable<Player> {
 
 	public void setCurrentMission(Mission currentMission) {
 		this.currentMission = currentMission;
-		syncChanges();
+		sendChanges();
 	}
 
 	public void addListener(PlayerListener listener) {
 		this.listeners.add(listener);
+		println(getName(), listeners);///
 	}
 
 	public void removeListener(PlayerListener listener) {
 		this.listeners.remove(listener);
+	}
+
+	public void removeListeners(Class<? extends PlayerListener> type) {
+		this.listeners.removeIf(type::isInstance);
 	}
 
 	public boolean has(String attribute) {
@@ -139,12 +144,12 @@ public final class Player extends Syncable<Player> {
 
 	public void add(String attribute) {
 		attributes.add(attribute);
-		syncChanges();
+		sendChanges();
 	}
 
 	public void remove(String attribute) {
 		attributes.remove(attribute);
-		syncChanges();
+		sendChanges();
 	}
 
 	public void emit(PlayerEvent event, Object data) {

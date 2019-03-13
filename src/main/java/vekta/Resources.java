@@ -196,7 +196,7 @@ public final class Resources {
 		}
 	}
 
-	public static void stopAllSoundsNotMusic() {
+	public static void stopAllSoundsExceptMusic() {
 		for(SoundFile sound : SOUNDS.values()) {
 			if(sound != getMusic())
 				sound.stop();

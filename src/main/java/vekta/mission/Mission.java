@@ -4,6 +4,7 @@ import vekta.Player;
 import vekta.PlayerEvent;
 import vekta.Resources;
 import vekta.Syncable;
+import vekta.connection.message.ShareMissionMessage;
 import vekta.mission.objective.Objective;
 import vekta.mission.reward.Reward;
 import vekta.util.RomanNumerals;
@@ -13,6 +14,7 @@ import java.util.List;
 
 import static processing.core.PApplet.println;
 import static vekta.Vekta.UI_COLOR;
+import static vekta.Vekta.getWorld;
 
 public class Mission extends Syncable<Mission> {
 	private final List<Objective> objectives = new ArrayList<>();
@@ -30,7 +32,7 @@ public class Mission extends Syncable<Mission> {
 
 	public Mission(Player player, String name, MissionIssuer issuer, int tier) {
 		this.player = player;
-		this.name = "(" + RomanNumerals.toRoman(tier) + ") " + name; // Add mission tier directly to name
+		this.name = name;
 		this.issuer = issuer;
 		this.tier = tier;
 	}
@@ -40,7 +42,7 @@ public class Mission extends Syncable<Mission> {
 	}
 
 	public String getName() {
-		return name;
+		return "(" + RomanNumerals.toRoman(tier) + ") " + name;
 	}
 
 	public MissionIssuer getIssuer() {
@@ -141,7 +143,7 @@ public class Mission extends Syncable<Mission> {
 				.withColor(getStatus().getColor())
 				.withTime(2);
 
-		syncChanges();
+		sendChanges();
 	}
 
 	public void cancel() {
@@ -161,7 +163,7 @@ public class Mission extends Syncable<Mission> {
 				.withColor(getStatus().getColor())
 				.withTime(2);
 
-		syncChanges();
+		sendChanges();
 	}
 
 	public void complete() {
@@ -182,6 +184,15 @@ public class Mission extends Syncable<Mission> {
 				.withColor(UI_COLOR)
 				.withTime(2);
 
-		syncChanges();
+		sendChanges();
+	}
+
+	public void share(Player player) {
+		Mission mission = new Mission(player, this.name, getIssuer(), getTier());
+		for(MissionListener listener : listeners) {
+			mission.add(listener);
+		}
+		
+		getWorld().sendMessage(player, new ShareMissionMessage(mission));
 	}
 }

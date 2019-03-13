@@ -3,7 +3,6 @@ package vekta.person;
 import vekta.Faction;
 import vekta.Resources;
 import vekta.Syncable;
-import vekta.menu.option.DialogOption;
 import vekta.mission.Mission;
 import vekta.mission.MissionIssuer;
 import vekta.object.SpaceObject;
@@ -24,7 +23,7 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 	private Faction faction;
 	private String title;
 	private Settlement home;
-	
+
 	private boolean busy;
 
 	public Person(String name, Faction faction) {
@@ -52,7 +51,7 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 			throw new RuntimeException("Faction cannot be null");
 		}
 		this.faction = faction;
-		syncChanges();
+		sendChanges();
 	}
 
 	public int getColor() {
@@ -94,25 +93,16 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 		}
 		this.home = home;
 		home.add(new HouseBuilding(this));
-		syncChanges();
+		sendChanges();
 	}
 
 	public Dialog createDialog(String type) {
 		String[] parts = Resources.generateString("dialog_" + type).split("\\*");
-		Dialog dialog = new Dialog(this, parts[0].trim());
+		Dialog dialog = new Dialog(type, this, parts[0].trim());
 		if(parts.length > 1) {
 			for(int i = 1; i < parts.length; i++) {
 				// Add custom response messages
-				String response = parts[i].trim();
-				if(response.startsWith(":")) {
-					String[] args = response.split(" ", 2);
-					Dialog next = createDialog(args[0].substring(1).trim());
-					dialog.add(new DialogOption(args[1].trim(), next));
-					next.then(dialog);
-				}
-				else {
-					dialog.addResponse(response);
-				}
+				dialog.parseResponse(parts[i].trim());
 			}
 		}
 		return dialog;
@@ -124,7 +114,7 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 
 	public void setOpinion(Faction faction, OpinionType opinion) {
 		opinions.put(faction, opinion);
-		syncChanges();
+		sendChanges();
 	}
 
 	public boolean isBusy() {
@@ -142,7 +132,7 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 		Faction faction = mission.getPlayer().getFaction();
 		if(getOpinion(faction).isPositive()) {
 			setOpinion(faction, OpinionType.NEUTRAL);
-			syncChanges();
+			sendChanges();
 		}
 	}
 

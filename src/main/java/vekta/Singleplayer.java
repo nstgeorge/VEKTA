@@ -3,6 +3,7 @@ package vekta;
 import processing.core.PVector;
 import processing.event.KeyEvent;
 import processing.sound.LowPass;
+import vekta.connection.message.Message;
 import vekta.context.PauseMenuContext;
 import vekta.context.World;
 import vekta.item.ColonyItem;
@@ -25,6 +26,8 @@ import vekta.sound.SoundGroup;
 import vekta.spawner.EventGenerator;
 import vekta.spawner.MissionGenerator;
 import vekta.spawner.WorldGenerator;
+import vekta.spawner.item.DialogItemSpawner;
+import vekta.spawner.world.StarSystemSpawner;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -84,33 +87,44 @@ public class Singleplayer implements World, PlayerListener {
 		Resources.stopMusic();
 
 		if(state == null) {
-			Faction playerFaction = new Faction(FactionType.PLAYER, "VEKTA I", UI_COLOR);
-			Player player = new Player(playerFaction);
-			player.addListener(this);
-
-			state = new WorldState();
-			state.setPlayer(player);
-
-			//			StarSystemSpawner.createSystem(PVector.random2D().mult(2 * AU_DISTANCE));
-
-			PlayerShip playerShip = register(new PlayerShip(
-					player.getFaction().getName(),
-					PVector.fromAngle(0), // Heading
-					new PVector(), // Position
-					new PVector(),    // Velocity
-					v.color(0, 255, 0)
-			));
-			playerShip.getInventory().add(50); // Starting money
-			playerShip.setController(player);
-
-			setupTesting(); // Temporary
+			if(load(AUTOSAVE_FILE)) {
+				return;
+			}
+			else {
+				// Run initial setup if no autosave
+				setup();
+			}
 		}
 
 		Player player = getPlayer();
 
 		// Configure UI overlay
 		overlay = new PlayerOverlay(player);
-		player.addListener(overlay); // TODO: listener might be getting serialized
+		player.removeListeners(PlayerOverlay.class);
+		player.addListener(overlay);
+	}
+
+	public void setup() {
+		Faction playerFaction = new Faction(FactionType.PLAYER, "VEKTA I", UI_COLOR);
+		Player player = new Player(playerFaction);
+		player.addListener(this);
+
+		state = new WorldState();
+		state.setPlayer(player);
+
+		StarSystemSpawner.createSystem(PVector.random2D().mult(2 * AU_DISTANCE));
+
+		PlayerShip playerShip = register(new PlayerShip(
+				player.getFaction().getName(),
+				PVector.fromAngle(0), // Heading
+				new PVector(), // Position
+				new PVector(),    // Velocity
+				v.color(0, 255, 0)
+		));
+		playerShip.getInventory().add(50); // Starting money
+		playerShip.setController(player);
+
+		setupTesting(); // Temporary
 	}
 
 	public void cleanup() {
@@ -144,13 +158,15 @@ public class Singleplayer implements World, PlayerListener {
 			SpaceStation.Component sensor = struct2.attach(SpaceStation.Direction.LEFT, new SensorModule());
 		}
 
+		playerShip.getInventory().add(new DialogItemSpawner().create());////
+
 		playerShip.addModule(new EngineModule(2)); // Upgrade engine
 		playerShip.addModule(new AutopilotModule());
 		playerShip.addModule(new TelescopeModule(.5F));
 		playerShip.addModule(new DrillModule(2));
 		playerShip.addModule(new HyperdriveModule(.5F));
+		playerShip.addModule(new ActiveTCSModule(2));
 		playerShip.getInventory().add(new ModuleItem(new WormholeModule()));
-		playerShip.getInventory().add(new ModuleItem(new ActiveTCSModule(5)));
 		playerShip.getInventory().add(new ModuleItem(new BatteryModule(1)));
 		playerShip.getInventory().add(new ModuleItem(new TorpedoModule(2)));
 		playerShip.getInventory().add(new ModuleItem(new TractorBeamModule(1)));
@@ -188,11 +204,9 @@ public class Singleplayer implements World, PlayerListener {
 			started = true;
 			start();
 		}
-
-		save(AUTOSAVE_FILE);
-
-		// Uncomment for testing
-		// __tune = TuneGenerator.randomTune();
+		else {
+			save(AUTOSAVE_FILE);
+		}
 	}
 
 	@Override
@@ -233,16 +247,17 @@ public class Singleplayer implements World, PlayerListener {
 			// Center around zero for improved floating-point precision
 			state.addRelativePosition(playerShip.getPosition());
 		}
-		
+
 		// Change global relative velocity to player ship when zoomed in
 		if(RenderLevel.SHIP.isVisibleTo(level)) {
 			state.addRelativeVelocity(playerShip.getVelocity());
 		}
 		else if(level.ordinal() == prevLevel.ordinal() + 1) {
 			state.resetRelativeVelocity();
+			state.addRelativeVelocity(findLargestObject().getVelocity());
 		}
 		state.updateGlobalCoords(getTimeScale());
-		
+
 		////
 
 		// Reset object counts for each render distance
@@ -266,7 +281,7 @@ public class Singleplayer implements World, PlayerListener {
 				// Clean up distant objects
 				float despawnRadius = WorldGenerator.getRadius(s.getDespawnLevel());
 				if(playerShip.getPosition().sub(s.getPosition()).magSq() >= sq(despawnRadius)) {
-					remove(s);
+					s.despawn();
 					continue;
 				}
 			}
@@ -416,8 +431,13 @@ public class Singleplayer implements World, PlayerListener {
 	}
 
 	@Override
-	public void syncChanges(Syncable object) {
+	public void sendChanges(Syncable object) {
 		// Do nothing in singleplayer
+	}
+
+	@Override
+	public void sendMessage(Player player, Message message) {
+		println("Attempted to send " + message.getClass().getSimpleName() + " to unavailable player: " + player.getName());
 	}
 
 	// TODO: convert to player event callback
@@ -427,7 +447,7 @@ public class Singleplayer implements World, PlayerListener {
 		if(Resources.getMusic() != null) {
 			lowPass.process(Resources.getMusic(), 800);
 		}
-		Resources.stopAllSoundsNotMusic();
+		Resources.stopAllSoundsExceptMusic();
 		Resources.playSound("death");
 	}
 
@@ -443,6 +463,8 @@ public class Singleplayer implements World, PlayerListener {
 		cleanup();
 
 		Singleplayer world = new Singleplayer();
+		world.state = new WorldState();
+		world.setup();
 		setContext(world);
 		applyContext();
 	}

@@ -51,7 +51,7 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 			throw new RuntimeException("Settlement faction cannot be null");
 		}
 		this.faction = faction;
-		syncChanges();
+		sendChanges();
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 			throw new RuntimeException("Settlement overview cannot be null");
 		}
 		this.overview = overview;
-		syncChanges();
+		sendChanges();
 	}
 
 	public boolean isInhabited() {
@@ -81,17 +81,17 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 
 	public void add(SettlementPart part) {
 		parts.add(part);
-		syncChanges();
+		sendChanges();
 	}
 
 	public void remove(SettlementPart part) {
 		parts.remove(part);
-		syncChanges();
+		sendChanges();
 	}
 
 	public void clear() {
 		getParts().clear();
-		syncChanges();
+		sendChanges();
 	}
 
 	@SuppressWarnings("unchecked")

@@ -165,13 +165,13 @@ public final class WorldState implements Serializable {
 			if(syncMap.containsKey(id)) {
 				S other = (S)syncMap.get(id);
 				other.onSync(object.getSyncData());
-				println("<sync>", object.getClass().getSimpleName() + "[" + Long.toHexString(id) + "]", remoteFlag);
+				println("<sync>", remoteFlag, object.getClass().getSimpleName() + "[" + Long.toHexString(id) + "]");
 				return other;
 			}
 			else {
 				add(object);
 				syncMap.put(object.getSyncID(), object);
-				println("<add>", object.getClass().getSimpleName() + "[" + Long.toHexString(id) + "]", remoteFlag);
+				//				println("<add>", remoteFlag, object.getClass().getSimpleName() + "[" + Long.toHexString(id) + "]");
 				return object;
 			}
 		}
@@ -227,9 +227,9 @@ public final class WorldState implements Serializable {
 		else if(object instanceof Faction) {
 			factions.remove(object);
 		}
-//		else {
-//			throw new RuntimeException("Cannot remove object: " + object);
-//		}
+		//		else {
+		//			throw new RuntimeException("Cannot remove object: " + object);
+		//		}
 	}
 
 	@SuppressWarnings("unchecked")

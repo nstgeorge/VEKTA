@@ -30,3 +30,4 @@ Thief
 Gangster
 Accountant
 Engineer
+Swindler

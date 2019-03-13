@@ -14,6 +14,10 @@ public class BasicOption implements MenuOption {
 		this(name, menu -> action.run());
 	}
 
+	public BasicOption(String name, MenuOption option) {
+		this(name, option::select);
+	}
+
 	public BasicOption(String name, MenuAction action) {
 		this.name = name;
 		this.action = action;

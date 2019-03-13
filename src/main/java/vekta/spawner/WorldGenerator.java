@@ -103,19 +103,19 @@ public class WorldGenerator {
 
 	public static List<MarketBuilding> randomMarkets(int shopTier, float chance) {
 		List<MarketBuilding> buildings = new ArrayList<>();
-		if(v.chance(chance)) {
+		if(v.chance(chance * 2)) {
 			buildings.add(new MarketBuilding(shopTier, "Goods", null));
 		}
-		if(v.chance(chance)) {
+		if(v.chance(chance * .5F)) {
 			buildings.add(new MarketBuilding(shopTier, "Trinkets", new MissionItemSpawner()));
 		}
-		if(v.chance(chance)) {
+		if(v.chance(chance * .5F)) {
 			buildings.add(new MarketBuilding(shopTier, "Modules", new ModuleItemSpawner()));
 		}
-		if(v.chance(chance)) {
+		if(v.chance(chance * .5F)) {
 			buildings.add(new MarketBuilding(shopTier, "Bonds", new BondItemSpawner()));
 		}
-		if(v.chance(chance)) {
+		if(v.chance(chance * .5F)) {
 			buildings.add(new MarketBuilding(shopTier, "Supplies", new ColonyItemSpawner()));
 		}
 		return buildings;

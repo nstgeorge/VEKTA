@@ -3,6 +3,7 @@ package vekta.person;
 import vekta.Player;
 import vekta.menu.Menu;
 import vekta.menu.handle.DialogMenuHandle;
+import vekta.menu.option.BasicOption;
 import vekta.menu.option.DialogOption;
 import vekta.menu.option.MenuOption;
 
@@ -14,6 +15,7 @@ import java.util.List;
 import static vekta.Vekta.*;
 
 public class Dialog implements Serializable {
+	private final String type;
 	private final Person person;
 	private final String message;
 
@@ -23,9 +25,14 @@ public class Dialog implements Serializable {
 
 	private boolean visited;
 
-	public Dialog(Person person, String message) {
+	public Dialog(String type, Person person, String message) {
+		this.type = type;
 		this.person = person;
 		this.message = message;
+	}
+
+	public String getType() {
+		return type;
 	}
 
 	public Person getPerson() {
@@ -78,6 +85,18 @@ public class Dialog implements Serializable {
 		return this;
 	}
 
+	public void parseResponse(String text) {
+		if(text.startsWith(":")) {
+			String[] args = text.split(" ", 2);
+			Dialog next = getPerson().createDialog(args[0].substring(1).trim());
+			add(new DialogOption(args[1].trim(), next));
+			next.then(this);
+		}
+		else {
+			addResponse(text);
+		}
+	}
+
 	public void add(MenuOption option) {
 		options.add(option);
 	}
@@ -98,10 +117,17 @@ public class Dialog implements Serializable {
 		visited = true;
 
 		Menu menu = new Menu(player, new DialogMenuHandle(def, this));
-		List<String> responses = new ArrayList<>(getResponses().isEmpty() ? Collections.singletonList("Next") : getResponses());
+		boolean hasResponses = !getResponses().isEmpty();
+		List<String> responses = new ArrayList<>(hasResponses ? getResponses() : Collections.singletonList("Next"));
 		Collections.shuffle(responses);
 		for(String response : responses) {
-			menu.add(hasNext() ? new DialogOption(response, getNext()) : menu.getDefault());
+			if(hasNext()) {
+				menu.add(new DialogOption(response, getNext()));
+			}
+			else if(hasResponses) {
+				// Use custom responses for the default option text
+				menu.add(new BasicOption(response, menu.getDefault()));
+			}
 		}
 
 		if(!getOptions().isEmpty()) {

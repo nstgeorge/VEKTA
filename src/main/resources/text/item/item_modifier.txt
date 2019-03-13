@@ -26,3 +26,6 @@ Detergent
 Repellent
 Fabricator
 Swiper
+Assembler
+Disassembler
+Compensator

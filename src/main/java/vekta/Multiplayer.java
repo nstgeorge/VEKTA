@@ -1,5 +1,7 @@
 package vekta;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import processing.core.PVector;
 import vekta.connection.Connection;
 import vekta.connection.ConnectionListener;
@@ -7,6 +9,13 @@ import vekta.connection.Peer;
 import vekta.connection.message.*;
 import vekta.context.TextInputContext;
 import vekta.menu.Menu;
+import vekta.menu.handle.MenuHandle;
+import vekta.menu.handle.ObjectMenuHandle;
+import vekta.menu.option.BackOption;
+import vekta.menu.option.BasicOption;
+import vekta.menu.option.MissionOption;
+import vekta.menu.option.PlayerOption;
+import vekta.mission.Mission;
 import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.Ship;
@@ -31,7 +40,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	private transient Connection connection;
 	private boolean unableToConnect = false;
 
-	private final transient Map<Peer, Player> playerMap = new WeakHashMap<>();
+	private final transient BiMap<Peer, Player> playerMap = HashBiMap.create();
 	private final transient Map<Peer, Float> timeMap = new WeakHashMap<>();
 
 	private float timeScale = 1;
@@ -49,7 +58,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		super.start();
 
 		setContext(new TextInputContext(mainMenu, "Choose a Name:", Settings.getString("multiplayer.name", Resources.generateString("person")), name -> {
-			getPlayer().getFaction().setName(name.trim());
+			getPlayer().getFaction().setName(name);
 			getPlayer().getFaction().setColor(0xFF000000 | Integer.parseInt(Settings.getString("multiplayer.color", String.valueOf(WorldGenerator.randomPlanetColor()))));
 			getPlayer().getShip().setName(getPlayer().getFaction().getName());
 			getPlayer().getShip().setColor(getPlayer().getFaction().getColor());
@@ -115,10 +124,14 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	@Override
 	@SuppressWarnings("unchecked")
 	public void onSyncObject(Peer peer, SyncMessage msg) {
-		if(msg.getData() instanceof SpaceObject) {
-			println("Warning: received SpaceObject in a SyncMessage");
+		if(msg.getData() instanceof Player) {
+			println("Warning: received Player in a SyncMessage");
 			return;
 		}
+//		if(msg.getData() instanceof SpaceObject) {
+//			println("Warning: received SpaceObject in a SyncMessage");
+//			return;
+//		}
 
 		long id = msg.getID();
 		println("<receive>", msg.getData().getClass().getSimpleName() + "[" + Long.toHexString(id) + "]");
@@ -172,6 +185,17 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		recomputeTimeScale();
 	}
 
+	@Override
+	public void onShareMission(Peer peer, ShareMissionMessage msg) {
+		Mission mission = register(msg.getMission());
+		Player sender = playerMap.get(peer);
+
+		Menu menu = new Menu(getPlayer(), new ObjectMenuHandle(new BackOption(getWorld()), sender.getShip()));
+		menu.add(new MissionOption(mission));
+		menu.addDefault();
+		setContext(menu);
+	}
+
 	//// World methods
 
 	@Override
@@ -186,11 +210,22 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	}
 
 	@Override
-	public void syncChanges(Syncable object) {
-		super.syncChanges(object);
-		if(object.shouldPropagate()) {
+	public void sendChanges(Syncable object) {
+		super.sendChanges(object);
+		if(object.shouldSendChanges()) {
 			println("<broadcast>", object.getClass().getSimpleName() + "[" + Long.toHexString(object.getSyncID()) + "]");
 			connection.send(new SyncMessage(object));
+		}
+	}
+
+	@Override
+	public void sendMessage(Player player, Message message) {
+		Peer peer = playerMap.inverse().get(player);
+		if(peer != null) {
+			peer.send(message);
+		}
+		else {
+			super.sendMessage(player, message);
 		}
 	}
 
@@ -236,14 +271,32 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	@Override
 	public void unfocus() {
 		super.unfocus();
-//		if(connection != null) {// TEMP conditional
-			connection.send(new TimeScaleMessage(Float.POSITIVE_INFINITY));
-//		}
+		//		if(connection != null) {// TEMP conditional
+		connection.send(new TimeScaleMessage(Float.POSITIVE_INFINITY));
+		//		}
 	}
 
 	@Override
 	public void onMenu(Menu menu) {
 		super.onMenu(menu);
+
+		////
+		if(menu.getHandle() instanceof ObjectMenuHandle && ((ObjectMenuHandle)menu.getHandle()).getSpaceObject() != getPlayerShip()) {
+			println("!!!!! " + getPlayerShip().getName() + " " + ((ObjectMenuHandle)menu.getHandle()).getSpaceObject());///
+		}
+
+		if(menu.getHandle() instanceof ObjectMenuHandle && ((ObjectMenuHandle)menu.getHandle()).getSpaceObject() == getPlayerShip()) {
+			println(playerMap);////
+			if(!playerMap.isEmpty()) {
+				menu.add(new BasicOption("Players", m -> {
+					Menu sub = new Menu(m.getPlayer(), new MenuHandle(new BackOption(m)));
+					for(Player player : playerMap.values()) {
+						sub.add(new PlayerOption(player));
+					}
+					setContext(sub);
+				}));
+			}
+		}
 	}
 
 	@Override
@@ -264,6 +317,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		if(v.frameCount % 300 == 0) {
 			println("----");
 			println("Time Scale: " + getTimeScale());
+			println("Remote Players: " + playerMap.size());
 			println("Player Objects: " + state.getSyncables().stream()
 					.filter(s -> s instanceof Player)
 					.map(s -> ((Player)s).getName())

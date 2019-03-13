@@ -1,18 +1,8 @@
-{item_adj_common} Map
-{item_adj_rare} Map
+Assorted Map Pieces
 Coordinate Chip
-Special {item_noun}
-Humming {item_noun}
-Pulsing {item_noun}
-Entrancing {item_noun}
-Unusual {item_noun}
-Sentient {item_noun}
-Whispering {item_noun}
-Talkative {item_noun}
-Overemotional {item_noun}
-Posessed {item_noun}
-Timid {item_noun}
-Loud {item_noun}
-Sassy {item_noun}
-Helpful {item_noun}
-Polite {item_noun}
+Handwritten Coordinates
+{item_adj_common} {item_noun_mission}
+{item_adj_rare} {item_noun_mission}
+{item_noun_mission}
+{item_adj_mission} {item_noun_mission}
+{item_adj_mission} {item_noun}

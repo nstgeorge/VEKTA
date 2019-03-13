@@ -248,22 +248,22 @@ public class Vekta extends PApplet {
 		return getWorld().register(object);
 	}
 
-	/**
-	 * Convenience method: apply one Syncable data structure to the other.
-	 */
-	@SuppressWarnings("unchecked")
-	public static void syncAll(Iterable<? extends Syncable> sync, Iterable<? extends Syncable> data) {
-		if(sync == null || data == null) {
-			return;
-		}
-		for(Syncable s : sync) {
-			for(Syncable d : data) {
-				if(s.getSyncID() == d.getSyncID()) {
-					s.onSync(d.getSyncData());
-				}
-			}
-		}
-	}
+//	/**
+//	 * Convenience method: apply one Syncable data structure to the other.
+//	 */
+//	@SuppressWarnings("unchecked")
+//	public static void syncAll(Iterable<? extends Syncable> sync, Iterable<? extends Syncable> data) {
+//		if(sync == null || data == null) {
+//			return;
+//		}
+//		for(Syncable s : sync) {
+//			for(Syncable d : data) {
+//				if(s.getSyncID() == d.getSyncID()) {
+//					s.onSync(d.getSyncData());
+//				}
+//			}
+//		}
+//	}
 
 	//// Misc. UI methods ////
 

@@ -57,8 +57,12 @@ public abstract class Syncable<T extends Syncable> implements Serializable {
 	/**
 	 * Determine whether changes to this object should be propagated to remote clients.
 	 */
-	public boolean shouldPropagate() {
+	public boolean shouldSendChanges() {
 		return true;
+	}
+
+	public void sendChanges() {
+		getWorld().sendChanges(this);
 	}
 
 	/**
@@ -67,6 +71,10 @@ public abstract class Syncable<T extends Syncable> implements Serializable {
 	@SuppressWarnings("unchecked")
 	public T getSyncData() {
 		return (T)this;
+	}
+
+	public boolean shouldSyncField(Field field) {
+		return true;
 	}
 
 	public void onAddRemote() {
@@ -90,6 +98,7 @@ public abstract class Syncable<T extends Syncable> implements Serializable {
 				// Recursively replace Syncable objects
 				Object object = field.get(data);
 				if(object instanceof Syncable) {
+//					println("#$@%^&:::", this, object, register((Syncable)object));
 					field.set(this, register((Syncable)object));
 				}
 				else if(object instanceof Collection) {
@@ -116,13 +125,5 @@ public abstract class Syncable<T extends Syncable> implements Serializable {
 		catch(Exception e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	public boolean shouldSyncField(Field field) {
-		return true;
-	}
-
-	public void syncChanges() {
-		getWorld().syncChanges(this);
 	}
 }

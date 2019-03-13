@@ -39,6 +39,7 @@ Sensor
 Finger
 Sock
 Cardboard Box
+Duffel Bag
 Pylon
 Command Center
 AI
@@ -57,3 +58,12 @@ Tesseract
 Hypersphere
 Polytope
 Jumper Cable
+Wheel
+Spring
+Glove
+Mitten
+Fur
+Rubber
+Concrete
+Food
+Chair

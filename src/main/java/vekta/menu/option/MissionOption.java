@@ -4,6 +4,7 @@ import vekta.menu.Menu;
 import vekta.mission.Mission;
 import vekta.mission.MissionStatus;
 
+import static processing.core.PApplet.println;
 import static vekta.Vekta.MISSION_COLOR;
 
 public class MissionOption implements MenuOption {
@@ -32,12 +33,11 @@ public class MissionOption implements MenuOption {
 
 	@Override
 	public void select(Menu menu) {
+		println(mission.getStatus());///
 		if(mission.getStatus() == MissionStatus.READY) {
 			getMission().start();
 		}
-		else if(mission.getStatus() == MissionStatus.STARTED) {
-			menu.getPlayer().setCurrentMission(mission);
-		}
+		menu.getPlayer().setCurrentMission(mission);
 		menu.close();
 	}
 }
