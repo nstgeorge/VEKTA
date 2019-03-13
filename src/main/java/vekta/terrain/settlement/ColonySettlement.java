@@ -13,7 +13,7 @@ public class ColonySettlement extends Settlement {
 		super(faction, "colony");
 
 		add(new CapitalBuilding(this));
-		add(WorldGenerator.randomMarket(1));
+		add(WorldGenerator.createMarket(1));
 	}
 
 	@Override

@@ -23,6 +23,6 @@ public class MarketUpgrade implements SettlementUpgrade {
 
 	@Override
 	public void upgrade(Player player, Settlement settlement) {
-		settlement.add(WorldGenerator.randomMarket(1));
+		settlement.add(WorldGenerator.createMarket(1));
 	}
 }

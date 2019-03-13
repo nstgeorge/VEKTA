@@ -5,19 +5,19 @@ import java.io.Serializable;
 import static vekta.Vekta.*;
 
 public final class Counter implements Serializable {
-	private final int frames;
+	private final int interval;
 	private int ct;
 
 	public Counter() {
 		this(0);
 	}
 
-	public Counter(int frames) {
-		this.frames = frames;
+	public Counter(int interval) {
+		this.interval = interval;
 	}
 
-	public int getFrames() {
-		return frames;
+	public int getInterval() {
+		return interval;
 	}
 
 	public int getProgress() {
@@ -29,12 +29,12 @@ public final class Counter implements Serializable {
 	}
 
 	public Counter ready() {
-		ct = frames;
+		ct = interval;
 		return this;
 	}
 
 	public Counter randomize() {
-		ct = (int)v.random(frames);
+		ct = (int)v.random(interval);
 		return this;
 	}
 
@@ -47,7 +47,7 @@ public final class Counter implements Serializable {
 	}
 
 	public boolean step() {
-		return ++ct >= frames;
+		return ++ct >= interval;
 	}
 
 	public boolean cycle() {

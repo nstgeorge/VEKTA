@@ -14,7 +14,7 @@ public class OutpostSettlement extends Settlement {
 		super(faction, "outpost");
 
 		if(v.chance(.5F)) {
-			add(WorldGenerator.randomMarket(1));
+			add(WorldGenerator.createMarket(1));
 		}
 	}
 

@@ -44,7 +44,7 @@ public class WorldGenerator {
 		}
 	}
 
-	public static Terrain randomTerrain() {
+	public static Terrain createPlanetTerrain() {
 		Terrain terrain;
 		boolean features = true;
 		float r = v.random(1);
@@ -63,7 +63,7 @@ public class WorldGenerator {
 			features = false;
 		}
 		if(features) {
-			int featureCt = (int)v.random(1, 4);
+			int featureCt = (int)v.random(2, 6);
 			for(int i = 0; i < featureCt; i++) {
 				String feature = Resources.generateString("planet_feature");
 				for(String s : feature.split(",")) {
@@ -97,7 +97,7 @@ public class WorldGenerator {
 		}
 	}
 
-	public static MarketBuilding randomMarket(int shopTier) {
+	public static MarketBuilding createMarket(int shopTier) {
 		return v.random(randomMarkets(shopTier, 1));
 	}
 

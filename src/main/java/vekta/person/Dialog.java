@@ -6,6 +6,7 @@ import vekta.menu.handle.DialogMenuHandle;
 import vekta.menu.option.BasicOption;
 import vekta.menu.option.DialogOption;
 import vekta.menu.option.MenuOption;
+import vekta.spawner.DialogGenerator;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -115,6 +116,8 @@ public class Dialog implements Serializable {
 			return;
 		}
 		visited = true;
+
+		DialogGenerator.setupDialog(player, this);
 
 		Menu menu = new Menu(player, new DialogMenuHandle(def, this));
 

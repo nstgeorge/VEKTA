@@ -31,7 +31,7 @@ public class TownSettlement extends Settlement {
 		}
 		else {
 			// Occasionally have a specialized market
-			district.add(WorldGenerator.randomMarket(2));
+			district.add(WorldGenerator.createMarket(2));
 		}
 		add(district);
 

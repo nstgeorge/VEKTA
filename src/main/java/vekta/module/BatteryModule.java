@@ -83,6 +83,5 @@ public class BatteryModule extends ShipModule {
 				menu.add(new RechargeOption(getShip(), price));
 			}
 		}
-
 	}
 }

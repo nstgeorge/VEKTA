@@ -26,7 +26,6 @@ import vekta.sound.SoundGroup;
 import vekta.spawner.EventGenerator;
 import vekta.spawner.MissionGenerator;
 import vekta.spawner.WorldGenerator;
-import vekta.spawner.item.DialogItemSpawner;
 import vekta.spawner.world.StarSystemSpawner;
 
 import java.io.*;
@@ -160,7 +159,7 @@ public class Singleplayer implements World, PlayerListener {
 			SpaceStation.Component sensor = struct2.attach(SpaceStation.Direction.LEFT, new SensorModule());
 		}
 
-		playerShip.getInventory().add(new DialogItemSpawner().create());////
+//		playerShip.getInventory().add(new DialogItemSpawner().create());////
 
 		playerShip.addModule(new EngineModule(2)); // Upgrade engine
 		playerShip.addModule(new AutopilotModule());
@@ -225,9 +224,27 @@ public class Singleplayer implements World, PlayerListener {
 			Resources.setMusic(MUSIC.random(), false);
 		}
 
+		float prevTimeScale = timeScale;
+
+		// Update time factor
+		smoothZoom += (zoom - smoothZoom) * ZOOM_SMOOTH;
+		timeScale = max(1, smoothZoom * TIME_SCALE) / (1 + smoothZoom * TIME_SCALE * TIME_SCALE * TIME_FALLOFF);
+
+		// Determine render level from time scale
 		RenderLevel level = getRenderLevel();
 
-		////
+		// Speed up ship-to-ship movement
+		if(level == RenderLevel.PLANET && timeScale < MIN_PLANET_TIME_SCALE) {
+			timeScale = MIN_PLANET_TIME_SCALE;
+		}
+
+		// Hotfix: counteract velocity mismatch on player zoom
+		if(prevTimeScale != timeScale) {
+			playerShip.getPositionReference()
+					.add(playerShip.getVelocity().mult(timeScale - prevTimeScale));
+		}
+
+		//// Global coordinate logic
 
 		if(level.ordinal() == prevLevel.ordinal() - 1 && !playerShip.isDestroyed()) {
 			// Center around zero for improved floating-point precision
@@ -245,14 +262,6 @@ public class Singleplayer implements World, PlayerListener {
 		state.updateGlobalCoords(getTimeScale());
 
 		////
-
-		// Update time factor
-		smoothZoom += (zoom - smoothZoom) * ZOOM_SMOOTH;
-		timeScale = max(1, zoom * TIME_SCALE) / (1 + zoom * TIME_SCALE * TIME_SCALE * TIME_FALLOFF);
-
-		if(level == RenderLevel.PLANET && timeScale < MIN_PLANET_TIME_SCALE) {
-			timeScale = MIN_PLANET_TIME_SCALE;
-		}
 
 		v.clear();
 		v.rectMode(CENTER);
@@ -276,10 +285,11 @@ public class Singleplayer implements World, PlayerListener {
 				continue;
 			}
 
-			objectCounts[s.getRenderLevel().ordinal()]++; // Increment count for object's render distance
+			// Increment count for object's render level
+			objectCounts[s.getRenderLevel().ordinal()]++;
 
-			// Run on targeting loop
 			if(targeting) {
+				// Update Targeter instances
 				s.updateTargets();
 			}
 
@@ -314,17 +324,23 @@ public class Singleplayer implements World, PlayerListener {
 				cameraPos.set(s.getPositionReference());
 			}
 
-			// Draw object
+			// Start drawing object
 			v.pushMatrix();
+
+			// Set up object position
 			PVector position = s.getPositionReference();
 			float scale = getZoom();
 			float screenX = (position.x - cameraPos.x) / scale;
 			float screenY = (position.y - cameraPos.y) / scale;
 			v.translate(screenX, screenY);
+
+			// Draw trail
 			s.updateTrail();
 			if(s == playerShip || s.getRenderLevel().isVisibleTo(level)) {
 				s.drawTrail(scale);
 			}
+
+			// Draw object
 			v.stroke(s.getColor());
 			v.noFill();
 			float r = s.getRadius() / scale;
@@ -332,6 +348,8 @@ public class Singleplayer implements World, PlayerListener {
 			if(abs(screenX) - onScreenRadius <= v.width / 2 && abs(screenY) - onScreenRadius <= v.height / 2) {
 				s.draw(level, r);
 			}
+
+			// End drawing object
 			v.popMatrix();
 		}
 

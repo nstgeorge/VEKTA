@@ -4,11 +4,7 @@ import processing.core.PVector;
 import vekta.Player;
 import vekta.RenderLevel;
 import vekta.Resources;
-import vekta.menu.Menu;
-import vekta.menu.handle.MissionMenuHandle;
-import vekta.menu.option.BasicOption;
 import vekta.menu.option.ItemTradeOption;
-import vekta.menu.option.MissionOption;
 import vekta.mission.Mission;
 import vekta.mission.MissionIssuer;
 import vekta.mission.objective.Objective;
@@ -16,13 +12,13 @@ import vekta.object.planet.TerrestrialPlanet;
 import vekta.person.Dialog;
 import vekta.person.OpinionType;
 import vekta.person.Person;
-import vekta.spawner.item.MissionItemSpawner;
 import vekta.spawner.world.AsteroidSpawner;
 import vekta.terrain.LandingSite;
 
 import java.util.Arrays;
 
-import static vekta.Vekta.*;
+import static vekta.Vekta.getWorld;
+import static vekta.Vekta.v;
 
 public class MissionGenerator {
 	private static final ObjectiveSpawner[] OBJECTIVE_SPAWNERS = Resources.getSubclassInstances(ObjectiveSpawner.class);
@@ -117,16 +113,9 @@ public class MissionGenerator {
 		}
 		else if(v.chance(.3F)) {
 			dialog = person.createDialog("offer");
-			dialog.add(new ItemTradeOption(player.getInventory(), MissionItemSpawner.randomMissionItem(p -> MissionGenerator.createMission(p, person)), 0));
 		}
 		else {
 			dialog = person.createDialog("request");
-			dialog.add(new BasicOption("Learn More", menu -> {
-				Menu sub = new Menu(menu.getPlayer(), new MissionMenuHandle(menu.getDefault()));
-				sub.add(new MissionOption(createMission(player, person)));
-				sub.addDefault();
-				setContext(sub);
-			}));
 		}
 		return dialog;
 	}
