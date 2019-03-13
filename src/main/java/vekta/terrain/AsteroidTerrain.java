@@ -10,9 +10,6 @@ public class AsteroidTerrain extends Terrain {
 		if(v.chance(.25F)) {
 			addFeature("Mineable");
 		}
-		if(v.chance(.25F)) {
-			addFeature("Inhabited");
-		}
 	}
 
 	@Override
