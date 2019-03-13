@@ -230,12 +230,6 @@ public class Singleplayer implements World, PlayerListener {
 			timeScale = MIN_PLANET_TIME_SCALE;
 		}
 
-		// Counteract velocity mismatch on player zoom
-		if(prevTimeScale != timeScale) {
-			playerShip.getPositionReference()
-					.add(playerShip.getVelocity().mult(timeScale - prevTimeScale));
-		}
-		
 		updateGlobal(level);
 
 		v.clear();
