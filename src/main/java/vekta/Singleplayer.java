@@ -229,8 +229,14 @@ public class Singleplayer implements World, PlayerListener {
 		if(level == RenderLevel.PLANET && timeScale < MIN_PLANET_TIME_SCALE) {
 			timeScale = MIN_PLANET_TIME_SCALE;
 		}
+
+		// Counteract velocity mismatch on player zoom
+		if(prevTimeScale != timeScale) {
+			playerShip.getPositionReference()
+					.add(playerShip.getVelocity().mult(timeScale - prevTimeScale));
+		}
 		
-		updateGlobalCoords(level);
+		updateGlobal(level);
 
 		v.clear();
 		v.rectMode(CENTER);
@@ -364,7 +370,7 @@ public class Singleplayer implements World, PlayerListener {
 		}
 	}
 
-	private void updateGlobalCoords(RenderLevel level) {
+	private void updateGlobal(RenderLevel level) {
 		ModularShip playerShip = getPlayerShip();
 
 		// Set global velocity relative to player ship when zoomed in
