@@ -13,7 +13,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static vekta.Vekta.*;
+import static vekta.Vekta.MISSION_COLOR;
+import static vekta.Vekta.println;
 
 public abstract class Objective extends Syncable<Objective> implements MissionListener, PlayerListener {
 	private final Set<Mission> missions = new HashSet<>();
@@ -100,7 +101,8 @@ public abstract class Objective extends Syncable<Objective> implements MissionLi
 	@Override
 	public final void onStart(Mission mission) {
 		if(missions.contains(mission)) {
-			throw new RuntimeException("Objective already started");
+			println("Warning: objective aleady started for mission: " + mission.getName());
+			return;
 		}
 		missions.add(mission);
 		mission.getPlayer().addListener(this);
@@ -139,10 +141,10 @@ public abstract class Objective extends Syncable<Objective> implements MissionLi
 	public void onSync(Objective data) {
 		super.onSync(data);
 
-//		// TEMP
-//		if(getSpaceObject() != null && !getSpaceObject().isDestroyed()) {
-//			register(data.getSpaceObject());
-//		}
+		//		// TEMP
+		//		if(getSpaceObject() != null && !getSpaceObject().isDestroyed()) {
+		//			register(data.getSpaceObject());
+		//		}
 	}
 
 	public interface ObjectiveCallback extends Serializable {

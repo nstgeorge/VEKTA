@@ -62,7 +62,9 @@ public abstract class Syncable<T extends Syncable> implements Serializable {
 	}
 
 	public void sendChanges() {
-		getWorld().sendChanges(this);
+		if(shouldSendChanges()) {
+			getWorld().sendChanges(this);
+		}
 	}
 
 	/**
@@ -95,10 +97,10 @@ public abstract class Syncable<T extends Syncable> implements Serializable {
 				field.setAccessible(true);
 				MODIFIER_FIELD.setInt(field, field.getModifiers() & ~Modifier.FINAL);
 
-				// Recursively replace Syncable objects
+				// Recursively replace Syncable object references
 				Object object = field.get(data);
 				if(object instanceof Syncable) {
-//					println("#$@%^&:::", this, object, register((Syncable)object));
+					//					println(":::", this, object, register((Syncable)object));
 					field.set(this, register((Syncable)object));
 				}
 				else if(object instanceof Collection) {

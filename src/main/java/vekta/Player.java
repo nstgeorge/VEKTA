@@ -11,8 +11,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static processing.core.PApplet.println;
-
 public final class Player extends Syncable<Player> {
 	private Faction faction;
 	private ModularShip currentShip;
@@ -42,7 +40,7 @@ public final class Player extends Syncable<Player> {
 
 			@Override
 			public void onMissionStatus(Mission mission) {
-				println("::::", mission.getName(), mission.getStatus(), mission.getCurrentObjective() != null ? mission.getCurrentObjective().getName() : null);
+//				println("::::", mission.getName(), mission.getStatus(), mission.getCurrentObjective() != null ? mission.getCurrentObjective().getName() : null);
 				switch(mission.getStatus()) {
 				case READY:
 				case STARTED:

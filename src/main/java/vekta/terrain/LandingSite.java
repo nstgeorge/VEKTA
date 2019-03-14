@@ -1,6 +1,7 @@
 package vekta.terrain;
 
 import processing.core.PVector;
+import vekta.Syncable;
 import vekta.object.SpaceObject;
 import vekta.object.ship.Ship;
 import vekta.sound.Tune;
@@ -14,7 +15,7 @@ import static vekta.Vekta.*;
  * A landing terrain for one spacecraft-like object.
  * State management for landing sites should be handled or proxied through this class.
  */
-public class LandingSite implements Serializable {
+public class LandingSite extends Syncable<LandingSite> implements Serializable {
 	private final SpaceObject parent;
 	private final Terrain terrain;
 

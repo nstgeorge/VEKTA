@@ -30,7 +30,7 @@ public class WormholeModule extends ShipModule {
 		return target != null && !target.isDestroyed();
 	}
 
-	public SpaceObject findTarget() {
+	public SpaceObject getTarget() {
 		if(!hasTarget()) {
 			target = null;
 		}
@@ -47,7 +47,7 @@ public class WormholeModule extends ShipModule {
 
 	@Override
 	public String getName() {
-		return "Wormhole Drive (" + (hasTarget() ? findTarget().getName() : "untargeted") + ")";
+		return "Wormhole Drive (" + (hasTarget() ? getTarget().getName() : "untargeted") + ")";
 	}
 
 	@Override
@@ -69,13 +69,10 @@ public class WormholeModule extends ShipModule {
 	@Override
 	public void onKeyPress(KeyBinding key) {
 		if(key == KeyBinding.SHIP_TELESCOPE) {
-			Targeter targeter = (Targeter)getShip().getModule(ModuleType.TARGET_COMPUTER);
-			if(targeter != null && targeter.getTarget() != null) {
-				setTarget(targeter.getTarget());
-				if(getShip().hasController()) {
-					getShip().getController().send("Wormhole target "
-							+ (hasTarget() ? "updated to " + findTarget().getName() : "cleared"));
-				}
+			setTarget(chooseTarget());
+			if(getShip().hasController()) {
+				getShip().getController().send("Wormhole target "
+						+ (hasTarget() ? "updated to " + getTarget().getName() : "cleared"));
 			}
 		}
 		else if(key == KeyBinding.SHIP_HYPERDRIVE) {
@@ -83,8 +80,17 @@ public class WormholeModule extends ShipModule {
 		}
 	}
 
-	public void teleport(ModularShip ship) {
-		if(!hasTarget()) {
+	private SpaceObject chooseTarget() {
+		Targeter targeter = (Targeter)getShip().getModule(ModuleType.TARGET_COMPUTER);
+		if(targeter != null && targeter.getTarget() != null) {
+			return targeter.getTarget();
+		}
+		return null;
+	}
+
+	private void teleport(ModularShip ship) {
+		SpaceObject target = hasTarget() ? getTarget() : chooseTarget();
+		if(target == null) {
 			return;
 		}
 
@@ -122,7 +128,7 @@ public class WormholeModule extends ShipModule {
 		}
 
 		if(menu.getHandle() instanceof ObjectMenuHandle && ((ObjectMenuHandle)menu.getHandle()).getSpaceObject() == menu.getPlayer().getShip()) {
-			menu.add(new BasicOption("Teleport (" + findTarget().getName() + ")", m -> {
+			menu.add(new BasicOption("Teleport (" + getTarget().getName() + ")", m -> {
 				m.close();
 				teleport(m.getPlayer().getShip());
 			}));

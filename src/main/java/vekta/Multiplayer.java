@@ -128,10 +128,10 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 			println("Warning: received Player in a SyncMessage");
 			return;
 		}
-//		if(msg.getData() instanceof SpaceObject) {
-//			println("Warning: received SpaceObject in a SyncMessage");
-//			return;
-//		}
+		//		if(msg.getData() instanceof SpaceObject) {
+		//			println("Warning: received SpaceObject in a SyncMessage");
+		//			return;
+		//		}
 
 		long id = msg.getID();
 		println("<receive>", msg.getData().getClass().getSimpleName() + "[" + Long.toHexString(id) + "]");
@@ -212,10 +212,9 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	@Override
 	public void sendChanges(Syncable object) {
 		super.sendChanges(object);
-		if(object.shouldSendChanges()) {
-			println("<broadcast>", object.getClass().getSimpleName() + "[" + Long.toHexString(object.getSyncID()) + "]");
-			connection.send(new SyncMessage(object));
-		}
+		
+		println("<broadcast>", object.getClass().getSimpleName() + "[" + Long.toHexString(object.getSyncID()) + "]");
+		connection.send(new SyncMessage(object));
 	}
 
 	@Override
