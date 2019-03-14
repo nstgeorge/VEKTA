@@ -26,7 +26,6 @@ import vekta.sound.SoundGroup;
 import vekta.spawner.EventGenerator;
 import vekta.spawner.MissionGenerator;
 import vekta.spawner.WorldGenerator;
-import vekta.spawner.world.StarSystemSpawner;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -66,10 +65,11 @@ public class Singleplayer implements World, PlayerListener {
 	private RenderLevel prevLevel = RenderLevel.PARTICLE;
 
 	// TODO: move to WorldState
-	private final Counter targetCt = new Counter(30); // Counter for periodically updating Targeter instances
-	private final Counter spawnCt = new Counter(100); // Counter for periodically cleaning/spawning objects
-	private final Counter eventCt = new Counter(3600 * 5).randomize(); // Counter for random player events
-	private final Counter situationCt = new Counter(100).randomize(); // Counter for situational events
+	private final Counter targetCt = new Counter(30).randomize(); // Update Targeter instances
+	//	private final Counter spawnCt = new Counter(10).randomize(); // Spawn objects
+	private final Counter cleanupCt = new Counter(100).randomize(); // Despawn objects
+	private final Counter eventCt = new Counter(3600 * 5).randomize(); // Occasional random events
+	private final Counter situationCt = new Counter(100).randomize(); // Situational events
 
 	private PlayerOverlay overlay;
 
@@ -103,20 +103,20 @@ public class Singleplayer implements World, PlayerListener {
 	}
 
 	public void setup() {
-		Faction playerFaction = new Faction(FactionType.PLAYER, "VEKTA I", UI_COLOR);
-		Player player = new Player(playerFaction);
-		player.addListener(this);
-
 		state = new WorldState();
+		
+		Faction playerFaction = register(new Faction(FactionType.PLAYER, "VEKTA I", UI_COLOR));
+		Player player = register(new Player(playerFaction));
+		player.addListener(this);
 		state.setPlayer(player);
 
-		StarSystemSpawner.createSystem(PVector.random2D().mult(2 * AU_DISTANCE));
+		//		StarSystemSpawner.createSystem(PVector.random2D().mult(2 * AU_DISTANCE));
 
 		PlayerShip playerShip = register(new PlayerShip(
 				player.getFaction().getName(),
 				PVector.fromAngle(0), // Heading
 				new PVector(), // Position
-				new PVector(),    // Velocity
+				new PVector(), // Velocity
 				v.color(0, 255, 0)
 		));
 		playerShip.getInventory().add(50); // Starting money
@@ -235,7 +235,7 @@ public class Singleplayer implements World, PlayerListener {
 			playerShip.getPositionReference()
 					.add(playerShip.getVelocity().mult(timeScale - prevTimeScale));
 		}
-		
+
 		updateGlobal(level);
 
 		v.clear();
@@ -246,7 +246,8 @@ public class Singleplayer implements World, PlayerListener {
 		v.translate(v.width / 2F, v.height / 2F);
 
 		boolean targeting = targetCt.cycle();
-		boolean cleanup = spawnCt.cycle();
+		//		boolean spawning = spawnCt.cycle();
+		boolean cleanup = cleanupCt.cycle();
 
 		state.startUpdate();
 
@@ -330,9 +331,9 @@ public class Singleplayer implements World, PlayerListener {
 		while(spawnLevel.ordinal() > 0 && v.chance(.05F)) {
 			spawnLevel = RenderLevel.values()[spawnLevel.ordinal() - 1];
 		}
-		if(objectCounts[spawnLevel.ordinal()] < MAX_OBJECTS_PER_DIST) {
-			WorldGenerator.spawnOccasional(spawnLevel, playerShip);
-		}
+		//		if(objectCounts[spawnLevel.ordinal()] < MAX_OBJECTS_PER_DIST) {
+		//			WorldGenerator.spawnOccasional(spawnLevel, playerShip);
+		//		}
 
 		if(eventCt.cycle()) {
 			eventCt.randomize();
@@ -347,9 +348,6 @@ public class Singleplayer implements World, PlayerListener {
 		v.popMatrix();
 
 		// GUI setup
-		//		v.camera();
-		//		v.noLights();
-		//		v.hint(DISABLE_DEPTH_TEST);
 		if(!playerShip.isDestroyed()) {
 			overlay.render();
 		}
@@ -370,7 +368,7 @@ public class Singleplayer implements World, PlayerListener {
 		}
 	}
 
-	private void updateGlobal(RenderLevel level) {
+	protected void updateGlobal(RenderLevel level) {
 		ModularShip playerShip = getPlayerShip();
 
 		// Set global velocity relative to player ship when zoomed in

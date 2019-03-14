@@ -4,15 +4,17 @@ import vekta.Syncable;
 import vekta.connection.MessageListener;
 import vekta.connection.Peer;
 
+import java.io.Serializable;
+
 public class SyncMessage implements Message {
 	private final long id;
-	private final Syncable data;
+	private final Serializable data;
 	
 	public SyncMessage(Syncable s) {
 		this(s.getSyncID(), s.getSyncData());
 	}
 
-	public SyncMessage(long id, Syncable data) {
+	public SyncMessage(long id, Serializable data) {
 		this.id = id;
 		this.data = data;
 	}
@@ -21,7 +23,7 @@ public class SyncMessage implements Message {
 		return id;
 	}
 
-	public Syncable getData() {
+	public Serializable getData() {
 		return data;
 	}
 

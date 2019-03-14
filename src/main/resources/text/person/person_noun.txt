@@ -6,7 +6,9 @@ Ranger
 Voyager
 Knight
 King
+Queen
 Knight
+Priest
 Monk
 Artist
 Painter

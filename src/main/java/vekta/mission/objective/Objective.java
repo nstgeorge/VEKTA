@@ -13,7 +13,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static vekta.Vekta.*;
+import static vekta.Vekta.MISSION_COLOR;
+import static vekta.Vekta.println;
 
 public abstract class Objective extends Syncable<Objective> implements MissionListener, PlayerListener {
 	private final Set<Mission> missions = new HashSet<>();
@@ -50,41 +51,40 @@ public abstract class Objective extends Syncable<Objective> implements MissionLi
 	}
 
 	public void cancel() {
-		for(Mission mission : missions) {
-			setStatus(MissionStatus.CANCELLED, mission);
-		}
+		setStatus(MissionStatus.CANCELLED);
 	}
 
 	public void complete() {
-		for(Mission mission : missions) {
-			setStatus(MissionStatus.COMPLETED, mission);
-		}
+		setStatus(MissionStatus.COMPLETED);
 	}
 
-	private void setStatus(MissionStatus status, Mission mission) {
+	private void setStatus(MissionStatus status) {
 		if(this.status == status) {
 			return;
 		}
 		this.status = status;
-		if(status == MissionStatus.CANCELLED) {
-			mission.getPlayer().send("Objective cancelled: " + getDisplayText())
-					.withColor(MISSION_COLOR);
-			if(isOptional()) {
-				mission.cancel();
+
+		for(Mission mission : getMissions()) {
+			if(status == MissionStatus.CANCELLED) {
+				mission.getPlayer().send("Objective cancelled: " + getDisplayText())
+						.withColor(MISSION_COLOR);
+				if(isOptional()) {
+					mission.cancel();
+				}
+				mission.getPlayer().removeListener(this);
+				next.clear();
 			}
-			mission.getPlayer().removeListener(this);
-			next.clear();
-		}
-		else if(status == MissionStatus.COMPLETED) {
-			mission.getPlayer().send("Objective completed: " + getDisplayText())
-					.withColor(MISSION_COLOR);
-			for(ObjectiveCallback next : this.next) {
-				next.callback(mission);
+			else if(status == MissionStatus.COMPLETED) {
+				mission.getPlayer().send("Objective completed: " + getDisplayText())
+						.withColor(MISSION_COLOR);
+				for(ObjectiveCallback next : this.next) {
+					next.callback(mission);
+				}
+				mission.getPlayer().removeListener(this);
+				next.clear();
 			}
-			mission.getPlayer().removeListener(this);
-			next.clear();
+			mission.updateCurrentObjective();
 		}
-		mission.updateCurrentObjective();
 
 		sendChanges();
 	}
@@ -107,8 +107,8 @@ public abstract class Objective extends Syncable<Objective> implements MissionLi
 		mission.getPlayer().addListener(this);
 		if(getStatus() != MissionStatus.STARTED) {
 			onStartFirst(mission);
+			setStatus(MissionStatus.STARTED);
 		}
-		setStatus(MissionStatus.STARTED, mission);
 	}
 
 	@Override
@@ -134,15 +134,6 @@ public abstract class Objective extends Syncable<Objective> implements MissionLi
 	}
 
 	public void onCompleteFirst(Mission mission) {
-	}
-
-	@Override
-	public void onSync(Objective data) {
-		super.onSync(data);
-
-		register(getSpaceObject());/////
-		
-		println(getSpaceObject()!=null,getSpaceObject()!=null?getSpaceObject().isDestroyed():"");////
 	}
 
 	public interface ObjectiveCallback extends Serializable {

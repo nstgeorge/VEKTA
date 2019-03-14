@@ -139,4 +139,13 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 
 	public void onSettlementMenu(Menu menu) {
 	}
+
+	@Override
+	public void onSync(Settlement data) {
+		super.onSync(data);
+		
+		// Update buildings
+		this.parts.clear();
+		this.parts.addAll(data.parts);
+	}
 }

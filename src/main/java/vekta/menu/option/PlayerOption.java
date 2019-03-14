@@ -25,6 +25,11 @@ public class PlayerOption implements MenuOption {
 	}
 
 	@Override
+	public int getColor() {
+		return getPlayer().getColor();
+	}
+
+	@Override
 	public void select(Menu menu) {
 		Menu sub = new Menu(menu.getPlayer(), new ObjectMenuHandle(menu.getDefault(), player.getShip()));
 		sub.add(new BasicOption("Set Target", m -> {

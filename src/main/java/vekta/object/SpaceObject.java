@@ -324,18 +324,5 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	public PVector relativeVelocity(SpaceObject other) {
 		return other.getVelocity().sub(getVelocity());
 	}
-	
-	// Syncable methods
+}
 
-	@Override
-	public void onSync(SpaceObject data) {
-		PVector pos = getPosition();
-		PVector vel = getVelocity();
-		
-		super.onSync(data);
-		
-		// Prevent changing position via sync
-		position.set(pos);
-		velocity.set(vel);
-	}
-}  

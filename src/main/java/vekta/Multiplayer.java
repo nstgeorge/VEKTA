@@ -16,9 +16,9 @@ import vekta.menu.option.BasicOption;
 import vekta.menu.option.MissionOption;
 import vekta.menu.option.PlayerOption;
 import vekta.mission.Mission;
+import vekta.mission.objective.Objective;
 import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
-import vekta.object.ship.Ship;
 import vekta.spawner.WorldGenerator;
 
 import java.io.File;
@@ -44,7 +44,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 
 	private final transient BiMap<Peer, Player> playerMap = HashBiMap.create();
 	private final transient Map<Peer, Float> timeMap = new WeakHashMap<>();
-	private final transient Set<Syncable> objectsToSync = new HashSet<>();
+	private final transient Set<Syncable> changesToSend = new HashSet<>();
 
 	private float timeScale = 1;
 
@@ -116,7 +116,8 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		boolean existed = playerMap.containsKey(peer);
 		Player player = msg.getPlayer();
 		println("<player>", "[" + Long.toHexString(player.getSyncID()) + "]");
-		playerMap.put(peer, state.register(player, true));
+		//		playerMap.put(peer, state.register(player, true));
+		playerMap.put(peer, player);
 		if(!existed) {
 			getPlayer().send(player.getName() + " joined the world");
 			peer.send(new PlayerJoinMessage(getPlayer()));
@@ -157,7 +158,8 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 
 	@Override
 	public void onCreateObject(Peer peer, CreateMessage msg) {
-		Syncable object = state.register(msg.getObject(), true);
+		//		Syncable object = state.register(msg.getObject(), true);
+		Syncable object = msg.getObject();
 		if(object instanceof SpaceObject) {
 			SpaceObject s = (SpaceObject)object;
 			s.getPositionReference().add(state.getGlobalOffset().relativePosition(msg.getOffset()));
@@ -190,10 +192,14 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 
 	@Override
 	public void onShareMission(Peer peer, ShareMissionMessage msg) {
-		Mission mission = register(msg.getMission());
 		Player sender = playerMap.get(peer);
+		Mission mission = register(msg.getMission());
 
-		Menu menu = new Menu(getPlayer(), new ObjectMenuHandle(new BackOption(getWorld()), sender.getShip()));
+		for(Objective objective : mission.getObjectives()) {
+			objective.onStart(mission);
+		}
+
+		Menu menu = new Menu(getPlayer(), new ObjectMenuHandle(new BackOption(getContext()), sender.getShip()));
 		menu.add(new MissionOption(mission));
 		menu.addDefault();
 		setContext(menu);
@@ -206,7 +212,6 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		boolean isNew = state.find(object.getSyncID()) == null;
 		object = super.register(object);
 		if(isNew && !object.isRemote()) {
-			//			new Exception().printStackTrace();
 			connection.send(new CreateMessage(object, state.getGlobalOffset()));
 		}
 		return object;
@@ -216,7 +221,9 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	public void sendChanges(Syncable object) {
 		super.sendChanges(object);
 
-		objectsToSync.add(object);
+		if(!object.isRemote()) {
+			changesToSend.add(object);
+		}
 	}
 
 	@Override
@@ -228,6 +235,12 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		else {
 			super.sendMessage(player, message);
 		}
+	}
+
+	@Override
+	protected void updateGlobal(RenderLevel level) {
+		// Disable global coord shifting for now
+		//		super.updateGlobal(level);
 	}
 
 	@Override
@@ -314,11 +327,11 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 			}
 		}
 
-		for(Syncable object : objectsToSync) {
+		for(Syncable object : changesToSend) {
 			println("<broadcast>", object.getClass().getSimpleName() + "[" + Long.toHexString(object.getSyncID()) + "]");
 			connection.send(new SyncMessage(object));
 		}
-		objectsToSync.clear();
+		changesToSend.clear();
 
 		// Periodically print debug info
 		if(v.frameCount % 300 == 0) {
@@ -329,9 +342,9 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 					.filter(s -> s instanceof Player)
 					.map(s -> ((Player)s).getName())
 					.collect(Collectors.joining(", ")));
-			println("Ship Objects: " + state.getSyncables().stream()
-					.filter(s -> s instanceof Ship)
-					.map(s -> ((Ship)s).getName() + ((Ship)s).getPosition())
+			println("SpaceObjects: " + state.getSyncables().stream()
+					.filter(s -> s instanceof SpaceObject)
+					.map(s -> ((SpaceObject)s).getName())
 					.collect(Collectors.joining(", ")));
 		}
 	}

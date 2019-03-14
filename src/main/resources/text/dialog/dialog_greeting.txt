@@ -4,8 +4,7 @@ Hello there! *Hi. *:aside_prequel You are a bold one.
 Howdy!
 How are you today? *I'm fine, thanks. *Good. *Yes.
 Hey! What are you doing flying out here? *Just snooping around. *Nice to see you again, old friend.
-It seems the stories are true...
 You... *Yes? *Me.
 Get over here, you {item_adj_common} little {item_noun}. *Okay! *What did you just call me?
 Greetings! 
-How's my dude? 
+How's my dude?

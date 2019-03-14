@@ -103,13 +103,13 @@ public class WormholeModule extends ShipModule {
 
 		float temp = ship.getTemperature();
 		if(ship.hasEnergy() && ship.getEnergy() >= getEnergyConsumption()) {
+			Resources.playSound("hyperdriveHit");
 			ship.consumeEnergyImmediate(getEnergyConsumption());
 			ship.setTemperature(temp);
+			ship.setVelocity(target.getVelocity());
+			ship.setLanding(true);
 			PVector offset = PVector.random2D().mult((ship.getRadius() + target.getRadius()) * 2);
 			ship.getPositionReference().set(target.getPosition().add(offset));
-			ship.setVelocity(target.getVelocity());
-			Resources.playSound("hyperdriveHit");
-			getShip().setLanding(true);
 		}
 		else if(ship.hasController()) {
 			ship.getController().send("Not enough energy! (" + (int)getShip().getEnergy() + " / " + (int)getEnergyConsumption() + ")");

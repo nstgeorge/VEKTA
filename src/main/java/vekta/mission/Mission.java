@@ -189,8 +189,13 @@ public class Mission extends Syncable<Mission> {
 
 	public void share(Player player) {
 		Mission mission = new Mission(player, this.name, getIssuer(), getTier());
-		for(MissionListener listener : listeners) {
-			mission.add(listener);
+//		for(MissionListener listener : listeners) {
+//			mission.add(listener);
+//		}
+		for(Objective objective : getObjectives()) {
+			if(!objective.getStatus().isDone()){
+				mission.add(objective);
+			}
 		}
 		
 		getWorld().sendMessage(player, new ShareMissionMessage(mission));

@@ -1,10 +1,12 @@
 package vekta.spawner.objective;
 
-import vekta.Resources;
 import vekta.mission.Mission;
 import vekta.mission.objective.Objective;
 import vekta.mission.objective.SurveyFeatureObjective;
 import vekta.spawner.MissionGenerator;
+import vekta.terrain.Terrain;
+
+import static vekta.Vekta.v;
 
 public class SurveyFeatureObjectiveSpawner implements MissionGenerator.ObjectiveSpawner {
 	@Override
@@ -19,7 +21,7 @@ public class SurveyFeatureObjectiveSpawner implements MissionGenerator.Objective
 
 	@Override
 	public Objective getMainObjective(Mission mission) {
-		String feature = Resources.generateString("planet_feature");
-		return new SurveyFeatureObjective(feature);
+		Terrain terrain = MissionGenerator.randomLandingSite().getTerrain();
+		return new SurveyFeatureObjective(v.random(terrain.getFeatures()));
 	}
 }

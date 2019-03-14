@@ -30,6 +30,8 @@ public class Dialog implements Serializable {
 		this.type = type;
 		this.person = person;
 		this.message = message;
+		
+		DialogGenerator.initDialog(this);
 	}
 
 	public String getType() {
@@ -124,7 +126,7 @@ public class Dialog implements Serializable {
 		}
 		visited = true;
 
-		DialogGenerator.setupDialog(player, this);
+		DialogGenerator.setupPlayerDialog(player, this);
 
 		Menu menu = new Menu(player, new DialogMenuHandle(def, this));
 

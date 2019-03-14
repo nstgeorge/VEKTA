@@ -6,8 +6,8 @@ import vekta.item.Item;
 import vekta.item.ItemCategory;
 import vekta.item.PatternItemCategory;
 
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static vekta.Vekta.round;
 import static vekta.Vekta.v;
@@ -17,7 +17,7 @@ public class ItemGenerator {
 	private static final ItemCategory[] CATEGORIES;
 
 	static {
-		Map<String, Set<String>> map = Resources.getStringMap("item_category", true);
+		Map<String, List<String>> map = Resources.getStringMap("item_category", true);
 		CATEGORIES = map.keySet().stream()
 				.map(k -> new PatternItemCategory(k, map.get(k).toArray(new String[0])))
 				.toArray(ItemCategory[]::new);

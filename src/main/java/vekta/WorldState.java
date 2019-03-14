@@ -15,7 +15,7 @@ import static processing.core.PApplet.println;
 public final class WorldState implements Serializable {
 	private Player player;
 
-	private final Map<Long, Syncable> syncMap = new HashMap<>(); // All client-syncable objects
+	private final transient Map<Long, Syncable> syncMap = new HashMap<>(); // All client-syncable objects
 
 	private final List<SpaceObject> objects = new ArrayList<>();
 	private final List<SpaceObject> gravityObjects = new ArrayList<>();
@@ -26,13 +26,7 @@ public final class WorldState implements Serializable {
 	private final List<Person> people = new ArrayList<>();
 	private final List<Faction> factions = new ArrayList<>();
 
-	//	private final GlobalVector globalPosition = new GlobalVector();
-	//	private final PVector globalVelocity = new PVector();
-
 	private final GlobalOffset globalOffset = new GlobalOffset();
-
-	private final Set<Syncable> registerScope = new HashSet<>();
-	private boolean remoteFlag;
 
 	private boolean updating;
 
@@ -44,7 +38,7 @@ public final class WorldState implements Serializable {
 	}
 
 	public void setPlayer(Player player) {
-		this.player = register(player);///
+		this.player = register(player);
 	}
 
 	public Collection<Syncable> getSyncables() {
@@ -142,44 +136,21 @@ public final class WorldState implements Serializable {
 		return objectsToRemove.contains(s);
 	}
 
-	public <S extends Syncable> S register(S object) {
-		return register(object, false);
-	}
-
 	@SuppressWarnings("unchecked")
-	public <S extends Syncable> S register(S object, boolean remote) {
-		// Check if an object's sync logic has a circular reference
-		if(registerScope.contains(object)) {
+	public <S extends Syncable> S register(S object) {
+		// Find already existing object with the same state key
+		long id = object.getSyncID();
+		if(syncMap.containsKey(id)) {
+			S other = (S)syncMap.get(id);
+			other.onSync(object.getSyncData());
+			println("<sync>", object.isRemote(), object.getClass().getSimpleName() + "[" + Long.toHexString(id) + "]");
+			return other;
+		}
+		else {
+			add(object);
+			syncMap.put(object.getSyncID(), object);
+			println("<add>", object.isRemote(), object.getClass().getSimpleName() + "[" + Long.toHexString(id) + "]");
 			return object;
-		}
-		registerScope.add(object);
-
-		// If the objects are being registered remotely, set a flag to resolve recursively
-		boolean flagging = remote && !remoteFlag;
-		if(flagging) {
-			remoteFlag = true;
-		}
-		try {
-			// Find already existing object with the same state key
-			long id = object.getSyncID();
-			if(syncMap.containsKey(id)) {
-				S other = (S)syncMap.get(id);
-				other.onSync(object.getSyncData());
-				println("<sync>", remoteFlag, object.getClass().getSimpleName() + "[" + Long.toHexString(id) + "]");
-				return other;
-			}
-			else {
-				add(object);
-				syncMap.put(object.getSyncID(), object);
-				//				println("<add>", remoteFlag, object.getClass().getSimpleName() + "[" + Long.toHexString(id) + "]");
-				return object;
-			}
-		}
-		finally {
-			registerScope.remove(object);
-			if(flagging) {
-				remoteFlag = false;
-			}
 		}
 	}
 
@@ -189,7 +160,7 @@ public final class WorldState implements Serializable {
 			if(s.isDestroyed()) {
 				return;
 			}
-			
+
 			if(updating) {
 				objectsToAdd.add(s);
 			}
@@ -204,8 +175,7 @@ public final class WorldState implements Serializable {
 			factions.add((Faction)object);
 		}
 
-		if(remoteFlag) {
-			object.setRemote(true);
+		if(object.isRemote()) {
 			object.onAddRemote();
 		}
 	}

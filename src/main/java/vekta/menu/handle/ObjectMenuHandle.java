@@ -29,13 +29,13 @@ public class ObjectMenuHandle extends MenuHandle {
 	public void render(Menu menu) {
 		super.render(menu);
 
-		v.textSize(64);
+		v.textSize(48);
 		v.fill(target.getColor());
 		v.text(target.getName(), v.width / 2F, getButtonY(-3));
 
 		// Draw object preview
 		v.pushMatrix();
-		v.translate(getButtonX(), getButtonY(0) - 150);
+		v.translate(getButtonX(), getButtonY(-2) + 40);
 		v.rotate(v.frameCount * ROTATE_SPEED);
 		v.noFill();
 		v.stroke(target.getColor());

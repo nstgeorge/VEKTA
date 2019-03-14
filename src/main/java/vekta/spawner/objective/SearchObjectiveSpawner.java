@@ -4,6 +4,7 @@ import vekta.item.Item;
 import vekta.mission.Mission;
 import vekta.mission.objective.DeliverItemObjective;
 import vekta.mission.objective.Objective;
+import vekta.mission.objective.ObtainItemObjective;
 import vekta.mission.objective.SearchForItemObjective;
 import vekta.person.Person;
 import vekta.spawner.ItemGenerator;
@@ -26,10 +27,13 @@ public class SearchObjectiveSpawner implements MissionGenerator.ObjectiveSpawner
 	@Override
 	public Objective getMainObjective(Mission mission) {
 		Item item = ItemGenerator.randomItem();
-		Person person = mission.getIssuer() instanceof Person && v.chance(.8F)
-				? (Person)mission.getIssuer()
-				: randomMissionPerson();
 		mission.add(new SearchForItemObjective(item, v.random(.1F, .5F)));
-		return new DeliverItemObjective(item, person);
+		return new ObtainItemObjective(item)
+				.then(m -> {
+					Person person = m.getIssuer() instanceof Person && v.chance(.8F)
+							? (Person)m.getIssuer()
+							: randomMissionPerson();
+					m.add(new DeliverItemObjective(item, person));
+				});
 	}
 }

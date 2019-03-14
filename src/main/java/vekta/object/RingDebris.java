@@ -16,12 +16,12 @@ import static vekta.Vekta.*;
 
 public class RingDebris extends Planet {
 	private static final float MAX_PART_DISTANCE = .5F;
-	private static final float SPIN_SCALE = .02F;
+	private static final float SPIN_SCALE = .01F;
 
 	private final Inventory inventory = new Inventory();
 
 	private float angle;
-	private float spinSpeed = sq(v.random(-1, 1)) * SPIN_SCALE;
+	private float spinSpeed = v.random(-1, 1) * SPIN_SCALE;
 
 	private final float[][] positions = new float[(int)v.random(4) + 1][5];
 

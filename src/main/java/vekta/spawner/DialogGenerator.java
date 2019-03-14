@@ -18,14 +18,17 @@ public final class DialogGenerator {
 
 	private static final Map<String, List<String>> NEXT_MAP = Resources.getStringMap("dialog_next_map", false);
 
-	public static void setupDialog(Player player, Dialog dialog) {
-		DialogSpawner spawner = SPAWNERS.get(dialog.getType());
-		if(spawner != null) {
-			spawner.setup(player, dialog);
-		}
+	public static void initDialog(Dialog dialog) {
 		List<String> nextList = NEXT_MAP.get(dialog.getType());
 		if(nextList != null && !nextList.isEmpty()) {
 			dialog.then(v.random(nextList));
+		}
+	}
+	
+	public static void setupPlayerDialog(Player player, Dialog dialog) {
+		DialogSpawner spawner = SPAWNERS.get(dialog.getType());
+		if(spawner != null) {
+			spawner.setup(player, dialog);
 		}
 	}
 
