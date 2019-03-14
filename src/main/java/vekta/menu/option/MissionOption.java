@@ -33,7 +33,6 @@ public class MissionOption implements MenuOption {
 
 	@Override
 	public void select(Menu menu) {
-		println(mission.getStatus());///
 		if(mission.getStatus() == MissionStatus.READY) {
 			getMission().start();
 		}
