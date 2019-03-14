@@ -106,10 +106,6 @@ public class Dialog implements Serializable {
 		add(new DialogOption(response, dialog));
 	}
 
-	//	public void openMenu(Menu menu) {
-	//		openMenu(menu.getPlayer(), new BackOption(menu));
-	//	}
-
 	public void openMenu(Player player, MenuOption def) {
 		if(visited && next != null) {
 			getNext().openMenu(player, def);
@@ -135,7 +131,7 @@ public class Dialog implements Serializable {
 		else {
 			// Add custom responses for exiting dialog
 			for(String response : getResponses()) {
-				menu.add(new BasicOption(response, m -> m.getDefault().select(m)));
+				menu.add(new BasicOption(response, menu.getDefault()::select));
 			}
 		}
 
@@ -144,7 +140,8 @@ public class Dialog implements Serializable {
 			Collections.shuffle(menu.getOptions());
 		}
 		else {
-			menu.addDefault();
+			menu.add(new BasicOption("Back", menu.getDefault()::select));
+//			menu.addDefault();
 		}
 
 		setContext(menu);

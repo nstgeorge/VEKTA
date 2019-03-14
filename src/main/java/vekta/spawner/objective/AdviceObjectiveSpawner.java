@@ -30,7 +30,7 @@ public class AdviceObjectiveSpawner implements ObjectiveSpawner {
 
 	public static Dialog randomAdviceDialog(Player player, Person person) {
 		Dialog dialog = person.createDialog("advice");
-		int adviceCt = (int)v.random(2) + 1;
+		int adviceCt = (int)v.random(2) + 1 /**/+10;
 		while(adviceCt-- > 0) {
 			dialog.then("advice_thank");
 			// Add continuation dialog for subsequent advice

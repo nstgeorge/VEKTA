@@ -26,11 +26,12 @@ public class DialogOption implements MenuOption {
 
 	@Override
 	public void select(Menu menu) {
-		boolean useMenuDefault = menu.getHandle() instanceof DialogMenuHandle;
-		dialog.openMenu(menu.getPlayer(), useMenuDefault
-				? menu.getDefault()
-				: defaultOption != null ? defaultOption : new BackOption(menu));
-		
 		menu.remove(this);
+		
+		boolean useMenuDefault = menu.getHandle() instanceof DialogMenuHandle;
+		dialog.openMenu(menu.getPlayer(),
+				defaultOption != null ? defaultOption :
+						useMenuDefault ? menu.getDefault() : new BackOption(menu));
+
 	}
 }

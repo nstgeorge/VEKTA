@@ -25,7 +25,7 @@ public class Menu implements Context {
 	private boolean hasAutoOption;
 	private MenuOption autoOption;
 
-	private int index = 0;
+	private int index;
 
 	public Menu(Player player, MenuHandle handle) {
 		this.player = player;
@@ -167,6 +167,11 @@ public class Menu implements Context {
 
 	@Override
 	public void focus() {
+		// If menu changed, ensure that the index is valid
+		if(index >= size()) {
+			index = size() - 1;
+		}
+		
 		handle.focus(this);
 		if(autoOption != null) {
 			autoOption.select(this);
@@ -176,7 +181,7 @@ public class Menu implements Context {
 			listener.onFocus();
 		}
 	}
-	
+
 	@Override
 	public void render() {
 		handle.render(this);

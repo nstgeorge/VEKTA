@@ -1,7 +1,7 @@
 package vekta.module;
 
 public class ActiveTCSModule extends PassiveTCSModule {
-	private static final float EFFICIENCY_BOOST = 20;
+	private static final float EFFICIENCY_BOOST = 10;
 
 	private boolean active = false;
 
