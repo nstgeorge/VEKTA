@@ -4,7 +4,6 @@ import vekta.menu.Menu;
 import vekta.mission.Mission;
 import vekta.mission.MissionStatus;
 
-import static processing.core.PApplet.println;
 import static vekta.Vekta.MISSION_COLOR;
 
 public class MissionOption implements MenuOption {

@@ -89,9 +89,20 @@ public class Dialog implements Serializable {
 	public void parseResponse(String text) {
 		if(text.startsWith(":")) {
 			String[] args = text.split(" ", 2);
-			Dialog next = getPerson().createDialog(args[0].substring(1).trim());
-			add(new DialogOption(args[1].trim(), next));
-			next.then(this);
+			String type = args[0].substring(1).trim();
+			String response = args[1].trim();
+			boolean aside = type.startsWith("aside"); // Special behavior for `dialog_aside_...`
+			if(type.startsWith("^")) {
+				// Manually indicated aside behavior
+				type = type.substring(1).trim();
+				aside = true;
+			}
+			
+			Dialog next = getPerson().createDialog(type);
+			add(new DialogOption(response, next));
+			if(aside) {
+				next.then(this);
+			}
 		}
 		else {
 			addResponse(text);
@@ -141,7 +152,7 @@ public class Dialog implements Serializable {
 		}
 		else {
 			menu.add(new BasicOption("Back", menu.getDefault()::select));
-//			menu.addDefault();
+			//			menu.addDefault();
 		}
 
 		setContext(menu);

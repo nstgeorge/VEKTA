@@ -100,14 +100,14 @@ public final class Resources {
 		return array;
 	}
 
-	public static Map<String, Set<String>> getStringMap(String key, boolean reverse) {
-		Map<String, Set<String>> map = new HashMap<>();
+	public static Map<String, List<String>> getStringMap(String key, boolean reverse) {
+		Map<String, List<String>> map = new HashMap<>();
 		for(String s : getStrings(key)) {
 			String[] split = s.split(":", 2);
 			String id = split[split.length > 1 && reverse ? 1 : 0].trim();
-			Set<String> set = map.computeIfAbsent(id, k -> new HashSet<>());
+			List<String> list = map.computeIfAbsent(id, k -> new ArrayList<>());
 			if(split.length > 1) {
-				set.add(split[reverse ? 0 : 1].trim());
+				list.add(split[reverse ? 0 : 1].trim());
 			}
 		}
 		return map;

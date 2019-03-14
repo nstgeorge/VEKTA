@@ -22,7 +22,9 @@ import vekta.object.ship.Ship;
 import vekta.spawner.WorldGenerator;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.stream.Collectors;
 
@@ -42,6 +44,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 
 	private final transient BiMap<Peer, Player> playerMap = HashBiMap.create();
 	private final transient Map<Peer, Float> timeMap = new WeakHashMap<>();
+	private final transient Set<Syncable> objectsToSync = new HashSet<>();
 
 	private float timeScale = 1;
 
@@ -212,9 +215,8 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	@Override
 	public void sendChanges(Syncable object) {
 		super.sendChanges(object);
-		
-		println("<broadcast>", object.getClass().getSimpleName() + "[" + Long.toHexString(object.getSyncID()) + "]");
-		connection.send(new SyncMessage(object));
+
+		objectsToSync.add(object);
 	}
 
 	@Override
@@ -311,6 +313,12 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 				}
 			}
 		}
+
+		for(Syncable object : objectsToSync) {
+			println("<broadcast>", object.getClass().getSimpleName() + "[" + Long.toHexString(object.getSyncID()) + "]");
+			connection.send(new SyncMessage(object));
+		}
+		objectsToSync.clear();
 
 		// Periodically print debug info
 		if(v.frameCount % 300 == 0) {

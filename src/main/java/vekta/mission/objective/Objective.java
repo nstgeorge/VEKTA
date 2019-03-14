@@ -13,8 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static vekta.Vekta.MISSION_COLOR;
-import static vekta.Vekta.println;
+import static vekta.Vekta.*;
 
 public abstract class Objective extends Syncable<Objective> implements MissionListener, PlayerListener {
 	private final Set<Mission> missions = new HashSet<>();
@@ -141,10 +140,9 @@ public abstract class Objective extends Syncable<Objective> implements MissionLi
 	public void onSync(Objective data) {
 		super.onSync(data);
 
-		//		// TEMP
-		//		if(getSpaceObject() != null && !getSpaceObject().isDestroyed()) {
-		//			register(data.getSpaceObject());
-		//		}
+		register(getSpaceObject());/////
+		
+		println(getSpaceObject()!=null,getSpaceObject()!=null?getSpaceObject().isDestroyed():"");////
 	}
 
 	public interface ObjectiveCallback extends Serializable {

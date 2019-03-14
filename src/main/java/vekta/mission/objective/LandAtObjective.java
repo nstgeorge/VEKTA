@@ -1,5 +1,6 @@
 package vekta.mission.objective;
 
+import vekta.menu.Menu;
 import vekta.object.SpaceObject;
 import vekta.terrain.LandingSite;
 
@@ -24,9 +25,24 @@ public class LandAtObjective extends Objective {
 	}
 
 	@Override
+	public void onMenu(Menu menu) {
+		// TODO: check more frequently than opening menus
+		if(getSpaceObject().isDestroyed()) {
+			cancel();
+		}
+	}
+
+	@Override
 	public void onLand(LandingSite site) {
 		if(site.getParent() == getSpaceObject()) {
 			complete();
 		}
+	}
+
+	@Override
+	public void onSync(Objective data) {
+		super.onSync(data);
+		
+		onMenu(null);/////
 	}
 }

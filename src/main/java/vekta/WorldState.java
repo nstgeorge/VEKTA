@@ -186,6 +186,10 @@ public final class WorldState implements Serializable {
 	private void add(Syncable object) {
 		if(object instanceof SpaceObject) {
 			SpaceObject s = (SpaceObject)object;
+			if(s.isDestroyed()) {
+				return;
+			}
+			
 			if(updating) {
 				objectsToAdd.add(s);
 			}
