@@ -2,6 +2,7 @@ package vekta.terrain.settlement;
 
 import vekta.Faction;
 import vekta.Resources;
+import vekta.Sync;
 import vekta.Syncable;
 import vekta.menu.Menu;
 import vekta.object.SpaceObject;
@@ -12,12 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Settlement extends Syncable<Settlement> implements SettlementPart {
-	private final List<SettlementPart> parts = new ArrayList<>();
+	private final @Sync List<SettlementPart> parts = new ArrayList<>();
 
 	private final String name;
-	private String overview;
-	private LandingSite site;
-	private Faction faction;
+	private @Sync String overview;
+	private @Sync LandingSite site;
+	private @Sync Faction faction;
 
 	public Settlement(Faction faction, String key) {
 		this(faction, Resources.generateString(key), Resources.generateString("overview_" + key));
@@ -51,7 +52,7 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 			throw new RuntimeException("Settlement faction cannot be null");
 		}
 		this.faction = faction;
-		sendChanges();
+		syncChanges();
 	}
 
 	@Override
@@ -68,7 +69,7 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 			throw new RuntimeException("Settlement overview cannot be null");
 		}
 		this.overview = overview;
-		sendChanges();
+		syncChanges();
 	}
 
 	public boolean isInhabited() {
@@ -81,17 +82,17 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 
 	public void add(SettlementPart part) {
 		parts.add(part);
-		sendChanges();
+		syncChanges();
 	}
 
 	public void remove(SettlementPart part) {
 		parts.remove(part);
-		sendChanges();
+		syncChanges();
 	}
 
 	public void clear() {
 		getParts().clear();
-		sendChanges();
+		syncChanges();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -138,14 +139,5 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 	}
 
 	public void onSettlementMenu(Menu menu) {
-	}
-
-	@Override
-	public void onSync(Settlement data) {
-		super.onSync(data);
-		
-		// Update buildings
-		this.parts.clear();
-		this.parts.addAll(data.parts);
 	}
 }

@@ -1,6 +1,6 @@
 {settlement}
 {person}'s Refuge
 {person}'s Hideout
-{faction} Emigrants
-{faction} Refugees
+{planet} Refugees
+{star} Emigrants
 {star} Embassy

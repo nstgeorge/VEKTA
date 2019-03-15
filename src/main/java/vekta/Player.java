@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Set;
 
 public final class Player extends Syncable<Player> {
-	private Faction faction;
-	private ModularShip currentShip;
+	private /*@Sync */Faction faction;
+	private /*@Sync */ModularShip currentShip;
 
 	private final List<PlayerListener> listeners = new ArrayList<>();
 	private final Set<String> attributes = new HashSet<>();
@@ -91,7 +91,7 @@ public final class Player extends Syncable<Player> {
 			throw new RuntimeException("Player faction cannot be null");
 		}
 		this.faction = faction;
-		sendChanges();
+		syncChanges();
 	}
 
 	public String getName() {
@@ -120,7 +120,7 @@ public final class Player extends Syncable<Player> {
 
 	public void setCurrentMission(Mission currentMission) {
 		this.currentMission = currentMission;
-		sendChanges();
+		syncChanges();
 	}
 
 	public void addListener(PlayerListener listener) {
@@ -141,12 +141,12 @@ public final class Player extends Syncable<Player> {
 
 	public void addAttribute(String attribute) {
 		attributes.add(attribute);
-		sendChanges();
+		syncChanges();
 	}
 
 	public void removeAttribute(String attribute) {
 		attributes.remove(attribute);
-		sendChanges();
+		syncChanges();
 	}
 
 	public void emit(PlayerEvent event, Object data) {
@@ -163,12 +163,4 @@ public final class Player extends Syncable<Player> {
 		emit(PlayerEvent.NOTIFICATION, notification);
 		return notification;
 	}
-
-	//	@Override
-	//	public void onSync(Player data) {
-	//		faction = register(data.faction);
-	//		currentShip = register(data.currentShip);
-	//		
-	//		// TODO: other fields
-	//	}
 }

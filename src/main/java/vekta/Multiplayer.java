@@ -79,7 +79,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		}));
 		//		applyContext();
 	}
-
+	
 	//// Connection listeners
 
 	@Override
@@ -116,7 +116,6 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		boolean existed = playerMap.containsKey(peer);
 		Player player = msg.getPlayer();
 		println("<player>", "[" + Long.toHexString(player.getSyncID()) + "]");
-		//		playerMap.put(peer, state.register(player, true));
 		playerMap.put(peer, player);
 		if(!existed) {
 			getPlayer().send(player.getName() + " joined the world");
@@ -132,11 +131,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 			println("Warning: received Player in a SyncMessage");
 			return;
 		}
-		//		if(msg.getData() instanceof SpaceObject) {
-		//			println("Warning: received SpaceObject in a SyncMessage");
-		//			return;
-		//		}
-
+		
 		long id = msg.getID();
 		println("<receive>", msg.getData().getClass().getSimpleName() + "[" + Long.toHexString(id) + "]");
 		Syncable object = state.getSyncable(id);
@@ -208,6 +203,11 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	//// World methods
 
 	@Override
+	public void populateWorld() {
+		// Override singleplayer world population
+	}
+
+	@Override
 	public <T extends Syncable> T register(T object) {
 		boolean isNew = state.find(object.getSyncID()) == null;
 		object = super.register(object);
@@ -221,7 +221,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	public void sendChanges(Syncable object) {
 		super.sendChanges(object);
 
-		if(!object.isRemote()) {
+		if(object.shouldSendChanges()) {
 			changesToSend.add(object);
 		}
 	}
@@ -235,12 +235,6 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		else {
 			super.sendMessage(player, message);
 		}
-	}
-
-	@Override
-	protected void updateGlobal(RenderLevel level) {
-		// Disable global coord shifting for now
-		//		super.updateGlobal(level);
 	}
 
 	@Override
@@ -342,10 +336,10 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 					.filter(s -> s instanceof Player)
 					.map(s -> ((Player)s).getName())
 					.collect(Collectors.joining(", ")));
-			println("SpaceObjects: " + state.getSyncables().stream()
-					.filter(s -> s instanceof SpaceObject)
-					.map(s -> ((SpaceObject)s).getName())
-					.collect(Collectors.joining(", ")));
+//			println("SpaceObjects: " + state.getSyncables().stream()
+//					.filter(s -> s instanceof SpaceObject)
+//					.map(s -> ((SpaceObject)s).getName())
+//					.collect(Collectors.joining(", ")));
 		}
 	}
 

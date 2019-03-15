@@ -174,10 +174,6 @@ public final class WorldState implements Serializable {
 		else if(object instanceof Faction && !factions.contains(object) && ((Faction)object).getType() != FactionType.PLAYER) {
 			factions.add((Faction)object);
 		}
-
-		if(object.isRemote()) {
-			object.onAddRemote();
-		}
 	}
 
 	private void addImmediately(SpaceObject s) {

@@ -31,7 +31,7 @@ public final class Faction extends Syncable<Faction> implements Serializable, Re
 	@Override
 	public void setName(String name) {
 		this.name = name;
-		sendChanges();
+		syncChanges();
 	}
 
 	public int getColor() {
@@ -40,7 +40,7 @@ public final class Faction extends Syncable<Faction> implements Serializable, Re
 
 	public void setColor(int color) {
 		this.color = color;
-		sendChanges();
+		syncChanges();
 	}
 
 	public boolean isNeutral(Faction faction) {
@@ -53,7 +53,7 @@ public final class Faction extends Syncable<Faction> implements Serializable, Re
 			enemies.remove(faction);
 			faction.allies.remove(this);
 			faction.enemies.remove(this);
-			sendChanges();
+			syncChanges();
 		}
 	}
 
@@ -70,7 +70,7 @@ public final class Faction extends Syncable<Faction> implements Serializable, Re
 		if(faction != this) {
 			allies.add(faction);
 			faction.allies.add(this);
-			sendChanges();
+			syncChanges();
 		}
 	}
 
@@ -97,7 +97,7 @@ public final class Faction extends Syncable<Faction> implements Serializable, Re
 				ally.setEnemy(this);
 			}
 
-			sendChanges();
+			syncChanges();
 		}
 	}
 

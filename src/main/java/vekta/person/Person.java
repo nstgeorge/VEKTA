@@ -2,6 +2,7 @@ package vekta.person;
 
 import vekta.Faction;
 import vekta.Resources;
+import vekta.Sync;
 import vekta.Syncable;
 import vekta.mission.Mission;
 import vekta.mission.MissionIssuer;
@@ -20,11 +21,10 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 
 	private final String name;
 
-	private Faction faction;
-	private String title;
-	private Settlement home;
-
-	private boolean busy;
+	private @Sync Faction faction;
+	private @Sync String title;
+	private @Sync Settlement home;
+	private @Sync boolean busy;
 
 	public Person(String name, Faction faction) {
 		this.name = name;
@@ -51,7 +51,7 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 			throw new RuntimeException("Faction cannot be null");
 		}
 		this.faction = faction;
-		sendChanges();
+		syncChanges();
 	}
 
 	public int getColor() {
@@ -60,6 +60,7 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 
 	public void setTitle(String title) {
 		this.title = title;
+		syncChanges();
 	}
 
 	public boolean hasHome() {
@@ -93,7 +94,7 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 		}
 		this.home = home;
 		home.add(new HouseBuilding(this));
-		sendChanges();
+		syncChanges();
 	}
 
 	public Dialog createDialog(String type) {
@@ -114,7 +115,7 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 
 	public void setOpinion(Faction faction, OpinionType opinion) {
 		opinions.put(faction, opinion);
-		sendChanges();
+		syncChanges();
 	}
 
 	public boolean isBusy() {
@@ -124,6 +125,7 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 	@Override
 	public void onStart(Mission mission) {
 		busy = true;
+		syncChanges();
 	}
 
 	@Override
@@ -132,14 +134,16 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 		Faction faction = mission.getPlayer().getFaction();
 		if(getOpinion(faction).isPositive()) {
 			setOpinion(faction, OpinionType.NEUTRAL);
-			sendChanges();
+			syncChanges();
 		}
+		syncChanges();
 	}
 
 	@Override
 	public void onComplete(Mission mission) {
 		busy = false;
 		setOpinion(mission.getPlayer().getFaction(), OpinionType.GRATEFUL);
+		syncChanges();
 	}
 
 	//	@Override

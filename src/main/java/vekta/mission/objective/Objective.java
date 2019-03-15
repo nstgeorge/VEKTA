@@ -9,15 +9,13 @@ import vekta.object.SpaceObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static vekta.Vekta.MISSION_COLOR;
 import static vekta.Vekta.println;
 
 public abstract class Objective extends Syncable<Objective> implements MissionListener, PlayerListener {
-	private final Set<Mission> missions = new HashSet<>();
+	private final List<Mission> missions = new ArrayList<>();
 
 	private MissionStatus status = MissionStatus.READY;
 
@@ -46,7 +44,7 @@ public abstract class Objective extends Syncable<Objective> implements MissionLi
 		return status;
 	}
 
-	public Set<Mission> getMissions() {
+	public List<Mission> getMissions() {
 		return missions;
 	}
 
@@ -68,9 +66,6 @@ public abstract class Objective extends Syncable<Objective> implements MissionLi
 			if(status == MissionStatus.CANCELLED) {
 				mission.getPlayer().send("Objective cancelled: " + getDisplayText())
 						.withColor(MISSION_COLOR);
-				if(isOptional()) {
-					mission.cancel();
-				}
 				mission.getPlayer().removeListener(this);
 				next.clear();
 			}
@@ -86,7 +81,7 @@ public abstract class Objective extends Syncable<Objective> implements MissionLi
 			mission.updateCurrentObjective();
 		}
 
-		sendChanges();
+		syncChanges();
 	}
 
 	public String getDisplayText() {
@@ -138,5 +133,19 @@ public abstract class Objective extends Syncable<Objective> implements MissionLi
 
 	public interface ObjectiveCallback extends Serializable {
 		void callback(Mission mission);
+	}
+
+	@Override
+	public boolean shouldSendChanges() {
+		return !isRemote() || getStatus().isDone();
+	}
+
+	@Override
+	public void onSync(Objective data) {
+		super.onSync(data);
+
+		println(getStatus(), data.getStatus(), getMissions());////
+
+		setStatus(data.getStatus());
 	}
 }

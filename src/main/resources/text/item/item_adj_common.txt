@@ -46,3 +46,4 @@ Hazardous
 Deformed
 Crude
 Rough-Edged
+Miniature

@@ -143,7 +143,7 @@ public class Mission extends Syncable<Mission> {
 				.withColor(getStatus().getColor())
 				.withTime(2);
 
-		sendChanges();
+		syncChanges();
 	}
 
 	public void cancel() {
@@ -163,7 +163,7 @@ public class Mission extends Syncable<Mission> {
 				.withColor(getStatus().getColor())
 				.withTime(2);
 
-		sendChanges();
+		syncChanges();
 	}
 
 	public void complete() {
@@ -172,6 +172,8 @@ public class Mission extends Syncable<Mission> {
 			return;
 		}
 
+		println(getName(), listeners);/////
+		
 		for(MissionListener listener : listeners) {
 			listener.onComplete(this);
 		}
@@ -184,7 +186,7 @@ public class Mission extends Syncable<Mission> {
 				.withColor(UI_COLOR)
 				.withTime(2);
 
-		sendChanges();
+		syncChanges();
 	}
 
 	public void share(Player player) {

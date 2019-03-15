@@ -28,8 +28,8 @@ public class SurveyFeatureObjective extends Objective {
 	@Override
 	public void onMenu(Menu menu) {
 		if(menu.getHandle() instanceof SurveyMenuHandle) {
-			if(((SurveyMenuHandle)menu.getHandle()).getSite().getTerrain().hasFeature(feature)) {
-
+			if(((SurveyMenuHandle)menu.getHandle()).getSite().getTerrain().hasFeature(getFeature())) {
+				complete();
 			}
 		}
 	}

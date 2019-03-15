@@ -18,7 +18,7 @@ public enum MissionStatus {
 		return color;
 	}
 
-	boolean isDone() {
+	public boolean isDone() {
 		return this == CANCELLED || this == COMPLETED;
 	}
 }

@@ -26,6 +26,7 @@ import vekta.sound.SoundGroup;
 import vekta.spawner.EventGenerator;
 import vekta.spawner.MissionGenerator;
 import vekta.spawner.WorldGenerator;
+import vekta.spawner.world.StarSystemSpawner;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -104,13 +105,11 @@ public class Singleplayer implements World, PlayerListener {
 
 	public void setup() {
 		state = new WorldState();
-		
+
 		Faction playerFaction = register(new Faction(FactionType.PLAYER, "VEKTA I", UI_COLOR));
 		Player player = register(new Player(playerFaction));
 		player.addListener(this);
 		state.setPlayer(player);
-
-		//		StarSystemSpawner.createSystem(PVector.random2D().mult(2 * AU_DISTANCE));
 
 		PlayerShip playerShip = register(new PlayerShip(
 				player.getFaction().getName(),
@@ -122,6 +121,8 @@ public class Singleplayer implements World, PlayerListener {
 		playerShip.getInventory().add(50); // Starting money
 		playerShip.setController(player);
 
+		populateWorld();
+
 		setupTesting(); // Temporary
 	}
 
@@ -130,6 +131,10 @@ public class Singleplayer implements World, PlayerListener {
 
 		// Cleanup behavior on exiting/restarting the world
 		lowPass.stop();
+	}
+
+	public void populateWorld() {
+		StarSystemSpawner.createSystem(PVector.random2D().mult(2 * AU_DISTANCE));
 	}
 
 	private void setupTesting() {
@@ -331,9 +336,9 @@ public class Singleplayer implements World, PlayerListener {
 		while(spawnLevel.ordinal() > 0 && v.chance(.05F)) {
 			spawnLevel = RenderLevel.values()[spawnLevel.ordinal() - 1];
 		}
-		//		if(objectCounts[spawnLevel.ordinal()] < MAX_OBJECTS_PER_DIST) {
-		//			WorldGenerator.spawnOccasional(spawnLevel, playerShip);
-		//		}
+//		if(objectCounts[spawnLevel.ordinal()] < MAX_OBJECTS_PER_DIST) {
+//			WorldGenerator.spawnOccasional(spawnLevel, playerShip);
+//		}
 
 		if(eventCt.cycle()) {
 			eventCt.randomize();
