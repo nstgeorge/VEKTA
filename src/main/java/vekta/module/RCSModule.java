@@ -1,6 +1,7 @@
 package vekta.module;
 
 import vekta.KeyBinding;
+import vekta.menu.Menu;
 import vekta.object.ship.ModularShip;
 
 import static java.lang.Math.abs;
@@ -64,5 +65,10 @@ public class RCSModule extends ShipModule {
 		if(key == KeyBinding.SHIP_LEFT || key == KeyBinding.SHIP_RIGHT) {
 			getShip().setTurnControl(0);
 		}
+	}
+
+	@Override
+	public void onMenu(Menu menu) {
+		getShip().setTurnControl(0);
 	}
 }

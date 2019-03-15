@@ -29,6 +29,15 @@ public class OutpostSettlement extends Settlement {
 
 	@Override
 	public void onSettlementMenu(Menu menu) {
+	}
 
+	@Override
+	public float chooseStartingValue() {
+		return v.random(1, 2);
+	}
+
+	@Override
+	public float getEconomicInfluence() {
+		return .1F;
 	}
 }

@@ -2,6 +2,7 @@ package vekta.module;
 
 import vekta.KeyBinding;
 import vekta.Resources;
+import vekta.menu.Menu;
 import vekta.object.ship.ModularShip;
 
 import static vekta.Vekta.*;
@@ -106,5 +107,10 @@ public class HyperdriveModule extends ShipModule {
 			Resources.stopSound("hyperdriveLoop");
 			Resources.playSound("hyperdriveEnd");
 		}
+	}
+
+	@Override
+	public void onMenu(Menu menu) {
+		endHyperdrive();
 	}
 }

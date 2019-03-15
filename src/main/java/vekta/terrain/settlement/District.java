@@ -3,7 +3,7 @@ package vekta.terrain.settlement;
 import vekta.menu.Menu;
 import vekta.menu.handle.DistrictMenuHandle;
 import vekta.menu.option.BackOption;
-import vekta.menu.option.BasicOption;
+import vekta.menu.option.CustomOption;
 import vekta.terrain.LandingSite;
 
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public class District implements SettlementPart {
 
 	@Override
 	public void setupSettlementMenu(Menu menu) {
-		menu.add(new BasicOption(getName(), m -> {
+		menu.add(new CustomOption(getName(), m -> {
 			Menu sub = new Menu(m.getPlayer(), new DistrictMenuHandle(new BackOption(m), this));
 			for(SettlementPart part : getParts()) {
 				part.setupSettlementMenu(sub);

@@ -32,6 +32,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static vekta.Vekta.*;
 
@@ -65,12 +66,12 @@ public class Singleplayer implements World, PlayerListener {
 	private float timeScale = 1; // Camera time scale factor
 	private RenderLevel prevLevel = RenderLevel.PARTICLE;
 
-	// TODO: move to WorldState
 	private final Counter targetCt = new Counter(30).randomize(); // Update Targeter instances
 	//	private final Counter spawnCt = new Counter(10).randomize(); // Spawn objects
 	private final Counter cleanupCt = new Counter(100).randomize(); // Despawn objects
 	private final Counter eventCt = new Counter(3600 * 5).randomize(); // Occasional random events
 	private final Counter situationCt = new Counter(100).randomize(); // Situational events
+	private final Counter economyCt = new Counter(600).randomize(); // Economic progression
 
 	private PlayerOverlay overlay;
 
@@ -106,7 +107,7 @@ public class Singleplayer implements World, PlayerListener {
 	public void setup() {
 		state = new WorldState();
 
-		Faction playerFaction = register(new Faction(FactionType.PLAYER, "VEKTA I", UI_COLOR));
+		Faction playerFaction = register(new Faction(FactionType.PLAYER, "VEKTA I", 1, UI_COLOR));
 		Player player = register(new Player(playerFaction));
 		player.addListener(this);
 		state.setPlayer(player);
@@ -241,8 +242,6 @@ public class Singleplayer implements World, PlayerListener {
 					.add(playerShip.getVelocity().mult(timeScale - prevTimeScale));
 		}
 
-		updateGlobal(level);
-
 		v.clear();
 		v.rectMode(CENTER);
 		v.ellipseMode(RADIUS);
@@ -332,13 +331,15 @@ public class Singleplayer implements World, PlayerListener {
 
 		state.endUpdate();
 
+		updateGlobal(level);
+
 		RenderLevel spawnLevel = level;
 		while(spawnLevel.ordinal() > 0 && v.chance(.05F)) {
 			spawnLevel = RenderLevel.values()[spawnLevel.ordinal() - 1];
 		}
-//		if(objectCounts[spawnLevel.ordinal()] < MAX_OBJECTS_PER_DIST) {
-//			WorldGenerator.spawnOccasional(spawnLevel, playerShip);
-//		}
+		if(objectCounts[spawnLevel.ordinal()] < MAX_OBJECTS_PER_DIST) {
+			WorldGenerator.spawnOccasional(spawnLevel, playerShip);
+		}
 
 		if(eventCt.cycle()) {
 			eventCt.randomize();
@@ -347,6 +348,16 @@ public class Singleplayer implements World, PlayerListener {
 
 		if(situationCt.cycle()) {
 			EventGenerator.updateSituations(getPlayer());
+		}
+		
+		if(economyCt.cycle()) {
+			// TODO: add state.getEconomies() or a top-level world economy
+			for(Faction faction : state.getFactions()){
+				faction.getEconomy().update();
+			}
+			
+			// Debug: print economy values for balancing
+			println(state.getFactions().stream().map(f -> f.getName() + " (" + Math.round(f.getEconomy().getValue()) + ")").collect(Collectors.joining(", ")));
 		}
 
 		prevLevel = level;
@@ -479,8 +490,7 @@ public class Singleplayer implements World, PlayerListener {
 	public void restart() {
 		cleanup();
 
-		Singleplayer world = new Singleplayer();
-		world.state = new WorldState();
+		Singleplayer world = new Singleplayer(new WorldState());
 		world.setup();
 		setContext(world);
 		applyContext();
@@ -598,8 +608,10 @@ public class Singleplayer implements World, PlayerListener {
 		}
 
 		try {
-			setContext(new Singleplayer(Format.read(new FileInputStream(file))));
+			Singleplayer world = new Singleplayer(Format.read(new FileInputStream(file)));
+			setContext(world);
 			applyContext();
+			
 			println("Loaded from " + file);
 			return true;
 		}

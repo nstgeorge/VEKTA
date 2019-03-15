@@ -32,14 +32,14 @@ public class PlayerOption implements MenuOption {
 	@Override
 	public void select(Menu menu) {
 		Menu sub = new Menu(menu.getPlayer(), new ObjectMenuHandle(menu.getDefault(), player.getShip()));
-		sub.add(new BasicOption("Set Target", m -> {
+		sub.add(new CustomOption("Set Target", m -> {
 			Targeter t = (Targeter)m.getPlayer().getShip().getModule(ModuleType.TARGET_COMPUTER);
 			if(t != null) {
 				t.setTarget(player.getShip());
 			}
 		}).withRemoval());
 		if(menu.getPlayer().getCurrentMission() != null) {
-			sub.add(new BasicOption("Share Mission", m -> m.getPlayer().getCurrentMission().share(getPlayer()))
+			sub.add(new CustomOption("Share Mission", m -> m.getPlayer().getCurrentMission().share(getPlayer()))
 					.withRemoval());
 		}
 		sub.addDefault();

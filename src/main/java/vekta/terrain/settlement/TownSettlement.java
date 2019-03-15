@@ -1,6 +1,7 @@
 package vekta.terrain.settlement;
 
 import vekta.Faction;
+import vekta.spawner.PersonGenerator;
 import vekta.spawner.WorldGenerator;
 import vekta.terrain.building.CapitalBuilding;
 import vekta.terrain.building.MarketBuilding;
@@ -48,5 +49,21 @@ public class TownSettlement extends Settlement {
 	@Override
 	public void onSetup() {
 		getTerrain().addFeature("Rural");
+		
+		// Add extra people
+		int personCt = (int)v.random(2) + 1;
+		for(int i = 0; i < personCt; i++) {
+			PersonGenerator.createPerson(this);
+		}
+	}
+
+	@Override
+	public float chooseStartingValue() {
+		return v.random(2, 5);
+	}
+
+	@Override
+	public float getEconomicInfluence() {
+		return .5F;
 	}
 }

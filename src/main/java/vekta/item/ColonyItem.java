@@ -3,7 +3,7 @@ package vekta.item;
 import vekta.Faction;
 import vekta.menu.Menu;
 import vekta.menu.handle.LandingMenuHandle;
-import vekta.menu.option.BasicOption;
+import vekta.menu.option.CustomOption;
 import vekta.menu.option.MenuOption;
 import vekta.menu.option.SettlementOption;
 import vekta.terrain.HabitableTerrain;
@@ -37,7 +37,7 @@ public class ColonyItem extends Item {
 			if(terrain instanceof HabitableTerrain && !terrain.isInhabited()) {
 				menu.getPlayer().getInventory().remove(this);
 				Faction faction = getFaction() != null ? getFaction() : menu.getPlayer().getFaction();
-				menu.add(new BasicOption("Colonize", m -> {
+				menu.add(new CustomOption("Colonize", m -> {
 					ColonySettlement settlement = new ColonySettlement(faction);
 					settlement.setOverview("You land close to your recently established colony.");
 					settlement.clear();

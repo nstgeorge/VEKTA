@@ -6,20 +6,19 @@ import vekta.mission.Mission;
 import vekta.object.ship.ModularShip;
 import vekta.overlay.singleplayer.Notification;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public final class Player extends Syncable<Player> {
-	private /*@Sync */Faction faction;
-	private /*@Sync */ModularShip currentShip;
+	private /*@Sync */ Faction faction;
+	private /*@Sync */ ModularShip currentShip;
 
 	private final List<PlayerListener> listeners = new ArrayList<>();
 	private final Set<String> attributes = new HashSet<>();
 
 	private final List<Mission> missions = new ArrayList<>();
 	private Mission currentMission;
+
+	private final Map<Item, Integer> buyPrices = new HashMap<>();
 
 	public Player(Faction faction) {
 		setFaction(faction);
@@ -40,7 +39,7 @@ public final class Player extends Syncable<Player> {
 
 			@Override
 			public void onMissionStatus(Mission mission) {
-//				println("::::", mission.getName(), mission.getStatus(), mission.getCurrentObjective() != null ? mission.getCurrentObjective().getName() : null);
+				//				println("::::", mission.getName(), mission.getStatus(), mission.getCurrentObjective() != null ? mission.getCurrentObjective().getName() : null);
 				switch(mission.getStatus()) {
 				case READY:
 				case STARTED:
@@ -77,6 +76,7 @@ public final class Player extends Syncable<Player> {
 
 			@Override
 			public void onRemoveItem(Item item) {
+				buyPrices.remove(item);
 				item.onRemove(Player.this);
 			}
 		});
@@ -162,6 +162,19 @@ public final class Player extends Syncable<Player> {
 	public Notification send(Notification notification) {
 		emit(PlayerEvent.NOTIFICATION, notification);
 		return notification;
+	}
+
+	public int getBuyPrice(Item item) {
+		return buyPrices.getOrDefault(item, 0);
+	}
+
+	public void setBuyPrice(Item item, int price) {
+		if(price > 0) {
+			buyPrices.put(item, price);
+		}
+		else {
+			buyPrices.remove(item);
+		}
 	}
 
 	@Override

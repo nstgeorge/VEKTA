@@ -4,21 +4,21 @@ import vekta.menu.Menu;
 
 import java.io.Serializable;
 
-public class BasicOption implements MenuOption {
+public class CustomOption implements MenuOption {
 	private final String name;
 	private final MenuAction action;
 	private int color;
 	private boolean remove;
 
-	public BasicOption(String name, Runnable action) {
+	public CustomOption(String name, Runnable action) {
 		this(name, menu -> action.run());
 	}
 
-	public BasicOption(String name, MenuOption option) {
+	public CustomOption(String name, MenuOption option) {
 		this(name, option::select);
 	}
 
-	public BasicOption(String name, MenuAction action) {
+	public CustomOption(String name, MenuAction action) {
 		this.name = name;
 		this.action = action;
 		this.color = MenuOption.super.getColor();
@@ -34,12 +34,12 @@ public class BasicOption implements MenuOption {
 		return color;
 	}
 
-	public BasicOption withColor(int color) {
+	public CustomOption withColor(int color) {
 		this.color = color;
 		return this;
 	}
 
-	public BasicOption withRemoval() {
+	public CustomOption withRemoval() {
 		this.remove = true;
 		return this;
 	}

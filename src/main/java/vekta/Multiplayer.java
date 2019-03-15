@@ -12,7 +12,7 @@ import vekta.menu.Menu;
 import vekta.menu.handle.MenuHandle;
 import vekta.menu.handle.ObjectMenuHandle;
 import vekta.menu.option.BackOption;
-import vekta.menu.option.BasicOption;
+import vekta.menu.option.CustomOption;
 import vekta.menu.option.MissionOption;
 import vekta.menu.option.PlayerOption;
 import vekta.mission.Mission;
@@ -297,7 +297,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		if(menu.getHandle() instanceof ObjectMenuHandle && ((ObjectMenuHandle)menu.getHandle()).getSpaceObject() == getPlayerShip()) {
 			println(playerMap);////
 			if(!playerMap.isEmpty()) {
-				menu.add(new BasicOption("Players", m -> {
+				menu.add(new CustomOption("Players", m -> {
 					Menu sub = new Menu(m.getPlayer(), new MenuHandle(new BackOption(m)));
 					for(Player player : playerMap.values()) {
 						sub.add(new PlayerOption(player));

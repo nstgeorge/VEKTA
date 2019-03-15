@@ -7,15 +7,12 @@ import vekta.object.ship.Ship;
 import vekta.sound.Tune;
 import vekta.spawner.TuneGenerator;
 
-import java.io.Serializable;
-
 import static vekta.Vekta.*;
 
 /**
- * A landing terrain for one spacecraft-like object.
- * State management for landing sites should be handled or proxied through this class.
+ * A landing site for one spacecraft-like object.
  */
-public class LandingSite extends Syncable<LandingSite> implements Serializable {
+public class LandingSite extends Syncable<LandingSite> {
 	private final SpaceObject parent;
 	private final Terrain terrain;
 
@@ -26,7 +23,7 @@ public class LandingSite extends Syncable<LandingSite> implements Serializable {
 	public LandingSite(SpaceObject parent, Terrain terrain) {
 		this.parent = parent;
 		this.terrain = terrain;
-		
+
 		terrain.setup(this);
 	}
 
@@ -60,7 +57,7 @@ public class LandingSite extends Syncable<LandingSite> implements Serializable {
 		landed.setVelocity(velocity);
 		landed.getPositionReference().add(velocity.mult(getWorld().getTimeScale()));
 		//		landed.applyVelocity(velocity); // Boost the ship away from the planet
-		
+
 		ship.setTemperature(ship.getOptimalTemperature()); // TODO: adjust based on planet temperature
 		ship.doLand(this);
 	}

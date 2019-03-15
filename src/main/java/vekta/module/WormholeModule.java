@@ -6,7 +6,7 @@ import vekta.Resources;
 import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.menu.handle.ObjectMenuHandle;
-import vekta.menu.option.BasicOption;
+import vekta.menu.option.CustomOption;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 import vekta.object.ship.ModularShip;
@@ -128,7 +128,7 @@ public class WormholeModule extends ShipModule {
 		}
 
 		if(menu.getHandle() instanceof ObjectMenuHandle && ((ObjectMenuHandle)menu.getHandle()).getSpaceObject() == menu.getPlayer().getShip()) {
-			menu.add(new BasicOption("Teleport (" + getTarget().getName() + ")", m -> {
+			menu.add(new CustomOption("Teleport (" + getTarget().getName() + ")", m -> {
 				m.close();
 				teleport(m.getPlayer().getShip());
 			}));

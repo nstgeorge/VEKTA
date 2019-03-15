@@ -30,7 +30,7 @@ public class MissionMenuOption implements MenuOption {
 		for(Mission mission : getPlayer().getMissions()) {
 			sub.add(new MissionOption(mission));
 		}
-		sub.add(new BasicOption("Deselect", () -> {
+		sub.add(new CustomOption("Deselect", () -> {
 			getPlayer().setCurrentMission(null);
 			sub.close();
 		}).withColor(v.color(200)));

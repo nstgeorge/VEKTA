@@ -1,5 +1,6 @@
 package vekta.menu.option;
 
+import vekta.Player;
 import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;
@@ -54,6 +55,15 @@ public class ItemTradeOption implements MenuOption {
 		return buying ? you : them;
 	}
 
+	public int getPrice() {
+		return price;
+	}
+
+	public int getProfit(Player player) {
+		int buyPrice = player.getBuyPrice(getItem());
+		return getPrice() - buyPrice;
+	}
+
 	@Override
 	public boolean isEnabled() {
 		return getTo().has(price) && getFrom().has(item);
@@ -68,6 +78,9 @@ public class ItemTradeOption implements MenuOption {
 		from.add(price);
 		if(transfer) {
 			to.add(item);
+		}
+		if(buying) {
+			menu.getPlayer().setBuyPrice(item, price);
 		}
 		menu.remove(this);
 	}

@@ -1,23 +1,34 @@
 package vekta;
 
-import java.io.Serializable;
+import vekta.economy.Economy;
+import vekta.economy.ProductivityModifier;
+import vekta.economy.NoiseModifier;
+
 import java.util.HashSet;
 import java.util.Set;
 
-import static java.lang.Float.max;
+public final class Faction extends Syncable<Faction> implements Renameable, ProductivityModifier {
+	private static final float BASE_PRODUCTIVITY = 1;
+	private static final float ALLY_MODIFIER = 1;
+	private static final float ENEMY_MODIFIER = -1;
 
-public final class Faction extends Syncable<Faction> implements Serializable, Renameable {
 	private final FactionType type;
-	private String name;
-	private int color;
+	private @Sync String name;
+	private @Sync int color;
 
-	private final Set<Faction> allies = new HashSet<>();
-	private final Set<Faction> enemies = new HashSet<>();
+	private final @Sync Set<Faction> allies = new HashSet<>();
+	private final @Sync Set<Faction> enemies = new HashSet<>();
 
-	public Faction(FactionType type, String name, int color) {
+	private final Economy economy;
+
+	public Faction(FactionType type, String name, float value, int color) {
 		this.type = type;
 		this.name = name;
 		this.color = color;
+		
+		economy = new Economy(value);
+		economy.addModifier(this); // Add faction productivity to economy
+		economy.addModifier(new NoiseModifier(1)); // Add random noise to economy
 	}
 
 	public FactionType getType() {
@@ -41,6 +52,10 @@ public final class Faction extends Syncable<Faction> implements Serializable, Re
 	public void setColor(int color) {
 		this.color = color;
 		syncChanges();
+	}
+
+	public Economy getEconomy() {
+		return economy;
 	}
 
 	public boolean isNeutral(Faction faction) {
@@ -101,15 +116,16 @@ public final class Faction extends Syncable<Faction> implements Serializable, Re
 		}
 	}
 
-	public float getValue() {
-		return max(1, allies.size() - enemies.size() * .5F);
+	@Override
+	public String getModifierName() {
+		return "Faction Productivity";
 	}
 
-	//	@Override
-	//	public void onSync(Faction data) {
-	//		this.name = data.name;
-	//		this.color = data.color;
-	//		syncAll(allies, data.allies);
-	//		syncAll(allies, data.enemies);
-	//	}
+	/**
+	 * Return the productivity modifier of the faction.
+	 */
+	@Override
+	public float updateModifier(Economy economy) {
+		return BASE_PRODUCTIVITY + allies.size() * ALLY_MODIFIER - enemies.size() * ENEMY_MODIFIER;
+	}
 }

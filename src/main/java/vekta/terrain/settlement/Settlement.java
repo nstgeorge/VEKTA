@@ -4,6 +4,8 @@ import vekta.Faction;
 import vekta.Resources;
 import vekta.Sync;
 import vekta.Syncable;
+import vekta.economy.Economy;
+import vekta.economy.ProductivityModifier;
 import vekta.menu.Menu;
 import vekta.object.SpaceObject;
 import vekta.terrain.LandingSite;
@@ -12,13 +14,15 @@ import vekta.terrain.Terrain;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Settlement extends Syncable<Settlement> implements SettlementPart {
+public abstract class Settlement extends Syncable<Settlement> implements SettlementPart, ProductivityModifier {
 	private final @Sync List<SettlementPart> parts = new ArrayList<>();
 
 	private final String name;
 	private @Sync String overview;
 	private @Sync LandingSite site;
 	private @Sync Faction faction;
+
+	private final Economy economy;
 
 	public Settlement(Faction faction, String key) {
 		this(faction, Resources.generateString(key), Resources.generateString("overview_" + key));
@@ -27,6 +31,8 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 	public Settlement(Faction faction, String name, String overview) {
 		this.name = name;
 		this.overview = overview;
+
+		economy = new Economy(chooseStartingValue());
 
 		setFaction(faction);
 	}
@@ -51,6 +57,10 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 		if(faction == null) {
 			throw new RuntimeException("Settlement faction cannot be null");
 		}
+		if(this.faction != null) {
+			this.faction.getEconomy().removeModifier(this);
+		}
+		faction.getEconomy().addModifier(this);
 		this.faction = faction;
 		syncChanges();
 	}
@@ -71,6 +81,14 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 		this.overview = overview;
 		syncChanges();
 	}
+
+	public Economy getEconomy() {
+		return economy;
+	}
+
+	public abstract float chooseStartingValue();
+
+	public abstract float getEconomicInfluence();
 
 	public boolean isInhabited() {
 		return true;
@@ -139,5 +157,15 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 	}
 
 	public void onSettlementMenu(Menu menu) {
+	}
+
+	@Override
+	public String getModifierName() {
+		return getName();
+	}
+
+	@Override
+	public float updateModifier(Economy economy) {
+		return getEconomy().getProductivity() * getEconomicInfluence();
 	}
 }

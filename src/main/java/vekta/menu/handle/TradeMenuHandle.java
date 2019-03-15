@@ -2,6 +2,7 @@ package vekta.menu.handle;
 
 import vekta.item.Inventory;
 import vekta.menu.Menu;
+import vekta.menu.option.ItemTradeOption;
 import vekta.menu.option.MenuOption;
 
 import static vekta.Vekta.UI_COLOR;
@@ -38,5 +39,19 @@ public class TradeMenuHandle extends MenuHandle {
 		v.textSize(32);
 		v.fill(buying ? UI_COLOR : 100);
 		v.text((buying ? "You" : "They") + " have: [" + to.getMoney() + " G]", v.width / 2F, v.height / 4F + 48);
+	}
+
+	@Override
+	void drawButton(Menu menu, MenuOption opt, int index) {
+		super.drawButton(menu, opt, index);
+
+		if(!buying && opt instanceof ItemTradeOption) {
+			ItemTradeOption trade = (ItemTradeOption)opt;
+			
+			int profit = trade.getProfit(menu.getPlayer());
+
+			v.fill(profit > 0 ? UI_COLOR : 100);
+			v.text((profit > 0 ? "+" : "") + profit, getButtonX() + getButtonWidth() * 3 / 4F, getButtonY(index));
+		}
 	}
 }

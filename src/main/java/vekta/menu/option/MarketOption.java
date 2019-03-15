@@ -6,6 +6,7 @@ import vekta.menu.Menu;
 import vekta.menu.handle.TradeMenuHandle;
 import vekta.terrain.building.MarketBuilding;
 
+import java.util.Comparator;
 import java.util.Map;
 
 import static vekta.Vekta.setContext;
@@ -45,6 +46,12 @@ public class MarketOption implements MenuOption {
 				sub.add(new ItemTradeOption(buying, you, them, item, offers.get(item), true));
 			}
 		}
+		sub.getOptions().sort(Comparator.comparingInt(opt -> {
+			if(opt instanceof ItemTradeOption) {
+				return ((ItemTradeOption)opt).getProfit(sub.getPlayer()) * (buying ? 1 : -1);
+			}
+			return 0;
+		}));
 		sub.addDefault();
 		setContext(sub);
 	}

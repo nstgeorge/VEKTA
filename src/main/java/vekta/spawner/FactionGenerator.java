@@ -10,6 +10,7 @@ public class FactionGenerator {
 	public static Faction createFaction() {
 		return register(new Faction(FactionType.EMPIRE,
 				Resources.generateString("faction"),
+				v.random(10, 100),
 				WorldGenerator.randomPlanetColor()));
 	}
 

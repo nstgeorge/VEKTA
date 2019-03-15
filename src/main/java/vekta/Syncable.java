@@ -128,10 +128,13 @@ public abstract class Syncable<T extends Serializable> implements Serializable {
 	}
 
 	protected Object readResolve() throws ObjectStreamException {
+		// TODO: find a better way to distinguish between peer/savefile deserialization
 		if(getWorld() instanceof Multiplayer) {
-			setRemote(true); // TODO: find a better way to distinguish between peer/savefile deserialization
+			setRemote(true);
+			// Sync and reference the registered object
+			return getWorld().register(this);
 		}
-		// Sync and reference the registered object
-		return getWorld().register(this);
+		// Don't register objects if singleplayer
+		return this;
 	}
 }

@@ -7,7 +7,7 @@ public class BondItem extends Item {
 	private final Faction faction;
 
 	public BondItem(Faction faction) {
-		super(faction.getName() + " Bonds", ItemType.COMMON);
+		super(faction.getName() + " Bonds", ItemType.ASSET);
 
 		this.faction = faction;
 	}
@@ -23,6 +23,6 @@ public class BondItem extends Item {
 
 	@Override
 	public int randomPrice() {
-		return (int)(super.randomPrice() * getFaction().getValue());
+		return Math.round(getFaction().getEconomy().getValue());
 	}
 }

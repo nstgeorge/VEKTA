@@ -1,6 +1,7 @@
 package vekta.module;
 
 import vekta.KeyBinding;
+import vekta.menu.Menu;
 import vekta.object.ship.ModularShip;
 
 import static com.jogamp.opengl.math.FloatUtil.abs;
@@ -64,5 +65,10 @@ public class EngineModule extends ShipModule {
 		if(key == KeyBinding.SHIP_FORWARD || key == KeyBinding.SHIP_BACKWARD) {
 			getShip().setThrustControl(0);
 		}
+	}
+
+	@Override
+	public void onMenu(Menu menu) {
+		getShip().setThrustControl(0);
 	}
 }

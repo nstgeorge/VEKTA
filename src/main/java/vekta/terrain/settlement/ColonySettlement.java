@@ -6,6 +6,8 @@ import vekta.menu.Menu;
 import vekta.spawner.WorldGenerator;
 import vekta.terrain.building.CapitalBuilding;
 
+import static vekta.Vekta.v;
+
 public class ColonySettlement extends Settlement {
 	private final Inventory inventory = new Inventory();
 
@@ -27,6 +29,15 @@ public class ColonySettlement extends Settlement {
 
 	@Override
 	public void onSettlementMenu(Menu menu) {
+	}
 
+	@Override
+	public float chooseStartingValue() {
+		return v.random(.1F, .5F);
+	}
+
+	@Override
+	public float getEconomicInfluence() {
+		return .2F;
 	}
 }

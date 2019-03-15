@@ -5,7 +5,7 @@ import vekta.Player;
 import vekta.RenderLevel;
 import vekta.context.StationLayoutContext;
 import vekta.menu.Menu;
-import vekta.menu.option.BasicOption;
+import vekta.menu.option.CustomOption;
 import vekta.module.Module;
 import vekta.module.ModuleType;
 import vekta.module.station.ComponentModule;
@@ -147,7 +147,7 @@ public class SpaceStation extends ModularShip {
 	// TODO: convert to event listener
 	@Override
 	public void setupDockingMenu(Player player, Menu menu) {
-		menu.add(new BasicOption("Customize", () -> {
+		menu.add(new CustomOption("Customize", () -> {
 			setContext(new StationLayoutContext(menu, this, player));
 		}));
 	}

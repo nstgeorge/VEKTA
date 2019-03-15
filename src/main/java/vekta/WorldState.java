@@ -4,6 +4,7 @@ import processing.core.PVector;
 import vekta.object.SpaceObject;
 import vekta.person.Person;
 
+import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.util.*;
 
@@ -15,7 +16,7 @@ import static processing.core.PApplet.println;
 public final class WorldState implements Serializable {
 	private Player player;
 
-	private final transient Map<Long, Syncable> syncMap = new HashMap<>(); // All client-syncable objects
+	private transient Map<Long, Syncable> syncMap = new HashMap<>(); // All client-syncable objects
 
 	private final List<SpaceObject> objects = new ArrayList<>();
 	private final List<SpaceObject> gravityObjects = new ArrayList<>();
@@ -30,7 +31,9 @@ public final class WorldState implements Serializable {
 
 	private boolean updating;
 
-	public WorldState() {
+	private Object readResolve() throws ObjectStreamException {
+		syncMap = new HashMap<>();
+		return this;
 	}
 
 	public Player getPlayer() {
@@ -142,8 +145,11 @@ public final class WorldState implements Serializable {
 		long id = object.getSyncID();
 		if(syncMap.containsKey(id)) {
 			S other = (S)syncMap.get(id);
-			other.onSync(object.getSyncData());
-			println("<sync>", object.isRemote(), object.getClass().getSimpleName() + "[" + Long.toHexString(id) + "]");
+			if(object.isRemote()) {
+				// Sync remotely owned object
+				other.onSync(object.getSyncData());
+				println("<sync>", object.isRemote(), object.getClass().getSimpleName() + "[" + Long.toHexString(id) + "]");
+			}
 			return other;
 		}
 		else {

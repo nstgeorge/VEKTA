@@ -46,4 +46,14 @@ public class CitySettlement extends Settlement {
 			PersonGenerator.createPerson(this);
 		}
 	}
+
+	@Override
+	public float chooseStartingValue() {
+		return v.random(5, 10);
+	}
+
+	@Override
+	public float getEconomicInfluence() {
+		return 1;
+	}
 }

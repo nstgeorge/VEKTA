@@ -55,14 +55,15 @@ public class LearnAboutObjective extends Objective {
 				alreadyAsked.add(dialog.getPerson());
 				
 				boolean foundInfo = v.chance(getRarity());
-				if(foundInfo) {
-					complete();
-				}
-				
 				Dialog next = foundInfo
 						? new Dialog("topic", dialog.getPerson(), getInfo())
 						: dialog.getPerson().createDialog("unknown_topic");
-				next.addResponse("Thanks for the help!");
+				
+				if(foundInfo) {
+					next.addResponse("Thanks for the help!");
+					complete();
+				}
+				
 				menu.add(new DialogOption("Ask about " + getTopic(), next));
 			}
 		}

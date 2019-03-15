@@ -3,7 +3,6 @@ package vekta.menu;
 import vekta.KeyBinding;
 import vekta.Player;
 import vekta.PlayerEvent;
-import vekta.Resources;
 import vekta.context.Context;
 import vekta.menu.handle.MenuHandle;
 import vekta.menu.option.MenuOption;
@@ -30,8 +29,7 @@ public class Menu implements Context {
 	public Menu(Player player, MenuHandle handle) {
 		this.player = player;
 		this.handle = handle;
-
-		Resources.stopAllSoundsExceptMusic();
+		
 		handle.init(this);
 
 		if(getPlayer() != null) {

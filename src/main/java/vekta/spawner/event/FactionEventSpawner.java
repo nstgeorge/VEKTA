@@ -2,6 +2,8 @@ package vekta.spawner.event;
 
 import vekta.Faction;
 import vekta.Player;
+import vekta.economy.ProductivityModifier;
+import vekta.economy.TemporaryModifier;
 import vekta.spawner.EventGenerator;
 import vekta.spawner.FactionGenerator;
 
@@ -31,10 +33,16 @@ public class FactionEventSpawner implements EventGenerator.EventSpawner {
 		}
 		else if(v.chance(.7F)) {
 			a.setAlly(b);
+			ProductivityModifier mod = new TemporaryModifier("Trade Negotiations", 1, .05F);
+			a.getEconomy().addModifier(mod);
+			b.getEconomy().addModifier(mod);
 			player.send(a.getName() + " has formed an alliance with " + b.getName());
 		}
 		else {
 			a.setEnemy(b);
+			ProductivityModifier mod = new TemporaryModifier("Trade Embargo", 1, .05F);
+			a.getEconomy().addModifier(mod);
+			b.getEconomy().addModifier(mod);
 			player.send(a.getName() + " has declared war on " + b.getName());
 		}
 	}

@@ -4,7 +4,6 @@ import processing.core.PVector;
 import vekta.Player;
 import vekta.RenderLevel;
 import vekta.Resources;
-import vekta.menu.option.ItemTradeOption;
 import vekta.mission.Mission;
 import vekta.mission.MissionIssuer;
 import vekta.mission.objective.Objective;
@@ -84,28 +83,18 @@ public class MissionGenerator {
 	}
 
 	public static Dialog randomVisitDialog(Player player, Person person) {
-		Dialog dialog = null;
 		if(person.isBusy()) {
-			dialog = person.createDialog("busy");
+			return person.createDialog("greeting").then("busy");
 		}
 		else {
-			float r = v.random(1);
-			if(r > .4) {
-				dialog = randomApproachDialog(player, person);
-			}
+			return randomApproachDialog(player, person);
 		}
-		Dialog greeting = person.createDialog("greeting");
-		if(dialog != null) {
-			greeting.then(dialog);
-		}
-		return greeting;
 	}
 
 	public static Dialog randomApproachDialog(Player player, Person person) {
 		Dialog dialog;
 		if(person.getOpinion(player.getFaction()) == OpinionType.GRATEFUL && v.chance(.4F)) {
 			dialog = person.createDialog("offer");
-			dialog.add(new ItemTradeOption(player.getInventory(), ItemGenerator.randomItem(), 0));
 			person.setOpinion(player.getFaction(), OpinionType.FRIENDLY);
 		}
 		else if(v.chance(.3F)){

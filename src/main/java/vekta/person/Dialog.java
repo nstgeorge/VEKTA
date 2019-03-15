@@ -3,7 +3,7 @@ package vekta.person;
 import vekta.Player;
 import vekta.menu.Menu;
 import vekta.menu.handle.DialogMenuHandle;
-import vekta.menu.option.BasicOption;
+import vekta.menu.option.CustomOption;
 import vekta.menu.option.DialogOption;
 import vekta.menu.option.MenuOption;
 import vekta.spawner.DialogGenerator;
@@ -144,7 +144,7 @@ public class Dialog implements Serializable {
 		else {
 			// Add custom responses for exiting dialog
 			for(String response : getResponses()) {
-				menu.add(new BasicOption(response, menu.getDefault()::select));
+				menu.add(new CustomOption(response, menu.getDefault()::select));
 			}
 		}
 
@@ -153,7 +153,7 @@ public class Dialog implements Serializable {
 			Collections.shuffle(menu.getOptions());
 		}
 		else {
-			menu.add(new BasicOption("Back", menu.getDefault()::select));
+			menu.add(new CustomOption("Back", menu.getDefault()::select));
 			//			menu.addDefault();
 		}
 
