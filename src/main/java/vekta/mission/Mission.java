@@ -13,8 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static processing.core.PApplet.println;
-import static vekta.Vekta.UI_COLOR;
-import static vekta.Vekta.getWorld;
+import static vekta.Vekta.*;
 
 public class Mission extends Syncable<Mission> {
 	private final List<Objective> objectives = new ArrayList<>();
@@ -171,7 +170,7 @@ public class Mission extends Syncable<Mission> {
 			println("Mission cannot be completed from state: " + getStatus());
 			return;
 		}
-
+		
 		println(getName(), listeners);/////
 		
 		for(MissionListener listener : listeners) {
@@ -190,16 +189,19 @@ public class Mission extends Syncable<Mission> {
 	}
 
 	public void share(Player player) {
-		Mission mission = new Mission(player, this.name, getIssuer(), getTier());
+		Mission mission = register(new Mission(player, this.name, getIssuer(), getTier()));
 //		for(MissionListener listener : listeners) {
 //			mission.add(listener);
 //		}
 		for(Objective objective : getObjectives()) {
-			if(!objective.getStatus().isDone()){
+//			if(!objective.getStatus().isDone()){
 				mission.add(objective);
-			}
+//			}
 		}
 		
-		getWorld().sendMessage(player, new ShareMissionMessage(mission));
+		println(mission.getObjectives());///////
+//		if(!mission.getObjectives().isEmpty()){
+			getWorld().sendMessage(player, new ShareMissionMessage(mission));
+//		}
 	}
 }

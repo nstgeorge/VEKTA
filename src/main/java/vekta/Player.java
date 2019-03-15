@@ -163,4 +163,12 @@ public final class Player extends Syncable<Player> {
 		emit(PlayerEvent.NOTIFICATION, notification);
 		return notification;
 	}
+
+	@Override
+	public void onSync(Player data) {
+		if(isRemote()) {
+			// Prevent local player from syncing remote changes
+			super.onSync(data);
+		}
+	}
 }

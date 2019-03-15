@@ -16,7 +16,6 @@ import vekta.menu.option.BasicOption;
 import vekta.menu.option.MissionOption;
 import vekta.menu.option.PlayerOption;
 import vekta.mission.Mission;
-import vekta.mission.objective.Objective;
 import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
 import vekta.spawner.WorldGenerator;
@@ -188,11 +187,13 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	@Override
 	public void onShareMission(Peer peer, ShareMissionMessage msg) {
 		Player sender = playerMap.get(peer);
-		Mission mission = register(msg.getMission());
-
-		for(Objective objective : mission.getObjectives()) {
-			objective.onStart(mission);
-		}
+		Mission mission = msg.getMission();
+		
+		println(mission.getObjectives(), mission.getStatus());//////
+		
+//		for(Objective objective : mission.getObjectives()) {
+//			objective.onStart(mission);
+//		}
 
 		Menu menu = new Menu(getPlayer(), new ObjectMenuHandle(new BackOption(getContext()), sender.getShip()));
 		menu.add(new MissionOption(mission));

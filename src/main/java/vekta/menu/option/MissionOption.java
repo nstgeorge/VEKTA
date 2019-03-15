@@ -35,7 +35,9 @@ public class MissionOption implements MenuOption {
 		if(mission.getStatus() == MissionStatus.READY) {
 			getMission().start();
 		}
-		menu.getPlayer().setCurrentMission(mission);
+		else if(mission.getStatus() == MissionStatus.STARTED) {
+			menu.getPlayer().setCurrentMission(mission);
+		}
 		menu.close();
 	}
 }

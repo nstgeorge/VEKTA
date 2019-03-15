@@ -129,7 +129,7 @@ public class TelemetryOverlay implements Overlay {
 	private void drawDial(String name, PVector info, float locX, float locY, int c) {
 		v.strokeWeight(2);
 		float radius = 50;
-		v.fill(0);
+		v.noFill();
 		v.stroke(c);
 		v.ellipse(locX, locY, radius, radius);
 		v.fill(100, 100, 100);

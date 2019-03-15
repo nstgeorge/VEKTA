@@ -137,7 +137,7 @@ public abstract class Objective extends Syncable<Objective> implements MissionLi
 
 	@Override
 	public boolean shouldSendChanges() {
-		return !isRemote() || getStatus().isDone();
+		return /*!isRemote() || */getStatus().isDone();
 	}
 
 	@Override

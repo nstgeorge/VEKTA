@@ -415,4 +415,13 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			module.onKeyRelease(key);
 		}
 	}
+
+	@Override
+	public void onSync(SpaceObject data) {
+		super.onSync(data);
+		
+		if(isRemote()) {
+			controller = null;
+		}
+	}
 }  
