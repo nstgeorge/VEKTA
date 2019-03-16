@@ -14,6 +14,8 @@ public class ColonySettlement extends Settlement {
 	public ColonySettlement(Faction faction) {
 		super(faction, "colony");
 
+		getEconomy().setValue(v.random(.1F, 1));
+
 		add(new CapitalBuilding(this));
 		add(WorldGenerator.createMarket(1));
 	}
@@ -29,15 +31,5 @@ public class ColonySettlement extends Settlement {
 
 	@Override
 	public void onSettlementMenu(Menu menu) {
-	}
-
-	@Override
-	public float chooseStartingValue() {
-		return v.random(.1F, .5F);
-	}
-
-	@Override
-	public float getEconomicInfluence() {
-		return .2F;
 	}
 }

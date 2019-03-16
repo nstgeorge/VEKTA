@@ -7,6 +7,7 @@ import vekta.economy.TemporaryModifier;
 import vekta.spawner.EventGenerator;
 import vekta.spawner.FactionGenerator;
 
+import static vekta.Vekta.getWorld;
 import static vekta.Vekta.v;
 
 public class FactionEventSpawner implements EventGenerator.EventSpawner {
@@ -23,27 +24,33 @@ public class FactionEventSpawner implements EventGenerator.EventSpawner {
 			b = FactionGenerator.createFaction();
 		}
 
+		String message;
+
 		if(a.isAlly(b)) {
 			a.setNeutral(b);
-			player.send(a.getName() + " has withdrawn from their alliance with " + b.getName());
+			message = a.getName() + " has withdrawn from their alliance with " + b.getName();
 		}
 		else if(a.isEnemy(b)) {
 			a.setNeutral(b);
-			player.send(a.getName() + " has negotiated peace with " + b.getName());
+			message = a.getName() + " has negotiated peace with " + b.getName();
 		}
 		else if(v.chance(.7F)) {
 			a.setAlly(b);
 			ProductivityModifier mod = new TemporaryModifier("Trade Negotiations", 1, .05F);
 			a.getEconomy().addModifier(mod);
 			b.getEconomy().addModifier(mod);
-			player.send(a.getName() + " has formed an alliance with " + b.getName());
+			message = a.getName() + " has formed an alliance with " + b.getName();
 		}
 		else {
 			a.setEnemy(b);
 			ProductivityModifier mod = new TemporaryModifier("Trade Embargo", 1, .05F);
 			a.getEconomy().addModifier(mod);
 			b.getEconomy().addModifier(mod);
-			player.send(a.getName() + " has declared war on " + b.getName());
+			message = a.getName() + " has declared war on " + b.getName();
+		}
+
+		for(Player p : getWorld().findObjects(Player.class)) {
+			p.send(message);
 		}
 	}
 }

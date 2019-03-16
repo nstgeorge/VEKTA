@@ -6,7 +6,6 @@ import static vekta.Vekta.v;
 
 public class AsteroidTerrain extends Terrain {
 	public AsteroidTerrain() {
-		addFeature("Asteroid");
 		if(v.chance(.25F)) {
 			addFeature("Mineable");
 		}

@@ -12,7 +12,7 @@ public class RefineryUpgrade implements SettlementUpgrade {
 
 	@Override
 	public int getCost(Player player, Settlement settlement) {
-		return 100;
+		return 150;
 	}
 
 	@Override

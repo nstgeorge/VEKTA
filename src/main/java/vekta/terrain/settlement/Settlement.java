@@ -14,7 +14,12 @@ import vekta.terrain.Terrain;
 import java.util.ArrayList;
 import java.util.List;
 
+import static processing.core.PApplet.ceil;
+
 public abstract class Settlement extends Syncable<Settlement> implements SettlementPart, ProductivityModifier {
+	private static final float POPULATION_PER_VALUE = 10000;
+	private static final float INFLUENCE_SCALE = .1F;
+
 	private final @Sync List<SettlementPart> parts = new ArrayList<>();
 
 	private final String name;
@@ -24,6 +29,8 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 
 	private final Economy economy;
 
+	//	private int population;
+
 	public Settlement(Faction faction, String key) {
 		this(faction, Resources.generateString(key), Resources.generateString("overview_" + key));
 	}
@@ -32,7 +39,7 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 		this.name = name;
 		this.overview = overview;
 
-		economy = new Economy(chooseStartingValue());
+		economy = new Economy();
 
 		setFaction(faction);
 	}
@@ -86,13 +93,30 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 		return economy;
 	}
 
-	public abstract float chooseStartingValue();
-
-	public abstract float getEconomicInfluence();
+	public float getEconomySignificance() {
+		return .1F;
+	}
 
 	public boolean isInhabited() {
-		return true;
+		return getPopulation() > 0;
 	}
+
+	public int getPopulation() {
+		//		return population;
+		return ceil(getEconomy().getValue() * POPULATION_PER_VALUE);
+	}
+
+	//	public void setPopulation(int population) {
+	//		this.population = population;
+	//	}
+	//
+	//	public void addPopulation(int amount) {
+	//		setPopulation(getPopulation() + amount);
+	//	}
+	//
+	//	public void removePopulation(int amount) {
+	//		setPopulation(max(0, getPopulation() - amount));
+	//	}
 
 	public List<SettlementPart> getParts() {
 		return parts;
@@ -149,10 +173,10 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 	}
 
 	@Override
-	public final void setupSettlementMenu(Menu menu) {
+	public final void setupMenu(Menu menu) {
 		onSettlementMenu(menu);
 		for(SettlementPart part : getParts()) {
-			part.setupSettlementMenu(menu);
+			part.setupMenu(menu);
 		}
 	}
 
@@ -161,11 +185,16 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 
 	@Override
 	public String getModifierName() {
-		return getName();
+		return "Settlement: " + getName();
 	}
 
 	@Override
 	public float updateModifier(Economy economy) {
-		return getEconomy().getProductivity() * getEconomicInfluence();
+		if(getSite().getParent().isDestroyed()) {
+			economy.removeModifier(this);
+			return 0;
+		}
+		getEconomy().update();
+		return getEconomy().getProductivity() * getEconomySignificance();
 	}
 }

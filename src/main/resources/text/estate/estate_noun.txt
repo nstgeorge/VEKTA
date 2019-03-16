@@ -1,0 +1,13 @@
+{landmark_noun}
+Estate
+House
+Flat
+Place
+Point
+Mansion
+Square
+Plaza
+Hotel
+Reservoir
+Mine
+Farm

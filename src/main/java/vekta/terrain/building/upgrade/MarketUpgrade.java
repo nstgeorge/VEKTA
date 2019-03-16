@@ -13,7 +13,7 @@ public class MarketUpgrade implements SettlementUpgrade {
 
 	@Override
 	public int getCost(Player player, Settlement settlement) {
-		return 50;
+		return 200;
 	}
 
 	@Override

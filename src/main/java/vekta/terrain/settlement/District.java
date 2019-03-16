@@ -46,11 +46,11 @@ public class District implements SettlementPart {
 	}
 
 	@Override
-	public void setupSettlementMenu(Menu menu) {
+	public void setupMenu(Menu menu) {
 		menu.add(new CustomOption(getName(), m -> {
 			Menu sub = new Menu(m.getPlayer(), new DistrictMenuHandle(new BackOption(m), this));
 			for(SettlementPart part : getParts()) {
-				part.setupSettlementMenu(sub);
+				part.setupMenu(sub);
 			}
 			sub.addDefault();
 			setContext(sub);

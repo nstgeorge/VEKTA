@@ -32,7 +32,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static vekta.Vekta.*;
 
@@ -47,6 +46,9 @@ public class Singleplayer implements World, PlayerListener {
 	private static final float TIME_SCALE = .001F;
 	private static final float TIME_FALLOFF = .1F;
 	private static final int MAX_OBJECTS_PER_DIST = 5; // TODO: increase as we add more object types
+
+	private static final float MAX_AUDITORY_DISTANCE = 3000; // Used for calculating volume of sounds. Higher = hear more
+	private static final float MAX_PAN_DISTANCE = 1000; // Distance where sound is panned entirely left/right
 
 	private static final float MIN_PLANET_TIME_SCALE = 10; // Make traveling between ship-level objects much faster
 
@@ -166,6 +168,7 @@ public class Singleplayer implements World, PlayerListener {
 
 		playerShip.addModule(new EngineModule(2)); // Upgrade engine
 		playerShip.addModule(new AutopilotModule());
+		playerShip.addModule(new AntennaModule(1));
 		playerShip.addModule(new TelescopeModule(.5F));
 		playerShip.addModule(new DrillModule(2));
 		playerShip.addModule(new HyperdriveModule(.5F));
@@ -349,15 +352,11 @@ public class Singleplayer implements World, PlayerListener {
 		if(situationCt.cycle()) {
 			EventGenerator.updateSituations(getPlayer());
 		}
-		
+
 		if(economyCt.cycle()) {
-			// TODO: add state.getEconomies() or a top-level world economy
-			for(Faction faction : state.getFactions()){
+			for(Faction faction : state.getFactions()) {
 				faction.getEconomy().update();
 			}
-			
-			// Debug: print economy values for balancing
-			println(state.getFactions().stream().map(f -> f.getName() + " (" + Math.round(f.getEconomy().getValue()) + ")").collect(Collectors.joining(", ")));
 		}
 
 		prevLevel = level;
@@ -511,33 +510,36 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> T findRandomObject(Class<T> type) {
-		List<T> candidates = new ArrayList<>();
-		// TODO: find an efficient way to DRY these loops
+	public <T extends Syncable> List<T> findObjects(Class<T> type) {
+		List candidates;
 		if(SpaceObject.class.isAssignableFrom(type)) {
-			for(SpaceObject s : state.getObjects()) {
-				if(type.isInstance(s)) {
-					candidates.add((T)s);
-				}
-			}
+			candidates = state.getObjects();
 		}
 		else if(Person.class.isAssignableFrom(type)) {
-			for(Person p : state.getPeople()) {
-				if(type.isInstance(p)) {
-					candidates.add((T)p);
-				}
-			}
+			candidates = state.getPeople();
 		}
 		else if(Faction.class.isAssignableFrom(type)) {
-			for(Faction f : state.getFactions()) {
-				if(type.isInstance(f)) {
-					candidates.add((T)f);
-				}
-			}
+			candidates = state.getFactions();
+		}
+		else if(Player.class.isAssignableFrom(type)) {
+			candidates = Collections.singletonList(getPlayer());
 		}
 		else {
 			throw new RuntimeException("Unrecognized object type: " + type.getName());
 		}
+
+		List<T> list = new ArrayList<>();
+		for(Object obj : candidates) {
+			if(type.isInstance(obj)) {
+				list.add((T)obj);
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public <T extends Syncable> T findRandomObject(Class<T> type) {
+		List<T> candidates = findObjects(type);
 		return candidates.isEmpty() ? null : v.random(candidates);
 	}
 
@@ -611,7 +613,7 @@ public class Singleplayer implements World, PlayerListener {
 			Singleplayer world = new Singleplayer(Format.read(new FileInputStream(file)));
 			setContext(world);
 			applyContext();
-			
+
 			println("Loaded from " + file);
 			return true;
 		}

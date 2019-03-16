@@ -12,5 +12,5 @@ public interface SettlementPart extends Serializable {
 
 	void setup(LandingSite site);
 
-	void setupSettlementMenu(Menu menu);
+	void setupMenu(Menu menu);
 }

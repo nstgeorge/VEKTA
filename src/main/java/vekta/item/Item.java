@@ -29,7 +29,7 @@ public class Item implements Serializable, Comparable<Item> {
 	}
 
 	public int randomPrice() {
-		return (int)(v.random(1, 10) * getType().getPriceModifier());
+		return (int)(v.random(2, 5) * getType().getPriceModifier());
 	}
 
 	public void onAdd(Player player) {

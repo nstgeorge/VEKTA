@@ -11,7 +11,8 @@ public abstract class Reward implements MissionListener {
 	public final void onComplete(Mission mission) {
 		onReward(mission, mission.getPlayer());
 		mission.getPlayer().send("Received: " + getName())
-				.withColor(getColor());
+				.withColor(getColor())
+				.withTime(2);
 	}
 
 	public abstract String getName();

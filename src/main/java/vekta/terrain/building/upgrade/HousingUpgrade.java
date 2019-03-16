@@ -14,7 +14,7 @@ public class HousingUpgrade implements SettlementUpgrade {
 
 	@Override
 	public int getCost(Player player, Settlement settlement) {
-		return 50 * (1 + settlement.count(HouseBuilding.class));
+		return 100 * (1 + settlement.count(HouseBuilding.class));
 	}
 
 	@Override

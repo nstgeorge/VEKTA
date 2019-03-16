@@ -56,6 +56,7 @@ public class AsteroidSpawner implements WorldGenerator.WorldSpawner {
 		else {
 			terrain = new HabitableTerrain(new EmptySettlement(faction));
 		}
+		terrain.addFeature("Asteroid");
 		return createAsteroid(pos, terrain);
 	}
 

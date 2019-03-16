@@ -13,7 +13,7 @@ import static vekta.Vekta.v;
 public class InventoryRewardSpawner implements MissionGenerator.RewardSpawner {
 	@Override
 	public float getWeight() {
-		return 1;
+		return 3;
 	}
 
 	@Override

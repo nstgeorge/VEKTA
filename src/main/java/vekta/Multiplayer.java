@@ -2,6 +2,7 @@ package vekta;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.google.common.collect.Lists;
 import processing.core.PVector;
 import vekta.connection.Connection;
 import vekta.connection.ConnectionListener;
@@ -21,10 +22,7 @@ import vekta.object.ship.ModularShip;
 import vekta.spawner.WorldGenerator;
 
 import java.io.File;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.WeakHashMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static vekta.Vekta.*;
@@ -78,7 +76,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		}));
 		//		applyContext();
 	}
-	
+
 	//// Connection listeners
 
 	@Override
@@ -130,7 +128,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 			println("Warning: received Player in a SyncMessage");
 			return;
 		}
-		
+
 		long id = msg.getID();
 		println("<receive>", msg.getData().getClass().getSimpleName() + "[" + Long.toHexString(id) + "]");
 		Syncable object = state.getSyncable(id);
@@ -188,12 +186,12 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	public void onShareMission(Peer peer, ShareMissionMessage msg) {
 		Player sender = playerMap.get(peer);
 		Mission mission = msg.getMission();
-		
+
 		println(mission.getObjectives(), mission.getStatus());//////
-		
-//		for(Objective objective : mission.getObjectives()) {
-//			objective.onStart(mission);
-//		}
+
+		//		for(Objective objective : mission.getObjectives()) {
+		//			objective.onStart(mission);
+		//		}
 
 		Menu menu = new Menu(getPlayer(), new ObjectMenuHandle(new BackOption(getContext()), sender.getShip()));
 		menu.add(new MissionOption(mission));
@@ -286,29 +284,6 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 	}
 
 	@Override
-	public void onMenu(Menu menu) {
-		super.onMenu(menu);
-
-		////
-		if(menu.getHandle() instanceof ObjectMenuHandle && ((ObjectMenuHandle)menu.getHandle()).getSpaceObject() != getPlayerShip()) {
-			println("!!!!! " + getPlayerShip().getName() + " " + ((ObjectMenuHandle)menu.getHandle()).getSpaceObject());///
-		}
-
-		if(menu.getHandle() instanceof ObjectMenuHandle && ((ObjectMenuHandle)menu.getHandle()).getSpaceObject() == getPlayerShip()) {
-			println(playerMap);////
-			if(!playerMap.isEmpty()) {
-				menu.add(new CustomOption("Players", m -> {
-					Menu sub = new Menu(m.getPlayer(), new MenuHandle(new BackOption(m)));
-					for(Player player : playerMap.values()) {
-						sub.add(new PlayerOption(player));
-					}
-					setContext(sub);
-				}));
-			}
-		}
-	}
-
-	@Override
 	public void render() {
 		super.render();
 
@@ -337,10 +312,33 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 					.filter(s -> s instanceof Player)
 					.map(s -> ((Player)s).getName())
 					.collect(Collectors.joining(", ")));
-//			println("SpaceObjects: " + state.getSyncables().stream()
-//					.filter(s -> s instanceof SpaceObject)
-//					.map(s -> ((SpaceObject)s).getName())
-//					.collect(Collectors.joining(", ")));
+			//			println("SpaceObjects: " + state.getSyncables().stream()
+			//					.filter(s -> s instanceof SpaceObject)
+			//					.map(s -> ((SpaceObject)s).getName())
+			//					.collect(Collectors.joining(", ")));
+		}
+	}
+
+	@Override
+	public void onMenu(Menu menu) {
+		super.onMenu(menu);
+
+		////
+		if(menu.getHandle() instanceof ObjectMenuHandle && ((ObjectMenuHandle)menu.getHandle()).getSpaceObject() != getPlayerShip()) {
+			println("!!!!! " + getPlayerShip().getName() + " " + ((ObjectMenuHandle)menu.getHandle()).getSpaceObject());///
+		}
+
+		if(menu.getHandle() instanceof ObjectMenuHandle && ((ObjectMenuHandle)menu.getHandle()).getSpaceObject() == getPlayerShip()) {
+			println(playerMap);////
+			if(!playerMap.isEmpty()) {
+				menu.add(new CustomOption("Players", m -> {
+					Menu sub = new Menu(m.getPlayer(), new MenuHandle(new BackOption(m)));
+					for(Player player : playerMap.values()) {
+						sub.add(new PlayerOption(player));
+					}
+					setContext(sub);
+				}));
+			}
 		}
 	}
 
@@ -355,6 +353,15 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		cleanup();
 
 		setContext(new Multiplayer());
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T extends Syncable> List<T> findObjects(Class<T> type) {
+		if(Player.class.equals(type)) {
+			return Lists.asList((T)getPlayer(), (T[])playerMap.values().toArray());
+		}
+		return super.findObjects(type);
 	}
 
 	@Override

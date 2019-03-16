@@ -15,7 +15,7 @@ public class RechargeSituation implements Situation {
 	@Override
 	public void start(Player player) {
 		Dialog dialog = MissionGenerator.randomMissionPerson().createDialog("recharge");
-		dialog.add(new RechargeOption(player.getShip(), .3F));
+		dialog.add(new RechargeOption(player.getShip(), .5F));
 		ApproachEventSpawner.createMessenger(player, dialog);
 	}
 

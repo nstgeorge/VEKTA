@@ -14,6 +14,10 @@ public class CitySettlement extends Settlement {
 	public CitySettlement(Faction faction) {
 		super(faction, "city");
 
+		getEconomy().setValue(v.random(5, 20));
+
+		//		addPopulation((int)v.random(100, 100000) + 1);
+
 		add(new CapitalBuilding(this));
 
 		if(v.chance(.75F)) {
@@ -45,15 +49,5 @@ public class CitySettlement extends Settlement {
 		for(int i = 0; i < personCt; i++) {
 			PersonGenerator.createPerson(this);
 		}
-	}
-
-	@Override
-	public float chooseStartingValue() {
-		return v.random(5, 10);
-	}
-
-	@Override
-	public float getEconomicInfluence() {
-		return 1;
 	}
 }

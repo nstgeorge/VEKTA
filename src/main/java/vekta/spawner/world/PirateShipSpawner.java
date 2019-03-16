@@ -20,6 +20,11 @@ public class PirateShipSpawner implements WorldGenerator.WorldSpawner {
 
 	@Override
 	public RenderLevel getSpawnLevel() {
+		return RenderLevel.PARTICLE;
+	}
+
+	@Override
+	public RenderLevel getObjectLevel() {
 		return RenderLevel.SHIP;
 	}
 

@@ -13,6 +13,10 @@ public class OutpostSettlement extends Settlement {
 	public OutpostSettlement(Faction faction) {
 		super(faction, "outpost");
 
+		getEconomy().setValue(v.random(.01F, .1F));
+
+		//		addPopulation((int)v.random(5) + 1);
+
 		if(v.chance(.5F)) {
 			add(WorldGenerator.createMarket(1));
 		}
@@ -29,15 +33,5 @@ public class OutpostSettlement extends Settlement {
 
 	@Override
 	public void onSettlementMenu(Menu menu) {
-	}
-
-	@Override
-	public float chooseStartingValue() {
-		return v.random(1, 2);
-	}
-
-	@Override
-	public float getEconomicInfluence() {
-		return .1F;
 	}
 }

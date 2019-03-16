@@ -16,6 +16,10 @@ public class TownSettlement extends Settlement {
 	public TownSettlement(Faction faction) {
 		super(faction, "town");
 
+		getEconomy().setValue(v.random(1, 5));
+
+		//		addPopulation((int)v.random(5, 100) + 1);
+
 		add(new CapitalBuilding(this));
 
 		List<MarketBuilding> buildings = WorldGenerator.randomMarkets(2, .1F);
@@ -49,21 +53,11 @@ public class TownSettlement extends Settlement {
 	@Override
 	public void onSetup() {
 		getTerrain().addFeature("Rural");
-		
+
 		// Add extra people
 		int personCt = (int)v.random(2) + 1;
 		for(int i = 0; i < personCt; i++) {
 			PersonGenerator.createPerson(this);
 		}
-	}
-
-	@Override
-	public float chooseStartingValue() {
-		return v.random(2, 5);
-	}
-
-	@Override
-	public float getEconomicInfluence() {
-		return .5F;
 	}
 }

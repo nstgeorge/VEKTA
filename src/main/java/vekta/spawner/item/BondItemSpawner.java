@@ -1,6 +1,7 @@
 package vekta.spawner.item;
 
-import vekta.item.BondItem;
+import vekta.Faction;
+import vekta.item.EconomyItem;
 import vekta.item.Item;
 import vekta.spawner.FactionGenerator;
 import vekta.spawner.ItemGenerator;
@@ -13,11 +14,16 @@ public class BondItemSpawner implements ItemGenerator.ItemSpawner {
 
 	@Override
 	public boolean isValid(Item item) {
-		return item instanceof BondItem;
+		return item instanceof EconomyItem;
 	}
 
 	@Override
 	public Item create() {
-		return new BondItem(FactionGenerator.randomFaction());
+		Faction faction = FactionGenerator.randomFaction();
+		return createBondItem(faction);
+	}
+
+	public static EconomyItem createBondItem(Faction faction) {
+		return new EconomyItem(faction.getName() + " Bonds", faction.getEconomy(), 1);
 	}
 }

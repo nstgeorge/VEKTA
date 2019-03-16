@@ -29,7 +29,7 @@ public class Menu implements Context {
 	public Menu(Player player, MenuHandle handle) {
 		this.player = player;
 		this.handle = handle;
-		
+
 		handle.init(this);
 
 		if(getPlayer() != null) {
@@ -146,15 +146,6 @@ public class Menu implements Context {
 		});
 	}
 
-	public void addCloseListener(Runnable callback) {
-		addListener(new MenuListener() {
-			@Override
-			public void onClose() {
-				callback.run();
-			}
-		});
-	}
-
 	public void addListener(MenuListener listener) {
 		listeners.add(listener);
 	}
@@ -169,7 +160,7 @@ public class Menu implements Context {
 		if(index >= size()) {
 			index = size() - 1;
 		}
-		
+
 		handle.focus(this);
 		if(autoOption != null) {
 			autoOption.select(this);
@@ -202,9 +193,6 @@ public class Menu implements Context {
 	public void close() {
 		if(handle.getDefault() != null) {
 			handle.getDefault().select(this);
-		}
-		for(MenuListener listener : listeners) {
-			listener.onClose();
 		}
 	}
 }

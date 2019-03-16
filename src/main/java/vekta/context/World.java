@@ -9,9 +9,6 @@ import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 
 public interface World extends Context {
-	float MAX_AUDITORY_DISTANCE = 3000; // Used for calculating volume of sounds. Higher = hear more
-	float MAX_PAN_DISTANCE = 1000; // Distance where sound is panned entirely left/right
-
 	RenderLevel getRenderLevel();
 
 	float getTimeScale();
@@ -47,8 +44,10 @@ public interface World extends Context {
 	 * Called when the gamemode restarts
 	 */
 	void restart();
+	
+	<T extends Syncable> Iterable<T> findObjects(Class<T> type);
 
-	<T> T findRandomObject(Class<T> type); // TODO: add predicate overload
+	<T extends Syncable> T findRandomObject(Class<T> type); // TODO: add predicate overload
 
 	SpaceObject findOrbitObject(SpaceObject object);
 

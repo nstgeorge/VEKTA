@@ -5,7 +5,6 @@ import vekta.Faction;
 import vekta.RenderLevel;
 import vekta.Resources;
 import vekta.object.SpaceObject;
-import vekta.spawner.item.BondItemSpawner;
 import vekta.spawner.item.ColonyItemSpawner;
 import vekta.spawner.item.MissionItemSpawner;
 import vekta.spawner.item.ModuleItemSpawner;
@@ -27,7 +26,7 @@ public class WorldGenerator {
 		WorldSpawner[] options = Resources.getSubclassInstances(WorldSpawner.class);
 		// Create spawner array for each RenderLevel, indexed by ordinal()
 		SPAWNERS = Arrays.stream(RenderLevel.values())
-				.map(level -> Arrays.stream(options).filter(s -> s.getSpawnLevel() == level).toArray(WorldSpawner[]::new))
+				.map(level -> Arrays.stream(options).filter(s -> s.getObjectLevel() == level).toArray(WorldSpawner[]::new))
 				.toArray(WorldSpawner[][]::new);
 	}
 
@@ -36,11 +35,10 @@ public class WorldGenerator {
 	}
 
 	public static void spawnOccasional(RenderLevel level, SpaceObject center) {
-		PVector pos = randomSpawnPosition(level, center.getPosition());
-
 		WorldSpawner[] array = SPAWNERS[level.ordinal()];
 		if(array.length > 0) {
-			Weighted.random(array).spawn(center, pos);
+			WorldSpawner spawner = Weighted.random(array);
+			spawner.spawn(center, randomSpawnPosition(spawner.getSpawnLevel(), center.getPosition()));
 		}
 	}
 
@@ -112,9 +110,9 @@ public class WorldGenerator {
 		if(v.chance(chance * .5F)) {
 			buildings.add(new MarketBuilding(shopTier, "Modules", new ModuleItemSpawner()));
 		}
-		if(v.chance(chance * .5F)) {
-			buildings.add(new MarketBuilding(shopTier, "Bonds", new BondItemSpawner()));
-		}
+//		if(v.chance(chance * .5F)) {
+//			buildings.add(new MarketBuilding(shopTier, "Bonds", new BondItemSpawner()));
+//		}
 		if(v.chance(chance * .25F)) {
 			buildings.add(new MarketBuilding(shopTier, "Supplies", new ColonyItemSpawner()));
 		}
@@ -148,6 +146,10 @@ public class WorldGenerator {
 
 	public interface WorldSpawner extends Weighted {
 		RenderLevel getSpawnLevel();
+
+		default RenderLevel getObjectLevel() {
+			return getSpawnLevel();
+		}
 
 		void spawn(SpaceObject center, PVector pos);
 	}

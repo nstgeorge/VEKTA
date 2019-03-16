@@ -37,7 +37,7 @@ public class RefineryBuilding implements SettlementPart {
 	}
 
 	@Override
-	public void setupSettlementMenu(Menu menu) {
+	public void setupMenu(Menu menu) {
 		menu.add(new CustomOption("Refinery", m -> {
 			Menu sub = new Menu(m.getPlayer(), new MenuHandle(new BackOption(m)));
 			for(Item item : m.getPlayer().getInventory()) {
