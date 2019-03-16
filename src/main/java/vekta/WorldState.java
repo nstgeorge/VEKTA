@@ -144,13 +144,13 @@ public final class WorldState implements Serializable {
 		// Find already existing object with the same state key
 		long id = object.getSyncID();
 		if(syncMap.containsKey(id)) {
-			S other = (S)syncMap.get(id);
-			if(object.isRemote()) {
+			S current = (S)syncMap.get(id);
+			if(current.isRemote()) {
 				// Sync remotely owned object
-				other.onSync(object.getSyncData());
+				current.onSync(object.getSyncData());
 				println("<sync>", object.isRemote(), object.getClass().getSimpleName() + "[" + Long.toHexString(id) + "]");
 			}
-			return other;
+			return current;
 		}
 		else {
 			add(object);

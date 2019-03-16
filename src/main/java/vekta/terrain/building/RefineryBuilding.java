@@ -19,18 +19,23 @@ public class RefineryBuilding implements SettlementPart {
 
 	@Override
 	public String getName() {
-		return getTypeString();
+		return getGenericName();
 	}
 
 	@Override
-	public String getTypeString() {
+	public String getGenericName() {
 		return "Refinery";
+	}
+
+	@Override
+	public BuildingType getType() {
+		return BuildingType.INDUSTRIAL;
 	}
 
 	@Override
 	public void setup(LandingSite site) {
 		site.getTerrain().addFeature("Industrial");
-		
+
 		if(v.chance(.25F)) {
 			site.getTerrain().addFeature("Smog");
 		}

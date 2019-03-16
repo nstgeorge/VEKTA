@@ -45,6 +45,6 @@ public class SettlementMenuHandle extends MenuHandle {
 		v.text(settlement.getName(), v.width / 2F, getButtonY(-2));
 		v.textSize(20);
 		v.fill(100);
-		v.text(settlement.getTypeString() + ", " + settlement.getFaction().getName(), v.width / 2F, getButtonY(-2) + 50);
+		v.text(settlement.getGenericName() + ", " + settlement.getFaction().getName(), v.width / 2F, getButtonY(-2) + 50);
 	}
 }

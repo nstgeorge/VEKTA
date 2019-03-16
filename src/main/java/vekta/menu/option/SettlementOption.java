@@ -15,7 +15,7 @@ public class SettlementOption implements MenuOption {
 
 	@Override
 	public String getName() {
-		return "Visit " + settlement.getTypeString();
+		return "Visit " + settlement.getGenericName();
 	}
 
 //	@Override

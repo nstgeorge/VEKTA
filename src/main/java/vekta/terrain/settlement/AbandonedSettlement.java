@@ -17,7 +17,7 @@ public class AbandonedSettlement extends Settlement {
 	}
 
 	@Override
-	public String getTypeString() {
+	public String getGenericName() {
 		return "Ruins";
 	}
 

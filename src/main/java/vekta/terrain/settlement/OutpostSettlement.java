@@ -1,6 +1,8 @@
 package vekta.terrain.settlement;
 
 import vekta.Faction;
+import vekta.economy.Economy;
+import vekta.economy.NoiseModifier;
 import vekta.item.Inventory;
 import vekta.menu.Menu;
 import vekta.spawner.WorldGenerator;
@@ -13,8 +15,6 @@ public class OutpostSettlement extends Settlement {
 	public OutpostSettlement(Faction faction) {
 		super(faction, "outpost");
 
-		getEconomy().setValue(v.random(.2F, 1));
-
 		//		addPopulation((int)v.random(5) + 1);
 
 		if(v.chance(.5F)) {
@@ -22,13 +22,19 @@ public class OutpostSettlement extends Settlement {
 		}
 	}
 
+	public Inventory getInventory() {
+		return inventory;
+	}
+
 	@Override
-	public String getTypeString() {
+	public String getGenericName() {
 		return "Outpost";
 	}
 
-	public Inventory getInventory() {
-		return inventory;
+	@Override
+	public void onSetupEconomy(Economy economy) {
+		economy.setValue(v.random(.2F, 1));
+		economy.addModifier(new NoiseModifier(.1F));
 	}
 
 	@Override

@@ -13,7 +13,6 @@ import static vekta.Vekta.getWorld;
 import static vekta.Vekta.setContext;
 
 public class BondMenuOption implements MenuOption {
-	private final Inventory inventory;
 	private final List<Faction> factions;
 
 	public BondMenuOption(Inventory inv) {
@@ -21,17 +20,12 @@ public class BondMenuOption implements MenuOption {
 	}
 
 	public BondMenuOption(Inventory inv, List<Faction> factions) {
-		this.inventory = inv;
 		this.factions = factions;
 	}
 
 	@Override
 	public String getName() {
 		return "Bond Market";
-	}
-
-	public Inventory getInventory() {
-		return inventory;
 	}
 
 	public List<Faction> getFactions() {

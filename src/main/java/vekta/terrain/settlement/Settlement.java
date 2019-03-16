@@ -10,6 +10,7 @@ import vekta.menu.Menu;
 import vekta.object.SpaceObject;
 import vekta.terrain.LandingSite;
 import vekta.terrain.Terrain;
+import vekta.terrain.building.BuildingType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,8 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 		this.overview = overview;
 
 		economy = new Economy();
+		onSetupEconomy(economy);
+		economy.fillHistory();
 
 		setFaction(faction);
 	}
@@ -75,6 +78,11 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public BuildingType getType() {
+		return BuildingType.EXTERNAL;
 	}
 
 	public String getOverview() {
@@ -123,8 +131,23 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 	}
 
 	public void add(SettlementPart part) {
-		parts.add(part);
+		boolean added = false;
+		for(SettlementPart existing : getParts()) {
+			if(existing.addIfRelevant(part)) {
+				added = true;
+				break;
+			}
+		}
+		if(!added && !parts.contains(part)) {
+			parts.add(part);
+		}
 		syncChanges();
+	}
+
+	@Override
+	public boolean addIfRelevant(SettlementPart part) {
+		add(part);
+		return true;
 	}
 
 	public void remove(SettlementPart part) {
@@ -167,6 +190,9 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 		for(SettlementPart part : getParts()) {
 			part.setup(site);
 		}
+	}
+	
+	public void onSetupEconomy(Economy economy) {
 	}
 
 	public void onSetup() {

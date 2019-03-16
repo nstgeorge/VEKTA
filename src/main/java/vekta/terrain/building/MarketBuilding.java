@@ -31,12 +31,17 @@ public class MarketBuilding implements SettlementPart {
 
 	@Override
 	public String getName() {
-		return getTypeString();
+		return getGenericName();
 	}
 
 	@Override
-	public String getTypeString() {
+	public String getGenericName() {
 		return type;
+	}
+
+	@Override
+	public BuildingType getType() {
+		return BuildingType.MARKET;
 	}
 
 	public Inventory getInventory() {

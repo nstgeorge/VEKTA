@@ -27,7 +27,7 @@ public class MarketOption implements MenuOption {
 
 	@Override
 	public String getName() {
-		return (buying ? "Buy" : "Sell") + " " + building.getTypeString();
+		return (buying ? "Buy" : "Sell") + " " + building.getGenericName();
 	}
 
 	public Inventory getFrom() {

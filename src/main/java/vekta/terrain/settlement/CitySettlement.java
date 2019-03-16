@@ -1,11 +1,11 @@
 package vekta.terrain.settlement;
 
 import vekta.Faction;
+import vekta.economy.Economy;
+import vekta.economy.NoiseModifier;
 import vekta.spawner.PersonGenerator;
 import vekta.spawner.WorldGenerator;
-import vekta.terrain.building.CapitalBuilding;
-import vekta.terrain.building.MarketBuilding;
-import vekta.terrain.building.RefineryBuilding;
+import vekta.terrain.building.*;
 
 import static vekta.Vekta.v;
 
@@ -14,29 +14,29 @@ public class CitySettlement extends Settlement {
 	public CitySettlement(Faction faction) {
 		super(faction, "city");
 
-		getEconomy().setValue(v.random(5, 10));
-
 		//		addPopulation((int)v.random(100, 100000) + 1);
+
+		add(new District("Trade District", BuildingType.MARKET));
+		add(new District("Industrial District", BuildingType.INDUSTRIAL));
+		add(new District("Housing District", BuildingType.RESIDENTIAL));
+		add(new District("Financial District", BuildingType.ECONOMY));
+//		add(new District("Government Offices", BuildingType.GOVERNMENT));
 
 		add(new CapitalBuilding(this));
 
-		if(v.chance(.75F)) {
-			District district = new District("Trade District");
-			for(MarketBuilding building : WorldGenerator.randomMarkets(3, .5F)) {
-				district.add(building);
-			}
-			add(district);
+		for(MarketBuilding building : WorldGenerator.randomMarkets(3, .4F)) {
+			add(building);
 		}
 
 		if(v.chance(.75F)) {
-			District district = new District("Industrial District");
-			district.add(new RefineryBuilding());
-			add(district);
+			add(new RefineryBuilding());
 		}
+
+		add(new EconomyBuilding(this, (int)(v.random(10, 20))));
 	}
 
 	@Override
-	public String getTypeString() {
+	public String getGenericName() {
 		return "City";
 	}
 
@@ -49,5 +49,11 @@ public class CitySettlement extends Settlement {
 		for(int i = 0; i < personCt; i++) {
 			PersonGenerator.createPerson(this);
 		}
+	}
+
+	@Override
+	public void onSetupEconomy(Economy economy) {
+		economy.setValue(v.random(5, 10));
+		economy.addModifier(new NoiseModifier(2));
 	}
 }

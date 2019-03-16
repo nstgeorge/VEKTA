@@ -22,12 +22,17 @@ public class CapitalBuilding implements SettlementPart {
 
 	@Override
 	public String getName() {
-		return getTypeString();
+		return getGenericName();
 	}
 
 	@Override
-	public String getTypeString() {
+	public String getGenericName() {
 		return "Town Hall";
+	}
+
+	@Override
+	public BuildingType getType() {
+		return BuildingType.GOVERNMENT;
 	}
 
 	@Override
@@ -36,13 +41,12 @@ public class CapitalBuilding implements SettlementPart {
 
 	@Override
 	public void setupMenu(Menu menu) {
-
 		if(getSettlement().getFaction() == menu.getPlayer().getFaction()) {
 			// Add upgrade management option
 			menu.add(new UpgradeMenuOption(menu.getPlayer(), getSettlement()));
 
 			// Add advisement option
-			Person person = new Person("Mayor of " + getSettlement().getName(), menu.getPlayer().getFaction());
+			Person person = new Person("Mayor of " + getSettlement().getName(), getSettlement().getFaction());
 			menu.add(new DialogOption("Advise Mayor", AdviceObjectiveSpawner.randomAdviceDialog(menu.getPlayer(), person)));
 		}
 	}

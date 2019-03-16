@@ -7,6 +7,7 @@ import vekta.spawner.ItemGenerator;
 import vekta.spawner.PersonGenerator;
 import vekta.terrain.settlement.Settlement;
 
+import static processing.core.PApplet.sq;
 import static vekta.Vekta.v;
 
 public class EstateItemSpawner implements ItemGenerator.ItemSpawner {
@@ -27,16 +28,16 @@ public class EstateItemSpawner implements ItemGenerator.ItemSpawner {
 		return randomEstateItem(PersonGenerator.randomHome());
 	}
 
-	public static Item randomEstateItem(Settlement settlement) {
-		return randomEstateItem(settlement, v.random(.5F, 3));
+	public static EconomyItem randomEstateItem(Settlement settlement) {
+		return randomEstateItem(settlement, sq(v.random(.5F, 2)));
 	}
 
-	public static Item randomEstateItem(Settlement settlement, float value) {
-		boolean common = value < 1;
+	public static EconomyItem randomEstateItem(Settlement settlement, float valueScale) {
+		boolean common = valueScale < 1;
 		String name = Resources.generateString("estate_" + (common ? "common" : "rare"));
 		return new EconomyItem(
 				name + " (" + settlement.getName() + ")",
 				settlement.getEconomy(),
-				value * VALUE_SCALE);
+				valueScale * VALUE_SCALE);
 	}
 }

@@ -25,8 +25,13 @@ public class HouseBuilding implements SettlementPart {
 	}
 
 	@Override
-	public String getTypeString() {
+	public String getGenericName() {
 		return "House";
+	}
+
+	@Override
+	public BuildingType getType() {
+		return BuildingType.RESIDENTIAL;
 	}
 
 	@Override

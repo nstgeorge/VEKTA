@@ -16,7 +16,7 @@ public class EmptySettlement extends Settlement {
 	}
 
 	@Override
-	public String getTypeString() {
+	public String getGenericName() {
 		return "Territory";
 	}
 
