@@ -14,7 +14,7 @@ public class ColonySettlement extends Settlement {
 	public ColonySettlement(Faction faction) {
 		super(faction, "colony");
 
-		getEconomy().setValue(v.random(.1F, 1));
+		getEconomy().setValue(v.random(1, 2));
 
 		add(new CapitalBuilding(this));
 		add(WorldGenerator.createMarket(1));

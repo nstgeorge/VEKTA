@@ -14,7 +14,7 @@ public class CitySettlement extends Settlement {
 	public CitySettlement(Faction faction) {
 		super(faction, "city");
 
-		getEconomy().setValue(v.random(5, 20));
+		getEconomy().setValue(v.random(5, 10));
 
 		//		addPopulation((int)v.random(100, 100000) + 1);
 

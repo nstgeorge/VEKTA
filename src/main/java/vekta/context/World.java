@@ -8,6 +8,8 @@ import vekta.connection.message.Message;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 
+import java.util.List;
+
 public interface World extends Context {
 	RenderLevel getRenderLevel();
 
@@ -45,7 +47,7 @@ public interface World extends Context {
 	 */
 	void restart();
 	
-	<T extends Syncable> Iterable<T> findObjects(Class<T> type);
+	<T extends Syncable> List<T> findObjects(Class<T> type);
 
 	<T extends Syncable> T findRandomObject(Class<T> type); // TODO: add predicate overload
 

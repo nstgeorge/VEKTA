@@ -49,7 +49,7 @@ public class BondMenuOption implements MenuOption {
 	private void update(Menu sub, boolean buying) {
 		sub.clear();
 		for(Faction faction : getFactions()) {
-			float valueChange = 1; // Amount to raise the market value
+			float valueChange = .2F; // Amount to raise the market value
 			sub.add(new EconomyItemOption(
 					sub.getPlayer().getInventory(),
 					BondItemSpawner.createBondItem(faction),

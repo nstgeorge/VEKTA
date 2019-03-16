@@ -10,8 +10,8 @@ import vekta.menu.handle.EconomyMenuHandle;
 import static vekta.Vekta.moneyString;
 
 public class EconomyItemOption implements MenuOption {
-	private static final float FEE = .1F;
-	
+	private static final float FEE = 1;
+
 	private final Inventory inventory;
 	private final EconomyItem item;
 	private final float valueChange;
@@ -25,7 +25,7 @@ public class EconomyItemOption implements MenuOption {
 		this.callback = callback;
 
 		this.valueChange = buying ? valueChange : -valueChange;
-		this.price = Math.round(item.randomPrice() * (1 + (buying ? FEE : -FEE)));
+		this.price = Math.round(item.randomPrice() + (buying ? FEE : -FEE));
 
 		// If selling, try to replace item with equivalent from inventory
 		if(!buying && !inv.has(item)) {

@@ -5,6 +5,7 @@ import vekta.menu.Menu;
 
 import java.io.Serializable;
 
+import static processing.core.PApplet.*;
 import static vekta.Vekta.v;
 
 public class Item implements Serializable, Comparable<Item> {
@@ -29,7 +30,7 @@ public class Item implements Serializable, Comparable<Item> {
 	}
 
 	public int randomPrice() {
-		return (int)(v.random(2, 5) * getType().getPriceModifier());
+		return max(0, round(v.random(2, 5) * getType().getPriceModifier()));
 	}
 
 	public void onAdd(Player player) {

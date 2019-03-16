@@ -2,7 +2,7 @@ Map
 Files
 Encrypted Drive
 Tablet
-Coordinates
+Coordinate Chip
 Compass
 Book
 Diary

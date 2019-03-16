@@ -1,16 +1,16 @@
 package vekta;
 
 import vekta.economy.Economy;
-import vekta.economy.ProductivityModifier;
 import vekta.economy.NoiseModifier;
+import vekta.economy.ProductivityModifier;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public final class Faction extends Syncable<Faction> implements Renameable, ProductivityModifier {
-	private static final float BASE_PRODUCTIVITY = 1;
-	private static final float ALLY_MODIFIER = 1;
-	private static final float ENEMY_MODIFIER = -1;
+	private static final float BASE_PRODUCTIVITY = .2F;
+	private static final float ALLY_MODIFIER = .2F;
+	private static final float ENEMY_MODIFIER = -.3F;
 
 	private final FactionType type;
 	private @Sync String name;
@@ -21,14 +21,18 @@ public final class Faction extends Syncable<Faction> implements Renameable, Prod
 
 	private final Economy economy;
 
-	public Faction(FactionType type, String name, float value, int color) {
+	public Faction(FactionType type, String name, float value, float risk, int color) {
 		this.type = type;
 		this.name = name;
 		this.color = color;
-		
+
 		economy = new Economy(value);
 		economy.addModifier(this); // Add faction productivity to economy
-		economy.addModifier(new NoiseModifier(1)); // Add random noise to economy
+		if(risk > 0) {
+			// Add economic variability/risk
+			economy.addModifier(new NoiseModifier(risk * value));
+		}
+		economy.fillHistory();
 	}
 
 	public FactionType getType() {

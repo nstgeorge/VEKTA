@@ -9,7 +9,7 @@ import vekta.spawner.ItemGenerator;
 public class BondItemSpawner implements ItemGenerator.ItemSpawner {
 	@Override
 	public float getWeight() {
-		return 1;
+		return .1F;
 	}
 
 	@Override

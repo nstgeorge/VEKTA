@@ -4,7 +4,7 @@ import vekta.menu.Menu;
 import vekta.menu.option.DialogOption;
 import vekta.person.Dialog;
 import vekta.person.Person;
-import vekta.spawner.MissionGenerator;
+import vekta.spawner.DialogGenerator;
 import vekta.terrain.LandingSite;
 import vekta.terrain.settlement.SettlementPart;
 
@@ -36,7 +36,7 @@ public class HouseBuilding implements SettlementPart {
 	@Override
 	public void setupMenu(Menu menu) {
 		if(!getPerson().getOpinion(menu.getPlayer().getFaction()).isNegative()) {
-			Dialog dialog = MissionGenerator.randomVisitDialog(menu.getPlayer(), getPerson());
+			Dialog dialog = DialogGenerator.randomVisitDialog(menu.getPlayer(), getPerson());
 			menu.add(new DialogOption("Visit " + getPerson().getName(), dialog));
 		}
 	}

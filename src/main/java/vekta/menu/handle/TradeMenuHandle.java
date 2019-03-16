@@ -38,7 +38,7 @@ public class TradeMenuHandle extends MenuHandle {
 
 		v.textSize(32);
 		v.fill(buying ? UI_COLOR : 100);
-		v.text((buying ? "You" : "They") + " have: [" + to.getMoney() + " G]", v.width / 2F, v.height / 4F + 48);
+		v.text((buying ? "You" : "They") + " have: [" + to.getMoney() + " G]", getButtonX(), getButtonY(-2));
 	}
 
 	@Override

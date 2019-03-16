@@ -5,6 +5,7 @@ import vekta.Player;
 import vekta.RenderLevel;
 import vekta.object.ship.MessengerShip;
 import vekta.person.Dialog;
+import vekta.spawner.DialogGenerator;
 import vekta.spawner.EventGenerator;
 import vekta.spawner.MissionGenerator;
 import vekta.spawner.WorldGenerator;
@@ -19,7 +20,7 @@ public class ApproachEventSpawner implements EventGenerator.EventSpawner {
 
 	@Override
 	public void spawn(Player player) {
-		createMessenger(player, MissionGenerator.randomApproachDialog(player, MissionGenerator.randomMissionPerson()));
+		createMessenger(player, DialogGenerator.randomApproachDialog(player, MissionGenerator.randomMissionPerson()));
 	}
 
 	public static MessengerShip createMessenger(Player player, Dialog dialog) {

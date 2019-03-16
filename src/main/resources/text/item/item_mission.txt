@@ -1,6 +1,8 @@
 Assorted Map Pieces
 Coordinate Chip
 Handwritten Coordinates
+Handwritten Instructions
+Decryption Key
 {item_adj_common} {item_noun_mission}
 {item_adj_rare} {item_noun_mission}
 {item_noun_mission}

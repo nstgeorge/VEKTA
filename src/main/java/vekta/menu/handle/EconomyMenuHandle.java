@@ -85,7 +85,7 @@ public class EconomyMenuHandle extends MenuHandle {
 					}
 				}
 				if(ct > 0) {
-					v.text("x" + ct, getButtonX() + getButtonWidth() / 2F + 50, getButtonY(i) + 10);
+					v.text("x" + ct, getButtonX() + getButtonWidth() / 2F + 50, getButtonY(i) + 6);
 					if(i == currentIndex) {
 						currentCount = ct;
 					}
@@ -105,8 +105,8 @@ public class EconomyMenuHandle extends MenuHandle {
 		float chartCenter = v.width - getButtonX() + 200 * (buying ? 1 : -1);
 		float chartLeft = chartCenter - getButtonWidth() / 2F;
 		float chartRight = chartCenter + getButtonWidth() / 2F;
-		float chartTop = getButtonY(-1);
-		float chartBottom = getButtonY(4);
+		float chartTop = v.height * .25F;
+		float chartBottom = v.height * .5F;
 
 		float max = 0;
 		float min = Float.POSITIVE_INFINITY;
@@ -132,8 +132,8 @@ public class EconomyMenuHandle extends MenuHandle {
 		for(int i = 0; i < history.length; i++) {
 			float value = history[i];
 
-			float x = chartLeft + i * spacingX;
-			float y = chartTop + (value - min) * spacingY;
+			float x = chartRight - i * spacingX;
+			float y = chartTop + (max - value) * spacingY;
 
 			if(i > 0) {
 				v.line(prevX, prevY, x, y);

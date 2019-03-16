@@ -39,6 +39,6 @@ public class LootMenuHandle extends MenuHandle {
 
 		v.textSize(32);
 		v.fill(UI_COLOR);
-		v.text("Items Found: " + inv.itemCount(), v.width / 2F, v.height / 4F);
+		v.text("Items Found: " + inv.itemCount(), getButtonX(), getButtonY(-2));
 	}
 }

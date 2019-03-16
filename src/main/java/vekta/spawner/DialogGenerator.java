@@ -3,6 +3,8 @@ package vekta.spawner;
 import vekta.Player;
 import vekta.Resources;
 import vekta.person.Dialog;
+import vekta.person.OpinionType;
+import vekta.person.Person;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,6 +32,30 @@ public final class DialogGenerator {
 		if(spawner != null) {
 			spawner.setup(player, dialog);
 		}
+	}
+
+	public static Dialog randomVisitDialog(Player player, Person person) {
+		if(person.isBusy()) {
+			return person.createDialog("greeting").then("busy");
+		}
+		else {
+			return randomApproachDialog(player, person);
+		}
+	}
+
+	public static Dialog randomApproachDialog(Player player, Person person) {
+		Dialog dialog;
+		if(person.getOpinion(player.getFaction()) == OpinionType.GRATEFUL && v.chance(.4F)) {
+			dialog = person.createDialog("offer");
+			person.setOpinion(player.getFaction(), OpinionType.FRIENDLY);
+		}
+		else if(v.chance(.3F)) {
+			dialog = person.createDialog("offer");
+		}
+		else {
+			dialog = person.createDialog("request");
+		}
+		return dialog;
 	}
 
 	public interface DialogSpawner {

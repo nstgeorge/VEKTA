@@ -8,8 +8,6 @@ import vekta.mission.Mission;
 import vekta.mission.MissionIssuer;
 import vekta.mission.objective.Objective;
 import vekta.object.planet.TerrestrialPlanet;
-import vekta.person.Dialog;
-import vekta.person.OpinionType;
 import vekta.person.Person;
 import vekta.spawner.world.AsteroidSpawner;
 import vekta.terrain.LandingSite;
@@ -80,33 +78,6 @@ public class MissionGenerator {
 
 	public static String randomMissionName() {
 		return Resources.generateString("mission");
-	}
-
-	public static Dialog randomVisitDialog(Player player, Person person) {
-		if(person.isBusy()) {
-			return person.createDialog("greeting").then("busy");
-		}
-		else {
-			return randomApproachDialog(player, person);
-		}
-	}
-
-	public static Dialog randomApproachDialog(Player player, Person person) {
-		Dialog dialog;
-		if(person.getOpinion(player.getFaction()) == OpinionType.GRATEFUL && v.chance(.4F)) {
-			dialog = person.createDialog("offer");
-			person.setOpinion(player.getFaction(), OpinionType.FRIENDLY);
-		}
-		else if(v.chance(.3F)){
-			return person.createDialog("greeting").then("busy");
-		}
-		else if(v.chance(.3F)) {
-			dialog = person.createDialog("offer");
-		}
-		else {
-			dialog = person.createDialog("request");
-		}
-		return dialog;
 	}
 
 	public interface ObjectiveSpawner extends Weighted {

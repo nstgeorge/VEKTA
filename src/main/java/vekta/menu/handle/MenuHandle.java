@@ -19,6 +19,9 @@ import static vekta.Vekta.*;
 public class MenuHandle implements Serializable {
 	private final MenuOption defaultOption;
 
+	// Internal menu reference for item scrolling (evaluating this approach)
+	private Menu menu;
+
 	public MenuHandle(Context parent) {
 		this(new BackOption(parent));
 	}
@@ -44,7 +47,16 @@ public class MenuHandle implements Serializable {
 	}
 
 	public int getButtonY(int i) {
-		return v.height / 2 - 64 + i * getSpacing();
+		//		return v.height / 2 - 64 + i * getSpacing();
+
+		// Scroll items 
+		int offset = 0;
+		int extraOptions = menu.size() - 5;
+		if(extraOptions > 0) {
+			offset -= menu.getIndex() * getSpacing() * extraOptions / menu.size();
+		}
+
+		return v.height / 2 - 64 + i * getSpacing() + offset;
 	}
 
 	public String getSelectVerb() {
@@ -55,6 +67,7 @@ public class MenuHandle implements Serializable {
 	}
 
 	public void focus(Menu menu) {
+		this.menu = menu;
 	}
 
 	public void beforeDraw() {
@@ -93,7 +106,7 @@ public class MenuHandle implements Serializable {
 		String name = opt.getName();
 
 		// Draw border
-		v.stroke(selected ? 220 : UI_COLOR);
+		v.stroke(selected ? 255 : UI_COLOR);
 		v.noFill();
 		v.rect(getButtonX(), yPos, max(getButtonWidth(), v.textWidth(name) + 20) + (selected ? 10 : 0), 50);
 

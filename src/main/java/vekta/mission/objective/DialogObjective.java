@@ -46,8 +46,10 @@ public class DialogObjective extends Objective {
 	public void onMenu(Menu menu) {
 		if(menu.getHandle() instanceof DialogMenuHandle) {
 			Dialog dialog = ((DialogMenuHandle)menu.getHandle()).getDialog();
-			if(dialog.getPerson() == getDialog().getPerson()) {
+			if(dialog == getDialog()) {
 				complete();
+			}
+			else if(dialog.getPerson() == getDialog().getPerson()) {
 				menu.add(new DialogOption(getVerb(), getDialog()));
 			}
 		}

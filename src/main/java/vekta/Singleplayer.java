@@ -109,7 +109,7 @@ public class Singleplayer implements World, PlayerListener {
 	public void setup() {
 		state = new WorldState();
 
-		Faction playerFaction = register(new Faction(FactionType.PLAYER, "VEKTA I", 1, UI_COLOR));
+		Faction playerFaction = register(new Faction(FactionType.PLAYER, "VEKTA I", 1, .1F, UI_COLOR));
 		Player player = register(new Player(playerFaction));
 		player.addListener(this);
 		state.setPlayer(player);
@@ -215,7 +215,7 @@ public class Singleplayer implements World, PlayerListener {
 			save(AUTOSAVE_FILE);
 		}
 	}
-
+	
 	@Override
 	public void render() {
 		ModularShip playerShip = getPlayerShip();

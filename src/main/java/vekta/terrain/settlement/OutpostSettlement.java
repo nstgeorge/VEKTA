@@ -13,7 +13,7 @@ public class OutpostSettlement extends Settlement {
 	public OutpostSettlement(Faction faction) {
 		super(faction, "outpost");
 
-		getEconomy().setValue(v.random(.01F, .1F));
+		getEconomy().setValue(v.random(.2F, 1));
 
 		//		addPopulation((int)v.random(5) + 1);
 

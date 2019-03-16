@@ -9,9 +9,9 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static processing.core.PApplet.max;
-import static vekta.Vekta.v;
 
 public class Economy extends Syncable<Economy> {
+	private static final int HISTORY_LENGTH = 100;
 	private static final float PRODUCTIVITY_EFFECT_SCALE = .05F;
 
 	private @Sync float value; // The overall value of the economy 
@@ -20,7 +20,7 @@ public class Economy extends Syncable<Economy> {
 	private final @Sync List<ProductivityModifier> modifiers = new CopyOnWriteArrayList<>();
 	private final @Sync Map<ProductivityModifier, Float> productivityMap = new HashMap<>();
 
-	private @Sync float[] history;
+	private final @Sync float[] history = new float[HISTORY_LENGTH];
 
 	public Economy() {
 		this(0);
@@ -66,15 +66,6 @@ public class Economy extends Syncable<Economy> {
 	}
 
 	public float[] getHistory() {
-		if(history == null) {
-			history = new float[100];
-			float value = getValue();
-			for(int i = history.length - 1; i >= 0; i--) {
-				history[i] = value;
-				// TODO: use logic from NoiseModifier
-				value *= 1 + v.random(-1, 1) / value;
-			}
-		}
 		return history;
 	}
 
@@ -82,6 +73,12 @@ public class Economy extends Syncable<Economy> {
 		float[] history = getHistory();
 		System.arraycopy(history, 0, history, 1, history.length - 1);
 		history[0] = value;
+	}
+
+	public void fillHistory() {
+		for(int i = 0; i < getHistory().length; i++) {
+			update();
+		}
 	}
 
 	public void update() {
