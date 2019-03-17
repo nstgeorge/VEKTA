@@ -39,7 +39,7 @@ public class MarketOption implements MenuOption {
 	}
 
 	@Override
-	public void select(Menu menu) {
+	public void onSelect(Menu menu) {
 		Menu sub = new Menu(menu.getPlayer(), new TradeMenuHandle(new BackOption(menu), buying, getTo()));
 		for(Item item : offers.keySet()) {
 			if(getFrom().has(item) && (buying || building.canSell(item))) {

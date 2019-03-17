@@ -11,7 +11,7 @@ import static vekta.Vekta.v;
 public class OreItemSpawner implements ItemGenerator.ItemSpawner {
 	@Override
 	public float getWeight() {
-		return 1;
+		return 3;
 	}
 
 	@Override

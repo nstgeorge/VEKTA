@@ -10,7 +10,7 @@ import static vekta.Vekta.v;
 public class TradeItemSpawner implements ItemGenerator.ItemSpawner {
 	@Override
 	public float getWeight() {
-		return 2;
+		return 5;
 	}
 
 	@Override

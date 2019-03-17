@@ -41,7 +41,7 @@ Sock
 Cardboard Box
 Duffel Bag
 Pylon
-Command Center
+Pedestal
 AI
 Robot
 Razor

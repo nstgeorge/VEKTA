@@ -1,41 +1,49 @@
 package vekta.module;
 
+import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.menu.handle.LandingMenuHandle;
 import vekta.menu.option.RechargeOption;
+import vekta.object.ship.ModularShip;
+import vekta.object.ship.Rechargeable;
 import vekta.terrain.LandingSite;
 import vekta.terrain.settlement.Settlement;
 
-import static java.lang.Math.round;
+import java.util.List;
 
-public class BatteryModule extends ShipModule {
-	private final int capacity;
+import static processing.core.PApplet.round;
+import static processing.core.PApplet.sq;
 
-	private float charge;
+public class BatteryModule extends ShipModule implements Rechargeable {
+	private static float CHARGE_THRESHOLD = .9F;
+	
+	private final ModularShip.Battery battery;
 
 	public BatteryModule() {
-		this(100);
+		this(new ModularShip.Battery(100));
 	}
 
-	public BatteryModule(int capacity) {
-		this.capacity = capacity;
+	public BatteryModule(ModularShip.Battery battery) {
+		this.battery = battery;
 	}
 
-	public int getCapacity() {
-		return capacity;
-	}
-
-	public float getCharge() {
-		return getShip() != null ? getShip().getEnergy() : charge;
-	}
-
-	public float getRatio() {
-		return getCharge() / getCapacity();
+	public ModularShip.Battery getBattery() {
+		return battery;
 	}
 
 	@Override
 	public String getName() {
-		return "Battery v" + ((float)getCapacity() / 100) + " (" + round(getRatio() * 100) + "%)";
+		return "Battery v" + ((float)getBattery().getCapacity() / 100) + " (" + round(getBattery().getRatio() * 100) + "%)";
+	}
+
+	@Override
+	public float getRechargeAmount() {
+		return getBattery().getCapacity() - getBattery().getCharge();
+	}
+
+	@Override
+	public void recharge(float amount) {
+		getBattery().addCharge(amount);
 	}
 
 	@Override
@@ -45,26 +53,24 @@ public class BatteryModule extends ShipModule {
 
 	@Override
 	public boolean isBetter(Module other) {
-		return other instanceof BatteryModule && getCapacity() > ((BatteryModule)other).getCapacity();
+		return other instanceof BatteryModule && getBattery().getCapacity() > ((BatteryModule)other).getBattery().getCapacity();
 	}
 
 	@Override
 	public Module getVariant() {
-		BatteryModule battery = new BatteryModule(chooseInclusive(1, 50) * 10);
-		battery.charge = choose(0, battery.getCapacity());
-		return battery;
+		ModularShip.Battery battery = new ModularShip.Battery(chooseInclusive(1, 50) * 10);
+		battery.setCharge(sq(choose(0, 1)) * battery.getCapacity());
+		return new BatteryModule(battery);
 	}
 
 	@Override
 	public void onInstall() {
-		getShip().setEnergy(getCharge());
-		getShip().setMaxEnergy(getCapacity());
+		getShip().addBattery(getBattery());
 	}
 
 	@Override
 	public void onUninstall() {
-		charge = getShip().getEnergy();
-		getShip().setMaxEnergy(0);
+		getShip().removeBattery(getBattery());
 	}
 
 	@Override
@@ -72,7 +78,7 @@ public class BatteryModule extends ShipModule {
 		if(menu.getHandle() instanceof LandingMenuHandle) {
 			LandingSite site = ((LandingMenuHandle)menu.getHandle()).getSite();
 
-			if(site.getTerrain().isInhabited() && getCharge() <= getCapacity() * .9F) {
+			if(site.getTerrain().isInhabited()) {
 				float price = .2F;
 				for(Settlement settlement : site.getTerrain().getSettlements()) {
 					if(settlement.getFaction().isAlly(menu.getPlayer().getFaction())) {
@@ -80,8 +86,24 @@ public class BatteryModule extends ShipModule {
 						break;
 					}
 				}
-				menu.add(new RechargeOption(getShip(), price));
+
+				ModularShip ship = menu.getPlayer().getShip();
+				List<ModularShip.Battery> shipBatteries = ship.getBatteries();
+				if(shipBatteries.contains(getBattery()) && shipBatteries.get(0) == getBattery()) {
+					// Add recharge option for ship rather than mounted battery
+					if(ship.getEnergy() <= ship.getMaxEnergy() * CHARGE_THRESHOLD) {
+						menu.add(new RechargeOption(menu.getPlayer(), price));
+					}
+				}
+				else if(getBattery().getCharge() <= getBattery().getCapacity() * CHARGE_THRESHOLD) {
+					menu.add(new RechargeOption(menu.getPlayer(), this, price));
+				}
 			}
 		}
+	}
+
+	@Override
+	public void onItemMenu(Item item, Menu menu) {
+		onMenu(menu);
 	}
 }

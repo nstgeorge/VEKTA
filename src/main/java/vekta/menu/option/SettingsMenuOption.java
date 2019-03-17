@@ -13,7 +13,7 @@ public class SettingsMenuOption implements MenuOption {
 	}
 
 	@Override
-	public void select(Menu menu) {
+	public void onSelect(Menu menu) {
 		setContext(new SettingsMenuContext(menu));
 	}
 }

@@ -23,14 +23,17 @@ public class UpgradeOption implements MenuOption {
 		return moneyString(upgrade.getName(), upgrade.getCost(player, settlement));
 	}
 
-	@Override
-	public boolean isEnabled() {
-		return player.getInventory().has(upgrade.getCost(player, settlement));
-	}
+//	@Override
+//	public boolean isEnabled() {
+//		return player.getInventory().has(upgrade.getCost(player, settlement));
+//	}
 
 	@Override
-	public void select(Menu menu) {
-		upgrade.upgrade(player, settlement);
-		menu.close();
+	public void onSelect(Menu menu) {
+//		int cost = upgrade.getCost(player, settlement);
+//		if(player.getInventory().remove(cost)) {
+			upgrade.upgrade(player, settlement);
+			menu.close();
+//		}
 	}
 }

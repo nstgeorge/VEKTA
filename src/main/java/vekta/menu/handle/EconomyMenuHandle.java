@@ -44,6 +44,11 @@ public class EconomyMenuHandle extends MenuHandle {
 		return buying;
 	}
 
+	public void setBuying(Menu menu, boolean buying) {
+		this.buying = buying;
+		onChangeSide.callback(menu, buying);
+	}
+
 	@Override
 	public int getButtonWidth() {
 		return v.width / 3;
@@ -58,6 +63,15 @@ public class EconomyMenuHandle extends MenuHandle {
 	@Override
 	public int getButtonY(int i) {
 		return super.getButtonY(i - 2);
+	}
+
+	@Override
+	public void focus(Menu menu) {
+		super.focus(menu);
+
+		if(buying && menu.size() == 1) {
+			setBuying(menu, false);
+		}
 	}
 
 	@Override
@@ -176,13 +190,10 @@ public class EconomyMenuHandle extends MenuHandle {
 		super.keyPressed(menu, key);
 
 		if(key == KeyBinding.MENU_LEFT) {
-			buying = true;
-			onChangeSide.callback(menu, true);
+			setBuying(menu, true);
 		}
 		else if(key == KeyBinding.MENU_RIGHT) {
-			buying = false;
-			onChangeSide.callback(menu, false);
-
+			setBuying(menu, false);
 		}
 	}
 

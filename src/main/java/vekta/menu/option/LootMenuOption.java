@@ -23,7 +23,7 @@ public class LootMenuOption implements MenuOption {
 	}
 
 	@Override
-	public void select(Menu menu) {
+	public void onSelect(Menu menu) {
 		Menu sub = new Menu(menu.getPlayer(), new LootMenuHandle(new BackOption(menu, () -> {
 			if(them.itemCount() == 0) {
 				menu.remove(this);

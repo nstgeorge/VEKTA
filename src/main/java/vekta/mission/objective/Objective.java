@@ -68,6 +68,9 @@ public abstract class Objective extends Syncable<Objective> implements MissionLi
 						.withColor(MISSION_COLOR);
 				mission.getPlayer().removeListener(this);
 				next.clear();
+				if(!isOptional()) {
+					mission.cancel();
+				}
 			}
 			else if(status == MissionStatus.COMPLETED) {
 				mission.getPlayer().send("Objective completed: " + getDisplayText())

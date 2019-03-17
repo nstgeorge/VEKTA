@@ -70,7 +70,7 @@ public class ItemTradeOption implements MenuOption {
 	}
 
 	@Override
-	public void select(Menu menu) {
+	public void onSelect(Menu menu) {
 		Inventory from = getFrom();
 		Inventory to = getTo();
 		to.remove(price);

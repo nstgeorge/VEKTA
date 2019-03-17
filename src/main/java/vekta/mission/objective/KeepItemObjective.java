@@ -1,6 +1,7 @@
 package vekta.mission.objective;
 
 import vekta.item.Item;
+import vekta.mission.Mission;
 import vekta.object.SpaceObject;
 
 public class KeepItemObjective extends Objective {
@@ -8,8 +9,6 @@ public class KeepItemObjective extends Objective {
 
 	public KeepItemObjective(Item item) {
 		this.item = item;
-		
-		this.optional();/// TODO: complete after becoming the only remaining objective
 	}
 
 	public Item getItem() {
@@ -25,11 +24,23 @@ public class KeepItemObjective extends Objective {
 	public SpaceObject getSpaceObject() {
 		return null;
 	}
-	
+
 	@Override
 	public void onRemoveItem(Item item) {
 		if(item == getItem()) {
 			cancel();
+		}
+	}
+
+	@Override
+	public void onMissionStatus(Mission mission) {
+		if(getMissions().contains(mission)) {
+			for(Objective objective : mission.getObjectives()) {
+				if(!objective.getStatus().isDone() && objective != this) {
+					return;
+				}
+			}
+			complete();
 		}
 	}
 }

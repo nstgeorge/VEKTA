@@ -1,18 +1,21 @@
 package vekta.menu.option;
 
 import vekta.item.EconomyItem;
+import vekta.item.Inventory;
+import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.menu.handle.EconomyMenuHandle;
-
-import java.util.List;
+import vekta.terrain.settlement.Settlement;
 
 import static vekta.Vekta.setContext;
 
 public class EstateMenuOption implements MenuOption {
-	private final List<EconomyItem> items;
+	private final Settlement settlement;
+	private final Inventory inventory;
 
-	public EstateMenuOption(List<EconomyItem> items) {
-		this.items = items;
+	public EstateMenuOption(Settlement settlement, Inventory inventory) {
+		this.settlement = settlement;
+		this.inventory = inventory;
 	}
 
 	@Override
@@ -20,12 +23,16 @@ public class EstateMenuOption implements MenuOption {
 		return "Real Estate";
 	}
 
-	public List<EconomyItem> getItems() {
-		return items;
+	public Settlement getSettlement() {
+		return settlement;
+	}
+
+	public Inventory getInventory() {
+		return inventory;
 	}
 
 	@Override
-	public void select(Menu menu) {
+	public void onSelect(Menu menu) {
 		EconomyMenuHandle handle = new EconomyMenuHandle(new BackOption(menu), menu.getPlayer().getInventory(), this::update);
 		Menu sub = new Menu(menu.getPlayer(), handle);
 		update(sub, handle.isBuying());
@@ -33,14 +40,24 @@ public class EstateMenuOption implements MenuOption {
 	}
 
 	private void update(Menu sub, boolean buying) {
+		Inventory inv = buying ? getInventory() : sub.getPlayer().getInventory();
+
 		sub.clear();
-		for(EconomyItem item : getItems()) {
-			sub.add(new EconomyItemOption(
-					sub.getPlayer().getInventory(),
-					item,
-					0,
-					buying,
-					this::update));
+		for(Item item : inv) {
+			if(item instanceof EconomyItem) {
+				EconomyItem economyItem = (EconomyItem)item;
+				if(economyItem.getEconomy() == getSettlement().getEconomy()) {
+					sub.add(new EconomyItemOption(
+							sub.getPlayer().getInventory(),
+							economyItem,
+							0,
+							buying,
+							(m, b) -> {
+								inv.remove(item);
+								update(m, b);
+							}));
+				}
+			}
 		}
 		sub.addDefault();
 	}

@@ -14,7 +14,7 @@ public class ModuleItemSpawner implements ItemGenerator.ItemSpawner {
 
 	@Override
 	public float getWeight() {
-		return 1;
+		return .5F;
 	}
 
 	@Override

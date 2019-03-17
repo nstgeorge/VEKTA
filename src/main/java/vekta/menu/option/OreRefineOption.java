@@ -39,7 +39,7 @@ public class OreRefineOption implements MenuOption {
 	}
 
 	@Override
-	public void select(Menu menu) {
+	public void onSelect(Menu menu) {
 		if(inventory.remove(getItem())) {
 			selected = true;
 			inventory.add(getItem().getRefined());

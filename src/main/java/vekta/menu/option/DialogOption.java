@@ -25,7 +25,7 @@ public class DialogOption implements MenuOption {
 	}
 
 	@Override
-	public void select(Menu menu) {
+	public void onSelect(Menu menu) {
 		menu.remove(this);
 		
 		boolean useMenuDefault = menu.getHandle() instanceof DialogMenuHandle;

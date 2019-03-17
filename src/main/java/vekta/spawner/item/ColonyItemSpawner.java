@@ -8,7 +8,7 @@ import vekta.spawner.ItemGenerator;
 public class ColonyItemSpawner implements ItemGenerator.ItemSpawner {
 	@Override
 	public float getWeight() {
-		return .2F;
+		return .01F; // Very rare to find naturally
 	}
 
 	@Override
@@ -22,7 +22,7 @@ public class ColonyItemSpawner implements ItemGenerator.ItemSpawner {
 	}
 
 	public static Item randomColonyItem() {
-		// TODO: add more items
+		// TODO: add more colony-related items
 		return new ColonyItem();
 	}
 }

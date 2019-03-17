@@ -1,14 +1,9 @@
 package vekta.menu.option;
 
-import com.google.common.collect.Lists;
-import vekta.Faction;
 import vekta.Player;
 import vekta.menu.Menu;
 import vekta.menu.handle.MenuHandle;
 
-import java.util.List;
-
-import static vekta.Vekta.getWorld;
 import static vekta.Vekta.setContext;
 
 public class InternetMenuOption implements MenuOption {
@@ -31,10 +26,10 @@ public class InternetMenuOption implements MenuOption {
 	}
 
 	@Override
-	public void select(Menu menu) {
+	public void onSelect(Menu menu) {
 		Menu sub = new Menu(menu.getPlayer(), new MenuHandle(new BackOption(menu)));
 		
-		sub.add(new BondMenuOption(menu.getPlayer().getInventory()));
+		sub.add(new BondMenuOption());
 		
 		sub.addDefault();
 		setContext(sub);

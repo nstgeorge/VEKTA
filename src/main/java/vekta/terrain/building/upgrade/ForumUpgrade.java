@@ -2,30 +2,31 @@ package vekta.terrain.building.upgrade;
 
 import vekta.Player;
 import vekta.economy.TemporaryModifier;
-import vekta.spawner.WorldGenerator;
-import vekta.terrain.building.MarketBuilding;
+import vekta.terrain.building.ForumBuilding;
 import vekta.terrain.settlement.Settlement;
 
-public class MarketUpgrade implements SettlementUpgrade {
+import static vekta.Vekta.v;
+
+public class ForumUpgrade implements SettlementUpgrade {
 	@Override
 	public String getName() {
-		return "Add Marketplace";
+		return "Build Economic Forum";
 	}
 
 	@Override
 	public boolean isAvailable(Player player, Settlement settlement) {
-		return settlement.find(MarketBuilding.class) == null;
+		return settlement.find(ForumBuilding.class) == null;
 	}
 
 	@Override
 	public int getCost(Player player, Settlement settlement) {
-		return 200;
+		return 250;
 	}
 
 	@Override
 	public void upgrade(Player player, Settlement settlement) {
-		settlement.add(WorldGenerator.createMarket(1));
-
-		settlement.getEconomy().addModifier(new TemporaryModifier("Efficient Markets", .5F, .05F));
+		settlement.add(new ForumBuilding(settlement, (int)v.random(3, 6)));
+		
+		settlement.getEconomy().addModifier(new TemporaryModifier("Economic Infrastructure", 1, .1F));
 	}
 }

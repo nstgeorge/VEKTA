@@ -3,11 +3,12 @@ package vekta.economy;
 public class TemporaryModifier implements ProductivityModifier {
 	private final String name;
 	private float amount;
-	private float decay;
+	private final float decay;
 
 	public TemporaryModifier(String name, float amount, float decay) {
 		this.name = name;
 		this.amount = amount;
+		this.decay = decay;
 	}
 
 	@Override
@@ -27,20 +28,14 @@ public class TemporaryModifier implements ProductivityModifier {
 		return decay;
 	}
 
-	public void setDecay(float decay) {
-		this.decay = decay;
-	}
-
 	@Override
 	public float updateModifier(Economy economy) {
 		float sign = Math.signum(amount);
 		float abs = amount * sign - decay;
 		if(abs <= 0) {
 			economy.removeModifier(this);
-			return 0;
+			return amount = 0;
 		}
-		
-		amount = abs * sign;
-		return amount;
+		return amount = abs * sign;
 	}
 }

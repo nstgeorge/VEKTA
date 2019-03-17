@@ -26,7 +26,7 @@ public class BackOption implements MenuOption {
 	}
 
 	@Override
-	public void select(Menu menu) {
+	public void onSelect(Menu menu) {
 		setContext(parent);
 		if(callback != null) {
 			callback.callback();

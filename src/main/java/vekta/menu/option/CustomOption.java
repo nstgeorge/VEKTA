@@ -15,7 +15,7 @@ public class CustomOption implements MenuOption {
 	}
 
 	public CustomOption(String name, MenuOption option) {
-		this(name, option::select);
+		this(name, option::onSelect);
 	}
 
 	public CustomOption(String name, MenuAction action) {
@@ -45,7 +45,7 @@ public class CustomOption implements MenuOption {
 	}
 
 	@Override
-	public void select(Menu menu) {
+	public void onSelect(Menu menu) {
 		action.select(menu);
 		if(remove) {
 			menu.remove(this);

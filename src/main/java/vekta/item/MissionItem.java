@@ -4,6 +4,8 @@ import vekta.Faction;
 import vekta.Player;
 import vekta.mission.Mission;
 import vekta.mission.MissionIssuer;
+import vekta.mission.objective.KeepItemObjective;
+import vekta.mission.objective.Objective;
 import vekta.object.SpaceObject;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.spawner.FactionGenerator;
@@ -11,6 +13,7 @@ import vekta.spawner.FactionGenerator;
 import java.io.Serializable;
 
 import static vekta.Vekta.getWorld;
+import static vekta.Vekta.v;
 
 public class MissionItem extends Item implements MissionIssuer {
 	private final MissionProvider provider;
@@ -22,7 +25,7 @@ public class MissionItem extends Item implements MissionIssuer {
 	public MissionItem(String name, Mission mission) {
 		this(name, player -> mission);
 	}
-	
+
 	public MissionItem(String name, MissionProvider provider) {
 		super(name, ItemType.MISSION);
 
@@ -31,7 +34,21 @@ public class MissionItem extends Item implements MissionIssuer {
 
 	public Mission createMission(Player player) {
 		activated = true;
-		return provider.createMission(player);
+		Mission mission = provider.createMission(player);
+		Objective objective = new KeepItemObjective(this);
+		if(v.chance(.1F)) {
+			objective.optional();
+		}
+		mission.add(objective);
+		return mission;
+	}
+
+	@Override
+	public Faction getFaction() {
+		if(faction == null) {
+			faction = FactionGenerator.randomFaction();
+		}
+		return faction;
 	}
 
 	@Override
@@ -40,14 +57,6 @@ public class MissionItem extends Item implements MissionIssuer {
 		if(!activated) {
 			createMission(player).start();
 		}
-	}
-
-	@Override
-	public Faction getFaction() {
-		if(faction == null){
-			faction = FactionGenerator.randomFaction();
-		}
-		return faction;
 	}
 
 	@Override

@@ -19,7 +19,7 @@ public class RequestDialogSpawner implements DialogGenerator.DialogSpawner {
 
 	@Override
 	public void setup(Player player, Dialog dialog) {
-		dialog.add(new CustomOption("Learn More", menu -> {
+		dialog.add(new CustomOption("(Learn More)", menu -> {
 			Menu sub = new Menu(menu.getPlayer(), new MissionMenuHandle(menu.getDefault()));
 			sub.add(new MissionOption(MissionGenerator.createMission(player, dialog.getPerson())));
 			sub.addDefault();

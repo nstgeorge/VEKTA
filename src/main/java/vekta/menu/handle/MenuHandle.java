@@ -17,6 +17,8 @@ import static vekta.Vekta.*;
  * Default inject renderer implementation; draws buttons and select text
  */
 public class MenuHandle implements Serializable {
+	private static final int ITEMS_BEFORE_SCROLL = 5; // Number of items before menu starts scrolling
+	
 	private final MenuOption defaultOption;
 
 	// Internal menu reference for item scrolling (evaluating this approach)
@@ -47,16 +49,13 @@ public class MenuHandle implements Serializable {
 	}
 
 	public int getButtonY(int i) {
-		//		return v.height / 2 - 64 + i * getSpacing();
-
 		// Scroll items 
-		int offset = 0;
-		int extraOptions = menu.size() - 5;
+		int y = v.height / 2 - 64 + i * getSpacing();
+		int extraOptions = menu.size() - ITEMS_BEFORE_SCROLL;
 		if(extraOptions > 0) {
-			offset -= menu.getIndex() * getSpacing() * extraOptions / menu.size();
+			y -= menu.getIndex() * getSpacing() * extraOptions / menu.size();
 		}
-
-		return v.height / 2 - 64 + i * getSpacing() + offset;
+		return y;
 	}
 
 	public String getSelectVerb() {
@@ -72,9 +71,6 @@ public class MenuHandle implements Serializable {
 
 	public void beforeDraw() {
 		v.clear();
-		//		v.camera();
-		//		v.noLights();
-		//		v.hint(DISABLE_DEPTH_TEST);
 	}
 
 	public void render(Menu menu) {

@@ -79,7 +79,7 @@ public class EconomyItemOption implements MenuOption {
 	}
 
 	@Override
-	public void select(Menu menu) {
+	public void onSelect(Menu menu) {
 		if(buying && getInventory().remove(getPrice())) {
 			getInventory().add(getItem());
 			menu.getPlayer().setBuyPrice(getItem(), getPrice());

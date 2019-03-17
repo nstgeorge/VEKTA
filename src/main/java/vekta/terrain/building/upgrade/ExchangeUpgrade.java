@@ -2,31 +2,29 @@ package vekta.terrain.building.upgrade;
 
 import vekta.Player;
 import vekta.economy.TemporaryModifier;
-import vekta.terrain.building.EconomyBuilding;
+import vekta.terrain.building.ExchangeBuilding;
 import vekta.terrain.settlement.Settlement;
 
-import static vekta.Vekta.v;
-
-public class EconomyUpgrade implements SettlementUpgrade {
+public class ExchangeUpgrade implements SettlementUpgrade {
 	@Override
 	public String getName() {
-		return "Build Economic Forum";
+		return "Build Financial Exchange";
 	}
 
 	@Override
 	public boolean isAvailable(Player player, Settlement settlement) {
-		return settlement.find(EconomyBuilding.class) == null;
+		return settlement.find(ExchangeBuilding.class) == null;
 	}
 
 	@Override
 	public int getCost(Player player, Settlement settlement) {
-		return 250;
+		return 200;
 	}
 
 	@Override
 	public void upgrade(Player player, Settlement settlement) {
-		settlement.add(new EconomyBuilding(settlement, (int)v.random(3, 6)));
-		
-		settlement.getEconomy().addModifier(new TemporaryModifier("Economic Infrastructure", 1, .1F));
+		settlement.add(new ExchangeBuilding());
+
+		settlement.getEconomy().addModifier(new TemporaryModifier("Financial Influx", 1, .2F));
 	}
 }

@@ -52,6 +52,6 @@ public class RefineryBuilding implements SettlementPart {
 			}
 			sub.addDefault();
 			setContext(sub);
-		}));
+		}).withRemoval());
 	}
 }

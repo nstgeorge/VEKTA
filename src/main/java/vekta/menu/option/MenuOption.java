@@ -17,5 +17,5 @@ public interface MenuOption extends Serializable {
 		return true;
 	}
 
-	void select(Menu menu);
+	void onSelect(Menu menu);
 }

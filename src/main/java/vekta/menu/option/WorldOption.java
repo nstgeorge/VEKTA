@@ -23,7 +23,7 @@ public class WorldOption implements MenuOption {
 	}
 
 	@Override
-	public void select(Menu menu) {
+	public void onSelect(Menu menu) {
 		setContext(provider.provide());
 		applyContext();
 	}

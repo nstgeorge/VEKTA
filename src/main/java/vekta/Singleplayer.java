@@ -23,6 +23,7 @@ import vekta.object.ship.SpaceStation;
 import vekta.overlay.singleplayer.PlayerOverlay;
 import vekta.person.Person;
 import vekta.sound.SoundGroup;
+import vekta.spawner.EconomyGenerator;
 import vekta.spawner.EventGenerator;
 import vekta.spawner.MissionGenerator;
 import vekta.spawner.WorldGenerator;
@@ -171,10 +172,10 @@ public class Singleplayer implements World, PlayerListener {
 		playerShip.addModule(new AntennaModule(1));
 		playerShip.addModule(new TelescopeModule(.5F));
 		playerShip.addModule(new DrillModule(2));
-		playerShip.addModule(new HyperdriveModule(.5F));
+		playerShip.addModule(new HyperdriveModule(1));
 		playerShip.addModule(new ActiveTCSModule(2));
+		playerShip.getInventory().add(new ModuleItem(new GeneratorModule()));
 		playerShip.getInventory().add(new ModuleItem(new WormholeModule()));
-		playerShip.getInventory().add(new ModuleItem(new BatteryModule()));
 		playerShip.getInventory().add(new ModuleItem(new TorpedoModule(2)));
 		playerShip.getInventory().add(new ModuleItem(new TractorBeamModule(1)));
 		playerShip.getInventory().add(new ModuleItem(new StructuralModule(3, 1)));
@@ -215,7 +216,7 @@ public class Singleplayer implements World, PlayerListener {
 			save(AUTOSAVE_FILE);
 		}
 	}
-	
+
 	@Override
 	public void render() {
 		ModularShip playerShip = getPlayerShip();
@@ -276,7 +277,7 @@ public class Singleplayer implements World, PlayerListener {
 				s.updateTargets();
 			}
 
-			if(cleanup) {
+			if(cleanup && !s.isPersistent()) {
 				// Clean up distant objects
 				float despawnRadius = WorldGenerator.getRadius(s.getDespawnLevel());
 				if(playerShip.getPosition().sub(s.getPosition()).magSq() >= sq(despawnRadius)) {
@@ -354,9 +355,14 @@ public class Singleplayer implements World, PlayerListener {
 		}
 
 		if(economyCt.cycle()) {
-			for(Faction faction : state.getFactions()) {
-				faction.getEconomy().update();
+			List<Faction> factions = state.getFactions();
+			if(!factions.isEmpty()) {
+				EconomyGenerator.updateFaction(v.random(factions));
+				for(Faction faction : factions) {
+					faction.getEconomy().update();
+				}
 			}
+			getPlayer().getFaction().getEconomy().update();
 		}
 
 		prevLevel = level;

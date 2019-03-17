@@ -26,11 +26,12 @@ public class HabitableTerrain extends Terrain {
 		return Collections.singletonList(getSettlement());
 	}
 
-	public void changeSettlement(Settlement settlement) {
+	public void changeSettlement(LandingSite site, Settlement settlement) {
 		if(settlement == null) {
 			throw new RuntimeException("Settlement cannot be null");
 		}
 		this.settlement = settlement;
+		settlement.setup(site);
 	}
 
 	@Override

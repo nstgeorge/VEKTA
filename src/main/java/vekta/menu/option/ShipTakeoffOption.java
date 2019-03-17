@@ -21,7 +21,7 @@ public class ShipTakeoffOption implements MenuOption {
 	}
 
 	@Override
-	public void select(Menu menu) {
+	public void onSelect(Menu menu) {
 		setContext(world);
 //		applyContext();
 		site.takeoff();

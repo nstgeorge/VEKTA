@@ -64,7 +64,7 @@ public class LearnAboutObjective extends Objective {
 					complete();
 				}
 				
-				menu.add(new DialogOption("Ask about " + getTopic(), next));
+				menu.add(new DialogOption("(Ask about " + getTopic() + ")", next));
 			}
 		}
 	}

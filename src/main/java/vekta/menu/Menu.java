@@ -46,7 +46,7 @@ public class Menu implements Context {
 	}
 
 	public MenuOption getCursor() {
-		return options.get(index);
+		return get(getIndex());
 	}
 
 	public List<MenuOption> getOptions() {
@@ -70,6 +70,9 @@ public class Menu implements Context {
 	}
 
 	public MenuOption get(int i) {
+		if(i > size()) {
+			i = size() - 1;
+		}
 		return options.get(i);
 	}
 
@@ -97,6 +100,9 @@ public class Menu implements Context {
 		if(options.remove(item)) {
 			if(size() == 0) {
 				close();
+			}
+			else if(index >= size()) {
+				index = size() - 1;
 			}
 			return true;
 		}
@@ -131,7 +137,7 @@ public class Menu implements Context {
 	}
 
 	public void select(MenuOption option) {
-		option.select(this);
+		option.onSelect(this);
 		for(MenuListener listener : listeners) {
 			listener.onSelect(option);
 		}
@@ -156,14 +162,9 @@ public class Menu implements Context {
 
 	@Override
 	public void focus() {
-		// If menu changed, ensure that the index is valid
-		if(index >= size()) {
-			index = size() - 1;
-		}
-
 		handle.focus(this);
 		if(autoOption != null) {
-			autoOption.select(this);
+			select(autoOption);
 			autoOption = null;
 		}
 		for(MenuListener listener : listeners) {
@@ -192,7 +193,7 @@ public class Menu implements Context {
 
 	public void close() {
 		if(handle.getDefault() != null) {
-			handle.getDefault().select(this);
+			select(handle.getDefault());
 		}
 	}
 }

@@ -68,8 +68,10 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 			throw new RuntimeException("Settlement faction cannot be null");
 		}
 		if(this.faction != null) {
+//			getEconomy().removeModifier(this.faction);
 			this.faction.getEconomy().removeModifier(this);
 		}
+//		getEconomy().addModifier(faction);
 		faction.getEconomy().addModifier(this);
 		this.faction = faction;
 		syncChanges();
@@ -110,38 +112,24 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 	}
 
 	public int getPopulation() {
-		//		return population;
 		return ceil(getEconomy().getValue() * POPULATION_PER_VALUE);
 	}
-
-	//	public void setPopulation(int population) {
-	//		this.population = population;
-	//	}
-	//
-	//	public void addPopulation(int amount) {
-	//		setPopulation(getPopulation() + amount);
-	//	}
-	//
-	//	public void removePopulation(int amount) {
-	//		setPopulation(max(0, getPopulation() - amount));
-	//	}
 
 	public List<SettlementPart> getParts() {
 		return parts;
 	}
 
 	public void add(SettlementPart part) {
-		boolean added = false;
 		for(SettlementPart existing : getParts()) {
 			if(existing.addIfRelevant(part)) {
-				added = true;
-				break;
+				syncChanges();
+				return;
 			}
 		}
-		if(!added && !parts.contains(part)) {
+		if(!parts.contains(part)) {
 			parts.add(part);
+			syncChanges();
 		}
-		syncChanges();
 	}
 
 	@Override
@@ -191,7 +179,7 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 			part.setup(site);
 		}
 	}
-	
+
 	public void onSetupEconomy(Economy economy) {
 	}
 

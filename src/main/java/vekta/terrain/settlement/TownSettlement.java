@@ -22,7 +22,7 @@ public class TownSettlement extends Settlement {
 
 		add(new CapitalBuilding(this));
 
-		add(new EconomyBuilding(this, (int)(v.random(5, 10))));
+		add(new ForumBuilding(this, (int)(v.random(5, 10))));
 
 		List<MarketBuilding> buildings = WorldGenerator.randomMarkets(2, .1F);
 		if(!buildings.isEmpty()) {

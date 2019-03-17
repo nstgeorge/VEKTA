@@ -21,7 +21,7 @@ public class PlayerShip extends ModularShip {
 		addModule(new EngineModule(1));
 		addModule(new RCSModule(1));
 		addModule(new TargetingModule());
-		addModule(new BatteryModule(100));
+		addModule(new BatteryModule(new Battery(100)));
 		addModule(new PassiveTCSModule(1));
 		addModule(new CannonModule());
 
@@ -42,10 +42,10 @@ public class PlayerShip extends ModularShip {
 	public void onUpdate(RenderLevel level) {
 		super.onUpdate(level);
 
-//				// Test particle system
-//				if(getRenderLevel().isVisibleTo(level)) {
-//					emitter.update(getHeading().rotate(HALF_PI));
-//				}
+		//				// Test particle system
+		//				if(getRenderLevel().isVisibleTo(level)) {
+		//					emitter.update(getHeading().rotate(HALF_PI));
+		//				}
 	}
 
 	@Override

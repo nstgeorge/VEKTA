@@ -38,20 +38,28 @@ public class ColonyItem extends Item {
 				menu.getPlayer().getInventory().remove(this);
 				Faction faction = getFaction() != null ? getFaction() : menu.getPlayer().getFaction();
 				menu.add(new CustomOption("Colonize", m -> {
+					// Set up colony settlement
 					ColonySettlement settlement = new ColonySettlement(faction);
 					settlement.setOverview("You land close to your recently established colony.");
 					settlement.clear();
 					settlement.add(new CapitalBuilding(settlement));
-					((HabitableTerrain)terrain).changeSettlement(settlement);
+					((HabitableTerrain)terrain).changeSettlement(site, settlement);
+					
+					// Ensure that the colony object doesn't despawn
+					site.getParent().setPersistent(true);
+					
+					// Remove other settlement menu options
 					for(int i = 0; i < m.size(); i++) {
 						MenuOption other = menu.get(i);
 						if(other instanceof SettlementOption) {
 							m.remove(other);
 						}
 					}
+					
+					// Add colony to menu
 					MenuOption option = new SettlementOption(settlement);
 					m.add(0, option);
-					option.select(m);
+					m.select(option);
 				}).withColor(faction.getColor()).withRemoval());
 			}
 		}

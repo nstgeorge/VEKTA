@@ -3,6 +3,7 @@ package vekta.menu.option;
 import vekta.Player;
 import vekta.Resources;
 import vekta.menu.Menu;
+import vekta.menu.handle.MenuHandle;
 import vekta.terrain.building.upgrade.SettlementUpgrade;
 import vekta.terrain.settlement.Settlement;
 
@@ -25,8 +26,8 @@ public class UpgradeMenuOption implements MenuOption {
 	}
 
 	@Override
-	public void select(Menu menu) {
-		Menu sub = new Menu(menu.getPlayer(), menu.getHandle());
+	public void onSelect(Menu menu) {
+		Menu sub = new Menu(menu.getPlayer(), new MenuHandle(new BackOption(menu)));
 		updateMenu(sub, menu);
 		sub.addSelectListener(option -> updateMenu(sub, menu));
 		setContext(sub);
@@ -39,6 +40,6 @@ public class UpgradeMenuOption implements MenuOption {
 				sub.add(new UpgradeOption(player, settlement, upgrade));
 			}
 		}
-		sub.add(new BackOption(parent));
+		sub.addDefault();
 	}
 }

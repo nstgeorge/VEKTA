@@ -136,7 +136,7 @@ public class Dialog implements Serializable {
 
 		if(hasNext()) {
 			// Add custom responses leading to next dialog
-			List<String> responses = !getResponses().isEmpty() ? getResponses() : Collections.singletonList("Next");
+			List<String> responses = !getResponses().isEmpty() ? getResponses() : Collections.singletonList("(Next)");
 			for(String response : responses) {
 				menu.add(new DialogOption(response, getNext()));
 			}
@@ -144,7 +144,7 @@ public class Dialog implements Serializable {
 		else {
 			// Add custom responses for exiting dialog
 			for(String response : getResponses()) {
-				menu.add(new CustomOption(response, menu.getDefault()::select));
+				menu.add(new CustomOption(response, menu.getDefault()));
 			}
 		}
 
@@ -153,7 +153,7 @@ public class Dialog implements Serializable {
 			Collections.shuffle(menu.getOptions());
 		}
 		else {
-			menu.add(new CustomOption("Back", menu.getDefault()::select));
+			menu.add(new CustomOption("Back", menu.getDefault()));
 			//			menu.addDefault();
 		}
 

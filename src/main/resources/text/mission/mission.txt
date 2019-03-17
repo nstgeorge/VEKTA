@@ -21,6 +21,7 @@ A Shady {mission_noun}
 A Better {mission_noun}
 A Real {mission_noun}
 A True {mission_noun}
+An Odd {mission_noun}
 An Undeniable {mission_noun}
 The Latest {mission_noun}
 The Next {mission_noun}

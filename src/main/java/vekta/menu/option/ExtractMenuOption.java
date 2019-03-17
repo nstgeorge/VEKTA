@@ -27,7 +27,7 @@ public class ExtractMenuOption implements MenuOption {
 	}
 
 	@Override
-	public void select(Menu menu) {
+	public void onSelect(Menu menu) {
 		Inventory loot = new Inventory();
 		Menu sub = new Menu(menu.getPlayer(), new LootMenuHandle(new BackOption(menu), loot));
 		int ct = (int)v.random(amount) + 1;

@@ -2,7 +2,6 @@ package vekta.menu.option;
 
 import com.google.common.collect.Lists;
 import vekta.Faction;
-import vekta.item.Inventory;
 import vekta.menu.Menu;
 import vekta.menu.handle.EconomyMenuHandle;
 import vekta.spawner.item.BondItemSpawner;
@@ -15,11 +14,11 @@ import static vekta.Vekta.setContext;
 public class BondMenuOption implements MenuOption {
 	private final List<Faction> factions;
 
-	public BondMenuOption(Inventory inv) {
-		this(inv, Lists.newArrayList(getWorld().findObjects(Faction.class)));
+	public BondMenuOption() {
+		this(Lists.newArrayList(getWorld().findObjects(Faction.class)));
 	}
 
-	public BondMenuOption(Inventory inv, List<Faction> factions) {
+	public BondMenuOption(List<Faction> factions) {
 		this.factions = factions;
 	}
 
@@ -33,7 +32,7 @@ public class BondMenuOption implements MenuOption {
 	}
 
 	@Override
-	public void select(Menu menu) {
+	public void onSelect(Menu menu) {
 		EconomyMenuHandle handle = new EconomyMenuHandle(new BackOption(menu), menu.getPlayer().getInventory(), this::update);
 		Menu sub = new Menu(menu.getPlayer(), handle);
 		update(sub, handle.isBuying());

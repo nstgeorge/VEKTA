@@ -17,6 +17,7 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 
 	protected final PVector[] trail;
 
+	private boolean persistent;
 	private boolean destroyed;
 
 	protected final PVector position = new PVector();
@@ -213,6 +214,14 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	 * Invoked when colliding with SpaceObject `s`
 	 */
 	public void onCollide(SpaceObject s) {
+	}
+
+	public boolean isPersistent() {
+		return persistent;
+	}
+
+	public void setPersistent(boolean persistent) {
+		this.persistent = persistent;
 	}
 
 	public final boolean isDestroyed() {

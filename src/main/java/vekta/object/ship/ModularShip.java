@@ -1,5 +1,6 @@
 package vekta.object.ship;
 
+import com.google.common.collect.ImmutableMap;
 import processing.core.PVector;
 import vekta.*;
 import vekta.context.World;
@@ -16,12 +17,20 @@ import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 import vekta.terrain.LandingSite;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static vekta.Vekta.*;
 
-public abstract class ModularShip extends Ship implements ModuleUpgradeable, PlayerListener {
+public abstract class ModularShip extends Ship implements ModuleUpgradeable, PlayerListener, Rechargeable {
+	private static final Map<KeyBinding, Class<? extends MenuOption>> SHORTCUT_MAP = ImmutableMap.of(
+			KeyBinding.SHIP_MISSIONS, MissionMenuOption.class,
+			KeyBinding.SHIP_LOADOUT, LoadoutMenuOption.class,
+			KeyBinding.SHIP_INTERNET, InternetMenuOption.class
+	);
+
 	private static final float ENERGY_TIME_SCALE = 1e-4F;
 	private static final float ENERGY_HEAT_SCALE = 1;
 
@@ -32,6 +41,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	private float turn;
 
 	private boolean overheated;
+	private final List<Battery> batteries = new ArrayList<>();
 	private float energy;
 	private float maxEnergy;
 
@@ -111,8 +121,35 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		return overheated;
 	}
 
+	public List<Battery> getBatteries() {
+		return batteries;
+	}
+
+	public boolean hasBattery(Battery battery) {
+		return batteries.contains(battery);
+	}
+
+	public void addBattery(Battery battery) {
+		if(!hasBattery(battery)) {
+			batteries.add(battery);
+			maxEnergy += battery.getCapacity();
+			energy += battery.getCharge();
+			battery.setCharge(0);
+		}
+	}
+
+	public void removeBattery(Battery battery) {
+		if(hasBattery(battery)) {
+			batteries.remove(battery);
+			maxEnergy -= battery.getCapacity();
+			float chargeTransfer = max(0, energy - battery.getCapacity());
+			energy -= chargeTransfer;
+			battery.setCharge(chargeTransfer);
+		}
+	}
+
 	public boolean hasEnergy() {
-		return energy > 0 && !isOverheated();
+		return getEnergy() > 0 && !isOverheated();
 	}
 
 	public float getEnergy() {
@@ -121,13 +158,23 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	public void setEnergy(float energy) {
 		this.energy = energy;
-		if(this.energy > maxEnergy) {
-			this.energy = maxEnergy;
-		}
 	}
 
-	public void addEnergy(float amount) {
-		setEnergy(energy + amount);
+	public float getMaxEnergy() {
+		return maxEnergy;
+	}
+
+	@Override
+	public float getRechargeAmount() {
+		return getMaxEnergy() - getEnergy();
+	}
+
+	@Override
+	public void recharge(float amount) {
+		energy += amount;
+		if(energy > maxEnergy) {
+			energy = maxEnergy;
+		}
 	}
 
 	public boolean consumeEnergyOverTime(float amount) {
@@ -144,26 +191,13 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		}
 
 		addHeat(amount * ENERGY_HEAT_SCALE / ENERGY_TIME_SCALE);
-		energy -= amount;
-		if(energy < 0) {
-			energy = 0;
+		setEnergy(getEnergy() - amount);
+		if(!hasEnergy()) {
 			landing = true;
 			return false;
 		}
 		return true;
 	}
-
-	public float getMaxEnergy() {
-		return maxEnergy;
-	}
-
-	public void setMaxEnergy(float amount) {
-		maxEnergy += amount;
-	}
-
-	//	public void recharge() {
-	//		setEnergy(getMaxEnergy());
-	//	}
 
 	@Override
 	public List<Module> getModules() {
@@ -304,7 +338,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			site.getTerrain().setupLandingMenu(menu);
 			menu.add(new SurveyOption(site));
 			menu.addDefault();
-//			Resources.stopSound("engine");
+			//			Resources.stopSound("engine");
 			Resources.playSound("land");
 			setContext(menu);
 
@@ -314,7 +348,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	@Override
 	public void doDock(SpaceObject s) {
-//		Resources.stopSound("engine");
+		//		Resources.stopSound("engine");
 		if(hasController()) {
 			if(s instanceof Ship) {
 				Menu menu = new Menu(getController(), new ObjectMenuHandle(new ShipUndockOption(this, getWorld()), s));
@@ -322,7 +356,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 				menu.addDefault();
 				setContext(menu);
 			}
-			
+
 			getController().emit(PlayerEvent.DOCK, s);
 		}
 	}
@@ -395,15 +429,15 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			module.onKeyPress(key);
 		}
 
-		// TODO: generalize menu shortcuts
-		if(key == KeyBinding.SHIP_MENU || key == KeyBinding.SHIP_MISSIONS || key == KeyBinding.SHIP_LOADOUT) {
+		Class shortcutType = SHORTCUT_MAP.get(key);
+		if(key == KeyBinding.SHIP_MENU || shortcutType != null) {
 			Menu menu = openShipMenu();
-			for(MenuOption option : menu.getOptions()) {
-				boolean autoSelect = (key == KeyBinding.SHIP_MISSIONS && option instanceof MissionMenuOption)
-						|| (key == KeyBinding.SHIP_LOADOUT && option instanceof LoadoutMenuOption);
-				if(autoSelect) {
-					option.select(menu);
-					break;
+			if(shortcutType != null) {
+				for(MenuOption option : menu.getOptions()) {
+					if(shortcutType.isInstance(option)) {
+						menu.select(option);
+						break;
+					}
 				}
 			}
 		}
@@ -419,9 +453,45 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	@Override
 	public void onSync(SpaceObject data) {
 		super.onSync(data);
-		
+
 		if(isRemote()) {
 			controller = null;
+		}
+	}
+
+	/**
+	 * Battery abstraction for modular ships.
+	 */
+	public static final class Battery implements Serializable {
+		private final int capacity;
+
+		private float charge;
+
+		public Battery(int capacity) {
+			this.capacity = capacity;
+		}
+
+		public int getCapacity() {
+			return capacity;
+		}
+
+		public float getCharge() {
+			return charge;
+		}
+
+		public void setCharge(float charge) {
+			this.charge = charge;
+		}
+
+		public void addCharge(float amount) {
+			charge += amount;
+			if(charge > capacity) {
+				charge = capacity;
+			}
+		}
+
+		public float getRatio() {
+			return getCharge() / getCapacity();
 		}
 	}
 }  

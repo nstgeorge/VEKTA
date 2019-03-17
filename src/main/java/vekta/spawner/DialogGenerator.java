@@ -26,7 +26,7 @@ public final class DialogGenerator {
 			dialog.then(v.random(nextList));
 		}
 	}
-	
+
 	public static void setupPlayerDialog(Player player, Dialog dialog) {
 		DialogSpawner spawner = SPAWNERS.get(dialog.getType());
 		if(spawner != null) {
@@ -35,7 +35,10 @@ public final class DialogGenerator {
 	}
 
 	public static Dialog randomVisitDialog(Player player, Person person) {
-		if(person.isBusy()) {
+		if(person.getOpinion(player.getFaction()).isNegative()) {
+			return person.createDialog("busy");
+		}
+		else if(person.isBusy()) {
 			return person.createDialog("greeting").then("busy");
 		}
 		else {

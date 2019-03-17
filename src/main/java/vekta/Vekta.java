@@ -14,6 +14,8 @@ import vekta.menu.option.ExitGameOption;
 import vekta.menu.option.SettingsMenuOption;
 import vekta.menu.option.WorldOption;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.LogManager;
@@ -278,6 +280,10 @@ public class Vekta extends PApplet {
 
 	public <T> T random(List<T> list) {
 		return list.get((int)random(list.size()));
+	}
+
+	public <T> T random(Collection<T> collection) {
+		return random(new ArrayList<>(collection)); // TODO: optimize
 	}
 
 	public boolean chance(float chance) {

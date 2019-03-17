@@ -7,7 +7,7 @@ import vekta.item.Inventory;
 import vekta.menu.Menu;
 import vekta.spawner.WorldGenerator;
 import vekta.terrain.building.CapitalBuilding;
-import vekta.terrain.building.EconomyBuilding;
+import vekta.terrain.building.ForumBuilding;
 
 import static vekta.Vekta.v;
 
@@ -21,7 +21,7 @@ public class ColonySettlement extends Settlement {
 		add(WorldGenerator.createMarket(1));
 
 		if(v.chance(.75F)) {
-			add(new EconomyBuilding(this, (int)(v.random(2, 5))));
+			add(new ForumBuilding(this, (int)(v.random(2, 5))));
 		}
 	}
 

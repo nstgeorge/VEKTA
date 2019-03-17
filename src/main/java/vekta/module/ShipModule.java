@@ -5,8 +5,6 @@ import vekta.module.station.ComponentModule;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.SpaceStation;
 
-import java.math.BigDecimal;
-
 import static vekta.Vekta.round;
 import static vekta.Vekta.v;
 
@@ -49,10 +47,7 @@ public abstract class ShipModule implements ComponentModule {
 	}
 
 	protected final float chooseInclusive(float min, float max, float interval) {
-		// Using BigDecimal to prevent rouning errors
-		return new BigDecimal(chooseInclusive((int)(min / interval), (int)(max / interval)))
-				.multiply(new BigDecimal(interval))
-				.floatValue();
+		return interval * chooseInclusive((int)(min / interval), (int)(max / interval));
 	}
 
 	@Override

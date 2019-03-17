@@ -182,8 +182,7 @@ public class Mission extends Syncable<Mission> {
 		getPlayer().emit(PlayerEvent.MISSION_STATUS, this);
 		Resources.playSound("missionComplete");
 		getPlayer().send("Mission completed: " + getName())
-				.withColor(UI_COLOR)
-				.withTime(2);
+				.withColor(UI_COLOR);
 
 		syncChanges();
 	}

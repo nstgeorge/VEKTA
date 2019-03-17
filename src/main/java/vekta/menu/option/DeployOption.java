@@ -40,8 +40,8 @@ public class DeployOption implements MenuOption {
 	}
 
 	@Override
-	public void select(Menu menu) {
-		register(getSupplier().get());
+	public void onSelect(Menu menu) {
+		register(getSupplier().get()).setPersistent(true);
 		getPlayer().getInventory().remove(getItem());
 		menu.close();
 	}

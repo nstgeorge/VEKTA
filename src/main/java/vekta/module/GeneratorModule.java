@@ -1,6 +1,8 @@
 package vekta.module;
 
 public class GeneratorModule extends ShipModule {
+	private static final float GENERATOR_HEAT = 5e4F;
+
 	private final float rate;
 
 	public GeneratorModule() {
@@ -17,7 +19,7 @@ public class GeneratorModule extends ShipModule {
 
 	@Override
 	public String getName() {
-		return "Energy Generator v" + getRate();
+		return "Nuclear Generator v" + getRate();
 	}
 
 	@Override
@@ -32,11 +34,15 @@ public class GeneratorModule extends ShipModule {
 
 	@Override
 	public Module getVariant() {
-		return new GeneratorModule(chooseInclusive(.5F, 5, .5F));
+		return new GeneratorModule(chooseInclusive(.5F, 2, .5F));
 	}
 
 	@Override
 	public void onUpdate() {
-		getShip().addEnergy(10 * getRate() * PER_MINUTE);
+		float amount = 10 * getRate() * PER_MINUTE;
+		if(getShip().getEnergy() < getShip().getMaxEnergy()) {
+			getShip().recharge(amount);
+			getShip().addHeat(amount * GENERATOR_HEAT);
+		}
 	}
 }

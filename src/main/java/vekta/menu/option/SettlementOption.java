@@ -28,7 +28,7 @@ public class SettlementOption implements MenuOption {
 	}
 
 	@Override
-	public void select(Menu menu) {
+	public void onSelect(Menu menu) {
 		Menu sub = new Menu(menu.getPlayer(), new SettlementMenuHandle(new BackOption(menu), getSettlement()));
 		getSettlement().setupMenu(sub);
 		sub.addDefault();

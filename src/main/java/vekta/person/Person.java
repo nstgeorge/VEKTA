@@ -118,6 +118,16 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 		syncChanges();
 	}
 
+	public void upgradeOpinion(Faction faction) {
+		setOpinion(faction, getOpinion(faction).upgraded());
+		syncChanges();
+	}
+
+	public void downgradeOpinion(Faction faction) {
+		setOpinion(faction, getOpinion(faction).downgraded());
+		syncChanges();
+	}
+
 	public boolean isBusy() {
 		return busy;
 	}
@@ -132,8 +142,8 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 	public void onCancel(Mission mission) {
 		busy = false;
 		Faction faction = mission.getPlayer().getFaction();
-		if(getOpinion(faction).isPositive()) {
-			setOpinion(faction, OpinionType.NEUTRAL);
+		if(!getOpinion(faction).isNegative()) {
+			downgradeOpinion(faction);
 			syncChanges();
 		}
 		syncChanges();
@@ -142,7 +152,7 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 	@Override
 	public void onComplete(Mission mission) {
 		busy = false;
-		setOpinion(mission.getPlayer().getFaction(), OpinionType.GRATEFUL);
+		upgradeOpinion(mission.getPlayer().getFaction());
 		syncChanges();
 	}
 

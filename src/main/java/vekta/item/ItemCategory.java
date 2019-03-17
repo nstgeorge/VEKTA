@@ -1,6 +1,8 @@
 package vekta.item;
 
-public abstract class ItemCategory {
+import java.io.Serializable;
+
+public abstract class ItemCategory implements Serializable {
 	private final String name;
 
 	public ItemCategory(String name) {

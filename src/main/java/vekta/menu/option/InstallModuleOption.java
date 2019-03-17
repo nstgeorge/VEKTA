@@ -38,7 +38,7 @@ public class InstallModuleOption implements MenuOption {
 	}
 
 	@Override
-	public void select(Menu menu) {
+	public void onSelect(Menu menu) {
 		upgrader.installModule(module);
 	}
 
