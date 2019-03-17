@@ -1,0 +1,5 @@
+Pub
+Bar
+Inn
+Tavern
+Hotel

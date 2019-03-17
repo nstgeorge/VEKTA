@@ -14,8 +14,6 @@ public class CitySettlement extends Settlement {
 	public CitySettlement(Faction faction) {
 		super(faction, "city");
 
-		//		addPopulation((int)v.random(100, 100000) + 1);
-
 		add(new District("Trade District", BuildingType.MARKET));
 		add(new District("Industrial District", BuildingType.INDUSTRIAL));
 		add(new District("Housing District", BuildingType.RESIDENTIAL));

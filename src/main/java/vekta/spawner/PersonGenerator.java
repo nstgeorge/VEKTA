@@ -1,8 +1,10 @@
 package vekta.spawner;
 
 import processing.core.PVector;
+import vekta.Faction;
 import vekta.RenderLevel;
 import vekta.Resources;
+import vekta.economy.ProductivityModifier;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.person.Person;
 import vekta.spawner.world.AsteroidSpawner;
@@ -10,6 +12,7 @@ import vekta.terrain.HabitableTerrain;
 import vekta.terrain.settlement.OutpostSettlement;
 import vekta.terrain.settlement.Settlement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static vekta.Vekta.*;
@@ -45,18 +48,15 @@ public class PersonGenerator {
 		}
 	}
 
-	public static void updateHome(Person person) {
-		if(!person.hasHome()) {
-			person.setHome(PersonGenerator.randomHome(person));
+	public static Settlement randomHome(Faction faction) {
+		List<Settlement> homes = new ArrayList<>();
+		// Choose from settlements affecting faction's economy
+		for(ProductivityModifier mod : faction.getEconomy().getModifiers()) {
+			if(mod instanceof Settlement) {
+				homes.add((Settlement)mod);
+			}
 		}
-	}
-
-	public static Settlement randomHome(Person person) {
-		if(person != null && person.hasHome() && v.chance(.2F)) {
-			// Use person's home settlement
-			return person.findHome();
-		}
-		return randomHome();
+		return homes.isEmpty() ? v.random(homes) : randomHome();
 	}
 
 	public static Settlement randomHome() {

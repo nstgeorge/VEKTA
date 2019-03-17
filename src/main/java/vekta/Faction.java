@@ -1,18 +1,18 @@
 package vekta;
 
 import vekta.economy.Economy;
+import vekta.economy.EconomyDescriptor;
 import vekta.economy.NoiseModifier;
 import vekta.economy.ProductivityModifier;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public final class Faction extends Syncable<Faction> implements Renameable, ProductivityModifier {
+public class Faction extends Syncable<Faction> implements Renameable, EconomyDescriptor, ProductivityModifier {
 	private static final float BASE_PRODUCTIVITY = .2F;
 	private static final float ALLY_MODIFIER = .2F;
 	private static final float ENEMY_MODIFIER = -.3F;
 
-	private final FactionType type;
 	private @Sync String name;
 	private @Sync int color;
 
@@ -21,8 +21,7 @@ public final class Faction extends Syncable<Faction> implements Renameable, Prod
 
 	private final Economy economy;
 
-	public Faction(FactionType type, String name, float value, float risk, int color) {
-		this.type = type;
+	public Faction(String name, float value, float risk, int color) {
 		this.name = name;
 		this.color = color;
 
@@ -35,10 +34,7 @@ public final class Faction extends Syncable<Faction> implements Renameable, Prod
 		economy.fillHistory();
 	}
 
-	public FactionType getType() {
-		return type;
-	}
-
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -49,6 +45,7 @@ public final class Faction extends Syncable<Faction> implements Renameable, Prod
 		syncChanges();
 	}
 
+	@Override
 	public int getColor() {
 		return color;
 	}
@@ -58,6 +55,7 @@ public final class Faction extends Syncable<Faction> implements Renameable, Prod
 		syncChanges();
 	}
 
+	@Override
 	public Economy getEconomy() {
 		return economy;
 	}

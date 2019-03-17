@@ -31,6 +31,10 @@ public abstract class Objective extends Syncable<Objective> implements MissionLi
 		return this;
 	}
 
+	public boolean isCondition() {
+		return false;
+	}
+
 	public Objective then(ObjectiveCallback next) {
 		this.next.add(next);
 		return this;

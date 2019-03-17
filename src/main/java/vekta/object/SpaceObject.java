@@ -1,8 +1,10 @@
 package vekta.object;
 
 import processing.core.PVector;
+import vekta.PlayerEvent;
 import vekta.RenderLevel;
 import vekta.Syncable;
+import vekta.object.ship.ModularShip;
 import vekta.spawner.WorldGenerator;
 
 import java.io.Serializable;
@@ -235,6 +237,10 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 		destroyed = true;
 		onDestroy(reason);
 		getWorld().remove(this);
+
+		if(reason instanceof ModularShip && ((ModularShip)reason).hasController()) {
+			((ModularShip)reason).getController().emit(PlayerEvent.DESTROY_OBJECT, this);
+		}
 	}
 
 	/**

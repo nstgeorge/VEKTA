@@ -60,7 +60,7 @@ public class FighterShip extends Ship implements Targeter {
 
 	@Override
 	public boolean isValidTarget(SpaceObject obj) {
-		return obj instanceof Ship;
+		return obj instanceof Ship && !obj.isDestroyed();
 	}
 
 	public float getEngageDistance() {

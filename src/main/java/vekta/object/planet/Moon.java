@@ -42,7 +42,7 @@ public class Moon extends TerrestrialPlanet {
 			// Ensure moon stays in orbit
 			PVector offset = getPosition().sub(getParent().getPosition());
 			offset.setMag(getOrbitDistance());
-			//			getPositionReference().set(getParent().getPosition().add(offset));
+			//			getPositionReference().set(getParentObject().getPosition().add(offset));
 			WorldGenerator.orbit(getParent(), this, 0);
 			syncMovement(getParent().getPosition().add(offset), getVelocity(), 0, orbitCt.getInterval());
 		}
@@ -65,7 +65,7 @@ public class Moon extends TerrestrialPlanet {
 	//		super.updateTrail();
 	//
 	//		float timeScale = getWorld().getTimeScale();
-	//		PVector parentPos = getParent().getPosition();
+	//		PVector parentPos = getParentObject().getPosition();
 	//		PVector offset = parentPos.copy().sub(lastParentPosition).mult(timeScale / lastTimeScale);
 	//		for(PVector pos : trail) {
 	//			if(pos != null) {

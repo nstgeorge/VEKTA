@@ -1,32 +1,24 @@
 package vekta.mission.reward;
 
 import vekta.Faction;
-import vekta.Player;
 import vekta.mission.Mission;
 
-public class AllianceReward extends Reward {
-	private final Faction faction;
-
+public class AllianceReward extends DiplomacyReward {
 	public AllianceReward(Faction faction) {
-		this.faction = faction;
+		super(faction);
 	}
 
-	public Faction getFaction() {
-		return faction;
-	}
-
-	@Override
-	public String getName() {
-		return "Alliance with " + getFaction().getName();
+	public AllianceReward(Faction a, Faction b) {
+		super(a, b);
 	}
 
 	@Override
-	public int getColor() {
-		return getFaction().getColor();
+	public String getTypeName() {
+		return "Alliance";
 	}
 
 	@Override
-	public void onReward(Mission mission, Player player) {
-		player.getFaction().setAlly(getFaction());
+	public void onReward(Mission mission, Faction a, Faction b) {
+		a.setAlly(b);
 	}
 }

@@ -22,7 +22,7 @@ public class MissionGenerator {
 	private static final RewardSpawner[] REWARD_SPAWNERS = Resources.getSubclassInstances(RewardSpawner.class);
 
 	public static Mission createMission(Player player, MissionIssuer issuer) {
-		return createMission(player, issuer, (int)v.random(3) + 1);
+		return createMission(player, issuer, issuer.chooseMissionTier(player));
 	}
 
 	public static Mission createMission(Player player, MissionIssuer issuer, int tier) {
@@ -72,7 +72,6 @@ public class MissionGenerator {
 		if(person == null || person == exclude || v.chance(.1F)) {
 			person = PersonGenerator.createPerson();
 		}
-		PersonGenerator.updateHome(person);
 		return person;
 	}
 

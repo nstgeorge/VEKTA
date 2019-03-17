@@ -1,8 +1,11 @@
 package vekta.menu.option;
 
+import vekta.context.Context;
 import vekta.menu.Menu;
 
 import java.io.Serializable;
+
+import static vekta.Vekta.setContext;
 
 public class CustomOption implements MenuOption {
 	private final String name;
@@ -14,8 +17,8 @@ public class CustomOption implements MenuOption {
 		this(name, menu -> action.run());
 	}
 
-	public CustomOption(String name, MenuOption option) {
-		this(name, option::onSelect);
+	public CustomOption(String name, Context context) {
+		this(name, menu -> setContext(context));
 	}
 
 	public CustomOption(String name, MenuAction action) {

@@ -1,6 +1,7 @@
 package vekta.menu.option;
 
 import vekta.menu.Menu;
+import vekta.menu.handle.SecurityMenuHandle;
 import vekta.menu.handle.SettlementMenuHandle;
 import vekta.terrain.settlement.Settlement;
 
@@ -18,10 +19,10 @@ public class SettlementOption implements MenuOption {
 		return "Visit " + settlement.getGenericName();
 	}
 
-//	@Override
-//	public int getColor() {
-//		return settlement.getFaction().getColor();
-//	}
+	//	@Override
+	//	public int getColor() {
+	//		return settlement.getFaction().getColor();
+	//	}
 
 	public Settlement getSettlement() {
 		return settlement;
@@ -32,6 +33,14 @@ public class SettlementOption implements MenuOption {
 		Menu sub = new Menu(menu.getPlayer(), new SettlementMenuHandle(new BackOption(menu), getSettlement()));
 		getSettlement().setupMenu(sub);
 		sub.addDefault();
-		setContext(sub);
+
+		if(getSettlement().getFaction().isEnemy(menu.getPlayer().getFaction())) {
+			Menu security = new Menu(menu.getPlayer(), new SecurityMenuHandle(sub.getDefault(), sub, getSettlement().getFaction()));
+			security.addDefault();
+			setContext(security);
+		}
+		else {
+			setContext(sub);
+		}
 	}
 }

@@ -18,8 +18,4 @@ public class RechargeSituation implements Situation {
 		dialog.add(new RechargeOption(player, .5F));
 		ApproachEventSpawner.createMessenger(player, dialog);
 	}
-
-	@Override
-	public void end(Player player) {
-	}
 }

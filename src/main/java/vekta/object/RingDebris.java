@@ -8,13 +8,15 @@ import vekta.menu.Menu;
 import vekta.menu.handle.ObjectMenuHandle;
 import vekta.menu.option.ShipUndockOption;
 import vekta.object.planet.Planet;
+import vekta.object.ship.Damageable;
+import vekta.object.ship.Damager;
 import vekta.object.ship.ModularShip;
 import vekta.spawner.item.OreItemSpawner;
 
 import static processing.core.PConstants.TWO_PI;
 import static vekta.Vekta.*;
 
-public class RingDebris extends Planet {
+public class RingDebris extends Planet implements Damageable {
 	private static final float MAX_PART_DISTANCE = .5F;
 	private static final float SPIN_SCALE = .01F;
 
@@ -39,7 +41,9 @@ public class RingDebris extends Planet {
 			};
 		}
 
-		getInventory().add(OreItemSpawner.randomOre(getName()));
+		if(v.chance(.5F)) {
+			getInventory().add(OreItemSpawner.randomOre(getName()));
+		}
 	}
 
 	public Inventory getInventory() {
@@ -88,4 +92,14 @@ public class RingDebris extends Planet {
 			super.onCollide(s);
 		}
 	}
-}  
+
+	@Override
+	public boolean isDamageableFrom(Damager damager) {
+		return true;
+	}
+
+	@Override
+	public void damage(float amount, Damager damager) {
+		destroyBecause(damager.getParentObject());
+	}
+}

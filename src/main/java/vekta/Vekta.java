@@ -80,7 +80,8 @@ public class Vekta extends PApplet {
 
 		//		DEF_ZOOM = (height / 2.0F) / tan((PI * 30.0F / 180.0F)); // For some reason, this is the default eyeZ location for Processing
 		UI_COLOR = color(0, 255, 0);
-		DANGER_COLOR = color(255, 0, 0);
+		//		DANGER_COLOR = color(255, 0, 0);
+		DANGER_COLOR = v.color(220, 100, 0);
 		MISSION_COLOR = ItemType.MISSION.getColor();
 
 		Settings.init();

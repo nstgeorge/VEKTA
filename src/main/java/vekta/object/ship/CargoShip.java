@@ -2,6 +2,7 @@ package vekta.object.ship;
 
 import processing.core.PVector;
 import vekta.Counter;
+import vekta.Faction;
 import vekta.Player;
 import vekta.RenderLevel;
 import vekta.menu.Menu;
@@ -25,13 +26,17 @@ public class CargoShip extends Ship {
 
 	private final Counter steerCt = new Counter();
 
+	private final Faction faction;
+
 	private final List<FighterShip> fighters = new ArrayList<>();
 
-	public CargoShip(String name, PVector heading, PVector position, PVector velocity, int color) {
-		super(name, heading, position, velocity, color, DEF_SPEED, DEF_TURN);
+	public CargoShip(String name, PVector heading, PVector position, PVector velocity, Faction faction) {
+		super(name, heading, position, velocity, faction.getColor(), DEF_SPEED, DEF_TURN);
 
-		int reinforcementCt = (int)v.random(1, 3);
-		for(int i = 0; i < reinforcementCt; i++) {
+		this.faction = faction;
+
+		int escortCt = (int)v.random(1, 3);
+		for(int i = 0; i < escortCt; i++) {
 			FighterShip fighter = register(new FighterShip(
 					getName() + " Defender",
 					heading,

@@ -53,4 +53,7 @@ public interface PlayerListener extends Serializable {
 
 	default void onRemoveItem(Item item) {
 	}
+
+	default void onDestroyObject(SpaceObject object) {
+	}
 }

@@ -12,6 +12,7 @@ public class GasGiant extends Planet {
 	private final float ringAngle;
 	private final float ringRatio;
 	private final float[] ringDistances;
+	private final float maxRadius;
 
 	public GasGiant(String name, float mass, float density, PVector position, PVector velocity, int color) {
 		super(name, mass, density, position, velocity, color);
@@ -22,11 +23,12 @@ public class GasGiant extends Planet {
 		for(int i = 0; i < ringDistances.length; i++) {
 			ringDistances[i] = d *= v.random(1.01F, 1.5F);
 		}
+		maxRadius = d;
 	}
 
 	@Override
 	public float getOnScreenRadius(float r) {
-		return r * 2;
+		return r * maxRadius;
 	}
 
 	@Override

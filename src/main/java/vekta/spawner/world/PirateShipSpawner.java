@@ -1,43 +1,29 @@
 package vekta.spawner.world;
 
 import processing.core.PVector;
-import vekta.RenderLevel;
-import vekta.spawner.WorldGenerator;
-import vekta.object.SpaceObject;
-import vekta.object.planet.TerrestrialPlanet;
 import vekta.object.ship.PirateShip;
 import vekta.object.ship.Ship;
+import vekta.spawner.ItemGenerator;
+import vekta.spawner.WorldGenerator;
+import vekta.terrain.LandingSite;
 
 import static vekta.Vekta.*;
-import static vekta.spawner.ItemGenerator.addLoot;
-import static vekta.spawner.WorldGenerator.orbit;
 
-public class PirateShipSpawner implements WorldGenerator.WorldSpawner {
+public class PirateShipSpawner extends ShipSpawner {
+	private static final int PIRATE_COLOR = DANGER_COLOR;
+	
 	@Override
 	public float getWeight() {
-		return 1;
+		return .5F;
 	}
 
 	@Override
-	public RenderLevel getSpawnLevel() {
-		return RenderLevel.PARTICLE;
-	}
+	public void spawn(LandingSite site, PVector pos) {
+		if(!site.getTerrain().getSettlements().isEmpty()) {
+			Ship s = register(new PirateShip("YARRYACHT", PVector.random2D(), pos, new PVector(), PIRATE_COLOR));
+			WorldGenerator.orbit(site.getParent(), s, .25F);
 
-	@Override
-	public RenderLevel getObjectLevel() {
-		return RenderLevel.SHIP;
-	}
-
-	@Override
-	public void spawn(SpaceObject center, PVector pos) {
-		SpaceObject orbit = getWorld().findOrbitObject(center);
-		if(orbit instanceof TerrestrialPlanet && ((TerrestrialPlanet)orbit).isHabitable()) {
-			// Only spawn near terrestrial planets
-			Ship s = register(new PirateShip("YARRYACHT", PVector.random2D(), pos, new PVector(), v.color(220, 100, 0)));
-			orbit(orbit, s, .5F);
-
-			addLoot(s.getInventory(), 1);
-			
+			ItemGenerator.addLoot(s.getInventory(), 1);
 		}
 	}
 }

@@ -43,7 +43,7 @@ public class FactionEventSpawner implements EventGenerator.EventSpawner {
 		}
 		else {
 			a.setEnemy(b);
-			ProductivityModifier mod = new TemporaryModifier("Trade Embargo", 1, .05F);
+			ProductivityModifier mod = new TemporaryModifier("Wartime Spending", -1, .05F);
 			a.getEconomy().addModifier(mod);
 			b.getEconomy().addModifier(mod);
 			message = a.getName() + " has declared war on " + b.getName();

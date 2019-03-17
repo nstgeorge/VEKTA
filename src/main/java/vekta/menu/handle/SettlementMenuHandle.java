@@ -40,7 +40,7 @@ public class SettlementMenuHandle extends MenuHandle {
 		v.fill(100);
 		v.text("Welcome to", v.width / 2F, getButtonY(-2) - 64);
 		v.textSize(48);
-		v.fill(settlement.getFaction().getColor());
+		v.fill(settlement.getColor());
 		v.fill(200);
 		v.text(settlement.getName(), v.width / 2F, getButtonY(-2));
 		v.textSize(20);

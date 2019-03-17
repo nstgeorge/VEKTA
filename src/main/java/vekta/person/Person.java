@@ -1,9 +1,6 @@
 package vekta.person;
 
-import vekta.Faction;
-import vekta.Resources;
-import vekta.Sync;
-import vekta.Syncable;
+import vekta.*;
 import vekta.mission.Mission;
 import vekta.mission.MissionIssuer;
 import vekta.object.SpaceObject;
@@ -14,6 +11,8 @@ import vekta.terrain.settlement.Settlement;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static vekta.Vekta.v;
 
 public class Person extends Syncable<Person> implements MissionIssuer {
 
@@ -69,7 +68,7 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 
 	public Settlement findHome() {
 		if(!hasHome()) {
-			home = PersonGenerator.randomHome();
+			home = PersonGenerator.randomHome(getFaction());
 		}
 		return home;
 	}
@@ -110,7 +109,12 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 	}
 
 	public OpinionType getOpinion(Faction faction) {
-		return opinions.getOrDefault(faction, OpinionType.NEUTRAL);
+		OpinionType opinion = opinions.getOrDefault(faction, OpinionType.NEUTRAL);
+		return getFaction().isAlly(faction)
+				? opinion.upgraded()
+				: getFaction().isEnemy(faction)
+				? opinion.downgraded()
+				: opinion;
 	}
 
 	public void setOpinion(Faction faction, OpinionType opinion) {
@@ -130,6 +134,21 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 
 	public boolean isBusy() {
 		return busy;
+	}
+
+	@Override
+	public int chooseMissionTier(Player player) {
+		int tier = (int)v.random(2) + 1;
+		if(getOpinion(player.getFaction()).isPositive()) {
+			tier++; // Allow Tier III mission if positive opinion
+			if(getFaction().isAlly(player.getFaction())) {
+				tier++; // Allow Tier IV mission if factions are allied
+				if(getOpinion(player.getFaction()) == OpinionType.GRATEFUL && v.chance(.5F)) {
+					tier++; // Allow Tier V mission if very happy with the player
+				}
+			}
+		}
+		return tier;
 	}
 
 	@Override

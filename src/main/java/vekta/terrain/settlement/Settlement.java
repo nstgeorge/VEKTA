@@ -5,6 +5,7 @@ import vekta.Resources;
 import vekta.Sync;
 import vekta.Syncable;
 import vekta.economy.Economy;
+import vekta.economy.EconomyDescriptor;
 import vekta.economy.ProductivityModifier;
 import vekta.menu.Menu;
 import vekta.object.SpaceObject;
@@ -17,10 +18,9 @@ import java.util.List;
 
 import static processing.core.PApplet.ceil;
 
-public abstract class Settlement extends Syncable<Settlement> implements SettlementPart, ProductivityModifier {
+public abstract class Settlement extends Syncable<Settlement> implements SettlementPart, EconomyDescriptor, ProductivityModifier {
 	private static final float POPULATION_PER_VALUE = 10000;
-	private static final float INFLUENCE_SCALE = .1F;
-
+	
 	private final @Sync List<SettlementPart> parts = new ArrayList<>();
 
 	private final String name;
@@ -68,10 +68,10 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 			throw new RuntimeException("Settlement faction cannot be null");
 		}
 		if(this.faction != null) {
-//			getEconomy().removeModifier(this.faction);
+			//			getEconomy().removeModifier(this.faction);
 			this.faction.getEconomy().removeModifier(this);
 		}
-//		getEconomy().addModifier(faction);
+		//		getEconomy().addModifier(faction);
 		faction.getEconomy().addModifier(this);
 		this.faction = faction;
 		syncChanges();
@@ -80,6 +80,11 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public int getColor() {
+		return getFaction().getColor();
 	}
 
 	@Override

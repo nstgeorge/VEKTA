@@ -2,10 +2,13 @@ package vekta.object;
 
 import processing.core.PVector;
 import vekta.RenderLevel;
+import vekta.object.ship.Damageable;
+import vekta.object.ship.Damager;
 
-import static vekta.Vekta.*;
+import static vekta.Vekta.getWorld;
+import static vekta.Vekta.v;
 
-public class Projectile extends SpaceObject {
+public class Projectile extends SpaceObject implements Damager {
 	// Default settings
 	private static final float DESPAWN_TIME = 1000;
 	private static final float DEF_MASS = 1000;
@@ -21,7 +24,17 @@ public class Projectile extends SpaceObject {
 		this.parent = parent;
 	}
 
-	public SpaceObject getParent() {
+	public float getDamage() {
+		return 1;
+	}
+
+	@Override
+	public SpaceObject getAttackObject() {
+		return this;
+	}
+
+	@Override
+	public SpaceObject getParentObject() {
 		return parent;
 	}
 
@@ -69,16 +82,18 @@ public class Projectile extends SpaceObject {
 
 	@Override
 	public boolean collidesWith(RenderLevel level, SpaceObject s) {
-		return s.getColor() != getParent().getColor() && super.collidesWith(getRenderLevel(), s); // Always collide regardless of render distance
+		if(s instanceof Damageable) {
+			return ((Damageable)s).isDamageableFrom(this);
+		}
+		return super.collidesWith(getRenderLevel(), s); // Always collide regardless of render distance
 	}
 
-	/**
-	 * Override to always destroy projectiles on impact
-	 */
 	@Override
 	public void onCollide(SpaceObject s) {
 		destroyBecause(s);
-		s.destroyBecause(this); // TODO: switch to imparting damage
+		if(s instanceof Damageable) {
+			((Damageable)s).damage(getDamage(), this);
+		}
 		getWorld().playSound("explosion", getPosition());
 	}
 }  

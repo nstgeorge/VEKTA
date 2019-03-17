@@ -6,6 +6,8 @@ import vekta.item.Item;
 import vekta.item.ItemCategory;
 import vekta.item.PatternItemCategory;
 
+import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +23,10 @@ public class ItemGenerator {
 		CATEGORIES = map.keySet().stream()
 				.map(k -> new PatternItemCategory(k, map.get(k).toArray(new String[0])))
 				.toArray(ItemCategory[]::new);
+	}
+
+	public static ItemSpawner getSpawner(Class<? extends ItemSpawner> type) {
+		return Arrays.stream(SPAWNERS).filter(type::isInstance).findFirst().orElse(null);
 	}
 
 	public static Item randomItem() {
@@ -48,7 +54,7 @@ public class ItemGenerator {
 		}
 	}
 
-	public interface ItemSpawner extends Weighted {
+	public interface ItemSpawner extends Weighted, Serializable {
 		boolean isValid(Item item);
 
 		Item create();

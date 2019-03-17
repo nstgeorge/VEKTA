@@ -5,6 +5,7 @@ import vekta.Faction;
 import vekta.RenderLevel;
 import vekta.Resources;
 import vekta.object.SpaceObject;
+import vekta.spawner.item.ClothingItemSpawner;
 import vekta.spawner.item.ColonyItemSpawner;
 import vekta.spawner.item.MissionItemSpawner;
 import vekta.spawner.item.ModuleItemSpawner;
@@ -105,16 +106,16 @@ public class WorldGenerator {
 			buildings.add(new MarketBuilding(shopTier, "Goods", null));
 		}
 		if(v.chance(chance * .5F)) {
-			buildings.add(new MarketBuilding(shopTier, "Trinkets", new MissionItemSpawner()));
+			buildings.add(new MarketBuilding(shopTier, "Trinkets", ItemGenerator.getSpawner(MissionItemSpawner.class)));
 		}
 		if(v.chance(chance * .5F)) {
-			buildings.add(new MarketBuilding(shopTier, "Modules", new ModuleItemSpawner()));
+			buildings.add(new MarketBuilding(shopTier, "Modules", ItemGenerator.getSpawner(ModuleItemSpawner.class)));
 		}
-//		if(v.chance(chance * .5F)) {
-//			buildings.add(new MarketBuilding(shopTier, "Bonds", new BondItemSpawner()));
-//		}
+		if(v.chance(chance * .5F)) {
+			buildings.add(new MarketBuilding(shopTier, "Clothing", ItemGenerator.getSpawner(ClothingItemSpawner.class)));
+		}
 		if(v.chance(chance * .25F)) {
-			buildings.add(new MarketBuilding(shopTier, "Supplies", new ColonyItemSpawner()));
+			buildings.add(new MarketBuilding(shopTier, "Supplies", ItemGenerator.getSpawner(ColonyItemSpawner.class)));
 		}
 		return buildings;
 	}

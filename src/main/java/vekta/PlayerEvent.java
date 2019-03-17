@@ -14,7 +14,8 @@ public enum PlayerEvent {
 	INSTALL_MODULE(PlayerListener::onInstallModule),
 	UNINSTALL_MODULE(PlayerListener::onUninstallModule),
 	ADD_ITEM(PlayerListener::onAddItem),
-	REMOVE_ITEM(PlayerListener::onRemoveItem);
+	REMOVE_ITEM(PlayerListener::onRemoveItem),
+	DESTROY_OBJECT(PlayerListener::onDestroyObject);
 
 	private final BiConsumer<PlayerListener, ?> action;
 

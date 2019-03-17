@@ -27,7 +27,7 @@ public class SearchObjectiveSpawner implements MissionGenerator.ObjectiveSpawner
 	@Override
 	public Objective getMainObjective(Mission mission) {
 		Item item = ItemGenerator.randomItem();
-		mission.add(new SearchForItemObjective(item, v.random(.1F, .5F)));
+		mission.add(new SearchForItemObjective(item, v.random(.2F, .4F) / mission.getTier()));
 		return new ObtainItemObjective(item)
 				.then(m -> {
 					Person person = m.getIssuer() instanceof Person && v.chance(.8F)

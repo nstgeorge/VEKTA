@@ -13,6 +13,8 @@ import static vekta.Vekta.*;
  * A landing site for one spacecraft-like object.
  */
 public class LandingSite extends Syncable<LandingSite> {
+	private static final float LAUNCH_SPEED_SCALE = 2;
+
 	private final SpaceObject parent;
 	private final Terrain terrain;
 
@@ -49,15 +51,14 @@ public class LandingSite extends Syncable<LandingSite> {
 		}
 
 		landed = ship;
-		getWorld().remove(ship); // TODO: make sure this works properly in multiplayer
+		getWorld().remove(ship);
 
 		// Set position/velocity for takeoff
 		PVector offset = landed.getPosition().copy().sub(getParent().getPosition());
 		PVector velocity = offset.setMag(getLaunchSpeed()).add(getParent().getVelocity());
 		landed.setVelocity(velocity);
 		landed.getPositionReference().add(velocity.mult(getWorld().getTimeScale()));
-		//		landed.applyVelocity(velocity); // Boost the ship away from the planet
-
+		
 		ship.setTemperature(ship.getOptimalTemperature()); // TODO: adjust based on planet temperature
 		ship.doLand(this);
 	}
@@ -68,16 +69,15 @@ public class LandingSite extends Syncable<LandingSite> {
 		}
 
 		register(landed);
-		landed.undock();/// Start landing debounce
+		landed.undock(); // Start landing debounce
 		landed.onDepart(getParent());
 		landed = null;
 	}
 
 	/**
-	 * Compute the launch speed (escape velocity)
+	 * Compute the launch speed
 	 */
 	private float getLaunchSpeed() {
-		float escapeScale = 2; // Boost a bit more than escape velocity
-		return escapeScale * (float)Math.sqrt(2 * G * parent.getMass() / parent.getRadius());
+		return (float)Math.sqrt(2 * G * parent.getMass() / parent.getRadius()) * LAUNCH_SPEED_SCALE;
 	}
 }

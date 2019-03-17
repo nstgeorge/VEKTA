@@ -20,8 +20,9 @@ public final class Player extends Syncable<Player> {
 
 	private final Map<Item, Integer> buyPrices = new HashMap<>();
 
-	public Player(Faction faction) {
+	public Player(PlayerFaction faction) {
 		setFaction(faction);
+		faction.setPlayer(this);
 
 		addListener(new PlayerListener() {
 			@Override
@@ -135,17 +136,17 @@ public final class Player extends Syncable<Player> {
 		this.listeners.removeIf(type::isInstance);
 	}
 
-	public boolean hasAttribute(String attribute) {
-		return attributes.contains(attribute);
+	public boolean hasAttribute(Class attribute) {
+		return attributes.contains(attribute.getSimpleName());
 	}
 
-	public void addAttribute(String attribute) {
-		attributes.add(attribute);
+	public void addAttribute(Class attribute) {
+		attributes.add(attribute.getSimpleName());
 		syncChanges();
 	}
 
-	public void removeAttribute(String attribute) {
-		attributes.remove(attribute);
+	public void removeAttribute(Class attribute) {
+		attributes.remove(attribute.getSimpleName());
 		syncChanges();
 	}
 

@@ -30,7 +30,7 @@ public class Dialog implements Serializable {
 		this.type = type;
 		this.person = person;
 		this.message = message;
-		
+
 		DialogGenerator.initDialog(this);
 	}
 
@@ -99,7 +99,7 @@ public class Dialog implements Serializable {
 				type = type.substring(1).trim();
 				aside = true;
 			}
-			
+
 			Dialog next = getPerson().createDialog(type);
 			add(new DialogOption(response, next));
 			if(aside) {
@@ -144,7 +144,7 @@ public class Dialog implements Serializable {
 		else {
 			// Add custom responses for exiting dialog
 			for(String response : getResponses()) {
-				menu.add(new CustomOption(response, menu.getDefault()));
+				menu.add(new CustomOption(response, menu.getDefault()::onSelect));
 			}
 		}
 
@@ -153,7 +153,7 @@ public class Dialog implements Serializable {
 			Collections.shuffle(menu.getOptions());
 		}
 		else {
-			menu.add(new CustomOption("Back", menu.getDefault()));
+			menu.add(new CustomOption("Back", menu.getDefault()::onSelect));
 			//			menu.addDefault();
 		}
 

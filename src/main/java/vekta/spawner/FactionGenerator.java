@@ -1,7 +1,6 @@
 package vekta.spawner;
 
 import vekta.Faction;
-import vekta.FactionType;
 import vekta.Resources;
 
 import java.util.List;
@@ -12,11 +11,25 @@ public class FactionGenerator {
 	private static final float NEW_FACTION_RATE = .1F;
 
 	public static Faction createFaction() {
-		return register(new Faction(FactionType.EMPIRE,
+		Faction faction = new Faction(
 				Resources.generateString("faction"),
 				v.random(10, 100), // Economic value
 				v.random(.1F, .2F), // Economic risk
-				WorldGenerator.randomPlanetColor()));
+				WorldGenerator.randomPlanetColor());
+
+		if(v.chance(.5F)) {
+			faction.setAlly(randomFaction());
+		}
+
+		if(v.chance(.5F)) {
+			faction.setEnemy(randomFaction());
+		}
+
+//		for(Player player : getWorld().findObjects(Player.class)) {
+//			faction.setEnemy(player.getFaction());//TEMP
+//		}
+
+		return register(faction);
 	}
 
 	public static Faction randomFaction() {

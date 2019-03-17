@@ -94,8 +94,8 @@ public class Mission extends Syncable<Mission> {
 				if(current == null) {
 					current = objective;
 				}
-				if(!objective.isOptional()) {
-					return; // Return and select non-optional objective
+				if(!objective.isOptional() && !objective.isCondition()) {
+					return; // Return and select objective
 				}
 			}
 			else if(objective.getStatus() == MissionStatus.COMPLETED) {

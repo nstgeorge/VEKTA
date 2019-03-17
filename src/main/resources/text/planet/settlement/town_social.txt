@@ -1,0 +1,5 @@
+{item_common} {town_noun_social}
+{item_adj_common} {town_noun_social}
+{item_adj_rare} {town_noun_social}
+{settlement} {town_noun_social}
+{planet} {town_noun_social}

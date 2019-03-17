@@ -33,11 +33,6 @@ public class DialogMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public void focus(Menu menu) {
-		super.focus(menu);
-	}
-
-	@Override
 	public void render(Menu menu) {
 		super.render(menu);
 

@@ -25,8 +25,9 @@ import vekta.person.Person;
 import vekta.sound.SoundGroup;
 import vekta.spawner.EconomyGenerator;
 import vekta.spawner.EventGenerator;
-import vekta.spawner.MissionGenerator;
+import vekta.spawner.FactionGenerator;
 import vekta.spawner.WorldGenerator;
+import vekta.spawner.item.ClothingItemSpawner;
 import vekta.spawner.world.StarSystemSpawner;
 
 import java.io.*;
@@ -110,7 +111,7 @@ public class Singleplayer implements World, PlayerListener {
 	public void setup() {
 		state = new WorldState();
 
-		Faction playerFaction = register(new Faction(FactionType.PLAYER, "VEKTA I", 1, .1F, UI_COLOR));
+		PlayerFaction playerFaction = register(new PlayerFaction("VEKTA I", UI_COLOR));
 		Player player = register(new Player(playerFaction));
 		player.addListener(this);
 		state.setPlayer(player);
@@ -269,8 +270,10 @@ public class Singleplayer implements World, PlayerListener {
 				continue;
 			}
 
-			// Increment count for object's render level
-			objectCounts[s.getRenderLevel().ordinal()]++;
+			if(!s.isPersistent()) {
+				// Increment count for object's render level
+				objectCounts[s.getRenderLevel().ordinal()]++;
+			}
 
 			if(targeting) {
 				// Update Targeter instances
@@ -415,8 +418,11 @@ public class Singleplayer implements World, PlayerListener {
 	// Temp: debug key listener
 	@Override
 	public void keyPressed(KeyEvent event) {
+		//		if(v.key == '`') {
+		//			MissionGenerator.createMission(getPlayer(), MissionGenerator.randomMissionPerson(), (int)v.random(5) + 1).start();
+		//		}
 		if(v.key == '`') {
-			MissionGenerator.createMission(getPlayer(), MissionGenerator.randomMissionPerson()).start();
+			getPlayer().getInventory().add(ClothingItemSpawner.createDisguiseItem(FactionGenerator.randomFaction()));
 		}
 		World.super.keyPressed(event);
 	}
@@ -642,7 +648,7 @@ public class Singleplayer implements World, PlayerListener {
 		catch(IOException e) {
 			e.printStackTrace();
 			getPlayer().send("Failed to save progress: " + e.getMessage())
-					.withColor(DANGER_COLOR);
+					.withColor(v.color(255, 0, 0));
 			return false;
 		}
 	}

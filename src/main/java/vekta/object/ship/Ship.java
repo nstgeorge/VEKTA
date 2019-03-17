@@ -16,7 +16,7 @@ import static processing.core.PConstants.CLOSE;
 import static processing.core.PConstants.HALF_PI;
 import static vekta.Vekta.*;
 
-public abstract class Ship extends SpaceObject implements Renameable, InventoryListener {
+public abstract class Ship extends SpaceObject implements Renameable, InventoryListener, Damageable {
 	private static final float CRATE_SPEED = 1;
 	private static final float DEPART_FRAMES = 100; // Number of frames to wait before docking/landing again
 
@@ -105,8 +105,8 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 		SpaceObject dock = getDock();
 		if(dock != null) {
 			PVector offset = getPosition().sub(dock.getPosition());
-			setVelocity(dock.getVelocity().add(offset.mult(.05F)));
-			position.add(offset.setMag(getRadius() * 2 + dock.getRadius()));
+			setVelocity(dock.getVelocity().add(offset.mult(.01F)));
+			position.add(offset.setMag(getRadius() + dock.getRadius()));
 			this.dock = null;
 			onDepart(dock);
 		}
@@ -137,6 +137,16 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 			// Board ship
 			dock(s);
 		}
+	}
+
+	@Override
+	public boolean isDamageableFrom(Damager damager) {
+		return damager.getParentObject().getColor() != getColor();
+	}
+
+	@Override
+	public void damage(float amount, Damager damager) {
+		destroyBecause(damager.getParentObject());
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package vekta.terrain.settlement;
 
 import vekta.Faction;
+import vekta.Resources;
 import vekta.economy.Economy;
 import vekta.economy.NoiseModifier;
 import vekta.spawner.PersonGenerator;
@@ -16,9 +17,10 @@ public class TownSettlement extends Settlement {
 	public TownSettlement(Faction faction) {
 		super(faction, "town");
 
-		//		addPopulation((int)v.random(5, 100) + 1);
-
 		add(new District("Marketplace", BuildingType.MARKET));
+		if(v.chance(.75F)) {
+			add(new District(Resources.generateString("town_social"), BuildingType.RESIDENTIAL));
+		}
 
 		add(new CapitalBuilding(this));
 

@@ -177,7 +177,7 @@ public final class WorldState implements Serializable {
 		else if(object instanceof Person && !people.contains(object)) {
 			people.add((Person)object);
 		}
-		else if(object instanceof Faction && !factions.contains(object) && ((Faction)object).getType() != FactionType.PLAYER) {
+		else if(object instanceof Faction && !factions.contains(object) && !(object instanceof PlayerFaction)) {
 			factions.add((Faction)object);
 		}
 	}

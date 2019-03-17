@@ -67,6 +67,11 @@ public class MissionItem extends Item implements MissionIssuer {
 		return home;
 	}
 
+	@Override
+	public int chooseMissionTier(Player player) {
+		return (int)v.random(2) + 1;
+	}
+
 	public interface MissionProvider extends Serializable {
 		Mission createMission(Player player);
 	}
