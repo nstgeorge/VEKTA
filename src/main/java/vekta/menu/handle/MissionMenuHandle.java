@@ -1,7 +1,6 @@
 package vekta.menu.handle;
 
 import vekta.menu.Menu;
-import vekta.menu.option.MenuOption;
 import vekta.menu.option.MissionOption;
 import vekta.mission.Mission;
 import vekta.mission.objective.Objective;
@@ -15,8 +14,7 @@ import static vekta.Vekta.v;
  * Mission selector inject handle
  */
 public class MissionMenuHandle extends MenuHandle {
-	public MissionMenuHandle(MenuOption defaultOption) {
-		super(defaultOption);
+	public MissionMenuHandle() {
 	}
 
 	@Override

@@ -13,10 +13,6 @@ public class CustomOption implements MenuOption {
 	private int color;
 	private boolean remove;
 
-	public CustomOption(String name, Runnable action) {
-		this(name, menu -> action.run());
-	}
-
 	public CustomOption(String name, Context context) {
 		this(name, menu -> setContext(context));
 	}

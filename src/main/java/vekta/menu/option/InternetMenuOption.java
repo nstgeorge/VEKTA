@@ -27,10 +27,10 @@ public class InternetMenuOption implements MenuOption {
 
 	@Override
 	public void onSelect(Menu menu) {
-		Menu sub = new Menu(menu.getPlayer(), new MenuHandle(new BackOption(menu)));
-		
+		Menu sub = new Menu(menu, new MenuHandle());
+
 		sub.add(new BondMenuOption());
-		
+
 		sub.addDefault();
 		setContext(sub);
 	}

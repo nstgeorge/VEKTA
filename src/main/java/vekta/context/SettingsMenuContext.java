@@ -22,7 +22,7 @@ public class SettingsMenuContext implements Context {
 
 	public SettingsMenuContext(Context parent) {
 		this.parent = parent;
-		
+
 		settingsOptions.set("Music", "On,Off");
 		settingsOptions.set("Sound", "On,Off");
 		settingsDefinitions.set("On", 1);
@@ -43,9 +43,9 @@ public class SettingsMenuContext implements Context {
 		MainMenuHandle.HYPERSPACE.render();
 
 		// Draw settings
-//		v.hint(DISABLE_DEPTH_TEST);
-//		v.camera();
-//		v.noLights();
+		//		v.hint(DISABLE_DEPTH_TEST);
+		//		v.camera();
+		//		v.noLights();
 		v.textFont(bodyFont);
 		v.stroke(0);
 		v.fill(255);
@@ -79,7 +79,7 @@ public class SettingsMenuContext implements Context {
 
 	private void drawButton(String name, int yPos, boolean selected) {
 		if(selected)
-			v.stroke(255);
+			v.stroke(name.equals("Back") ? 100 : 255);
 		else
 			v.stroke(UI_COLOR);
 		v.fill(1);

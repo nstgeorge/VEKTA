@@ -24,7 +24,7 @@ public class SurveyOption implements MenuOption {
 
 	@Override
 	public void onSelect(Menu menu) {
-		Menu sub = new Menu(menu.getPlayer(), new SurveyMenuHandle(new BackOption(menu), getSite()));
+		Menu sub = new Menu(menu, new SurveyMenuHandle(getSite()));
 		sub.addDefault();
 		setContext(sub);
 	}

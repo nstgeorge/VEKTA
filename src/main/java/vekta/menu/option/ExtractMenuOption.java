@@ -1,10 +1,10 @@
 package vekta.menu.option;
 
-import vekta.spawner.item.OreItemSpawner;
 import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.menu.handle.LootMenuHandle;
+import vekta.spawner.item.OreItemSpawner;
 import vekta.terrain.LandingSite;
 
 import static vekta.Vekta.setContext;
@@ -29,7 +29,7 @@ public class ExtractMenuOption implements MenuOption {
 	@Override
 	public void onSelect(Menu menu) {
 		Inventory loot = new Inventory();
-		Menu sub = new Menu(menu.getPlayer(), new LootMenuHandle(new BackOption(menu), loot));
+		Menu sub = new Menu(menu, new LootMenuHandle(loot));
 		int ct = (int)v.random(amount) + 1;
 		for(int i = 0; i < ct; i++) {
 			Item item = OreItemSpawner.randomOre(site.getParent().getName());

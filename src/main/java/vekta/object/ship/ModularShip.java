@@ -321,7 +321,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	}
 
 	public Menu openShipMenu() {
-		Menu menu = new Menu(getController(), new ObjectMenuHandle(new BackOption(getWorld()), this));
+		Menu menu = new Menu(getController(), new BackOption(getWorld()), new ObjectMenuHandle(this));
 		menu.add(new LoadoutMenuOption(this));
 		menu.add(new MissionMenuOption(getController()));
 		menu.add(new RenameOption(this));
@@ -334,7 +334,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	@Override
 	public void doLand(LandingSite site) {
 		if(hasController()) {
-			Menu menu = new Menu(getController(), new LandingMenuHandle(site, getWorld()));
+			Menu menu = new Menu(getController(), new ShipTakeoffOption(site, getWorld()), new LandingMenuHandle(site));
 			site.getTerrain().setupLandingMenu(menu);
 			menu.add(new SurveyOption(site));
 			menu.addDefault();
@@ -351,7 +351,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		//		Resources.stopSound("engine");
 		if(hasController()) {
 			if(s instanceof Ship) {
-				Menu menu = new Menu(getController(), new ObjectMenuHandle(new ShipUndockOption(this, getWorld()), s));
+				Menu menu = new Menu(getController(), new ShipUndockOption(this, getWorld()), new ObjectMenuHandle(s));
 				((Ship)s).setupDockingMenu(getController(), menu);
 				menu.addDefault();
 				setContext(menu);

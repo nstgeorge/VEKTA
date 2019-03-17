@@ -193,7 +193,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		//			objective.onStart(mission);
 		//		}
 
-		Menu menu = new Menu(getPlayer(), new ObjectMenuHandle(new BackOption(getContext()), sender.getShip()));
+		Menu menu = new Menu(getPlayer(), new BackOption(getContext()), new ObjectMenuHandle(sender.getShip()));
 		menu.add(new MissionOption(mission));
 		menu.addDefault();
 		setContext(menu);
@@ -332,7 +332,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 			println(playerMap);////
 			if(!playerMap.isEmpty()) {
 				menu.add(new CustomOption("Players", m -> {
-					Menu sub = new Menu(m.getPlayer(), new MenuHandle(new BackOption(m)));
+					Menu sub = new Menu(m.getPlayer(), new BackOption(m), new MenuHandle());
 					for(Player player : playerMap.values()) {
 						sub.add(new PlayerOption(player));
 					}

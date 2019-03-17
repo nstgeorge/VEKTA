@@ -24,11 +24,11 @@ public class LootMenuOption implements MenuOption {
 
 	@Override
 	public void onSelect(Menu menu) {
-		Menu sub = new Menu(menu.getPlayer(), new LootMenuHandle(new BackOption(menu, () -> {
+		Menu sub = new Menu(menu.getPlayer(), new BackOption(menu, () -> {
 			if(them.itemCount() == 0) {
 				menu.remove(this);
 			}
-		}), them));
+		}), new LootMenuHandle(them));
 		for(Item item : them) {
 			sub.add(new ItemTradeOption(true, you, them, item));
 		}

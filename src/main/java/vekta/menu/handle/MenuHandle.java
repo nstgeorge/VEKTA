@@ -3,9 +3,7 @@ package vekta.menu.handle;
 import vekta.KeyBinding;
 import vekta.Resources;
 import vekta.Settings;
-import vekta.context.Context;
 import vekta.menu.Menu;
-import vekta.menu.option.BackOption;
 import vekta.menu.option.MenuOption;
 
 import java.io.Serializable;
@@ -18,22 +16,11 @@ import static vekta.Vekta.*;
  */
 public class MenuHandle implements Serializable {
 	private static final int ITEMS_BEFORE_SCROLL = 5; // Number of items before menu starts scrolling
-	
-	private final MenuOption defaultOption;
 
 	// Internal menu reference for item scrolling (evaluating this approach)
 	private Menu menu;
 
-	public MenuHandle(Context parent) {
-		this(new BackOption(parent));
-	}
-
-	public MenuHandle(MenuOption defaultOption) {
-		this.defaultOption = defaultOption;
-	}
-
-	public MenuOption getDefault() {
-		return defaultOption;
+	public MenuHandle() {
 	}
 
 	public int getSpacing() {
@@ -83,7 +70,9 @@ public class MenuHandle implements Serializable {
 		v.textAlign(CENTER, CENTER);
 		v.rectMode(CENTER);
 		for(int i = 0; i < menu.size(); i++) {
-			drawButton(menu, menu.get(i), i);
+			MenuOption opt = menu.get(i);
+			opt.onUpdate(menu);
+			drawButton(menu, opt, i);
 		}
 
 		v.noStroke();
@@ -95,14 +84,14 @@ public class MenuHandle implements Serializable {
 		}
 	}
 
-	void drawButton(Menu menu, MenuOption opt, int index) {
+	protected void drawButton(Menu menu, MenuOption opt, int index) {
 		float yPos = getButtonY(index);
 		boolean selected = menu.getIndex() == index;
 
 		String name = opt.getName();
 
 		// Draw border
-		v.stroke(selected ? 255 : UI_COLOR);
+		v.stroke(selected ? 255 : opt == menu.getDefault() ? 100 : opt.getBorderColor());
 		v.noFill();
 		v.rect(getButtonX(), yPos, max(getButtonWidth(), v.textWidth(name) + 20) + (selected ? 10 : 0), 50);
 

@@ -2,7 +2,6 @@ package vekta.terrain.settlement;
 
 import vekta.menu.Menu;
 import vekta.menu.handle.DistrictMenuHandle;
-import vekta.menu.option.BackOption;
 import vekta.menu.option.CustomOption;
 import vekta.terrain.LandingSite;
 import vekta.terrain.building.BuildingType;
@@ -68,7 +67,7 @@ public class District implements SettlementPart {
 	public void setupMenu(Menu menu) {
 		if(!getParts().isEmpty()) {
 			menu.add(new CustomOption(getName(), m -> {
-				Menu sub = new Menu(m.getPlayer(), new DistrictMenuHandle(new BackOption(m), this));
+				Menu sub = new Menu(m, new DistrictMenuHandle(this));
 				for(SettlementPart part : getParts()) {
 					part.setupMenu(sub);
 				}

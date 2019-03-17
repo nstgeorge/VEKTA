@@ -85,7 +85,7 @@ public class StationLayoutContext implements Context, ModuleUpgrader {
 
 		// End station rendering
 		v.popMatrix();
-		
+
 		v.textAlign(CENTER);
 
 		// Draw title
@@ -143,7 +143,7 @@ public class StationLayoutContext implements Context, ModuleUpgrader {
 			uninstallModule(cursor.getModule());
 		}
 		else if(isPlacing()) {
-			Menu menu = new Menu(getPlayer(), new LoadoutMenuHandle(new BackOption(this), Collections.singletonList(cursor.getModule())));
+			Menu menu = new Menu(getPlayer(), new BackOption(this), new LoadoutMenuHandle(Collections.singletonList(cursor.getModule())));
 			for(Module module : getPlayer().getShip().findUpgrades()) {
 				if(module instanceof ComponentModule) {
 					ComponentModule m = (ComponentModule)module;

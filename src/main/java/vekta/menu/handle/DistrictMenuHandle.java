@@ -1,7 +1,6 @@
 package vekta.menu.handle;
 
 import vekta.menu.Menu;
-import vekta.menu.option.MenuOption;
 import vekta.terrain.settlement.District;
 
 /**
@@ -10,9 +9,7 @@ import vekta.terrain.settlement.District;
 public class DistrictMenuHandle extends MenuHandle {
 	private final District district;
 
-	public DistrictMenuHandle(MenuOption defaultOption, District district) {
-		super(defaultOption);
-
+	public DistrictMenuHandle(District district) {
 		this.district = district;
 	}
 

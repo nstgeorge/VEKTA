@@ -1,7 +1,6 @@
 package vekta.menu.handle;
 
 import vekta.menu.Menu;
-import vekta.menu.option.MenuOption;
 import vekta.terrain.LandingSite;
 
 import java.util.List;
@@ -21,9 +20,7 @@ public class SurveyMenuHandle extends MenuHandle {
 
 	private final float perspective;
 
-	public SurveyMenuHandle(MenuOption def, LandingSite site) {
-		super(def);
-
+	public SurveyMenuHandle(LandingSite site) {
 		this.site = site;
 
 		perspective = v.random(PI);
@@ -66,7 +63,7 @@ public class SurveyMenuHandle extends MenuHandle {
 			v.stroke(v.lerpColor(0, color, sq(cos(r / 2 + perspective))));
 			v.arc(0, 0, PLANET_SIZE * xScale, PLANET_SIZE, -HALF_PI, HALF_PI);
 		}
-		
+
 		// TODO: render object info (mass, radius, etc.)
 
 		// Draw features

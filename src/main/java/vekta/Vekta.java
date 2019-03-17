@@ -98,7 +98,7 @@ public class Vekta extends PApplet {
 		bodyFont = createFont(FONTNAME, 24);
 		v.textFont(bodyFont);
 
-		mainMenu = new Menu(null, new MainMenuHandle(new ExitGameOption("Quit")));
+		mainMenu = new Menu(null, new ExitGameOption("Quit"), new MainMenuHandle());
 		mainMenu.add(new WorldOption("Singleplayer", Singleplayer::new));
 		mainMenu.add(new WorldOption("Multiplayer", Multiplayer::new));
 		mainMenu.add(new SettingsMenuOption());

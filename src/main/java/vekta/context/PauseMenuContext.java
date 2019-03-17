@@ -7,8 +7,9 @@ import vekta.Settings;
 import static vekta.Vekta.*;
 
 /**
- * Pause inject implementation as a Context. Eventually this can be converted over to use a Menu for additional flexibility.
+ * Pause inject implementation as a Context. 
  */
+// TODO: convert to PauseMenuHandle
 public class PauseMenuContext implements Context {
 	private final World world;
 
@@ -51,12 +52,8 @@ public class PauseMenuContext implements Context {
 	 * Draws an option of name "name" at yPos in the overlay
 	 */
 	private void drawOption(String name, int yPos, boolean selected) {
-		// Shape ---------------------
-//		v.hint(DISABLE_DEPTH_TEST);
-		//		v.camera();
-		//		v.noLights();
 		if(selected)
-			v.stroke(255);
+			v.stroke(name.equals(options[options.length - 1]) ? 100 : 255);
 		else
 			v.stroke(UI_COLOR);
 		v.fill(1);

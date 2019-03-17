@@ -4,7 +4,6 @@ import processing.core.PVector;
 import vekta.Resources;
 import vekta.context.Hyperspace;
 import vekta.menu.Menu;
-import vekta.menu.option.MenuOption;
 
 import static processing.core.PConstants.CENTER;
 import static vekta.Vekta.v;
@@ -18,14 +17,10 @@ public class MainMenuHandle extends MenuHandle {
 			0.1F,
 			170);
 
-	public MainMenuHandle(MenuOption def) {
-		super(def);
-	}
-
 	@Override
 	public void focus(Menu menu) {
 		super.focus(menu);
-		
+
 		Resources.setMusic("theme", false);
 	}
 

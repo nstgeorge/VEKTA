@@ -13,8 +13,15 @@ public interface MenuOption extends Serializable {
 		return UI_COLOR;
 	}
 
+	default int getBorderColor() {
+		return UI_COLOR;
+	}
+
 	default boolean isEnabled() {
 		return true;
+	}
+
+	default void onUpdate(Menu menu) {
 	}
 
 	void onSelect(Menu menu);

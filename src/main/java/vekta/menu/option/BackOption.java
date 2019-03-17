@@ -24,7 +24,7 @@ public class BackOption implements MenuOption {
 	public String getName() {
 		return "Back";
 	}
-
+	
 	@Override
 	public void onSelect(Menu menu) {
 		setContext(parent);
@@ -33,7 +33,7 @@ public class BackOption implements MenuOption {
 		}
 		//		applyContext();
 	}
-	
+
 	public interface OptionCallback extends Serializable {
 		void callback();
 	}

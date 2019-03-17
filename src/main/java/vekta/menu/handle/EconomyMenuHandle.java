@@ -29,9 +29,7 @@ public class EconomyMenuHandle extends MenuHandle {
 
 	private final EconomyMenuCallback onChangeSide;
 
-	public EconomyMenuHandle(MenuOption defaultOption, Inventory inv, EconomyMenuCallback onChangeSide) {
-		super(defaultOption);
-
+	public EconomyMenuHandle(Inventory inv, EconomyMenuCallback onChangeSide) {
 		this.inv = inv;
 		this.onChangeSide = onChangeSide;
 	}

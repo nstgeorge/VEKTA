@@ -26,13 +26,13 @@ public class MissionMenuOption implements MenuOption {
 
 	@Override
 	public void onSelect(Menu menu) {
-		Menu sub = new Menu(menu.getPlayer(), new MissionMenuHandle(menu.getDefault()));
+		Menu sub = new Menu(menu.getPlayer(), menu.getDefault(), new MissionMenuHandle());
 		for(Mission mission : getPlayer().getMissions()) {
 			sub.add(new MissionOption(mission));
 		}
-		sub.add(new CustomOption("Deselect", () -> {
+		sub.add(new CustomOption("Deselect", m -> {
 			getPlayer().setCurrentMission(null);
-			sub.close();
+			m.close();
 		}).withColor(v.color(200)));
 		setContext(sub);
 	}

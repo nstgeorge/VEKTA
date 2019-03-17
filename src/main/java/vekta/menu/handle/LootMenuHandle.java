@@ -2,7 +2,6 @@ package vekta.menu.handle;
 
 import vekta.item.Inventory;
 import vekta.menu.Menu;
-import vekta.menu.option.MenuOption;
 
 import static vekta.Vekta.UI_COLOR;
 import static vekta.Vekta.v;
@@ -13,9 +12,7 @@ import static vekta.Vekta.v;
 public class LootMenuHandle extends MenuHandle {
 	private final Inventory inv;
 
-	public LootMenuHandle(MenuOption defaultOption, Inventory inv) {
-		super(defaultOption);
-
+	public LootMenuHandle(Inventory inv) {
 		this.inv = inv;
 	}
 

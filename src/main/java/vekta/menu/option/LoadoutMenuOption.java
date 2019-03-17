@@ -10,7 +10,7 @@ import static vekta.Vekta.setContext;
 
 public class LoadoutMenuOption implements MenuOption, ModuleUpgrader {
 	private final ModuleUpgradeable upgradeable;
-	
+
 	public LoadoutMenuOption(ModuleUpgradeable upgradeable) {
 		this.upgradeable = upgradeable;
 	}
@@ -26,7 +26,7 @@ public class LoadoutMenuOption implements MenuOption, ModuleUpgrader {
 
 	@Override
 	public void onSelect(Menu menu) {
-		Menu sub = new Menu(menu.getPlayer(), new LoadoutMenuHandle(menu.getDefault(), upgradeable.getModules()));
+		Menu sub = new Menu(menu.getPlayer(), menu.getDefault(), new LoadoutMenuHandle(upgradeable.getModules()));
 		sub.addSelectListener(option -> updateMenu(sub));
 		updateMenu(sub);
 		setContext(sub);

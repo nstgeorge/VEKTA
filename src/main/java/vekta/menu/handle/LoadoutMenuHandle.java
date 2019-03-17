@@ -1,7 +1,6 @@
 package vekta.menu.handle;
 
 import vekta.menu.Menu;
-import vekta.menu.option.MenuOption;
 import vekta.module.Module;
 
 import java.util.List;
@@ -14,9 +13,7 @@ import static vekta.Vekta.v;
 public class LoadoutMenuHandle extends MenuHandle {
 	private final List<Module> modules;
 
-	public LoadoutMenuHandle(MenuOption defaultOption, List<Module> modules) {
-		super(defaultOption);
-
+	public LoadoutMenuHandle(List<Module> modules) {
 		this.modules = modules;
 	}
 

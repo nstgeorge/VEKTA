@@ -2,7 +2,6 @@ package vekta.menu.handle;
 
 import vekta.RenderLevel;
 import vekta.menu.Menu;
-import vekta.menu.option.MenuOption;
 import vekta.object.SpaceObject;
 
 import static vekta.Vekta.v;
@@ -15,9 +14,7 @@ public class ObjectMenuHandle extends MenuHandle {
 
 	private final SpaceObject target;
 
-	public ObjectMenuHandle(MenuOption def, SpaceObject target) {
-		super(def);
-
+	public ObjectMenuHandle(SpaceObject target) {
 		this.target = target;
 	}
 

@@ -82,7 +82,7 @@ public class RingDebris extends Planet implements Damageable {
 			if(ship.hasController() && ship.isDockable(this)) {
 				ship.dock(this);
 				Player player = ship.getController();
-				Menu menu = new Menu(player, new ObjectMenuHandle(new ShipUndockOption(ship, getWorld()), this));
+				Menu menu = new Menu(player, new ShipUndockOption(ship, getWorld()), new ObjectMenuHandle(this));
 				menu.addDefault();
 				setContext(menu);
 				applyContext();

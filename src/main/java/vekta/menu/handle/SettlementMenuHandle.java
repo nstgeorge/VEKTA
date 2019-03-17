@@ -1,7 +1,6 @@
 package vekta.menu.handle;
 
 import vekta.menu.Menu;
-import vekta.menu.option.MenuOption;
 import vekta.terrain.settlement.Settlement;
 
 import static vekta.Vekta.v;
@@ -12,9 +11,7 @@ import static vekta.Vekta.v;
 public class SettlementMenuHandle extends MenuHandle {
 	private final Settlement settlement;
 
-	public SettlementMenuHandle(MenuOption def, Settlement settlement) {
-		super(def);
-
+	public SettlementMenuHandle(Settlement settlement) {
 		this.settlement = settlement;
 	}
 

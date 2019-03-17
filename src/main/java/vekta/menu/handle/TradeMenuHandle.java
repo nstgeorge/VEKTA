@@ -15,9 +15,7 @@ public class TradeMenuHandle extends MenuHandle {
 	private boolean buying;
 	private final Inventory to;
 
-	public TradeMenuHandle(MenuOption defaultOption, boolean buying, Inventory to) {
-		super(defaultOption);
-
+	public TradeMenuHandle(boolean buying, Inventory to) {
 		this.buying = buying;
 		this.to = to;
 	}

@@ -4,7 +4,6 @@ import vekta.item.Item;
 import vekta.item.OreItem;
 import vekta.menu.Menu;
 import vekta.menu.handle.MenuHandle;
-import vekta.menu.option.BackOption;
 import vekta.menu.option.CustomOption;
 import vekta.menu.option.OreRefineOption;
 import vekta.terrain.LandingSite;
@@ -44,7 +43,7 @@ public class RefineryBuilding implements SettlementPart {
 	@Override
 	public void setupMenu(Menu menu) {
 		menu.add(new CustomOption("Refinery", m -> {
-			Menu sub = new Menu(m.getPlayer(), new MenuHandle(new BackOption(m)));
+			Menu sub = new Menu(m, new MenuHandle());
 			for(Item item : m.getPlayer().getInventory()) {
 				if(item instanceof OreItem && ((OreItem)item).getRefined() != null) {
 					sub.add(new OreRefineOption((OreItem)item, m.getPlayer().getInventory()));

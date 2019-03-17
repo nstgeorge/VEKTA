@@ -115,7 +115,7 @@ public class SpaceStation extends ModularShip {
 			drawRelative(level, r);
 		}
 
-//		emitter.update(new PVector(1, 0));
+		//		emitter.update(new PVector(1, 0));
 	}
 
 	@Override
@@ -131,7 +131,7 @@ public class SpaceStation extends ModularShip {
 			v.rotate(component.getDirection()/*.rotate(component.getRotation())*/.getAngle());
 			component.getModule().draw(dist, TILE_SIZE * ratio);
 			v.popMatrix();
-			
+
 			v.noFill(); // Component models assume no fill by default
 
 			//			// DEBUG: render bounding boxes
@@ -147,9 +147,8 @@ public class SpaceStation extends ModularShip {
 	// TODO: convert to event listener
 	@Override
 	public void setupDockingMenu(Player player, Menu menu) {
-		menu.add(new CustomOption("Customize", () -> {
-			setContext(new StationLayoutContext(menu, this, player));
-		}));
+		menu.add(new CustomOption("Customize", m ->
+				setContext(new StationLayoutContext(menu, this, player))));
 	}
 
 	public final class Component implements Serializable {

@@ -27,7 +27,7 @@ public class UpgradeMenuOption implements MenuOption {
 
 	@Override
 	public void onSelect(Menu menu) {
-		Menu sub = new Menu(menu.getPlayer(), new MenuHandle(new BackOption(menu)));
+		Menu sub = new Menu(menu, new MenuHandle());
 		updateMenu(sub, menu);
 		sub.addSelectListener(option -> updateMenu(sub, menu));
 		setContext(sub);

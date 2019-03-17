@@ -1,8 +1,6 @@
 package vekta.menu.handle;
 
-import vekta.context.World;
 import vekta.menu.Menu;
-import vekta.menu.option.ShipTakeoffOption;
 import vekta.object.SpaceObject;
 import vekta.terrain.LandingSite;
 
@@ -14,9 +12,7 @@ import static vekta.Vekta.v;
 public class LandingMenuHandle extends MenuHandle {
 	private final LandingSite site;
 
-	public LandingMenuHandle(LandingSite site, World world) {
-		super(new ShipTakeoffOption(site, world));
-
+	public LandingMenuHandle(LandingSite site) {
 		this.site = site;
 	}
 
@@ -32,7 +28,7 @@ public class LandingMenuHandle extends MenuHandle {
 	@Override
 	public void render(Menu menu) {
 		super.render(menu);
-		
+
 		site.getTune().update();
 
 		SpaceObject s = site.getParent();

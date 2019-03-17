@@ -31,7 +31,7 @@ public class PlayerOption implements MenuOption {
 
 	@Override
 	public void onSelect(Menu menu) {
-		Menu sub = new Menu(menu.getPlayer(), new ObjectMenuHandle(menu.getDefault(), player.getShip()));
+		Menu sub = new Menu(menu.getPlayer(), menu.getDefault(), new ObjectMenuHandle(player.getShip()));
 		sub.add(new CustomOption("Set Target", m -> {
 			Targeter t = (Targeter)m.getPlayer().getShip().getModule(ModuleType.TARGET_COMPUTER);
 			if(t != null) {

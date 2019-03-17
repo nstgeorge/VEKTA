@@ -3,7 +3,6 @@ package vekta.menu.handle;
 import vekta.Faction;
 import vekta.context.Context;
 import vekta.menu.Menu;
-import vekta.menu.option.MenuOption;
 
 import static vekta.Vekta.v;
 
@@ -14,9 +13,7 @@ public class SecurityMenuHandle extends MenuHandle {
 	private final Faction faction;
 	private final Context next;
 
-	public SecurityMenuHandle(MenuOption back, Context next, Faction faction) {
-		super(back);
-
+	public SecurityMenuHandle(Context next, Faction faction) {
 		this.faction = faction;
 		this.next = next;
 	}

@@ -30,12 +30,12 @@ public class SettlementOption implements MenuOption {
 
 	@Override
 	public void onSelect(Menu menu) {
-		Menu sub = new Menu(menu.getPlayer(), new SettlementMenuHandle(new BackOption(menu), getSettlement()));
+		Menu sub = new Menu(menu, new SettlementMenuHandle(getSettlement()));
 		getSettlement().setupMenu(sub);
 		sub.addDefault();
 
 		if(getSettlement().getFaction().isEnemy(menu.getPlayer().getFaction())) {
-			Menu security = new Menu(menu.getPlayer(), new SecurityMenuHandle(sub.getDefault(), sub, getSettlement().getFaction()));
+			Menu security = new Menu(menu.getPlayer(), sub.getDefault(), new SecurityMenuHandle(sub, getSettlement().getFaction()));
 			security.addDefault();
 			setContext(security);
 		}

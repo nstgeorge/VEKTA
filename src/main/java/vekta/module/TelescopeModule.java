@@ -59,7 +59,7 @@ public class TelescopeModule extends ShipModule {
 				float dist = PVector.dist(getShip().getPosition(), planet.getPosition());
 				float maxDist = getResolution() * RANGE_SCALE;
 				if(dist <= maxDist) {
-					Menu menu = new Menu(getShip().getController(), new SurveyMenuHandle(new BackOption(getWorld()), planet.getLandingSite()));
+					Menu menu = new Menu(getShip().getController(), new BackOption(getWorld()), new SurveyMenuHandle(planet.getLandingSite()));
 					menu.addDefault();
 					setContext(menu);
 				}

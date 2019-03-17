@@ -33,8 +33,8 @@ public class EstateMenuOption implements MenuOption {
 
 	@Override
 	public void onSelect(Menu menu) {
-		EconomyMenuHandle handle = new EconomyMenuHandle(new BackOption(menu), menu.getPlayer().getInventory(), this::update);
-		Menu sub = new Menu(menu.getPlayer(), handle);
+		EconomyMenuHandle handle = new EconomyMenuHandle(menu.getPlayer().getInventory(), this::update);
+		Menu sub = new Menu(menu, handle);
 		update(sub, handle.isBuying());
 		setContext(sub);
 	}

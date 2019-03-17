@@ -5,6 +5,7 @@ import vekta.Player;
 import vekta.PlayerEvent;
 import vekta.context.Context;
 import vekta.menu.handle.MenuHandle;
+import vekta.menu.option.BackOption;
 import vekta.menu.option.MenuOption;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class Menu implements Context {
 	private final Player player;
 	private final MenuHandle handle;
 
+	private MenuOption defaultOption;
 	private final List<MenuOption> options = new ArrayList<>();
 	private final List<MenuListener> listeners = new ArrayList<>();
 
@@ -26,9 +28,14 @@ public class Menu implements Context {
 
 	private int index;
 
-	public Menu(Player player, MenuHandle handle) {
+	public Menu(Menu parent, MenuHandle handle) {
+		this(parent.getPlayer(), new BackOption(parent), handle);
+	}
+
+	public Menu(Player player, MenuOption def, MenuHandle handle) {
 		this.player = player;
 		this.handle = handle;
+		this.defaultOption = def;
 
 		handle.init(this);
 
@@ -77,7 +84,11 @@ public class Menu implements Context {
 	}
 
 	public MenuOption getDefault() {
-		return handle.getDefault();
+		return defaultOption;
+	}
+
+	public void setDefaultOption(MenuOption defaultOption) {
+		this.defaultOption = defaultOption;
 	}
 
 	public void clear() {
@@ -93,7 +104,7 @@ public class Menu implements Context {
 	}
 
 	public void addDefault() {
-		add(handle.getDefault());
+		add(defaultOption);
 	}
 
 	public boolean remove(MenuOption item) {
@@ -192,8 +203,8 @@ public class Menu implements Context {
 	}
 
 	public void close() {
-		if(handle.getDefault() != null) {
-			select(handle.getDefault());
+		if(getDefault() != null) {
+			select(getDefault());
 		}
 	}
 }
