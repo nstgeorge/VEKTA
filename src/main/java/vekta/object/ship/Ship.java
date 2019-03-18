@@ -64,6 +64,11 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 	}
 
 	@Override
+	public RenderLevel getDespawnLevel() {
+		return RenderLevel.PLANET;
+	}
+
+	@Override
 	public float getSpecificHeat() {
 		return 1;
 	}

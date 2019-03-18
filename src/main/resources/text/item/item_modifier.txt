@@ -31,3 +31,6 @@ Assembler
 Disassembler
 Compressor
 Dissector
+Dispenser
+Condenser
+Statue

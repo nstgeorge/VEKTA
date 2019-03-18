@@ -62,3 +62,7 @@ Wiggly
 Bad
 Stinky
 Strong-Smelling
+Crumpled
+Crumbling
+Mummified
+Charred

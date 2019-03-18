@@ -2,8 +2,7 @@ package vekta.object;
 
 import processing.core.PVector;
 import vekta.RenderLevel;
-import vekta.object.particle.ColorRange;
-import vekta.object.particle.ColorSelector;
+import vekta.object.particle.*;
 import vekta.object.planet.Planet;
 
 import static processing.core.PApplet.sq;
@@ -11,7 +10,7 @@ import static vekta.Vekta.register;
 import static vekta.Vekta.v;
 
 public class PlanetBusterProjectile extends HomingProjectile {
-	private static final float EXPLOSION_SCALE = 1;
+	private static final float EXPLOSION_SCALE = 100;
 
 	public PlanetBusterProjectile(SpaceObject parent, SpaceObject target, PVector position, PVector velocity, int color) {
 		super(parent, target, 1000, position, velocity, color);
@@ -45,14 +44,14 @@ public class PlanetBusterProjectile extends HomingProjectile {
 
 			ColorSelector colorRange = new ColorRange(s.getColor(), 255);
 
-			//			ParticleStyle style = new ParticleStyle()
-			//					.withStartColor(colorRange)
-			//					.withEndColor(new ConstantColor(0))
-			//					.withLifetime(200);
-			//
-			//			for(int i = 0; i < 50; i++) {
-			//				register(new Particle(s, position, PVector.random2D().mult(s.getRadius() * EXPLOSION_SCALE).add(velocity), style));
-			//			}
+//			ParticleStyle style = new ParticleStyle()
+//					.withStartColor(colorRange)
+//					.withEndColor(new ConstantColor(0))
+//					.withLifetime(200);
+//
+//			for(int i = 0; i < 50; i++) {
+//				register(new Particle(s, position, PVector.random2D().mult(v.random(s.getRadius() * EXPLOSION_SCALE)).add(velocity), style));
+//			}
 
 			for(int i = 0; i < 10; i++) {
 				int color = v.chance(.5F) ? 255 : colorRange.selectColor();

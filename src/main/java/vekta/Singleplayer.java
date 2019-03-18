@@ -606,16 +606,17 @@ public class Singleplayer implements World, PlayerListener {
 			pan = 1;
 
 		// Volume
-		float volume = (MAX_AUDITORY_DISTANCE - distance) / MAX_AUDITORY_DISTANCE;
+		float maxDistance = MAX_AUDITORY_DISTANCE * getZoom();
+		float volume = (maxDistance - distance) / maxDistance;
 		if(volume < 0)
 			volume = 0;
 		if(volume > 1)
 			volume = 1;
 
+		Resources.playSound(sound);
 		Resources.setSoundVolume(sound, volume);
 		Resources.setSoundPan(sound, pan);
-		Resources.playSound(sound);
-		Resources.resetSoundVolumeAndPan(sound);
+		//		Resources.resetSoundVolumeAndPan(sound);
 	}
 
 	public boolean load(File file) {

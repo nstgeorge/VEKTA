@@ -1,8 +1,11 @@
 {firstname}
 {firstname} {firstname}
-{firstname} {firstname}{lastname_suffix}
+{firstname} {lastname}
 {person_adj} {firstname}
-Lord {firstname} {firstname}{lastname_suffix}
+Lord {firstname} {lastname}
+Sir {firstname} {lastname}
+Big {firstname}
+Little {firstname}
 Mr. {firstname}
 Ms. {firstname}
 Dr. {firstname}

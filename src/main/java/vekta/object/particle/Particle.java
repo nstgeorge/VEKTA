@@ -62,9 +62,14 @@ public class Particle extends SpaceObject {
 		return 1;
 	}
 
+//	@Override
+//	public RenderLevel getRenderLevel() {
+//		return RenderLevel.SHIP;
+//	}
+
 	@Override
 	public RenderLevel getRenderLevel() {
-		return RenderLevel.SHIP;
+		return RenderLevel.STAR;
 	}
 
 	@Override

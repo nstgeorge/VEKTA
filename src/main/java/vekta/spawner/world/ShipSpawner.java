@@ -17,7 +17,7 @@ public abstract class ShipSpawner implements WorldGenerator.WorldSpawner {
 
 	@Override
 	public RenderLevel getObjectLevel() {
-		return RenderLevel.SHIP;
+		return RenderLevel.PLANET;
 	}
 
 	@Override
