@@ -1,14 +1,15 @@
 package vekta.module;
 
 import processing.core.PVector;
-import vekta.object.ship.ModularShip;
 import vekta.object.Projectile;
+import vekta.object.ship.ModularShip;
 
-import static vekta.Vekta.*;
+import static vekta.Vekta.getWorld;
+import static vekta.Vekta.register;
 
 public class CannonModule extends WeaponModule {
 	private static final float PROJECTILE_SPEED = 20;
-
+	
 	@Override
 	public String getName() {
 		return "Plasma Cannon";

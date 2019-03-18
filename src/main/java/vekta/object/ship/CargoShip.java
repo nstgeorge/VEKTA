@@ -8,15 +8,11 @@ import vekta.RenderLevel;
 import vekta.menu.Menu;
 import vekta.menu.option.LootMenuOption;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static vekta.Vekta.register;
+import static vekta.Vekta.getWorld;
 import static vekta.Vekta.v;
 
 public class CargoShip extends Ship {
-	// CargoShip defaults
-	private static final float DEF_MASS = 500;
+	private static final float DEF_MASS = 1000;
 	private static final float DEF_RADIUS = 15;
 	private static final float DEF_SPEED = .01F;
 	private static final float DEF_TURN = 1;
@@ -28,25 +24,14 @@ public class CargoShip extends Ship {
 
 	private final Faction faction;
 
-	private final List<FighterShip> fighters = new ArrayList<>();
-
 	public CargoShip(String name, PVector heading, PVector position, PVector velocity, Faction faction) {
 		super(name, heading, position, velocity, faction.getColor(), DEF_SPEED, DEF_TURN);
 
 		this.faction = faction;
+	}
 
-		int escortCt = (int)v.random(1, 3);
-		for(int i = 0; i < escortCt; i++) {
-			FighterShip fighter = register(new FighterShip(
-					getName() + " Defender",
-					heading,
-					PVector.random2D().mult(getRadius() * 10).add(position),
-					velocity,
-					getColor()
-			));
-			fighters.add(fighter);
-			fighter.setTarget(this); // Follow cargo ship
-		}
+	public Faction getFaction() {
+		return faction;
 	}
 
 	@Override
@@ -74,8 +59,10 @@ public class CargoShip extends Ship {
 	public void setupDockingMenu(Player player, Menu menu) {
 		menu.add(new LootMenuOption("Loot", player.getInventory(), getInventory()));
 
-		for(FighterShip fighter : fighters) {
-			fighter.setTarget(player.getShip());
+		for(EscortShip escort : getWorld().findObjects(EscortShip.class)) {
+			if(escort.getTarget() == this) {
+				escort.setTarget(player.getShip());
+			}
 		}
 	}
 

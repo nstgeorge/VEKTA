@@ -1,0 +1,4 @@
+{person}
+{firstname_boss} {person_title}
+{firstname_boss} {boss_title}
+{item_adj_common} {firstname_boss}

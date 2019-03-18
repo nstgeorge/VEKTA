@@ -12,6 +12,9 @@ Phone : High Tech
 Ancient : Artifact
 Relic : Artifact
 
+Weapon : Weapon
+Military : Weapon
+Militarized : Weapon
 Meathook : Weapon
 Bonesaw : Weapon
 Hacksaw : Weapon

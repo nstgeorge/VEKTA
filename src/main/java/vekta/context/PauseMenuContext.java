@@ -7,7 +7,7 @@ import vekta.Settings;
 import static vekta.Vekta.*;
 
 /**
- * Pause inject implementation as a Context. 
+ * Pause inject implementation as a Context.
  */
 // TODO: convert to PauseMenuHandle
 public class PauseMenuContext implements Context {
@@ -53,9 +53,9 @@ public class PauseMenuContext implements Context {
 	 */
 	private void drawOption(String name, int yPos, boolean selected) {
 		if(selected)
-			v.stroke(name.equals(options[options.length - 1]) ? 100 : 255);
+			v.stroke(255);
 		else
-			v.stroke(UI_COLOR);
+			v.stroke(name.equals(options[options.length - 1]) ? 100 : UI_COLOR);
 		v.fill(1);
 		v.rectMode(CENTER);
 		v.rect(v.width / 8F, yPos, 200 + (selected ? 10 : 0), 50);

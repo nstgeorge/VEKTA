@@ -23,16 +23,20 @@ public class PersonGenerator {
 	}
 
 	public static Person createPerson(Settlement home) {
-		Person person = register(new Person(randomPersonName(), FactionGenerator.randomFaction()));
+		Person person = register(new Person(randomPersonName(), home.getFaction()));
 		person.setHome(home);
 		if(v.random(1) < .5F) {
 			person.setTitle(randomPersonTitle(person));
 		}
 		return person;
 	}
-
+	
 	public static String randomPersonName() {
 		return Resources.generateString("person");
+	}
+
+	public static String randomBossName() {
+		return Resources.generateString("boss");
 	}
 
 	public static String randomPersonTitle(Person person) {

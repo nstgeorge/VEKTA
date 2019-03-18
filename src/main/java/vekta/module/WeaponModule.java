@@ -11,9 +11,13 @@ public abstract class WeaponModule extends ShipModule {
 
 	@Override
 	public void onKeyPress(KeyBinding key) {
-		if(key == KeyBinding.SHIP_FIRE) {
+		if(key == getFireKey()) {
 			fireWeapon();
 		}
+	}
+
+	public KeyBinding getFireKey() {
+		return KeyBinding.SHIP_ATTACK;
 	}
 
 	public abstract void fireWeapon();

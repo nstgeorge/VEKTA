@@ -66,6 +66,10 @@ public class CargoCrate extends SpaceObject {
 
 	@Override
 	public void onCollide(SpaceObject s) {
+		if(s.isDestroyed()) {
+			return;
+		}
+
 		destroyBecause(s);
 		if(s instanceof ModularShip && ((ModularShip)s).hasController()) {
 			Player player = ((ModularShip)s).getController();

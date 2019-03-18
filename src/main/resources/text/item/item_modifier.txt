@@ -1,3 +1,4 @@
+{boss_modifier}
 Attachment
 Tenderizer
 Lasso
@@ -29,3 +30,4 @@ Swiper
 Assembler
 Disassembler
 Compressor
+Dissector

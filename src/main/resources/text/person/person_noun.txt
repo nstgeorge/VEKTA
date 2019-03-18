@@ -33,3 +33,6 @@ Gangster
 Accountant
 Engineer
 Swindler
+Guardian
+Protector
+Agent

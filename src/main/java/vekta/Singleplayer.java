@@ -25,9 +25,8 @@ import vekta.person.Person;
 import vekta.sound.SoundGroup;
 import vekta.spawner.EconomyGenerator;
 import vekta.spawner.EventGenerator;
-import vekta.spawner.FactionGenerator;
+import vekta.spawner.MissionGenerator;
 import vekta.spawner.WorldGenerator;
-import vekta.spawner.item.ClothingItemSpawner;
 import vekta.spawner.world.StarSystemSpawner;
 
 import java.io.*;
@@ -123,6 +122,7 @@ public class Singleplayer implements World, PlayerListener {
 				new PVector(), // Velocity
 				v.color(0, 255, 0)
 		));
+		playerShip.setPersistent(true);
 		playerShip.getInventory().add(50); // Starting money
 		playerShip.setController(player);
 
@@ -170,11 +170,12 @@ public class Singleplayer implements World, PlayerListener {
 
 		playerShip.addModule(new EngineModule(2)); // Upgrade engine
 		playerShip.addModule(new AutopilotModule());
-		playerShip.addModule(new AntennaModule(1));
+		playerShip.addModule(new AntennaModule());
 		playerShip.addModule(new TelescopeModule(.5F));
 		playerShip.addModule(new DrillModule(2));
-		playerShip.addModule(new HyperdriveModule(1));
+		playerShip.addModule(new HyperdriveModule());
 		playerShip.addModule(new ActiveTCSModule(2));
+		playerShip.addModule(new CountermeasureModule());
 		playerShip.getInventory().add(new ModuleItem(new GeneratorModule()));
 		playerShip.getInventory().add(new ModuleItem(new WormholeModule()));
 		playerShip.getInventory().add(new ModuleItem(new TorpedoModule(2)));
@@ -274,7 +275,7 @@ public class Singleplayer implements World, PlayerListener {
 				// Increment count for object's render level
 				objectCounts[s.getRenderLevel().ordinal()]++;
 			}
-
+						
 			if(targeting) {
 				// Update Targeter instances
 				s.updateTargets();
@@ -347,7 +348,7 @@ public class Singleplayer implements World, PlayerListener {
 		if(objectCounts[spawnLevel.ordinal()] < MAX_OBJECTS_PER_DIST) {
 			WorldGenerator.spawnOccasional(spawnLevel, playerShip);
 		}
-
+		
 		if(eventCt.cycle()) {
 			eventCt.randomize();
 			EventGenerator.spawnEvent(getPlayer());
@@ -418,12 +419,12 @@ public class Singleplayer implements World, PlayerListener {
 	// Temp: debug key listener
 	@Override
 	public void keyPressed(KeyEvent event) {
-		//		if(v.key == '`') {
-		//			MissionGenerator.createMission(getPlayer(), MissionGenerator.randomMissionPerson(), (int)v.random(5) + 1).start();
-		//		}
 		if(v.key == '`') {
-			getPlayer().getInventory().add(ClothingItemSpawner.createDisguiseItem(FactionGenerator.randomFaction()));
+			MissionGenerator.createMission(getPlayer(), MissionGenerator.randomMissionPerson(), (int)v.random(5) + 1).start();
 		}
+		//		if(v.key == '`') {
+		//			getPlayer().getInventory().add(ClothingItemSpawner.createDisguiseItem(FactionGenerator.randomFaction()));
+		//		}
 		World.super.keyPressed(event);
 	}
 

@@ -26,7 +26,7 @@ public class QuicktimeOption implements MenuOption {
 
 	@Override
 	public String getName() {
-		return name + " (" + (int)(time) + ":" + (int)(time * 60) + ")";
+		return name + " [" + (int)(time) + ":" + (int)(time * 60) + "]";
 	}
 
 	@Override

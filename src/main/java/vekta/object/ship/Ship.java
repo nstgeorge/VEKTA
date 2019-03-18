@@ -106,7 +106,7 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 		if(dock != null) {
 			PVector offset = getPosition().sub(dock.getPosition());
 			setVelocity(dock.getVelocity().add(offset.mult(.01F)));
-			position.add(offset.setMag(getRadius() + dock.getRadius()));
+//			position.add(offset.setMag(getRadius() + dock.getRadius()));
 			this.dock = null;
 			onDepart(dock);
 		}
@@ -159,7 +159,7 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 
 	@Override
 	public void drawDistant(float r) {
-		drawMarker();///////
+		drawMarker();
 	}
 
 	protected void drawShip(float r, ShipModelType shape) {

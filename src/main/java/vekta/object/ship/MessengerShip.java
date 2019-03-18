@@ -53,7 +53,7 @@ public class MessengerShip extends Ship {
 	}
 
 	@Override
-	public RenderLevel getRenderLevel() {
+	public RenderLevel getDespawnLevel() {
 		return RenderLevel.PLANET; // Increase despawn radius compared to other ships
 	}
 

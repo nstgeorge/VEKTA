@@ -1,7 +1,9 @@
 package vekta.spawner;
 
+import vekta.Faction;
 import vekta.Player;
 import vekta.Resources;
+import vekta.menu.Menu;
 import vekta.person.Dialog;
 import vekta.person.OpinionType;
 import vekta.person.Person;
@@ -27,16 +29,19 @@ public final class DialogGenerator {
 		}
 	}
 
-	public static void setupPlayerDialog(Player player, Dialog dialog) {
+	public static void setupDialogMenu(Menu menu, Dialog dialog) {
 		DialogSpawner spawner = SPAWNERS.get(dialog.getType());
 		if(spawner != null) {
-			spawner.setup(player, dialog);
+			spawner.setup(menu, dialog);
 		}
 	}
 
 	public static Dialog randomVisitDialog(Player player, Person person) {
-		if(person.getOpinion(player.getFaction()).isNegative()) {
-			return person.createDialog("busy");
+		if(person.getOpinion(player.getFaction()) == OpinionType.UNFRIENDLY) {
+			return person.createDialog(v.chance(.5F) ? "busy" : "ask_leave");
+		}
+		else if(person.getOpinion(player.getFaction()) == OpinionType.ENEMY) {
+			return person.createDialog(v.chance(.8F) ? "call_security" : "ask_leave");
 		}
 		else if(person.isBusy()) {
 			return person.createDialog("greeting").then("busy");
@@ -61,9 +66,14 @@ public final class DialogGenerator {
 		return dialog;
 	}
 
+	public static Dialog randomSecurityDialog(Faction faction) {
+		Person guard = new Person("Security Guard", faction);
+		return guard.createDialog("security");
+	}
+
 	public interface DialogSpawner {
 		String getType();
 
-		void setup(Player player, Dialog dialog);
+		void setup(Menu menu, Dialog dialog);
 	}
 }

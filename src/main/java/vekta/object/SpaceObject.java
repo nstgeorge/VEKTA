@@ -5,7 +5,6 @@ import vekta.PlayerEvent;
 import vekta.RenderLevel;
 import vekta.Syncable;
 import vekta.object.ship.ModularShip;
-import vekta.spawner.WorldGenerator;
 
 import java.io.Serializable;
 import java.util.List;
@@ -14,7 +13,7 @@ import static vekta.Vekta.*;
 
 public abstract class SpaceObject extends Syncable<SpaceObject> implements Serializable {
 	private static final float MARKER_SIZE = 40;
-	private static final int DEFAULT_TRAIL_LENGTH = 100;
+	private static final int DEFAULT_TRAIL_LENGTH = 50;
 	private static final float MOTION_SYNC_FACTOR = .2F; // How much to over/undercorrect object motion
 
 	protected final PVector[] trail;
@@ -268,12 +267,10 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	}
 
 	public void drawDistant(float r) {
-		//		drawMarker();
 	}
 
 	public void drawMarker() {
-		// Temp
-		v.stroke(v.lerpColor(0, getColor(), 1 - getPosition().mag() / WorldGenerator.getRadius(getRenderLevel())));
+//		v.stroke(v.lerpColor(0, getColor(), sq(1 - getPosition().mag() / WorldGenerator.getRadius(getDespawnLevel()))));
 
 		float outer = MARKER_SIZE * getMarkerScale();
 		float inner = outer * .8F;

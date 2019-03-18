@@ -1,17 +1,18 @@
 package vekta.spawner.dialog;
 
 import vekta.menu.Menu;
+import vekta.menu.option.BackOption;
 import vekta.person.Dialog;
 import vekta.spawner.DialogGenerator;
 
-public class ConfrontDialogSpawner implements DialogGenerator.DialogSpawner {
+public class SecurityDialogSpawner implements DialogGenerator.DialogSpawner {
 	@Override
 	public String getType() {
-		return "confront";
+		return "security";
 	}
 
 	@Override
 	public void setup(Menu menu, Dialog dialog) {
-		dialog.getPerson().downgradeOpinion(menu.getPlayer().getFaction());
+		menu.setDefault(new BackOption(menu));
 	}
 }

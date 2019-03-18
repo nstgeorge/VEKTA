@@ -1,41 +1,32 @@
 package vekta.spawner.world;
 
 import processing.core.PVector;
-import vekta.RenderLevel;
 import vekta.module.BatteryModule;
 import vekta.module.RCSModule;
 import vekta.module.station.SensorModule;
 import vekta.module.station.SolarArrayModule;
 import vekta.module.station.StationCoreModule;
 import vekta.module.station.StructuralModule;
-import vekta.object.SpaceObject;
-import vekta.object.planet.TerrestrialPlanet;
 import vekta.object.ship.SpaceStation;
-import vekta.spawner.WorldGenerator;
+import vekta.terrain.LandingSite;
 
-import static vekta.Vekta.*;
+import static vekta.Vekta.register;
+import static vekta.Vekta.v;
 import static vekta.spawner.ItemGenerator.addLoot;
 import static vekta.spawner.WorldGenerator.orbit;
 import static vekta.spawner.WorldGenerator.randomPlanetColor;
 
-public class SpaceStationSpawner implements WorldGenerator.WorldSpawner {
+public class SpaceStationSpawner extends ShipSpawner {
 	@Override
 	public float getWeight() {
 		return .5F;
 	}
 
 	@Override
-	public RenderLevel getSpawnLevel() {
-		return RenderLevel.SHIP;
-	}
-
-	@Override
-	public void spawn(SpaceObject center, PVector pos) {
-		SpaceObject orbit = getWorld().findOrbitObject(center);
-		if(orbit instanceof TerrestrialPlanet) {
-			// Only spawn near terrestrial planets
-			int color = v.random(1) < .6F ? orbit.getColor() : randomPlanetColor();
-			SpaceStation s = register(new SpaceStation("OUTPOST I", new StationCoreModule(), PVector.random2D(), pos, new PVector(), color));
+	public void spawn(LandingSite site, PVector pos) {
+		if(site.getTerrain().isInhabited()) {
+			int color = v.random(1) < .6F ? site.getParent().getColor() : randomPlanetColor();
+			SpaceStation s = register(new SpaceStation("Space Station", new StationCoreModule(), PVector.random2D(), pos, new PVector(), color));
 
 			// TODO: randomize
 			SpaceStation.Component core = s.getCore();
@@ -48,9 +39,9 @@ public class SpaceStationSpawner implements WorldGenerator.WorldSpawner {
 			SpaceStation.Component panel3 = struct2.attach(SpaceStation.Direction.RIGHT, new SolarArrayModule(1));
 			SpaceStation.Component sensor = struct2.attach(SpaceStation.Direction.LEFT, new SensorModule());
 
-			orbit(orbit, s, .5F);
+			orbit(site.getParent(), s, .25F);
 
-			addLoot(s.getInventory(), 3);
+			addLoot(s.getInventory(), 2);
 
 		}
 	}

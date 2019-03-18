@@ -40,7 +40,7 @@ public class GeneratorModule extends ShipModule {
 	@Override
 	public void onUpdate() {
 		float amount = 10 * getRate() * PER_MINUTE;
-		if(getShip().getEnergy() < getShip().getMaxEnergy()) {
+		if(getShip().getEnergy() < getShip().getMaxEnergy() && !getShip().isOverheated()) {
 			getShip().recharge(amount);
 			getShip().addHeat(amount * GENERATOR_HEAT);
 		}

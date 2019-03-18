@@ -87,7 +87,7 @@ public class Menu implements Context {
 		return defaultOption;
 	}
 
-	public void setDefaultOption(MenuOption defaultOption) {
+	public void setDefault(MenuOption defaultOption) {
 		this.defaultOption = defaultOption;
 	}
 

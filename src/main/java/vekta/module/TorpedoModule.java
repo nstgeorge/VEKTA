@@ -30,7 +30,7 @@ public class TorpedoModule extends WeaponModule {
 
 	@Override
 	public Module getVariant() {
-		return new TorpedoModule(chooseInclusive(1, 2));
+		return new TorpedoModule(chooseInclusive(1, 4));
 	}
 
 	@Override

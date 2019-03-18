@@ -7,6 +7,11 @@ import vekta.menu.handle.MenuHandle;
 import vekta.terrain.building.upgrade.SettlementUpgrade;
 import vekta.terrain.settlement.Settlement;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+
 import static vekta.Vekta.setContext;
 
 public class UpgradeMenuOption implements MenuOption {
@@ -35,7 +40,11 @@ public class UpgradeMenuOption implements MenuOption {
 
 	private void updateMenu(Menu sub, Menu parent) {
 		sub.clear();
-		for(SettlementUpgrade upgrade : UPGRADES) {
+
+		List<SettlementUpgrade> upgrades = new ArrayList<>(Arrays.asList(UPGRADES));
+		upgrades.sort(Comparator.comparingInt(u -> u.getCost(sub.getPlayer(), settlement)));
+
+		for(SettlementUpgrade upgrade : upgrades) {
 			if(upgrade.isAvailable(player, settlement)) {
 				sub.add(new UpgradeOption(player, settlement, upgrade));
 			}

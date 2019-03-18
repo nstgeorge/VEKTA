@@ -125,10 +125,9 @@ public class Dialog implements Serializable {
 			return;
 		}
 		visited = true;
-		
-		DialogGenerator.setupPlayerDialog(player, this);
 
 		Menu menu = new Menu(player, def, new DialogMenuHandle(this));
+		DialogGenerator.setupDialogMenu(menu, this);
 
 		for(MenuOption option : getOptions()) {
 			menu.add(option);

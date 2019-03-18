@@ -78,9 +78,7 @@ public class Vekta extends PApplet {
 	public void setup() {
 		v = this;
 
-		//		DEF_ZOOM = (height / 2.0F) / tan((PI * 30.0F / 180.0F)); // For some reason, this is the default eyeZ location for Processing
 		UI_COLOR = color(0, 255, 0);
-		//		DANGER_COLOR = color(255, 0, 0);
 		DANGER_COLOR = v.color(220, 100, 0);
 		MISSION_COLOR = ItemType.MISSION.getColor();
 
@@ -90,6 +88,8 @@ public class Vekta extends PApplet {
 		background(0);
 		frameRate(60);
 		noCursor();
+
+		hint(DISABLE_DEPTH_TEST);
 
 		textMode(SHAPE);
 
@@ -154,7 +154,7 @@ public class Vekta extends PApplet {
 	public void mousePressed() {
 		if(context != null) {
 			// TODO: allow mouse events binding to user-specified keys
-			context.keyPressed(KeyBinding.SHIP_FIRE);
+			context.keyPressed(KeyBinding.SHIP_ATTACK);
 			context.keyPressed(KeyBinding.MENU_SELECT);
 		}
 	}
@@ -162,7 +162,7 @@ public class Vekta extends PApplet {
 	@Override
 	public void mouseReleased() {
 		if(context != null) {
-			context.keyReleased(KeyBinding.SHIP_FIRE);
+			context.keyReleased(KeyBinding.SHIP_ATTACK);
 			context.keyReleased(KeyBinding.MENU_SELECT);
 		}
 	}

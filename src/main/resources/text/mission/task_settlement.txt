@@ -1,4 +1,4 @@
-{planet_task}
+{task_planet}
 Browse Public Archives
 Promote {item_common}
 Promote {item_rare}

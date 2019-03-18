@@ -72,16 +72,14 @@ public class SettingsMenuContext implements Context {
 		drawButton("Back", 200 + ((optionIndex + 1) * SETTINGS_SPACING), selectedSetting == settingsOptions.size());
 		v.textSize(16);
 		v.fill(255, 255, 255);
-		v.text("X to cycle options, ESC to go back", v.width / 2F, 200 + ((optionIndex + 2) * SETTINGS_SPACING));
-		//		v.textFont(bodyFont);
-		//		v.hint(ENABLE_DEPTH_TEST);
+		v.text(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to cycle options, " + Settings.getKeyText(KeyBinding.MENU_CLOSE) + " to go back", v.width / 2F, 200 + ((optionIndex + 2) * SETTINGS_SPACING));
 	}
 
 	private void drawButton(String name, int yPos, boolean selected) {
 		if(selected)
-			v.stroke(name.equals("Back") ? 100 : 255);
+			v.stroke(255);
 		else
-			v.stroke(UI_COLOR);
+			v.stroke(name.equals("Back") ? 100 : UI_COLOR);
 		v.fill(1);
 		v.rectMode(CENTER);
 		v.rect(v.width / 2F, yPos, 200 + (selected ? 10 : 0), 50);

@@ -3,7 +3,10 @@ dwig
 ster
 o
 a
+r
+th
 us
+is
 ats
 ens
 bert
@@ -16,3 +19,11 @@ feld
 li
 zo
 hy
+bron
+go
+ron
+swick
+tch
+tsch
+gre
+sh

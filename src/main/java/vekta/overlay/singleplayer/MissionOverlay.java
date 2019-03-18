@@ -32,9 +32,10 @@ public class MissionOverlay implements Overlay {
 			v.text(mission.getName(), 50, 50);
 			for(int i = 0; i < objectives.size(); i++) {
 				Objective objective = objectives.get(i);
-				v.fill(mission.getCurrentObjective() == objective ? objective.getStatus().getColor() : 100);
+				boolean isCurrent = mission.getCurrentObjective() == objective;
+				v.fill(isCurrent ? objective.getStatus().getColor() : 100);
 				v.textSize(16);
-				v.text(objective.getDisplayText(), 50, 90 + i * 30);
+				v.text(objective.getDisplayText(), isCurrent ? 55 : 50, 90 + i * 30);
 			}
 		}
 	}

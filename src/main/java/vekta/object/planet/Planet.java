@@ -48,6 +48,11 @@ public abstract class Planet extends SpaceObject {
 	}
 
 	@Override
+	public int getTrailLength() {
+		return super.getTrailLength() * 4;
+	}
+
+	@Override
 	public void draw(RenderLevel level, float r) {
 		// Temp: fade out planet if zoomed in too much to render
 		float maxRadius = 1000;

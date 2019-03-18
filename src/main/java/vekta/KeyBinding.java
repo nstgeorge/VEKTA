@@ -3,6 +3,7 @@ package vekta;
 import java.awt.event.KeyEvent;
 
 import static java.awt.event.KeyEvent.*;
+import static processing.core.PConstants.CONTROL;
 import static processing.core.PConstants.ESC;
 
 public enum KeyBinding {
@@ -18,7 +19,8 @@ public enum KeyBinding {
 	SHIP_BACKWARD('s'),
 	SHIP_LEFT('a'),
 	SHIP_RIGHT('d'),
-	SHIP_FIRE(' '),
+	SHIP_ATTACK(' '),
+	SHIP_DEFEND(CONTROL),
 	SHIP_MENU('v'),
 	SHIP_LOADOUT('e'),
 	SHIP_MISSIONS('q'),

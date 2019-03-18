@@ -9,10 +9,7 @@ import static vekta.Vekta.getWorld;
 import static vekta.Vekta.v;
 
 public class Projectile extends SpaceObject implements Damager {
-	// Default settings
 	private static final float DESPAWN_TIME = 1000;
-	private static final float DEF_MASS = 1000;
-	private static final int DEF_RADIUS = 2;
 
 	private final SpaceObject parent;
 
@@ -45,16 +42,31 @@ public class Projectile extends SpaceObject implements Damager {
 
 	@Override
 	public float getMass() {
-		return DEF_MASS;
+		return 100;
 	}
 
 	@Override
 	public float getRadius() {
-		return DEF_RADIUS;
+		return 2;
+	}
+
+	@Override
+	public int getColor() {
+		return v.color(200);
+	}
+
+	@Override
+	public int getTrailColor() {
+		return super.getColor();
 	}
 
 	@Override
 	public RenderLevel getRenderLevel() {
+		return RenderLevel.PLANET;
+	}
+
+	@Override
+	public RenderLevel getDespawnLevel() {
 		return RenderLevel.SHIP;
 	}
 
@@ -66,7 +78,7 @@ public class Projectile extends SpaceObject implements Damager {
 	@Override
 	public void onUpdate(RenderLevel level) {
 		if(++aliveTime >= DESPAWN_TIME) {
-			getWorld().remove(this);
+			despawn();
 		}
 	}
 
@@ -82,10 +94,10 @@ public class Projectile extends SpaceObject implements Damager {
 
 	@Override
 	public boolean collidesWith(RenderLevel level, SpaceObject s) {
-		if(s instanceof Damageable) {
-			return ((Damageable)s).isDamageableFrom(this);
-		}
-		return super.collidesWith(getRenderLevel(), s); // Always collide regardless of render distance
+		// Always collide regardless of render distance
+		boolean colliding = super.collidesWith(getRenderLevel(), s);
+
+		return colliding && s instanceof Damageable && ((Damageable)s).isDamageableFrom(this);
 	}
 
 	@Override
