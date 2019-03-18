@@ -12,7 +12,7 @@ import static vekta.Vekta.getWorld;
 public abstract class ShipSpawner implements WorldGenerator.WorldSpawner {
 	@Override
 	public RenderLevel getSpawnLevel() {
-		return RenderLevel.PARTICLE;
+		return RenderLevel.SHIP;
 	}
 
 	@Override
