@@ -11,7 +11,7 @@ import static vekta.Vekta.*;
 public class PlanetBusterProjectile extends HomingProjectile {
 	private static final int EXPLOSION_PARTICLES = 100;
 	private static final int EXPLOSION_SHOCKWAVES = 10;
-	private static final float EXPLOSION_SCALE = .001F;
+	private static final float EXPLOSION_SCALE = .0001F;
 
 	public PlanetBusterProjectile(SpaceObject parent, SpaceObject target, PVector position, PVector velocity, int color) {
 		super(parent, target, 1000, position, velocity, color);
@@ -58,7 +58,7 @@ public class PlanetBusterProjectile extends HomingProjectile {
 
 			for(int i = 0; i < EXPLOSION_SHOCKWAVES; i++) {
 				int color = v.chance(.5F) ? 255 : colorRange.selectColor();
-				register(new Shockwave(s, v.random(.1F, .3F), (int)(sq(v.random(.2F, 1)) * 250), color));
+				register(new Shockwave(s, v.random(.1F, .5F), (int)(sq(v.random(.2F, 1)) * 250), color));
 			}
 
 			s.destroyBecause(getParentObject());

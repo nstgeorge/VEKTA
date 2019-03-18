@@ -44,7 +44,7 @@ public class PauseMenuContext implements Context {
 		v.fill(255);
 		v.textAlign(CENTER);
 		v.text(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to select", v.width / 8F, (v.height / 2) + (options.length * 100) + 100);
-		v.hint(ENABLE_DEPTH_TEST);
+//		v.hint(ENABLE_DEPTH_TEST);
 		//noLoop();
 	}
 

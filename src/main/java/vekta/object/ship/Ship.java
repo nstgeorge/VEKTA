@@ -159,7 +159,7 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 	public void onDestroy(SpaceObject s) {
 		// Add shockwaves
 		for(int i = 0; i < 3; i++) {
-			register(new Shockwave(this, v.random(.5F, 2), (int)v.random(10, 60), v.chance(.5F) ? 255 : getColor()));
+			register(new Shockwave(this, sq(v.random(.5F, 1)), (int)v.random(10, 60), v.chance(.5F) ? 255 : getColor()));
 		}
 
 		// Add cargo drops

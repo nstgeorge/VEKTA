@@ -88,6 +88,10 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 	}
 
 	public void setHome(Settlement home) {
+		if(this.home == home) {
+			return;
+		}
+
 		if(hasHome()) {
 			// Remove previous house if exists
 			home.remove(home.getParts().stream()
@@ -95,7 +99,9 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 					.findFirst().orElse(null));
 		}
 		this.home = home;
-		home.add(new HouseBuilding(this));
+		if(home != null) {
+			home.add(new HouseBuilding(this));
+		}
 		syncChanges();
 	}
 

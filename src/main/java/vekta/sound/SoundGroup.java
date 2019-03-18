@@ -34,6 +34,9 @@ public class SoundGroup implements Externalizable {
 		while(Resources.hasSound(sub = key + "_" + sounds.size())) {
 			sounds.add(Resources.getSound(sub));
 		}
+		if(sounds.isEmpty()) {
+			throw new RuntimeException("No sounds found for group: `" + key + "`");
+		}
 		this.sounds = sounds.toArray(new SoundFile[0]);
 	}
 

@@ -61,7 +61,7 @@ public class Shockwave extends SpaceObject {
 			return;
 		}
 
-		radius += speed * sqrt(radius) * getWorld().getTimeScale();
+		radius += speed * pow(radius, 1 / 3F) * getWorld().getTimeScale();
 	}
 
 	@Override
