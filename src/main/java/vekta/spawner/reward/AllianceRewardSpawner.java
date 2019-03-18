@@ -5,7 +5,6 @@ import vekta.mission.Mission;
 import vekta.mission.reward.AllianceReward;
 import vekta.mission.reward.BreakAllianceReward;
 import vekta.mission.reward.DiplomacyReward;
-import vekta.mission.reward.PeaceReward;
 import vekta.spawner.MissionGenerator;
 
 public class AllianceRewardSpawner implements MissionGenerator.RewardSpawner {
@@ -27,9 +26,9 @@ public class AllianceRewardSpawner implements MissionGenerator.RewardSpawner {
 			mission.add(new BreakAllianceReward(faction));
 			MissionGenerator.addRewards(mission);
 		}
-		else if(faction.isEnemy(mission.getPlayer().getFaction())) {
-			mission.add(new PeaceReward(faction));
-		}
+		//		else if(faction.isEnemy(mission.getPlayer().getFaction())) {
+		//			mission.add(new PeaceReward(faction));
+		//		}
 		else {
 			mission.add(new AllianceReward(faction));
 		}

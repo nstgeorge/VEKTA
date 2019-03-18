@@ -2,8 +2,9 @@ package vekta.object.ship;
 
 import processing.core.PVector;
 import vekta.RenderLevel;
+import vekta.object.Countermeasure;
 
-import static vekta.Vekta.DANGER_COLOR;
+import static vekta.Vekta.*;
 
 public class BossShip extends FighterShip {
 	private final int tier;
@@ -36,5 +37,19 @@ public class BossShip extends FighterShip {
 	@Override
 	public int chooseAttackTime() {
 		return super.chooseAttackTime() / 3;
+	}
+
+	@Override
+	public void fireProjectile() {
+		if(v.chance(.9F)) {
+			super.fireProjectile();
+		}
+		else {
+			getWorld().playSound("countermeasure", getPosition());
+			PVector velocity = PVector.random2D().mult(getAttackScale())
+					.sub(getHeading())
+					.add(getVelocity());
+			register(new Countermeasure(this, getPosition(), velocity));
+		}
 	}
 }  

@@ -11,3 +11,5 @@ Hotel
 Reservoir
 Mine
 Farm
+Castle
+Palace

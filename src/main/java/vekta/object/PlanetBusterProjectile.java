@@ -6,8 +6,7 @@ import vekta.object.particle.*;
 import vekta.object.planet.Planet;
 
 import static processing.core.PApplet.sq;
-import static vekta.Vekta.register;
-import static vekta.Vekta.v;
+import static vekta.Vekta.*;
 
 public class PlanetBusterProjectile extends HomingProjectile {
 	private static final int EXPLOSION_PARTICLES = 100;
@@ -44,6 +43,8 @@ public class PlanetBusterProjectile extends HomingProjectile {
 			PVector position = s.getPosition();
 			PVector velocity = s.getVelocity();
 
+			getWorld().playSound("planetExplosion", position);
+
 			ColorSelector colorRange = new ColorRange(s.getColor(), 255);
 
 			ParticleStyle style = new ParticleStyle()
@@ -59,7 +60,7 @@ public class PlanetBusterProjectile extends HomingProjectile {
 				int color = v.chance(.5F) ? 255 : colorRange.selectColor();
 				register(new Shockwave(s, v.random(.1F, .3F), (int)(sq(v.random(.2F, 1)) * 250), color));
 			}
-						
+
 			s.destroyBecause(getParentObject());
 		}
 

@@ -9,6 +9,7 @@ import vekta.item.InventoryListener;
 import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.object.CargoCrate;
+import vekta.object.Shockwave;
 import vekta.object.SpaceObject;
 import vekta.terrain.LandingSite;
 
@@ -111,7 +112,7 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 		if(dock != null) {
 			PVector offset = getPosition().sub(dock.getPosition());
 			setVelocity(dock.getVelocity().add(offset.mult(.01F)));
-//			position.add(offset.setMag(getRadius() + dock.getRadius()));
+			//			position.add(offset.setMag(getRadius() + dock.getRadius()));
 			this.dock = null;
 			onDepart(dock);
 		}
@@ -156,9 +157,17 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 
 	@Override
 	public void onDestroy(SpaceObject s) {
+		// Add shockwaves
+		for(int i = 0; i < 3; i++) {
+			register(new Shockwave(this, v.random(.5F, 2), (int)v.random(10, 60), v.chance(.5F) ? 255 : getColor()));
+		}
+
+		// Add cargo drops
 		for(Item item : getInventory()) {
 			register(new CargoCrate(item, getPosition(), PVector.random2D().setMag(v.random(CRATE_SPEED))));
 		}
+		
+		// Inherit behavior
 		super.onDestroy(s);
 	}
 

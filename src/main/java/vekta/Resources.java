@@ -260,9 +260,7 @@ public final class Resources {
 
 	public static void setSoundPan(String key, float pan) {
 		SoundFile sound = getSound(key);
-		if(sound.channels() > 1) {
-			sound.pan(pan);
-		}
+		sound.pan(pan);
 	}
 
 	public static void resetSoundVolumeAndPan(String key) {
