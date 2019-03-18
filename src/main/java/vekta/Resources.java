@@ -236,6 +236,9 @@ public final class Resources {
 				if(loop) {
 					sound.loop();
 				}
+				else {
+					sound.play();
+				}
 				// Keep track for next time
 				currentMusic = sound;
 			}
