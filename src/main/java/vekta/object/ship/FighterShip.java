@@ -20,7 +20,7 @@ public abstract class FighterShip extends Ship implements Targeter {
 	private static final float DEF_TURN = 4;
 	private static final float DEF_ENGAGE_DIST = WorldGenerator.getRadius(RenderLevel.PARTICLE);
 
-	private static final float PROJECTILE_SPEED = 10;
+	private static final float PROJECTILE_SPEED = 20;
 	private static final float MIN_ATTACK = 10;
 	private static final float MAX_ATTACK = 200;
 	private static final float ATTACK_SPREAD = 10;

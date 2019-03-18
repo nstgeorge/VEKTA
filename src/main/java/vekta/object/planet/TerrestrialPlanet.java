@@ -3,8 +3,12 @@ package vekta.object.planet;
 import processing.core.PVector;
 import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
+import vekta.person.Person;
 import vekta.terrain.LandingSite;
 import vekta.terrain.Terrain;
+import vekta.terrain.settlement.Settlement;
+
+import static vekta.Vekta.getWorld;
 
 /**
  * Terrestrial (landable) planet
@@ -53,6 +57,19 @@ public class TerrestrialPlanet extends Planet {
 		SpaceObject landed = site.getLanded();
 		if(landed != null) {
 			landed.onDestroy(s);
+		}
+
+		// If player destroyed planet, immediately set enemy
+		if(s instanceof ModularShip && ((ModularShip)s).hasController()) {
+			for(Person person : getWorld().findObjects(Person.class)) {
+				if(getTerrain().getSettlements().contains(person.findHome())) {
+					person.die();
+				}
+			}
+
+			for(Settlement settlement : getTerrain().getSettlements()) {
+				settlement.getFaction().setEnemy(((ModularShip)s).getController().getFaction());
+			}
 		}
 	}
 }

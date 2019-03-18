@@ -23,6 +23,11 @@ public class DebrisPlanet extends Planet {
 	}
 
 	@Override
+	public boolean impartsGravity() {
+		return false; // For now
+	}
+
+	@Override
 	public int getSplitsRemaining() {
 		return splitsRemaining;
 	}

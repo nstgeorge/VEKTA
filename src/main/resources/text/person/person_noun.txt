@@ -35,4 +35,5 @@ Engineer
 Swindler
 Guardian
 Protector
+Seeker
 Agent

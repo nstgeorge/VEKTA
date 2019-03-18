@@ -47,7 +47,6 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	private final PVector acceleration = new PVector();
 
-	// ModuleUpgradeable modules
 	private final List<Module> modules = new ArrayList<>();
 
 	public ModularShip(String name, PVector heading, PVector position, PVector velocity, int color, float speed, float turnSpeed) {

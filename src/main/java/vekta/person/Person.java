@@ -12,6 +12,7 @@ import vekta.terrain.settlement.Settlement;
 import java.util.HashMap;
 import java.util.Map;
 
+import static vekta.Vekta.getWorld;
 import static vekta.Vekta.v;
 
 public class Person extends Syncable<Person> implements MissionIssuer {
@@ -24,6 +25,8 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 	private @Sync String title;
 	private @Sync Settlement home;
 	private @Sync boolean busy;
+
+	private boolean dead;
 
 	public Person(String name, Faction faction) {
 		this.name = name;
@@ -136,6 +139,17 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 		return busy;
 	}
 
+	public boolean isDead() {
+		return dead;
+	}
+
+	public void die() {
+		this.dead = true;
+		setHome(null);
+		getWorld().remove(this);
+		syncChanges();
+	}
+
 	@Override
 	public int chooseMissionTier(Player player) {
 		int tier = (int)v.random(2) + 1;
@@ -175,12 +189,12 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 		syncChanges();
 	}
 
-	//	@Override
-	//	public void onSync(Person data) {
-	//		this.faction = data.faction;
-	//		this.title = data.title;
-	//		//		this.home = register(data.home);
-	//
-	//		syncAll(opinions.keySet(), data.opinions.keySet());
-	//	}
+	@Override
+	public void onSync(Person data) {
+		super.onSync(data);
+
+		if(data.dead) {
+			die();
+		}
+	}
 }

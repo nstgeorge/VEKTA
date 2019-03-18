@@ -11,7 +11,6 @@ import static vekta.Vekta.*;
  * Model for a planet.
  */
 public abstract class Planet extends SpaceObject {
-	private static final float MIN_SPLIT_RADIUS = 1e7F;
 	private static final float SPLIT_MASS_ABSORB = .5F;
 
 	private final String name;
@@ -90,37 +89,33 @@ public abstract class Planet extends SpaceObject {
 
 	@Override
 	public void onDestroy(SpaceObject s) {
-		//println("Planet destroyed with radius: " + getDistanceScale());
+		// Split planet into pieces
+		// Use mass-weighted collision velocity for base debris velocity
+		float xWeight = getVelocity().x * getMass() + s.getVelocity().x * s.getMass();
+		float yWeight = getVelocity().y * getMass() + s.getVelocity().y * s.getMass();
+		float massSum = getMass() + s.getMass();
+		PVector newVelocity = new PVector(xWeight / massSum, yWeight / massSum);
 
-		// If sufficiently large, split planet into pieces
-		if(getRadius() >= MIN_SPLIT_RADIUS) {
-			// Use mass-weighted collision velocity for base debris velocity
-			float xWeight = getVelocity().x * getMass() + s.getVelocity().x * s.getMass();
-			float yWeight = getVelocity().y * getMass() + s.getVelocity().y * s.getMass();
-			float massSum = getMass() + s.getMass();
-			PVector newVelocity = new PVector(xWeight / massSum, yWeight / massSum);
+		//			Terrain terrain = new MoltenTerrain();
 
-			//			Terrain terrain = new MoltenTerrain();
+		int splitsRemaining = getSplitsRemaining() - 1;
+		if(splitsRemaining > 0) {
+			int parts = (int)v.random(10, 20);
+			float partMass = mass / parts;
+			float partDensity = getDensity();
+			for(int i = 0; i < parts; i++) {
+				float massFactor = sq(v.random(.25F, 1));
+				PVector offset = PVector.random2D().mult(v.random(getRadius() * .5F));
+				PVector velocity = offset.mult(v.random(.05F, .1F) * .0001F / massFactor);
 
-			int splitsRemaining = getSplitsRemaining() - 1;
-			if(splitsRemaining > 0) {
-				int parts = (int)v.random(10, 20);
-				float partMass = mass / parts;
-				float partDensity = getDensity();
-				for(int i = 0; i < parts; i++) {
-					float massFactor = sq(v.random(.25F, 1));
-					PVector offset = PVector.random2D().mult(v.random(getRadius() * .5F));
-					PVector velocity = offset.mult(v.random(.05F, .1F) * .0001F / massFactor);
-
-					register(new DebrisPlanet(
-							Resources.generateString("planet_debris"),
-							massFactor * partMass,
-							v.random(.5F, 1) * partDensity,
-							splitsRemaining,
-							getPosition().add(offset),
-							newVelocity.copy().add(velocity),
-							v.lerpColor(getColor(), 0, v.random(.1F, .5F))));
-				}
+				register(new DebrisPlanet(
+						Resources.generateString("planet_debris"),
+						massFactor * partMass,
+						v.random(.5F, 1) * partDensity,
+						splitsRemaining,
+						getPosition().add(offset),
+						newVelocity.copy().add(velocity),
+						v.lerpColor(getColor(), 0, v.random(.1F, .5F))));
 			}
 		}
 

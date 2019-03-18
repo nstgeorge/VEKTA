@@ -25,6 +25,7 @@ An Odd {mission_noun}
 An Undeniable {mission_noun}
 The Latest {mission_noun}
 The Next {mission_noun}
+Another {mission_noun}
 The {mission_noun}
 At least it's not {planet}
 By Command of {person}

@@ -22,11 +22,7 @@ public class Particle extends SpaceObject {
 
 		this.endColor = style.getEndColor().selectColor();
 	}
-
-	public SpaceObject getParent() {
-		return parent;
-	}
-
+	
 	public final ParticleStyle getStyle() {
 		return style;
 	}
@@ -39,7 +35,7 @@ public class Particle extends SpaceObject {
 	@Override
 	public void onUpdate(RenderLevel level) {
 		PVector currentVelocity = getVelocity();
-		addVelocity(currentVelocity.sub(getParent().getVelocity()).setMag(-getStyle().getDrag()));
+		addVelocity(currentVelocity.sub(parent.getVelocity()).setMag(-getStyle().getDrag()));
 
 		aliveTime += 1 / v.frameRate;
 		if(aliveTime >= getStyle().getLifetime()) {
@@ -62,10 +58,10 @@ public class Particle extends SpaceObject {
 		return 1;
 	}
 
-//	@Override
-//	public RenderLevel getRenderLevel() {
-//		return RenderLevel.SHIP;
-//	}
+	//	@Override
+	//	public RenderLevel getRenderLevel() {
+	//		return RenderLevel.SHIP;
+	//	}
 
 	@Override
 	public RenderLevel getRenderLevel() {

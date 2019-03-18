@@ -23,7 +23,7 @@ public class DefeatObjective extends Objective {
 	@Override
 	public SpaceObject getSpaceObject() {
 		if(target.isDestroyed() && !getStatus().isDone()) {
-			complete();
+			cancel();
 		}
 		return target;
 	}

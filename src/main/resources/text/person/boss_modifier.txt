@@ -10,8 +10,8 @@ Slicer
 Puncher
 Miner
 Harvester
-Hunter
 Destroyer
+Hunter
 Gatherer
 Wrinkler
 Breaker
@@ -53,6 +53,7 @@ Tromper
 Trampler
 Weaver
 Darkener
+Avenger
 Eviscerator
 Banisher
 Exterminator
@@ -163,3 +164,4 @@ Juggler
 Tetherer
 Scalper
 Dissector
+Seeker

@@ -260,6 +260,8 @@ public class Singleplayer implements World, PlayerListener {
 		//		boolean spawning = spawnCt.cycle();
 		boolean cleanup = cleanupCt.cycle();
 
+		updateGlobal(level);
+
 		state.startUpdate();
 
 		// Reset object counts for each render distance
@@ -267,6 +269,7 @@ public class Singleplayer implements World, PlayerListener {
 			objectCounts[i] = 0;
 		}
 
+		// Update loop
 		for(SpaceObject s : state.getObjects()) {
 			if(state.isRemoving(s)) {
 				continue;
@@ -274,21 +277,21 @@ public class Singleplayer implements World, PlayerListener {
 
 			if(!s.isPersistent()) {
 				// Increment count for object's render level
-				objectCounts[s.getRenderLevel().ordinal()]++;
+				objectCounts[s.getDespawnLevel().ordinal()]++;
+
+				if(cleanup) {
+					// Clean up distant objects
+					float despawnRadius = WorldGenerator.getRadius(s.getDespawnLevel());
+					if(playerShip.getPosition().sub(s.getPosition()).magSq() >= sq(despawnRadius)) {
+						s.despawn();
+						continue;
+					}
+				}
 			}
-						
+
 			if(targeting) {
 				// Update Targeter instances
 				s.updateTargets();
-			}
-
-			if(cleanup && !s.isPersistent()) {
-				// Clean up distant objects
-				float despawnRadius = WorldGenerator.getRadius(s.getDespawnLevel());
-				if(playerShip.getPosition().sub(s.getPosition()).magSq() >= sq(despawnRadius)) {
-					s.despawn();
-					continue;
-				}
 			}
 
 			s.update(level);
@@ -307,7 +310,12 @@ public class Singleplayer implements World, PlayerListener {
 					}
 				}
 			}
+		}
 
+		state.endUpdate();
+
+		// Draw loop
+		for(SpaceObject s : state.getObjects()) {
 			// Start drawing object
 			v.pushMatrix();
 
@@ -338,10 +346,6 @@ public class Singleplayer implements World, PlayerListener {
 			v.popMatrix();
 		}
 
-		state.endUpdate();
-
-		updateGlobal(level);
-
 		RenderLevel spawnLevel = level;
 		while(spawnLevel.ordinal() > 0 && v.chance(.05F)) {
 			spawnLevel = RenderLevel.values()[spawnLevel.ordinal() - 1];
@@ -349,7 +353,7 @@ public class Singleplayer implements World, PlayerListener {
 		if(objectCounts[spawnLevel.ordinal()] < MAX_OBJECTS_PER_DIST) {
 			WorldGenerator.spawnOccasional(spawnLevel, playerShip);
 		}
-		
+
 		if(eventCt.cycle()) {
 			eventCt.randomize();
 			EventGenerator.spawnEvent(getPlayer());
