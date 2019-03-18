@@ -31,6 +31,10 @@ public class PlanetBusterModule extends WeaponModule {
 
 	@Override
 	public void fireWeapon() {
+		if(used) {
+			return;
+		}
+
 		ModularShip ship = getShip();
 		Module m = ship.getModule(ModuleType.TARGET_COMPUTER);
 		if(m instanceof Targeter) {

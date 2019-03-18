@@ -28,8 +28,8 @@ public class MissionGenerator {
 	public static Mission createMission(Player player, MissionIssuer issuer, int tier) {
 		Mission mission = new Mission(player, randomMissionName(), issuer, tier);
 		mission.add(issuer);
-		addRewards(mission);
 		addObjectives(mission);
+		addRewards(mission);
 		return mission;
 	}
 
