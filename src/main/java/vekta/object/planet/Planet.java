@@ -4,8 +4,6 @@ import processing.core.PVector;
 import vekta.RenderLevel;
 import vekta.Resources;
 import vekta.object.SpaceObject;
-import vekta.terrain.MoltenTerrain;
-import vekta.terrain.Terrain;
 
 import static vekta.Vekta.*;
 
@@ -13,24 +11,21 @@ import static vekta.Vekta.*;
  * Model for a planet.
  */
 public abstract class Planet extends SpaceObject {
-	private static final float MIN_SPLIT_RADIUS = 20 * SCALE; // TODO: improve cutoff
-	private static final float SPLIT_OFFSET_SCALE = .25F;
-	private static final float SPLIT_VELOCITY_SCALE = 1;
+	private static final float MIN_SPLIT_RADIUS = 1e7F;
 	private static final float SPLIT_MASS_ABSORB = .5F;
 
 	private final String name;
-	private float mass;
 	private final float density;
 
-	private float radiusCache;
+	private float mass;
+	private float radius;
 
 	public Planet(String name, float mass, float density, PVector position, PVector velocity, int color) {
 		super(position, velocity, color);
 		this.name = name;
-		this.mass = mass;
 		this.density = density;
 
-		updateRadius();
+		setMass(mass); // Configure mass and radius
 	}
 
 	public boolean impartsGravity() {
@@ -80,7 +75,7 @@ public abstract class Planet extends SpaceObject {
 
 	@Override
 	public boolean collidesWith(RenderLevel level, SpaceObject s) {
-		return getColor() != s.getColor() && super.collidesWith(level, s);
+		return super.collidesWith(level, s);
 	}
 
 	@Override
@@ -97,29 +92,35 @@ public abstract class Planet extends SpaceObject {
 	public void onDestroy(SpaceObject s) {
 		//println("Planet destroyed with radius: " + getDistanceScale());
 
-		// If sufficiently large, split planet in half
+		// If sufficiently large, split planet into pieces
 		if(getRadius() >= MIN_SPLIT_RADIUS) {
-			float newMass = getMass() / 2;
-
 			// Use mass-weighted collision velocity for base debris velocity
 			float xWeight = getVelocity().x * getMass() + s.getVelocity().x * s.getMass();
 			float yWeight = getVelocity().y * getMass() + s.getVelocity().y * s.getMass();
 			float massSum = getMass() + s.getMass();
 			PVector newVelocity = new PVector(xWeight / massSum, yWeight / massSum);
 
-			PVector base = getPosition().copy().sub(s.getPosition()).normalize().rotate(PI / 2);
-			PVector offset = base.copy().mult(getRadius() * SPLIT_OFFSET_SCALE);
-			PVector splitVelocity = base.copy().mult(SPLIT_VELOCITY_SCALE);
-			Terrain terrain = new MoltenTerrain();
-			Planet a = new TerrestrialPlanet(Resources.generateString("planet_debris"), newMass, getDensity(), terrain, getPosition().copy().add(offset), newVelocity.copy().add(splitVelocity), getColor());
-			Planet b = new TerrestrialPlanet(Resources.generateString("planet_debris"), newMass, getDensity(), terrain, getPosition().copy().sub(offset), newVelocity.copy().sub(splitVelocity), getColor());
-			if(!s.collidesWith(getRenderLevel(), a)) {
-				mass -= a.mass;
-				register(a);
-			}
-			if(!s.collidesWith(getRenderLevel(), b)) {
-				mass -= b.mass;
-				register(b);
+			//			Terrain terrain = new MoltenTerrain();
+
+			int splitsRemaining = getSplitsRemaining() - 1;
+			if(splitsRemaining > 0) {
+				int parts = (int)v.random(10, 20);
+				float partMass = mass / parts;
+				float partDensity = getDensity();
+				for(int i = 0; i < parts; i++) {
+					float massFactor = sq(v.random(.25F, 1));
+					PVector offset = PVector.random2D().mult(v.random(getRadius() * .5F));
+					PVector velocity = offset.mult(v.random(.05F, .1F) * .0001F / massFactor);
+
+					register(new DebrisPlanet(
+							Resources.generateString("planet_debris"),
+							massFactor * partMass,
+							v.random(.5F, 1) * partDensity,
+							splitsRemaining,
+							getPosition().add(offset),
+							newVelocity.copy().add(velocity),
+							v.lerpColor(getColor(), 0, v.random(.1F, .5F))));
+				}
 			}
 		}
 
@@ -128,6 +129,10 @@ public abstract class Planet extends SpaceObject {
 			Planet p = (Planet)s;
 			p.setMass(p.getMass() + mass * SPLIT_MASS_ABSORB);
 		}
+	}
+
+	public int getSplitsRemaining() {
+		return 3;
 	}
 
 	@Override
@@ -142,16 +147,12 @@ public abstract class Planet extends SpaceObject {
 
 	void setMass(float mass) {
 		this.mass = mass;
-		updateRadius();
+		this.radius = pow(getMass() / getDensity(), (float)1 / 3);
 	}
 
 	@Override
 	public float getRadius() {
-		return radiusCache;
-	}
-
-	private void updateRadius() {
-		radiusCache = pow(getMass() / getDensity(), (float)1 / 3)/* / SCALE*/;
+		return radius;
 	}
 
 	public float getDensity() {

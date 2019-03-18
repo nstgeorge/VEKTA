@@ -176,6 +176,7 @@ public class Singleplayer implements World, PlayerListener {
 		playerShip.addModule(new HyperdriveModule());
 		playerShip.addModule(new ActiveTCSModule(2));
 		playerShip.addModule(new CountermeasureModule());
+		playerShip.getInventory().add(new ModuleItem(new PlanetBusterModule()));
 		playerShip.getInventory().add(new ModuleItem(new GeneratorModule()));
 		playerShip.getInventory().add(new ModuleItem(new WormholeModule()));
 		playerShip.getInventory().add(new ModuleItem(new TorpedoModule(2)));

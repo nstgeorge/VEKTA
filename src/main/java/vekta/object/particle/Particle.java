@@ -4,7 +4,8 @@ import processing.core.PVector;
 import vekta.RenderLevel;
 import vekta.object.SpaceObject;
 
-import static vekta.Vekta.*;
+import static vekta.Vekta.getWorld;
+import static vekta.Vekta.v;
 
 public class Particle extends SpaceObject {
 	private final SpaceObject parent;
@@ -53,7 +54,7 @@ public class Particle extends SpaceObject {
 
 	@Override
 	public float getMass() {
-		return 1;
+		return Float.POSITIVE_INFINITY; // Temp (planet collisions)
 	}
 
 	@Override
@@ -86,6 +87,6 @@ public class Particle extends SpaceObject {
 
 	@Override
 	public int getTrailLength() {
-		return 20;
+		return super.getTrailLength() / 2;
 	}
 }

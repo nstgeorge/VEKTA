@@ -11,7 +11,7 @@ import static vekta.Vekta.v;
 
 public class HomingProjectile extends Projectile {
 	private static final float HOMING_ACCEL = .2F;
-	private static final float HOMING_DAMPEN = .98F;
+	private static final float HOMING_DAMPEN = .02F;
 
 	private @Sync SpaceObject target;
 	private final float speed;
@@ -40,7 +40,7 @@ public class HomingProjectile extends Projectile {
 	public float getSpeed() {
 		return speed;
 	}
-
+	
 	@Override
 	public void onUpdate(RenderLevel level) {
 		if(target != null) {
@@ -51,9 +51,8 @@ public class HomingProjectile extends Projectile {
 				float distSq = relativePosition(target).magSq();
 				float speedSq = relativeVelocity(target).magSq();
 				PVector pos = target.getPosition().add(target.getVelocity().mult(sqrt(speedSq / distSq)));
-				setVelocity(getVelocity()
-						.add(pos.sub(getPosition()).setMag(getSpeed() * HOMING_ACCEL))
-						.mult(HOMING_DAMPEN));
+				addVelocity(pos.sub(getPosition()).setMag(getSpeed() * HOMING_ACCEL)
+						.add(relativeVelocity(target).mult(HOMING_DAMPEN)));
 			}
 		}
 
