@@ -1,1 +1,3 @@
 {boss}
+{person}
+{firstname}
