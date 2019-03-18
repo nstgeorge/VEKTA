@@ -40,7 +40,7 @@ public class TradeMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	void drawButton(Menu menu, MenuOption opt, int index) {
+	protected void drawButton(Menu menu, MenuOption opt, int index) {
 		super.drawButton(menu, opt, index);
 
 		if(!buying && opt instanceof ItemTradeOption) {

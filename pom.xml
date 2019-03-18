@@ -50,6 +50,14 @@
             <systemPath>${project.basedir}/lib/processing/sound/library/javamp3-1.0.3.jar</systemPath>
         </dependency>
 
+        <!-- OpenCL/JavaCL -->
+        <!--<dependency>-->
+            <!--<groupId>com.nativelibs4java</groupId>-->
+            <!--<artifactId>javacl</artifactId>-->
+            <!--<version>1.0.0-RC4</version>-->
+            <!--<type>bundle</type>-->
+        <!--</dependency>-->
+
         <!-- Reflections / IoC -->
         <dependency>
             <groupId>org.reflections</groupId>
