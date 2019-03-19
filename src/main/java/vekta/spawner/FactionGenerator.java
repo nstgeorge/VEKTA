@@ -1,7 +1,6 @@
 package vekta.spawner;
 
 import vekta.Faction;
-import vekta.Player;
 import vekta.Resources;
 
 import java.util.List;
@@ -26,9 +25,9 @@ public class FactionGenerator {
 			faction.setEnemy(randomFaction());
 		}
 
-		for(Player player : getWorld().findObjects(Player.class)) {
-			faction.setEnemy(player.getFaction());//TEMP
-		}
+//		for(Player player : getWorld().findObjects(Player.class)) {
+//			faction.setEnemy(player.getFaction());//TEMP
+//		}
 
 		return register(faction);
 	}

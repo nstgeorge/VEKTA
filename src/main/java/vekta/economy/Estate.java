@@ -2,7 +2,9 @@ package vekta.economy;
 
 import vekta.terrain.settlement.Settlement;
 
-public class Estate {
+import java.io.Serializable;
+
+public class Estate implements Serializable {
 	private final String name;
 	private final Settlement settlement;
 	private final float size;

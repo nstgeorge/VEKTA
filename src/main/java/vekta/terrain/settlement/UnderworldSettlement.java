@@ -18,13 +18,11 @@ public class UnderworldSettlement extends Settlement {
 	private final String genericName;
 
 	public UnderworldSettlement(Faction faction) {
-		super(faction, "underworld");
+		super(faction, faction.getName() + " Underworld", Resources.generateString("underworld"));
 
 		genericName = Resources.generateString("underworld_type");
-
-		if(v.chance(.5F)) {
-			add(new MarketBuilding(2, "Coins", ItemGenerator.getSpawner(CoinItemSpawner.class)));
-		}
+		
+		add(new MarketBuilding(2, "Coins", ItemGenerator.getSpawner(CoinItemSpawner.class)));
 	}
 
 	public Inventory getInventory() {
