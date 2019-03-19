@@ -1,10 +1,12 @@
 package vekta.object;
 
+import processing.core.PVector;
 import vekta.RenderLevel;
 
 import static vekta.Vekta.*;
 
 public class Shockwave extends SpaceObject {
+	private final SpaceObject relative;
 	private float radius;
 	private float speed;
 	private final int time;
@@ -12,8 +14,9 @@ public class Shockwave extends SpaceObject {
 	private int aliveTime;
 
 	public Shockwave(SpaceObject relative, float speed, int time, int color) {
-		super(relative.getPosition(), relative.getVelocity(), color);
+		super(relative.getPosition(), new PVector()/*relative.getVelocity()*/, color);
 
+		this.relative = relative;
 		this.radius = relative.getRadius();
 		this.speed = speed;
 		this.time = time;
@@ -66,6 +69,8 @@ public class Shockwave extends SpaceObject {
 		}
 
 		radius += speed * pow(radius, 1 / 3F) * getWorld().getTimeScale();
+
+		applyVelocity(relative.getVelocity());
 	}
 
 	@Override

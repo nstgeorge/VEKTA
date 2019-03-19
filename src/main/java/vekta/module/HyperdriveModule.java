@@ -56,8 +56,7 @@ public class HyperdriveModule extends ShipModule {
 
 	@Override
 	public void onUninstall() {
-		active = false;
-		currentBoost = 0;
+		endHyperdrive();
 	}
 
 	@Override
@@ -79,10 +78,13 @@ public class HyperdriveModule extends ShipModule {
 			ship.setVelocity(ship.getHeading().setMag(ship.getVelocity().mag()));
 			ship.accelerate(effectiveThrust * currentBoost, ship.getVelocity());
 
-			////
-			Shockwave wave = register(new Shockwave(getShip(), timeScale * currentBoost * .0004F, (int)v.random(20, 30), getShip().getColor()));
+			Shockwave wave = register(new Shockwave(
+					getShip(),
+					timeScale * 1e-4F * currentBoost,
+					(int)v.random(20, 40),
+					getShip().getColor()));
 			wave.setRadius(1);
-			wave.addVelocity(ship.getHeading().mult(-.05F * timeScale * currentBoost));
+			wave.addVelocity(ship.getVelocity().mult(-.1F));
 		}
 	}
 
@@ -109,6 +111,7 @@ public class HyperdriveModule extends ShipModule {
 	public void endHyperdrive() {
 		if(isActive()) {
 			active = false;
+			currentBoost = 0;
 			Resources.stopSound("hyperdriveLoop");
 			Resources.playSound("hyperdriveEnd");
 		}
