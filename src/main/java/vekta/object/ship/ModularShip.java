@@ -3,6 +3,7 @@ package vekta.object.ship;
 import com.google.common.collect.ImmutableMap;
 import processing.core.PVector;
 import vekta.*;
+import vekta.context.NavigationContext;
 import vekta.context.World;
 import vekta.item.Item;
 import vekta.item.ModuleItem;
@@ -28,7 +29,8 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	private static final Map<KeyBinding, Class<? extends MenuOption>> SHORTCUT_MAP = ImmutableMap.of(
 			KeyBinding.SHIP_MISSIONS, MissionMenuOption.class,
 			KeyBinding.SHIP_LOADOUT, LoadoutMenuOption.class,
-			KeyBinding.SHIP_INTERNET, InternetMenuOption.class
+			KeyBinding.SHIP_INTERNET, InternetMenuOption.class,
+			KeyBinding.SHIP_NAVIGATION, NavigationOption.class
 	);
 
 	private static final float ENERGY_TIME_SCALE = 1e-4F;
@@ -307,6 +309,24 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		}
 	}
 
+	public void setTargets(SpaceObject target) {
+		for(Module m : getModules()) {
+			if(m instanceof Targeter) {
+				((Targeter) m).setTarget(target);
+			}
+		}
+	}
+
+	public List<SpaceObject> getTargets() {
+		List<SpaceObject> targets = new ArrayList<>();
+		for(Module m : getModules()) {
+			if(m instanceof Targeter) {
+				targets.add(((Targeter) m).getTarget());
+			}
+		}
+		return targets;
+	}
+
 	@Override
 	public void onDestroy(SpaceObject s) {
 		if(hasController()) {
@@ -316,6 +336,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	public Menu openShipMenu() {
 		Menu menu = new Menu(getController(), new BackOption(getWorld()), new ObjectMenuHandle(this));
+		menu.add(new NavigationOption(controller));
 		menu.add(new LoadoutMenuOption(this));
 		menu.add(new MissionMenuOption(getController()));
 		menu.add(new RenameOption(this));
