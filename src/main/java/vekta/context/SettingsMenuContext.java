@@ -94,7 +94,7 @@ public class SettingsMenuContext implements Context {
 	void updateSetting() {
 		selectedOptions[selectedSetting] = (selectedOptions[selectedSetting] + 1) % settingsOptions.valueArray()[selectedSetting].split(",").length;
 		Settings.set(settingsOptions.keyArray()[selectedSetting].toLowerCase(), selectedOptions[selectedSetting]);
-		Resources.updateMusicVolume();
+		Resources.adjustFromSettings();
 	}
 
 	@Override

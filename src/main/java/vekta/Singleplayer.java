@@ -48,8 +48,8 @@ public class Singleplayer implements World, PlayerListener {
 	private static final float TIME_FALLOFF = .1F;
 	private static final int MAX_OBJECTS_PER_DIST = 5; // TODO: increase as we add more object types
 
-	private static final float MAX_AUDITORY_DISTANCE = 3000; // Used for calculating volume of sounds. Higher = hear more
-	private static final float MAX_PAN_DISTANCE = 1000; // Distance where sound is panned entirely left/right
+	private static final float MAX_AUDITORY_DISTANCE = 2000; // Used for calculating volume of sounds. Higher = hear more
+	private static final float MAX_PAN_DISTANCE = 3000; // Distance where sound is panned entirely left/right
 
 	private static final float MIN_PLANET_TIME_SCALE = 10; // Make traveling between ship-level objects much faster
 
@@ -604,23 +604,14 @@ public class Singleplayer implements World, PlayerListener {
 
 		// Pan
 		float pan = (MAX_PAN_DISTANCE - distanceX) / MAX_PAN_DISTANCE;
-		if(pan < -1)
-			pan = -1;
-		if(pan > 1)
-			pan = 1;
+		pan = pan > 1 ? 1 : pan < -1 ? -1 : pan; // Clamp between -1 and 1
 
 		// Volume
 		float maxDistance = MAX_AUDITORY_DISTANCE * getZoom();
 		float volume = (maxDistance - distance) / maxDistance;
-		if(volume < 0)
-			volume = 0;
-		if(volume > 1)
-			volume = 1;
-
-		Resources.playSound(sound);
-		Resources.setSoundVolume(sound, volume);
-		Resources.setSoundPan(sound, pan);
-		//		Resources.resetSoundVolumeAndPan(sound);
+		volume = volume > 1 ? 1 : volume < 0 ? 0 : volume; // Clamp between 0 and 1
+		
+		Resources.playSound(sound, volume, pan);
 	}
 
 	public boolean load(File file) {

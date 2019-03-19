@@ -114,11 +114,9 @@ public class Vekta extends PApplet {
 		if(context != null) {
 			context.render();
 		}
-
-		//		hint(DISABLE_DEPTH_TEST);
-		//		camera();
-		//		noLights();
-
+		
+		Resources.updateAudio();
+		
 		// FPS OVERLAY
 		fill(255);
 		textAlign(LEFT);

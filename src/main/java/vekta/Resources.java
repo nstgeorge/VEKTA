@@ -32,7 +32,11 @@ public final class Resources {
 	private static final char REF_BEFORE = '{';
 	private static final char REF_AFTER = '}';
 
+	private static final int MUSIC_FADE_TIME = 100;
+
+	private static SoundFile prevMusic;
 	private static SoundFile currentMusic;
+	private static int fadeProgress;
 
 	public static PShape logo; // TODO: generalize SVG file loading
 
@@ -176,10 +180,22 @@ public final class Resources {
 	// TODO: DRY up these sound methods a bit
 
 	public static void playSound(String key) {
+		playSound(key, 1);
+	}
+
+	public static void playSound(String key, float volume) {
+		playSound(key, volume, 0);
+	}
+
+	public static void playSound(String key, float volume, float pan) {
+		playSound(key, volume, pan, 1);
+	}
+
+	public static void playSound(String key, float volume, float pan, float freq) {
 		if(Settings.getInt("sound") > 0) {
 			SoundFile sound = getSound(key);
 			sound.stop();
-			sound.play();
+			sound.play(freq, pan, volume);
 		}
 	}
 
@@ -198,8 +214,9 @@ public final class Resources {
 
 	public static void stopAllSoundsExceptMusic() {
 		for(SoundFile sound : SOUNDS.values()) {
-			if(sound != getMusic())
+			if(sound != currentMusic && sound != prevMusic) {
 				sound.stop();
+			}
 		}
 	}
 
@@ -213,9 +230,6 @@ public final class Resources {
 	}
 
 	public static SoundFile getMusic() {
-		if(currentMusic != null && !currentMusic.isPlaying()) {
-			currentMusic = null;
-		}
 		return currentMusic;
 	}
 
@@ -227,54 +241,56 @@ public final class Resources {
 		float volume = Settings.getInt("music");
 		if(volume > 0) {
 			if(sound != currentMusic) {
-				// Stop previous music
-				if(currentMusic != null) {
-					currentMusic.stop();
-				}
-				// Start new music
-				sound.amp(volume);
+				sound.amp(1);
 				if(loop) {
 					sound.loop();
 				}
 				else {
 					sound.play();
 				}
-				// Keep track for next time
+				// Set up crossfading
+				stopMusic();
 				currentMusic = sound;
 			}
 		}
 	}
 
 	public static void stopMusic() {
-		if(currentMusic != null) {
-			currentMusic.stop();
+		if(prevMusic != null) {
+			prevMusic.stop();
 		}
+		prevMusic = currentMusic;
+		fadeProgress = 0;
 	}
 
-	public static void setSoundVolume(String key, float volume) {
-		SoundFile sound = getSound(key);
-		if(volume > 0) {
-			sound.amp(volume);
-		}
-		else {
-			sound.stop();
-		}
-	}
-
-	public static void setSoundPan(String key, float pan) {
-		SoundFile sound = getSound(key);
-		sound.pan(pan);
-	}
-
-	public static void resetSoundVolumeAndPan(String key) {
-		SoundFile sound = getSound(key);
-		sound.pan(0);
-		sound.amp(1);
-	}
-
-	public static void updateMusicVolume() {
+	public static void adjustFromSettings() {
 		if(currentMusic != null) {
 			currentMusic.amp(Settings.getInt("music"));
+		}
+	}
+
+	public static void updateAudio() {
+		if(currentMusic != null) {
+			if(!currentMusic.isPlaying()) {
+				currentMusic = null;
+			}
+		}
+
+		if(prevMusic != null) {
+			if(fadeProgress <= MUSIC_FADE_TIME) {
+				float progress = (float)++fadeProgress / MUSIC_FADE_TIME;
+				prevMusic.amp(1 - progress);
+				if(currentMusic != null) {
+					currentMusic.amp(progress);
+				}
+			}
+			else {
+				prevMusic.stop();
+				prevMusic = null;
+				if(currentMusic != null) {
+					currentMusic.amp(1);
+				}
+			}
 		}
 	}
 }

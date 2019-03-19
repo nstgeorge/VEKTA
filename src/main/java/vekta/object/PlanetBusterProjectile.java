@@ -58,7 +58,7 @@ public class PlanetBusterProjectile extends HomingProjectile {
 
 			for(int i = 0; i < EXPLOSION_SHOCKWAVES; i++) {
 				int color = v.chance(.5F) ? 255 : colorRange.selectColor();
-				register(new Shockwave(s, v.random(.1F, .5F), (int)(sq(v.random(.2F, 1)) * 250), color));
+				register(new Shockwave(s, v.random(.2F, 1), (int)(sq(v.random(.2F, 1)) * 250), color));
 			}
 
 			s.destroyBecause(getParentObject());

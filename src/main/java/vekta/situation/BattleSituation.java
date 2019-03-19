@@ -1,20 +1,22 @@
 package vekta.situation;
 
 import vekta.Player;
+import vekta.RenderLevel;
 import vekta.Resources;
 import vekta.object.ship.FighterShip;
 import vekta.sound.SoundGroup;
+import vekta.spawner.WorldGenerator;
 
 import static vekta.Vekta.getWorld;
 
 public class BattleSituation implements Situation {
 	private static final SoundGroup BATTLE_MUSIC = new SoundGroup("battle");
-//	private static final float BATTLE_RADIUS = WorldGenerator.getRadius(RenderLevel.SHIP);
+	private static final float BATTLE_RADIUS = WorldGenerator.getRadius(RenderLevel.SHIP);
 
 	@Override
 	public boolean isHappening(Player player) {
 		for(FighterShip ship : getWorld().findObjects(FighterShip.class)) {
-			if(ship.getTarget() == player.getShip()/* && player.getShip().relativePosition(ship).magSq() <= BATTLE_RADIUS * BATTLE_RADIUS*/) {
+			if(ship.getTarget() != null && player.getShip().relativePosition(ship).magSq() <= BATTLE_RADIUS * BATTLE_RADIUS) {
 				return true;
 			}
 		}
@@ -33,6 +35,5 @@ public class BattleSituation implements Situation {
 	@Override
 	public void end(Player player) {
 		Resources.stopMusic();
-		player.send("Leaving hostile territory");
 	}
 }

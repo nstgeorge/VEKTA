@@ -110,9 +110,15 @@ public class WormholeModule extends ShipModule {
 			ship.setLanding(true);
 			PVector offset = PVector.random2D().mult((ship.getRadius() + target.getRadius()) * 2);
 			ship.getPositionReference().set(target.getPosition().add(offset));
+
+			Targeter targeter = (Targeter)getShip().getModule(ModuleType.TARGET_COMPUTER);
+			if(targeter != null) {
+				// Update ship targeter
+				targeter.setTarget(target);
+			}
 		}
 		else if(ship.hasController()) {
-			ship.getController().send("Not enough energy! (" + (int)getShip().getEnergy() + " / " + (int)getEnergyConsumption() + ")");
+			ship.getController().send("Not enough energy! (" + (int)ship.getEnergy() + " / " + (int)getEnergyConsumption() + ")");
 		}
 	}
 
