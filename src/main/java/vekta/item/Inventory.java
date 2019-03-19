@@ -1,15 +1,15 @@
 package vekta.item;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public final class Inventory implements Serializable, Iterable<Item> {
 	private final InventoryListener listener;
 
-	private final List<Item> items = new ArrayList<>();
+	private final List<Item> items = new CopyOnWriteArrayList<>();
 	private int money;
 
 	public Inventory() {
@@ -51,7 +51,7 @@ public final class Inventory implements Serializable, Iterable<Item> {
 	}
 
 	public List<Item> getItems() {
-		return new ArrayList<>(items);
+		return items;
 	}
 
 	public boolean has(Item item) {
@@ -76,13 +76,27 @@ public final class Inventory implements Serializable, Iterable<Item> {
 		return false;
 	}
 
+	public void clearMoney() {
+		remove(getMoney());
+	}
+
+	public void clearItems() {
+		for(Item item : this) {
+			remove(item);
+		}
+	}
+
+	public void clear() {
+		clearMoney();
+		clearItems();
+	}
+
 	public void moveTo(Inventory other) {
-		other.add(money);
+		other.add(getMoney());
 		for(Item item : this) {
 			other.add(item);
 		}
-		items.clear();
-		money = 0;
+		clear();
 	}
 
 	@Override

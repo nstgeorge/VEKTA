@@ -24,7 +24,7 @@ public class ItemGenerator {
 				.map(k -> new PatternItemCategory(k, map.get(k).toArray(new String[0])))
 				.toArray(ItemCategory[]::new);
 	}
-
+	
 	public static ItemSpawner getSpawner(Class<? extends ItemSpawner> type) {
 		return Arrays.stream(SPAWNERS).filter(type::isInstance).findFirst().orElse(null);
 	}

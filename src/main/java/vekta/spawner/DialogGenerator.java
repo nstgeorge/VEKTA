@@ -1,6 +1,5 @@
 package vekta.spawner;
 
-import vekta.Faction;
 import vekta.Player;
 import vekta.Resources;
 import vekta.menu.Menu;
@@ -64,11 +63,6 @@ public final class DialogGenerator {
 			dialog = person.createDialog("request");
 		}
 		return dialog;
-	}
-
-	public static Dialog randomSecurityDialog(Faction faction) {
-		Person guard = new Person("Security Guard", faction);
-		return guard.createDialog("security");
 	}
 
 	public interface DialogSpawner {

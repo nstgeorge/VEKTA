@@ -1,5 +1,4 @@
 {person_title}
 {boss_noun}-{boss_modifier}
 {item_noun}-{boss_modifier}
-{boss_noun}-{item_modifier}
 the {boss_noun} {boss_modifier}

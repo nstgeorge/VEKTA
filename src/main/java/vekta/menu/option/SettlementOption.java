@@ -1,8 +1,10 @@
 package vekta.menu.option;
 
+import vekta.Faction;
 import vekta.menu.Menu;
 import vekta.menu.handle.SecurityMenuHandle;
 import vekta.menu.handle.SettlementMenuHandle;
+import vekta.spawner.dialog.SecurityDialogSpawner;
 import vekta.terrain.settlement.Settlement;
 
 import static vekta.Vekta.setContext;
@@ -34,9 +36,14 @@ public class SettlementOption implements MenuOption {
 		getSettlement().setupMenu(sub);
 		sub.addDefault();
 
-		if(getSettlement().getFaction().isEnemy(menu.getPlayer().getFaction())) {
-			Menu security = new Menu(menu.getPlayer(), sub.getDefault(), new SecurityMenuHandle(sub, getSettlement().getFaction()));
-			security.addDefault();
+		if(getSettlement().hasSecurity(menu.getPlayer())) {
+			Faction faction = getSettlement().getFaction();
+
+			MenuOption confront = new DialogOption("Confront Security", SecurityDialogSpawner.randomSecurityDialog(faction, menu.getDefault()));
+
+			Menu security = new Menu(menu.getPlayer(), confront, new SecurityMenuHandle(sub, faction));
+			getSettlement().onSecurityMenu(security);
+			security.add(new QuicktimeOption(5, "Walk Away", sub.getDefault()::onSelect));
 			setContext(security);
 		}
 		else {

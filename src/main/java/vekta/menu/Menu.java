@@ -143,7 +143,7 @@ public class Menu implements Context {
 		}
 	}
 
-	public void select() {
+	public void selectCursor() {
 		select(getCursor());
 	}
 

@@ -1,9 +1,6 @@
 package vekta.terrain.settlement;
 
-import vekta.Faction;
-import vekta.Resources;
-import vekta.Sync;
-import vekta.Syncable;
+import vekta.*;
 import vekta.economy.Economy;
 import vekta.economy.EconomyDescriptor;
 import vekta.economy.ProductivityModifier;
@@ -20,7 +17,7 @@ import static processing.core.PApplet.ceil;
 
 public abstract class Settlement extends Syncable<Settlement> implements SettlementPart, EconomyDescriptor, ProductivityModifier {
 	private static final float POPULATION_PER_VALUE = 10000;
-	
+
 	private final @Sync List<SettlementPart> parts = new ArrayList<>();
 
 	private final String name;
@@ -200,6 +197,13 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 	}
 
 	public void onSettlementMenu(Menu menu) {
+	}
+
+	public boolean hasSecurity(Player player) {
+		return getFaction().isEnemy(player.getFaction());
+	}
+
+	public void onSecurityMenu(Menu menu) {
 	}
 
 	@Override

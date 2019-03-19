@@ -1,5 +1,6 @@
 package vekta.situation;
 
+import processing.sound.SoundFile;
 import vekta.Player;
 import vekta.RenderLevel;
 import vekta.Resources;
@@ -8,6 +9,7 @@ import vekta.sound.SoundGroup;
 import vekta.spawner.WorldGenerator;
 
 import static vekta.Vekta.getWorld;
+import static vekta.Vekta.v;
 
 public class BattleSituation implements Situation {
 	private static final SoundGroup BATTLE_MUSIC = new SoundGroup("battle");
@@ -25,7 +27,10 @@ public class BattleSituation implements Situation {
 
 	@Override
 	public void start(Player player) {
-		Resources.setMusic(BATTLE_MUSIC.random(), false);
+		SoundFile sound = BATTLE_MUSIC.random();
+		Resources.setMusic(sound, true);
+
+		sound.jump(v.random(sound.duration())); // Start at random point in music
 	}
 
 	@Override
