@@ -3,9 +3,7 @@ package vekta.object.planet;
 import processing.core.PShape;
 import processing.core.PVector;
 
-import java.io.ObjectStreamException;
-
-import static processing.core.PConstants.*;
+import static processing.core.PConstants.ELLIPSE;
 import static vekta.Vekta.v;
 
 /**
@@ -25,7 +23,7 @@ public class GasGiant extends Planet {
 		super(name, mass, density, position, velocity, color);
 		ringAngle = v.random(360);
 		ringRatio = v.random(.1F, 1);
-		ringDistances = new float[(int)v.random(2, 7)];
+		ringDistances = new float[(int)v.random(2, 5)];
 		ringColors = new int[ringDistances.length];
 		float d = v.random(1.5F, 3);
 		for(int i = 0; i < ringDistances.length; i++) {
@@ -33,30 +31,6 @@ public class GasGiant extends Planet {
 			ringColors[i] = v.lerpColor(20, 70, v.random(1));
 		}
 		maxRadius = d;
-
-		setupShape();
-	}
-
-	private void setupShape() {
-		v.ellipseMode(CORNER);
-		v.noFill();
-		v.strokeWeight(1);
-
-		rings = new PShape[ringDistances.length];
-		for(int i = 0; i < ringDistances.length; i++) {
-			float rd = ringDistances[i];
-			v.stroke(ringColors[i]);
-			PShape ring = v.createShape(ELLIPSE, 0, 0, rd * 2, rd * 2 * ringRatio);
-			rings[i] = ring;
-		}
-		
-		v.ellipseMode(CENTER);
-	}
-
-	@Override
-	protected Object readResolve() throws ObjectStreamException {
-		setupShape();
-		return super.readResolve();
 	}
 
 	@Override
@@ -68,7 +42,19 @@ public class GasGiant extends Planet {
 	public void drawNearby(float r) {
 		super.drawNearby(r);
 
+		// Initialize in draw loop for correct rendering paramters
+		if(rings == null) {
+			rings = new PShape[ringDistances.length];
+			for(int i = 0; i < ringDistances.length; i++) {
+				float rd = ringDistances[i];
+				v.stroke(ringColors[i]);
+				PShape ring = v.createShape(ELLIPSE, rd, rd * ringRatio, rd, rd * ringRatio);
+				rings[i] = ring;
+			}
+		}
+
 		v.scale(r);
+		v.rotate(ringAngle);
 		for(PShape ring : rings) {
 			ring.setStrokeWeight(1 / r);
 			v.shape(ring);
