@@ -97,17 +97,19 @@ public class Projectile extends SpaceObject implements Damager {
 	@Override
 	public boolean collidesWith(RenderLevel level, SpaceObject s) {
 		// Always collide regardless of render distance
-		boolean colliding = super.collidesWith(getRenderLevel(), s);
-
-		return colliding && s instanceof Damageable && ((Damageable)s).isDamageableFrom(this);
+		return super.collidesWith(getRenderLevel(), s);
+		
+//		boolean colliding = super.collidesWith(getRenderLevel(), s);
+//		return colliding && s instanceof Damageable && ((Damageable)s).isDamageableFrom(this);
 	}
 
 	@Override
 	public void onCollide(SpaceObject s) {
-		destroyBecause(s);
 		if(s instanceof Damageable) {
 			((Damageable)s).damage(getDamage(), this);
+			
+			getWorld().playSound("explosion", getPosition());
+			destroyBecause(s);
 		}
-		getWorld().playSound("explosion", getPosition());
 	}
 }  

@@ -26,7 +26,7 @@ public class Shockwave extends SpaceObject {
 
 	@Override
 	public float getMass() {
-		return Float.POSITIVE_INFINITY; // TODO: change when collision detection is upgraded
+		return 1;
 	}
 
 	@Override

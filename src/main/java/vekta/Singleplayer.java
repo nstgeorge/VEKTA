@@ -243,13 +243,7 @@ public class Singleplayer implements World, PlayerListener {
 		if(level == RenderLevel.PLANET && timeScale < MIN_PLANET_TIME_SCALE) {
 			timeScale = MIN_PLANET_TIME_SCALE;
 		}
-
-		// Counteract velocity mismatch on player zoom
-		if(prevTimeScale != timeScale && prevLevel == level) {
-			playerShip.getPositionReference()
-					.add(playerShip.getVelocity().mult(timeScale - prevTimeScale));
-		}
-
+		
 		v.clear();
 		v.rectMode(CENTER);
 		v.ellipseMode(RADIUS);
@@ -271,7 +265,8 @@ public class Singleplayer implements World, PlayerListener {
 		}
 
 		// Pre-update loop
-		for(SpaceObject s : state.getObjects()) {
+		List<SpaceObject> objects = state.getObjects();
+		for(SpaceObject s : objects) {
 			if(!s.isPersistent()) {
 				// Increment count for object's render level
 				objectCounts[s.getDespawnLevel().ordinal()]++;
@@ -295,31 +290,16 @@ public class Singleplayer implements World, PlayerListener {
 			s.applyVelocity(s.getVelocityReference());
 		}
 
-
 		// Custom behavior loop
-		for(SpaceObject s : state.getObjects()) {
+		for(int i = 0, size = objects.size(); i < size; i++) {
+			SpaceObject s = objects.get(i);
 			// Skip despawned/destroyed objects
 			if(state.isRemoving(s)) {
 				continue;
 			}
-			
+
 			// Update object
 			s.update(level);
-			
-			for(SpaceObject other : state.getObjects()) {
-				if(s != other) {
-					// Check both collisions before firing events (prevents race conditions)
-					// TODO: colliders should check each other rather than themselves
-					boolean collides1 = s.collidesWith(level, other);
-					boolean collides2 = other.collidesWith(level, s);
-					if(collides1) {
-						s.onCollide(other);
-					}
-					if(collides2) {
-						other.onCollide(s);
-					}
-				}
-			}
 
 			// Start drawing object
 			v.pushMatrix();
@@ -343,14 +323,31 @@ public class Singleplayer implements World, PlayerListener {
 			v.noFill();
 			float r = s.getRadius() / scale;
 			float onScreenRadius = s.getOnScreenRadius(r);
-			if(abs(screenX) - onScreenRadius <= v.width / 2 && abs(screenY) - onScreenRadius <= v.height / 2) {
+			boolean visible = abs(screenX) - onScreenRadius <= v.width / 2 && abs(screenY) - onScreenRadius <= v.height / 2;
+			if(visible) {
 				s.draw(level, r);
 			}
 
 			// End drawing object
 			v.popMatrix();
+
+			// Check collisions when on screen
+			if(visible) {
+				for(int j = i + 1; j < size; j++) {
+					SpaceObject other = objects.get(j);
+
+					// Ensure collision is reasonable
+					if(s.getRenderLevel().isVisibleTo(level) || other.getRenderLevel().isVisibleTo(level)) {
+						// Check both collision conditions before interacting
+						if(s.collidesWith(level, other) && other.collidesWith(level, s)) {
+							s.onCollide(other);
+							other.onCollide(s);
+						}
+					}
+				}
+			}
 		}
-		
+
 		state.endUpdate();
 
 		RenderLevel spawnLevel = level;

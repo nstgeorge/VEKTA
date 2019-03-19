@@ -57,7 +57,7 @@ public class LandingSite extends Syncable<LandingSite> {
 		PVector offset = landed.getPosition().copy().sub(getParent().getPosition());
 		PVector velocity = offset.setMag(getLaunchSpeed()).add(getParent().getVelocity());
 		landed.setVelocity(velocity);
-		landed.getPositionReference().add(velocity.mult(getWorld().getTimeScale()));
+//		landed.getPositionReference().add(velocity.mult(getWorld().getTimeScale()));
 		
 		ship.setTemperature(ship.getOptimalTemperature()); // TODO: adjust based on planet temperature
 		ship.doLand(this);

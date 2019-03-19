@@ -22,7 +22,7 @@ public class Particle extends SpaceObject {
 
 		this.endColor = style.getEndColor().selectColor();
 	}
-	
+
 	public final ParticleStyle getStyle() {
 		return style;
 	}
@@ -34,9 +34,8 @@ public class Particle extends SpaceObject {
 
 	@Override
 	public void onUpdate(RenderLevel level) {
-		PVector currentVelocity = getVelocity();
-		addVelocity(currentVelocity.sub(parent.getVelocity()).setMag(-getStyle().getDrag()));
-
+		addVelocity(relativeVelocity(parent).mult(getStyle().getDrag()));
+		
 		aliveTime += 1 / v.frameRate;
 		if(aliveTime >= getStyle().getLifetime()) {
 			despawn();
@@ -50,7 +49,7 @@ public class Particle extends SpaceObject {
 
 	@Override
 	public float getMass() {
-		return Float.POSITIVE_INFINITY; // Temp (planet collisions)
+		return 1;
 	}
 
 	@Override
