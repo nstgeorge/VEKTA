@@ -80,7 +80,7 @@ public class HyperdriveModule extends ShipModule {
 			ship.accelerate(effectiveThrust * currentBoost, ship.getVelocity());
 
 			////
-			Shockwave wave = register(new Shockwave(getShip(), timeScale * currentBoost * .0002F, (int)v.random(20, 30), getShip().getColor()));
+			Shockwave wave = register(new Shockwave(getShip(), timeScale * currentBoost * .0004F, (int)v.random(20, 30), getShip().getColor()));
 			wave.setRadius(1);
 			wave.addVelocity(ship.getHeading().mult(-.05F * timeScale * currentBoost));
 		}
