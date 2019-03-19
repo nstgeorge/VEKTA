@@ -10,7 +10,9 @@ import vekta.object.SpaceObject;
 import vekta.object.planet.Planet;
 import vekta.overlay.singleplayer.TelemetryOverlay;
 import vekta.terrain.LandingSite;
+import vekta.terrain.settlement.Settlement;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -162,9 +164,17 @@ public class NavigationContext implements Context, PlayerListener {
                     break;
                 case SCANNED:
                     List<String> features = player.getObservedFeatures(focus);
+                    List<Settlement> settlements = player.getObservedSettlements(focus);
+                    List<String> settlementNames = new ArrayList<>();
+
+                    for(Settlement s : settlements) {
+                        settlementNames.add(s.getName());
+                    }
+
                     v.text("Mass: " + TelemetryOverlay.getMassString(focus.getMass()), 0, 0);
                     v.text("Radius: " + focus.getRadius() + " km", 0, SPACING);
                     v.text(buildMultipleLineString(features, "Features"), 0, SPACING * 2);
+                    v.text(buildMultipleLineString(settlementNames, "Settlements"), 0, SPACING * 2 + (24 * numberOfLines(buildMultipleLineString(features, "Features"))));
                     break;
             }
 
@@ -203,8 +213,10 @@ public class NavigationContext implements Context, PlayerListener {
                 selected = Math.min(++selected, player.getObservedObjectList().size() - 1);
                 break;
             case MENU_SELECT:
-                Resources.playSound("notification");
-                player.getShip().setTargets(objectList.keySet().toArray(new SpaceObject[]{})[selected]);
+                if(objectList.size() > 0) {
+                    Resources.playSound("notification");
+                    player.getShip().setTargets(objectList.keySet().toArray(new SpaceObject[]{})[selected]);
+                }
                 break;
         }
     }
@@ -257,5 +269,13 @@ public class NavigationContext implements Context, PlayerListener {
             finalString = finalString.concat("\n" + line);
         }
         return finalString;
+    }
+
+    private int numberOfLines(String in) {
+        int count = 0;
+        for(char c : in.toCharArray()) {
+            if(c == '\n') count++;
+        }
+        return count;
     }
 }
