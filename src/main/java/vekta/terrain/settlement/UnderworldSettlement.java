@@ -6,7 +6,9 @@ import vekta.economy.Economy;
 import vekta.economy.NoiseModifier;
 import vekta.economy.TemporaryModifier;
 import vekta.item.Inventory;
-import vekta.spawner.WorldGenerator;
+import vekta.spawner.ItemGenerator;
+import vekta.spawner.item.CoinItemSpawner;
+import vekta.terrain.building.MarketBuilding;
 
 import static vekta.Vekta.v;
 
@@ -21,7 +23,7 @@ public class UnderworldSettlement extends Settlement {
 		genericName = Resources.generateString("underworld_type");
 
 		if(v.chance(.5F)) {
-			add(WorldGenerator.createMarket(2));
+			add(new MarketBuilding(2, "Coins", ItemGenerator.getSpawner(CoinItemSpawner.class)));
 		}
 	}
 

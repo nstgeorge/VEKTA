@@ -1,3 +1,6 @@
+{item_coin} Cash
+Lite{item_coin}
+Dark{item_coin}
 {item_adj_common}Coin
 {item_adj_rare}Coin
 {item_modifier}Coin
@@ -8,13 +11,14 @@
 {planet}Coin
 {person_noun}Coin
 {mission_noun}Coin
-Coin{impersonal_name} Credits
-Crypto{boss_modifier}
+Coin{impersonal_name} Credit
+Crypto{boss_noun} Coin
+Crypto{boss_modifier} Coin
 {item_adj_common} Token
-{item_adj_common} Credits
-{boss_noun} Credits
-{boss_modifier} Credits
+{item_adj_common} Credit
+{boss_noun} Credit
+{boss_modifier} Credit
 {item_adj_common}{letter}
-{item_adj_rare}{letter}
+{item_adj_rare}{letter}{letter}
 {item_common} Token
-{item_common} Credits
+{item_common} Credit

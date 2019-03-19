@@ -241,6 +241,7 @@ public final class Resources {
 		float volume = Settings.getInt("music");
 		if(volume > 0) {
 			if(sound != currentMusic) {
+				stopMusic();
 				sound.amp(1);
 				if(loop) {
 					sound.loop();
@@ -249,7 +250,6 @@ public final class Resources {
 					sound.play();
 				}
 				// Set up crossfading
-				stopMusic();
 				currentMusic = sound;
 			}
 		}
