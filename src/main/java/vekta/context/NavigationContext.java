@@ -1,4 +1,261 @@
 package vekta.context;
 
-public class NavigationContext {
+import vekta.KeyBinding;
+import vekta.Player;
+import vekta.PlayerListener;
+import vekta.Resources;
+import vekta.menu.Menu;
+import vekta.menu.handle.SurveyMenuHandle;
+import vekta.object.SpaceObject;
+import vekta.object.planet.Planet;
+import vekta.overlay.singleplayer.TelemetryOverlay;
+import vekta.terrain.LandingSite;
+
+import java.util.HashMap;
+import java.util.List;
+
+import static processing.core.PConstants.*;
+import static vekta.Vekta.*;
+
+public class NavigationContext implements Context, PlayerListener {
+
+    public enum INFO_LEVEL {
+        OWNED(5),
+        SCANNED(4),
+        LANDED(3),
+        TARGETED(2),
+        WITHIN_RANGE(1);
+
+        private final int code;
+
+        INFO_LEVEL(int code) { this.code = code; }
+
+        public boolean isHigher(INFO_LEVEL level) {
+            return level.getCode() < this.getCode();
+        }
+
+        public int getCode() { return code; }
+    }
+
+    private HashMap<SpaceObject, INFO_LEVEL> objectList;
+
+
+    private int selected;
+
+    private static final float ROTATE_SPEED = 1F / 2000;
+    private static final float SCAN_SPEED = 1F / 100;
+    private static final int PLANET_SIZE = 100;
+    private static final int PLANET_RES = 32;
+
+    private static final int PADDING = 150;
+    private static final int SPACING = 30;
+
+    private final Context parent;
+    private final Player player;
+
+    public NavigationContext(Context parent, Player player) {
+        this.parent = parent;
+        this.player = player;
+
+        selected = 0;
+
+        player.addListener(this);
+    }
+
+    @Override
+    public void render() {
+        v.clear();
+        v.textAlign(CENTER);
+        v.textSize(36);
+        v.text("Navigation", v.width / 2F, 60);
+
+        v.textSize(24);
+        v.fill(UI_COLOR);
+
+        objectList = player.getObservedObjectList();
+
+        if(objectList.size() > 0) {
+
+            v.shapeMode(CORNERS);
+            v.stroke(100);
+            v.line(v.width / 2F, 100, v.width / 2F, v.height - 50);
+
+            SpaceObject[] objects = new SpaceObject[objectList.size()];
+            objects = objectList.keySet().toArray(objects);
+
+            for(int i = 0; i < objectList.keySet().size(); i++) {
+
+                SpaceObject object = objects[i];
+                v.fill(object.getColor());
+                v.textAlign(LEFT);
+
+                if(i == selected) {
+                    v.text(">>", PADDING - 100, 110 + (SPACING * i));
+                }
+                if(object.getName().length() > 20) {
+                    v.text(object.getName().trim().substring(0, 17) + "...", PADDING, 110 + (SPACING * i));
+                } else {
+                    v.text(object.getName().trim(), PADDING, 110 + (SPACING * i));
+                }
+                v.textAlign(RIGHT);
+                v.text(TelemetryOverlay.getDistanceString(object, player), v.width / 2F - PADDING, 110 + (SPACING * i));
+            }
+
+            float rotate = v.frameCount * ROTATE_SPEED;
+            float scan = v.frameCount * SCAN_SPEED;
+
+            // Right side
+            SpaceObject focus = objects[selected];
+            INFO_LEVEL level = objectList.get(focus);
+            int color = focus.getColor();
+
+            v.pushMatrix();
+            v.textAlign(CENTER);
+            v.translate(3 * v.width / 4F, 200 + PLANET_SIZE / 2F);
+            v.fill(color);
+            v.text(focus.getName(), 0, -130);
+            if(player.getShip().getTargets().contains(focus)) {
+                v.text(":: Targeted ::", 0, v.height - (250 + PLANET_SIZE / 2F));
+            } else {
+                v.text("Press SELECT to target", 0, v.height - (250 + PLANET_SIZE / 2F));
+            }
+
+
+            // a e s t h e t i c planet animation
+            // TODO: Move this into a function in Planet
+            if(focus instanceof Planet && level == INFO_LEVEL.SCANNED) {
+                float perspective = 1;
+
+                v.shapeMode(CENTER);
+                v.strokeWeight(2);
+                v.noFill();
+
+                // Draw scanner arc
+                float scanScale = cos(scan);
+                v.stroke(v.lerpColor(0, color, sq(cos(scan / 2 + perspective))));
+                v.arc(0, 0, PLANET_SIZE * scanScale, PLANET_SIZE, -HALF_PI, HALF_PI);
+
+                // Draw planet
+                for(float r = 0; r < TWO_PI; r += TWO_PI / PLANET_RES) {
+                    float angle = r + rotate;
+                    float xScale = cos(angle);
+                    v.stroke(v.lerpColor(0, color, sq(cos(r / 2 + perspective))));
+                    v.arc(0, 0, PLANET_SIZE * xScale, PLANET_SIZE, -HALF_PI, HALF_PI);
+                }
+
+                v.strokeWeight(1);
+            } else {
+                v.textSize(PLANET_SIZE);
+                v.fill(100);
+                v.text("?", 0, 0);
+                v.textSize(24);
+            }
+
+            // Info
+            v.fill(focus.getColor());
+            v.translate(-(v.width / 4F) + PADDING, PLANET_SIZE + SPACING);
+            v.textAlign(LEFT);
+            switch(objectList.get(focus)) {
+                case LANDED:
+                    v.text("Mass: " + TelemetryOverlay.getMassString(focus.getMass()), 0, 0);
+                    v.text("Radius: " + focus.getRadius() + " km", 0, SPACING);
+                    break;
+                case SCANNED:
+                    List<String> features = player.getObservedFeatures(focus);
+                    v.text("Mass: " + TelemetryOverlay.getMassString(focus.getMass()), 0, 0);
+                    v.text("Radius: " + focus.getRadius() + " km", 0, SPACING);
+                    v.text(buildMultipleLineString(features, "Features"), 0, SPACING * 2);
+                    break;
+            }
+
+            v.textAlign(CENTER);
+
+            v.popMatrix();
+
+        } else {
+            v.fill(100);
+            v.text("No entries found. \nLand on, dock on, or scan a planet or ship for data.", v.width / 2F, 100);
+        }
+    }
+
+    @Override
+    public void focus() {
+
+    }
+
+    @Override
+    public void unfocus() {
+
+    }
+
+    @Override
+    public void keyPressed(KeyBinding key) {
+        switch(key) {
+            case MENU_CLOSE:
+                setContext(parent);
+                break;
+            case MENU_UP:
+                Resources.playSound("change");
+                selected = Math.max(--selected, 0);
+                break;
+            case MENU_DOWN:
+                Resources.playSound("change");
+                selected = Math.min(++selected, player.getObservedObjectList().size() - 1);
+                break;
+            case MENU_SELECT:
+                Resources.playSound("notification");
+                player.getShip().setTargets(objectList.keySet().toArray(new SpaceObject[]{})[selected]);
+                break;
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyBinding key) {
+
+    }
+
+    @Override
+    public void onLand(LandingSite site) {
+        player.recordSpaceObject(site.getParent(), INFO_LEVEL.LANDED);
+
+    }
+
+    @Override
+    public void onDock(SpaceObject object) {
+        player.recordSpaceObject(object, INFO_LEVEL.LANDED);
+    }
+
+    @Override
+    public void onMenu(Menu menu) {
+        if(menu.getHandle() instanceof SurveyMenuHandle) {
+            LandingSite site = ((SurveyMenuHandle) menu.getHandle()).getSite();
+            player.recordSpaceObject(site.getParent(), INFO_LEVEL.SCANNED, site.getTerrain());
+        }
+    }
+
+    private String buildMultipleLineString(List<String> words, String description) {
+        String finalString = "";
+        String[] lines = new String[10];
+        int currentLineIndex = 0;
+        int currentWordIndex = 0;
+        for(int i = 0; i < lines.length; i++) { lines[i] = ""; }
+        lines[0] = description + ": ";
+        for(String word : words) {
+            if(v.textWidth(lines[currentLineIndex] + ", " + word) > (v.width / 2F - PADDING * 2)) {
+                currentLineIndex++;
+            }
+            if(currentWordIndex != words.size() - 1) {
+                lines[currentLineIndex] = lines[currentLineIndex] + word + ", ";
+            } else {
+                lines[currentLineIndex] = lines[currentLineIndex] + word;
+            }
+
+            currentWordIndex++;
+        }
+        for(String line : lines) {
+            if(line == null) return finalString;
+            finalString = finalString.concat("\n" + line);
+        }
+        return finalString;
+    }
 }

@@ -33,17 +33,7 @@ public class TelemetryOverlay implements Overlay {
 		if(targeter != null && targeter.getTarget() != null) {
 			SpaceObject target = targeter.getTarget();
 
-			float dist = player.getShip().getPosition().dist(target.getPosition());
-			String unit = "meters";
-			if(dist > AU_DISTANCE * .01F) {
-				dist /= AU_DISTANCE;
-				unit = "AU";
-			}
-			else if(dist > 100) {
-				dist /= 1000;
-				unit = "km";
-			}
-			distString = ((float)round(dist * 100) / 100) + " " + unit;
+			distString = getDistanceString(target, player);
 		}
 		else {
 			distString = "--";
@@ -88,22 +78,13 @@ public class TelemetryOverlay implements Overlay {
 				targetString = "PLANET [1], ASTEROID [2], SHIP [3]" + (player.getCurrentMission() != null ? ", OBJECTIVE [4]" : "");
 			}
 			else {
-				float mass = (float)round(target.getMass() * 1000) / 1000;
-				String unit = "tonnes";
-				if(mass >= SUN_MASS * .1F) {
-					mass = (float)round(target.getMass() / SUN_MASS * 1000) / 1000;
-					unit = "Suns";
-				}
-				else if(mass >= EARTH_MASS * .1F) {
-					mass = (float)round(target.getMass() / EARTH_MASS * 1000) / 1000;
-					unit = "Earths";
-				}
+				String massString = getMassString(target.getMass());
 				if(target instanceof TerrestrialPlanet) {
 					TerrestrialPlanet closestPlanet = (TerrestrialPlanet)target;
-					targetString = target.getName() + " - " + distString + " \nHabitable: " + (closestPlanet.isHabitable() ? "YES" : "NO") + "\nMass: " + mass + " " + unit;
+					targetString = target.getName() + " - " + distString + " \nHabitable: " + (closestPlanet.isHabitable() ? "YES" : "NO") + "\nMass: " + massString;
 				}
 				else {
-					targetString = target.getName() + " - " + distString + " \nSpeed: " + (float)round(target.getVelocity().mag() * 100) / 100 + "\nMass: " + mass + " " + unit;
+					targetString = target.getName() + " - " + distString + " \nSpeed: " + (float)round(target.getVelocity().mag() * 100) / 100 + "\nMass: " + massString;
 				}
 				// Closest object arrow
 				drawDial("Direction", target.getPosition().sub(ship.getPosition()), 450, dialHeight, target.getColor());
@@ -125,6 +106,33 @@ public class TelemetryOverlay implements Overlay {
 				}
 			}
 		}
+	}
+
+	public static String getDistanceString(SpaceObject target, Player player) {
+		float dist = player.getShip().getPosition().dist(target.getPosition());
+		String unit = "meters";
+		if(dist > AU_DISTANCE * .01F) {
+			dist /= AU_DISTANCE;
+			unit = "AU";
+		}
+		else if(dist > 100) {
+			dist /= 1000;
+			unit = "km";
+		}
+		return ((float)round(dist * 100) / 100) + " " + unit;
+	}
+
+	public static String getMassString(float mass) {
+		String unit = "tonnes";
+		if(mass >= SUN_MASS * .1F) {
+			mass = (float)round((mass / SUN_MASS) * 1000) / 1000;
+			unit = "Suns";
+		}
+		else if(mass >= EARTH_MASS * .1F) {
+			mass = (float)round((mass / EARTH_MASS) * 1000) / 1000;
+			unit = "Earths";
+		}
+		return mass + " " + unit;
 	}
 
 	private void drawDial(String name, PVector info, float locX, float locY, int c) {

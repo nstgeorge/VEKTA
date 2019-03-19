@@ -1,22 +1,33 @@
 package vekta.overlay.singleplayer;
 
+import vekta.KeyBinding;
 import vekta.Player;
 import vekta.overlay.Overlay;
+
+import java.util.HashMap;
 
 import static processing.core.PConstants.*;
 import static vekta.Vekta.UI_COLOR;
 import static vekta.Vekta.v;
 
-public class PaneOverlay implements Overlay {
+public class DirectoryOverlay implements Overlay {
 
-    private static final String[] PANES = {"Navigation", "Logs", "Economies"};
+    private static HashMap<KeyBinding, String> PANES;
     private static final int BAR_HEIGHT = 30;
     private static final int PADDING = 30;
 
     private final Player player;
 
-    public PaneOverlay(Player player) {
+    public DirectoryOverlay(Player player) {
         this.player = player;
+
+        PANES = new HashMap<KeyBinding, String>() {{
+            put(KeyBinding.SHIP_NAVIGATION, "Navigation");
+            put(KeyBinding.SHIP_LOADOUT, "Loadout");
+            put(KeyBinding.SHIP_MISSIONS, "Missions");
+            put(KeyBinding.SHIP_HYPERDRIVE, "Hyperdrive");
+            put(KeyBinding.SHIP_INTERNET, "Internet");
+        }};
     }
 
     @Override
@@ -29,13 +40,9 @@ public class PaneOverlay implements Overlay {
         v.textAlign(LEFT, CENTER);
         v.fill(UI_COLOR);
         int x = PADDING;
-        for(int i = 0; i < PANES.length; i++) {
-            v.text("[" + (i+1) + "]: " + PANES[i], x, BAR_HEIGHT / 2F);
-            x += v.textWidth("[x]: " + PANES[i]) + PADDING;
-        }
-
-        if(player.getCurrentMission() != null) {
-            v.text("Missions", x, BAR_HEIGHT / 2F);
+        for(KeyBinding key : PANES.keySet()) {
+            v.text("[" + (char)key.getDefaultKeyCode() + "]: " + PANES.get(key), x, BAR_HEIGHT / 2F);
+            x += v.textWidth("[x]: " + PANES.get(key)) + PADDING;
         }
     }
 }

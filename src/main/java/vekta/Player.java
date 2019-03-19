@@ -1,10 +1,14 @@
 package vekta;
 
+import vekta.context.NavigationContext;
 import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.mission.Mission;
+import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
 import vekta.overlay.singleplayer.Notification;
+import vekta.terrain.Terrain;
+import vekta.terrain.settlement.Settlement;
 
 import java.util.*;
 
@@ -14,6 +18,10 @@ public final class Player extends Syncable<Player> {
 
 	private final List<PlayerListener> listeners = new ArrayList<>();
 	private final Set<String> attributes = new HashSet<>();
+
+	private HashMap<SpaceObject, NavigationContext.INFO_LEVEL> observedObjectList = new HashMap<>();
+	private HashMap<SpaceObject, List<String>> observedObjectFeatureList = new HashMap<>();
+	private HashMap<SpaceObject, List<Settlement>> observedObjectSettlementList = new HashMap<>();
 
 	private final List<Mission> missions = new ArrayList<>();
 	private Mission currentMission;
@@ -81,6 +89,37 @@ public final class Player extends Syncable<Player> {
 				item.onRemove(Player.this);
 			}
 		});
+	}
+
+	public void recordSpaceObject(SpaceObject object, NavigationContext.INFO_LEVEL level) {
+		if(!observedObjectList.containsKey(object) || level.isHigher(observedObjectList.get(object))) {
+			observedObjectList.put(object, level);
+		}
+	}
+
+	// Used when adding a scanned planet
+	public void recordSpaceObject(SpaceObject object, NavigationContext.INFO_LEVEL level, Terrain terrain) {
+		if(!observedObjectList.containsKey(object) || level.isHigher(observedObjectList.get(object))) {
+			observedObjectList.put(object, level);
+			observedObjectFeatureList.put(object, terrain.getFeatures());
+			observedObjectSettlementList.put(object, terrain.getSettlements());
+		}
+	}
+
+	public void removeSpaceObject(SpaceObject object) {
+		observedObjectList.remove(object);
+	}
+
+	public HashMap<SpaceObject, NavigationContext.INFO_LEVEL> getObservedObjectList() {
+		return observedObjectList;
+	}
+
+	public List<String> getObservedFeatures(SpaceObject object) {
+		return observedObjectFeatureList.get(object);
+	}
+
+	public List<Settlement> getObservedSettlements(SpaceObject object) {
+		return observedObjectSettlementList.get(object);
 	}
 
 	public Faction getFaction() {

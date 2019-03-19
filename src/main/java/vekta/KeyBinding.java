@@ -24,6 +24,7 @@ public enum KeyBinding {
 	SHIP_MENU('v'),
 	SHIP_LOADOUT('e'),
 	SHIP_MISSIONS('q'),
+	SHIP_NAVIGATION('n'),
 	SHIP_INTERNET('y'),
 	OBJECTIVE_CYCLE('o'),
 	MISSION_CYCLE('p'),
