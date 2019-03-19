@@ -15,11 +15,11 @@ public class CallSecurityDialogSpawner implements DialogGenerator.DialogSpawner 
 	
 	@Override
 	public void setup(Menu menu, Dialog dialog) {
-		MenuOption def = menu.getDefault();
+		MenuOption leave = menu.getDefault();
 
 		Dialog security = SecurityDialogSpawner.randomSecurityDialog(dialog.getPerson().getFaction(), menu.getDefault());
-		menu.setDefault(new DialogOption("(Talk to Security)", security));
+		menu.setDefault(new DialogOption("Talk to Security", security));
 
-		dialog.add(new QuicktimeOption(3, "(Run Away)", def::onSelect));
+		dialog.add(new QuicktimeOption(3, "Run Away", leave::onSelect));
 	}
 }

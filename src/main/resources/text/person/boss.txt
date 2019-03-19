@@ -5,4 +5,4 @@
 {firstname} {lastname} {boss_title}
 {item_adj_common} {firstname_boss}
 {item_adj_common} {firstname_boss} {boss_title}
-The {boss_noun} {boss_modifier}
+The {item_adj_common} {boss_noun} {boss_modifier}

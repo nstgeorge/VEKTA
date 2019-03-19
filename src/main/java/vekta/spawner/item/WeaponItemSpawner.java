@@ -31,7 +31,7 @@ public class WeaponItemSpawner implements ItemGenerator.ItemSpawner {
 	public static WeaponItem randomWeapon() {
 		String key = v.random(WEAPONS.keySet());
 		String name = key;
-		if(v.chance(.5F)) {
+		if(v.chance(.75F)) {
 			name = Resources.generateString("item_adj_common") + " " + name;
 		}
 		return new WeaponItem(name, v.random(WEAPONS.get(key)).replace("*", name));

@@ -1,9 +1,12 @@
 Bread Knife : Stab with *
 Kitchen Spoon : Bludgeon with *
-Razor Blade : Murder with *
-Razor Wire : Murder with *
-Broadsword : Chop with *
+Garden Hose : Drown with *
+Razor Wire : Strangle with *
+Broadsword : Cleave with *
 Scimitar : Slice with *
+Pitchfork : Shank with *
+Rake : Clobber with *
+Plastic Brick : Induce terminal * foot injury
 Woodchipper : Eviscerate with *
 Spike : Impale with *
 Spear : Impale with *
@@ -15,3 +18,4 @@ Worm-o Concentrate : Dissolve with *
 Hatchet : Chop with *
 Chainsaw : Dismember with *
 Firecracker : Detonate *
+Mini Laser : Evaporate with *

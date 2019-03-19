@@ -50,7 +50,7 @@ public class DialogObjective extends Objective {
 				complete();
 			}
 			else if(dialog.getPerson() == getDialog().getPerson()) {
-				menu.add(new DialogOption("(" + getVerb() + ")", getDialog()));
+				menu.add(new DialogOption(getVerb(), getDialog()));
 			}
 		}
 	}
