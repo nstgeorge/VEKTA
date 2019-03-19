@@ -1,22 +1,27 @@
 package vekta.terrain.settlement;
 
 import vekta.Faction;
+import vekta.Resources;
 import vekta.economy.Economy;
 import vekta.economy.NoiseModifier;
+import vekta.economy.TemporaryModifier;
 import vekta.item.Inventory;
-import vekta.menu.Menu;
 import vekta.spawner.WorldGenerator;
 
 import static vekta.Vekta.v;
 
-public class OutpostSettlement extends Settlement {
+public class UnderworldSettlement extends Settlement {
 	private final Inventory inventory = new Inventory();
 
-	public OutpostSettlement(Faction faction) {
-		super(faction, "outpost");
+	private final String genericName;
+
+	public UnderworldSettlement(Faction faction) {
+		super(faction, "underworld");
+
+		genericName = Resources.generateString("underworld_type");
 
 		if(v.chance(.5F)) {
-			add(WorldGenerator.createMarket(1));
+			add(WorldGenerator.createMarket(2));
 		}
 	}
 
@@ -26,16 +31,13 @@ public class OutpostSettlement extends Settlement {
 
 	@Override
 	public String getGenericName() {
-		return "Outpost";
+		return genericName;
 	}
 
 	@Override
 	public void onSetupEconomy(Economy economy) {
 		economy.setValue(v.random(.2F, 1));
 		economy.addModifier(new NoiseModifier(.1F));
-	}
-
-	@Override
-	public void onSettlementMenu(Menu menu) {
+		economy.addModifier(new TemporaryModifier("Criminal Jurisdiction", -.01F, 0));
 	}
 }

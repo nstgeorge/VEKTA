@@ -12,14 +12,20 @@ import java.util.List;
 import static vekta.Vekta.setContext;
 
 public class District implements SettlementPart {
+	private final Settlement settlement;
 	private final String name;
 	private final BuildingType type;
 
 	private final List<SettlementPart> parts = new ArrayList<>();
 
-	public District(String name, BuildingType type) {
+	public District(Settlement settlement, String name, BuildingType type) {
+		this.settlement = settlement;
 		this.name = name;
 		this.type = type;
+	}
+
+	public Settlement getSettlement() {
+		return settlement;
 	}
 
 	@Override

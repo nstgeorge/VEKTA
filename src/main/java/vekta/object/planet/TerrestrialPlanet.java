@@ -1,12 +1,17 @@
 package vekta.object.planet;
 
 import processing.core.PVector;
+import vekta.Faction;
+import vekta.economy.TemporaryModifier;
 import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
 import vekta.person.Person;
 import vekta.terrain.LandingSite;
 import vekta.terrain.Terrain;
 import vekta.terrain.settlement.Settlement;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static vekta.Vekta.getWorld;
 
@@ -67,8 +72,16 @@ public class TerrestrialPlanet extends Planet {
 				}
 			}
 
-			for(Settlement settlement : getTerrain().getSettlements()) {
-				settlement.getFaction().setEnemy(((ModularShip)s).getController().getFaction());
+			Set<Faction> factions = getTerrain().getSettlements().stream()
+					.map(Settlement::getFaction)
+					.collect(Collectors.toSet());
+
+			for(Faction faction : factions) {
+				faction.setEnemy(((ModularShip)s).getController().getFaction());
+				faction.getEconomy().addModifier(new TemporaryModifier(
+						"Destruction of " + getName(),
+						-faction.getEconomy().getValue() * .1F,
+						.1F));
 			}
 		}
 	}

@@ -53,7 +53,7 @@ public class LoadoutMenuHandle extends MenuHandle {
 		v.textAlign(v.LEFT);
 		v.text("Installed:", v.width - getButtonX() - 20, getButtonY(-2));
 
-		int basis = getButtonY(0);
+		float basis = v.width / 4F;
 
 		v.textSize(24);
 		v.fill(v.color(200));

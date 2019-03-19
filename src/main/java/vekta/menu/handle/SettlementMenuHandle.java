@@ -24,11 +24,6 @@ public class SettlementMenuHandle extends MenuHandle {
 		return super.getButtonWidth() * 2;
 	}
 
-	//	@Override
-	//	public int getButtonY(int i) {
-	//		return super.getButtonY(i - 1);
-	//	}
-
 	@Override
 	public void render(Menu menu) {
 		super.render(menu);

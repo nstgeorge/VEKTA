@@ -40,31 +40,36 @@ public class MissionMenuHandle extends MenuHandle {
 		v.fill(v.color(100));
 		v.textAlign(v.CENTER);
 		v.text("Mission:", getButtonX(), getButtonY(-1));
-		
+
 		if(!(menu.getCursor() instanceof MissionOption)) {
 			return;
 		}
 		Mission mission = ((MissionOption)menu.getCursor()).getMission();
 
 		float missionX = getButtonX() + getButtonWidth() * .75F;
+		float missionY = v.height / 4F;
 
 		v.textAlign(v.LEFT);
 		v.fill(100);
-		v.text(mission.getName(), missionX, getButtonY(-1));
+		v.text(mission.getName(), missionX, missionY);
 
 		v.textSize(24);
 		List<Objective> objectives = mission.getObjectives();
 		for(int i = 0; i < objectives.size(); i++) {
 			Objective objective = objectives.get(i);
 			v.fill(objective.getStatus().getColor());
-			v.text(objective.getDisplayText(), missionX + 20, getButtonY(i));
+			v.text(objective.getDisplayText(), missionX + 20, missionY + getMissionOffset(i + 1));
 		}
-		float rewardBasis = getButtonY(objectives.size());
 		List<Reward> rewards = mission.getRewards();
+		float rewardBasis = objectives.size() + 1;
 		for(int i = 0; i < rewards.size(); i++) {
 			Reward reward = rewards.get(i);
 			v.fill(reward.getColor());
-			v.text(reward.getDisplayText(), missionX + 20, (rewardBasis + getButtonY(objectives.size() + i)) / 2);
+			v.text(reward.getDisplayText(), missionX + 30, missionY + getMissionOffset(rewardBasis + i * .75F));
 		}
+	}
+
+	private float getMissionOffset(float position) {
+		return position * getSpacing() * .75F;
 	}
 }

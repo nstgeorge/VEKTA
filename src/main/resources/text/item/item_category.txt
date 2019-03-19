@@ -15,6 +15,7 @@ Relic : Artifact
 Weapon : Weapon
 Military : Weapon
 Militarized : Weapon
+Shank : Weapon
 Meathook : Weapon
 Bonesaw : Weapon
 Hacksaw : Weapon

@@ -14,11 +14,11 @@ public class CitySettlement extends Settlement {
 	public CitySettlement(Faction faction) {
 		super(faction, "city");
 
-		add(new District("Trade District", BuildingType.MARKET));
-		add(new District("Industrial District", BuildingType.INDUSTRIAL));
-		add(new District("Housing District", BuildingType.RESIDENTIAL));
-		add(new District("Financial District", BuildingType.ECONOMY));
-//		add(new District("Government Offices", BuildingType.GOVERNMENT));
+		add(new District(this, "Trade District", BuildingType.MARKET));
+		add(new District(this, "Industrial District", BuildingType.INDUSTRIAL));
+		add(new District(this, "Housing District", BuildingType.RESIDENTIAL));
+		add(new District(this, "Financial District", BuildingType.ECONOMY));
+		//		add(new District(this, "Government Offices", BuildingType.GOVERNMENT));
 
 		add(new CapitalBuilding(this));
 

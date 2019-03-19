@@ -52,7 +52,10 @@ Prototype
 Authentic
 Special
 Fashionable
+Classy
 Trendy
+Colorful
+Beautiful
 Pleasant
 Nice-Smelling
 Extra-Large
@@ -60,3 +63,7 @@ Weaponized
 Military-Grade
 Militarized
 Tactical
+Regal
+Kingly
+Queenly
+Knightly

@@ -165,3 +165,8 @@ Tetherer
 Scalper
 Dissector
 Seeker
+Twister
+Tweaker
+Slapper
+Squeezer
+Hugger

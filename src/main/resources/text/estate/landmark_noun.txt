@@ -9,3 +9,6 @@ Plateau
 Valley
 Hills
 Fields
+Cove
+Cave
+Enclave

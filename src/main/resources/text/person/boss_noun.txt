@@ -339,3 +339,5 @@ Way
 Lane
 Thneed
 Thrill
+Worm
+Slug
