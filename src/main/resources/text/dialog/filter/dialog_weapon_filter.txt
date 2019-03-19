@@ -1,5 +1,5 @@
-call_security
-ask_leave
-nervous_assassin
-react_angry
-recharge
+dialog_call_security
+dialog_ask_leave
+dialog_nervous_assassin
+dialog_react_angry
+dialog_recharge

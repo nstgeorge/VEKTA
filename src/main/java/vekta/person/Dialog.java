@@ -25,11 +25,27 @@ public class Dialog implements Serializable {
 	private Dialog next;
 
 	private boolean visited;
+	private int textColor;
 
 	public Dialog(String type, Person person, String message) {
 		this.type = type;
 		this.person = person;
-		this.message = message;
+
+		textColor = UI_COLOR;
+
+		// Set the color of the text
+		// TODO: Move this to appropriate function
+		if(message.startsWith("!")) {
+			// Angry message
+			textColor = v.color(255, 0, 0);
+			this.message = message.substring(1, message.length() - 1);
+		} else if (message.startsWith("|")) {
+			// Non-dialog message ("You notice something" or  other non-dialog message)
+			textColor = v.color(100);
+			this.message = message.substring(1, message.length() - 1);
+		} else {
+			this.message = message;
+		}
 
 		DialogGenerator.initDialog(this);
 	}
@@ -45,6 +61,10 @@ public class Dialog implements Serializable {
 	public String getMessage() {
 		return message;
 	}
+
+	public int getTextColor() { return textColor; }
+
+	public void setTextColor(int color) { textColor = color; }
 
 	public boolean isVisited() {
 		return visited;
