@@ -5,7 +5,6 @@ import processing.core.PVector;
 
 import java.io.ObjectStreamException;
 
-import static processing.core.PApplet.sq;
 import static processing.core.PConstants.*;
 import static vekta.Vekta.v;
 
@@ -31,7 +30,7 @@ public class GasGiant extends Planet {
 		float d = v.random(1.5F, 3);
 		for(int i = 0; i < ringDistances.length; i++) {
 			ringDistances[i] = d *= v.random(1.01F, 1.5F);
-			ringColors[i] = v.lerpColor(20, 80, sq(v.random(1)));
+			ringColors[i] = v.lerpColor(20, 70, v.random(1));
 		}
 		maxRadius = d;
 
