@@ -12,6 +12,6 @@ Club : Maul with *
 Shank : Stab with *
 Paddle : Spank with lethal force using *
 Worm-o Concentrate : Dissolve with *
-Axe : Chop with *
+Hatchet : Chop with *
 Chainsaw : Dismember with *
 Firecracker : Detonate *

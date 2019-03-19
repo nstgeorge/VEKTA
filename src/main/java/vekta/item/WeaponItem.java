@@ -16,7 +16,7 @@ public class WeaponItem extends Item {
 	static {
 		String[] types = Resources.getStrings("dialog_weapon_filter");
 		for(String type : types) {
-			if(!Resources.hasStrings(type)) {
+			if(!Resources.hasStrings("dialog_" + type)) {
 				throw new RuntimeException("Missing weapon dialog filter type: `" + type + "`");
 			}
 		}
@@ -40,7 +40,8 @@ public class WeaponItem extends Item {
 		if(menu.getHandle() instanceof DialogMenuHandle) {
 			Dialog dialog = ((DialogMenuHandle)menu.getHandle()).getDialog();
 			if(DIALOG_FILTER.contains(dialog.getType())) {
-				setupDialog(dialog); /// necessary to set up menu rather than dialog?
+				setupDialog(dialog);
+				dialog.add(menu.getDefault());
 			}
 		}
 	}

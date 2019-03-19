@@ -92,9 +92,9 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 			return;
 		}
 
-		if(hasHome()) {
+		if(this.home != null) {
 			// Remove previous house if exists
-			home.remove(home.getParts().stream()
+			this.home.remove(this.home.getParts().stream()
 					.filter(p -> p instanceof HouseBuilding && ((HouseBuilding)p).getPerson() == this)
 					.findFirst().orElse(null));
 		}

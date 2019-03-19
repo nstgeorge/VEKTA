@@ -8,3 +8,4 @@ You... *Yes? *Me.
 Get over here, you {item_adj_common} little {item_noun}. *Okay! *What did you just call me?
 Greetings!
 How's my dude?
+Great to see you! *Likewise. 

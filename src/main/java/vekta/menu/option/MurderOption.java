@@ -29,6 +29,7 @@ public class MurderOption implements MenuOption {
 
 	@Override
 	public void onSelect(Menu menu) {
+		MenuOption def = menu.getDefault();
 		MenuOption confront = new DialogOption("Confront Security",
 				SecurityDialogSpawner.randomSecurityDialog(getPerson().getFaction(), menu.getDefault()));
 
@@ -36,6 +37,6 @@ public class MurderOption implements MenuOption {
 
 		menu.clear();
 		menu.setDefault(confront);
-		menu.add(new QuicktimeOption(3, "Leave", menu.getDefault()::onSelect));
+		menu.add(new QuicktimeOption(3, "Leave", def::onSelect));
 	}
 }

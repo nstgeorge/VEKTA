@@ -1,3 +1,8 @@
-... Yeah, I'm going to call security. *You'll never take me alive!
-!Security! *This isn't good...
-|You hear sirens in the distance. Time to get out of here!
+! Security! *This isn't good...
+| You hear sirens in the distance. Time to get out of here!
+...Yeah, I'm going to call security. *You'll never take me alive!
+Hey there. Nice timing for you to show up.
+Security's already on the way here. 
+You shouldn't be here! 
+It's you! Security!
+Don't make me call the guards... *:ask_leave Wait! Hear me out. 

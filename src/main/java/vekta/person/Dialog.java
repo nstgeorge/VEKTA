@@ -37,13 +37,15 @@ public class Dialog implements Serializable {
 		// TODO: Move this to appropriate function
 		if(message.startsWith("!")) {
 			// Angry message
-			textColor = v.color(255, 0, 0);
-			this.message = message.substring(1, message.length() - 1);
-		} else if (message.startsWith("|")) {
+			textColor = DANGER_COLOR;
+			this.message = message.substring(1).trim();
+		}
+		else if(message.startsWith("|")) {
 			// Non-dialog message ("You notice something" or  other non-dialog message)
 			textColor = v.color(100);
-			this.message = message.substring(1, message.length() - 1);
-		} else {
+			this.message = message.substring(1).trim();
+		}
+		else {
 			this.message = message;
 		}
 
@@ -62,9 +64,13 @@ public class Dialog implements Serializable {
 		return message;
 	}
 
-	public int getTextColor() { return textColor; }
+	public int getTextColor() {
+		return textColor;
+	}
 
-	public void setTextColor(int color) { textColor = color; }
+	public void setTextColor(int color) {
+		textColor = color;
+	}
 
 	public boolean isVisited() {
 		return visited;
@@ -132,7 +138,9 @@ public class Dialog implements Serializable {
 	}
 
 	public void add(MenuOption option) {
-		options.add(option);
+		if(!options.contains(option)) {
+			options.add(option);
+		}
 	}
 
 	public void add(String response, Dialog dialog) {

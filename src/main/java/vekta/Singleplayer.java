@@ -25,9 +25,9 @@ import vekta.person.Person;
 import vekta.sound.SoundGroup;
 import vekta.spawner.EconomyGenerator;
 import vekta.spawner.EventGenerator;
-import vekta.spawner.FactionGenerator;
 import vekta.spawner.WorldGenerator;
 import vekta.spawner.item.ClothingItemSpawner;
+import vekta.spawner.item.WeaponItemSpawner;
 import vekta.spawner.world.StarSystemSpawner;
 
 import java.io.*;
@@ -185,6 +185,7 @@ public class Singleplayer implements World, PlayerListener {
 		playerShip.getInventory().add(new ModuleItem(new StationCoreModule(1)));
 		playerShip.getInventory().add(new ModuleItem(new OrbitModule(1)));
 		playerShip.getInventory().add(new ColonyItem());
+		playerShip.getInventory().add(WeaponItemSpawner.randomWeapon());
 	}
 
 	public Player getPlayer() {
@@ -430,8 +431,9 @@ public class Singleplayer implements World, PlayerListener {
 		if(v.key == '`') {
 			for(Faction faction : state.getFactions()) {
 				faction.setEnemy(getPlayer().getFaction());
+				getPlayer().getInventory().add(ClothingItemSpawner.createDisguiseItem(faction));
+				getPlayer().send("DEBUG: everyone is your enemy and you have disguises");
 			}
-			getPlayer().getInventory().add(ClothingItemSpawner.createDisguiseItem(FactionGenerator.randomFaction()));
 		}
 		World.super.keyPressed(event);
 	}

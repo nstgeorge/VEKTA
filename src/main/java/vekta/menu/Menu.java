@@ -77,7 +77,7 @@ public class Menu implements Context {
 	}
 
 	public MenuOption get(int i) {
-		if(i > size()) {
+		if(i >= size()) {
 			i = size() - 1;
 		}
 		return options.get(i);
