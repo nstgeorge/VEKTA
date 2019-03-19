@@ -73,11 +73,6 @@ public abstract class Planet extends SpaceObject {
 	}
 
 	@Override
-	public boolean collidesWith(RenderLevel level, SpaceObject s) {
-		return super.collidesWith(level, s);
-	}
-
-	@Override
 	public void onCollide(SpaceObject s) {
 		if(getMass() * 2 >= s.getMass()) {
 			if(s instanceof Moon && ((Moon)s).getParent() == this) { // TODO: move to Moon when collision checking is upgraded

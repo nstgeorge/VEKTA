@@ -134,6 +134,11 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 	}
 
 	@Override
+	public boolean collidesWith(RenderLevel level, SpaceObject s) {
+		return super.collidesWith(level, s);
+	}
+
+	@Override
 	public void onCollide(SpaceObject s) {
 		if(s instanceof CargoCrate) {
 			// Add item_common.txt to ship's inventory
@@ -166,7 +171,7 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 		for(Item item : getInventory()) {
 			register(new CargoCrate(item, getPosition(), PVector.random2D().setMag(v.random(CRATE_SPEED))));
 		}
-		
+
 		// Inherit behavior
 		super.onDestroy(s);
 	}

@@ -75,7 +75,7 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	public boolean impartsGravity() {
 		return false;
 	}
-
+	
 	public abstract float getSpecificHeat();
 
 	public float getTemperature() {
@@ -116,6 +116,13 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	 */
 	public final PVector getVelocity() {
 		return velocity.copy();
+	}
+
+	/**
+	 * Gets a reference to the object's velocity
+	 */
+	public final PVector getVelocityReference() {
+		return velocity;
 	}
 
 	/**
@@ -205,9 +212,6 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	 * Does this collide with that?
 	 */
 	public boolean collidesWith(RenderLevel level, SpaceObject s) {
-		if(!getRenderLevel().isVisibleTo(level)) {
-			return false;
-		}
 		return distSq(getPosition(), s.getPosition()) < sq(getRadius() + s.getRadius());
 	}
 
@@ -270,7 +274,7 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	}
 
 	public void drawMarker() {
-//		v.stroke(v.lerpColor(0, getColor(), sq(1 - getPosition().mag() / WorldGenerator.getRadius(getDespawnLevel()))));
+		//		v.stroke(v.lerpColor(0, getColor(), sq(1 - getPosition().mag() / WorldGenerator.getRadius(getDespawnLevel()))));
 
 		float outer = MARKER_SIZE * getMarkerScale();
 		float inner = outer * .8F;
@@ -317,8 +321,8 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	 * Perform physics updates for this SpaceObject.
 	 */
 	public final void update(RenderLevel level) {
+		//		applyVelocity(velocity);
 		onUpdate(level);
-		applyVelocity(velocity);
 	}
 
 	public void updateTargets() {

@@ -17,12 +17,19 @@ public class Particle extends SpaceObject {
 	public Particle(SpaceObject parent, PVector position, PVector velocity, ParticleStyle style) {
 		super(position, velocity, style.getStartColor().selectColor());
 
+		if(parent == null) {
+			throw new RuntimeException("Particle parent cannot be null");
+		}
+
 		this.parent = parent;
 		this.style = style;
 
 		this.endColor = style.getEndColor().selectColor();
+		
+		// TEMP
+		applyVelocity(getVelocity().mult(-1));
 	}
-	
+
 	public final ParticleStyle getStyle() {
 		return style;
 	}
@@ -34,8 +41,7 @@ public class Particle extends SpaceObject {
 
 	@Override
 	public void onUpdate(RenderLevel level) {
-		PVector currentVelocity = getVelocity();
-		addVelocity(currentVelocity.sub(parent.getVelocity()).setMag(-getStyle().getDrag()));
+		addVelocity(relativeVelocity(parent).mult(getStyle().getDrag()));
 
 		aliveTime += 1 / v.frameRate;
 		if(aliveTime >= getStyle().getLifetime()) {
@@ -50,7 +56,7 @@ public class Particle extends SpaceObject {
 
 	@Override
 	public float getMass() {
-		return Float.POSITIVE_INFINITY; // Temp (planet collisions)
+		return 1;
 	}
 
 	@Override
@@ -89,5 +95,10 @@ public class Particle extends SpaceObject {
 	@Override
 	public int getTrailLength() {
 		return super.getTrailLength() / 2;
+	}
+
+	@Override
+	public boolean collidesWith(RenderLevel level, SpaceObject s) {
+		return false;
 	}
 }
