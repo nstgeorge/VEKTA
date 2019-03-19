@@ -333,6 +333,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			menu.add(new SurveyOption(site));
 			menu.addDefault();
 			Resources.playSound("land");
+			this.setLanding(false);
 			setContext(menu);
 
 			getController().emit(PlayerEvent.LAND, site);
@@ -346,6 +347,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 				Menu menu = new Menu(getController(), new ShipUndockOption(this, getWorld()), new ObjectMenuHandle(s));
 				((Ship)s).setupDockingMenu(getController(), menu);
 				menu.addDefault();
+				this.setLanding(false);
 				setContext(menu);
 			}
 
