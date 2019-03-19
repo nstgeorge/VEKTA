@@ -26,7 +26,7 @@ public class DestroyAroundObjective extends Objective {
 
 	@Override
 	public String getName() {
-		return name + (getSpaceObject() != null ? " (" + getSpaceObject().getName() + ")" : "");
+		return name + (getSpaceObject() != null ? " orbiting " + getSpaceObject().getName() : "");
 	}
 
 	@Override

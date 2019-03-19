@@ -28,7 +28,7 @@ public class DeliverItemObjective extends Objective {
 
 	@Override
 	public String getName() {
-		return "Deliver " + getItem().getName() + " to " + getPerson().getName();
+		return "Deliver " + getItem().getName() + " to " + getPerson().getFullName();
 	}
 
 	@Override

@@ -1,0 +1,17 @@
+Bread Knife : Stab with *
+Kitchen Spoon : Bludgeon with *
+Razor Blade : Murder with *
+Razor Wire : Murder with *
+Broadsword : Chop with *
+Scimitar : Slice with *
+Woodchipper : Eviscerate with *
+Spike : Impale with *
+Spear : Impale with *
+Mace : Maul with *
+Club : Maul with *
+Shank : Stab with *
+Paddle : Spank with lethal force using *
+Worm-o Concentrate : Dissolve with *
+Axe : Chop with *
+Chainsaw : Dismember with *
+Firecracker : Detonate *

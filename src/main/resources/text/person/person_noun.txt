@@ -37,3 +37,4 @@ Guardian
 Protector
 Seeker
 Agent
+Inquisitor

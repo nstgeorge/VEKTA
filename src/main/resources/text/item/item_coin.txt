@@ -1,6 +1,7 @@
 {item_coin} Cash
 Lite{item_coin}
 Dark{item_coin}
+{color}Coin
 {item_adj_common}Coin
 {item_adj_rare}Coin
 {item_modifier}Coin

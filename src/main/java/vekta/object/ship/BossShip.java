@@ -31,12 +31,12 @@ public class BossShip extends FighterShip {
 
 	@Override
 	public float getAttackScale() {
-		return super.getAttackScale() * 3;
+		return tier;
 	}
 
 	@Override
 	public int chooseAttackTime() {
-		return super.chooseAttackTime() / 3;
+		return super.chooseAttackTime() / tier;
 	}
 
 	@Override

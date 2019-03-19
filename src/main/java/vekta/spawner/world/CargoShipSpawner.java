@@ -2,6 +2,7 @@ package vekta.spawner.world;
 
 import processing.core.PVector;
 import vekta.Faction;
+import vekta.object.SpaceObject;
 import vekta.object.ship.CargoShip;
 import vekta.object.ship.EscortShip;
 import vekta.object.ship.Ship;
@@ -13,14 +14,14 @@ import vekta.terrain.LandingSite;
 import static vekta.Vekta.register;
 import static vekta.Vekta.v;
 
-public class CargoShipSpawner extends ShipSpawner {
+public class CargoShipSpawner extends NearPlanetSpawner {
 	@Override
 	public float getWeight() {
 		return 1;
 	}
 
 	@Override
-	public void spawn(LandingSite site, PVector pos) {
+	public void spawn(SpaceObject center, PVector pos, LandingSite site) {
 		if(site.getTerrain().isInhabited()) {
 			Faction faction = v.chance(.25F)
 					? v.random(site.getTerrain().getSettlements()).getFaction()

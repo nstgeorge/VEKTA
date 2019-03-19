@@ -115,7 +115,7 @@ public class MenuHandle implements Serializable {
 		else if(key == KeyBinding.MENU_SELECT) {
 			if(menu.getCursor().isEnabled()) {
 				Resources.playSound("select");
-				menu.select();
+				menu.selectCursor();
 			}
 		}
 	}

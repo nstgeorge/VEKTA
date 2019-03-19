@@ -25,10 +25,6 @@ public class FactionGenerator {
 			faction.setEnemy(randomFaction());
 		}
 
-//		for(Player player : getWorld().findObjects(Player.class)) {
-//			faction.setEnemy(player.getFaction());//TEMP
-//		}
-
 		return register(faction);
 	}
 

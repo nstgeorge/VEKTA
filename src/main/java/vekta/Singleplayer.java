@@ -23,7 +23,10 @@ import vekta.object.ship.SpaceStation;
 import vekta.overlay.singleplayer.PlayerOverlay;
 import vekta.person.Person;
 import vekta.sound.SoundGroup;
-import vekta.spawner.*;
+import vekta.spawner.EconomyGenerator;
+import vekta.spawner.EventGenerator;
+import vekta.spawner.FactionGenerator;
+import vekta.spawner.WorldGenerator;
 import vekta.spawner.item.ClothingItemSpawner;
 import vekta.spawner.world.StarSystemSpawner;
 
@@ -63,8 +66,8 @@ public class Singleplayer implements World, PlayerListener {
 	protected WorldState state;
 
 	private float zoom = 1; // Zoom factor
-	private float smoothZoom = zoom; // Smooth zoom factor (converges toward `zoom`)
-	private float timeScale = 1; // Camera time scale factor
+	private float smoothZoom = zoom; // Zoom factor with time smoothing
+	private float timeScale = 1; // World time scale
 	private RenderLevel prevLevel = RenderLevel.PARTICLE;
 
 	private final Counter targetCt = new Counter(30).randomize(); // Update Targeter instances
@@ -130,9 +133,8 @@ public class Singleplayer implements World, PlayerListener {
 	}
 
 	public void cleanup() {
-		getPlayer().removeListener(this);
-
 		// Cleanup behavior on exiting/restarting the world
+		getPlayer().removeListener(this);
 		lowPass.stop();
 	}
 
@@ -422,12 +424,15 @@ public class Singleplayer implements World, PlayerListener {
 	// Temp: debug key listener
 	@Override
 	public void keyPressed(KeyEvent event) {
-//		if(v.key == '`') {
-//			MissionGenerator.createMission(getPlayer(), MissionGenerator.randomMissionPerson(), (int)v.random(5) + 1).start();
-//		}
-				if(v.key == '`') {
-					getPlayer().getInventory().add(ClothingItemSpawner.createDisguiseItem(FactionGenerator.randomFaction()));
-				}
+		//		if(v.key == '`') {
+		//			MissionGenerator.createMission(getPlayer(), MissionGenerator.randomMissionPerson(), (int)v.random(5) + 1).start();
+		//		}
+		if(v.key == '`') {
+			for(Faction faction : state.getFactions()) {
+				faction.setEnemy(getPlayer().getFaction());
+			}
+			getPlayer().getInventory().add(ClothingItemSpawner.createDisguiseItem(FactionGenerator.randomFaction()));
+		}
 		World.super.keyPressed(event);
 	}
 
@@ -459,8 +464,11 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public void mouseWheel(int amount) {
+		float prevZoom = zoom;
 		zoom = max(MIN_ZOOM_LEVEL, min(MAX_ZOOM_LEVEL, zoom * (1 + amount * ZOOM_EXPONENT)));
-		onZoomChange(zoom);
+		if(zoom != prevZoom) {
+			onZoomChange(zoom);
+		}
 	}
 
 	@Override
@@ -608,7 +616,7 @@ public class Singleplayer implements World, PlayerListener {
 		float maxDistance = MAX_AUDITORY_DISTANCE * getZoom();
 		float volume = (maxDistance - distance) / maxDistance;
 		volume = volume > 1 ? 1 : volume < 0 ? 0 : volume; // Clamp between 0 and 1
-		
+
 		Resources.playSound(sound, volume, pan);
 	}
 

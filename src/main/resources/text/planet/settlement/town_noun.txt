@@ -1,3 +1,4 @@
+{landmark_noun}
 Barrow
 Hamlet
 Town
@@ -9,5 +10,4 @@ Territory
 Requisition
 Camp
 Tribe
-Pit
 Enclave

@@ -117,8 +117,8 @@ public final class Resources {
 		return map;
 	}
 
-	public static String generateString(String type) {
-		String string = v.random(getStrings(type));
+	public static String generateString(String key) {
+		String string = v.random(getStrings(key));
 		int openIndex, closeIndex;
 		while((openIndex = string.indexOf(REF_BEFORE)) != -1 && (closeIndex = string.indexOf(REF_AFTER)) > openIndex) {
 			string = string.substring(0, openIndex)
@@ -241,7 +241,11 @@ public final class Resources {
 		float volume = Settings.getInt("music");
 		if(volume > 0) {
 			if(sound != currentMusic) {
+				// Set up crossfading
 				stopMusic();
+				currentMusic = sound;
+
+				// Play sound
 				sound.amp(1);
 				if(loop) {
 					sound.loop();
@@ -249,8 +253,6 @@ public final class Resources {
 				else {
 					sound.play();
 				}
-				// Set up crossfading
-				currentMusic = sound;
 			}
 		}
 	}
@@ -259,7 +261,10 @@ public final class Resources {
 		if(prevMusic != null) {
 			prevMusic.stop();
 		}
-		prevMusic = currentMusic;
+		if(currentMusic != null) {
+			prevMusic = currentMusic;
+			currentMusic = null;
+		}
 		fadeProgress = 0;
 	}
 
@@ -270,19 +275,16 @@ public final class Resources {
 	}
 
 	public static void updateAudio() {
-		if(currentMusic != null) {
-			if(!currentMusic.isPlaying()) {
-				currentMusic = null;
-			}
-		}
-
 		if(prevMusic != null) {
-			if(fadeProgress <= MUSIC_FADE_TIME) {
-				float progress = (float)++fadeProgress / MUSIC_FADE_TIME;
-				prevMusic.amp(1 - progress);
-				if(currentMusic != null) {
+			if(fadeProgress < MUSIC_FADE_TIME) {
+				float progress = (float)fadeProgress / MUSIC_FADE_TIME;
+				if(progress > 0) {
+					prevMusic.amp(1 - progress);
+				}
+				if(currentMusic != null && progress > 0) {
 					currentMusic.amp(progress);
 				}
+				fadeProgress++;
 			}
 			else {
 				prevMusic.stop();
@@ -291,6 +293,9 @@ public final class Resources {
 					currentMusic.amp(1);
 				}
 			}
+		}
+		else if(currentMusic != null && !currentMusic.isPlaying()) {
+			currentMusic = null;
 		}
 	}
 }
