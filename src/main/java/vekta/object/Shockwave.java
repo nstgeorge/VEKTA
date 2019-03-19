@@ -34,6 +34,10 @@ public class Shockwave extends SpaceObject {
 		return radius;
 	}
 
+	public void setRadius(float radius) {
+		this.radius = radius;
+	}
+
 	@Override
 	public int getColor() {
 		return v.lerpColor(0, super.getColor(), sq(1 - (float)aliveTime / time));
