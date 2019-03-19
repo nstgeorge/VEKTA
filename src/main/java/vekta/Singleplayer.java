@@ -270,12 +270,8 @@ public class Singleplayer implements World, PlayerListener {
 			objectCounts[i] = 0;
 		}
 
-		// Update loop
+		// Pre-update loop
 		for(SpaceObject s : state.getObjects()) {
-			if(state.isRemoving(s)) {
-				continue;
-			}
-
 			if(!s.isPersistent()) {
 				// Increment count for object's render level
 				objectCounts[s.getDespawnLevel().ordinal()]++;
@@ -295,8 +291,21 @@ public class Singleplayer implements World, PlayerListener {
 				s.updateTargets();
 			}
 
-			s.update(level);
 			s.applyGravity(state.getGravityObjects());
+			s.applyVelocity(s.getVelocityReference());
+		}
+
+
+		// Custom behavior loop
+		for(SpaceObject s : state.getObjects()) {
+			// Skip despawned/destroyed objects
+			if(state.isRemoving(s)) {
+				continue;
+			}
+			
+			// Update object
+			s.update(level);
+			
 			for(SpaceObject other : state.getObjects()) {
 				if(s != other) {
 					// Check both collisions before firing events (prevents race conditions)
@@ -311,12 +320,7 @@ public class Singleplayer implements World, PlayerListener {
 					}
 				}
 			}
-		}
 
-		state.endUpdate();
-
-		// Draw loop
-		for(SpaceObject s : state.getObjects()) {
 			// Start drawing object
 			v.pushMatrix();
 
@@ -346,6 +350,8 @@ public class Singleplayer implements World, PlayerListener {
 			// End drawing object
 			v.popMatrix();
 		}
+		
+		state.endUpdate();
 
 		RenderLevel spawnLevel = level;
 		while(spawnLevel.ordinal() > 0 && v.chance(.05F)) {

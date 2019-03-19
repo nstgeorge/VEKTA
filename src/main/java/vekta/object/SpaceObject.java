@@ -119,6 +119,13 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	}
 
 	/**
+	 * Gets a reference to the object's velocity
+	 */
+	public final PVector getVelocityReference() {
+		return velocity;
+	}
+
+	/**
 	 * Sets the velocity of the object
 	 */
 	public final void setVelocity(PVector velocity) {
@@ -270,7 +277,7 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	}
 
 	public void drawMarker() {
-//		v.stroke(v.lerpColor(0, getColor(), sq(1 - getPosition().mag() / WorldGenerator.getRadius(getDespawnLevel()))));
+		//		v.stroke(v.lerpColor(0, getColor(), sq(1 - getPosition().mag() / WorldGenerator.getRadius(getDespawnLevel()))));
 
 		float outer = MARKER_SIZE * getMarkerScale();
 		float inner = outer * .8F;
@@ -317,8 +324,8 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	 * Perform physics updates for this SpaceObject.
 	 */
 	public final void update(RenderLevel level) {
+		//		applyVelocity(velocity);
 		onUpdate(level);
-		applyVelocity(velocity);
 	}
 
 	public void updateTargets() {
