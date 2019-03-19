@@ -78,9 +78,11 @@ public final class WorldState implements Serializable {
 
 	public void endUpdate() {
 		updating = false;
-		objects.removeAll(objectsToRemove);
-		gravityObjects.removeAll(objectsToRemove);
-		objectsToRemove.clear();
+		if(!objectsToRemove.isEmpty()) {
+			objects.removeAll(objectsToRemove);
+			gravityObjects.removeAll(objectsToRemove);
+			objectsToRemove.clear();
+		}
 	}
 
 	public GlobalOffset getGlobalOffset() {

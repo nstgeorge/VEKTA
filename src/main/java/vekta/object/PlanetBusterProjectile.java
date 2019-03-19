@@ -38,6 +38,11 @@ public class PlanetBusterProjectile extends HomingProjectile {
 	}
 
 	@Override
+	public boolean collidesWith(RenderLevel level, SpaceObject s) {
+		return s instanceof Planet && super.collidesWith(level, s);
+	}
+
+	@Override
 	public void onDestroy(SpaceObject s) {
 		if(s instanceof Planet) {
 			PVector position = s.getPosition();
@@ -52,8 +57,13 @@ public class PlanetBusterProjectile extends HomingProjectile {
 					.withEndColor(new ConstantColor(0))
 					.withLifetime(10);
 
+			PVector particleVelocity = velocity.add(s.relativeVelocity(this).mult(.1F));
 			for(int i = 0; i < EXPLOSION_PARTICLES; i++) {
-				register(new Particle(s, position, PVector.random2D().mult(v.random(s.getRadius() * EXPLOSION_SCALE)).add(velocity), style));
+				register(new Particle(
+						v.chance(.5F) ? getParentObject() : s,
+						position,
+						PVector.random2D().mult(v.random(s.getRadius() * EXPLOSION_SCALE)).add(particleVelocity),
+						style));
 			}
 
 			for(int i = 0; i < EXPLOSION_SHOCKWAVES; i++) {

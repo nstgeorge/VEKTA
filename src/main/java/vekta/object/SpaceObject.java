@@ -75,7 +75,7 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	public boolean impartsGravity() {
 		return false;
 	}
-
+	
 	public abstract float getSpecificHeat();
 
 	public float getTemperature() {

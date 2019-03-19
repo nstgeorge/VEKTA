@@ -76,6 +76,11 @@ public class RingDebris extends Planet implements Damageable {
 	}
 
 	@Override
+	public void drawDistant(float r) {
+		v.point(0, 0);
+	}
+
+	@Override
 	public void onCollide(SpaceObject s) {
 		if(s instanceof ModularShip) {
 			ModularShip ship = (ModularShip)s;
