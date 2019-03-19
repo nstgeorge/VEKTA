@@ -17,9 +17,9 @@ public class TownSettlement extends Settlement {
 	public TownSettlement(Faction faction) {
 		super(faction, "town");
 
-		add(new District("Marketplace", BuildingType.MARKET));
+		add(new District(this, "Marketplace", BuildingType.MARKET));
 		if(v.chance(.75F)) {
-			add(new District(Resources.generateString("town_social"), BuildingType.RESIDENTIAL));
+			add(new District(this, Resources.generateString("town_social"), BuildingType.RESIDENTIAL));
 		}
 
 		add(new CapitalBuilding(this));

@@ -34,3 +34,4 @@ Dissector
 Dispenser
 Condenser
 Statue
+Rotator

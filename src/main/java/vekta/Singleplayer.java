@@ -23,10 +23,8 @@ import vekta.object.ship.SpaceStation;
 import vekta.overlay.singleplayer.PlayerOverlay;
 import vekta.person.Person;
 import vekta.sound.SoundGroup;
-import vekta.spawner.EconomyGenerator;
-import vekta.spawner.EventGenerator;
-import vekta.spawner.MissionGenerator;
-import vekta.spawner.WorldGenerator;
+import vekta.spawner.*;
+import vekta.spawner.item.ClothingItemSpawner;
 import vekta.spawner.world.StarSystemSpawner;
 
 import java.io.*;
@@ -424,12 +422,12 @@ public class Singleplayer implements World, PlayerListener {
 	// Temp: debug key listener
 	@Override
 	public void keyPressed(KeyEvent event) {
-		if(v.key == '`') {
-			MissionGenerator.createMission(getPlayer(), MissionGenerator.randomMissionPerson(), (int)v.random(5) + 1).start();
-		}
-		//		if(v.key == '`') {
-		//			getPlayer().getInventory().add(ClothingItemSpawner.createDisguiseItem(FactionGenerator.randomFaction()));
-		//		}
+//		if(v.key == '`') {
+//			MissionGenerator.createMission(getPlayer(), MissionGenerator.randomMissionPerson(), (int)v.random(5) + 1).start();
+//		}
+				if(v.key == '`') {
+					getPlayer().getInventory().add(ClothingItemSpawner.createDisguiseItem(FactionGenerator.randomFaction()));
+				}
 		World.super.keyPressed(event);
 	}
 

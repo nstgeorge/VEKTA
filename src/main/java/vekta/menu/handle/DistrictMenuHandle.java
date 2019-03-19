@@ -3,6 +3,8 @@ package vekta.menu.handle;
 import vekta.menu.Menu;
 import vekta.terrain.settlement.District;
 
+import static vekta.Vekta.v;
+
 /**
  * Menu renderer for looting/scavenging
  */
@@ -17,11 +19,6 @@ public class DistrictMenuHandle extends MenuHandle {
 		return district;
 	}
 
-//	@Override
-//	public int getSpacing() {
-//		return 70;
-//	}
-
 	@Override
 	public int getButtonY(int i) {
 		return super.getButtonY(i - 1);
@@ -31,6 +28,8 @@ public class DistrictMenuHandle extends MenuHandle {
 	public void render(Menu menu) {
 		super.render(menu);
 
-		// TODO: customize for districts
+		v.textSize(48);
+		v.fill(district.getSettlement().getColor());
+		v.text(district.getName(), v.width / 2F, getButtonY(-2));
 	}
 }

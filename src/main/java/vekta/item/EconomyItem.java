@@ -2,15 +2,13 @@ package vekta.item;
 
 import vekta.economy.Economy;
 
-public class EconomyItem extends Item {
+public abstract class EconomyItem extends Item {
 	private final Economy economy;
-	private final float valueScale;
 
-	public EconomyItem(String name, Economy economy, float valueScale) {
+	public EconomyItem(String name, Economy economy) {
 		super(name, ItemType.ECONOMY);
 
 		this.economy = economy;
-		this.valueScale = valueScale;
 	}
 
 	public Economy getEconomy() {
@@ -18,7 +16,7 @@ public class EconomyItem extends Item {
 	}
 
 	public float getValueScale() {
-		return valueScale;
+		return 1;
 	}
 
 	@Override

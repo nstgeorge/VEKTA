@@ -1,0 +1,20 @@
+{item_adj_common}Coin
+{item_adj_rare}Coin
+{item_modifier}Coin
+{boss_noun}Coin
+{boss_modifier}Coin
+{firstname}Coin
+{lastname}Coin
+{planet}Coin
+{person_noun}Coin
+{mission_noun}Coin
+Coin{impersonal_name} Credits
+Crypto{boss_modifier}
+{item_adj_common} Token
+{item_adj_common} Credits
+{boss_noun} Credits
+{boss_modifier} Credits
+{item_adj_common}{letter}
+{item_adj_rare}{letter}
+{item_common} Token
+{item_common} Credits

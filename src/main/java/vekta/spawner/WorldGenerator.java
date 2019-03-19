@@ -82,6 +82,9 @@ public class WorldGenerator {
 		else if(r > .5) {
 			return new TownSettlement(faction);
 		}
+		else if(r > .4) {
+			return new UnderworldSettlement(faction);
+		}
 		else if(r > .3) {
 			return new ColonySettlement(faction);
 		}

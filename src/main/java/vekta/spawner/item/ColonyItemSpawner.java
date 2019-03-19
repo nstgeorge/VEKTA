@@ -1,19 +1,19 @@
 package vekta.spawner.item;
 
+import vekta.item.CoinItem;
 import vekta.item.ColonyItem;
 import vekta.item.Item;
-import vekta.item.ItemType;
 import vekta.spawner.ItemGenerator;
 
 public class ColonyItemSpawner implements ItemGenerator.ItemSpawner {
 	@Override
 	public float getWeight() {
-		return .01F; // Very rare to find naturally
+		return .1F; // Rare to find naturally
 	}
 
 	@Override
 	public boolean isValid(Item item) {
-		return item.getType() == ItemType.COLONY;
+		return item instanceof CoinItem;
 	}
 
 	@Override

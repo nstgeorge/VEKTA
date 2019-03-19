@@ -332,7 +332,6 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			site.getTerrain().setupLandingMenu(menu);
 			menu.add(new SurveyOption(site));
 			menu.addDefault();
-			//			Resources.stopSound("engine");
 			Resources.playSound("land");
 			setContext(menu);
 
@@ -342,7 +341,6 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	@Override
 	public void doDock(SpaceObject s) {
-		//		Resources.stopSound("engine");
 		if(hasController()) {
 			if(s instanceof Ship) {
 				Menu menu = new Menu(getController(), new ShipUndockOption(this, getWorld()), new ObjectMenuHandle(s));
