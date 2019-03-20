@@ -3,7 +3,6 @@ package vekta.object.ship;
 import com.google.common.collect.ImmutableMap;
 import processing.core.PVector;
 import vekta.*;
-import vekta.context.NavigationContext;
 import vekta.context.World;
 import vekta.item.Item;
 import vekta.item.ModuleItem;
@@ -74,7 +73,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		player.addListener(this);
 		getController().emit(PlayerEvent.CHANGE_SHIP, this);
 	}
-	
+
 	public boolean isLanding() {
 		return landing;
 	}
@@ -312,7 +311,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	public void setTargets(SpaceObject target) {
 		for(Module m : getModules()) {
 			if(m instanceof Targeter) {
-				((Targeter) m).setTarget(target);
+				((Targeter)m).setTarget(target);
 			}
 		}
 	}
@@ -321,7 +320,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		List<SpaceObject> targets = new ArrayList<>();
 		for(Module m : getModules()) {
 			if(m instanceof Targeter) {
-				targets.add(((Targeter) m).getTarget());
+				targets.add(((Targeter)m).getTarget());
 			}
 		}
 		return targets;
@@ -336,9 +335,9 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	public Menu openShipMenu() {
 		Menu menu = new Menu(getController(), new BackOption(getWorld()), new ObjectMenuHandle(this));
-		menu.add(new NavigationOption(controller));
+		menu.add(new NavigationOption());
 		menu.add(new LoadoutMenuOption(this));
-		menu.add(new MissionMenuOption(getController()));
+		menu.add(new MissionMenuOption());
 		menu.add(new RenameOption(this));
 		menu.addDefault();
 		setContext(menu);

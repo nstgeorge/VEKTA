@@ -1,5 +1,6 @@
 package vekta.menu.handle;
 
+import vekta.KeyBinding;
 import vekta.menu.Menu;
 import vekta.menu.option.MissionOption;
 import vekta.mission.Mission;
@@ -30,6 +31,11 @@ public class MissionMenuHandle extends MenuHandle {
 	@Override
 	public int getButtonY(int i) {
 		return super.getButtonY(i) - 100;
+	}
+
+	@Override
+	public KeyBinding getShortcutKey() {
+		return KeyBinding.SHIP_MISSIONS;
 	}
 
 	@Override

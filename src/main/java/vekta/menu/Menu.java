@@ -9,7 +9,9 @@ import vekta.menu.option.BackOption;
 import vekta.menu.option.MenuOption;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import static java.lang.Math.max;
@@ -21,6 +23,7 @@ public class Menu implements Context {
 
 	private MenuOption defaultOption;
 	private final List<MenuOption> options = new ArrayList<>();
+	private final Map<KeyBinding, MenuOption> hotkeys = new HashMap<>();
 	private final List<MenuListener> listeners = new ArrayList<>();
 
 	private boolean hasAutoOption;

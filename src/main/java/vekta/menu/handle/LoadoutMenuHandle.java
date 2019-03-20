@@ -1,5 +1,6 @@
 package vekta.menu.handle;
 
+import vekta.KeyBinding;
 import vekta.menu.Menu;
 import vekta.module.Module;
 
@@ -8,7 +9,7 @@ import java.util.List;
 import static vekta.Vekta.v;
 
 /**
- * Module loadout inject renderer
+ * Module loadout menu renderer
  */
 public class LoadoutMenuHandle extends MenuHandle {
 	private final List<Module> modules;
@@ -40,6 +41,11 @@ public class LoadoutMenuHandle extends MenuHandle {
 	@Override
 	public String getSelectVerb() {
 		return "install";
+	}
+
+	@Override
+	public KeyBinding getShortcutKey() {
+		return KeyBinding.SHIP_LOADOUT;
 	}
 
 	@Override

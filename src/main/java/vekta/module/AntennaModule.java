@@ -47,7 +47,7 @@ public class AntennaModule extends ShipModule {
 	public void onMenu(Menu menu) {
 		if(menu.getHandle() instanceof ObjectMenuHandle && ((ObjectMenuHandle)menu.getHandle()).getSpaceObject() == getShip()) {
 			boolean connected = true; // TODO: determine whether in connection range
-			menu.add(new InternetMenuOption(menu.getPlayer(), connected));
+			menu.add(new InternetMenuOption(connected));
 		}
 	}
 }

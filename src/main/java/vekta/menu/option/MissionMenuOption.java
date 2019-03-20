@@ -1,6 +1,5 @@
 package vekta.menu.option;
 
-import vekta.Player;
 import vekta.menu.Menu;
 import vekta.menu.handle.MissionMenuHandle;
 import vekta.mission.Mission;
@@ -9,14 +8,8 @@ import static vekta.Vekta.setContext;
 import static vekta.Vekta.v;
 
 public class MissionMenuOption implements MenuOption {
-	private final Player player;
 
-	public MissionMenuOption(Player player) {
-		this.player = player;
-	}
-
-	public Player getPlayer() {
-		return player;
+	public MissionMenuOption() {
 	}
 
 	@Override
@@ -27,11 +20,11 @@ public class MissionMenuOption implements MenuOption {
 	@Override
 	public void onSelect(Menu menu) {
 		Menu sub = new Menu(menu.getPlayer(), menu.getDefault(), new MissionMenuHandle());
-		for(Mission mission : getPlayer().getMissions()) {
+		for(Mission mission : menu.getPlayer().getMissions()) {
 			sub.add(new MissionOption(mission));
 		}
 		sub.add(new CustomOption("Deselect", m -> {
-			getPlayer().setCurrentMission(null);
+			m.getPlayer().setCurrentMission(null);
 			m.close();
 		}).withColor(v.color(200)));
 		setContext(sub);

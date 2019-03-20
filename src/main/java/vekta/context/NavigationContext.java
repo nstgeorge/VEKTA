@@ -208,6 +208,7 @@ public class NavigationContext implements Context, PlayerListener {
 	public void keyPressed(KeyBinding key) {
 		switch(key) {
 		case MENU_CLOSE:
+		case SHIP_NAVIGATION:
 			setContext(parent);
 			break;
 		case MENU_UP:

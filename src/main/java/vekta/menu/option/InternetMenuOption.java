@@ -1,17 +1,14 @@
 package vekta.menu.option;
 
-import vekta.Player;
 import vekta.menu.Menu;
-import vekta.menu.handle.MenuHandle;
+import vekta.menu.handle.InternetMenuHandle;
 
 import static vekta.Vekta.setContext;
 
 public class InternetMenuOption implements MenuOption {
-	private final Player player;
 	private final boolean enabled;
 
-	public InternetMenuOption(Player player, boolean enabled) {
-		this.player = player;
+	public InternetMenuOption(boolean enabled) {
 		this.enabled = enabled;
 	}
 
@@ -27,7 +24,7 @@ public class InternetMenuOption implements MenuOption {
 
 	@Override
 	public void onSelect(Menu menu) {
-		Menu sub = new Menu(menu, new MenuHandle());
+		Menu sub = new Menu(menu, new InternetMenuHandle());
 
 		sub.add(new BondMenuOption());
 

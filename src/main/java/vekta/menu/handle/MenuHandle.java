@@ -49,6 +49,10 @@ public class MenuHandle implements Serializable {
 		return "select";
 	}
 
+	public KeyBinding getShortcutKey() {
+		return null;
+	}
+
 	public void init(Menu menu) {
 	}
 
@@ -101,7 +105,7 @@ public class MenuHandle implements Serializable {
 	}
 
 	public void keyPressed(Menu menu, KeyBinding key) {
-		if(key == KeyBinding.MENU_CLOSE) {
+		if(key == KeyBinding.MENU_CLOSE || key == getShortcutKey()) {
 			menu.close();
 		}
 		else if(key == KeyBinding.MENU_UP) {
