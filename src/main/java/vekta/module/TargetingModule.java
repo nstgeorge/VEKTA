@@ -16,6 +16,8 @@ public class TargetingModule extends ShipModule implements Targeter {
 	private TargetingMode mode;
 	private SpaceObject target;
 
+	private SpaceObject prevTarget; // Target debounce
+
 	public TargetingMode getMode() {
 		return mode;
 	}
@@ -40,8 +42,14 @@ public class TargetingModule extends ShipModule implements Targeter {
 
 	@Override
 	public void setTarget(SpaceObject target) {
-		if(this.target != target) Resources.playSound("targetChange");
+		if(this.target != null) {
+			prevTarget = this.target;
+		}
 		this.target = target;
+
+		if(target != null && target != prevTarget) {
+			Resources.playSound("targetChange");
+		}
 	}
 
 	@Override
