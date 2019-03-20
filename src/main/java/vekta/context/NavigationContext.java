@@ -54,6 +54,7 @@ public class NavigationContext implements Context, PlayerListener {
 
 	private static final int PADDING = 150;
 	private static final int SPACING = 30;
+	private static final int ITEMS_BEFORE_SCROLL = 5;
 
 	private final Context parent;
 	private final Player player;
@@ -70,9 +71,6 @@ public class NavigationContext implements Context, PlayerListener {
 	@Override
 	public void render() {
 		v.clear();
-		v.textAlign(CENTER);
-		v.textSize(36);
-		v.text("Navigation", v.width / 2F, 60);
 
 		v.textSize(24);
 		v.fill(UI_COLOR);
@@ -87,6 +85,10 @@ public class NavigationContext implements Context, PlayerListener {
 
 			SpaceObject[] objects = new SpaceObject[objectList.size()];
 			objects = objectList.keySet().toArray(objects);
+
+			v.pushMatrix();
+			int scrollOffset = selected > ITEMS_BEFORE_SCROLL ? -((selected - ITEMS_BEFORE_SCROLL) * SPACING) : 0;
+			v.translate(0, scrollOffset);
 
 			for(int i = 0; i < objectList.keySet().size(); i++) {
 
@@ -106,6 +108,15 @@ public class NavigationContext implements Context, PlayerListener {
 				v.textAlign(RIGHT);
 				v.text(TelemetryOverlay.getDistanceString(object, player), v.width / 2F - PADDING, 110 + (SPACING * i));
 			}
+
+			v.popMatrix();
+
+			// Rectangles that block overflow
+			v.rectMode(CORNERS);
+			v.stroke(0);
+			v.fill(0);
+			v.rect(0, 0, v.width / 2F, 90);
+			v.rect(0, v.height, v.width / 2F, v.height - 100);
 
 			float rotate = v.frameCount * ROTATE_SPEED;
 			float scan = v.frameCount * SCAN_SPEED;
@@ -183,9 +194,12 @@ public class NavigationContext implements Context, PlayerListener {
 				break;
 			}
 
-			v.textAlign(CENTER);
-
 			v.popMatrix();
+
+			v.textAlign(CENTER);
+			v.textSize(36);
+			v.fill(255);
+			v.text("Navigation", v.width / 2F, 60);
 
 		}
 		else {
