@@ -37,8 +37,8 @@ public class SettingsMenuContext implements Context {
 	@Override
 	public void render() {
 		// hyperspace background
-		v.camera(v.width / 2F, v.height / 2F, (v.height / 2F) / tan(PI * 30F / 180F), v.width / 2F, v.height / 2F, 0F,
-				0F, 1F, 0F);
+//		v.camera(v.width / 2F, v.height / 2F, (v.height / 2F) / tan(PI * 30F / 180F), v.width / 2F, v.height / 2F, 0F,
+//				0F, 1F, 0F);
 		v.background(0);
 		MainMenuHandle.HYPERSPACE.render();
 
