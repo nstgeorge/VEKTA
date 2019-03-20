@@ -115,6 +115,14 @@ public class TelemetryOverlay implements Overlay {
 			dist /= AU_DISTANCE;
 			unit = "AU";
 		}
+		else if(dist > 10000000) {
+			dist /= 1000000000;
+			unit = "M km";
+		}
+		else if(dist > 100000) {
+			dist /= 1000000;
+			unit = "T km";
+		}
 		else if(dist > 100) {
 			dist /= 1000;
 			unit = "km";
