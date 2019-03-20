@@ -8,6 +8,7 @@ import vekta.menu.Menu;
 import vekta.menu.handle.SurveyMenuHandle;
 import vekta.object.SpaceObject;
 import vekta.object.planet.Planet;
+import vekta.observation.ObservationLevel;
 import vekta.overlay.singleplayer.TelemetryOverlay;
 import vekta.terrain.LandingSite;
 import vekta.terrain.settlement.Settlement;
@@ -21,29 +22,7 @@ import static vekta.Vekta.*;
 
 public class NavigationContext implements Context, PlayerListener {
 
-	public enum INFO_LEVEL {
-		OWNED(5),
-		SCANNED(4),
-		LANDED(3),
-		TARGETED(2),
-		WITHIN_RANGE(1);
-
-		private final int code;
-
-		INFO_LEVEL(int code) {
-			this.code = code;
-		}
-
-		public boolean isHigher(INFO_LEVEL level) {
-			return level.getCode() < this.getCode();
-		}
-
-		public int getCode() {
-			return code;
-		}
-	}
-
-	private HashMap<SpaceObject, INFO_LEVEL> objectList;
+	private HashMap<SpaceObject, ObservationLevel> objectList;
 
 	private int selected;
 
@@ -112,7 +91,7 @@ public class NavigationContext implements Context, PlayerListener {
 
 			// Right side
 			SpaceObject focus = objects[selected];
-			INFO_LEVEL level = objectList.get(focus);
+			ObservationLevel level = objectList.get(focus);
 			int color = focus.getColor();
 
 			v.pushMatrix();
@@ -129,7 +108,7 @@ public class NavigationContext implements Context, PlayerListener {
 
 			// a e s t h e t i c planet animation
 			// TODO: Move this into a function in Planet
-			if(focus instanceof Planet && level == INFO_LEVEL.SCANNED) {
+			if(focus instanceof Planet && level == ObservationLevel.SCANNED) {
 				float perspective = 1;
 
 				v.shapeMode(CENTER);
@@ -239,20 +218,20 @@ public class NavigationContext implements Context, PlayerListener {
 
 	@Override
 	public void onLand(LandingSite site) {
-		player.recordSpaceObject(site.getParent(), INFO_LEVEL.LANDED);
+		player.recordSpaceObject(site.getParent(), ObservationLevel.LANDED);
 
 	}
 
 	@Override
 	public void onDock(SpaceObject object) {
-		player.recordSpaceObject(object, INFO_LEVEL.LANDED);
+		player.recordSpaceObject(object, ObservationLevel.LANDED);
 	}
 
 	@Override
 	public void onMenu(Menu menu) {
 		if(menu.getHandle() instanceof SurveyMenuHandle) {
 			LandingSite site = ((SurveyMenuHandle)menu.getHandle()).getSite();
-			player.recordSpaceObject(site.getParent(), INFO_LEVEL.SCANNED, site.getTerrain());
+			player.recordSpaceObject(site.getParent(), ObservationLevel.SCANNED, site.getTerrain());
 		}
 	}
 

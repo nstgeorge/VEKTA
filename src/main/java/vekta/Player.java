@@ -1,11 +1,11 @@
 package vekta;
 
-import vekta.context.NavigationContext;
 import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.mission.Mission;
 import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
+import vekta.observation.ObservationLevel;
 import vekta.overlay.singleplayer.Notification;
 import vekta.terrain.Terrain;
 import vekta.terrain.settlement.Settlement;
@@ -19,7 +19,7 @@ public final class Player extends Syncable<Player> {
 	private final List<PlayerListener> listeners = new ArrayList<>();
 	private final Set<String> attributes = new HashSet<>();
 
-	private HashMap<SpaceObject, NavigationContext.INFO_LEVEL> observedObjectList = new HashMap<>();
+	private HashMap<SpaceObject, ObservationLevel> observedObjectList = new HashMap<>();
 	private HashMap<SpaceObject, List<String>> observedObjectFeatureList = new HashMap<>();
 	private HashMap<SpaceObject, List<Settlement>> observedObjectSettlementList = new HashMap<>();
 
@@ -91,14 +91,14 @@ public final class Player extends Syncable<Player> {
 		});
 	}
 
-	public void recordSpaceObject(SpaceObject object, NavigationContext.INFO_LEVEL level) {
+	public void recordSpaceObject(SpaceObject object, ObservationLevel level) {
 		if(!observedObjectList.containsKey(object) || level.isHigher(observedObjectList.get(object))) {
 			observedObjectList.put(object, level);
 		}
 	}
 
 	// Used when adding a scanned planet
-	public void recordSpaceObject(SpaceObject object, NavigationContext.INFO_LEVEL level, Terrain terrain) {
+	public void recordSpaceObject(SpaceObject object, ObservationLevel level, Terrain terrain) {
 		if(!observedObjectList.containsKey(object) || level.isHigher(observedObjectList.get(object))) {
 			observedObjectList.put(object, level);
 			observedObjectFeatureList.put(object, terrain.getFeatures());
@@ -110,7 +110,7 @@ public final class Player extends Syncable<Player> {
 		observedObjectList.remove(object);
 	}
 
-	public HashMap<SpaceObject, NavigationContext.INFO_LEVEL> getObservedObjectList() {
+	public HashMap<SpaceObject, ObservationLevel> getObservedObjectList() {
 		return observedObjectList;
 	}
 
