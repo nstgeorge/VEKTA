@@ -10,7 +10,9 @@ import vekta.object.SpaceObject;
 import vekta.object.planet.Planet;
 import vekta.overlay.singleplayer.TelemetryOverlay;
 import vekta.terrain.LandingSite;
+import vekta.terrain.settlement.Settlement;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,254 +21,261 @@ import static vekta.Vekta.*;
 
 public class NavigationContext implements Context, PlayerListener {
 
-	public enum INFO_LEVEL {
-		OWNED(5),
-		SCANNED(4),
-		LANDED(3),
-		TARGETED(2),
-		WITHIN_RANGE(1);
+    public enum INFO_LEVEL {
+        OWNED(5),
+        SCANNED(4),
+        LANDED(3),
+        TARGETED(2),
+        WITHIN_RANGE(1);
 
-		private final int code;
+        private final int code;
 
-		INFO_LEVEL(int code) {
-			this.code = code;
-		}
+        INFO_LEVEL(int code) { this.code = code; }
 
-		public boolean isHigher(INFO_LEVEL level) {
-			return level.getCode() < this.getCode();
-		}
+        public boolean isHigher(INFO_LEVEL level) {
+            return level.getCode() < this.getCode();
+        }
 
-		public int getCode() {
-			return code;
-		}
-	}
+        public int getCode() { return code; }
+    }
 
-	private HashMap<SpaceObject, INFO_LEVEL> objectList;
+    private HashMap<SpaceObject, INFO_LEVEL> objectList;
 
-	private int selected;
 
-	private static final float ROTATE_SPEED = 1F / 2000;
-	private static final float SCAN_SPEED = 1F / 100;
-	private static final int PLANET_SIZE = 100;
-	private static final int PLANET_RES = 32;
+    private int selected;
 
-	private static final int PADDING = 150;
-	private static final int SPACING = 30;
+    private static final float ROTATE_SPEED = 1F / 2000;
+    private static final float SCAN_SPEED = 1F / 100;
+    private static final int PLANET_SIZE = 100;
+    private static final int PLANET_RES = 32;
 
-	private final Context parent;
-	private final Player player;
+    private static final int PADDING = 150;
+    private static final int SPACING = 30;
 
-	public NavigationContext(Context parent, Player player) {
-		this.parent = parent;
-		this.player = player;
+    private final Context parent;
+    private final Player player;
 
-		selected = 0;
+    public NavigationContext(Context parent, Player player) {
+        this.parent = parent;
+        this.player = player;
 
-		player.addListener(this);
-	}
+        selected = 0;
 
-	@Override
-	public void render() {
-		v.clear();
-		v.textAlign(CENTER);
-		v.textSize(36);
-		v.text("Navigation", v.width / 2F, 60);
+        player.addListener(this);
+    }
 
-		v.textSize(24);
-		v.fill(UI_COLOR);
+    @Override
+    public void render() {
+        v.clear();
+        v.textAlign(CENTER);
+        v.textSize(36);
+        v.text("Navigation", v.width / 2F, 60);
 
-		objectList = player.getObservedObjectList();
+        v.textSize(24);
+        v.fill(UI_COLOR);
 
-		if(objectList.size() > 0) {
+        objectList = player.getObservedObjectList();
 
-			v.shapeMode(CORNERS);
-			v.stroke(100);
-			v.line(v.width / 2F, 100, v.width / 2F, v.height - 50);
+        if(objectList.size() > 0) {
 
-			SpaceObject[] objects = new SpaceObject[objectList.size()];
-			objects = objectList.keySet().toArray(objects);
+            v.shapeMode(CORNERS);
+            v.stroke(100);
+            v.line(v.width / 2F, 100, v.width / 2F, v.height - 50);
 
-			for(int i = 0; i < objectList.keySet().size(); i++) {
+            SpaceObject[] objects = new SpaceObject[objectList.size()];
+            objects = objectList.keySet().toArray(objects);
 
-				SpaceObject object = objects[i];
-				v.fill(object.getColor());
-				v.textAlign(LEFT);
+            for(int i = 0; i < objectList.keySet().size(); i++) {
 
-				if(i == selected) {
-					v.text(">>", PADDING - 100, 110 + (SPACING * i));
-				}
-				if(object.getName().length() > 20) {
-					v.text(object.getName().trim().substring(0, 17) + "...", PADDING, 110 + (SPACING * i));
-				}
-				else {
-					v.text(object.getName().trim(), PADDING, 110 + (SPACING * i));
-				}
-				v.textAlign(RIGHT);
-				v.text(TelemetryOverlay.getDistanceString(object, player), v.width / 2F - PADDING, 110 + (SPACING * i));
-			}
+                SpaceObject object = objects[i];
+                v.fill(object.getColor());
+                v.textAlign(LEFT);
 
-			float rotate = v.frameCount * ROTATE_SPEED;
-			float scan = v.frameCount * SCAN_SPEED;
+                if(i == selected) {
+                    v.text(">>", PADDING - 100, 110 + (SPACING * i));
+                }
+                if(object.getName().length() > 20) {
+                    v.text(object.getName().trim().substring(0, 17) + "...", PADDING, 110 + (SPACING * i));
+                } else {
+                    v.text(object.getName().trim(), PADDING, 110 + (SPACING * i));
+                }
+                v.textAlign(RIGHT);
+                v.text(TelemetryOverlay.getDistanceString(object, player), v.width / 2F - PADDING, 110 + (SPACING * i));
+            }
 
-			// Right side
-			SpaceObject focus = objects[selected];
-			INFO_LEVEL level = objectList.get(focus);
-			int color = focus.getColor();
+            float rotate = v.frameCount * ROTATE_SPEED;
+            float scan = v.frameCount * SCAN_SPEED;
 
-			v.pushMatrix();
-			v.textAlign(CENTER);
-			v.translate(3 * v.width / 4F, 200 + PLANET_SIZE / 2F);
-			v.fill(color);
-			v.text(focus.getName(), 0, -130);
-			if(player.getShip().getTargets().contains(focus)) {
-				v.text(":: Targeted ::", 0, v.height - (250 + PLANET_SIZE / 2F));
-			}
-			else {
-				v.text("Press SELECT to target", 0, v.height - (250 + PLANET_SIZE / 2F));
-			}
+            // Right side
+            SpaceObject focus = objects[selected];
+            INFO_LEVEL level = objectList.get(focus);
+            int color = focus.getColor();
 
-			// a e s t h e t i c planet animation
-			// TODO: Move this into a function in Planet
-			if(focus instanceof Planet && level == INFO_LEVEL.SCANNED) {
-				float perspective = 1;
+            v.pushMatrix();
+            v.textAlign(CENTER);
+            v.translate(3 * v.width / 4F, 200 + PLANET_SIZE / 2F);
+            v.fill(color);
+            v.text(focus.getName(), 0, -130);
+            if(player.getShip().getTargets().contains(focus)) {
+                v.text(":: Targeted ::", 0, v.height - (250 + PLANET_SIZE / 2F));
+            } else {
+                v.text("Press SELECT to target", 0, v.height - (250 + PLANET_SIZE / 2F));
+            }
 
-				v.shapeMode(CENTER);
-				v.strokeWeight(2);
-				v.noFill();
 
-				// Draw scanner arc
-				float scanScale = cos(scan);
-				v.stroke(v.lerpColor(0, color, sq(cos(scan / 2 + perspective))));
-				v.arc(0, 0, PLANET_SIZE * scanScale, PLANET_SIZE, -HALF_PI, HALF_PI);
+            // a e s t h e t i c planet animation
+            // TODO: Move this into a function in Planet
+            if(focus instanceof Planet && level == INFO_LEVEL.SCANNED) {
+                float perspective = 1;
 
-				// Draw planet
-				for(float r = 0; r < TWO_PI; r += TWO_PI / PLANET_RES) {
-					float angle = r + rotate;
-					float xScale = cos(angle);
-					v.stroke(v.lerpColor(0, color, sq(cos(r / 2 + perspective))));
-					v.arc(0, 0, PLANET_SIZE * xScale, PLANET_SIZE, -HALF_PI, HALF_PI);
-				}
+                v.shapeMode(CENTER);
+                v.strokeWeight(2);
+                v.noFill();
 
-				v.strokeWeight(1);
-			}
-			else {
-				v.textSize(PLANET_SIZE);
-				v.fill(100);
-				v.text("?", 0, 0);
-				v.textSize(24);
-			}
+                // Draw scanner arc
+                float scanScale = cos(scan);
+                v.stroke(v.lerpColor(0, color, sq(cos(scan / 2 + perspective))));
+                v.arc(0, 0, PLANET_SIZE * scanScale, PLANET_SIZE, -HALF_PI, HALF_PI);
 
-			// Info
-			v.fill(focus.getColor());
-			v.translate(-(v.width / 4F) + PADDING, PLANET_SIZE + SPACING);
-			v.textAlign(LEFT);
-			switch(objectList.get(focus)) {
-			case LANDED:
-				v.text("Mass: " + TelemetryOverlay.getMassString(focus.getMass()), 0, 0);
-				v.text("Radius: " + focus.getRadius() + " km", 0, SPACING);
-				break;
-			case SCANNED:
-				List<String> features = player.getObservedFeatures(focus);
-				v.text("Mass: " + TelemetryOverlay.getMassString(focus.getMass()), 0, 0);
-				v.text("Radius: " + focus.getRadius() + " km", 0, SPACING);
-				v.text(buildMultipleLineString(features, "Features"), 0, SPACING * 2);
-				break;
-			}
+                // Draw planet
+                for(float r = 0; r < TWO_PI; r += TWO_PI / PLANET_RES) {
+                    float angle = r + rotate;
+                    float xScale = cos(angle);
+                    v.stroke(v.lerpColor(0, color, sq(cos(r / 2 + perspective))));
+                    v.arc(0, 0, PLANET_SIZE * xScale, PLANET_SIZE, -HALF_PI, HALF_PI);
+                }
 
-			v.textAlign(CENTER);
+                v.strokeWeight(1);
+            } else {
+                v.textSize(PLANET_SIZE);
+                v.fill(100);
+                v.text("?", 0, 0);
+                v.textSize(24);
+            }
 
-			v.popMatrix();
+            // Info
+            v.fill(focus.getColor());
+            v.translate(-(v.width / 4F) + PADDING, PLANET_SIZE + SPACING);
+            v.textAlign(LEFT);
+            switch(objectList.get(focus)) {
+                case LANDED:
+                    v.text("Mass: " + TelemetryOverlay.getMassString(focus.getMass()), 0, 0);
+                    v.text("Radius: " + focus.getRadius() + " km", 0, SPACING);
+                    break;
+                case SCANNED:
+                    List<String> features = player.getObservedFeatures(focus);
+                    List<Settlement> settlements = player.getObservedSettlements(focus);
+                    List<String> settlementNames = new ArrayList<>();
 
-		}
-		else {
-			v.fill(100);
-			v.text("No entries found. \nLand on, dock on, or scan a planet or ship for data.", v.width / 2F, 100);
-		}
-	}
+                    for(Settlement s : settlements) {
+                        settlementNames.add(s.getName());
+                    }
 
-	@Override
-	public void focus() {
+                    v.text("Mass: " + TelemetryOverlay.getMassString(focus.getMass()), 0, 0);
+                    v.text("Radius: " + focus.getRadius() + " km", 0, SPACING);
+                    v.text(buildMultipleLineString(features, "Features"), 0, SPACING * 2);
+                    v.text(buildMultipleLineString(settlementNames, "Settlements"), 0, SPACING * 2 + (24 * numberOfLines(buildMultipleLineString(features, "Features"))));
+                    break;
+            }
 
-	}
+            v.textAlign(CENTER);
 
-	@Override
-	public void unfocus() {
+            v.popMatrix();
 
-	}
+        } else {
+            v.fill(100);
+            v.text("No entries found. \nLand on, dock on, or scan a planet or ship for data.", v.width / 2F, 100);
+        }
+    }
 
-	@Override
-	public void keyPressed(KeyBinding key) {
-		switch(key) {
-		case MENU_CLOSE:
-		case SHIP_NAVIGATION:
-			setContext(parent);
-			break;
-		case MENU_UP:
-			Resources.playSound("change");
-			selected = Math.max(--selected, 0);
-			break;
-		case MENU_DOWN:
-			Resources.playSound("change");
-			selected = Math.min(++selected, player.getObservedObjectList().size() - 1);
-			break;
-		case MENU_SELECT:
-			Resources.playSound("notification");
-			player.getShip().setTargets(objectList.keySet().toArray(new SpaceObject[] {})[selected]);
-			break;
-		}
-	}
+    @Override
+    public void focus() {
 
-	@Override
-	public void keyReleased(KeyBinding key) {
+    }
 
-	}
+    @Override
+    public void unfocus() {
 
-	@Override
-	public void onLand(LandingSite site) {
-		player.recordSpaceObject(site.getParent(), INFO_LEVEL.LANDED);
+    }
 
-	}
+    @Override
+    public void keyPressed(KeyBinding key) {
+        switch(key) {
+            case MENU_CLOSE:
+                setContext(parent);
+                break;
+            case MENU_UP:
+                Resources.playSound("change");
+                selected = Math.max(--selected, 0);
+                break;
+            case MENU_DOWN:
+                Resources.playSound("change");
+                selected = Math.min(++selected, player.getObservedObjectList().size() - 1);
+                break;
+            case MENU_SELECT:
+                if(objectList.size() > 0) {
+                    Resources.playSound("notification");
+                    player.getShip().setTargets(objectList.keySet().toArray(new SpaceObject[]{})[selected]);
+                }
+                break;
+        }
+    }
 
-	@Override
-	public void onDock(SpaceObject object) {
-		player.recordSpaceObject(object, INFO_LEVEL.LANDED);
-	}
+    @Override
+    public void keyReleased(KeyBinding key) {
 
-	@Override
-	public void onMenu(Menu menu) {
-		if(menu.getHandle() instanceof SurveyMenuHandle) {
-			LandingSite site = ((SurveyMenuHandle)menu.getHandle()).getSite();
-			player.recordSpaceObject(site.getParent(), INFO_LEVEL.SCANNED, site.getTerrain());
-		}
-	}
+    }
 
-	private String buildMultipleLineString(List<String> words, String description) {
-		String finalString = "";
-		String[] lines = new String[10];
-		int currentLineIndex = 0;
-		int currentWordIndex = 0;
-		for(int i = 0; i < lines.length; i++) {
-			lines[i] = "";
-		}
-		lines[0] = description + ": ";
-		for(String word : words) {
-			if(v.textWidth(lines[currentLineIndex] + ", " + word) > (v.width / 2F - PADDING * 2)) {
-				currentLineIndex++;
-			}
-			if(currentWordIndex != words.size() - 1) {
-				lines[currentLineIndex] = lines[currentLineIndex] + word + ", ";
-			}
-			else {
-				lines[currentLineIndex] = lines[currentLineIndex] + word;
-			}
+    @Override
+    public void onLand(LandingSite site) {
+        player.recordSpaceObject(site.getParent(), INFO_LEVEL.LANDED);
 
-			currentWordIndex++;
-		}
-		for(String line : lines) {
-			if(line == null)
-				return finalString;
-			finalString = finalString.concat("\n" + line);
-		}
-		return finalString;
-	}
+    }
+
+    @Override
+    public void onDock(SpaceObject object) {
+        player.recordSpaceObject(object, INFO_LEVEL.LANDED);
+    }
+
+    @Override
+    public void onMenu(Menu menu) {
+        if(menu.getHandle() instanceof SurveyMenuHandle) {
+            LandingSite site = ((SurveyMenuHandle) menu.getHandle()).getSite();
+            player.recordSpaceObject(site.getParent(), INFO_LEVEL.SCANNED, site.getTerrain());
+        }
+    }
+
+    private String buildMultipleLineString(List<String> words, String description) {
+        String finalString = "";
+        String[] lines = new String[10];
+        int currentLineIndex = 0;
+        int currentWordIndex = 0;
+        for(int i = 0; i < lines.length; i++) { lines[i] = ""; }
+        lines[0] = description + ": ";
+        for(String word : words) {
+            if(v.textWidth(lines[currentLineIndex] + ", " + word) > (v.width / 2F - PADDING * 2)) {
+                currentLineIndex++;
+            }
+            if(currentWordIndex != words.size() - 1) {
+                lines[currentLineIndex] = lines[currentLineIndex] + word + ", ";
+            } else {
+                lines[currentLineIndex] = lines[currentLineIndex] + word;
+            }
+
+            currentWordIndex++;
+        }
+        for(String line : lines) {
+            if(line == null) return finalString;
+            finalString = finalString.concat("\n" + line);
+        }
+        return finalString;
+    }
+
+    private int numberOfLines(String in) {
+        int count = 0;
+        for(char c : in.toCharArray()) {
+            if(c == '\n') count++;
+        }
+        return count;
+    }
 }
