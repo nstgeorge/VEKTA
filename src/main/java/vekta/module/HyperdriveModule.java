@@ -12,7 +12,7 @@ public class HyperdriveModule extends ShipModule {
 	private static final float LOW_TIME_SCALE_SPEEDUP = 50;
 	private static final float MIN_BOOST = 10;
 	private static final float MAX_BOOST = 100;
-	private static final float EFFECT_MODIFIER = 3; // Velocity effect of hyperdrive
+	private static final float TUNNEL_EFFECT = 4; // Tunnel effect scale
 
 	private final float boost;
 
@@ -81,11 +81,11 @@ public class HyperdriveModule extends ShipModule {
 			// Create shockwave effect
 			Shockwave wave = register(new Shockwave(
 					getShip(),
-					timeScale * 1e-4F * currentBoost,
+					timeScale * 5e-5F * currentBoost,
 					(int)v.random(20, 30),
 					getShip().getColor()));
 			wave.setRadius(1);
-			wave.addVelocity(ship.getHeading().mult(-500 * timeScale / currentBoost * (EFFECT_MODIFIER + thrust)));
+			wave.addVelocity(ship.getHeading().mult(-200 * timeScale / currentBoost * (TUNNEL_EFFECT + thrust)));
 		}
 	}
 
