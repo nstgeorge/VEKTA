@@ -221,7 +221,6 @@ public class NavigationContext implements Context, PlayerListener {
 			break;
 		case MENU_SELECT:
 			if(objectList.size() > 0) {
-				Resources.playSound("notification");
 				player.getShip().setTargets(objectList.keySet().toArray(new SpaceObject[] {})[selected]);
 			}
 			break;

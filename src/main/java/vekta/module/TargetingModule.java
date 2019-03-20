@@ -1,6 +1,7 @@
 package vekta.module;
 
 import vekta.KeyBinding;
+import vekta.Resources;
 import vekta.mission.Mission;
 import vekta.object.CargoCrate;
 import vekta.object.RingDebris;
@@ -39,6 +40,7 @@ public class TargetingModule extends ShipModule implements Targeter {
 
 	@Override
 	public void setTarget(SpaceObject target) {
+		if(this.target != target) Resources.playSound("targetChange");
 		this.target = target;
 	}
 
