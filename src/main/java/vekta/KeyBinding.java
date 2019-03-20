@@ -33,7 +33,7 @@ public enum KeyBinding {
 	SHIP_TARGET_ASTEROID('2'),
 	SHIP_TARGET_SHIP('3'),
 	SHIP_TARGET_OBJECTIVE('4'),
-	SHIP_TELESCOPE('r'),
+	SHIP_SCAN('r'),
 	SHIP_HYPERDRIVE('f');
 
 	private final int defaultKeyCode;

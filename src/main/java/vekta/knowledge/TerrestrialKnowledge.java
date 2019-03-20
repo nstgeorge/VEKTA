@@ -1,19 +1,30 @@
 package vekta.knowledge;
 
 import vekta.Player;
+import vekta.display.*;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.overlay.singleplayer.TelemetryOverlay;
+import vekta.terrain.settlement.Settlement;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
-
-import static vekta.Vekta.v;
 
 public class TerrestrialKnowledge extends SpaceObjectKnowledge {
 	private final TerrestrialPlanet planet;
 
-	public TerrestrialKnowledge(KnowledgeLevel level, TerrestrialPlanet planet) {
+	private final DisplayStyle style = new DisplayStyle();
+	private final Layout layout = new VerticalLayout(style);
+
+	// Scanner display items
+	private final Toggle<Layout> scanToggle = layout.add(new Toggle<>(new VerticalLayout(style)));
+	private final TextDisplay mass = scanToggle.getDisplay().add(new TextDisplay(style));
+	private final TextDisplay radius = scanToggle.getDisplay().add(new TextDisplay(style));
+
+	// Landing display items
+	private final Toggle<Layout> landToggle = layout.add(new Toggle<>(new VerticalLayout(style)));
+	private final TextDisplay features = landToggle.getDisplay().add(new TextDisplay(style));
+	private final TextDisplay settlements = landToggle.getDisplay().add(new TextDisplay(style));
+
+	public TerrestrialKnowledge(ObservationLevel level, TerrestrialPlanet planet) {
 		super(level);
 
 		this.planet = planet;
@@ -25,73 +36,36 @@ public class TerrestrialKnowledge extends SpaceObjectKnowledge {
 	}
 
 	@Override
+	public boolean isSimilar(ObservationKnowledge other) {
+		return other instanceof TerrestrialKnowledge && getSpaceObject() == ((SpaceObjectKnowledge)other).getSpaceObject();
+	}
+
+	@Override
 	public void draw(Player player, float width, float height) {
 		// Draw planet preview
 		super.draw(player, width, height);
 
+		// Configure style
+		style.color(getColor(player));
+		landToggle.getDisplay().customize().spacing(0).color(100);
+		
 		// Survey info
-		if(KnowledgeLevel.SCANNED.isAvailableFrom(getLevel())) {
-			v.fill(100);
-			
-			v.text("Mass: " + TelemetryOverlay.getMassString(getSpaceObject().getMass()), 0, 0);
-			v.text("Radius: " + TelemetryOverlay.getDistanceString(getSpaceObject().getRadius()), 0, SPACING);
-
-			// Translate for next group of information
-			v.translate(0, SPACING * 3);
-		}
+		//		if(scanToggle.setVisible(ObservationLevel.SCANNED.isAvailableFrom(getLevel()))) {
+		mass.customize().spacing(0);
+		mass.setText("Mass: " + TelemetryOverlay.getMassString(getSpaceObject().getMass()));
+		radius.customize().spacing(0);
+		radius.setText("Radius: " + TelemetryOverlay.getDistanceString(getSpaceObject().getRadius()));
+		//		}
 
 		// Landing info
-		if(KnowledgeLevel.VISITED.isAvailableFrom(getLevel())) {
-			v.fill(getColor(player));
+		//		if(landToggle.setVisible(ObservationLevel.VISITED.isAvailableFrom(getLevel()))) {
+		features.setText(String.join(", ", planet.getTerrain().getFeatures()));
 
-			List<String> features = planet.getTerrain().getFeatures();
-			List<String> settlements = player.findKnowledge(SettlementKnowledge.class).stream()
-					.filter(o -> o.getSettlement().getParent() == getSpaceObject())
-					.map(o -> o.getSettlement().getName())
-					.collect(Collectors.toList());
+		settlements.setText(planet.isHabitable()
+				? "Settlements: " + planet.getTerrain().getSettlements().stream().map(Settlement::getName).collect(Collectors.joining(", "))
+				: "Not Habitable");
+		//		}
 
-			v.text(buildMultilineString(features, "Features", width), 0, 0);
-
-			String settlementString = planet.isHabitable()
-					? buildMultilineString(settlements, "Settlements", width)
-					: "Not Habitable";
-			v.text(settlementString, 0, SPACING * 2 + (24 * numberOfLines(buildMultilineString(features, "Features", width))));
-		}
-	}
-
-	// TODO: make a helper class so we can encapsulate and reuse this logic elsewhere
-	private String buildMultilineString(List<String> words, String description, float width) {
-		if(words.isEmpty()) {
-			words.add("(None)");
-		}
-
-		List<String> lines = new ArrayList<>();
-		int currentLineIndex = 0;
-		int currentWordIndex = 0;
-		lines.add(description + ": ");
-		for(String word : words) {
-			if(v.textWidth(lines.get(currentLineIndex) + ", " + word) > width) {
-				currentLineIndex++;
-				lines.add("");
-			}
-			if(currentWordIndex != words.size() - 1) {
-				lines.set(currentLineIndex, lines.get(currentLineIndex) + word + ", ");
-			}
-			else {
-				lines.set(currentLineIndex, lines.get(currentLineIndex) + word);
-			}
-
-			currentWordIndex++;
-		}
-		return String.join("\n", lines);
-	}
-
-	private int numberOfLines(String in) {
-		int count = 0;
-		for(char c : in.toCharArray()) {
-			if(c == '\n')
-				count++;
-		}
-		return count;
+		layout.draw(width, height);
 	}
 }

@@ -1,7 +1,8 @@
 package vekta.menu.handle;
 
+import vekta.KeyBinding;
+import vekta.knowledge.ObservationLevel;
 import vekta.menu.Menu;
-import vekta.knowledge.KnowledgeLevel;
 import vekta.terrain.LandingSite;
 
 import java.util.List;
@@ -30,10 +31,15 @@ public class SurveyMenuHandle extends MenuHandle {
 	}
 
 	@Override
+	public KeyBinding getShortcutKey() {
+		return KeyBinding.SHIP_SCAN;
+	}
+
+	@Override
 	public void focus(Menu menu) {
 		super.focus(menu);
 
-		getSite().getParent().observe(KnowledgeLevel.SCANNED, menu.getPlayer());
+		getSite().getParent().observe(ObservationLevel.SCANNED, menu.getPlayer());
 	}
 
 	@Override

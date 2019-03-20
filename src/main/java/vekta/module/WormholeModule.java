@@ -68,7 +68,7 @@ public class WormholeModule extends ShipModule {
 
 	@Override
 	public void onKeyPress(KeyBinding key) {
-		if(key == KeyBinding.SHIP_TELESCOPE) {
+		if(key == KeyBinding.SHIP_SCAN) {
 			setTarget(chooseTarget());
 			if(getShip().hasController()) {
 				getShip().getController().send("Wormhole target "

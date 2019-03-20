@@ -7,8 +7,8 @@ import vekta.menu.Menu;
 import static vekta.Vekta.getWorld;
 import static vekta.Vekta.setContext;
 
-public class KnowledgeMenuOption implements MenuOption {
-	public KnowledgeMenuOption() {
+public class PlayerKnowledgeOption implements MenuOption {
+	public PlayerKnowledgeOption() {
 	}
 
 	@Override

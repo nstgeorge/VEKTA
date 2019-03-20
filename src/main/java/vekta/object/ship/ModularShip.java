@@ -6,7 +6,7 @@ import vekta.*;
 import vekta.context.World;
 import vekta.item.Item;
 import vekta.item.ModuleItem;
-import vekta.knowledge.KnowledgeLevel;
+import vekta.knowledge.ObservationLevel;
 import vekta.menu.Menu;
 import vekta.menu.handle.LandingMenuHandle;
 import vekta.menu.handle.ObjectMenuHandle;
@@ -31,7 +31,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			KeyBinding.SHIP_MISSIONS, MissionMenuOption.class,
 			KeyBinding.SHIP_LOADOUT, LoadoutMenuOption.class,
 			KeyBinding.SHIP_INTERNET, InternetMenuOption.class,
-			KeyBinding.SHIP_NAVIGATION, KnowledgeMenuOption.class
+			KeyBinding.SHIP_NAVIGATION, PlayerKnowledgeOption.class
 	);
 
 	private static final float ENERGY_TIME_SCALE = 1e-4F;
@@ -340,7 +340,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	public Menu openShipMenu() {
 		Menu menu = new Menu(getController(), new BackOption(getWorld()), new ObjectMenuHandle(this));
-		menu.add(new KnowledgeMenuOption());
+		menu.add(new PlayerKnowledgeOption());
 		menu.add(new LoadoutMenuOption(this));
 		menu.add(new MissionMenuOption());
 		menu.add(new RenameOption(this));
@@ -363,7 +363,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			setContext(menu);
 
 			player.emit(PlayerEvent.LAND, site);
-			site.getParent().observe(KnowledgeLevel.VISITED, player);
+			site.getParent().observe(ObservationLevel.VISITED, player);
 		}
 	}
 
@@ -380,7 +380,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			}
 
 			player.emit(PlayerEvent.DOCK, s);
-			s.observe(KnowledgeLevel.VISITED, player);
+			s.observe(ObservationLevel.VISITED, player);
 		}
 	}
 

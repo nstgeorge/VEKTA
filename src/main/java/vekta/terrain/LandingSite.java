@@ -4,7 +4,7 @@ import processing.core.PVector;
 import vekta.Syncable;
 import vekta.object.SpaceObject;
 import vekta.object.ship.Ship;
-import vekta.knowledge.KnowledgeLevel;
+import vekta.knowledge.ObservationLevel;
 import vekta.sound.Tune;
 import vekta.spawner.TuneGenerator;
 
@@ -75,7 +75,7 @@ public class LandingSite extends Syncable<LandingSite> {
 		landed = null;
 	}
 	
-	public void observe(KnowledgeLevel level) {
+	public void observe(ObservationLevel level) {
 		
 	}
 

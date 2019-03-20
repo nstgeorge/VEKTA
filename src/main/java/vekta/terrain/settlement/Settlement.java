@@ -6,7 +6,7 @@ import vekta.economy.EconomyDescriptor;
 import vekta.economy.ProductivityModifier;
 import vekta.menu.Menu;
 import vekta.object.SpaceObject;
-import vekta.knowledge.KnowledgeLevel;
+import vekta.knowledge.ObservationLevel;
 import vekta.knowledge.SettlementKnowledge;
 import vekta.terrain.LandingSite;
 import vekta.terrain.Terrain;
@@ -208,10 +208,10 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 	public void onSecurityMenu(Menu menu) {
 	}
 
-	public void observe(KnowledgeLevel level, Player player) {
+	public void observe(ObservationLevel level, Player player) {
 		player.addKnowledge(new SettlementKnowledge(level, this));
 
-		if(level == KnowledgeLevel.OWNED) {
+		if(level == ObservationLevel.OWNED) {
 			getParent().setPersistent(true);
 		}
 	}

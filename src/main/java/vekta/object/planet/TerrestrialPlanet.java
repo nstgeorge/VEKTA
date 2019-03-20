@@ -4,7 +4,7 @@ import processing.core.PVector;
 import vekta.Faction;
 import vekta.Player;
 import vekta.economy.TemporaryModifier;
-import vekta.knowledge.KnowledgeLevel;
+import vekta.knowledge.ObservationLevel;
 import vekta.knowledge.TerrestrialKnowledge;
 import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
@@ -90,12 +90,12 @@ public class TerrestrialPlanet extends Planet {
 	}
 
 	@Override
-	public void observe(KnowledgeLevel level, Player player) {
+	public void observe(ObservationLevel level, Player player) {
 		super.observe(level, player);
 
 		player.addKnowledge(new TerrestrialKnowledge(level, this));
 
-		if(KnowledgeLevel.SCANNED.isAvailableFrom(level)) {
+		if(ObservationLevel.SCANNED.isAvailableFrom(level)) {
 			for(Settlement settlement : getLandingSite().getTerrain().getSettlements()) {
 				// Observe settlements at the next-down observation level
 				settlement.observe(level.decreased(), player);

@@ -6,7 +6,7 @@ import vekta.object.ship.Ship;
 public class ShipKnowledge extends SpaceObjectKnowledge {
 	private final Ship ship;
 
-	public ShipKnowledge(KnowledgeLevel level, Ship ship) {
+	public ShipKnowledge(ObservationLevel level, Ship ship) {
 		super(level);
 
 		this.ship = ship;
@@ -16,7 +16,12 @@ public class ShipKnowledge extends SpaceObjectKnowledge {
 	public Ship getSpaceObject() {
 		return ship;
 	}
-	
+
+	@Override
+	public boolean isSimilar(ObservationKnowledge other) {
+		return other instanceof ShipKnowledge && getSpaceObject() == ((ShipKnowledge)other).getSpaceObject();
+	}
+
 	@Override
 	public void draw(Player player, float width, float height) {
 		// Draw ship preview

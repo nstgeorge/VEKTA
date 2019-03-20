@@ -132,7 +132,7 @@ public class SpaceStation extends ModularShip {
 			component.getModule().draw(dist, TILE_SIZE * ratio);
 			v.popMatrix();
 
-			v.noFill(); // Component models assume no fill by default
+			v.noFill(); // Display models assume no fill by default
 
 			//			// DEBUG: render bounding boxes
 			//			v.stroke(100);

@@ -66,8 +66,8 @@ public class Vekta extends PApplet {
 	public static int MISSION_COLOR;
 
 	// Fonts
-	public static PFont headerFont;
-	public static PFont bodyFont;
+	public static PFont HEADER_FONT;
+	public static PFont BODY_FONT;
 
 	@Override
 	public void settings() {
@@ -94,9 +94,9 @@ public class Vekta extends PApplet {
 		textMode(SHAPE);
 
 		// Fonts
-		headerFont = createFont(FONTNAME, 72);
-		bodyFont = createFont(FONTNAME, 24);
-		v.textFont(bodyFont);
+		HEADER_FONT = createFont(FONTNAME, 72);
+		BODY_FONT = createFont(FONTNAME, 24);
+		v.textFont(BODY_FONT);
 
 		mainMenu = new Menu(null, new ExitGameOption("Quit"), new MainMenuHandle());
 		mainMenu.add(new WorldOption("Singleplayer", Singleplayer::new));

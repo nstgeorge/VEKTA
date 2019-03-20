@@ -20,7 +20,7 @@ import vekta.object.Targeter;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.PlayerShip;
 import vekta.object.ship.SpaceStation;
-import vekta.knowledge.KnowledgeLevel;
+import vekta.knowledge.ObservationLevel;
 import vekta.overlay.singleplayer.PlayerOverlay;
 import vekta.person.Person;
 import vekta.sound.SoundGroup;
@@ -124,7 +124,7 @@ public class Singleplayer implements World, PlayerListener {
 				new PVector(), // Velocity
 				v.color(0, 255, 0)
 		));
-		playerShip.observe(KnowledgeLevel.OWNED, getPlayer());
+		playerShip.observe(ObservationLevel.OWNED, getPlayer());
 		playerShip.getInventory().add(50); // Starting money
 		playerShip.setController(player);
 
@@ -156,7 +156,7 @@ public class Singleplayer implements World, PlayerListener {
 					new PVector(),    // Velocity
 					playerShip.getColor()
 			));
-			station.observe(KnowledgeLevel.OWNED, getPlayer());
+			station.observe(ObservationLevel.OWNED, getPlayer());
 			SpaceStation.Component core = station.getCore();
 			SpaceStation.Component rcs = core.attach(SpaceStation.Direction.UP, new RCSModule(1));
 			SpaceStation.Component orbiter = core.attach(SpaceStation.Direction.RIGHT, new OrbitModule(1));
@@ -388,7 +388,7 @@ public class Singleplayer implements World, PlayerListener {
 			overlay.render();
 		}
 		else {
-			v.textFont(headerFont);
+			v.textFont(HEADER_FONT);
 			v.textAlign(CENTER, CENTER);
 
 			// Header text
@@ -399,7 +399,7 @@ public class Singleplayer implements World, PlayerListener {
 			// Body text
 			v.stroke(0);
 			v.fill(255);
-			v.textFont(bodyFont);
+			v.textFont(BODY_FONT);
 			v.text(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to load autosave", v.width / 2F, (v.height / 2F) + 97);
 		}
 	}

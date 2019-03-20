@@ -36,7 +36,7 @@ public class KnowledgeContext implements Context, Comparator<Knowledge> {
 				new KnowledgeTab("Settlements", SettlementKnowledge.class),
 				new KnowledgeTab("People", PersonKnowledge.class),
 				new KnowledgeTab("Ships", ShipKnowledge.class),
-				new KnowledgeTab("Owned by " + player.getName(), o -> o instanceof LevelKnowledge && ((LevelKnowledge)o).getLevel() == KnowledgeLevel.OWNED),
+				new KnowledgeTab("Owned by " + player.getName(), o -> o instanceof ObservationKnowledge && ((ObservationKnowledge)o).getLevel() == ObservationLevel.OWNED),
 				new KnowledgeTab("Everything", o -> true)
 		);
 		

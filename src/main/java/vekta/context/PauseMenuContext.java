@@ -39,7 +39,7 @@ public class PauseMenuContext implements Context {
 		for(int i = 0; i < options.length; i++) {
 			drawOption(options[i], (v.height / 2) + (i * 100), i == selected);
 		}
-		v.textFont(bodyFont);
+		v.textFont(BODY_FONT);
 		v.stroke(0);
 		v.fill(255);
 		v.textAlign(CENTER);
@@ -60,7 +60,7 @@ public class PauseMenuContext implements Context {
 		v.rectMode(CENTER);
 		v.rect(v.width / 8F, yPos, 200 + (selected ? 10 : 0), 50);
 		// Text ----------------------
-		v.textFont(bodyFont);
+		v.textFont(BODY_FONT);
 		v.stroke(0);
 		v.fill(UI_COLOR);
 		v.textAlign(CENTER, CENTER);

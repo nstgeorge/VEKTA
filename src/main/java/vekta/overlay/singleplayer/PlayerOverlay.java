@@ -6,7 +6,7 @@ import vekta.object.ship.ModularShip;
 import vekta.overlay.Overlay;
 
 import static processing.core.PConstants.LEFT;
-import static vekta.Vekta.bodyFont;
+import static vekta.Vekta.BODY_FONT;
 import static vekta.Vekta.v;
 
 public class PlayerOverlay implements Overlay, PlayerListener {
@@ -36,7 +36,7 @@ public class PlayerOverlay implements Overlay, PlayerListener {
 	@Override
 	public void render() {
 		// Set overlay text settings
-		v.textFont(bodyFont);
+		v.textFont(BODY_FONT);
 		v.textAlign(LEFT);
 		v.textSize(16);
 

@@ -11,6 +11,8 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static processing.core.PApplet.println;
+
 public final class Player extends Syncable<Player> {
 	private /*@Sync */ Faction faction;
 	private /*@Sync */ ModularShip currentShip;
@@ -18,7 +20,7 @@ public final class Player extends Syncable<Player> {
 	private final List<PlayerListener> listeners = new ArrayList<>();
 	private final Set<String> attributes = new HashSet<>();
 
-	//	private final HashMap<SpaceObject, KnowledgeLevel> observedObjectList = new HashMap<>();
+	//	private final HashMap<SpaceObject, ObservationLevel> observedObjectList = new HashMap<>();
 	//	private final HashMap<SpaceObject, List<String>> observedObjectFeatureList = new HashMap<>();
 	//	private final HashMap<SpaceObject, List<Settlement>> observedObjectSettlementList = new HashMap<>();
 
@@ -107,13 +109,14 @@ public final class Player extends Syncable<Player> {
 	public void addKnowledge(Knowledge knowledge) {
 		for(int i = 0; i < knowledgeList.size(); i++) {
 			Knowledge prev = knowledgeList.get(i);
+			println(knowledge.getName(), knowledge.getDelta(prev).name(), prev.getName());////
 			switch(knowledge.getDelta(prev)) {
+			case SAME:
+			case WORSE:
+				return; // Don't add if equivalent or better knowledge exists
 			case BETTER:
 				knowledgeList.set(i, knowledge);
 				return; // Swap out instead of adding new knowledge
-			case SAME:
-			case WORSE:
-				return; // Don't add if an equivalent or better knowledge exists
 			}
 		}
 		knowledgeList.add(0, knowledge); // Add to beginning of list

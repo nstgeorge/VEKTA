@@ -9,7 +9,7 @@ import static vekta.Vekta.v;
 public class SettlementKnowledge extends SpaceObjectKnowledge {
 	private final Settlement settlement;
 
-	public SettlementKnowledge(KnowledgeLevel level, Settlement settlement) {
+	public SettlementKnowledge(ObservationLevel level, Settlement settlement) {
 		super(level);
 
 		this.settlement = settlement;
@@ -25,13 +25,13 @@ public class SettlementKnowledge extends SpaceObjectKnowledge {
 	}
 
 	@Override
-	public boolean isSimilar(LevelKnowledge other) {
+	public boolean isSimilar(ObservationKnowledge other) {
 		return other instanceof SettlementKnowledge && getSettlement() == ((SettlementKnowledge)other).getSettlement();
 	}
 
 	@Override
 	public String getName() {
-		if(getLevel() == KnowledgeLevel.AWARE) {
+		if(getLevel() == ObservationLevel.AWARE) {
 			return "(Unknown Settlement)";
 		}
 		return getSettlement().getName();
@@ -39,7 +39,7 @@ public class SettlementKnowledge extends SpaceObjectKnowledge {
 
 	@Override
 	public int getColor(Player player) {
-		if(getLevel() == KnowledgeLevel.AWARE) {
+		if(getLevel() == ObservationLevel.AWARE) {
 			return v.color(100);
 		}
 		return getSettlement().getColor();
@@ -52,7 +52,7 @@ public class SettlementKnowledge extends SpaceObjectKnowledge {
 		v.fill(getSpaceObject().getColor());
 		v.text("Planet: " + getSpaceObject().getName(), 0, 0);
 
-		if(KnowledgeLevel.SCANNED.isAvailableFrom(getLevel())) {
+		if(ObservationLevel.SCANNED.isAvailableFrom(getLevel())) {
 			v.fill(getSettlement().getColor());
 			v.text("Population: " + getSettlement().getPopulation(), 0, SPACING * 2);
 		}

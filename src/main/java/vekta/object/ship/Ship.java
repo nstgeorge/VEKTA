@@ -11,7 +11,7 @@ import vekta.menu.Menu;
 import vekta.object.CargoCrate;
 import vekta.object.Shockwave;
 import vekta.object.SpaceObject;
-import vekta.knowledge.KnowledgeLevel;
+import vekta.knowledge.ObservationLevel;
 import vekta.knowledge.ShipKnowledge;
 import vekta.terrain.LandingSite;
 
@@ -236,12 +236,12 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 	}
 
 	@Override
-	public void observe(KnowledgeLevel level, Player player) {
+	public void observe(ObservationLevel level, Player player) {
 		super.observe(level, player);
 
 		player.addKnowledge(new ShipKnowledge(level, this));
 		
-		if(level == KnowledgeLevel.OWNED) {
+		if(level == ObservationLevel.OWNED) {
 			setPersistent(true);
 		}
 	}

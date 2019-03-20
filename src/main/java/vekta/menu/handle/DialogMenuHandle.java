@@ -1,7 +1,7 @@
 package vekta.menu.handle;
 
 import vekta.menu.Menu;
-import vekta.knowledge.KnowledgeLevel;
+import vekta.knowledge.ObservationLevel;
 import vekta.knowledge.PersonKnowledge;
 import vekta.person.Dialog;
 import vekta.person.Person;
@@ -40,7 +40,7 @@ public class DialogMenuHandle extends MenuHandle {
 	public void focus(Menu menu) {
 		super.focus(menu);
 
-		menu.getPlayer().addKnowledge(new PersonKnowledge(KnowledgeLevel.VISITED, getPerson()));
+		menu.getPlayer().addKnowledge(new PersonKnowledge(ObservationLevel.VISITED, getPerson()));
 	}
 
 	@Override

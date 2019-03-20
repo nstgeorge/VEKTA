@@ -40,13 +40,13 @@ public class SettingsMenuContext implements Context {
 		MainMenuHandle.HYPERSPACE.render();
 
 		// Draw settings
-		v.textFont(bodyFont);
+		v.textFont(BODY_FONT);
 		v.stroke(0);
 		v.fill(255);
 		v.textAlign(CENTER);
 		v.textSize(30);
 		v.text("Settings", v.width / 2F, 100);
-		v.textFont(bodyFont);
+		v.textFont(BODY_FONT);
 		// Draw each option
 		int optionIndex = 0;
 		for(String key : settingsOptions.keyArray()) {
@@ -78,7 +78,7 @@ public class SettingsMenuContext implements Context {
 		v.rectMode(CENTER);
 		v.rect(v.width / 2F, yPos, 200 + (selected ? 10 : 0), 50);
 		// Text ----------------------
-		v.textFont(bodyFont);
+		v.textFont(BODY_FONT);
 		v.stroke(0);
 		v.fill(UI_COLOR);
 		v.textAlign(CENTER, CENTER);

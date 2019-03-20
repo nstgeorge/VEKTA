@@ -9,7 +9,7 @@ import static vekta.Vekta.v;
 public class PersonKnowledge extends SpaceObjectKnowledge {
 	private final Person person;
 
-	public PersonKnowledge(KnowledgeLevel level, Person person) {
+	public PersonKnowledge(ObservationLevel level, Person person) {
 		super(level);
 
 		this.person = person;
@@ -22,6 +22,11 @@ public class PersonKnowledge extends SpaceObjectKnowledge {
 	@Override
 	public SpaceObject getSpaceObject() {
 		return getPerson().findHomeObject();
+	}
+
+	@Override
+	public boolean isSimilar(ObservationKnowledge other) {
+		return other instanceof PersonKnowledge && getPerson() == ((PersonKnowledge)other).getPerson();
 	}
 
 	@Override

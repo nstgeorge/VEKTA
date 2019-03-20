@@ -69,7 +69,7 @@ public class MenuHandle implements Serializable {
 
 		v.noStroke();
 		v.fill(255);
-		v.textFont(bodyFont);
+		v.textFont(BODY_FONT);
 		v.textSize(24);
 		v.textAlign(CENTER, CENTER);
 		v.rectMode(CENTER);

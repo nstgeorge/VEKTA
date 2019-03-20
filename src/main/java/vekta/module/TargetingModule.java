@@ -2,6 +2,7 @@ package vekta.module;
 
 import vekta.KeyBinding;
 import vekta.Resources;
+import vekta.knowledge.ObservationLevel;
 import vekta.mission.Mission;
 import vekta.object.CargoCrate;
 import vekta.object.RingDebris;
@@ -10,7 +11,6 @@ import vekta.object.Targeter;
 import vekta.object.planet.Asteroid;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.object.ship.Ship;
-import vekta.knowledge.KnowledgeLevel;
 
 public class TargetingModule extends ShipModule implements Targeter {
 
@@ -52,7 +52,7 @@ public class TargetingModule extends ShipModule implements Targeter {
 			Resources.playSound("targetChange");
 
 			if(getShip().hasController()) {
-				target.observe(KnowledgeLevel.AWARE, getShip().getController());
+				target.observe(ObservationLevel.AWARE, getShip().getController());
 			}
 		}
 	}

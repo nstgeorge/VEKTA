@@ -5,7 +5,7 @@ import vekta.Player;
 import vekta.PlayerEvent;
 import vekta.RenderLevel;
 import vekta.Syncable;
-import vekta.knowledge.KnowledgeLevel;
+import vekta.knowledge.ObservationLevel;
 import vekta.object.ship.ModularShip;
 
 import java.io.Serializable;
@@ -339,7 +339,7 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	public void onUpdate(RenderLevel level) {
 	}
 
-	public void observe(KnowledgeLevel level, Player player) {
+	public void observe(ObservationLevel level, Player player) {
 	}
 
 	//// Convenience methods

@@ -10,11 +10,11 @@ import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import static vekta.Vekta.v;
 
-public abstract class SpaceObjectKnowledge extends LevelKnowledge {
+public abstract class SpaceObjectKnowledge extends ObservationKnowledge {
 	protected static final int SPACING = 50;
 	private static final int PREVIEW_SIZE = 100;
 
-	public SpaceObjectKnowledge(KnowledgeLevel level) {
+	public SpaceObjectKnowledge(ObservationLevel level) {
 		super(level);
 	}
 
@@ -39,12 +39,7 @@ public abstract class SpaceObjectKnowledge extends LevelKnowledge {
 	public boolean isValid(Player player) {
 		return !getSpaceObject().isDestroyed();
 	}
-
-	@Override
-	public boolean isSimilar(LevelKnowledge other) {
-		return other instanceof SpaceObjectKnowledge && getSpaceObject() == ((SpaceObjectKnowledge)other).getSpaceObject();
-	}
-
+	
 	@Override
 	public String getSelectText(Player player) {
 		if(player.getShip().findNavigationTarget() == getSpaceObject()) {
@@ -60,7 +55,7 @@ public abstract class SpaceObjectKnowledge extends LevelKnowledge {
 
 	@Override
 	public void draw(Player player, float width, float height) {
-		if(KnowledgeLevel.SCANNED.isAvailableFrom(getLevel())) {
+		if(ObservationLevel.SCANNED.isAvailableFrom(getLevel())) {
 			v.noFill();
 
 			// Draw object preview
