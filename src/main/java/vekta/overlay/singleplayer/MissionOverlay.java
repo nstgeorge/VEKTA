@@ -29,13 +29,13 @@ public class MissionOverlay implements Overlay {
 			// Draw mission/objective text
 			v.fill(MISSION_COLOR);
 			v.textSize(24);
-			v.text(mission.getName(), 50, 50);
+			v.text(mission.getName(), 50, 70);
 			for(int i = 0; i < objectives.size(); i++) {
 				Objective objective = objectives.get(i);
 				boolean isCurrent = mission.getCurrentObjective() == objective;
 				v.fill(isCurrent ? objective.getStatus().getColor() : 100);
 				v.textSize(16);
-				v.text(objective.getDisplayText(), isCurrent ? 55 : 50, 90 + i * 30);
+				v.text(objective.getDisplayText(), isCurrent ? 55 : 50, 110 + i * 30);
 			}
 		}
 	}
