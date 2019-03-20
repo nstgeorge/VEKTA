@@ -29,11 +29,10 @@ public class TelemetryOverlay implements Overlay {
 	}
 
 	private void updateUIInformation() {
-		targeter = ((Targeter)player.getShip().getModule(ModuleType.TARGET_COMPUTER));
+		targeter = ((Targeter)player.getShip().getModule(ModuleType.NAVIGATION));
 		if(targeter != null && targeter.getTarget() != null) {
 			SpaceObject target = targeter.getTarget();
-
-			distString = getDistanceString(target, player);
+			distString = getDistanceString(player.getShip().relativePosition(target).mag());
 		}
 		else {
 			distString = "--";
@@ -108,12 +107,19 @@ public class TelemetryOverlay implements Overlay {
 		}
 	}
 
-	public static String getDistanceString(SpaceObject target, Player player) {
-		float dist = player.getShip().getPosition().dist(target.getPosition());
-		String unit = "meters";
+	public static String getDistanceString(float dist) {
+		String unit = "m";
 		if(dist > AU_DISTANCE * .01F) {
 			dist /= AU_DISTANCE;
 			unit = "AU";
+		}
+		else if(dist > 1e8) {
+			dist /= 1e9;
+			unit = "Gm"; // Gigameters
+		}
+		else if(dist > 1e5) {
+			dist /= 1e6;
+			unit = "Mm"; // Megameters
 		}
 		else if(dist > 100) {
 			dist /= 1000;

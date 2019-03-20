@@ -65,6 +65,11 @@ public class CargoCrate extends SpaceObject {
 	}
 
 	@Override
+	public boolean collidesWith(RenderLevel level, SpaceObject s) {
+		return !(s instanceof CargoCrate) && super.collidesWith(level, s);
+	}
+
+	@Override
 	public void onCollide(SpaceObject s) {
 		if(s.isDestroyed()) {
 			return;

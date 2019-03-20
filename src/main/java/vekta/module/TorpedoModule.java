@@ -41,7 +41,7 @@ public class TorpedoModule extends WeaponModule {
 	@Override
 	public void fireWeapon() {
 		ModularShip ship = getShip();
-		Module m = ship.getModule(ModuleType.TARGET_COMPUTER);
+		Module m = ship.getModule(ModuleType.NAVIGATION);
 		if(m instanceof Targeter) {
 			SpaceObject target = ((Targeter)m).getTarget();
 			if(target != null && ship.consumeEnergyImmediate(1)) {

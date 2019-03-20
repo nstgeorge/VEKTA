@@ -74,3 +74,5 @@ Back-Alley
 Rusty
 Lopsided
 Unwieldy
+Jagged
+Splintery

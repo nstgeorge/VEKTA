@@ -1,9 +1,11 @@
 package vekta.object;
 
 import processing.core.PVector;
+import vekta.Player;
 import vekta.PlayerEvent;
 import vekta.RenderLevel;
 import vekta.Syncable;
+import vekta.knowledge.KnowledgeLevel;
 import vekta.object.ship.ModularShip;
 
 import java.io.Serializable;
@@ -12,6 +14,7 @@ import java.util.List;
 import static vekta.Vekta.*;
 
 public abstract class SpaceObject extends Syncable<SpaceObject> implements Serializable {
+	private static final float PREVIEW_ROTATE_SPEED = 5e-3F;
 	private static final float MARKER_SIZE = 40;
 	private static final int DEFAULT_TRAIL_LENGTH = 50;
 	private static final float MOTION_SYNC_FACTOR = .2F; // How much to over/undercorrect object motion
@@ -75,7 +78,7 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	public boolean impartsGravity() {
 		return false;
 	}
-	
+
 	public abstract float getSpecificHeat();
 
 	public float getTemperature() {
@@ -273,6 +276,11 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	public void drawDistant(float r) {
 	}
 
+	public void drawPreview(float r) {
+		v.rotate(v.frameCount * PREVIEW_ROTATE_SPEED);
+		draw(RenderLevel.PARTICLE, r / 3);
+	}
+
 	public void drawMarker() {
 		//		v.stroke(v.lerpColor(0, getColor(), sq(1 - getPosition().mag() / WorldGenerator.getRadius(getDespawnLevel()))));
 
@@ -329,6 +337,9 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	}
 
 	public void onUpdate(RenderLevel level) {
+	}
+
+	public void observe(KnowledgeLevel level, Player player) {
 	}
 
 	//// Convenience methods

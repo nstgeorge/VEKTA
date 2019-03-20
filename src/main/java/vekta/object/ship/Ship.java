@@ -11,6 +11,8 @@ import vekta.menu.Menu;
 import vekta.object.CargoCrate;
 import vekta.object.Shockwave;
 import vekta.object.SpaceObject;
+import vekta.knowledge.KnowledgeLevel;
+import vekta.knowledge.ShipKnowledge;
 import vekta.terrain.LandingSite;
 
 import static processing.core.PConstants.CLOSE;
@@ -18,7 +20,7 @@ import static processing.core.PConstants.HALF_PI;
 import static vekta.Vekta.*;
 
 public abstract class Ship extends SpaceObject implements Renameable, InventoryListener, Damageable {
-	private static final float CRATE_SPEED = 1;
+	private static final float CRATE_SPEED = 10;
 	private static final float DEPART_FRAMES = 100; // Number of frames to wait before docking/landing again
 
 	private String name;
@@ -231,6 +233,17 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 	public abstract void setupDockingMenu(Player player, Menu menu);
 
 	public void onDepart(SpaceObject obj) {
+	}
+
+	@Override
+	public void observe(KnowledgeLevel level, Player player) {
+		super.observe(level, player);
+
+		player.addKnowledge(new ShipKnowledge(level, this));
+		
+		if(level == KnowledgeLevel.OWNED) {
+			setPersistent(true);
+		}
 	}
 
 	protected enum ShipModelType {

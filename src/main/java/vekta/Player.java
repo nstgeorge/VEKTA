@@ -2,15 +2,14 @@ package vekta;
 
 import vekta.item.Inventory;
 import vekta.item.Item;
+import vekta.knowledge.Knowledge;
 import vekta.mission.Mission;
-import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
-import vekta.observation.ObservationLevel;
 import vekta.overlay.singleplayer.Notification;
-import vekta.terrain.Terrain;
-import vekta.terrain.settlement.Settlement;
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public final class Player extends Syncable<Player> {
 	private /*@Sync */ Faction faction;
@@ -19,9 +18,11 @@ public final class Player extends Syncable<Player> {
 	private final List<PlayerListener> listeners = new ArrayList<>();
 	private final Set<String> attributes = new HashSet<>();
 
-	private HashMap<SpaceObject, ObservationLevel> observedObjectList = new HashMap<>();
-	private HashMap<SpaceObject, List<String>> observedObjectFeatureList = new HashMap<>();
-	private HashMap<SpaceObject, List<Settlement>> observedObjectSettlementList = new HashMap<>();
+	//	private final HashMap<SpaceObject, KnowledgeLevel> observedObjectList = new HashMap<>();
+	//	private final HashMap<SpaceObject, List<String>> observedObjectFeatureList = new HashMap<>();
+	//	private final HashMap<SpaceObject, List<Settlement>> observedObjectSettlementList = new HashMap<>();
+
+	private final List<Knowledge> knowledgeList = new ArrayList<>();
 
 	private final List<Mission> missions = new ArrayList<>();
 	private Mission currentMission;
@@ -48,7 +49,6 @@ public final class Player extends Syncable<Player> {
 
 			@Override
 			public void onMissionStatus(Mission mission) {
-				//				println("::::", mission.getName(), mission.getStatus(), mission.getCurrentObjective() != null ? mission.getCurrentObjective().getName() : null);
 				switch(mission.getStatus()) {
 				case READY:
 				case STARTED:
@@ -91,35 +91,42 @@ public final class Player extends Syncable<Player> {
 		});
 	}
 
-	public void recordSpaceObject(SpaceObject object, ObservationLevel level) {
-		if(!observedObjectList.containsKey(object) || level.isHigher(observedObjectList.get(object))) {
-			observedObjectList.put(object, level);
+	public List<Knowledge> getKnowledgeList() {
+		return knowledgeList;
+	}
+
+	public List<Knowledge> findKnowledge(Predicate<Knowledge> filter) {
+		return getKnowledgeList().stream().filter(filter).collect(Collectors.toList());
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends Knowledge> List<T> findKnowledge(Class<T> type) {
+		return (List<T>)findKnowledge(type::isInstance);
+	}
+
+	public void addKnowledge(Knowledge knowledge) {
+		for(int i = 0; i < knowledgeList.size(); i++) {
+			Knowledge prev = knowledgeList.get(i);
+			switch(knowledge.getDelta(prev)) {
+			case BETTER:
+				knowledgeList.set(i, knowledge);
+				return; // Swap out instead of adding new knowledge
+			case SAME:
+			case WORSE:
+				return; // Don't add if an equivalent or better knowledge exists
+			}
 		}
+		knowledgeList.add(0, knowledge); // Add to beginning of list
 	}
 
-	// Used when adding a scanned planet
-	public void recordSpaceObject(SpaceObject object, ObservationLevel level, Terrain terrain) {
-		if(!observedObjectList.containsKey(object) || level.isHigher(observedObjectList.get(object))) {
-			observedObjectList.put(object, level);
-			observedObjectFeatureList.put(object, terrain.getFeatures());
-			observedObjectSettlementList.put(object, terrain.getSettlements());
-		}
-	}
-
-	public void removeSpaceObject(SpaceObject object) {
-		observedObjectList.remove(object);
-	}
-
-	public HashMap<SpaceObject, ObservationLevel> getObservedObjectList() {
-		return observedObjectList;
-	}
-
-	public List<String> getObservedFeatures(SpaceObject object) {
-		return observedObjectFeatureList.get(object);
-	}
-
-	public List<Settlement> getObservedSettlements(SpaceObject object) {
-		return observedObjectSettlementList.get(object);
+	public void cleanupKnowledge() {
+		//		// Clean up invalid knowledge
+		//		for(Knowledge k : new ArrayList<>(getKnowledgeList())) {
+		//			if(!k.isValid(this)) {
+		//				knowledgeList.remove(k);
+		//			}
+		//		}
+		// Disabled for testing (evaluate how to handle destroyed/despawned/dead entries)
 	}
 
 	public Faction getFaction() {

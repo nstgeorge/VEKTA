@@ -81,7 +81,7 @@ public class WormholeModule extends ShipModule {
 	}
 
 	private SpaceObject chooseTarget() {
-		Targeter targeter = (Targeter)getShip().getModule(ModuleType.TARGET_COMPUTER);
+		Targeter targeter = (Targeter)getShip().getModule(ModuleType.NAVIGATION);
 		if(targeter != null && targeter.getTarget() != null) {
 			return targeter.getTarget();
 		}
@@ -111,7 +111,7 @@ public class WormholeModule extends ShipModule {
 			PVector offset = PVector.random2D().mult((ship.getRadius() + target.getRadius()) * 2);
 			ship.getPositionReference().set(target.getPosition().add(offset));
 
-			Targeter targeter = (Targeter)getShip().getModule(ModuleType.TARGET_COMPUTER);
+			Targeter targeter = (Targeter)getShip().getModule(ModuleType.NAVIGATION);
 			if(targeter != null) {
 				// Update ship targeter
 				targeter.setTarget(target);

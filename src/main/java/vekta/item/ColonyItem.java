@@ -6,6 +6,7 @@ import vekta.menu.handle.LandingMenuHandle;
 import vekta.menu.option.CustomOption;
 import vekta.menu.option.MenuOption;
 import vekta.menu.option.SettlementOption;
+import vekta.knowledge.KnowledgeLevel;
 import vekta.terrain.HabitableTerrain;
 import vekta.terrain.LandingSite;
 import vekta.terrain.Terrain;
@@ -46,7 +47,7 @@ public class ColonyItem extends Item {
 					((HabitableTerrain)terrain).changeSettlement(site, settlement);
 
 					// Ensure that the colony object doesn't despawn
-					site.getParent().setPersistent(true);
+					settlement.observe(KnowledgeLevel.OWNED, m.getPlayer());
 
 					// Remove other settlement menu options
 					for(int i = 0; i < m.size(); i++) {

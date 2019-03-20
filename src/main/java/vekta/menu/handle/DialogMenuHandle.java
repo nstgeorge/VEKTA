@@ -1,7 +1,10 @@
 package vekta.menu.handle;
 
 import vekta.menu.Menu;
+import vekta.knowledge.KnowledgeLevel;
+import vekta.knowledge.PersonKnowledge;
 import vekta.person.Dialog;
+import vekta.person.Person;
 
 import static vekta.Vekta.v;
 
@@ -19,6 +22,10 @@ public class DialogMenuHandle extends MenuHandle {
 		return dialog;
 	}
 
+	public Person getPerson() {
+		return getDialog().getPerson();
+	}
+
 	@Override
 	public int getButtonWidth() {
 		return v.width * 2 / 3;
@@ -30,9 +37,16 @@ public class DialogMenuHandle extends MenuHandle {
 	}
 
 	@Override
+	public void focus(Menu menu) {
+		super.focus(menu);
+
+		menu.getPlayer().addKnowledge(new PersonKnowledge(KnowledgeLevel.VISITED, getPerson()));
+	}
+
+	@Override
 	public void render(Menu menu) {
 		super.render(menu);
-		
+
 		v.textSize(64);
 		v.fill(dialog.getPerson().getColor());
 		v.text(dialog.getPerson().getName(), getButtonX(), getButtonY(-3));

@@ -52,7 +52,7 @@ public class TelescopeModule extends ShipModule {
 	@Override
 	public void onKeyPress(KeyBinding key) {
 		if(key == KeyBinding.SHIP_TELESCOPE) {
-			Targeter t = (Targeter)getShip().getModule(ModuleType.TARGET_COMPUTER);
+			Targeter t = (Targeter)getShip().getModule(ModuleType.NAVIGATION);
 			SpaceObject target = t != null ? t.getTarget() : getWorld().findOrbitObject(getShip());
 			if(target instanceof TerrestrialPlanet) {
 				TerrestrialPlanet planet = (TerrestrialPlanet)target;

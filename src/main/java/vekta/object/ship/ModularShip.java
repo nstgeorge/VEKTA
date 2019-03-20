@@ -6,6 +6,7 @@ import vekta.*;
 import vekta.context.World;
 import vekta.item.Item;
 import vekta.item.ModuleItem;
+import vekta.knowledge.KnowledgeLevel;
 import vekta.menu.Menu;
 import vekta.menu.handle.LandingMenuHandle;
 import vekta.menu.handle.ObjectMenuHandle;
@@ -13,6 +14,7 @@ import vekta.menu.option.*;
 import vekta.module.Module;
 import vekta.module.ModuleType;
 import vekta.module.ModuleUpgradeable;
+import vekta.module.TargetingModule;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 import vekta.terrain.LandingSite;
@@ -29,7 +31,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			KeyBinding.SHIP_MISSIONS, MissionMenuOption.class,
 			KeyBinding.SHIP_LOADOUT, LoadoutMenuOption.class,
 			KeyBinding.SHIP_INTERNET, InternetMenuOption.class,
-			KeyBinding.SHIP_NAVIGATION, NavigationOption.class
+			KeyBinding.SHIP_NAVIGATION, KnowledgeMenuOption.class
 	);
 
 	private static final float ENERGY_TIME_SCALE = 1e-4F;
@@ -309,22 +311,24 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		}
 	}
 
-	public void setTargets(SpaceObject target) {
-		for(Module m : getModules()) {
-			if(m instanceof Targeter) {
-				((Targeter)m).setTarget(target);
-			}
+	// TODO: update modules/UI to use these methods
+
+	public SpaceObject findNavigationTarget() {
+		Module m = getModule(ModuleType.NAVIGATION);
+		if(m instanceof Targeter) {
+			return ((Targeter)m).getTarget();
 		}
+		return null;
 	}
 
-	public List<SpaceObject> getTargets() {
-		List<SpaceObject> targets = new ArrayList<>();
-		for(Module m : getModules()) {
-			if(m instanceof Targeter) {
-				targets.add(((Targeter)m).getTarget());
-			}
+	public void setNavigationTarget(SpaceObject target) {
+		Module m = getModule(ModuleType.NAVIGATION);
+		if(m instanceof TargetingModule) { // Reset targeting mode if using a TargetingModule
+			((TargetingModule)m).setMode(null);
 		}
-		return targets;
+		if(m instanceof Targeter) {
+			((Targeter)m).setTarget(target);
+		}
 	}
 
 	@Override
@@ -336,7 +340,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	public Menu openShipMenu() {
 		Menu menu = new Menu(getController(), new BackOption(getWorld()), new ObjectMenuHandle(this));
-		menu.add(new NavigationOption());
+		menu.add(new KnowledgeMenuOption());
 		menu.add(new LoadoutMenuOption(this));
 		menu.add(new MissionMenuOption());
 		menu.add(new RenameOption(this));
@@ -349,7 +353,8 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	@Override
 	public void doLand(LandingSite site) {
 		if(hasController()) {
-			Menu menu = new Menu(getController(), new ShipTakeoffOption(site, getWorld()), new LandingMenuHandle(site));
+			Player player = getController();
+			Menu menu = new Menu(player, new ShipTakeoffOption(site, getWorld()), new LandingMenuHandle(site));
 			site.getTerrain().setupLandingMenu(menu);
 			menu.add(new SurveyOption(site));
 			menu.addDefault();
@@ -357,22 +362,25 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			this.setLanding(false);
 			setContext(menu);
 
-			getController().emit(PlayerEvent.LAND, site);
+			player.emit(PlayerEvent.LAND, site);
+			site.getParent().observe(KnowledgeLevel.VISITED, player);
 		}
 	}
 
 	@Override
 	public void doDock(SpaceObject s) {
 		if(hasController()) {
+			Player player = getController();
 			if(s instanceof Ship) {
-				Menu menu = new Menu(getController(), new ShipUndockOption(this, getWorld()), new ObjectMenuHandle(s));
-				((Ship)s).setupDockingMenu(getController(), menu);
+				Menu menu = new Menu(player, new ShipUndockOption(this, getWorld()), new ObjectMenuHandle(s));
+				((Ship)s).setupDockingMenu(player, menu);
 				menu.addDefault();
 				this.setLanding(false);
 				setContext(menu);
 			}
 
-			getController().emit(PlayerEvent.DOCK, s);
+			player.emit(PlayerEvent.DOCK, s);
+			s.observe(KnowledgeLevel.VISITED, player);
 		}
 	}
 

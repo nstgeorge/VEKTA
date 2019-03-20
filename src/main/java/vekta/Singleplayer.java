@@ -20,6 +20,7 @@ import vekta.object.Targeter;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.PlayerShip;
 import vekta.object.ship.SpaceStation;
+import vekta.knowledge.KnowledgeLevel;
 import vekta.overlay.singleplayer.PlayerOverlay;
 import vekta.person.Person;
 import vekta.sound.SoundGroup;
@@ -123,7 +124,7 @@ public class Singleplayer implements World, PlayerListener {
 				new PVector(), // Velocity
 				v.color(0, 255, 0)
 		));
-		playerShip.setPersistent(true);
+		playerShip.observe(KnowledgeLevel.OWNED, getPlayer());
 		playerShip.getInventory().add(50); // Starting money
 		playerShip.setController(player);
 
@@ -155,6 +156,7 @@ public class Singleplayer implements World, PlayerListener {
 					new PVector(),    // Velocity
 					playerShip.getColor()
 			));
+			station.observe(KnowledgeLevel.OWNED, getPlayer());
 			SpaceStation.Component core = station.getCore();
 			SpaceStation.Component rcs = core.attach(SpaceStation.Direction.UP, new RCSModule(1));
 			SpaceStation.Component orbiter = core.attach(SpaceStation.Direction.RIGHT, new OrbitModule(1));
@@ -243,7 +245,7 @@ public class Singleplayer implements World, PlayerListener {
 		if(level == RenderLevel.PLANET && timeScale < MIN_PLANET_TIME_SCALE) {
 			timeScale = MIN_PLANET_TIME_SCALE;
 		}
-		
+
 		v.clear();
 		v.rectMode(CENTER);
 		v.ellipseMode(RADIUS);

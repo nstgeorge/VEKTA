@@ -11,6 +11,9 @@ import static vekta.Vekta.*;
  * Model for a planet.
  */
 public abstract class Planet extends SpaceObject {
+	private static final float SURVEY_ROTATE_SPEED = .002F;
+	private static final float SURVEY_SCAN_SPEED = .01F;
+
 	private static final float SPLIT_MASS_ABSORB = .5F;
 
 	private final String name;
@@ -70,6 +73,37 @@ public abstract class Planet extends SpaceObject {
 	public void drawDistant(float r) {
 		super.drawDistant(r);
 		drawNearby(r);// Draw both reticle and planet
+	}
+
+	@Override
+	public void drawPreview(float r) {
+		// Render parameters (will eventually derive from planet properties)
+		float rotateSpeed = 1F / 2000;
+		float resolution = 32;
+		float perspective = 1;
+
+		float rotate = v.frameCount * rotateSpeed;
+		float scan = v.frameCount * SURVEY_SCAN_SPEED;
+		int color = getColor();
+
+		v.shapeMode(CENTER);
+		v.strokeWeight(2);
+		v.noFill();
+
+		// Draw scanner arc
+		float scanScale = cos(scan);
+		v.stroke(v.lerpColor(0, color, sq(cos(scan / 2 + perspective))));
+		v.arc(0, 0, r * scanScale, r, -HALF_PI, HALF_PI);
+
+		// Draw planet
+		for(float f = 0; f < TWO_PI; f += TWO_PI / resolution) {
+			float angle = f + rotate;
+			float xScale = cos(angle);
+			v.stroke(v.lerpColor(0, color, sq(cos(f / 2 + perspective))));
+			v.arc(0, 0, r * xScale, r, -HALF_PI, HALF_PI);
+		}
+
+		v.strokeWeight(1);
 	}
 
 	@Override

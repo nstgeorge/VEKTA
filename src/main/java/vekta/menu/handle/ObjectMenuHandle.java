@@ -1,6 +1,5 @@
 package vekta.menu.handle;
 
-import vekta.RenderLevel;
 import vekta.menu.Menu;
 import vekta.object.SpaceObject;
 
@@ -10,7 +9,6 @@ import static vekta.Vekta.v;
  * Menu renderer for a specific SpaceObject
  */
 public class ObjectMenuHandle extends MenuHandle {
-	private static final float ROTATE_SPEED = 5e-3F;
 
 	private final SpaceObject target;
 
@@ -33,10 +31,9 @@ public class ObjectMenuHandle extends MenuHandle {
 		// Draw object preview
 		v.pushMatrix();
 		v.translate(getButtonX(), getButtonY(-2) + 40);
-		v.rotate(v.frameCount * ROTATE_SPEED);
 		v.noFill();
 		v.stroke(target.getColor());
-		target.draw(RenderLevel.PARTICLE, getSpacing() / 3F);
+		target.drawPreview(getSpacing() / 3F);
 		v.popMatrix();
 	}
 }
