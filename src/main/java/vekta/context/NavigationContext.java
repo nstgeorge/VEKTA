@@ -196,16 +196,16 @@ public class NavigationContext implements Context, PlayerListener {
 
 			v.popMatrix();
 
-			v.textAlign(CENTER);
-			v.textSize(36);
-			v.fill(255);
-			v.text("Navigation", v.width / 2F, 60);
-
 		}
 		else {
 			v.fill(100);
+			v.textAlign(CENTER);
 			v.text("No entries found. \nLand on, dock on, or scan a planet or ship for data.", v.width / 2F, 100);
 		}
+		v.textAlign(CENTER);
+		v.textSize(36);
+		v.fill(255);
+		v.text("Navigation", v.width / 2F, 60);
 	}
 
 	@Override
