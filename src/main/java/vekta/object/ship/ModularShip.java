@@ -186,8 +186,9 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		}
 
 		addHeat(amount * ENERGY_HEAT_SCALE / ENERGY_TIME_SCALE);
-		setEnergy(getEnergy() - amount);
-		if(!hasEnergy()) {
+		energy -= amount;
+		if(energy <= 0) {
+			energy = 0;
 			landing = true;
 			return false;
 		}

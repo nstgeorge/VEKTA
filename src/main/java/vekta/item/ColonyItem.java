@@ -44,10 +44,10 @@ public class ColonyItem extends Item {
 					settlement.clear();
 					settlement.add(new CapitalBuilding(settlement));
 					((HabitableTerrain)terrain).changeSettlement(site, settlement);
-					
+
 					// Ensure that the colony object doesn't despawn
 					site.getParent().setPersistent(true);
-					
+
 					// Remove other settlement menu options
 					for(int i = 0; i < m.size(); i++) {
 						MenuOption other = menu.get(i);
@@ -55,12 +55,12 @@ public class ColonyItem extends Item {
 							m.remove(other);
 						}
 					}
-					
+
 					// Add colony to menu
 					MenuOption option = new SettlementOption(settlement);
 					m.add(0, option);
 					m.select(option);
-				}).withColor(faction.getColor()).withRemoval());
+				}).withColor(getColor()).withRemoval());
 			}
 		}
 	}
