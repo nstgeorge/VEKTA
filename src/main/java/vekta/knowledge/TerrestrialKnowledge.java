@@ -1,7 +1,9 @@
 package vekta.knowledge;
 
 import vekta.Player;
-import vekta.display.*;
+import vekta.display.Layout;
+import vekta.display.TextDisplay;
+import vekta.display.VerticalLayout;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.overlay.singleplayer.TelemetryOverlay;
 import vekta.terrain.settlement.Settlement;
@@ -10,19 +12,6 @@ import java.util.stream.Collectors;
 
 public class TerrestrialKnowledge extends SpaceObjectKnowledge {
 	private final TerrestrialPlanet planet;
-
-	private final DisplayStyle style = new DisplayStyle();
-	private final Layout layout = new VerticalLayout(style);
-
-	// Scanner display items
-	private final Toggle<Layout> scanToggle = layout.add(new Toggle<>(new VerticalLayout(style)));
-	private final TextDisplay mass = scanToggle.getDisplay().add(new TextDisplay(style));
-	private final TextDisplay radius = scanToggle.getDisplay().add(new TextDisplay(style));
-
-	// Landing display items
-	private final Toggle<Layout> landToggle = layout.add(new Toggle<>(new VerticalLayout(style)));
-	private final TextDisplay features = landToggle.getDisplay().add(new TextDisplay(style));
-	private final TextDisplay settlements = landToggle.getDisplay().add(new TextDisplay(style));
 
 	public TerrestrialKnowledge(ObservationLevel level, TerrestrialPlanet planet) {
 		super(level);
@@ -41,31 +30,33 @@ public class TerrestrialKnowledge extends SpaceObjectKnowledge {
 	}
 
 	@Override
-	public void draw(Player player, float width, float height) {
+	public void onLayout(Player player, Layout layout) {
 		// Draw planet preview
-		super.draw(player, width, height);
+		super.onLayout(player, layout);
 
-		// Configure style
-		style.color(getColor(player));
-		landToggle.getDisplay().customize().spacing(0).color(100);
-		
+		Layout aware = layout.add(new VerticalLayout());
+		aware.customize().color(100).spacing(layout.getStyle().spacing() / 2);
+
+		aware.add(new TextDisplay("Mass: " + TelemetryOverlay.getMassString(getSpaceObject().getMass())));
+		aware.add(new TextDisplay("Radius: " + TelemetryOverlay.getDistanceString(getSpaceObject().getRadius())));
+
 		// Survey info
-		//		if(scanToggle.setVisible(ObservationLevel.SCANNED.isAvailableFrom(getLevel()))) {
-		mass.customize().spacing(0);
-		mass.setText("Mass: " + TelemetryOverlay.getMassString(getSpaceObject().getMass()));
-		radius.customize().spacing(0);
-		radius.setText("Radius: " + TelemetryOverlay.getDistanceString(getSpaceObject().getRadius()));
-		//		}
+		if(ObservationLevel.SCANNED.isAvailableFrom(getLevel())) {
+			Layout scanned = layout.add(new VerticalLayout());
+
+			// Terrain features
+			scanned.add(new TextDisplay(String.join(", ", planet.getTerrain().getFeatures())));
+		}
 
 		// Landing info
-		//		if(landToggle.setVisible(ObservationLevel.VISITED.isAvailableFrom(getLevel()))) {
-		features.setText(String.join(", ", planet.getTerrain().getFeatures()));
+		if(ObservationLevel.VISITED.isAvailableFrom(getLevel())) {
+			Layout landed = layout.add(new VerticalLayout());
+			landed.customize().spacing(0).color(100);
 
-		settlements.setText(planet.isHabitable()
-				? "Settlements: " + planet.getTerrain().getSettlements().stream().map(Settlement::getName).collect(Collectors.joining(", "))
-				: "Not Habitable");
-		//		}
-
-		layout.draw(width, height);
+			// Settlements
+			landed.add(new TextDisplay(planet.isHabitable()
+					? "Settlements: " + planet.getTerrain().getSettlements().stream().map(Settlement::getName).collect(Collectors.joining(", "))
+					: "Not Habitable"));
+		}
 	}
 }

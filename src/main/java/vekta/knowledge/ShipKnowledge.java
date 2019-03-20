@@ -21,13 +21,7 @@ public class ShipKnowledge extends SpaceObjectKnowledge {
 	public boolean isSimilar(ObservationKnowledge other) {
 		return other instanceof ShipKnowledge && getSpaceObject() == ((ShipKnowledge)other).getSpaceObject();
 	}
-
-	@Override
-	public void draw(Player player, float width, float height) {
-		// Draw ship preview
-		super.draw(player, width, height);
-	}
-
+	
 	@Override
 	public String getSecondaryText(Player player) {
 		if(player.getShip() == getSpaceObject()) {

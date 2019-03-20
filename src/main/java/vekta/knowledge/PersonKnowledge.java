@@ -1,10 +1,10 @@
 package vekta.knowledge;
 
 import vekta.Player;
+import vekta.display.Layout;
+import vekta.display.TextDisplay;
 import vekta.object.SpaceObject;
 import vekta.person.Person;
-
-import static vekta.Vekta.v;
 
 public class PersonKnowledge extends SpaceObjectKnowledge {
 	private final Person person;
@@ -35,8 +35,8 @@ public class PersonKnowledge extends SpaceObjectKnowledge {
 	}
 
 	@Override
-	public void draw(Player player, float width, float height) {
-		v.color(getSpaceObject().getColor());
-		v.text("Home Planet: " + getSpaceObject().getName(), 0, 0);
+	public void onLayout(Player player, Layout layout) {
+		layout.add(new TextDisplay("Home Planet: " + getSpaceObject().getName()))
+				.customize().color(getSpaceObject().getColor());
 	}
 }

@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableList;
 import vekta.KeyBinding;
 import vekta.Player;
 import vekta.Resources;
+import vekta.display.Layout;
+import vekta.display.VerticalLayout;
 import vekta.knowledge.*;
 
 import java.util.Comparator;
@@ -16,7 +18,7 @@ import static vekta.Vekta.*;
 public class KnowledgeContext implements Context, Comparator<Knowledge> {
 	private static final int PADDING = 150;
 	private static final int SPACING = 30;
-	private static final int ITEMS_BEFORE_SCROLL = 5;
+	private static final int ITEMS_BEFORE_SCROLL = 10;
 
 	private final Context parent;
 	private final Player player;
@@ -26,6 +28,7 @@ public class KnowledgeContext implements Context, Comparator<Knowledge> {
 	private int tabIndex;
 
 	private int cursorIndex;
+	private Layout cursorLayout;
 
 	public KnowledgeContext(Context parent, Player player) {
 		this.parent = parent;
@@ -39,7 +42,7 @@ public class KnowledgeContext implements Context, Comparator<Knowledge> {
 				new KnowledgeTab("Owned by " + player.getName(), o -> o instanceof ObservationKnowledge && ((ObservationKnowledge)o).getLevel() == ObservationLevel.OWNED),
 				new KnowledgeTab("Everything", o -> true)
 		);
-		
+
 		player.cleanupKnowledge();
 		setTabIndex(0);
 	}
@@ -54,7 +57,12 @@ public class KnowledgeContext implements Context, Comparator<Knowledge> {
 
 		this.tabIndex = index;
 		this.tab = tabs.get(index);
-		this.cursorIndex = 0;
+		setCursorIndex(0);
+	}
+
+	public void setCursorIndex(int index) {
+		this.cursorIndex = index;
+		this.cursorLayout = null;
 	}
 
 	public String getTitleText() {
@@ -158,7 +166,13 @@ public class KnowledgeContext implements Context, Comparator<Knowledge> {
 			v.textAlign(LEFT);
 			v.pushMatrix();
 			v.translate(x, y);
-			cursor.draw(player, width, height);
+
+			if(cursorLayout == null) {
+				cursorLayout = new VerticalLayout();
+				cursorLayout.getStyle().color(cursor.getColor(player));
+				cursor.onLayout(player, cursorLayout);
+			}
+			cursorLayout.draw(width, height);
 			v.popMatrix();
 		}
 
@@ -202,13 +216,13 @@ public class KnowledgeContext implements Context, Comparator<Knowledge> {
 		case MENU_UP:
 			if(cursorIndex > 0) {
 				Resources.playSound("change");
-				cursorIndex--;
+				setCursorIndex(cursorIndex - 1);
 			}
 			break;
 		case MENU_DOWN:
 			if(cursorIndex < getKnowledgeList().size() - 1) {
 				Resources.playSound("change");
-				cursorIndex++;
+				setCursorIndex(cursorIndex + 1);
 			}
 			break;
 		case MENU_LEFT:
@@ -238,7 +252,7 @@ public class KnowledgeContext implements Context, Comparator<Knowledge> {
 
 	@Override
 	public void mouseWheel(int amount) {
-		cursorIndex = max(0, min(getKnowledgeList().size() - 1, cursorIndex + amount));
+		setCursorIndex(max(0, min(getKnowledgeList().size() - 1, cursorIndex + amount)));
 	}
 
 	protected class KnowledgeTab {

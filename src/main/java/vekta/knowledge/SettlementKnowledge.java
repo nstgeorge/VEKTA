@@ -1,6 +1,9 @@
 package vekta.knowledge;
 
 import vekta.Player;
+import vekta.display.Layout;
+import vekta.display.TextDisplay;
+import vekta.display.VerticalLayout;
 import vekta.object.SpaceObject;
 import vekta.terrain.settlement.Settlement;
 
@@ -46,15 +49,14 @@ public class SettlementKnowledge extends SpaceObjectKnowledge {
 	}
 
 	@Override
-	public void draw(Player player, float width, float height) {
-		// TODO: generalize stat/quality rendering
-
-		v.fill(getSpaceObject().getColor());
-		v.text("Planet: " + getSpaceObject().getName(), 0, 0);
+	public void onLayout(Player player, Layout layout) {
+		layout.add(new TextDisplay("Planet: " + getSpaceObject().getName()))
+				.customize().color(getSpaceObject().getColor());
 
 		if(ObservationLevel.SCANNED.isAvailableFrom(getLevel())) {
-			v.fill(getSettlement().getColor());
-			v.text("Population: " + getSettlement().getPopulation(), 0, SPACING * 2);
+			Layout scanned = layout.add(new VerticalLayout());
+
+			scanned.add(new TextDisplay("Population: " + getSettlement().getPopulation()));
 		}
 	}
 }

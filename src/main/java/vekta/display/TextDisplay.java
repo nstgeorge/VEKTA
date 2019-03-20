@@ -15,13 +15,10 @@ public class TextDisplay extends StyledDisplay {
 	private float cachedWidth;
 	private List<String> cachedLines;
 
-	public TextDisplay(DisplayStyle style) {
-		super(style);
+	public TextDisplay() {
 	}
 
-	public TextDisplay(DisplayStyle style, String text) {
-		this(style);
-
+	public TextDisplay(String text) {
 		setText(text);
 	}
 
@@ -71,6 +68,9 @@ public class TextDisplay extends StyledDisplay {
 		if(width == cachedWidth) {
 			return cachedLines;
 		}
+
+		// Configure text width checking
+		v.textSize(getStyle().fontSize());
 
 		// Split words by space character
 		String[] words = text.split(WRAP_DELIMITER);

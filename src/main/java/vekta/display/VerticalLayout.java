@@ -3,9 +3,6 @@ package vekta.display;
 import static vekta.Vekta.v;
 
 public class VerticalLayout extends Layout {
-	public VerticalLayout(DisplayStyle style) {
-		super(style);
-	}
 
 	@Override
 	public float getWidth(float width, float height) {
@@ -36,11 +33,14 @@ public class VerticalLayout extends Layout {
 			//				break; // Don't draw beyond overflowing item
 			//			}
 
-			// Draw layout item
-			item.draw(width, height);
+			// Get preferred height of item
+			float h = item.getHeight(width, height);
+			
+			// Draw item
+			item.draw(width, h);
 
 			// Compute offset for next element
-			float y = item.getHeight(width, height) + getStyle().spacing();
+			float y = h + getStyle().spacing();
 			v.translate(0, y);
 			height -= y;
 		}

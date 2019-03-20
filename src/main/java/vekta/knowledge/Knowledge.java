@@ -1,6 +1,7 @@
 package vekta.knowledge;
 
 import vekta.Player;
+import vekta.display.Layout;
 
 import java.io.Serializable;
 
@@ -18,11 +19,8 @@ public interface Knowledge extends Serializable {
 	}
 
 	boolean isValid(Player player);
-	
-	/**
-	 * Draw observation information where the top left of the panel is (0, 0)
-	 */
-	void draw(Player player, float width, float height);
 
 	void onSelect(Player player);
+
+	void onLayout(Player player, Layout layout);
 }

@@ -1,16 +1,19 @@
 package vekta.display;
 
 public abstract class StyledDisplay implements Display {
-	private DisplayStyle style;
+	private DisplayStyle style = new DisplayStyle();
 
 	private boolean custom;
 
-	public StyledDisplay(DisplayStyle style) {
-		this.style = style;
+	public StyledDisplay() {
 	}
 
 	public DisplayStyle getStyle() {
 		return style;
+	}
+
+	public void setStyle(DisplayStyle style) {
+		this.style = style;
 	}
 
 	public DisplayStyle customize() {
