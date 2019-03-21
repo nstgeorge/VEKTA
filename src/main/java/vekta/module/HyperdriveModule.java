@@ -85,7 +85,7 @@ public class HyperdriveModule extends ShipModule {
 					(int)v.random(20, 30),
 					getShip().getColor()));
 			wave.setRadius(1);
-			wave.addVelocity(ship.getHeading().mult(-200 * timeScale / currentBoost * (TUNNEL_EFFECT + thrust)));
+			wave.addVelocity(ship.getHeading().mult(-200 * timeScale / currentBoost * TUNNEL_EFFECT));
 		}
 	}
 

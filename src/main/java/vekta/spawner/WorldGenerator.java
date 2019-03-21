@@ -76,11 +76,14 @@ public class WorldGenerator {
 	public static Settlement createSettlement() {
 		Faction faction = FactionGenerator.randomFaction();
 		float r = v.random(1);
-		if(r > .7) {
+		if(r > .8) {
 			return new CitySettlement(faction);
 		}
-		else if(r > .5) {
+		else if(r > .6) {
 			return new TownSettlement(faction);
+		}
+		else if(r > .5) {
+			return new FortSettlement(faction);
 		}
 		else if(r > .4) {
 			return new UnderworldSettlement(faction);

@@ -11,8 +11,6 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static processing.core.PApplet.println;
-
 public final class Player extends Syncable<Player> {
 	private /*@Sync */ Faction faction;
 	private /*@Sync */ ModularShip currentShip;
@@ -24,11 +22,12 @@ public final class Player extends Syncable<Player> {
 	//	private final HashMap<SpaceObject, List<String>> observedObjectFeatureList = new HashMap<>();
 	//	private final HashMap<SpaceObject, List<Settlement>> observedObjectSettlementList = new HashMap<>();
 
-	private final List<Knowledge> knowledgeList = new ArrayList<>();
-
 	private final List<Mission> missions = new ArrayList<>();
 	private Mission currentMission;
 
+	private final List<Knowledge> knowledge = new ArrayList<>();
+
+	private final Map<Knowledge, Integer> knowledgePrices = new HashMap<>();
 	private final Map<Item, Integer> buyPrices = new HashMap<>();
 
 	public Player(PlayerFaction faction) {
@@ -45,8 +44,6 @@ public final class Player extends Syncable<Player> {
 					currentShip.setController(null);
 				}
 				currentShip = ship;
-				ship.setController(Player.this);
-				ship.setColor(getColor());
 			}
 
 			@Override
@@ -93,45 +90,6 @@ public final class Player extends Syncable<Player> {
 		});
 	}
 
-	public List<Knowledge> getKnowledgeList() {
-		return knowledgeList;
-	}
-
-	public List<Knowledge> findKnowledge(Predicate<Knowledge> filter) {
-		return getKnowledgeList().stream().filter(filter).collect(Collectors.toList());
-	}
-
-	@SuppressWarnings("unchecked")
-	public <T extends Knowledge> List<T> findKnowledge(Class<T> type) {
-		return (List<T>)findKnowledge(type::isInstance);
-	}
-
-	public void addKnowledge(Knowledge knowledge) {
-		for(int i = 0; i < knowledgeList.size(); i++) {
-			Knowledge prev = knowledgeList.get(i);
-			println(knowledge.getName(), knowledge.getDelta(prev).name(), prev.getName());////
-			switch(knowledge.getDelta(prev)) {
-			case SAME:
-			case WORSE:
-				return; // Don't add if equivalent or better knowledge exists
-			case BETTER:
-				knowledgeList.set(i, knowledge);
-				return; // Swap out instead of adding new knowledge
-			}
-		}
-		knowledgeList.add(0, knowledge); // Add to beginning of list
-	}
-
-	public void cleanupKnowledge() {
-		//		// Clean up invalid knowledge
-		//		for(Knowledge k : new ArrayList<>(getKnowledgeList())) {
-		//			if(!k.isValid(this)) {
-		//				knowledgeList.remove(k);
-		//			}
-		//		}
-		// Disabled for testing (evaluate how to handle destroyed/despawned/dead entries)
-	}
-
 	public Faction getFaction() {
 		return faction;
 	}
@@ -171,6 +129,64 @@ public final class Player extends Syncable<Player> {
 	public void setCurrentMission(Mission currentMission) {
 		this.currentMission = currentMission;
 		syncChanges();
+	}
+
+	public List<Knowledge> getKnowledge() {
+		return knowledge;
+	}
+
+	public Map<Knowledge, Integer> getKnowledgePrices() {
+		return knowledgePrices;
+	}
+
+	public List<Knowledge> findKnowledge(Predicate<Knowledge> filter) {
+		return getKnowledge().stream().filter(filter).collect(Collectors.toList());
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends Knowledge> List<T> findKnowledge(Class<T> type) {
+		return (List<T>)findKnowledge(type::isInstance);
+	}
+
+	public void addKnowledge(Knowledge knowledge) {
+		if(!knowledge.isValid(this)) {
+			return;
+		}
+		boolean added = false;
+		int value = knowledge.getArchiveValue();
+		for(int i = 0; i < this.knowledge.size(); i++) {
+			Knowledge prev = this.knowledge.get(i);
+			switch(knowledge.getDelta(prev)) {
+			case SAME:
+			case WORSE:
+				return; // Don't add if equivalent or better knowledge exists
+			case BETTER:
+				this.knowledge.set(i, knowledge);
+				added = true;
+				if(knowledgePrices.containsKey(prev)) {
+					knowledgePrices.remove(prev);
+				}
+				else {
+					value -= prev.getArchiveValue(); // Subtract previously collected value
+				}
+				break; // Swap out instead of adding new knowledge
+			}
+		}
+		if(!added) {
+			this.knowledge.add(0, knowledge); // Add to beginning of list
+		}
+		if(value > 0) {
+			knowledgePrices.put(knowledge, value);
+		}
+	}
+
+	public void cleanupKnowledge() {
+		// Clean up invalid knowledge
+		for(Knowledge k : new ArrayList<>(getKnowledge())) {
+			if(!k.isValid(this)) {
+				knowledge.remove(k);
+			}
+		}
 	}
 
 	public void addListener(PlayerListener listener) {

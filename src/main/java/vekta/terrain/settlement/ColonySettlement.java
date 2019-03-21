@@ -35,7 +35,7 @@ public class ColonySettlement extends Settlement {
 	}
 
 	@Override
-	public void onSetupEconomy(Economy economy) {
+	public void setupEconomy(Economy economy) {
 		getEconomy().setValue(v.random(1, 2));
 		getEconomy().addModifier(new NoiseModifier(.5F));
 	}

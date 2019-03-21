@@ -12,7 +12,7 @@ import static processing.core.PConstants.CENTER;
 import static vekta.Vekta.*;
 
 /**
- * Default inject renderer implementation; draws buttons and select text
+ * Default menu renderer implementation; draws buttons and select text
  */
 public class MenuHandle implements Serializable {
 	private static final int ITEMS_BEFORE_SCROLL = 5; // Number of items before menu starts scrolling

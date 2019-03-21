@@ -9,7 +9,7 @@ import static vekta.Vekta.UI_COLOR;
 import static vekta.Vekta.v;
 
 /**
- * Menu renderer for trading
+ * Menu renderer for trade interactions
  */
 public class TradeMenuHandle extends MenuHandle {
 	private boolean buying;

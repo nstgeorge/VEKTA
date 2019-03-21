@@ -20,6 +20,11 @@ public class TerrestrialKnowledge extends SpaceObjectKnowledge {
 	}
 
 	@Override
+	public int getArchiveValue() {
+		return (int)(getLevel().ordinal() * getSpaceObject().getValueScale());
+	}
+
+	@Override
 	public TerrestrialPlanet getSpaceObject() {
 		return planet;
 	}

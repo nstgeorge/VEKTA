@@ -6,7 +6,7 @@ import vekta.terrain.settlement.District;
 import static vekta.Vekta.v;
 
 /**
- * Menu renderer for looting/scavenging
+ * Menu renderer for visiting districts
  */
 public class DistrictMenuHandle extends MenuHandle {
 	private final District district;

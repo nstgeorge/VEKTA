@@ -21,6 +21,7 @@ public class CitySettlement extends Settlement {
 		//		add(new District(this, "Government Offices", BuildingType.GOVERNMENT));
 
 		add(new CapitalBuilding(this));
+		add(new AcademyBuilding(this));
 
 		for(MarketBuilding building : WorldGenerator.randomMarkets(3, .4F)) {
 			add(building);
@@ -51,7 +52,7 @@ public class CitySettlement extends Settlement {
 	}
 
 	@Override
-	public void onSetupEconomy(Economy economy) {
+	public void setupEconomy(Economy economy) {
 		economy.setValue(v.random(5, 10));
 		economy.addModifier(new NoiseModifier(2));
 	}

@@ -64,7 +64,7 @@ public class TownSettlement extends Settlement {
 	}
 
 	@Override
-	public void onSetupEconomy(Economy economy) {
+	public void setupEconomy(Economy economy) {
 		economy.setValue(v.random(2, 5));
 		economy.addModifier(new NoiseModifier(1));
 	}

@@ -45,6 +45,10 @@ public class TerrestrialPlanet extends Planet {
 		return getTerrain().hasFeature("Habitable");
 	}
 
+	public float getValueScale() {
+		return 1;
+	}
+
 	@Override
 	public void onCollide(SpaceObject s) {
 		if(s instanceof ModularShip) {

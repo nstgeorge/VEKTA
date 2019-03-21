@@ -1,6 +1,7 @@
 package vekta.context;
 
 import com.google.common.collect.ImmutableList;
+import processing.event.KeyEvent;
 import vekta.KeyBinding;
 import vekta.Player;
 import vekta.Resources;
@@ -160,7 +161,7 @@ public class KnowledgeContext implements Context, Comparator<Knowledge> {
 			v.text(cursor.getName(), x + width / 2, y - 100);
 
 			// Draw cursor selection text
-			v.text(cursor.getSelectText(player), v.width / 2F, y + height - 40);
+			v.text(cursor.getCursorText(player), v.width / 2F, y + height - 40);
 
 			// Draw cursor details
 			v.textAlign(LEFT);
@@ -194,23 +195,27 @@ public class KnowledgeContext implements Context, Comparator<Knowledge> {
 	}
 
 	@Override
-	public void keyPressed(KeyBinding key) {
-		switch(key) {
-		case SHIP_TARGET_PLANET: // temp: [1]
-			setTabIndex(0);
-			break;
-		case SHIP_TARGET_ASTEROID: // temp: [2]
-			setTabIndex(1);
-			break;
-		case SHIP_TARGET_SHIP: // temp: [3]
-			setTabIndex(2);
-			break;
-		case SHIP_TARGET_OBJECTIVE: // temp: [4]
-			setTabIndex(3);
-			break;
+	public void keyPressed(KeyEvent event) {
+		Context.super.keyPressed(event);
 
+		////temp
+		if(event.getKey() == '1') {
+			setTabIndex(0);
+		}
+		if(event.getKey() == '2') {
+			setTabIndex(1);
+		}
+	}
+
+	@Override
+	public void keyPressed(KeyBinding key) {
+		if(!getKnowledgeList().isEmpty()) {
+			getCursor().onKeyPress(player, key);
+		}
+
+		switch(key) {
 		case MENU_CLOSE:
-		case SHIP_NAVIGATION:
+		case SHIP_KNOWLEDGE:
 			setContext(parent);
 			break;
 		case MENU_UP:
@@ -237,17 +242,7 @@ public class KnowledgeContext implements Context, Comparator<Knowledge> {
 				setTabIndex(++tabIndex);
 			}
 			break;
-		case MENU_SELECT:
-			if(!getKnowledgeList().isEmpty()) {
-				getCursor().onSelect(player);
-			}
-			break;
 		}
-	}
-
-	@Override
-	public void keyReleased(KeyBinding key) {
-
 	}
 
 	@Override

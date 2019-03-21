@@ -21,6 +21,11 @@ public class AbandonedSettlement extends Settlement {
 		return "Ruins";
 	}
 
+	@Override
+	public float getValueScale() {
+		return 2;
+	}
+
 	public Inventory getInventory() {
 		return inventory;
 	}

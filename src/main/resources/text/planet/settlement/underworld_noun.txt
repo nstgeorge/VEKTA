@@ -9,4 +9,7 @@ Gang
 Hideout
 Camp
 Cartel
+Fringe
+Badlands
 Underworld
+Underground

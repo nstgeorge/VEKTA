@@ -3,17 +3,12 @@ package vekta.item;
 import vekta.economy.Economy;
 
 public abstract class EconomyItem extends Item {
-	private final Economy economy;
 
-	public EconomyItem(String name, Economy economy) {
+	public EconomyItem(String name) {
 		super(name, ItemType.ECONOMY);
-
-		this.economy = economy;
 	}
 
-	public Economy getEconomy() {
-		return economy;
-	}
+	public abstract Economy getEconomy();
 
 	public float getValueScale() {
 		return 1;

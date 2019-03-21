@@ -22,7 +22,7 @@ public class DirectoryOverlay implements Overlay {
         this.player = player;
 
         PANES = new HashMap<KeyBinding, String>() {{
-            put(KeyBinding.SHIP_NAVIGATION, "Navigation");
+            put(KeyBinding.SHIP_KNOWLEDGE, "Navigation");
             put(KeyBinding.SHIP_LOADOUT, "Loadout");
             put(KeyBinding.SHIP_MISSIONS, "Missions");
             put(KeyBinding.SHIP_HYPERDRIVE, "Hyperdrive");

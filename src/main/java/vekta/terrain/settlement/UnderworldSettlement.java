@@ -5,6 +5,8 @@ import vekta.Player;
 import vekta.economy.Economy;
 import vekta.economy.NoiseModifier;
 import vekta.economy.TemporaryModifier;
+import vekta.menu.Menu;
+import vekta.menu.option.CoinMenuOption;
 import vekta.spawner.FactionGenerator;
 import vekta.spawner.ItemGenerator;
 import vekta.spawner.item.ClothingItemSpawner;
@@ -37,9 +39,9 @@ public class UnderworldSettlement extends Settlement {
 			}
 		}
 
-		if(v.chance(.75F)) {
-			add(new MarketBuilding(2, "Coins", ItemGenerator.getSpawner(CoinItemSpawner.class)));
-		}
+		//		if(v.chance(.75F)) {
+		//			add(new MarketBuilding(2, "Coins", ItemGenerator.getSpawner(CoinItemSpawner.class)));
+		//		}
 	}
 
 	@Override
@@ -48,14 +50,24 @@ public class UnderworldSettlement extends Settlement {
 	}
 
 	@Override
+	public float getValueScale() {
+		return 2;
+	}
+
+	@Override
 	public boolean hasSecurity(Player player) {
 		return false;
 	}
 
 	@Override
-	public void onSetupEconomy(Economy economy) {
+	public void setupEconomy(Economy economy) {
 		economy.setValue(v.random(.2F, 1));
 		economy.addModifier(new NoiseModifier(.1F));
 		economy.addModifier(new TemporaryModifier("Criminal Jurisdiction", -.01F, 0));
+	}
+
+	@Override
+	public void onSettlementMenu(Menu menu) {
+		menu.add(new CoinMenuOption()); // Add street coin market
 	}
 }

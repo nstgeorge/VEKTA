@@ -1,18 +1,35 @@
 package vekta.item;
 
+import vekta.economy.Coin;
+import vekta.economy.CoinMarket;
 import vekta.economy.Economy;
 
 public class CoinItem extends EconomyItem {
-	private final float valueScale;
+	private final Coin coin;
+	private final CoinMarket market;
 
-	public CoinItem(String name, Economy economy, float valueScale) {
-		super(name, economy);
+	public CoinItem(Coin coin, CoinMarket market) {
+		super(coin.getName());
 
-		this.valueScale = valueScale;
+		this.coin = coin;
+		this.market = market;
+	}
+
+	public Coin getCoin() {
+		return coin;
+	}
+
+	public CoinMarket getMarket() {
+		return market;
+	}
+
+	@Override
+	public Economy getEconomy() {
+		return getMarket().getEconomy();
 	}
 
 	@Override
 	public float getValueScale() {
-		return valueScale;
+		return getCoin().getValueScale();
 	}
 }

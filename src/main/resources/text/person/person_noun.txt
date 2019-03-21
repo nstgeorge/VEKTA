@@ -24,6 +24,7 @@ Ambassador
 Watcher
 Doctor
 Warrior
+Conqueror
 Defender
 Dreamer
 Vagabond
@@ -38,3 +39,5 @@ Protector
 Seeker
 Agent
 Inquisitor
+Scourge
+Stranger

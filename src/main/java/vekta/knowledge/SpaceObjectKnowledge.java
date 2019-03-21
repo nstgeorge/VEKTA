@@ -5,8 +5,15 @@ import vekta.Player;
 import vekta.Settings;
 import vekta.display.Layout;
 import vekta.display.SpaceObjectDisplay;
+import vekta.menu.Menu;
+import vekta.menu.handle.KnowledgeMenuHandle;
+import vekta.menu.option.BackOption;
+import vekta.menu.option.TargetOption;
 import vekta.object.SpaceObject;
 import vekta.overlay.singleplayer.TelemetryOverlay;
+
+import static vekta.Vekta.getContext;
+import static vekta.Vekta.setContext;
 
 public abstract class SpaceObjectKnowledge extends ObservationKnowledge {
 	private static final int PREVIEW_SIZE = 200;
@@ -38,21 +45,33 @@ public abstract class SpaceObjectKnowledge extends ObservationKnowledge {
 	}
 
 	@Override
-	public String getSelectText(Player player) {
+	public String getCursorText(Player player) {
 		if(player.getShip().findNavigationTarget() == getSpaceObject()) {
 			return ":: Targeted ::";
 		}
-		return Settings.getKeyText(KeyBinding.MENU_SELECT) + " to set target";
+		return Settings.getKeyText(KeyBinding.SHIP_TARGET) + " to set target, " + Settings.getKeyText(KeyBinding.MENU_SELECT) + " for options";
 	}
 
 	@Override
-	public void onSelect(Player player) {
-		player.getShip().setNavigationTarget(getSpaceObject());
+	public void onKeyPress(Player player, KeyBinding key) {
+		if(key == KeyBinding.MENU_SELECT) {
+			Menu menu = new Menu(player, new BackOption(getContext()), new KnowledgeMenuHandle(this));
+			onMenu(menu);
+			menu.addDefault();
+			setContext(menu);
+		}
+		else if(key == KeyBinding.SHIP_TARGET) {
+			player.getShip().setNavigationTarget(getSpaceObject());
+		}
 	}
 
 	@Override
 	public void onLayout(Player player, Layout layout) {
 		SpaceObject displayObject = ObservationLevel.SCANNED.isAvailableFrom(getLevel()) ? getSpaceObject() : null;
 		layout.add(new SpaceObjectDisplay(displayObject, PREVIEW_SIZE));
+	}
+
+	public void onMenu(Menu menu) {
+		menu.add(new TargetOption(getSpaceObject()));
 	}
 }

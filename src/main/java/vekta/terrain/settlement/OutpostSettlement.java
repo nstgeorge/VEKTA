@@ -24,7 +24,7 @@ public class OutpostSettlement extends Settlement {
 	}
 
 	@Override
-	public void onSetupEconomy(Economy economy) {
+	public void setupEconomy(Economy economy) {
 		economy.setValue(v.random(.2F, 1));
 		economy.addModifier(new NoiseModifier(.1F));
 	}

@@ -2,8 +2,10 @@ package vekta;
 
 import java.awt.event.KeyEvent;
 
-import static java.awt.event.KeyEvent.*;
-import static processing.core.PConstants.*;
+import static java.awt.event.KeyEvent.VK_NUMPAD5;
+import static java.awt.event.KeyEvent.VK_NUMPAD9;
+import static processing.core.PConstants.CONTROL;
+import static processing.core.PConstants.ESC;
 
 public enum KeyBinding {
 	MENU_UP('w'),
@@ -23,12 +25,12 @@ public enum KeyBinding {
 	SHIP_MENU('v'),
 	SHIP_LOADOUT('e'),
 	SHIP_MISSIONS('q'),
-	SHIP_NAVIGATION('c'),
+	SHIP_KNOWLEDGE('c'),
 	SHIP_INTERNET('y'),
 	OBJECTIVE_CYCLE('o'),
 	MISSION_CYCLE('p'),
 	SHIP_LAND('\t'),
-	SHIP_TARGET_CLEAR('t'),
+	SHIP_TARGET('t'),
 	SHIP_TARGET_PLANET('1'),
 	SHIP_TARGET_ASTEROID('2'),
 	SHIP_TARGET_SHIP('3'),

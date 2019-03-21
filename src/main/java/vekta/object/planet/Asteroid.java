@@ -19,6 +19,11 @@ public class Asteroid extends TerrestrialPlanet {
 	}
 
 	@Override
+	public float getValueScale() {
+		return .5F;
+	}
+
+	@Override
 	public RenderLevel getRenderLevel() {
 		return RenderLevel.PLANET;
 	}

@@ -14,7 +14,7 @@ public class InternetMenuOption implements MenuOption {
 
 	@Override
 	public String getName() {
-		return connected ? "Internet" : "(No Internet Relay)";
+		return connected ? "Internet" : "(Too Remote for Internet)";
 	}
 
 	@Override

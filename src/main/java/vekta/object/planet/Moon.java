@@ -23,6 +23,11 @@ public class Moon extends TerrestrialPlanet {
 		this.orbitDistance = parent.getPosition().sub(position).mag();
 	}
 
+	@Override
+	public float getValueScale() {
+		return .75F;
+	}
+
 	public final Planet getParent() {
 		return parent;
 	}

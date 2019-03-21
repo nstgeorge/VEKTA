@@ -40,7 +40,9 @@ public class HouseBuilding implements SettlementPart {
 
 	@Override
 	public void setupMenu(Menu menu) {
-		Dialog dialog = DialogGenerator.randomVisitDialog(menu.getPlayer(), getPerson());
-		menu.add(new DialogOption("Visit " + getPerson().getName(), dialog));
+		if(!getPerson().isDead()) {
+			Dialog dialog = DialogGenerator.randomVisitDialog(menu.getPlayer(), getPerson());
+			menu.add(new DialogOption("Visit " + getPerson().getName(), dialog));
+		}
 	}
 }

@@ -114,9 +114,9 @@ public class Vekta extends PApplet {
 		if(context != null) {
 			context.render();
 		}
-		
+
 		Resources.updateAudio();
-		
+
 		// FPS OVERLAY
 		fill(255);
 		textAlign(LEFT);
@@ -151,9 +151,18 @@ public class Vekta extends PApplet {
 	@Override
 	public void mousePressed() {
 		if(context != null) {
-			// TODO: allow mouse events binding to user-specified keys
-			context.keyPressed(KeyBinding.SHIP_ATTACK);
-			context.keyPressed(KeyBinding.MENU_SELECT);
+			switch(v.mouseButton) {
+			case LEFT:
+				context.keyPressed(KeyBinding.SHIP_ATTACK);
+				context.keyPressed(KeyBinding.MENU_SELECT);
+				break;
+			case RIGHT:
+				context.keyPressed(KeyBinding.SHIP_DEFEND);
+				break;
+			case CENTER:
+				context.keyPressed(KeyBinding.SHIP_KNOWLEDGE);
+				break;
+			}
 		}
 	}
 

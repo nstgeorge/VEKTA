@@ -1,5 +1,6 @@
 package vekta.knowledge;
 
+import vekta.KeyBinding;
 import vekta.Player;
 import vekta.display.Layout;
 
@@ -10,17 +11,17 @@ public interface Knowledge extends Serializable {
 
 	String getName();
 
+	int getArchiveValue();
+	
 	int getColor(Player player);
 
 	String getSecondaryText(Player player);
 
-	default String getSelectText(Player player) {
-		return "select";
-	}
+	String getCursorText(Player player);
 
 	boolean isValid(Player player);
 
-	void onSelect(Player player);
+	void onKeyPress(Player player, KeyBinding key);
 
 	void onLayout(Player player, Layout layout);
 }

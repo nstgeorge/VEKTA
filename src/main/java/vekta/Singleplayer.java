@@ -6,8 +6,10 @@ import processing.sound.LowPass;
 import vekta.connection.message.Message;
 import vekta.context.PauseMenuContext;
 import vekta.context.World;
+import vekta.economy.Economy;
 import vekta.item.ColonyItem;
 import vekta.item.ModuleItem;
+import vekta.knowledge.ObservationLevel;
 import vekta.menu.Menu;
 import vekta.menu.handle.MainMenuHandle;
 import vekta.module.*;
@@ -20,11 +22,9 @@ import vekta.object.Targeter;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.PlayerShip;
 import vekta.object.ship.SpaceStation;
-import vekta.knowledge.ObservationLevel;
 import vekta.overlay.singleplayer.PlayerOverlay;
 import vekta.person.Person;
 import vekta.sound.SoundGroup;
-import vekta.spawner.EconomyGenerator;
 import vekta.spawner.EventGenerator;
 import vekta.spawner.WorldGenerator;
 import vekta.spawner.item.ClothingItemSpawner;
@@ -370,14 +370,16 @@ public class Singleplayer implements World, PlayerListener {
 		}
 
 		if(economyCt.cycle()) {
-			List<Faction> factions = state.getFactions();
-			if(!factions.isEmpty()) {
-				EconomyGenerator.updateFaction(v.random(factions));
-				for(Faction faction : factions) {
-					faction.getEconomy().update();
+			List<Economy> economiesToRemove = new ArrayList<>(1);
+			for(Economy economy : state.getEconomies()) {
+				if(economy.isAlive()) {
+					economy.update();
+				}
+				else {
+					economiesToRemove.add(economy);
 				}
 			}
-			getPlayer().getFaction().getEconomy().update();
+			state.getEconomies().removeAll(economiesToRemove);
 		}
 
 		prevLevel = level;
@@ -551,6 +553,9 @@ public class Singleplayer implements World, PlayerListener {
 		}
 		else if(Faction.class.isAssignableFrom(type)) {
 			candidates = state.getFactions();
+		}
+		else if(Economy.class.isAssignableFrom(type)) {
+			candidates = state.getEconomies();
 		}
 		else if(Player.class.isAssignableFrom(type)) {
 			candidates = Collections.singletonList(getPlayer());

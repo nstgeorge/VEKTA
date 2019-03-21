@@ -10,7 +10,7 @@ import java.util.List;
 import static vekta.Vekta.*;
 
 /**
- * Main inject renderer
+ * Menu renderer for surveying/scanning an object
  */
 public class SurveyMenuHandle extends MenuHandle {
 	private static final int PLANET_SIZE = 200;

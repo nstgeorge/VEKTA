@@ -2,26 +2,25 @@ package vekta.mission.reward;
 
 import vekta.Player;
 import vekta.economy.Economy;
-import vekta.economy.EconomyDescriptor;
 import vekta.economy.ProductivityModifier;
 import vekta.mission.Mission;
 
 public class EconomyReward extends Reward {
-	private final EconomyDescriptor descriptor;
+	private final Economy economy;
 	private final ProductivityModifier modifier;
 
-	public EconomyReward(EconomyDescriptor descriptor, ProductivityModifier modifier) {
-		this.descriptor = descriptor;
+	public EconomyReward(Economy economy, ProductivityModifier modifier) {
+		this.economy = economy;
 		this.modifier = modifier;
 	}
 
 	@Override
 	public String getName() {
-		return modifier.getModifierName() + " (" + descriptor.getName() + ")";
+		return modifier.getModifierName() + " (" + economy.getContainer().getName() + ")";
 	}
 
 	public Economy getEconomy() {
-		return descriptor.getEconomy();
+		return economy;
 	}
 
 	public ProductivityModifier getModifier() {
@@ -30,7 +29,7 @@ public class EconomyReward extends Reward {
 
 	@Override
 	public int getColor() {
-		return descriptor.getColor();
+		return economy.getContainer().getColor();
 	}
 
 	@Override

@@ -1,14 +1,16 @@
 package vekta;
 
 import vekta.economy.Economy;
-import vekta.economy.EconomyDescriptor;
+import vekta.economy.EconomyContainer;
 import vekta.economy.NoiseModifier;
 import vekta.economy.ProductivityModifier;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class Faction extends Syncable<Faction> implements Renameable, EconomyDescriptor, ProductivityModifier {
+import static vekta.Vekta.register;
+
+public class Faction extends Syncable<Faction> implements Renameable, EconomyContainer, ProductivityModifier {
 	private static final float BASE_PRODUCTIVITY = .2F;
 	private static final float ALLY_MODIFIER = .2F;
 	private static final float ENEMY_MODIFIER = -.3F;
@@ -25,7 +27,7 @@ public class Faction extends Syncable<Faction> implements Renameable, EconomyDes
 		this.name = name;
 		this.color = color;
 
-		economy = new Economy(value);
+		economy = register(new Economy(this, value));
 		economy.addModifier(this); // Add faction productivity to economy
 		if(risk > 0) {
 			// Add economic variability/risk
@@ -55,7 +57,6 @@ public class Faction extends Syncable<Faction> implements Renameable, EconomyDes
 		syncChanges();
 	}
 
-	@Override
 	public Economy getEconomy() {
 		return economy;
 	}
@@ -116,6 +117,11 @@ public class Faction extends Syncable<Faction> implements Renameable, EconomyDes
 
 			syncChanges();
 		}
+	}
+
+	@Override
+	public boolean isEconomyAlive() {
+		return true;
 	}
 
 	@Override

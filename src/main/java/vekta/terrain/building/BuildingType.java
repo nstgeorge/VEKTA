@@ -7,4 +7,5 @@ public enum BuildingType {
 	INDUSTRIAL,
 	MARKET,
 	ECONOMY,
+	KNOWLEDGE,
 }

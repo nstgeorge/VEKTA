@@ -102,7 +102,7 @@ public class TargetingModule extends ShipModule implements Targeter {
 	@Override
 	public void onKeyPress(KeyBinding key) {
 		switch(key) {
-		case SHIP_TARGET_CLEAR:
+		case SHIP_TARGET:
 			setMode(null);
 			break;
 		case SHIP_TARGET_PLANET:

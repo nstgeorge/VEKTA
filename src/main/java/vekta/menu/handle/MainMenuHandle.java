@@ -8,9 +8,6 @@ import vekta.menu.Menu;
 import static processing.core.PConstants.CENTER;
 import static vekta.Vekta.v;
 
-/**
- * Main inject renderer
- */
 public class MainMenuHandle extends MenuHandle {
 	public static final Hyperspace HYPERSPACE = new Hyperspace(
 			new PVector(v.width / 2F, v.height / 2F - 100),

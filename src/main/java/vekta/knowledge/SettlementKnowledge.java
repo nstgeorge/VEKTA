@@ -18,6 +18,11 @@ public class SettlementKnowledge extends SpaceObjectKnowledge {
 		this.settlement = settlement;
 	}
 
+	@Override
+	public int getArchiveValue() {
+		return (int)(getLevel().ordinal() / 2 * getSettlement().getValueScale());
+	}
+
 	public Settlement getSettlement() {
 		return settlement;
 	}
@@ -35,7 +40,7 @@ public class SettlementKnowledge extends SpaceObjectKnowledge {
 	@Override
 	public String getName() {
 		if(getLevel() == ObservationLevel.AWARE) {
-			return "(Unknown Settlement)";
+			return "(Unknown " + getSettlement().getGenericName() + ")";
 		}
 		return getSettlement().getName();
 	}
@@ -55,8 +60,13 @@ public class SettlementKnowledge extends SpaceObjectKnowledge {
 
 		if(ObservationLevel.SCANNED.isAvailableFrom(getLevel())) {
 			Layout scanned = layout.add(new VerticalLayout());
+			scanned.customize().spacing(layout.getStyle().spacing() / 2);
 
-			scanned.add(new TextDisplay("Population: " + getSettlement().getPopulation()));
+			scanned.add(new TextDisplay("Type: " + getSettlement().getGenericName()));
+
+			scanned.add(new TextDisplay(getSettlement().isInhabited()
+					? "Population: " + getSettlement().getPopulation()
+					: "Uninhabited"));
 		}
 	}
 }

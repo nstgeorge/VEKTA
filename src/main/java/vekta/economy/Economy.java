@@ -14,6 +14,8 @@ public class Economy extends Syncable<Economy> {
 	private static final int HISTORY_LENGTH = 100;
 	private static final float PRODUCTIVITY_EFFECT_SCALE = .05F;
 
+	private final EconomyContainer container;
+
 	private @Sync float value; // The overall value of the economy 
 	private @Sync float productivity; // The most recent change in value of the economy
 
@@ -22,12 +24,21 @@ public class Economy extends Syncable<Economy> {
 
 	private final @Sync float[] history = new float[HISTORY_LENGTH];
 
-	public Economy() {
-		this(0);
+	public Economy(EconomyContainer container) {
+		this(container, 0);
 	}
 
-	public Economy(float value) {
+	public Economy(EconomyContainer container, float value) {
+		this.container = container;
 		this.value = value;
+	}
+
+	public EconomyContainer getContainer() {
+		return container;
+	}
+
+	public boolean isAlive() {
+		return getContainer().isEconomyAlive();
 	}
 
 	public float getValue() {

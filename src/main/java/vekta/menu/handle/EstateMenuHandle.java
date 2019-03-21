@@ -6,7 +6,7 @@ import vekta.menu.Menu;
 import static vekta.Vekta.v;
 
 /**
- * Menu renderer for looting/scavenging
+ * Menu renderer for visiting estates
  */
 public class EstateMenuHandle extends MenuHandle {
 	private final Estate estate;

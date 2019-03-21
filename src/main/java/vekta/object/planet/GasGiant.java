@@ -6,11 +6,7 @@ import processing.core.PVector;
 import static processing.core.PConstants.ELLIPSE;
 import static vekta.Vekta.v;
 
-/**
- * Gas giant planet variant
- */
 public class GasGiant extends Planet {
-
 	private final float ringAngle;
 	private final float ringRatio;
 	private final float[] ringDistances;
@@ -42,7 +38,7 @@ public class GasGiant extends Planet {
 	public void drawNearby(float r) {
 		super.drawNearby(r);
 
-		// Initialize in draw loop for correct rendering paramters
+		// Initialize in draw loop for consistent rendering paramters
 		if(rings == null) {
 			rings = new PShape[ringDistances.length];
 			for(int i = 0; i < ringDistances.length; i++) {

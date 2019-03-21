@@ -20,6 +20,11 @@ public class EmptySettlement extends Settlement {
 		return "Territory";
 	}
 
+	@Override
+	public float getValueScale() {
+		return .5F;
+	}
+
 	public Inventory getInventory() {
 		return inventory;
 	}

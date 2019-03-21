@@ -1,12 +1,15 @@
 package vekta.spawner.reward;
 
 import vekta.Faction;
+import vekta.economy.Economy;
 import vekta.economy.ProductivityModifier;
 import vekta.economy.TemporaryModifier;
 import vekta.mission.Mission;
 import vekta.mission.reward.EconomyReward;
 import vekta.spawner.FactionGenerator;
 import vekta.spawner.MissionGenerator;
+import vekta.spawner.PersonGenerator;
+import vekta.terrain.settlement.Settlement;
 
 import static processing.core.PApplet.sq;
 import static vekta.Vekta.v;
@@ -27,11 +30,23 @@ public class EconomyRewardSpawner implements MissionGenerator.RewardSpawner {
 
 	@Override
 	public void setup(Mission mission) {
-		Faction faction = v.chance(.5F)
-				? mission.getPlayer().getFaction()
-				: FactionGenerator.randomFaction();
+		Faction faction;
+		Economy economy;
 
-		float amount = faction.getEconomy().getValue() * sq(mission.getTier()) * MODIFIER_SCALE;
+		// Sometimes affect economy of specific settlement
+		if(v.chance(.25F)) {
+			Settlement settlement = PersonGenerator.randomHome();
+			faction = settlement.getFaction();
+			economy = settlement.getEconomy();
+		}
+		else {
+			faction = v.chance(.5F)
+					? mission.getPlayer().getFaction()
+					: FactionGenerator.randomFaction();
+			economy = faction.getEconomy();
+		}
+
+		float amount = economy.getValue() * sq(mission.getTier()) * MODIFIER_SCALE;
 
 		ProductivityModifier modifier;
 
@@ -42,6 +57,6 @@ public class EconomyRewardSpawner implements MissionGenerator.RewardSpawner {
 			modifier = new TemporaryModifier("Market Panic", -amount, amount / MODIFIER_DURATION);
 		}
 
-		mission.add(new EconomyReward(faction, modifier));
+		mission.add(new EconomyReward(economy, modifier));
 	}
 }

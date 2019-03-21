@@ -60,7 +60,7 @@ public class PersonGenerator {
 				homes.add((Settlement)mod);
 			}
 		}
-		return homes.isEmpty() ? v.random(homes) : randomHome();
+		return !homes.isEmpty() ? v.random(homes) : randomHome();
 	}
 
 	public static Settlement randomHome() {

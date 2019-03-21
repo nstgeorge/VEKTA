@@ -3,8 +3,6 @@ package vekta.menu.option;
 import vekta.Player;
 import vekta.menu.Menu;
 import vekta.menu.handle.ObjectMenuHandle;
-import vekta.module.ModuleType;
-import vekta.object.Targeter;
 
 import static vekta.Vekta.setContext;
 
@@ -32,12 +30,7 @@ public class PlayerOption implements MenuOption {
 	@Override
 	public void onSelect(Menu menu) {
 		Menu sub = new Menu(menu.getPlayer(), menu.getDefault(), new ObjectMenuHandle(player.getShip()));
-		sub.add(new CustomOption("Set Target", m -> {
-			Targeter t = (Targeter)m.getPlayer().getShip().getModule(ModuleType.NAVIGATION);
-			if(t != null) {
-				t.setTarget(player.getShip());
-			}
-		}).withRemoval());
+		sub.add(new TargetOption(player.getShip()));
 		if(menu.getPlayer().getCurrentMission() != null) {
 			sub.add(new CustomOption("Share Mission", m -> m.getPlayer().getCurrentMission().share(getPlayer()))
 					.withRemoval());

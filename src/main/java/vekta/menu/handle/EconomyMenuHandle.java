@@ -20,7 +20,7 @@ import static processing.core.PConstants.LEFT;
 import static vekta.Vekta.*;
 
 /**
- * Mission selector inject handle
+ * Mission selector menu handle
  */
 public class EconomyMenuHandle extends MenuHandle {
 	private final Inventory inv;

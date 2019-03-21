@@ -31,7 +31,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			KeyBinding.SHIP_MISSIONS, MissionMenuOption.class,
 			KeyBinding.SHIP_LOADOUT, LoadoutMenuOption.class,
 			KeyBinding.SHIP_INTERNET, InternetMenuOption.class,
-			KeyBinding.SHIP_NAVIGATION, PlayerKnowledgeOption.class
+			KeyBinding.SHIP_KNOWLEDGE, PlayerKnowledgeOption.class
 	);
 
 	private static final float ENERGY_TIME_SCALE = 1e-4F;
@@ -69,11 +69,13 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			return;
 		}
 		if(hasController()) {
-			getController().emit(PlayerEvent.CHANGE_SHIP, null);
+			getController().removeListener(this);
 		}
 		this.controller = player;
-		player.addListener(this);
-		getController().emit(PlayerEvent.CHANGE_SHIP, this);
+		if(hasController()) {
+			getController().addListener(this);
+			getController().emit(PlayerEvent.CHANGE_SHIP, this);
+		}
 	}
 
 	public boolean isLanding() {
@@ -250,9 +252,6 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		modules.add(module);
 		module.onInstall(this);
 		if(hasController()) {
-			//			if(module instanceof PlayerListener) {
-			//				getController().addListener((PlayerListener)module);
-			//			}
 			getController().emit(PlayerEvent.INSTALL_MODULE, module);
 		}
 	}
@@ -263,15 +262,12 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			getInventory().add(new ModuleItem(module));
 			module.onUninstall(this);
 			if(hasController()) {
-				//				if(module instanceof PlayerListener) {
-				//					getController().removeListener((PlayerListener)module);
-				//				}
 				getController().emit(PlayerEvent.UNINSTALL_MODULE, module);
 			}
 		}
 	}
 
-	public PVector getAcceleration() {
+	public PVector getAccelerationReference() {
 		return acceleration;
 	}
 
@@ -393,20 +389,6 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	//// InventoryListener hooks
 
 	@Override
-	public void onMoneyAdd(int amount) {
-		//		if(hasController()) {
-		//			getController().send("+ " + amount + " G").withTime(.5F);
-		//		}
-	}
-
-	@Override
-	public void onMoneyRemove(int amount) {
-		//		if(hasController()) {
-		//			getController().send("- " + amount + " G").withTime(.5F);
-		//		}
-	}
-
-	@Override
 	public void onItemAdd(Item item) {
 		if(hasController()) {
 			getController().emit(PlayerEvent.ADD_ITEM, item);
@@ -420,21 +402,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		}
 	}
 
-	//// Syncable overrides
-
-	//	@Override
-	//	public boolean shouldSyncField(Field field) {
-	//		return !"controller".equals(field.getName()); //// TODO: prevent cycles differently
-	//	}
-
 	//// PlayerListener callbacks, active when hasController() == true
-
-	@Override
-	public void onChangeShip(ModularShip ship) {
-		if(ship != this) {
-			getController().removeListener(this);
-		}
-	}
 
 	@Override
 	public void onMenu(Menu menu) {

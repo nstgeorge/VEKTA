@@ -1,6 +1,7 @@
 package vekta;
 
 import processing.core.PVector;
+import vekta.economy.Economy;
 import vekta.object.SpaceObject;
 import vekta.person.Person;
 
@@ -26,6 +27,7 @@ public final class WorldState implements Serializable {
 
 	private final List<Person> people = new ArrayList<>();
 	private final List<Faction> factions = new ArrayList<>();
+	private final List<Economy> economies = new ArrayList<>();
 
 	private final GlobalOffset globalOffset = new GlobalOffset();
 
@@ -66,6 +68,10 @@ public final class WorldState implements Serializable {
 
 	public List<Faction> getFactions() {
 		return factions;
+	}
+
+	public List<Economy> getEconomies() {
+		return economies;
 	}
 
 	public void startUpdate() {
@@ -182,6 +188,9 @@ public final class WorldState implements Serializable {
 		else if(object instanceof Faction && !factions.contains(object) && !(object instanceof PlayerFaction)) {
 			factions.add((Faction)object);
 		}
+		else if(object instanceof Economy && !economies.contains(object)) {
+			economies.add((Economy)object);
+		}
 	}
 
 	private void addImmediately(SpaceObject s) {
@@ -204,6 +213,9 @@ public final class WorldState implements Serializable {
 		}
 		else if(object instanceof Faction) {
 			factions.remove(object);
+		}
+		else if(object instanceof Economy) {
+			economies.remove(object);
 		}
 		//		else {
 		//			throw new RuntimeException("Cannot remove object: " + object);

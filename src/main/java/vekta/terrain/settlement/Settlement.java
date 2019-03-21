@@ -2,12 +2,12 @@ package vekta.terrain.settlement;
 
 import vekta.*;
 import vekta.economy.Economy;
-import vekta.economy.EconomyDescriptor;
+import vekta.economy.EconomyContainer;
 import vekta.economy.ProductivityModifier;
-import vekta.menu.Menu;
-import vekta.object.SpaceObject;
 import vekta.knowledge.ObservationLevel;
 import vekta.knowledge.SettlementKnowledge;
+import vekta.menu.Menu;
+import vekta.object.SpaceObject;
 import vekta.terrain.LandingSite;
 import vekta.terrain.Terrain;
 import vekta.terrain.building.BuildingType;
@@ -16,8 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static processing.core.PApplet.ceil;
+import static vekta.Vekta.register;
 
-public abstract class Settlement extends Syncable<Settlement> implements SettlementPart, EconomyDescriptor, ProductivityModifier {
+public abstract class Settlement extends Syncable<Settlement> implements SettlementPart, EconomyContainer, ProductivityModifier {
 	private static final float POPULATION_PER_VALUE = 10000;
 
 	private final @Sync List<SettlementPart> parts = new ArrayList<>();
@@ -39,8 +40,8 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 		this.name = name;
 		this.overview = overview;
 
-		economy = new Economy();
-		onSetupEconomy(economy);
+		economy = register(new Economy(this));
+		setupEconomy(economy);
 		economy.fillHistory();
 
 		setFaction(faction);
@@ -84,6 +85,10 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 	@Override
 	public int getColor() {
 		return getFaction().getColor();
+	}
+
+	public float getValueScale() {
+		return 1;
 	}
 
 	@Override
@@ -184,7 +189,7 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 		}
 	}
 
-	public void onSetupEconomy(Economy economy) {
+	public void setupEconomy(Economy economy) {
 	}
 
 	public void onSetup() {
@@ -217,17 +222,22 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 	}
 
 	@Override
+	public boolean isEconomyAlive() {
+		return !getSite().getParent().isDestroyed();
+	}
+
+	@Override
 	public String getModifierName() {
 		return "Settlement: " + getName();
 	}
 
 	@Override
 	public float updateModifier(Economy economy) {
-		if(getSite().getParent().isDestroyed()) {
+		if(!isEconomyAlive()) {
 			economy.removeModifier(this);
 			return 0;
 		}
-		getEconomy().update();
+		//		getEconomy().update();
 		return getEconomy().getProductivity() * getEconomySignificance();
 	}
 }

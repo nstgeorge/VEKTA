@@ -12,7 +12,7 @@ import java.util.List;
 import static vekta.Vekta.v;
 
 /**
- * Mission selector inject handle
+ * Mission selector menu handle
  */
 public class MissionMenuHandle extends MenuHandle {
 	public MissionMenuHandle() {

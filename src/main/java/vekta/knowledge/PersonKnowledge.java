@@ -20,6 +20,16 @@ public class PersonKnowledge extends SpaceObjectKnowledge {
 	}
 
 	@Override
+	public int getArchiveValue() {
+		return 0;
+	}
+
+	@Override
+	public String getName() {
+		return getPerson().getName();
+	}
+
+	@Override
 	public SpaceObject getSpaceObject() {
 		return getPerson().findHomeObject();
 	}
