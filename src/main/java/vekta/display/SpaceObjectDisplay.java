@@ -57,7 +57,7 @@ public class SpaceObjectDisplay implements Display {
 			v.textSize(getSize() / 2);
 			v.fill(100);
 
-			v.text("?", width / 2, height / 4);
+			v.text("?", width / 2, height * 3 / 8);
 		}
 	}
 }

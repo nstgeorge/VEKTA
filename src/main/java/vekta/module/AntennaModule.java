@@ -3,8 +3,12 @@ package vekta.module;
 import vekta.menu.Menu;
 import vekta.menu.handle.ObjectMenuHandle;
 import vekta.menu.option.InternetMenuOption;
+import vekta.object.SpaceObject;
+import vekta.object.planet.TerrestrialPlanet;
 
+import static processing.core.PApplet.sq;
 import static vekta.Vekta.AU_DISTANCE;
+import static vekta.Vekta.getWorld;
 
 public class AntennaModule extends ShipModule {
 	private static final float RANGE_SCALE = AU_DISTANCE;
@@ -46,8 +50,17 @@ public class AntennaModule extends ShipModule {
 	@Override
 	public void onMenu(Menu menu) {
 		if(menu.getHandle() instanceof ObjectMenuHandle && ((ObjectMenuHandle)menu.getHandle()).getSpaceObject() == getShip()) {
-			boolean connected = true; // TODO: determine whether in connection range
+			boolean connected = findRelay() != null;
 			menu.add(new InternetMenuOption(connected));
 		}
+	}
+
+	private SpaceObject findRelay() {
+		for(TerrestrialPlanet planet : getWorld().findObjects(TerrestrialPlanet.class)) {
+			if(planet.getTerrain().isInhabited() && getShip().relativePosition(planet).magSq() <= sq(getRange())) {
+				return planet;
+			}
+		}
+		return null;
 	}
 }

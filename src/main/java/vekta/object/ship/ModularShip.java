@@ -457,7 +457,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			Menu menu = openShipMenu();
 			if(shortcutType != null) {
 				for(MenuOption option : menu.getOptions()) {
-					if(shortcutType.isInstance(option)) {
+					if(shortcutType.isInstance(option) && option.isEnabled()) {
 						menu.select(option);
 						break;
 					}
