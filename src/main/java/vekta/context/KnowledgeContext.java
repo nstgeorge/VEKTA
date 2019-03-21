@@ -70,7 +70,7 @@ public class KnowledgeContext implements Context, Comparator<Knowledge> {
 	}
 
 	public String getNoneFoundText() {
-		return "No information found. \nLand, dock, or scan objects to collect data. ";
+		return "No information found. \nLand, dock, or scan objects to collect data.";
 	}
 
 	public Knowledge getCursor() {

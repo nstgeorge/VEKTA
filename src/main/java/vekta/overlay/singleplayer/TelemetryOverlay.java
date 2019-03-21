@@ -129,15 +129,20 @@ public class TelemetryOverlay implements Overlay {
 	}
 
 	public static String getMassString(float mass) {
-		String unit = "tonnes";
+		String unit = "kg";
 		if(mass >= SUN_MASS * .1F) {
-			mass = (float)round((mass / SUN_MASS) * 1000) / 1000;
+			mass = (float)round(mass / SUN_MASS * 1000) / 1000;
 			unit = "Suns";
 		}
 		else if(mass >= EARTH_MASS * .1F) {
-			mass = (float)round((mass / EARTH_MASS) * 1000) / 1000;
+			mass = (float)round(mass / EARTH_MASS * 1000) / 1000;
 			unit = "Earths";
 		}
+//		else if(mass >= 1e5) {
+//			int order = IntMath.log10((int)mass, RoundingMode.FLOOR);
+//			mass = (float)round(mass / pow(10, order - 3)) / 1000;
+//			unit = "* 10^" + order + " kg";
+//		}
 		return mass + " " + unit;
 	}
 

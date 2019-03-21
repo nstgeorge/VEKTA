@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static processing.core.PApplet.max;
-import static processing.core.PConstants.LEFT;
+import static processing.core.PConstants.TOP;
 import static vekta.Vekta.v;
 
 public class TextDisplay extends StyledDisplay {
@@ -47,19 +47,23 @@ public class TextDisplay extends StyledDisplay {
 
 	@Override
 	public void draw(float width, float height) {
-		v.textAlign(LEFT); // TODO: align style
+		float spacing = getLineSpacing();
+
+		DisplayAlign align = getStyle().align();
+		float x = align.getX(0, width);
+		float y = 0;
+
+		v.textAlign(align.getAlignCode(), TOP);
 		v.textSize(getStyle().fontSize());
 		v.fill(getStyle().color());
 
 		List<String> lines = getLines(width);
-		float spacing = getLineSpacing();
-		float y = 0;
 		for(String line : lines) {
 			//			if(y >= height) {
 			//				break; // Don't draw overflowing lines
 			//			}
 
-			v.text(line, 0, y);
+			v.text(line, x, y);
 			y += spacing;
 		}
 	}

@@ -35,7 +35,7 @@ public class VerticalLayout extends Layout {
 
 			// Get preferred height of item
 			float h = item.getHeight(width, height);
-			
+
 			// Draw item
 			item.draw(width, h);
 
