@@ -17,7 +17,7 @@ public class Countermeasure extends SpaceObject implements Damageable {
 	private int aliveTime;
 
 	public Countermeasure(SpaceObject parent, PVector position, PVector velocity) {
-		super(position, velocity, v.color(200));
+		super(position, velocity, v.color(255, 200, 100));
 
 		//		setTemperature(100);
 

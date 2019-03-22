@@ -20,7 +20,7 @@ public class DungeonStartRoom extends DungeonRoom {
 
 	@Override
 	public void onEnter(Menu menu) {
-		Resources.setMusic(MUSIC.get(musicIndex), false);
+		Resources.setMusic(MUSIC.get(musicIndex), true);
 	}
 
 	@Override

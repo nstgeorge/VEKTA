@@ -1,0 +1,4 @@
+ate the {item_common}
+ate the {item_rare}
+murdered {person}
+held everyone at {settlement} hostage
