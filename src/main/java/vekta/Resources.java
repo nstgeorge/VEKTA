@@ -172,7 +172,7 @@ public final class Resources {
 	public static PShape getShape(String key) {
 		PShape shape = SHAPES.get(key);
 		if(shape == null) {
-			throw new RuntimeException("No string array exists with key: " + key);
+			throw new RuntimeException("No shape exists with key: " + key);
 		}
 		return shape;
 	}
@@ -246,9 +246,10 @@ public final class Resources {
 				currentMusic = sound;
 
 				// Play sound
-				sound.amp(1);
+				//				sound.amp(volume);
 				if(loop) {
 					sound.loop();
+					sound.jump(v.random(sound.duration())); // Start at random point in music
 				}
 				else {
 					sound.play();
@@ -292,9 +293,11 @@ public final class Resources {
 				if(currentMusic != null) {
 					currentMusic.amp(1);
 				}
+				fadeProgress = 0;
 			}
 		}
-		else if(currentMusic != null && !currentMusic.isPlaying()) {
+		else if(currentMusic != null && currentMusic.percent() > 100) {
+			currentMusic.stop();
 			currentMusic = null;
 		}
 	}

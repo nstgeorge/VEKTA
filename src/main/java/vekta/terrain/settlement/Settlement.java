@@ -16,10 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static processing.core.PApplet.ceil;
+import static processing.core.PApplet.sq;
 import static vekta.Vekta.register;
 
 public abstract class Settlement extends Syncable<Settlement> implements SettlementPart, EconomyContainer, ProductivityModifier {
-	private static final float POPULATION_PER_VALUE = 10000;
+	private static final float POPULATION_SCALE = 1000;
 
 	private final @Sync List<SettlementPart> parts = new ArrayList<>();
 
@@ -121,7 +122,7 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 	}
 
 	public int getPopulation() {
-		return ceil(getEconomy().getValue() * POPULATION_PER_VALUE);
+		return ceil(sq(getEconomy().getValue()) * POPULATION_SCALE);
 	}
 
 	public List<SettlementPart> getParts() {

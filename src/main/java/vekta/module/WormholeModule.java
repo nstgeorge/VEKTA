@@ -8,7 +8,6 @@ import vekta.menu.Menu;
 import vekta.menu.handle.ObjectMenuHandle;
 import vekta.menu.option.CustomOption;
 import vekta.object.SpaceObject;
-import vekta.object.Targeter;
 import vekta.object.ship.ModularShip;
 
 import static vekta.Vekta.*;
@@ -69,7 +68,7 @@ public class WormholeModule extends ShipModule {
 	@Override
 	public void onKeyPress(KeyBinding key) {
 		if(key == KeyBinding.SHIP_SCAN) {
-			setTarget(chooseTarget());
+			setTarget(getShip().findNavigationTarget());
 			if(getShip().hasController()) {
 				getShip().getController().send("Wormhole target "
 						+ (hasTarget() ? "updated to " + getTarget().getName() : "cleared"));
@@ -80,16 +79,8 @@ public class WormholeModule extends ShipModule {
 		}
 	}
 
-	private SpaceObject chooseTarget() {
-		Targeter targeter = (Targeter)getShip().getModule(ModuleType.NAVIGATION);
-		if(targeter != null && targeter.getTarget() != null) {
-			return targeter.getTarget();
-		}
-		return null;
-	}
-
 	private void teleport(ModularShip ship) {
-		SpaceObject target = hasTarget() ? getTarget() : chooseTarget();
+		SpaceObject target = hasTarget() ? getTarget() : ship.findNavigationTarget();
 		if(target == null) {
 			return;
 		}
@@ -111,15 +102,13 @@ public class WormholeModule extends ShipModule {
 			PVector offset = PVector.random2D().mult((ship.getRadius() + target.getRadius()) * 2);
 			ship.getPositionReference().set(target.getPosition().add(offset));
 
-			Targeter targeter = (Targeter)getShip().getModule(ModuleType.NAVIGATION);
-			if(targeter != null) {
-				// Update ship targeter
-				targeter.setTarget(target);
-			}
+			// Update ship targeter
+			ship.setNavigationTarget(target);
 		}
 		else if(ship.hasController()) {
 			ship.getController().send("Not enough energy! (" + (int)ship.getEnergy() + " / " + (int)getEnergyConsumption() + ")");
 		}
+
 	}
 
 	@Override

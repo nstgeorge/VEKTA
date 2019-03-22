@@ -31,7 +31,7 @@ public class CitySettlement extends Settlement {
 			add(new RefineryBuilding());
 		}
 
-		add(new ForumBuilding(this, (int)(v.random(8, 12))));
+		add(new ForumBuilding(this, (int)(v.random(10, 20))));
 		add(new ExchangeBuilding());
 	}
 

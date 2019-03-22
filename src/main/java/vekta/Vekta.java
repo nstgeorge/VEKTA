@@ -181,6 +181,10 @@ public class Vekta extends PApplet {
 		}
 	}
 
+	public static Context getNextContext() {
+		return nextContext;
+	}
+
 	public static Context getContext() {
 		return context;
 	}

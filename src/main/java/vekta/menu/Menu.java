@@ -187,6 +187,11 @@ public class Menu implements Context {
 	}
 
 	@Override
+	public void unfocus() {
+		handle.unfocus(this);
+	}
+
+	@Override
 	public void render() {
 		handle.render(this);
 	}

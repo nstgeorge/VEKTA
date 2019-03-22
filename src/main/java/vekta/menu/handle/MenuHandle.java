@@ -60,6 +60,9 @@ public class MenuHandle implements Serializable {
 		this.menu = menu;
 	}
 
+	public void unfocus(Menu menu) {
+	}
+
 	public void beforeDraw() {
 		v.clear();
 	}

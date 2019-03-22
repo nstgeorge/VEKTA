@@ -1,7 +1,7 @@
 # Format: <name> <start_dialog>::<next_dialog> <response>
 # Alternative: <name> <start_dialog> : <response>
 
-Worm-o Spray Can advice::react_worm Hit it with some Worm-o.
+Worm-o Spray Can advice::react_worm Hit 'em with some Worm-o.
 Worm-o Spray Can advice::react_worm Try using my Worm-o.
 Worm-o Spray Can advice::react_worm You could try the Worm-o.
 Worm-o Spray Can advice::react_worm Use the Worm-o.

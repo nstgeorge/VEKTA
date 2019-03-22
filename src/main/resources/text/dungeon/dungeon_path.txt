@@ -1,0 +1,3 @@
+# Disabled for now: {dungeon_path_special}
+{dungeon_path_noun}
+{dungeon_path_adj} {dungeon_path_noun}

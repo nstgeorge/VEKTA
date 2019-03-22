@@ -44,6 +44,10 @@ public class SoundGroup implements Externalizable {
 		return sounds.length;
 	}
 
+	public SoundFile get(int index) {
+		return sounds[index];
+	}
+
 	public void play(int index) {
 		SoundFile sound = sounds[(index + sounds.length) % sounds.length];
 		sound.play();
