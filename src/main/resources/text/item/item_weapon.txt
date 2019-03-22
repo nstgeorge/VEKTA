@@ -13,7 +13,7 @@ Spear : Impale with *
 Mace : Maul with *
 Club : Maul with *
 Shank : Stab with *
-Paddle : Spank with lethal force using *
+Paddle : Spank to death using *
 Worm-o Concentrate : Dissolve with *
 Hatchet : Chop with *
 Chainsaw : Dismember with *

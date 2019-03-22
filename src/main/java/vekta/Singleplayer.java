@@ -222,7 +222,7 @@ public class Singleplayer implements World, PlayerListener {
 			save(AUTOSAVE_FILE);
 		}
 	}
-
+	
 	@Override
 	public void render() {
 		ModularShip playerShip = getPlayerShip();
@@ -231,7 +231,7 @@ public class Singleplayer implements World, PlayerListener {
 		if(Resources.getMusic() == null && Settings.getInt("music") > 0) {
 			Resources.setMusic(MUSIC.random(), false);
 		}
-		
+
 		// Update time factor
 		smoothZoom += (zoom - smoothZoom) * ZOOM_SMOOTH;
 		timeScale = max(1, smoothZoom * TIME_SCALE) / (1 + smoothZoom * TIME_SCALE * TIME_SCALE * TIME_FALLOFF);

@@ -1,0 +1,10 @@
+{item_common}
+{item_rare}
+{item_legendary}
+{item_weapon}
+{ore_common}
+{ore_rare}
+{item_clothing_common}
+{item_clothing_rare}
+{item_coin}
+{item_mission}

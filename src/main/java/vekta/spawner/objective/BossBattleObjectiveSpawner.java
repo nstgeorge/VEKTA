@@ -5,6 +5,7 @@ import vekta.RenderLevel;
 import vekta.mission.Mission;
 import vekta.mission.objective.DefeatObjective;
 import vekta.mission.objective.Objective;
+import vekta.object.SpaceObject;
 import vekta.object.ship.BossShip;
 import vekta.object.ship.Ship;
 import vekta.spawner.ItemGenerator;
@@ -48,7 +49,10 @@ public class BossBattleObjectiveSpawner implements MissionGenerator.ObjectiveSpa
 
 		ItemGenerator.addLoot(ship.getInventory(), tier);
 
-		WorldGenerator.orbit(getWorld().findOrbitObject(ship), ship, .1F);
+		SpaceObject orbit = getWorld().findOrbitObject(ship);
+		if(orbit != null) {
+			WorldGenerator.orbit(orbit, ship, .1F);
+		}
 		return ship;
 	}
 }

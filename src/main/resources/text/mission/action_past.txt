@@ -1,4 +1,5 @@
-ate the {item_common}
-ate the {item_rare}
+ate the {item}
 murdered {person}
 held everyone at {settlement} hostage
+murdered {person}
+stepped on my {item}
