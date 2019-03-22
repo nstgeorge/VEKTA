@@ -20,7 +20,7 @@ public class ItemRoomSpawner implements DungeonGenerator.DungeonSpawner {
 	@Override
 	public DungeonRoom create(DungeonRoom parent, int depth) {
 		Inventory inv = new Inventory();
-		ItemGenerator.addLoot(inv, 2);
+		ItemGenerator.addLoot(inv, 1);
 		return new InventoryRoom(parent, "Storage Room", "You find what appears to be a long-abandoned storage closet.", inv);
 	}
 }
