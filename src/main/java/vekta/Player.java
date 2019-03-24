@@ -12,15 +12,13 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public final class Player extends Syncable<Player> {
+	private static final float OVERALL_SKILL_RATE = 1.5F;
+
 	private /*@Sync */ Faction faction;
 	private /*@Sync */ ModularShip currentShip;
 
 	private final List<PlayerListener> listeners = new ArrayList<>();
 	private final Set<String> attributes = new HashSet<>();
-
-	//	private final HashMap<SpaceObject, ObservationLevel> observedObjectList = new HashMap<>();
-	//	private final HashMap<SpaceObject, List<String>> observedObjectFeatureList = new HashMap<>();
-	//	private final HashMap<SpaceObject, List<Settlement>> observedObjectSettlementList = new HashMap<>();
 
 	private final List<Mission> missions = new ArrayList<>();
 	private Mission currentMission;
@@ -29,6 +27,8 @@ public final class Player extends Syncable<Player> {
 
 	private final Map<Knowledge, Integer> knowledgePrices = new HashMap<>();
 	private final Map<Item, Integer> buyPrices = new HashMap<>();
+
+	private final Map<SkillType, Float> skills = new EnumMap<>(SkillType.class);
 
 	public Player(PlayerFaction faction) {
 		setFaction(faction);
@@ -241,6 +241,21 @@ public final class Player extends Syncable<Player> {
 		else {
 			buyPrices.remove(item);
 		}
+	}
+
+	public float getSkill(SkillType type) {
+		return skills.getOrDefault(type, 0F);
+	}
+
+	public void addSkill(SkillType type, float amount) {
+		skills.put(type, getSkill(type) + amount);
+		if(type != SkillType.OVERALL) {
+			addSkill(SkillType.OVERALL, amount / SkillType.values().length * OVERALL_SKILL_RATE);
+		}
+	}
+
+	public SkillLevel getSkillLevel(SkillType type) {
+		return SkillLevel.fromSkill(getSkill(type));
 	}
 
 	@Override

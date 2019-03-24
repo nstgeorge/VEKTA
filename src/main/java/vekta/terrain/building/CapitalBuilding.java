@@ -2,6 +2,7 @@ package vekta.terrain.building;
 
 import vekta.menu.Menu;
 import vekta.menu.option.DialogOption;
+import vekta.menu.option.RenameOption;
 import vekta.menu.option.UpgradeMenuOption;
 import vekta.person.Person;
 import vekta.person.TemporaryPerson;
@@ -49,6 +50,8 @@ public class CapitalBuilding implements SettlementPart {
 			// Add advisement option
 			Person person = new TemporaryPerson("Mayor of " + getSettlement().getName(), getSettlement().getFaction());
 			menu.add(new DialogOption("Advise Mayor", AdviceObjectiveSpawner.randomAdviceDialog(menu.getPlayer(), person)));
+
+			menu.add(new RenameOption(getSettlement()));
 		}
 	}
 }

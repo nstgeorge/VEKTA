@@ -43,7 +43,8 @@ public class SellDataMenuOption implements MenuOption {
 		List<Knowledge> knowledge = new ArrayList<>(menu.getPlayer().getKnowledgePrices().keySet());
 		knowledge.sort(Comparator.comparingInt(k -> -k.getArchiveValue()));
 		for(Knowledge k : knowledge) {
-			// TODO: convert to DataTradeOption
+			// TODO: convert to DataTradeOption and use SideLayoutMenuHandle
+			// TODO: data items
 			sub.add(new CustomOption(moneyString(k.getName() + " Data", k.getArchiveValue()), m -> {
 				int price = m.getPlayer().getKnowledgePrices().get(k);
 				if(getInventory().remove(price)) {

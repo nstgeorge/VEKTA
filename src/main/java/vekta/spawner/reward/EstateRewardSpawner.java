@@ -18,7 +18,7 @@ public class EstateRewardSpawner implements MissionGenerator.RewardSpawner {
 
 	@Override
 	public boolean isValid(Mission mission) {
-		return true;
+		return mission.getTier() >= 3;
 	}
 
 	@Override

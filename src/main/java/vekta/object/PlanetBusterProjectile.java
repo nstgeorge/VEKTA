@@ -9,9 +9,9 @@ import static processing.core.PApplet.sq;
 import static vekta.Vekta.*;
 
 public class PlanetBusterProjectile extends HomingProjectile {
-	private static final int EXPLOSION_PARTICLES = 100;
+	private static final int EXPLOSION_PARTICLES = 150;
 	private static final int EXPLOSION_SHOCKWAVES = 10;
-	private static final float EXPLOSION_SCALE = .0001F;
+	private static final float EXPLOSION_SCALE = .00015F;
 
 	public PlanetBusterProjectile(SpaceObject parent, SpaceObject target, PVector position, PVector velocity, int color) {
 		super(parent, target, 1000, position, velocity, color);
@@ -60,7 +60,7 @@ public class PlanetBusterProjectile extends HomingProjectile {
 			PVector particleVelocity = velocity.add(s.relativeVelocity(this).mult(.1F));
 			for(int i = 0; i < EXPLOSION_PARTICLES; i++) {
 				register(new Particle(
-						v.chance(.5F) ? getParentObject() : s,
+						getParentObject(),
 						position,
 						PVector.random2D().mult(v.random(s.getRadius() * EXPLOSION_SCALE)).add(particleVelocity),
 						style));
@@ -68,7 +68,7 @@ public class PlanetBusterProjectile extends HomingProjectile {
 
 			for(int i = 0; i < EXPLOSION_SHOCKWAVES; i++) {
 				int color = v.chance(.5F) ? 255 : colorRange.selectColor();
-				register(new Shockwave(s, v.random(.2F, 1), (int)(sq(v.random(.2F, 1)) * 250), color));
+				register(new Shockwave(s, v.random(.2F, 2), (int)(sq(v.random(.2F, 1)) * 250), color));
 			}
 
 			s.destroyBecause(getParentObject());

@@ -1,6 +1,7 @@
 package vekta.item;
 
 import vekta.Faction;
+import vekta.InfoGroup;
 import vekta.menu.Menu;
 import vekta.menu.handle.SecurityMenuHandle;
 import vekta.menu.option.CustomOption;
@@ -16,7 +17,7 @@ public class ClothingItem extends BasicItem {
 
 	@Override
 	public String getName() {
-		return super.getName() + (faction != null ? " (" + faction.getName() + ")" : "");
+		return super.getName();
 	}
 
 	@Override
@@ -26,6 +27,13 @@ public class ClothingItem extends BasicItem {
 			if(handle.getFaction().isAlly(faction)) {
 				menu.add(new CustomOption("Wear " + getName(), handle.getNext()).withColor(faction.getColor()));
 			}
+		}
+	}
+
+	@Override
+	public void onInfo(InfoGroup info) {
+		if(faction != null) {
+			info.addStat("Faction", faction.getName());
 		}
 	}
 }

@@ -34,7 +34,7 @@ public class ShipKnowledge extends SpaceObjectKnowledge {
 	@Override
 	public String getSecondaryText(Player player) {
 		if(player.getShip() == getSpaceObject()) {
-			return "";
+			return null;
 		}
 		return super.getSecondaryText(player);
 	}
@@ -42,7 +42,7 @@ public class ShipKnowledge extends SpaceObjectKnowledge {
 	@Override
 	public String getCursorText(Player player) {
 		if(player.getShip() == getSpaceObject()) {
-			return "";
+			return null;
 		}
 		return super.getCursorText(player);
 	}

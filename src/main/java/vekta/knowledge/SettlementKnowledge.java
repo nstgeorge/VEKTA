@@ -4,12 +4,15 @@ import vekta.Player;
 import vekta.display.Layout;
 import vekta.display.TextDisplay;
 import vekta.display.VerticalLayout;
+import vekta.display.VisualDisplay;
 import vekta.object.SpaceObject;
 import vekta.terrain.settlement.Settlement;
 
 import static vekta.Vekta.v;
 
 public class SettlementKnowledge extends SpaceObjectKnowledge {
+	private static final float VISUAL_SIZE = 400;
+
 	private final Settlement settlement;
 
 	public SettlementKnowledge(ObservationLevel level, Settlement settlement) {
@@ -55,6 +58,12 @@ public class SettlementKnowledge extends SpaceObjectKnowledge {
 
 	@Override
 	public void onLayout(Player player, Layout layout) {
+		if(ObservationLevel.VISITED.isAvailableFrom(getLevel())) {
+			// Draw settlement
+			layout.add(new VisualDisplay(getSettlement().getVisual(), VISUAL_SIZE))
+					.customize().color(v.lerpColor(0, getSettlement().getColor(), .5F));
+		}
+
 		layout.add(new TextDisplay("Planet: " + getSpaceObject().getName()))
 				.customize().color(getSpaceObject().getColor());
 

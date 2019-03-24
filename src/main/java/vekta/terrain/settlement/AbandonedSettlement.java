@@ -1,6 +1,7 @@
 package vekta.terrain.settlement;
 
 import vekta.Faction;
+import vekta.Player;
 import vekta.Resources;
 import vekta.item.Inventory;
 import vekta.menu.Menu;
@@ -28,6 +29,11 @@ public class AbandonedSettlement extends Settlement {
 
 	public Inventory getInventory() {
 		return inventory;
+	}
+
+	@Override
+	public boolean hasSecurity(Player player) {
+		return false;
 	}
 
 	@Override

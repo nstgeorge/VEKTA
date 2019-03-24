@@ -12,16 +12,24 @@ public interface Knowledge extends Serializable {
 	String getName();
 
 	int getArchiveValue();
-	
+
 	int getColor(Player player);
 
-	String getSecondaryText(Player player);
+	default boolean isValid(Player player) {
+		return true;
+	}
 
-	String getCursorText(Player player);
+	default String getSecondaryText(Player player) {
+		return null;
+	}
 
-	boolean isValid(Player player);
+	default String getCursorText(Player player) {
+		return null;
+	}
 
-	void onKeyPress(Player player, KeyBinding key);
+	default void onKeyPress(Player player, KeyBinding key) {
+	}
 
-	void onLayout(Player player, Layout layout);
+	default void onLayout(Player player, Layout layout) {
+	}
 }

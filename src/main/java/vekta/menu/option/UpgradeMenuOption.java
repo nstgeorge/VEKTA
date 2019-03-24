@@ -33,12 +33,12 @@ public class UpgradeMenuOption implements MenuOption {
 	@Override
 	public void onSelect(Menu menu) {
 		Menu sub = new Menu(menu, new MenuHandle());
-		updateMenu(sub, menu);
-		sub.addSelectListener(option -> updateMenu(sub, menu));
+		updateMenu(sub);
+		sub.addSelectListener(option -> updateMenu(sub));
 		setContext(sub);
 	}
 
-	private void updateMenu(Menu sub, Menu parent) {
+	private void updateMenu(Menu sub) {
 		sub.clear();
 
 		List<SettlementUpgrade> upgrades = new ArrayList<>(Arrays.asList(UPGRADES));

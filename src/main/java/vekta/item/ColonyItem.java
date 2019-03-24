@@ -53,13 +53,14 @@ public class ColonyItem extends Item {
 				menu.getPlayer().getInventory().remove(this);
 				menu.add(new CustomOption("Colonize", m -> {
 					Faction faction = getFaction() != null ? getFaction() : m.getPlayer().getFaction();
-					
+
 					// Set up colony settlement
 					ColonySettlement settlement = new ColonySettlement(faction);
 					settlement.setOverview("You land close to your recently established colony.");
+					settlement.getEconomy().setValue(.1F);
 					settlement.clear();
 					settlement.add(new CapitalBuilding(settlement));
-					((HabitableTerrain)terrain).changeSettlement(site, settlement);
+					((HabitableTerrain)site.getTerrain()).changeSettlement(site, settlement);
 
 					// Ensure that the colony object doesn't despawn
 					settlement.observe(ObservationLevel.OWNED, m.getPlayer());

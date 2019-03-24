@@ -21,7 +21,7 @@ public class InventoryRoom extends DungeonRoom {
 	@Override
 	public void onEnter(Menu menu) {
 		for(Item item : getInventory()) {
-			menu.add(new ItemTradeOption(menu.getPlayer().getInventory(), item, 0));
+			menu.add(new ItemTradeOption(getInventory(), item, 0));
 		}
 	}
 }

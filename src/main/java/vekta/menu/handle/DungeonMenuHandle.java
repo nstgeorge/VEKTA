@@ -38,10 +38,10 @@ public class DungeonMenuHandle extends MenuHandle {
 
 		v.textSize(48);
 		v.fill(100);
-		v.text(room.getName(), getButtonX(), getButtonY(-3));
+		v.text(room.getName(), getButtonX(), getButtonY(-2));
 
 		v.textSize(32);
 		v.fill(220);
-		v.text(room.getDescription(), getButtonX(), getButtonY(-2));
+		v.text(room.getDescription(), getButtonX(), getButtonY(-1));
 	}
 }

@@ -135,7 +135,8 @@ public class KnowledgeContext implements Context, Comparator<Knowledge> {
 					v.text(name, PADDING, 110 + (SPACING * i));
 				}
 				v.textAlign(RIGHT);
-				v.text(knowledge.getSecondaryText(player), v.width / 2F - PADDING, 110 + (SPACING * i));
+				String secondaryText = knowledge.getSecondaryText(player);
+				v.text(secondaryText != null ? secondaryText : "", v.width / 2F - PADDING, 110 + (SPACING * i));
 			}
 
 			v.popMatrix();
@@ -161,7 +162,8 @@ public class KnowledgeContext implements Context, Comparator<Knowledge> {
 			v.text(cursor.getName(), x + width / 2, y - 100);
 
 			// Draw cursor selection text
-			v.text(cursor.getCursorText(player), v.width / 2F, y + height - 40);
+			String cursorText = cursor.getCursorText(player);
+			v.text(cursorText != null ? cursorText : "", v.width / 2F, y + height - 40);
 
 			// Draw cursor details
 			v.textAlign(LEFT);

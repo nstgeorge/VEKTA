@@ -3,7 +3,7 @@ package vekta.object.planet;
 import processing.core.PShape;
 import processing.core.PVector;
 
-import static processing.core.PConstants.CENTER;
+import static processing.core.PApplet.sq;
 import static processing.core.PConstants.ELLIPSE;
 import static vekta.Vekta.v;
 
@@ -30,6 +30,11 @@ public class GasGiant extends Planet {
 		maxRadius = d;
 	}
 
+	public boolean isInsideRings(PVector pos) {
+		float distSq = getPosition().sub(pos).magSq();
+		return distSq <= sq(getRadius() * ringDistances[ringDistances.length - 1]);
+	}
+
 	@Override
 	public float getOnScreenRadius(float r) {
 		return r * maxRadius;
@@ -45,7 +50,7 @@ public class GasGiant extends Planet {
 			for(int i = 0; i < ringDistances.length; i++) {
 				float rd = ringDistances[i];
 				v.stroke(ringColors[i]);
-				v.shapeMode(CENTER);
+				//				v.shapeMode(CENTER);
 				PShape ring = v.createShape(ELLIPSE, rd, rd * ringRatio, rd, rd * ringRatio);
 				rings[i] = ring;
 			}

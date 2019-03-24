@@ -1,6 +1,7 @@
 package vekta.terrain.settlement;
 
 import vekta.Faction;
+import vekta.Player;
 import vekta.item.Inventory;
 import vekta.menu.Menu;
 import vekta.menu.option.LootMenuOption;
@@ -27,6 +28,11 @@ public class EmptySettlement extends Settlement {
 
 	public Inventory getInventory() {
 		return inventory;
+	}
+
+	@Override
+	public boolean hasSecurity(Player player) {
+		return false;
 	}
 
 	@Override

@@ -13,6 +13,8 @@ public class AestheticPersonality extends Personality {
 
 	@Override
 	public void setupDialog(Dialog dialog) {
-		dialog.parseResponse(Resources.generateString("response_aesthetic"));
+		if(!"wtf".equals(dialog.getType())) {
+			dialog.parseResponse(Resources.generateString("response_aesthetic"));
+		}
 	}
 }

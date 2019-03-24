@@ -86,11 +86,11 @@ public class HyperdriveModule extends ShipModule {
 			// Create shockwave effect
 			Shockwave wave = register(new Shockwave(
 					getShip(),
-					timeScale * 5e-5F * currentBoost,
-					(int)v.random(20, 30),
+					timeScale * 1.5e-4F * currentBoost,
+					(int)v.random(10, 15),
 					getShip().getColor()));
 			wave.setRadius(1);
-			wave.addVelocity(ship.getHeading().mult(-200 * timeScale / currentBoost * TUNNEL_EFFECT));
+			wave.addVelocity(ship.getHeading().mult(-400 * timeScale / currentBoost * TUNNEL_EFFECT));
 		}
 	}
 

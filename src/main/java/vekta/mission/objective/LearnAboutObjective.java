@@ -1,5 +1,6 @@
 package vekta.mission.objective;
 
+import vekta.knowledge.TopicKnowledge;
 import vekta.menu.Menu;
 import vekta.menu.handle.DialogMenuHandle;
 import vekta.menu.option.DialogOption;
@@ -14,14 +15,14 @@ import static vekta.Vekta.v;
 
 public class LearnAboutObjective extends Objective {
 	private final String topic;
-	private final String info;
+	private final String description;
 	private final float rarity;
 
 	private final Set<Person> alreadyAsked = new HashSet<>();
 
-	public LearnAboutObjective(String topic, String info, float rarity) {
+	public LearnAboutObjective(String topic, String description, float rarity) {
 		this.topic = topic;
-		this.info = info;
+		this.description = description;
 		this.rarity = rarity;
 	}
 
@@ -29,8 +30,8 @@ public class LearnAboutObjective extends Objective {
 		return topic;
 	}
 
-	public String getInfo() {
-		return info;
+	public String getDescription() {
+		return description;
 	}
 
 	public float getRarity() {
@@ -56,12 +57,13 @@ public class LearnAboutObjective extends Objective {
 
 				boolean foundInfo = v.chance(getRarity());
 				Dialog next = foundInfo
-						? new Dialog("topic", dialog.getPerson(), getInfo())
+						? new Dialog("topic", dialog.getPerson(), getDescription())
 						: dialog.getPerson().createDialog("topic_unknown");
 
 				if(foundInfo) {
 					next.addResponse("Thanks for the help!");
 					complete();
+					menu.getPlayer().addKnowledge(new TopicKnowledge(getTopic(), getDescription(), (int)(1 / getRarity())));
 				}
 
 				menu.add(new DialogOption("Ask about " + getTopic(), next));

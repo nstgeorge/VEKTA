@@ -21,7 +21,7 @@ public class InventoryOption implements MenuOption {
 
 	@Override
 	public void onSelect(Menu menu) {
-		Menu sub = new Menu(menu.getPlayer(), new BackOption(menu), new InventoryMenuHandle(inv));
+		Menu sub = new Menu(menu.getPlayer(), menu.getDefault(), new InventoryMenuHandle(inv));
 		Inventory jettison = new Inventory();
 		for(Item item : inv) {
 			sub.add(new ItemTradeOption(false, inv, jettison, item));

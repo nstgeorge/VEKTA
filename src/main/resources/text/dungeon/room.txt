@@ -9,3 +9,4 @@ Echoing {room_noun} : The room echoes with your every step.
 Misty {room_noun} : You can barely see through the thick mist in this room. 
 Dark {room_noun} : Even with a light source, you can barely see anything at all. 
 Whispering {room_noun} : You hear echoing whispers, moving ever closer as you stand to listen. 
+Empty {room_noun} : You find yourself in a completely empty room. 

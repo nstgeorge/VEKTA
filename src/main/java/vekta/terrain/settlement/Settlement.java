@@ -12,6 +12,8 @@ import vekta.spawner.WorldGenerator;
 import vekta.terrain.LandingSite;
 import vekta.terrain.Terrain;
 import vekta.terrain.building.BuildingType;
+import vekta.terrain.visual.SettlementVisual;
+import vekta.terrain.visual.Visual;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,17 +22,19 @@ import static processing.core.PApplet.ceil;
 import static processing.core.PApplet.sq;
 import static vekta.Vekta.register;
 
-public abstract class Settlement extends Syncable<Settlement> implements SettlementPart, EconomyContainer, ProductivityModifier {
+public abstract class Settlement extends Syncable<Settlement> implements SettlementPart, EconomyContainer, ProductivityModifier,Renameable {
 	private static final float POPULATION_SCALE = 1000;
 
 	private final @Sync List<SettlementPart> parts = new ArrayList<>();
 
-	private final String name;
+	private @Sync String name;
 	private @Sync String overview;
 	private @Sync LandingSite site;
 	private @Sync Faction faction;
 
 	private final Economy economy;
+
+	private final Visual visual;
 
 	//	private int population;
 
@@ -45,6 +49,8 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 		economy = register(new Economy(this));
 		setupEconomy(economy);
 		economy.fillHistory();
+
+		visual = new SettlementVisual(0, 0, economy.getValue());
 
 		setFaction(faction);
 	}
@@ -73,10 +79,8 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 			throw new RuntimeException("Settlement faction cannot be null");
 		}
 		if(this.faction != null) {
-			//			getEconomy().removeModifier(this.faction);
 			this.faction.getEconomy().removeModifier(this);
 		}
-		//		getEconomy().addModifier(faction);
 		faction.getEconomy().addModifier(this);
 		this.faction = faction;
 		syncChanges();
@@ -85,6 +89,11 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Override
@@ -119,6 +128,10 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 
 	public float getEconomySignificance() {
 		return .1F;
+	}
+
+	public Visual getVisual() {
+		return visual;
 	}
 
 	public boolean isInhabited() {
