@@ -3,6 +3,7 @@ package vekta.spawner.item;
 import vekta.Resources;
 import vekta.item.Item;
 import vekta.item.ItemType;
+import vekta.item.TradeItem;
 import vekta.spawner.ItemGenerator;
 
 import static vekta.Vekta.v;
@@ -27,7 +28,7 @@ public class TradeItemSpawner implements ItemGenerator.ItemSpawner {
 	@Override
 	public Item create() {
 		ItemType type = randomType();
-		return new Item(randomName(type), type);
+		return new TradeItem(randomName(type), type);
 	}
 
 	public static ItemType randomType() {

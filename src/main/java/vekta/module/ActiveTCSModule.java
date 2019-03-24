@@ -24,6 +24,11 @@ public class ActiveTCSModule extends PassiveTCSModule {
 	}
 
 	@Override
+	public int getMass() {
+		return super.getMass() + 200;
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return other instanceof ActiveTCSModule
 				? getEfficiency() > ((ActiveTCSModule)other).getEfficiency()

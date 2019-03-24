@@ -1,7 +1,6 @@
 package vekta.object.ship;
 
 import processing.core.PVector;
-import vekta.Player;
 import vekta.RenderLevel;
 import vekta.context.StationLayoutContext;
 import vekta.menu.Menu;
@@ -93,11 +92,6 @@ public class SpaceStation extends ModularShip {
 	}
 
 	@Override
-	public float getMass() {
-		return 1000 * getModules().size(); // Estimate mass for now
-	}
-
-	@Override
 	public float getRadius() {
 		return TILE_SIZE * sqrt(5 * getModules().size()); // Estimate radius for now
 	}
@@ -144,11 +138,10 @@ public class SpaceStation extends ModularShip {
 		}
 	}
 
-	// TODO: convert to event listener
 	@Override
-	public void setupDockingMenu(Player player, Menu menu) {
+	public void setupDockingMenu(Menu menu) {
 		menu.add(new CustomOption("Customize", m ->
-				setContext(new StationLayoutContext(menu, this, player))));
+				setContext(new StationLayoutContext(m, this, m.getPlayer()))));
 	}
 
 	public final class Component implements Serializable {

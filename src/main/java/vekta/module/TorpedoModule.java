@@ -6,7 +6,8 @@ import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 import vekta.object.ship.ModularShip;
 
-import static vekta.Vekta.*;
+import static vekta.Vekta.getWorld;
+import static vekta.Vekta.register;
 
 public class TorpedoModule extends WeaponModule {
 	private final float speed;
@@ -31,6 +32,11 @@ public class TorpedoModule extends WeaponModule {
 	@Override
 	public Module getVariant() {
 		return new TorpedoModule(chooseInclusive(1, 4));
+	}
+
+	@Override
+	public int getMass() {
+		return 1200;
 	}
 
 	@Override

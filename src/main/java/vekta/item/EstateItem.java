@@ -7,8 +7,6 @@ public class EstateItem extends EconomyItem {
 	private final Estate estate;
 
 	public EstateItem(Estate estate) {
-		super(estate.getName() + " (" + estate.getSettlement().getName() + ")");
-
 		this.estate = estate;
 	}
 
@@ -17,8 +15,18 @@ public class EstateItem extends EconomyItem {
 	}
 
 	@Override
+	public String getName() {
+		return getEstate().getName() + " (" + estate.getSettlement().getName() + ")";
+	}
+
+	@Override
 	public Economy getEconomy() {
 		return getEstate().getSettlement().getEconomy();
+	}
+
+	@Override
+	public int getMass() {
+		return 1;
 	}
 
 	@Override

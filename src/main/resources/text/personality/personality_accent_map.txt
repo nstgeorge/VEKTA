@@ -1,0 +1,5 @@
+i : a
+a : o
+e : u
+g : j
+w : y

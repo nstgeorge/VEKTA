@@ -7,8 +7,8 @@ import vekta.situation.Situation;
 import static vekta.Vekta.v;
 
 public class EventGenerator {
-	private static final EventSpawner[] EVENT_SPAWNERS = Resources.getSubclassInstances(EventSpawner.class);
-	private static final Situation[] SITUATIONS = Resources.getSubclassInstances(Situation.class);
+	private static final EventSpawner[] EVENT_SPAWNERS = Resources.findSubclassInstances(EventSpawner.class);
+	private static final Situation[] SITUATIONS = Resources.findSubclassInstances(Situation.class);
 
 	public static void spawnEvent(Player player) {
 		Weighted.random(EVENT_SPAWNERS).spawn(player);

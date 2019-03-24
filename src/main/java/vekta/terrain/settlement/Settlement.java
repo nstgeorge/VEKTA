@@ -8,6 +8,7 @@ import vekta.knowledge.ObservationLevel;
 import vekta.knowledge.SettlementKnowledge;
 import vekta.menu.Menu;
 import vekta.object.SpaceObject;
+import vekta.spawner.WorldGenerator;
 import vekta.terrain.LandingSite;
 import vekta.terrain.Terrain;
 import vekta.terrain.building.BuildingType;
@@ -49,6 +50,9 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 	}
 
 	public LandingSite getSite() {
+		if(site == null) {
+			throw new RuntimeException("Settlement site was not yet initialized");
+		}
 		return site;
 	}
 
@@ -188,6 +192,7 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 		for(SettlementPart part : getParts()) {
 			part.setup(site);
 		}
+		WorldGenerator.populateSettlement(this);
 	}
 
 	public void setupEconomy(Economy economy) {

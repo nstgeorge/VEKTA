@@ -7,6 +7,7 @@ import vekta.Resources;
 import vekta.economy.ProductivityModifier;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.person.Person;
+import vekta.person.personality.Personality;
 import vekta.spawner.world.AsteroidSpawner;
 import vekta.terrain.HabitableTerrain;
 import vekta.terrain.settlement.OutpostSettlement;
@@ -18,6 +19,10 @@ import java.util.List;
 import static vekta.Vekta.*;
 
 public class PersonGenerator {
+	private static final Personality[] PERSONALITIES = Resources.findSubclassInstances(Personality.class);
+	private static final float PERSONALITY_CHANCE = .1F;
+//	private static final float PERSONALITY_CHANCE = 1;
+
 	public static Person createPerson() {
 		return createPerson(randomHome());
 	}
@@ -28,9 +33,12 @@ public class PersonGenerator {
 		if(v.random(1) < .5F) {
 			person.setTitle(randomPersonTitle(person));
 		}
+		if(v.chance(PERSONALITY_CHANCE)) {
+			person.setPersonality(v.random(PERSONALITIES));
+		}
 		return person;
 	}
-	
+
 	public static String randomPersonName() {
 		return Resources.generateString("person");
 	}

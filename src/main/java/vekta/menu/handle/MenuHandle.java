@@ -86,7 +86,7 @@ public class MenuHandle implements Serializable {
 		v.fill(255);
 		v.textAlign(CENTER);
 
-		if(menu.getCursor().isEnabled()) {
+		if(menu.size() > 0 && menu.getCursor().isEnabled()) {
 			v.text(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to " + getSelectVerb(), getButtonX(), getButtonY(menu.size()) + 100);
 		}
 	}
@@ -125,5 +125,8 @@ public class MenuHandle implements Serializable {
 				menu.selectCursor();
 			}
 		}
+	}
+
+	public void onChange(Menu menu) {
 	}
 }

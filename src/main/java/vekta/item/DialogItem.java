@@ -5,7 +5,7 @@ import vekta.menu.handle.DialogMenuHandle;
 import vekta.person.Dialog;
 import vekta.spawner.item.DialogItemSpawner;
 
-public class DialogItem extends Item {
+public class DialogItem extends BasicItem {
 
 	public DialogItem(String name, ItemType type) {
 		super(name, type);

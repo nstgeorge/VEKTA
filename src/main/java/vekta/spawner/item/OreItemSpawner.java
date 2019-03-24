@@ -1,6 +1,7 @@
 package vekta.spawner.item;
 
 import vekta.Resources;
+import vekta.item.BasicItem;
 import vekta.item.Item;
 import vekta.item.ItemType;
 import vekta.item.OreItem;
@@ -40,6 +41,6 @@ public class OreItemSpawner implements ItemGenerator.ItemSpawner {
 			}
 		}
 
-		return new OreItem(name, refined != null ? new Item(refined, type.getImproved()) : null, type);
+		return new OreItem(name, refined != null ? new BasicItem(refined, type.getImproved()) : null, type);
 	}
 }

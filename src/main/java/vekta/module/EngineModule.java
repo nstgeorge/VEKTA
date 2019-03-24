@@ -32,6 +32,11 @@ public class EngineModule extends ShipModule {
 	}
 
 	@Override
+	public int getMass() {
+		return 5000;
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return other instanceof EngineModule && getSpeed() > ((EngineModule)other).getSpeed();
 	}

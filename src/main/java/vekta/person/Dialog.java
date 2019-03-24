@@ -18,36 +18,24 @@ import static vekta.Vekta.*;
 public class Dialog implements Serializable {
 	private final String type;
 	private final Person person;
-	private final String message;
+	private String message;
+	private int color;
 
 	private final List<String> responses = new ArrayList<>();
 	private final List<MenuOption> options = new ArrayList<>();
 	private Dialog next;
 
 	private boolean visited;
-	private int textColor;
 
 	public Dialog(String type, Person person, String message) {
+		this(type, person, message, v.color(255));
+	}
+
+	public Dialog(String type, Person person, String message, int color) {
 		this.type = type;
 		this.person = person;
-
-		textColor = UI_COLOR;
-
-		// Set the color of the text
-		// TODO: Move this to appropriate function
-		if(message.startsWith("!")) {
-			// Angry message
-			textColor = DANGER_COLOR;
-			this.message = message.substring(1).trim();
-		}
-		else if(message.startsWith("|")) {
-			// Non-dialog message ("You notice something" or  other non-dialog message)
-			textColor = v.color(100);
-			this.message = message.substring(1).trim();
-		}
-		else {
-			this.message = message;
-		}
+		this.message = message;
+		this.color = color;
 
 		DialogGenerator.initDialog(this);
 	}
@@ -64,12 +52,16 @@ public class Dialog implements Serializable {
 		return message;
 	}
 
-	public int getTextColor() {
-		return textColor;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
-	public void setTextColor(int color) {
-		textColor = color;
+	public int getColor() {
+		return color;
+	}
+
+	public void setColor(int color) {
+		this.color = color;
 	}
 
 	public boolean isVisited() {
@@ -121,7 +113,7 @@ public class Dialog implements Serializable {
 			String response = args[1].trim();
 			boolean aside = type.startsWith("aside"); // Special behavior for `dialog_aside_...`
 			if(type.startsWith("^")) {
-				// Manually indicated aside behavior
+				// Mark to use aside behavior
 				type = type.substring(1).trim();
 				aside = true;
 			}
@@ -153,6 +145,10 @@ public class Dialog implements Serializable {
 			return;
 		}
 		visited = true;
+
+		if(getPerson().getPersonality() != null) {
+			getPerson().getPersonality().setupDialog(this);
+		}
 
 		Menu menu = new Menu(player, def, new DialogMenuHandle(this));
 		DialogGenerator.setupDialogMenu(menu, this);

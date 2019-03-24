@@ -42,7 +42,7 @@ public class CoinItemSpawner implements ItemGenerator.ItemSpawner {
 	}
 
 	public static Coin createCoin(CoinMarket market) {
-		Coin coin = new Coin(Resources.generateString("item_coin"), sq(v.random(1, 10)));
+		Coin coin = new Coin(Resources.generateString("item_coin"), sq(v.random(.5F, 5)));
 		market.getCoins().add(coin);
 		return coin;
 	}

@@ -15,6 +15,12 @@ public interface World extends Context {
 
 	float getTimeScale();
 
+	float getZoom();
+
+	void setAutoZoom(float zoom);
+
+	void setAutoZoomDirection(boolean outward);
+
 	/**
 	 * Add (or replace existing) Syncable object
 	 */
@@ -46,7 +52,7 @@ public interface World extends Context {
 	 * Called when the gamemode restarts
 	 */
 	void restart();
-	
+
 	<T extends Syncable> List<T> findObjects(Class<T> type);
 
 	<T extends Syncable> T findRandomObject(Class<T> type); // TODO: add predicate overload

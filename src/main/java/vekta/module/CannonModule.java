@@ -9,10 +9,15 @@ import static vekta.Vekta.register;
 
 public class CannonModule extends WeaponModule {
 	private static final float PROJECTILE_SPEED = 20;
-	
+
 	@Override
 	public String getName() {
 		return "Plasma Cannon";
+	}
+
+	@Override
+	public int getMass() {
+		return 1000;
 	}
 
 	@Override

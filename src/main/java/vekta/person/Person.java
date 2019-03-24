@@ -4,6 +4,7 @@ import vekta.*;
 import vekta.mission.Mission;
 import vekta.mission.MissionIssuer;
 import vekta.object.SpaceObject;
+import vekta.person.personality.Personality;
 import vekta.spawner.PersonGenerator;
 import vekta.terrain.LandingSite;
 import vekta.terrain.building.HouseBuilding;
@@ -12,8 +13,7 @@ import vekta.terrain.settlement.Settlement;
 import java.util.HashMap;
 import java.util.Map;
 
-import static vekta.Vekta.getWorld;
-import static vekta.Vekta.v;
+import static vekta.Vekta.*;
 
 public class Person extends Syncable<Person> implements MissionIssuer {
 
@@ -23,6 +23,7 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 
 	private @Sync Faction faction;
 	private @Sync String title;
+	private Personality personality;
 	private @Sync Settlement home;
 	private @Sync boolean busy;
 
@@ -63,6 +64,14 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 	public void setTitle(String title) {
 		this.title = title;
 		syncChanges();
+	}
+
+	public Personality getPersonality() {
+		return personality;
+	}
+
+	public void setPersonality(Personality personality) {
+		this.personality = personality;
 	}
 
 	public boolean hasHome() {
@@ -107,13 +116,38 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 
 	public Dialog createDialog(String type) {
 		String[] parts = Resources.generateString("dialog_" + type).split("\\*");
-		Dialog dialog = new Dialog(type, this, parts[0].trim());
-		if(parts.length > 1) {
-			for(int i = 1; i < parts.length; i++) {
-				// Add custom response messages
-				dialog.parseResponse(parts[i].trim());
+		Personality personality = getPersonality();
+
+		String text = parts[0].trim();
+
+		if(personality != null) {
+			if(!text.startsWith("|")) {
+				text = personality.transformDialog(type, text);
+
+				// Join and re-split responses
+				parts[0] = text;
+				parts = String.join("*", parts).split("\\*");
+				text = parts[0];
 			}
 		}
+
+		Dialog dialog = new Dialog(type, this, text);
+
+		if(text.startsWith("!")) {
+			// Angry message
+			dialog.setColor(DANGER_COLOR);
+			dialog.setMessage(text.substring(1).trim());
+		}
+		else if(text.startsWith("|")) {
+			// Non-dialog message ("You notice something" or  other non-dialog message)
+			dialog.setColor(v.color(100));
+			dialog.setMessage(text.substring(1).trim());
+		}
+
+		for(int i = 1; i < parts.length; i++) {
+			dialog.parseResponse(parts[i].trim());
+		}
+		
 		return dialog;
 	}
 

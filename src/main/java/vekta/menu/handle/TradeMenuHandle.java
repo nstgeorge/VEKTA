@@ -11,28 +11,20 @@ import static vekta.Vekta.v;
 /**
  * Menu renderer for trade interactions
  */
-public class TradeMenuHandle extends MenuHandle {
-	private boolean buying;
+public class TradeMenuHandle extends SideLayoutMenuHandle {
 	private final Inventory to;
 
 	public TradeMenuHandle(boolean buying, Inventory to) {
-		this.buying = buying;
+		super(buying);
+
 		this.to = to;
-	}
-
-	@Override
-	public int getSpacing() {
-		return 70;
-	}
-
-	@Override
-	public int getButtonWidth() {
-		return super.getButtonWidth() * 2;
 	}
 
 	@Override
 	public void render(Menu menu) {
 		super.render(menu);
+
+		boolean buying = isLeftSide();
 
 		v.textSize(32);
 		v.fill(buying ? UI_COLOR : 100);
@@ -43,13 +35,13 @@ public class TradeMenuHandle extends MenuHandle {
 	protected void drawButton(Menu menu, MenuOption opt, int index) {
 		super.drawButton(menu, opt, index);
 
-		if(!buying && opt instanceof ItemTradeOption) {
+		if(!isLeftSide() && opt instanceof ItemTradeOption) {
 			ItemTradeOption trade = (ItemTradeOption)opt;
-			
+
 			int profit = trade.getProfit(menu.getPlayer());
 
 			v.fill(profit > 0 ? UI_COLOR : 100);
-			v.text((profit > 0 ? "+" : "") + profit, getButtonX() + getButtonWidth() * 3 / 4F, getButtonY(index));
+			v.text((profit > 0 ? "+" : "") + profit, getButtonX() + getButtonWidth() / 2F + 50, getButtonY(index));
 		}
 	}
 }

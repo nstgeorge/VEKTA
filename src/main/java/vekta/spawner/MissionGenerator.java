@@ -18,8 +18,8 @@ import static vekta.Vekta.getWorld;
 import static vekta.Vekta.v;
 
 public class MissionGenerator {
-	private static final ObjectiveSpawner[] OBJECTIVE_SPAWNERS = Resources.getSubclassInstances(ObjectiveSpawner.class);
-	private static final RewardSpawner[] REWARD_SPAWNERS = Resources.getSubclassInstances(RewardSpawner.class);
+	private static final ObjectiveSpawner[] OBJECTIVE_SPAWNERS = Resources.findSubclassInstances(ObjectiveSpawner.class);
+	private static final RewardSpawner[] REWARD_SPAWNERS = Resources.findSubclassInstances(RewardSpawner.class);
 
 	public static Mission createMission(Player player, MissionIssuer issuer) {
 		return createMission(player, issuer, issuer.chooseMissionTier(player));

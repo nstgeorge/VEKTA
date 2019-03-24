@@ -2,7 +2,6 @@ package vekta.object.ship;
 
 import processing.core.PVector;
 import vekta.Counter;
-import vekta.Player;
 import vekta.RenderLevel;
 import vekta.menu.Menu;
 import vekta.object.HomingProjectile;
@@ -77,7 +76,7 @@ public abstract class FighterShip extends Ship implements Targeter {
 			float rangeFactor = engageSq - offset.magSq();
 
 			heading.set(offset.normalize());
-			
+
 			accelerate(max(-.5F, min(1F, -rangeFactor)));
 			if(rangeFactor >= 0 && attackCt.cycle()) {
 				fireProjectile();
@@ -104,7 +103,7 @@ public abstract class FighterShip extends Ship implements Targeter {
 	}
 
 	@Override
-	public void setupDockingMenu(Player player, Menu menu) {
+	public void setupDockingMenu(Menu menu) {
 	}
 
 	public float getAttackScale() {

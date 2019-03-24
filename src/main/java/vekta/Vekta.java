@@ -299,7 +299,7 @@ public class Vekta extends PApplet {
 	}
 
 	public boolean chance(float chance) {
-		return chance > 0 && (chance >= 1 || v.random(1) < chance);
+		return chance > 0 && (chance == 1 || v.random(1) < chance);
 	}
 
 	/**

@@ -1,0 +1,17 @@
+{description_item_rare}
+We got this * for free at an auction because literally nobody else wanted it. 
+It ain't the {item}, but it'll do.
+{item_adj_common}, {item_adj_common}, and most importantly, {item_adj_common}. 
+We have absolutely no idea where this came from. It just appeared in our shop one day. 
+It's similar to that {item_common} that {action_past_bad}. 
+Only the bravest among us can get more than one use out of this. 
+You don't want to know where this * has been...
+We're selling this at a discount for many, many reasons. 
+This is most likely the worst * in existence. 
+Sometimes, if you listen closely, you can hear it shouting insults at you. 
+Be careful with this one. 
+(It's very obviously broken)
+{boss_modifier} sold separately. 
+Probably your only chance to own a *.
+It's actually a repurposed {item_noun} {item_modifier}. 
+We can't seem to get rid of this thing. 

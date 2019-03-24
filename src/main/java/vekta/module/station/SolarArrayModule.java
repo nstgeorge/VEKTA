@@ -36,6 +36,11 @@ public class SolarArrayModule extends GeneratorModule {
 	}
 
 	@Override
+	public int getMass() {
+		return 15000;
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return other instanceof SolarArrayModule && getRate() > ((SolarArrayModule)other).getRate();
 	}

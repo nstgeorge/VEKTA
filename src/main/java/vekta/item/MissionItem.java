@@ -16,6 +16,7 @@ import static vekta.Vekta.getWorld;
 import static vekta.Vekta.v;
 
 public class MissionItem extends Item implements MissionIssuer {
+	private final String name;
 	private final MissionProvider provider;
 
 	private boolean activated;
@@ -27,9 +28,23 @@ public class MissionItem extends Item implements MissionIssuer {
 	}
 
 	public MissionItem(String name, MissionProvider provider) {
-		super(name, ItemType.MISSION);
-
+		this.name = name;
 		this.provider = provider;
+	}
+
+	@Override
+	public int getMass() {
+		return 10;
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public ItemType getType() {
+		return ItemType.MISSION;
 	}
 
 	public Mission createMission(Player player) {

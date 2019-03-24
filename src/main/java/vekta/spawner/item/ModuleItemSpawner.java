@@ -10,7 +10,7 @@ import vekta.spawner.ItemGenerator;
 import static vekta.Vekta.v;
 
 public class ModuleItemSpawner implements ItemGenerator.ItemSpawner {
-	private static final Module[] MODULES = Resources.getSubclassInstances(Module.class);
+	private static final Module[] MODULES = Resources.findSubclassInstances(Module.class);
 
 	@Override
 	public float getWeight() {

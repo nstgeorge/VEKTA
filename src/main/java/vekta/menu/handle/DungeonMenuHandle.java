@@ -36,8 +36,12 @@ public class DungeonMenuHandle extends MenuHandle {
 
 		getRoom().onUpdate(menu);
 
-		v.textSize(24);
-		v.fill(200);
+		v.textSize(48);
+		v.fill(100);
+		v.text(room.getName(), getButtonX(), getButtonY(-3));
+
+		v.textSize(32);
+		v.fill(220);
 		v.text(room.getDescription(), getButtonX(), getButtonY(-2));
 	}
 }

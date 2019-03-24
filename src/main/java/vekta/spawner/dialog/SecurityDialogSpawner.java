@@ -7,6 +7,7 @@ import vekta.menu.option.CustomOption;
 import vekta.menu.option.MenuOption;
 import vekta.person.Dialog;
 import vekta.person.Person;
+import vekta.person.TemporaryPerson;
 import vekta.spawner.DialogGenerator;
 
 public class SecurityDialogSpawner implements DialogGenerator.DialogSpawner {
@@ -21,7 +22,7 @@ public class SecurityDialogSpawner implements DialogGenerator.DialogSpawner {
 	}
 
 	public static Dialog randomSecurityDialog(Faction faction, MenuOption escape) {
-		Person guard = new Person("Security Guard", faction);
+		Person guard = new TemporaryPerson("Security Guard", faction);
 		Dialog dialog = guard.createDialog("security");
 		dialog.add(new CustomOption("Go Quietly", m -> {
 			// TODO: different behavior

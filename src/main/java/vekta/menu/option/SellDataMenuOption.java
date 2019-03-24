@@ -6,6 +6,10 @@ import vekta.menu.Menu;
 import vekta.menu.handle.TradeMenuHandle;
 import vekta.terrain.settlement.Settlement;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
 import static vekta.Vekta.moneyString;
 import static vekta.Vekta.setContext;
 
@@ -36,7 +40,9 @@ public class SellDataMenuOption implements MenuOption {
 		menu.getPlayer().cleanupKnowledge();
 
 		Menu sub = new Menu(menu, new TradeMenuHandle(false, getInventory()));
-		for(Knowledge k : menu.getPlayer().getKnowledgePrices().keySet()) {
+		List<Knowledge> knowledge = new ArrayList<>(menu.getPlayer().getKnowledgePrices().keySet());
+		knowledge.sort(Comparator.comparingInt(k -> -k.getArchiveValue()));
+		for(Knowledge k : knowledge) {
 			// TODO: convert to DataTradeOption
 			sub.add(new CustomOption(moneyString(k.getName() + " Data", k.getArchiveValue()), m -> {
 				int price = m.getPlayer().getKnowledgePrices().get(k);

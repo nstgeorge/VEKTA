@@ -15,7 +15,7 @@ import java.util.List;
 import static vekta.Vekta.setContext;
 
 public class UpgradeMenuOption implements MenuOption {
-	private static final SettlementUpgrade[] UPGRADES = Resources.getSubclassInstances(SettlementUpgrade.class);
+	private static final SettlementUpgrade[] UPGRADES = Resources.findSubclassInstances(SettlementUpgrade.class);
 
 	private final Player player;
 	private final Settlement settlement;

@@ -21,6 +21,11 @@ public class PlanetBusterModule extends WeaponModule {
 	}
 
 	@Override
+	public int getMass() {
+		return used ? 100 : 2000;
+	}
+
+	@Override
 	public Module getVariant() {
 		return new PlanetBusterModule();
 	}

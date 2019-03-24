@@ -1,5 +1,6 @@
 package vekta.module;
 
+import vekta.InfoGroup;
 import vekta.KeyBinding;
 import vekta.item.Item;
 import vekta.menu.Menu;
@@ -15,6 +16,8 @@ public interface Module extends Serializable {
 	String getName();
 
 	ModuleType getType();
+	
+	int getMass();
 
 	boolean isBetter(Module other);
 
@@ -36,10 +39,13 @@ public interface Module extends Serializable {
 
 	default void onKeyRelease(KeyBinding key) {
 	}
-	
+
 	default void onItemMenu(Item item, Menu menu) {
 	}
 
 	default void onMenu(Menu menu) {
+	}
+
+	default void onInfo(InfoGroup info) {
 	}
 }

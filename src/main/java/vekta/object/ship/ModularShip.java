@@ -31,6 +31,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			KeyBinding.SHIP_MISSIONS, MissionMenuOption.class,
 			KeyBinding.SHIP_LOADOUT, LoadoutMenuOption.class,
 			KeyBinding.SHIP_INTERNET, InternetMenuOption.class,
+			KeyBinding.SHIP_INVENTORY, InventoryOption.class,
 			KeyBinding.SHIP_KNOWLEDGE, PlayerKnowledgeOption.class
 	);
 
@@ -43,6 +44,8 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	private float thrust;
 	private float turn;
 
+	private float mass;
+
 	private boolean overheated;
 	private final List<Battery> batteries = new ArrayList<>();
 	private float energy;
@@ -54,6 +57,15 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	public ModularShip(String name, PVector heading, PVector position, PVector velocity, int color, float speed, float turnSpeed) {
 		super(name, heading, position, velocity, color, speed, turnSpeed);
+	}
+
+	@Override
+	public float getMass() {
+		return mass;
+	}
+
+	public float getBaseMass() {
+		return 1000;
 	}
 
 	public final boolean hasController() {
@@ -254,6 +266,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		if(hasController()) {
 			getController().emit(PlayerEvent.INSTALL_MODULE, module);
 		}
+		updateMass();
 	}
 
 	@Override
@@ -264,6 +277,17 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			if(hasController()) {
 				getController().emit(PlayerEvent.UNINSTALL_MODULE, module);
 			}
+		}
+		updateMass();
+	}
+
+	private void updateMass() {
+		mass = getBaseMass();
+		for(Module module : getModules()) {
+			mass += module.getMass();
+		}
+		for(Item item : getInventory().getItems()) {
+			mass += item.getMass();
 		}
 	}
 
@@ -337,6 +361,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	public Menu openShipMenu() {
 		Menu menu = new Menu(getController(), new BackOption(getWorld()), new ObjectMenuHandle(this));
 		menu.add(new PlayerKnowledgeOption());
+		menu.add(new InventoryOption(getInventory()));
 		menu.add(new LoadoutMenuOption(this));
 		menu.add(new MissionMenuOption());
 		menu.add(new RenameOption(this));
@@ -369,7 +394,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			Player player = getController();
 			if(s instanceof Ship) {
 				Menu menu = new Menu(player, new ShipUndockOption(this, getWorld()), new ObjectMenuHandle(s));
-				((Ship)s).setupDockingMenu(player, menu);
+				((Ship)s).setupDockingMenu(menu);
 				menu.addDefault();
 				this.setLanding(false);
 				setContext(menu);
@@ -386,6 +411,11 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		setTurnControl(0);
 	}
 
+	@Override
+	public void setupDockingMenu(Menu menu) {
+		// TODO: add ShipSwitchOption when relevant
+	}
+
 	//// InventoryListener hooks
 
 	@Override
@@ -393,6 +423,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		if(hasController()) {
 			getController().emit(PlayerEvent.ADD_ITEM, item);
 		}
+		updateMass();
 	}
 
 	@Override
@@ -400,6 +431,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		if(hasController()) {
 			getController().emit(PlayerEvent.REMOVE_ITEM, item);
 		}
+		updateMass();
 	}
 
 	//// PlayerListener callbacks, active when hasController() == true

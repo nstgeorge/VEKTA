@@ -38,6 +38,11 @@ public class DrillModule extends ShipModule {
 	}
 
 	@Override
+	public int getMass() {
+		return (int)((getEfficiency() + 2) * 500);
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return other instanceof DrillModule && getEfficiency() > ((DrillModule)other).getEfficiency();
 	}
@@ -58,7 +63,7 @@ public class DrillModule extends ShipModule {
 		}
 		else if(menu.getHandle() instanceof ObjectMenuHandle) {
 			SpaceObject s = ((ObjectMenuHandle)menu.getHandle()).getSpaceObject();
-			
+
 			if(s instanceof RingDebris) {
 				Inventory inv = ((RingDebris)s).getInventory();
 				if(inv.itemCount() > 0) {

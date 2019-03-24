@@ -36,6 +36,11 @@ public class CountermeasureModule extends WeaponModule {
 	}
 
 	@Override
+	public int getMass() {
+		return 1000;
+	}
+
+	@Override
 	public Module getVariant() {
 		return new CountermeasureModule(chooseInclusive(1, 3));
 	}

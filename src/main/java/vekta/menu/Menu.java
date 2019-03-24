@@ -67,12 +67,13 @@ public class Menu implements Context {
 		return index;
 	}
 
-	public void setIndex(int n) {
-		index = n;
+	public void setIndex(int index) {
+		this.index = index;
 		MenuOption cursor = getCursor();
 		for(MenuListener listener : listeners) {
 			listener.onHover(cursor);
 		}
+		handle.onChange(this);
 	}
 
 	public int size() {

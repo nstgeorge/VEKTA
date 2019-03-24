@@ -21,6 +21,11 @@ public class SensorModule implements ComponentModule {
 	}
 
 	@Override
+	public int getMass() {
+		return 1000;
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return false;
 	}

@@ -42,10 +42,8 @@ public class Singleplayer implements World, PlayerListener {
 	private static final File QUICKSAVE_FILE = new File("quicksave.vekta");
 	private static final File AUTOSAVE_FILE = new File("autosave.vekta");
 
-	private static final float ZOOM_EXPONENT = .3F;
+	private static final float ZOOM_FACTOR = .3F;
 	private static final float ZOOM_SMOOTH = .1F;
-	//	private static final float TIME_SCALE = 5e-4F;
-	//	private static final float TIME_FALLOFF = .2F;
 	private static final float TIME_SCALE = .001F;
 	private static final float TIME_FALLOFF = .1F;
 	private static final int MAX_OBJECTS_PER_DIST = 5; // TODO: increase as we add more object types
@@ -66,13 +64,13 @@ public class Singleplayer implements World, PlayerListener {
 
 	protected WorldState state;
 
-	private float zoom = 1; // Zoom factor
-	private float smoothZoom = zoom; // Zoom factor with time smoothing
+	private boolean lastZoomOutward; // Was last user-controlled zoom directed outward?
+	private float smoothZoom = 10; // Time-smoothed zoom factor
 	private float timeScale = 1; // World time scale
 	private RenderLevel prevLevel = RenderLevel.PARTICLE;
 
 	private final Counter targetCt = new Counter(30).randomize(); // Update Targeter instances
-	//	private final Counter spawnCt = new Counter(10).randomize(); // Spawn objects
+	private final Counter spawnCt = new Counter(10).randomize(); // Spawn objects
 	private final Counter cleanupCt = new Counter(100).randomize(); // Despawn objects
 	private final Counter eventCt = new Counter(3600 * 5).randomize(); // Occasional random events
 	private final Counter situationCt = new Counter(100).randomize(); // Situational events
@@ -208,8 +206,22 @@ public class Singleplayer implements World, PlayerListener {
 		return timeScale;
 	}
 
+	@Override
 	public float getZoom() {
 		return smoothZoom;
+	}
+
+	@Override
+	public void setAutoZoom(float zoom) {
+		// Only update if player was zooming in the same direction
+		if(lastZoomOutward ? zoom > state.getZoom() : zoom < state.getZoom()) {
+			state.setZoom(max(MIN_ZOOM_LEVEL, min(MAX_ZOOM_LEVEL, zoom)));
+		}
+	}
+
+	@Override
+	public void setAutoZoomDirection(boolean outward) {
+		lastZoomOutward = outward;
 	}
 
 	@Override
@@ -222,7 +234,7 @@ public class Singleplayer implements World, PlayerListener {
 			save(AUTOSAVE_FILE);
 		}
 	}
-	
+
 	@Override
 	public void render() {
 		ModularShip playerShip = getPlayerShip();
@@ -233,7 +245,7 @@ public class Singleplayer implements World, PlayerListener {
 		}
 
 		// Update time factor
-		smoothZoom += (zoom - smoothZoom) * ZOOM_SMOOTH;
+		smoothZoom += (state.getZoom() - smoothZoom) * ZOOM_SMOOTH;
 		timeScale = max(1, smoothZoom * TIME_SCALE) / (1 + smoothZoom * TIME_SCALE * TIME_SCALE * TIME_FALLOFF);
 
 		// Determine render level from time scale
@@ -252,7 +264,6 @@ public class Singleplayer implements World, PlayerListener {
 		v.translate(v.width / 2F, v.height / 2F);
 
 		boolean targeting = targetCt.cycle();
-		//		boolean spawning = spawnCt.cycle();
 		boolean cleanup = cleanupCt.cycle();
 
 		updateGlobal(level);
@@ -350,12 +361,14 @@ public class Singleplayer implements World, PlayerListener {
 
 		state.endUpdate();
 
-		RenderLevel spawnLevel = level;
-		while(spawnLevel.ordinal() > 0 && v.chance(.05F)) {
-			spawnLevel = RenderLevel.values()[spawnLevel.ordinal() - 1];
-		}
-		if(objectCounts[spawnLevel.ordinal()] < MAX_OBJECTS_PER_DIST) {
-			WorldGenerator.spawnOccasional(spawnLevel, playerShip);
+		if(spawnCt.cycle()) {
+			RenderLevel spawnLevel = level;
+			while(spawnLevel.ordinal() > 0 && v.chance(.05F)) {
+				spawnLevel = RenderLevel.values()[spawnLevel.ordinal() - 1];
+			}
+			if(objectCounts[spawnLevel.ordinal()] < MAX_OBJECTS_PER_DIST) {
+				WorldGenerator.spawnOccasional(spawnLevel, playerShip);
+			}
 		}
 
 		if(eventCt.cycle()) {
@@ -471,10 +484,17 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public void mouseWheel(int amount) {
-		float prevZoom = zoom;
-		zoom = max(MIN_ZOOM_LEVEL, min(MAX_ZOOM_LEVEL, zoom * (1 + amount * ZOOM_EXPONENT)));
+		float prevZoom = state.getZoom();
+		float zoom = max(MIN_ZOOM_LEVEL, min(MAX_ZOOM_LEVEL, prevZoom * (1 + amount * ZOOM_FACTOR)));
 		if(zoom != prevZoom) {
 			onZoomChange(zoom);
+		}
+		state.setZoom(zoom);
+		if(zoom > prevZoom) {
+			lastZoomOutward = true;
+		}
+		else if(zoom < prevZoom) {
+			lastZoomOutward = false;
 		}
 	}
 

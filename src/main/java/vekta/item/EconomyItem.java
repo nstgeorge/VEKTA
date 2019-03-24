@@ -4,11 +4,12 @@ import vekta.economy.Economy;
 
 public abstract class EconomyItem extends Item {
 
-	public EconomyItem(String name) {
-		super(name, ItemType.ECONOMY);
-	}
-
 	public abstract Economy getEconomy();
+
+	@Override
+	public ItemType getType() {
+		return ItemType.ECONOMY;
+	}
 
 	public float getValueScale() {
 		return 1;

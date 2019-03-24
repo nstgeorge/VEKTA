@@ -23,16 +23,31 @@ public class WeaponItem extends Item {
 		DIALOG_FILTER = new HashSet<>(Arrays.asList(types));
 	}
 
+	private final String name;
 	private final String action;
 
 	public WeaponItem(String name, String action) {
-		super(name, ItemType.DANGEROUS);
-
+		this.name = name;
 		this.action = action;
 	}
 
 	public String getAction() {
 		return action;
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public ItemType getType() {
+		return ItemType.DANGEROUS;
+	}
+
+	@Override
+	public int getMass() {
+		return 20;
 	}
 
 	@Override

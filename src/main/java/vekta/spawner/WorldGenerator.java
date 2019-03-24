@@ -25,7 +25,7 @@ public class WorldGenerator {
 
 	static {
 		// Load SPAWNERS from classpath
-		WorldSpawner[] options = Resources.getSubclassInstances(WorldSpawner.class);
+		WorldSpawner[] options = Resources.findSubclassInstances(WorldSpawner.class);
 		// Create spawner array for each RenderLevel, indexed by ordinal()
 		SPAWNERS = Arrays.stream(RenderLevel.values())
 				.map(level -> Arrays.stream(options).filter(s -> s.getObjectLevel() == level).toArray(WorldSpawner[]::new))
@@ -49,11 +49,7 @@ public class WorldGenerator {
 		boolean features = true;
 		float r = v.random(1);
 		if(r > .3) {
-			Settlement settlement = createSettlement();
-			if(v.chance(1)) {
-				settlement.add(new DungeonBuilding(DungeonGenerator.createDungeon()));
-			}
-			terrain = new HabitableTerrain(settlement);
+			terrain = new HabitableTerrain(createSettlement());
 		}
 		else if(r > .2) {
 			terrain = new MiningTerrain();
@@ -91,7 +87,7 @@ public class WorldGenerator {
 			return new FortSettlement(faction);
 		}
 		else if(r > .4) {
-			return new UnderworldSettlement(faction);
+			return new HideoutSettlement(faction);
 		}
 		else if(r > .3) {
 			return new ColonySettlement(faction);
@@ -104,6 +100,12 @@ public class WorldGenerator {
 		}
 		else {
 			return new AbandonedSettlement(faction, Resources.generateString("settlement"));
+		}
+	}
+
+	public static void populateSettlement(Settlement settlement) {
+		if(v.chance(.1F)) {
+			settlement.add(new DungeonBuilding(DungeonGenerator.createDungeon(settlement)));
 		}
 	}
 

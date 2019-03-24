@@ -4,14 +4,11 @@ import vekta.dungeon.DungeonRoom;
 import vekta.menu.Menu;
 import vekta.menu.handle.DungeonMenuHandle;
 
-import static vekta.Vekta.UI_COLOR;
-import static vekta.Vekta.setContext;
+import static vekta.Vekta.*;
 
 public class DungeonRoomOption implements MenuOption {
 	private final String name;
 	private final DungeonRoom room;
-
-	private boolean visited;
 
 	public DungeonRoomOption(String name, DungeonRoom room) {
 		this.name = name;
@@ -24,18 +21,19 @@ public class DungeonRoomOption implements MenuOption {
 	}
 
 	@Override
-	public int getBorderColor() {
-		return visited ? 200 : UI_COLOR;
+	public int getColor() {
+		return room.isVisited() ? UI_COLOR : v.color(200, 200, 100);
 	}
 
 	@Override
 	public void onSelect(Menu menu) {
-		visited = true;
+		room.setVisited(true);
 		Menu sub = new Menu(menu, new DungeonMenuHandle(room));
 		for(String path : room.getPathMap().keySet()) {
 			sub.add(new DungeonRoomOption(path, room.getPathMap().get(path)));
 		}
-		sub.addDefault();
 		setContext(sub);
+		applyContext();
+		sub.addDefault();
 	}
 }

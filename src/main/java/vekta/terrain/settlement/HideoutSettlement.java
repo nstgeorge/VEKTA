@@ -16,15 +16,10 @@ import vekta.terrain.building.MarketBuilding;
 
 import static vekta.Vekta.v;
 
-public class UnderworldSettlement extends Settlement {
+public class HideoutSettlement extends Settlement {
 
-	private final String genericName;
-
-	public UnderworldSettlement(Faction faction) {
-		super(faction, "underworld");
-
-		String[] parts = getName().split(" ");
-		genericName = parts[parts.length - 1];
+	public HideoutSettlement(Faction faction) {
+		super(faction, "hideout");
 
 		if(v.chance(.5F)) {
 			add(new MarketBuilding(2, "Weapons", ItemGenerator.getSpawner(WeaponItemSpawner.class)));
@@ -33,20 +28,16 @@ public class UnderworldSettlement extends Settlement {
 			MarketBuilding disguises = new MarketBuilding(2, "Disguises", ItemGenerator.getSpawner(CoinItemSpawner.class));
 			add(disguises);
 			disguises.getInventory().clearItems();
-			int disguiseCt = (int)v.random(5, 10);
+			int disguiseCt = (int)v.random(4, 8);
 			for(int i = 0; i < disguiseCt; i++) {
 				disguises.getInventory().add(ClothingItemSpawner.createDisguiseItem(FactionGenerator.randomFaction()));
 			}
 		}
-
-		//		if(v.chance(.75F)) {
-		//			add(new MarketBuilding(2, "Coins", ItemGenerator.getSpawner(CoinItemSpawner.class)));
-		//		}
 	}
 
 	@Override
 	public String getGenericName() {
-		return genericName;
+		return "Hideout";
 	}
 
 	@Override

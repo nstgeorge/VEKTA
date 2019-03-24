@@ -38,6 +38,7 @@ public class DungeonBuilding implements SettlementPart {
 
 	@Override
 	public void setupMenu(Menu menu) {
+		getDungeon().getStartRoom().setVisited(true); // Don't show special outline
 		menu.add(new DungeonRoomOption(getDungeon().getName(), getDungeon().getStartRoom()));
 	}
 }

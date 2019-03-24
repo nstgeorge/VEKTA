@@ -11,6 +11,8 @@ public class DungeonRoom implements Serializable {
 	private final String name;
 	private final String description;
 	private final Map<String, DungeonRoom> connections = new HashMap<>();
+	
+	private boolean visited;
 
 	public DungeonRoom(DungeonRoom parent, String name, String description) {
 		this(parent.getDungeon(), name, description);
@@ -34,6 +36,14 @@ public class DungeonRoom implements Serializable {
 
 	public String getDescription() {
 		return description;
+	}
+
+	public boolean isVisited() {
+		return visited;
+	}
+
+	public void setVisited(boolean visited) {
+		this.visited = visited;
 	}
 
 	public Map<String, DungeonRoom> getPathMap() {

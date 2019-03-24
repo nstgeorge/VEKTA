@@ -1,13 +1,18 @@
 package vekta.menu.option;
 
+import vekta.InfoGroup;
+import vekta.KeyBinding;
 import vekta.Player;
+import vekta.Settings;
+import vekta.display.Layout;
+import vekta.display.TextDisplay;
 import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;
 
 import static vekta.Vekta.moneyString;
 
-public class ItemTradeOption implements MenuOption {
+public class ItemTradeOption implements MenuOption, LayoutBuilder {
 	private final boolean buying;
 	private final Inventory you, them;
 	private final Item item;
@@ -83,5 +88,24 @@ public class ItemTradeOption implements MenuOption {
 			menu.getPlayer().setBuyPrice(item, price);
 		}
 		menu.remove(this);
+	}
+
+	@Override
+	public void onLayout(Layout layout) {
+		layout.add(new TextDisplay(getItem().getName()))
+				.customize().fontSize(32);
+
+		InfoGroup info = new InfoGroup();
+		info.addStat("Mass", item.getMass());
+		item.onInfo(info);
+		for(String line : info) {
+			// TODO: convert to InfoDisplay class
+			layout.add(new TextDisplay(line));
+		}
+
+		if(price > 0) {
+			layout.add(new TextDisplay(moneyString(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to " + (buying ? "buy" : "sell"), price)))
+					.customize().color(100);
+		}
 	}
 }

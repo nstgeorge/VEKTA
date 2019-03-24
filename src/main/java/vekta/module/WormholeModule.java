@@ -55,6 +55,11 @@ public class WormholeModule extends ShipModule {
 	}
 
 	@Override
+	public int getMass() {
+		return 700;
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return false;
 	}

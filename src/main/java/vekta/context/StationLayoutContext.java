@@ -251,6 +251,11 @@ public class StationLayoutContext implements Context, ModuleUpgrader {
 		}
 
 		@Override
+		public int getMass() {
+			return 0;
+		}
+
+		@Override
 		public void draw(RenderLevel dist, float tileSize) {
 			v.ellipse(0, 0, tileSize / 3, tileSize / 3);
 		}

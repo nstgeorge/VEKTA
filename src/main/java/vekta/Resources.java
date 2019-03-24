@@ -64,7 +64,7 @@ public final class Resources {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> T[] getSubclassInstances(Class<T> type) {
+	public static <T> T[] findSubclassInstances(Class<T> type) {
 		return REFLECTIONS.getSubTypesOf(type).stream()
 				.filter(t -> !t.isMemberClass() && !Modifier.isAbstract(t.getModifiers()))
 				.map(t -> {

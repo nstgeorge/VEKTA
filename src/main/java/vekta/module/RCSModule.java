@@ -32,6 +32,11 @@ public class RCSModule extends ShipModule {
 	}
 
 	@Override
+	public int getMass() {
+		return (int)((getTurnSpeed() + 5) * 100);
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return other instanceof RCSModule && getTurnSpeed() > ((RCSModule)other).getTurnSpeed();
 	}

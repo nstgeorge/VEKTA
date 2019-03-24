@@ -33,7 +33,7 @@ public class ObjectMenuHandle extends MenuHandle {
 		v.translate(getButtonX(), getButtonY(-2) + 40);
 		v.noFill();
 		v.stroke(target.getColor());
-		target.drawPreview(getSpacing() / 3F);
+		target.drawPreview(getSpacing() / 2F);
 		v.popMatrix();
 	}
 }

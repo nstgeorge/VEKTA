@@ -28,6 +28,11 @@ public class PassiveTCSModule extends ShipModule {
 	}
 
 	@Override
+	public int getMass() {
+		return (int)((getEfficiency() + 5) * 100);
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return other instanceof PassiveTCSModule && getEfficiency() > ((PassiveTCSModule)other).getEfficiency();
 	}
@@ -41,7 +46,7 @@ public class PassiveTCSModule extends ShipModule {
 	public void onUpdate() {
 		applyCooling(1);
 	}
-	
+
 	public void applyCooling(float scale) {
 		float optimal = getShip().getOptimalTemperature();
 		if(getShip().getTemperature() > optimal) {

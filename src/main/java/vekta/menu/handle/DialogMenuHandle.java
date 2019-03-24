@@ -1,10 +1,11 @@
 package vekta.menu.handle;
 
-import vekta.menu.Menu;
 import vekta.knowledge.ObservationLevel;
 import vekta.knowledge.PersonKnowledge;
+import vekta.menu.Menu;
 import vekta.person.Dialog;
 import vekta.person.Person;
+import vekta.person.TemporaryPerson;
 
 import static vekta.Vekta.v;
 
@@ -40,7 +41,9 @@ public class DialogMenuHandle extends MenuHandle {
 	public void focus(Menu menu) {
 		super.focus(menu);
 
-		menu.getPlayer().addKnowledge(new PersonKnowledge(ObservationLevel.VISITED, getPerson()));
+		if(!(getPerson() instanceof TemporaryPerson)) {
+			menu.getPlayer().addKnowledge(new PersonKnowledge(ObservationLevel.VISITED, getPerson()));
+		}
 	}
 
 	@Override
@@ -52,7 +55,7 @@ public class DialogMenuHandle extends MenuHandle {
 		v.text(dialog.getPerson().getName(), getButtonX(), getButtonY(-3));
 
 		v.textSize(24);
-		v.fill(dialog.getTextColor());
+		v.fill(dialog.getColor());
 		v.text(dialog.getMessage(), getButtonX(), getButtonY(-2));
 	}
 }

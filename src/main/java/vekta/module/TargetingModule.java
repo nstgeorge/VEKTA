@@ -12,7 +12,10 @@ import vekta.object.planet.Asteroid;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.object.ship.Ship;
 
+import static vekta.Vekta.getWorld;
+
 public class TargetingModule extends ShipModule implements Targeter {
+	private static final float AUTO_ZOOM_SCALE = .015F;
 
 	private TargetingMode mode;
 	private SpaceObject target;
@@ -85,6 +88,11 @@ public class TargetingModule extends ShipModule implements Targeter {
 	}
 
 	@Override
+	public int getMass() {
+		return 500;
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return false;
 	}
@@ -97,6 +105,13 @@ public class TargetingModule extends ShipModule implements Targeter {
 	@Override
 	public void onInstall() {
 		setMode(null);
+	}
+
+	@Override
+	public void onUpdate() {
+		if(target != null && getShip().isLanding()) {
+			getWorld().setAutoZoom(target.relativePosition(getShip()).mag() * AUTO_ZOOM_SCALE);
+		}
 	}
 
 	@Override

@@ -16,6 +16,7 @@ import static processing.core.PApplet.println;
  */
 public final class WorldState implements Serializable {
 	private Player player;
+	private float zoom = 1;
 
 	private transient Map<Long, Syncable> syncMap = new HashMap<>(); // All client-syncable objects
 
@@ -44,6 +45,14 @@ public final class WorldState implements Serializable {
 
 	public void setPlayer(Player player) {
 		this.player = register(player);
+	}
+
+	public float getZoom() {
+		return zoom;
+	}
+
+	public void setZoom(float zoom) {
+		this.zoom = zoom;
 	}
 
 	public Collection<Syncable> getSyncables() {
@@ -160,12 +169,12 @@ public final class WorldState implements Serializable {
 			}
 			return current;
 		}
-		else {
+		else if(!(object instanceof ConditionalRegister) || ((ConditionalRegister)object).shouldRegister()) {
 			add(object);
 			syncMap.put(object.getSyncID(), object);
 			println("<add>", object.isRemote(), object.getClass().getSimpleName() + "[" + Long.toHexString(id) + "]");
-			return object;
 		}
+		return object;
 	}
 
 	private void add(Syncable object) {

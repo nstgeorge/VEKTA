@@ -24,11 +24,19 @@ public class AutopilotModule extends TargetingModule {
 	public void setActive(boolean active) {
 		getShip().setLanding(active);
 		getShip().updateTargets();
+		
+		// Only zoom in or out as relevant
+		getWorld().setAutoZoomDirection(!active);
 	}
 
 	@Override
 	public String getName() {
 		return "Autopilot Computer";
+	}
+
+	@Override
+	public int getMass() {
+		return super.getMass() + 100;
 	}
 
 	@Override

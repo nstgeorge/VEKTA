@@ -16,6 +16,7 @@ public class CoinMarket implements Serializable, EconomyContainer, ProductivityM
 		this.economy = register(new Economy(this, 10));
 		economy.addModifier(new NoiseModifier(1));
 		economy.addModifier(this);
+		economy.fillHistory();
 	}
 
 	public Economy getEconomy() {

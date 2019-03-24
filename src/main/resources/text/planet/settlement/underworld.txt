@@ -1,3 +1,0 @@
-{settlement} {underworld_noun}
-{firstname} {underworld_noun}
-{lastname} {underworld_noun}

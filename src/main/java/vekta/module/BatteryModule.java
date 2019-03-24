@@ -16,7 +16,7 @@ import static processing.core.PApplet.sq;
 
 public class BatteryModule extends ShipModule implements Rechargeable {
 	private static float CHARGE_THRESHOLD = .9F;
-	
+
 	private final ModularShip.Battery battery;
 
 	public BatteryModule() {
@@ -49,6 +49,11 @@ public class BatteryModule extends ShipModule implements Rechargeable {
 	@Override
 	public ModuleType getType() {
 		return ModuleType.BATTERY;
+	}
+
+	@Override
+	public int getMass() {
+		return 10 * getBattery().getCapacity();
 	}
 
 	@Override

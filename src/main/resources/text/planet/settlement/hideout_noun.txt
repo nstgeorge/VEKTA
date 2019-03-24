@@ -13,3 +13,7 @@ Fringe
 Badlands
 Underworld
 Underground
+Foundation
+Clan
+Club
+Cradle

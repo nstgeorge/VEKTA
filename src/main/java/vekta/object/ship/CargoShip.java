@@ -3,7 +3,6 @@ package vekta.object.ship;
 import processing.core.PVector;
 import vekta.Counter;
 import vekta.Faction;
-import vekta.Player;
 import vekta.RenderLevel;
 import vekta.menu.Menu;
 import vekta.menu.option.LootMenuOption;
@@ -56,12 +55,12 @@ public class CargoShip extends Ship {
 	}
 
 	@Override
-	public void setupDockingMenu(Player player, Menu menu) {
-		menu.add(new LootMenuOption("Loot", player.getInventory(), getInventory()));
+	public void setupDockingMenu(Menu menu) {
+		menu.add(new LootMenuOption("Loot", menu.getPlayer().getInventory(), getInventory()));
 
 		for(EscortShip escort : getWorld().findObjects(EscortShip.class)) {
 			if(escort.getTarget() == this) {
-				escort.setTarget(player.getShip());
+				escort.setTarget(menu.getPlayer().getShip());
 			}
 		}
 	}

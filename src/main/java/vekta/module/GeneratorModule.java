@@ -28,6 +28,11 @@ public class GeneratorModule extends ShipModule {
 	}
 
 	@Override
+	public int getMass() {
+		return (int)((getRate() + 2) * 1000);
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return other instanceof GeneratorModule && getRate() > ((GeneratorModule)other).getRate();
 	}

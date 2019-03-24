@@ -77,13 +77,13 @@ public class MessengerShip extends Ship {
 	}
 
 	@Override
-	public void setupDockingMenu(Player player, Menu menu) {
+	public void setupDockingMenu(Menu menu) {
 		delivered = true;
 
 		menu.setAuto(new DialogOption("Talk to Pilot", getDialog(), menu.getDefault()));
 		// Back and remove
 		if(getInventory().itemCount() > 0) {
-			menu.add(new LootMenuOption("Collect Item" + (getInventory().itemCount() == 1 ? "s" : ""), player.getInventory(), getInventory()));
+			menu.add(new LootMenuOption("Collect Item" + (getInventory().itemCount() == 1 ? "s" : ""), menu.getPlayer().getInventory(), getInventory()));
 		}
 	}
 

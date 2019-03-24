@@ -46,6 +46,11 @@ public class HyperdriveModule extends ShipModule {
 	}
 
 	@Override
+	public int getMass() {
+		return (int)((getBoost() + 2) * 500);
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return other instanceof HyperdriveModule && getBoost() > ((HyperdriveModule)other).getBoost();
 	}

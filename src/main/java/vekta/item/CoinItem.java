@@ -9,10 +9,18 @@ public class CoinItem extends EconomyItem {
 	private final CoinMarket market;
 
 	public CoinItem(Coin coin, CoinMarket market) {
-		super(coin.getName());
-
 		this.coin = coin;
 		this.market = market;
+	}
+
+	@Override
+	public int getMass() {
+		return 1;
+	}
+
+	@Override
+	public String getName() {
+		return coin.getName();
 	}
 
 	public Coin getCoin() {

@@ -12,4 +12,4 @@ Odd Crystals
 Shiny Rocks : Very Shiny Rocks
 Salt
 Quartz
-Silicon : Mechanical Parts
+Silicon : Circuitry

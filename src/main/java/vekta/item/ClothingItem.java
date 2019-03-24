@@ -5,7 +5,7 @@ import vekta.menu.Menu;
 import vekta.menu.handle.SecurityMenuHandle;
 import vekta.menu.option.CustomOption;
 
-public class ClothingItem extends Item {
+public class ClothingItem extends BasicItem {
 	private final Faction faction;
 
 	public ClothingItem(String name, ItemType type, Faction faction) {

@@ -35,3 +35,6 @@ Dispenser
 Condenser
 Statue
 Rotator
+Squeezer
+Slosher
+Scaler

@@ -15,7 +15,7 @@ import static vekta.Vekta.round;
 import static vekta.Vekta.v;
 
 public class ItemGenerator {
-	private static final ItemSpawner[] SPAWNERS = Resources.getSubclassInstances(ItemSpawner.class);
+	private static final ItemSpawner[] SPAWNERS = Resources.findSubclassInstances(ItemSpawner.class);
 	private static final ItemCategory[] CATEGORIES;
 
 	static {

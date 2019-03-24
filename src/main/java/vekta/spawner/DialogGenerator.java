@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 import static vekta.Vekta.v;
 
 public final class DialogGenerator {
-	private static final Map<String, DialogSpawner> SPAWNERS = Arrays.stream(Resources.getSubclassInstances(DialogSpawner.class))
+	private static final Map<String, DialogSpawner> SPAWNERS = Arrays.stream(Resources.findSubclassInstances(DialogSpawner.class))
 			.collect(Collectors.toMap(DialogSpawner::getType, Function.identity()));
 
 	private static final Map<String, List<String>> NEXT_MAP = Resources.getStringMap("dialog_next_map", false);

@@ -9,7 +9,6 @@ import vekta.module.*;
 import static vekta.Vekta.v;
 
 public class PlayerShip extends ModularShip {
-	private static final float DEF_MASS = 5000;
 	private static final float DEF_RADIUS = 5;
 	private static final float DEF_SPEED = .1F; // Base speed (engine speed = 1)
 	private static final float DEF_TURN = 4; // Base turn speed (RCS turnSpeed = 1)
@@ -26,11 +25,6 @@ public class PlayerShip extends ModularShip {
 		addModule(new CannonModule());
 
 		setEnergy(getMaxEnergy());
-	}
-
-	@Override
-	public float getMass() {
-		return DEF_MASS;
 	}
 
 	@Override
@@ -72,9 +66,4 @@ public class PlayerShip extends ModularShip {
 		drawNearby(getRadius());
 		//		drawMarker();
 	}
-
-	@Override
-	public void setupDockingMenu(Player player, Menu menu) {
-		// TODO: add menu item_common.txt to switch into ship
-	}
-}  
+}

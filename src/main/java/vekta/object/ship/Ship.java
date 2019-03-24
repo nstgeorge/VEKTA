@@ -230,7 +230,7 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 		undock();
 	}
 
-	public abstract void setupDockingMenu(Player player, Menu menu);
+	public abstract void setupDockingMenu(Menu menu);
 
 	public void onDepart(SpaceObject obj) {
 	}
