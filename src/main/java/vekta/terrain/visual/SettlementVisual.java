@@ -62,18 +62,18 @@ public class SettlementVisual extends GroupVisual {
 			}
 		}
 
-		int domeCt = (int)(v.random(1, 3) * scale);
+		int domeCt = (int)(v.random(1, 2) * scale);
 		for(int i = 0; i < domeCt; i++) {
 			int pos = randomPosition();
 			int nearest = nearestPosition(pos);
 			add(new DomeVisual(xPositions[pos], yPositions[pos], sqrt(distSq(pos, nearest))));
 		}
 
-		int housingCt = (int)(v.random(2, 4) * scale);
-		for(int i = 0; i < housingCt; i++) {
+		int buildingCt = (int)(v.random(2, 4) * scale);
+		for(int i = 0; i < buildingCt; i++) {
 			int pos = randomPosition();
 			int nearest = nearestPosition(pos);
-			add(new HousingVisual(xPositions[pos], yPositions[pos], xPositions[nearest], yPositions[nearest],
+			add(new BuildingVisual(xPositions[pos], yPositions[pos], xPositions[nearest], yPositions[nearest],
 					v.random(.1F, 1) * ringSpacing,
 					v.random(.2F, 1)));
 		}

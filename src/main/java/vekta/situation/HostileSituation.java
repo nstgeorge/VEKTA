@@ -30,7 +30,7 @@ public class HostileSituation implements Situation {
 
 	@Override
 	public void start(Player player) {
-		Resources.setMusic(HOSTILE_MUSIC.random(), false);
+		Resources.setMusic(HOSTILE_MUSIC.random(), true);
 		player.send("Entering hostile territory!")
 				.withColor(DANGER_COLOR)
 				.withTime(2);

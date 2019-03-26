@@ -35,7 +35,7 @@ public class RefineryBuilding implements SettlementPart {
 	public void setup(LandingSite site) {
 		site.getTerrain().addFeature("Industrial");
 
-		if(v.chance(.25F)) {
+		if(site.getTerrain().hasFeature("Atmosphere") && v.chance(.3F)) {
 			site.getTerrain().addFeature("Smog");
 		}
 	}

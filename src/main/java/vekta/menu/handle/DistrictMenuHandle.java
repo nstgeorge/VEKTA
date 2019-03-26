@@ -2,16 +2,17 @@ package vekta.menu.handle;
 
 import vekta.menu.Menu;
 import vekta.terrain.settlement.District;
-
-import static vekta.Vekta.v;
+import vekta.terrain.settlement.Settlement;
 
 /**
  * Menu renderer for visiting districts
  */
-public class DistrictMenuHandle extends MenuHandle {
+public class DistrictMenuHandle extends SettlementMenuHandle {
 	private final District district;
 
-	public DistrictMenuHandle(District district) {
+	public DistrictMenuHandle(Settlement settlement, District district) {
+		super(settlement);
+
 		this.district = district;
 	}
 
@@ -19,17 +20,42 @@ public class DistrictMenuHandle extends MenuHandle {
 		return district;
 	}
 
-	@Override
-	public int getButtonY(int i) {
-		return super.getButtonY(i - 1);
-	}
+//	@Override
+//	public int getButtonY(int i) {
+//		return super.getButtonY(i - 1);
+//	}
 
 	@Override
 	public void render(Menu menu) {
 		super.render(menu);
 
-		v.textSize(48);
-		v.fill(district.getSettlement().getColor());
-		v.text(district.getName(), v.width / 2F, getButtonY(-2));
+		//		v.textSize(48);
+		//		v.fill(district.getSettlement().getColor());
+		//		v.text(district.getName(), v.width / 2F, getButtonY(-2));
+	}
+
+	@Override
+	protected String getSubtext() {
+		return getDistrict().getName();
+	}
+
+	@Override
+	protected void onVisit(Menu menu) {
+		// Override default behavior (observe settlement)
+	}
+
+	@Override
+	protected float getZoomScale() {
+		return 2;
+	}
+
+	@Override
+	protected float getX() {
+		return getDistrict().getX();
+	}
+
+	@Override
+	protected float getY() {
+		return getDistrict().getY();
 	}
 }

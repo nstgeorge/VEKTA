@@ -4,12 +4,12 @@ import static processing.core.PApplet.*;
 import static processing.core.PConstants.QUAD_STRIP;
 import static vekta.Vekta.v;
 
-public class HousingVisual extends Visual {
+public class BuildingVisual extends Visual {
 	private final float x2, y2;
 	private final float size;
 	private final float ratio;
 
-	public HousingVisual(float x1, float y1, float x2, float y2, float size, float ratio) {
+	public BuildingVisual(float x1, float y1, float x2, float y2, float size, float ratio) {
 		super(x1, y1);
 		this.x2 = x2;
 		this.y2 = y2;
