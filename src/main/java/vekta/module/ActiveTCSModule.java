@@ -1,5 +1,7 @@
 package vekta.module;
 
+import vekta.InfoGroup;
+
 public class ActiveTCSModule extends PassiveTCSModule {
 	private static final float EFFICIENCY_BOOST = 30;
 
@@ -58,5 +60,10 @@ public class ActiveTCSModule extends PassiveTCSModule {
 		if(getShip().getTemperature() <= getShip().getOptimalTemperature()) {
 			active = false;
 		}
+	}
+
+	@Override
+	public void onInfo(InfoGroup info) {
+		info.addDescription("The Active Thermal Control System (TCS) works similarly to Passive TCS, with the addition of using electricity to cool down the spacecraft when at high temperatures.");
 	}
 }

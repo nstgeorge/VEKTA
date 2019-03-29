@@ -1,6 +1,7 @@
 package vekta.module;
 
 import processing.core.PVector;
+import vekta.InfoGroup;
 import vekta.object.Projectile;
 import vekta.object.ship.ModularShip;
 
@@ -38,5 +39,12 @@ public class CannonModule extends WeaponModule {
 			PVector velocity = ship.getVelocity().add(ship.getHeading().setMag(PROJECTILE_SPEED));
 			register(new Projectile(ship, ship.getPosition(), velocity, ship.getColor()));
 		}
+	}
+
+	@Override
+	public void onInfo(InfoGroup info) {
+		info.addDescription("Fling chunks of molten plasma at your enemies.");
+
+		super.onInfo(info);
 	}
 }

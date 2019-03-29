@@ -1,5 +1,7 @@
 package vekta.module;
 
+import vekta.InfoGroup;
+
 public class PassiveTCSModule extends ShipModule {
 	private static final float EFFICIENCY_SCALE = 1e3F;
 
@@ -57,5 +59,10 @@ public class PassiveTCSModule extends ShipModule {
 				getShip().setTemperature(optimal);
 			}
 		}
+	}
+
+	@Override
+	public void onInfo(InfoGroup info) {
+		info.addDescription("The Passive Thermal Control System (TCS) slowly radiates excess heat away from the spacecraft.");
 	}
 }

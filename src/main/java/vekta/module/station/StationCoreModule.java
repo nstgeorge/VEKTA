@@ -1,6 +1,7 @@
 package vekta.module.station;
 
 import processing.core.PVector;
+import vekta.InfoGroup;
 import vekta.RenderLevel;
 import vekta.item.Item;
 import vekta.menu.Menu;
@@ -85,5 +86,10 @@ public class StationCoreModule extends ShipModule {
 					PVector.random2D(),
 					ship.getColor())));
 		}
+	}
+
+	@Override
+	public void onInfo(InfoGroup info) {
+		info.addDescription("This unsuspecting cube contains everything needed to build a modern space station.");
 	}
 }

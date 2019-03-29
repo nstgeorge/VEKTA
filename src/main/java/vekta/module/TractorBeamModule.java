@@ -1,6 +1,7 @@
 package vekta.module;
 
 import processing.core.PVector;
+import vekta.InfoGroup;
 import vekta.object.CargoCrate;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
@@ -89,5 +90,10 @@ public class TractorBeamModule extends ShipModule implements Targeter {
 			PVector vel = dir.mult(min(MAX_FORCE, force / dir.magSq()));
 			t.setVelocity(vel.add(t.getVelocity().mult(VELOCITY_DECAY)));
 		}
+	}
+
+	@Override
+	public void onInfo(InfoGroup info) {
+		info.addDescription("Pick up cargo crates and other small objects with ease.");
 	}
 }

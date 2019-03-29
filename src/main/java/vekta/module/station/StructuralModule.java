@@ -1,5 +1,6 @@
 package vekta.module.station;
 
+import vekta.InfoGroup;
 import vekta.RenderLevel;
 import vekta.module.Module;
 import vekta.module.ModuleType;
@@ -85,5 +86,10 @@ public class StructuralModule extends ShipModule {
 		v.rect(0, getHeight() * tileSize, getWidth() * tileSize, (getHeight() - (getHeight() * .1F)) * tileSize);
 
 		v.rectMode(CENTER);
+	}
+
+	@Override
+	public void onInfo(InfoGroup info) {
+		info.addDescription("If you need some extra space on your station, this is the module for you.");
 	}
 }

@@ -1,5 +1,6 @@
 package vekta.module;
 
+import vekta.InfoGroup;
 import vekta.KeyBinding;
 import vekta.menu.Menu;
 import vekta.object.ship.ModularShip;
@@ -75,5 +76,13 @@ public class EngineModule extends ShipModule {
 	@Override
 	public void onMenu(Menu menu) {
 		getShip().setThrustControl(0);
+	}
+
+	@Override
+	public void onInfo(InfoGroup info) {
+		info.addDescription("Behold, the world's most efficient spacecraft engine.");
+
+		info.addKey(KeyBinding.SHIP_FORWARD, "accelerate forward");
+		info.addKey(KeyBinding.SHIP_BACKWARD, "accelerate backward");
 	}
 }

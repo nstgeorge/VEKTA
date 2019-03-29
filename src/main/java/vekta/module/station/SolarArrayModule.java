@@ -1,5 +1,6 @@
 package vekta.module.station;
 
+import vekta.InfoGroup;
 import vekta.RenderLevel;
 import vekta.module.GeneratorModule;
 import vekta.module.Module;
@@ -128,5 +129,10 @@ public class SolarArrayModule extends GeneratorModule {
 		}
 
 		v.rectMode(CENTER);
+	}
+
+	@Override
+	public void onInfo(InfoGroup info) {
+		info.addDescription("Rule #1 of space exploration: if the nukes aren't quick enough, go solar.");
 	}
 }

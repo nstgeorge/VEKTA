@@ -62,7 +62,7 @@ public class SideLayoutMenuHandle extends MenuHandle {
 		float infoY = v.height / 4F;
 
 		v.pushStyle();
-		layout.draw(infoX, infoY, getButtonWidth() + offset, v.height);
+		layout.draw(infoX, infoY, getButtonWidth(), v.height);
 		v.popStyle();
 	}
 

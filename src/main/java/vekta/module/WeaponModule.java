@@ -1,5 +1,6 @@
 package vekta.module;
 
+import vekta.InfoGroup;
 import vekta.KeyBinding;
 
 public abstract class WeaponModule extends ShipModule {
@@ -14,6 +15,11 @@ public abstract class WeaponModule extends ShipModule {
 		if(key == getFireKey()) {
 			fireWeapon();
 		}
+	}
+
+	@Override
+	public void onInfo(InfoGroup info) {
+		info.addKey(getFireKey(), "attack");
 	}
 
 	public KeyBinding getFireKey() {

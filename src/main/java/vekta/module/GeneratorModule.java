@@ -1,5 +1,7 @@
 package vekta.module;
 
+import vekta.InfoGroup;
+
 public class GeneratorModule extends ShipModule {
 	private static final float GENERATOR_HEAT = 5e4F;
 
@@ -49,5 +51,10 @@ public class GeneratorModule extends ShipModule {
 			getShip().recharge(amount);
 			getShip().addHeat(amount * GENERATOR_HEAT);
 		}
+	}
+
+	@Override
+	public void onInfo(InfoGroup info) {
+		info.addDescription("Turn those radioactive fuel byproducts into some extra energy. Make sure your thermal control system can handle it, though.");
 	}
 }

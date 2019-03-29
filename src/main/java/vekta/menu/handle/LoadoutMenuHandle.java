@@ -55,7 +55,7 @@ public class LoadoutMenuHandle extends MenuHandle {
 		v.textSize(32);
 		v.fill(v.color(100));
 		v.textAlign(v.CENTER);
-		v.text("Available:", getButtonX(), getButtonY(-2));
+		v.text("Available:", getButtonX(), getButtonY(-1));
 		v.textAlign(v.LEFT);
 		v.text("Installed:", v.width - getButtonX() - 20, getLoadoutOffset(-2));
 

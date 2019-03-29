@@ -1,6 +1,7 @@
 package vekta.module;
 
 import processing.core.PVector;
+import vekta.InfoGroup;
 import vekta.KeyBinding;
 import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
@@ -24,7 +25,7 @@ public class AutopilotModule extends TargetingModule {
 	public void setActive(boolean active) {
 		getShip().setLanding(active);
 		getShip().updateTargets();
-		
+
 		// Only zoom in or out as relevant
 		getWorld().setAutoZoomDirection(!active);
 	}
@@ -99,5 +100,12 @@ public class AutopilotModule extends TargetingModule {
 		else if(key == KeyBinding.SHIP_FORWARD || key == KeyBinding.SHIP_BACKWARD || key == KeyBinding.SHIP_LEFT || key == KeyBinding.SHIP_RIGHT) {
 			setActive(false);
 		}
+	}
+
+	@Override
+	public void onInfo(InfoGroup info) {
+		super.onInfo(info);
+
+		info.addKey(KeyBinding.SHIP_LAND, "toggle autopilot");
 	}
 }

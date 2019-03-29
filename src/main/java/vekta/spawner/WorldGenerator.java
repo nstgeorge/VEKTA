@@ -10,7 +10,6 @@ import vekta.spawner.item.ColonyItemSpawner;
 import vekta.spawner.item.MissionItemSpawner;
 import vekta.spawner.item.ModuleItemSpawner;
 import vekta.terrain.*;
-import vekta.terrain.building.DungeonBuilding;
 import vekta.terrain.building.MarketBuilding;
 import vekta.terrain.settlement.*;
 
@@ -105,7 +104,7 @@ public class WorldGenerator {
 
 	public static void populateSettlement(Settlement settlement) {
 		if(v.chance(.1F)) {
-			settlement.add(new DungeonBuilding(DungeonGenerator.createDungeon(settlement)));
+			DungeonGenerator.createDungeon(settlement);
 		}
 	}
 

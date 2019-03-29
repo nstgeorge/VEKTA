@@ -1,5 +1,6 @@
 package vekta.module;
 
+import vekta.InfoGroup;
 import vekta.item.Inventory;
 import vekta.menu.Menu;
 import vekta.menu.handle.LandingMenuHandle;
@@ -72,5 +73,10 @@ public class DrillModule extends ShipModule {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void onInfo(InfoGroup info) {
+		info.addDescription("Extract natural resources from planets and asteroids.");
 	}
 }

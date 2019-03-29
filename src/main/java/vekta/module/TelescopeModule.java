@@ -1,6 +1,7 @@
 package vekta.module;
 
 import processing.core.PVector;
+import vekta.InfoGroup;
 import vekta.KeyBinding;
 import vekta.menu.Menu;
 import vekta.menu.handle.SurveyMenuHandle;
@@ -74,5 +75,12 @@ public class TelescopeModule extends ShipModule {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void onInfo(InfoGroup info) {
+		info.addDescription("The tool of choice for explorers, surveyors, and data collectors.");
+
+		info.addKey(KeyBinding.SHIP_SCAN, "survey target");
 	}
 }

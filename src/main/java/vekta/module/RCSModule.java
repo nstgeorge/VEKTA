@@ -1,5 +1,6 @@
 package vekta.module;
 
+import vekta.InfoGroup;
 import vekta.KeyBinding;
 import vekta.menu.Menu;
 import vekta.object.ship.ModularShip;
@@ -75,5 +76,13 @@ public class RCSModule extends ShipModule {
 	@Override
 	public void onMenu(Menu menu) {
 		getShip().setTurnControl(0);
+	}
+
+	@Override
+	public void onInfo(InfoGroup info) {
+		info.addDescription("A must-have for pilots who like to fly in more than one direction.");
+
+		info.addKey(KeyBinding.SHIP_LEFT, "rotate counterclockwise");
+		info.addKey(KeyBinding.SHIP_RIGHT, "rotate clockwise");
 	}
 }

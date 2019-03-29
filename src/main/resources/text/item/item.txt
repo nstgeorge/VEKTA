@@ -1,4 +1,7 @@
 {item_common}
+{item_common}
+{item_common}
+{item_rare}
 {item_rare}
 {item_legendary}
 {item_weapon}

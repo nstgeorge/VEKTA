@@ -1,6 +1,7 @@
 package vekta.module;
 
 import processing.core.PVector;
+import vekta.InfoGroup;
 import vekta.KeyBinding;
 import vekta.object.Countermeasure;
 import vekta.object.ship.ModularShip;
@@ -66,5 +67,12 @@ public class CountermeasureModule extends WeaponModule {
 					ship.getPosition(),
 					ship.getVelocity().add(PVector.random2D().mult(getEfficiency() * LAUNCH_SPEED)).sub(ship.getHeading())));
 		}
+	}
+
+	@Override
+	public void onInfo(InfoGroup info) {
+		info.addDescription("Keep those pesky torpedoes away from your ship.");
+		
+		info.addKey(getFireKey(), "deploy countermeasure");
 	}
 }

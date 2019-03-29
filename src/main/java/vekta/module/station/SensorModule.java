@@ -1,5 +1,6 @@
 package vekta.module.station;
 
+import vekta.InfoGroup;
 import vekta.RenderLevel;
 import vekta.module.Module;
 import vekta.module.ModuleType;
@@ -97,5 +98,11 @@ public class SensorModule implements ComponentModule {
 		v.endShape(CLOSE);
 
 		v.rectMode(CENTER);
+	}
+
+	@Override
+	public void onInfo(InfoGroup info) {
+		// TODO: perhaps add some sort of data collection functionality to SensorModule
+//		info.addDescription("");
 	}
 }

@@ -2,6 +2,7 @@ package vekta.module;
 
 import processing.core.PVector;
 import vekta.Counter;
+import vekta.InfoGroup;
 import vekta.object.SpaceObject;
 import vekta.spawner.WorldGenerator;
 
@@ -65,5 +66,10 @@ public class OrbitModule extends ShipModule {
 				getShip().addVelocity(velocity.sub(getShip().getVelocity()).mult(ADJUST_FACTOR * getSpeed() * getWorld().getTimeScale()));
 			}
 		}
+	}
+
+	@Override
+	public void onInfo(InfoGroup info) {
+		info.addDescription("Automatically stabilize your orbit around a star or planet.");
 	}
 }

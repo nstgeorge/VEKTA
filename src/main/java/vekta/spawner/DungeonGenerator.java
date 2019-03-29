@@ -3,6 +3,7 @@ package vekta.spawner;
 import vekta.Resources;
 import vekta.dungeon.Dungeon;
 import vekta.dungeon.DungeonRoom;
+import vekta.terrain.building.DungeonBuilding;
 import vekta.terrain.settlement.Settlement;
 
 import java.util.Arrays;
@@ -17,6 +18,7 @@ public class DungeonGenerator {
 	public static Dungeon createDungeon(Settlement settlement) {
 		Dungeon dungeon = new Dungeon(settlement.getSite(), Resources.generateString("dungeon"), Resources.generateString("overview_dungeon"));
 		addRooms(dungeon.getStartRoom(), 0);
+		settlement.add(new DungeonBuilding(dungeon));
 		return dungeon;
 	}
 

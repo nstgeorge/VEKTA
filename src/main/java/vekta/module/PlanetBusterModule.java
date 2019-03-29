@@ -1,5 +1,6 @@
 package vekta.module;
 
+import vekta.InfoGroup;
 import vekta.object.PlanetBusterProjectile;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
@@ -59,5 +60,12 @@ public class PlanetBusterModule extends WeaponModule {
 				ship.getController().send("Planet Buster requires a planetary target");
 			}
 		}
+	}
+
+	@Override
+	public void onInfo(InfoGroup info) {
+		info.addDescription("The latest innovations in planet-destroying technology have become so devastating that even carrying this around will cause alarm and suspicion.");
+
+		super.onInfo(info);
 	}
 }

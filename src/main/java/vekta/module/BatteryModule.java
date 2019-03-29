@@ -1,5 +1,6 @@
 package vekta.module;
 
+import vekta.InfoGroup;
 import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.menu.handle.LandingMenuHandle;
@@ -110,5 +111,10 @@ public class BatteryModule extends ShipModule implements Rechargeable {
 	@Override
 	public void onItemMenu(Item item, Menu menu) {
 		onMenu(menu);
+	}
+
+	@Override
+	public void onInfo(InfoGroup info) {
+		info.addDescription("Batteries are the core of any modern spacecraft. The more energy storage, the better.");
 	}
 }

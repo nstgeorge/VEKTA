@@ -1,5 +1,6 @@
 package vekta.module;
 
+import vekta.InfoGroup;
 import vekta.KeyBinding;
 import vekta.Resources;
 import vekta.menu.Menu;
@@ -126,5 +127,12 @@ public class HyperdriveModule extends ShipModule {
 	@Override
 	public void onMenu(Menu menu) {
 		endHyperdrive();
+	}
+
+	@Override
+	public void onInfo(InfoGroup info) {
+		info.addDescription("At long last, scientists have found an efficient way to distort the fabric of space-time with standard-grade spacecraft energy. Just make sure not to run out of charge while in hyperspace...");
+		
+		info.addKey(KeyBinding.SHIP_HYPERDRIVE, "start hyperdrive");
 	}
 }

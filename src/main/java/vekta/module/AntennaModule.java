@@ -1,5 +1,6 @@
 package vekta.module;
 
+import vekta.InfoGroup;
 import vekta.menu.Menu;
 import vekta.menu.handle.ObjectMenuHandle;
 import vekta.menu.option.InternetMenuOption;
@@ -67,5 +68,10 @@ public class AntennaModule extends ShipModule {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public void onInfo(InfoGroup info) {
+		info.addDescription("When in deep space, sometimes it's nice to check in with the galaxy.");
 	}
 }

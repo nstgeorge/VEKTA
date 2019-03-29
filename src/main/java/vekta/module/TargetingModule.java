@@ -1,5 +1,6 @@
 package vekta.module;
 
+import vekta.InfoGroup;
 import vekta.KeyBinding;
 import vekta.Resources;
 import vekta.knowledge.ObservationLevel;
@@ -139,6 +140,16 @@ public class TargetingModule extends ShipModule implements Targeter {
 			}
 			break;
 		}
+	}
+
+	@Override
+	public void onInfo(InfoGroup info) {
+		info.addDescription("Accurate ship targeting is an essential feature for every modern spacecraft.");
+
+		info.addKey(KeyBinding.SHIP_TARGET, "reset target");
+		info.addKey(KeyBinding.SHIP_TARGET_PLANET, "target nearest planet");
+		info.addKey(KeyBinding.SHIP_TARGET_ASTEROID, "target nearest asteroid");
+		info.addKey(KeyBinding.SHIP_TARGET_SHIP, "target nearest ship");
 	}
 
 	public enum TargetingMode {

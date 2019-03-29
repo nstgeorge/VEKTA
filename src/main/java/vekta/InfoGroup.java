@@ -18,6 +18,10 @@ public class InfoGroup implements Iterable<String> {
 		info.add(detail);
 	}
 
+	public void addKey(KeyBinding key, String value) {
+		info.add("[" + Settings.getKeyText(key) + "] " + value);
+	}
+
 	public void addStat(String key, int value) {
 		addStat(key, String.valueOf(value));
 	}
