@@ -20,3 +20,4 @@ Gate
 Steps
 Vent
 Ladder
+Pitfall
