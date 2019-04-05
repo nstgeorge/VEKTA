@@ -8,7 +8,6 @@ import vekta.object.HomingProjectile;
 import vekta.object.Projectile;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
-import vekta.spawner.WorldGenerator;
 
 import static vekta.Vekta.*;
 
@@ -17,7 +16,7 @@ public abstract class FighterShip extends Ship implements Targeter {
 	private static final float DEF_RADIUS = 5;
 	private static final float DEF_SPEED = .1F;
 	private static final float DEF_TURN = 4;
-	private static final float DEF_ENGAGE_DIST = WorldGenerator.getRadius(RenderLevel.PARTICLE);
+	private static final float DEF_ENGAGE_DIST = 2000;
 
 	private static final float PROJECTILE_SPEED = 20;
 	private static final float MIN_ATTACK = 10;
@@ -53,8 +52,8 @@ public abstract class FighterShip extends Ship implements Targeter {
 	}
 
 	@Override
-	public void setTarget(SpaceObject target) {
-		this.target = target;
+	public void setTarget(SpaceObject obj) {
+		this.target = obj;
 	}
 
 	@Override
@@ -68,7 +67,7 @@ public abstract class FighterShip extends Ship implements Targeter {
 
 	@Override
 	public void onUpdate(RenderLevel level) {
-		if(target != null && target.getColor() != getColor()) {
+		if(target != null) {
 			PVector pos = target.getPosition().add(relativeVelocity(target).div(PROJECTILE_SPEED));
 			PVector offset = pos.sub(position);
 
@@ -78,7 +77,7 @@ public abstract class FighterShip extends Ship implements Targeter {
 			heading.set(offset.normalize());
 
 			accelerate(max(-.5F, min(1F, -rangeFactor)));
-			if(rangeFactor >= 0 && attackCt.cycle()) {
+			if(target.getColor() != getColor() && rangeFactor >= 0 && attackCt.cycle()) {
 				fireProjectile();
 				attackCt.delay(chooseAttackTime());
 			}

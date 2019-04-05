@@ -1,6 +1,7 @@
 package vekta;
 
 import processing.core.PVector;
+import vekta.context.World;
 import vekta.economy.Economy;
 import vekta.object.SpaceObject;
 import vekta.person.Person;
@@ -10,6 +11,7 @@ import java.io.Serializable;
 import java.util.*;
 
 import static processing.core.PApplet.println;
+import static vekta.Vekta.v;
 
 /**
  * Serializable world information (.vekta format)
@@ -17,6 +19,10 @@ import static processing.core.PApplet.println;
 public final class WorldState implements Serializable {
 	private Player player;
 	private float zoom = 1;
+
+	private float time;
+
+	private final List<ScheduledCallback> callbacks = new ArrayList<>();
 
 	private transient Map<Long, Syncable> syncMap = new HashMap<>(); // All client-syncable objects
 
@@ -55,6 +61,14 @@ public final class WorldState implements Serializable {
 		this.zoom = zoom;
 	}
 
+	public float getTime() {
+		return time;
+	}
+
+	public void schedule(float delay, World.Callback callback) {
+		callbacks.add(new ScheduledCallback(getTime() + delay, callback));
+	}
+
 	public Collection<Syncable> getSyncables() {
 		return syncMap.values();
 	}
@@ -84,6 +98,16 @@ public final class WorldState implements Serializable {
 	}
 
 	public void startUpdate() {
+		time += 1 / v.frameRate;
+
+		for(int i = 0; i < callbacks.size(); i++) {
+			ScheduledCallback scheduled = callbacks.get(i);
+			if(scheduled.time <= time) {
+				callbacks.remove(i--);
+				scheduled.callback.callback();
+			}
+		}
+
 		updating = true;
 		for(SpaceObject s : objectsToAdd) {
 			addImmediately(s);
@@ -239,6 +263,16 @@ public final class WorldState implements Serializable {
 		}
 		else {
 			return null;
+		}
+	}
+
+	private static class ScheduledCallback implements Serializable {
+		private final float time;
+		private final World.Callback callback;
+
+		public ScheduledCallback(float time, World.Callback callback) {
+			this.time = time;
+			this.callback = callback;
 		}
 	}
 }

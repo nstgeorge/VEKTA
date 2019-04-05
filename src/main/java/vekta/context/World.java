@@ -8,10 +8,13 @@ import vekta.connection.message.Message;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 
+import java.io.Serializable;
 import java.util.List;
 
 public interface World extends Context {
 	RenderLevel getRenderLevel();
+
+	float getTime();
 
 	float getTimeScale();
 
@@ -20,6 +23,12 @@ public interface World extends Context {
 	void setAutoZoom(float zoom);
 
 	void setAutoZoomDirection(boolean outward);
+
+	default void schedule(Callback callback) {
+		schedule(0, callback);
+	}
+
+	void schedule(float delay, Callback callback);
 
 	/**
 	 * Add (or replace existing) Syncable object
@@ -62,4 +71,8 @@ public interface World extends Context {
 	void updateTargeter(Targeter t);
 
 	void playSound(String sound, PVector location);
+
+	interface Callback extends Serializable {
+		void callback();
+	}
 }  

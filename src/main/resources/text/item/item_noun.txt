@@ -68,3 +68,6 @@ Concrete
 Food
 Chair
 Shank
+Boomwhacker
+Pipe
+Bucket

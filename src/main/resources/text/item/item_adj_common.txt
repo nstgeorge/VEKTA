@@ -77,3 +77,8 @@ Unwieldy
 Jagged
 Splintery
 Redneck
+Spare
+Redundant
+Damaged
+Fragile
+Squishy

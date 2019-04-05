@@ -7,12 +7,12 @@ import vekta.RenderLevel;
 import vekta.item.Inventory;
 import vekta.item.InventoryListener;
 import vekta.item.Item;
+import vekta.knowledge.ObservationLevel;
+import vekta.knowledge.ShipKnowledge;
 import vekta.menu.Menu;
 import vekta.object.CargoCrate;
 import vekta.object.Shockwave;
 import vekta.object.SpaceObject;
-import vekta.knowledge.ObservationLevel;
-import vekta.knowledge.ShipKnowledge;
 import vekta.terrain.LandingSite;
 
 import static processing.core.PConstants.CLOSE;
@@ -21,7 +21,7 @@ import static vekta.Vekta.*;
 
 public abstract class Ship extends SpaceObject implements Renameable, InventoryListener, Damageable {
 	private static final float CRATE_SPEED = 10;
-	private static final float DEPART_FRAMES = 100; // Number of frames to wait before docking/landing again
+	private static final int DEPART_FRAMES = 100; // Number of seconds to wait before docking/landing again
 
 	private String name;
 	private final float speed;  // Force of the vector added when engine is on
@@ -104,12 +104,12 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 		return v.frameCount - departTime >= DEPART_FRAMES;
 	}
 
-	public void dock(SpaceObject s) {
+	public final void dock(SpaceObject s) {
 		dock = s;
 		doDock(s);
 	}
 
-	public void undock() {
+	public final void undock() {
 		SpaceObject dock = getDock();
 		if(dock != null) {
 			PVector offset = getPosition().sub(dock.getPosition());
@@ -240,7 +240,7 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 		super.observe(level, player);
 
 		player.addKnowledge(new ShipKnowledge(level, this));
-		
+
 		if(level == ObservationLevel.OWNED) {
 			setPersistent(true);
 		}

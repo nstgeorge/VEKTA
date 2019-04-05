@@ -73,7 +73,7 @@ public class Singleplayer implements World, PlayerListener {
 	private final Counter spawnCt = new Counter(10).randomize(); // Spawn objects
 	private final Counter cleanupCt = new Counter(100).randomize(); // Despawn objects
 	private final Counter eventCt = new Counter(3600 * 5).randomize(); // Occasional random events
-	private final Counter situationCt = new Counter(100).randomize(); // Situational events
+	private final Counter situationCt = new Counter(30).randomize(); // Situational events
 	private final Counter economyCt = new Counter(600).randomize(); // Economic progression
 
 	private PlayerOverlay overlay;
@@ -202,6 +202,11 @@ public class Singleplayer implements World, PlayerListener {
 	}
 
 	@Override
+	public float getTime() {
+		return state.getTime();
+	}
+
+	@Override
 	public float getTimeScale() {
 		return timeScale;
 	}
@@ -222,6 +227,11 @@ public class Singleplayer implements World, PlayerListener {
 	@Override
 	public void setAutoZoomDirection(boolean outward) {
 		lastZoomOutward = outward;
+	}
+
+	@Override
+	public void schedule(float delay, Callback callback) {
+		state.schedule(delay, callback);
 	}
 
 	@Override

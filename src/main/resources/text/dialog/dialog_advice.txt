@@ -1,4 +1,4 @@
 Space worms are eating all our crops! What should we do? *Spray 'em with some Worm-o. *Send in the army! *They're just crops...
 {person} has stolen the town's {item_rare}. What should we do as punishment? *To the gallows! *It's forgivable, just reprimand him. *He stole the what?
 A mysterious creature from {star} has arrived demanding payments. How should we proceed? *Have you tried talking to it? *Use lethal force. *Don't make eye contact. 
-{person} {action_past_bad}! What's your take? *Shame. *Break their legs. 
+{person} {action_past_bad}! What's your take? *That's a shame. *Break their legs. 

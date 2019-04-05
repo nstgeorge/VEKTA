@@ -11,7 +11,7 @@ Woodchipper : Eviscerate with *
 Spike : Impale with *
 Spear : Impale with *
 Mace : Maul with *
-Club : Maul with *
+Club : Whack with *
 Shank : Stab with *
 Paddle : Spank to death using *
 Worm-o Concentrate : Dissolve with *
@@ -19,3 +19,17 @@ Hatchet : Chop with *
 Chainsaw : Dismember with *
 Firecracker : Detonate *
 Mini Laser : Evaporate with *
+Gilloutine : Execute with *
+Mystery Shank : Shank using *
+Mystery Shank : Invoke the wrath of {boss} using *
+Mystery Shank : Summon murder witch using *
+Mystery Shank : Implode skull using *
+Mystery Shank : Curse using *
+Mystery Shank : Impart lethal diarrhea using *
+Mystery Shank : Stab, reincarnate, and stab again using *
+Mystery Shank : Banish using *
+Mystery Shank : Crush into black hole using *
+Mystery Shank : Induce lethal G-force using *
+Mystery Shank : Dehydrate into a shriveled prune using *
+Mystery Shank : Evaporate using *
+Mystery Shank : Airblast using *
