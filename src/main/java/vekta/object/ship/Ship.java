@@ -114,7 +114,6 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 		if(dock != null) {
 			PVector offset = getPosition().sub(dock.getPosition());
 			setVelocity(dock.getVelocity().add(offset.mult(.01F)));
-			//			position.add(offset.setMag(getRadius() + dock.getRadius()));
 			this.dock = null;
 			onDepart(dock);
 		}
@@ -143,7 +142,7 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 	@Override
 	public void onCollide(SpaceObject s) {
 		if(s instanceof CargoCrate) {
-			// Add item_common.txt to ship's inventory
+			// Add item to ship's inventory
 			getInventory().add(((CargoCrate)s).getItem());
 		}
 		else if(s instanceof Ship && isDockable(s) && ((Ship)s).isDockable(this)) {

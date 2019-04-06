@@ -36,7 +36,7 @@ public class FollowerReward extends Reward {
 				player,
 				getPerson().getFullName(),
 				PVector.random2D(),
-				PVector.random2D().normalize().mult(1000),
+				player.getShip().getPosition().add(PVector.random2D().normalize().mult(1000)),
 				new PVector(),
 				player.getColor()));
 		ship.setPersistent(true);
