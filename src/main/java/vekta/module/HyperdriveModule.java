@@ -74,24 +74,26 @@ public class HyperdriveModule extends ShipModule {
 		float thrust = ship.isLanding() ? -1 : ship.getThrustControl();
 		currentBoost = max(0, min(MAX_BOOST, ship.getVelocity().dot(ship.getHeading()))) * getBoost();
 
-		boolean movingFast = ship.getVelocity().magSq() >= sq(MIN_BOOST * timeScale);
-		if((!movingFast && thrust < 0) || !ship.hasEnergy()) {
-			endHyperdrive();
-		}
+		if(isActive()) {
+			boolean movingFast = ship.getVelocity().magSq() >= sq(MIN_BOOST * timeScale);
+			if((!movingFast && thrust < 0) || !ship.hasEnergy()) {
+				endHyperdrive();
+			}
 
-		if(isActive() && ship.consumeEnergyOverTime(.05F * currentBoost * PER_SECOND)) {
-			float effectiveThrust = thrust * max(timeScale, LOW_TIME_SCALE_SPEEDUP) / timeScale;
-			ship.setVelocity(ship.getHeading().setMag(min(currentBoost * timeScale, ship.getVelocity().mag())));
-			ship.accelerate(effectiveThrust * currentBoost, ship.getVelocity());
+			if(ship.consumeEnergyOverTime(.05F * currentBoost * PER_SECOND)) {
+				float effectiveThrust = thrust * max(timeScale, LOW_TIME_SCALE_SPEEDUP) / timeScale;
+				ship.setVelocity(ship.getHeading().setMag(min(currentBoost * timeScale, ship.getVelocity().mag())));
+				ship.accelerate(effectiveThrust * currentBoost, ship.getVelocity());
 
-			// Create shockwave effect
-			Shockwave wave = register(new Shockwave(
-					getShip(),
-					timeScale * 1.5e-4F * currentBoost,
-					(int)v.random(10, 15),
-					getShip().getColor()));
-			wave.setRadius(1);
-			wave.addVelocity(ship.getHeading().mult(-400 * timeScale / currentBoost * TUNNEL_EFFECT));
+				// Create shockwave effect
+				Shockwave wave = register(new Shockwave(
+						getShip(),
+						timeScale * 1.5e-4F * currentBoost,
+						(int)v.random(10, 15),
+						getShip().getColor()));
+				wave.setRadius(1);
+				wave.addVelocity(ship.getHeading().mult(-400 * timeScale / currentBoost * TUNNEL_EFFECT));
+			}
 		}
 	}
 
@@ -132,7 +134,7 @@ public class HyperdriveModule extends ShipModule {
 	@Override
 	public void onInfo(InfoGroup info) {
 		info.addDescription("At long last, scientists have found an efficient way to distort the fabric of space-time with standard-grade spacecraft energy. Just make sure not to run out of charge while in hyperspace...");
-		
+
 		info.addKey(KeyBinding.SHIP_HYPERDRIVE, "start hyperdrive");
 	}
 }
