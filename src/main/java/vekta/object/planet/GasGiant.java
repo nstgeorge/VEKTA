@@ -45,13 +45,13 @@ public class GasGiant extends Planet {
 	public void drawNearby(float r) {
 		super.drawNearby(r);
 
-		// Initialize in draw loop for consistent rendering paramters
+		// Initialize in draw loop for consistent rendering parameters
 		if(rings == null) {
 			rings = new PShape[ringDistances.length];
+			v.shapeMode(CENTER);/// TODO: ensure that this fixes the ring rendering issue
 			for(int i = 0; i < ringDistances.length; i++) {
 				float rd = ringDistances[i];
 				v.stroke(ringColors[i]);
-				v.shapeMode(CENTER);/// TODO: ensure that this fixes the ring rendering issue
 				PShape ring = v.createShape(ELLIPSE, rd, rd * ringRatio, rd, rd * ringRatio);
 				rings[i] = ring;
 			}
