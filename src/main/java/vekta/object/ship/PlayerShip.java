@@ -1,9 +1,7 @@
 package vekta.object.ship;
 
 import processing.core.PVector;
-import vekta.Player;
 import vekta.RenderLevel;
-import vekta.menu.Menu;
 import vekta.module.*;
 
 import static vekta.Vekta.v;
@@ -58,6 +56,11 @@ public class PlayerShip extends ModularShip {
 
 	@Override
 	public void drawNearby(float r) {
+		// Estimate heading for multiplayer
+		if(isRemote() && velocity.magSq() > 1) {
+			setHeading(getVelocity());
+		}
+		
 		drawShip(r, ShipModelType.DEFAULT);
 	}
 

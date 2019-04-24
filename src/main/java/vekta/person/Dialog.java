@@ -147,7 +147,7 @@ public class Dialog implements Serializable {
 		visited = true;
 
 		if(getPerson().getPersonality() != null) {
-			getPerson().getPersonality().setupDialog(this);
+			getPerson().getPersonality().prepareDialog(this);
 		}
 
 		Menu menu = new Menu(player, def, new DialogMenuHandle(this));

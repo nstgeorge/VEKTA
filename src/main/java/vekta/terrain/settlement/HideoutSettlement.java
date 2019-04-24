@@ -10,7 +10,6 @@ import vekta.menu.option.CoinMenuOption;
 import vekta.spawner.FactionGenerator;
 import vekta.spawner.ItemGenerator;
 import vekta.spawner.item.ClothingItemSpawner;
-import vekta.spawner.item.CoinItemSpawner;
 import vekta.spawner.item.WeaponItemSpawner;
 import vekta.terrain.building.MarketBuilding;
 
@@ -25,7 +24,7 @@ public class HideoutSettlement extends Settlement {
 			add(new MarketBuilding(2, "Weapons", ItemGenerator.getSpawner(WeaponItemSpawner.class)));
 		}
 		else {
-			MarketBuilding disguises = new MarketBuilding(2, "Disguises", ItemGenerator.getSpawner(CoinItemSpawner.class));
+			MarketBuilding disguises = new MarketBuilding(2, "Disguises", ItemGenerator.getSpawner(ClothingItemSpawner.class));
 			add(disguises);
 			disguises.getInventory().clearItems();
 			int disguiseCt = (int)v.random(4, 8);

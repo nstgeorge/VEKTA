@@ -20,6 +20,7 @@ import static processing.core.PConstants.HALF_PI;
 import static vekta.Vekta.*;
 
 public abstract class Ship extends SpaceObject implements Renameable, InventoryListener, Damageable {
+	private static final float FADE_AMOUNT = 10; // Reticle zoom fading factor
 	private static final float CRATE_SPEED = 10;
 	private static final int DEPART_FRAMES = 100; // Number of seconds to wait before docking/landing again
 
@@ -31,7 +32,7 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 	private final Inventory inventory = new Inventory(this);
 
 	private transient SpaceObject dock;
-	private transient int departTime; // Dock/land frame
+	private transient int departTime; // Dock/land debounce frame
 
 	public Ship(String name, PVector heading, PVector position, PVector velocity, int color, float speed, float turnSpeed) {
 		super(position, velocity, color);
@@ -178,16 +179,22 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 	}
 
 	@Override
-	public void drawDistant(float r) {
+	public void draw(RenderLevel level, float r) {
+		// Fade marker near ship level
+		boolean fading = RenderLevel.SHIP.isVisibleTo(level);
+		if(fading) {
+			float radius = getRadius();
+			v.stroke(v.lerpColor(0, getColor(), radius / max(radius, r * FADE_AMOUNT)));
+		}
 		drawMarker();
+		if(fading) {
+			v.stroke(getColor());
+		}
+
+		super.draw(level, r);
 	}
 
 	protected void drawShip(float r, ShipModelType shape) {
-		// Estimate heading for multiplayer
-		if(isRemote() && velocity.magSq() > 1) {
-			setHeading(getVelocity());
-		}
-
 		float theta = heading.heading() + HALF_PI;
 		v.rotate(theta);
 		v.beginShape();

@@ -120,18 +120,19 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 
 		String text = parts[0].trim();
 
+		Dialog dialog = new Dialog(type, this, text);
+
 		if(personality != null) {
 			if(!text.startsWith("|")) {
-				text = personality.transformDialog(type, text);
+				text = personality.transformDialog(dialog, type, text);
 
 				// Join and re-split responses
 				parts[0] = text;
 				parts = String.join("*", parts).split("\\*");
 				text = parts[0];
+				dialog.setMessage(text.trim());
 			}
 		}
-
-		Dialog dialog = new Dialog(type, this, text);
 
 		if(text.startsWith("!")) {
 			// Angry message
@@ -147,7 +148,7 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 		for(int i = 1; i < parts.length; i++) {
 			dialog.parseResponse(parts[i].trim());
 		}
-		
+
 		return dialog;
 	}
 

@@ -278,7 +278,8 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 
 	public void drawPreview(float r) {
 		v.rotate(v.frameCount * PREVIEW_ROTATE_SPEED);
-		draw(RenderLevel.PARTICLE, r / 3);
+		//		draw(RenderLevel.PARTICLE, r / 3);
+		drawNearby(r / 3);
 	}
 
 	public void drawMarker() {
