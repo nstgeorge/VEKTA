@@ -4,6 +4,7 @@ import processing.core.PShape;
 import processing.core.PVector;
 
 import static processing.core.PApplet.sq;
+import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.ELLIPSE;
 import static vekta.Vekta.v;
 
@@ -50,7 +51,7 @@ public class GasGiant extends Planet {
 			for(int i = 0; i < ringDistances.length; i++) {
 				float rd = ringDistances[i];
 				v.stroke(ringColors[i]);
-				//				v.shapeMode(CENTER);
+				v.shapeMode(CENTER);/// TODO: ensure that this fixes the ring rendering issue
 				PShape ring = v.createShape(ELLIPSE, rd, rd * ringRatio, rd, rd * ringRatio);
 				rings[i] = ring;
 			}
