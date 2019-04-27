@@ -18,7 +18,7 @@ public final class Player extends Syncable<Player> {
 	private /*@Sync */ ModularShip currentShip;
 
 	private final List<PlayerListener> listeners = new ArrayList<>();
-	private final Set<String> attributes = new HashSet<>();
+	private final Collection<String> attributes = new ArrayList<>();
 
 	private final List<Mission> missions = new ArrayList<>();
 	private Mission currentMission;
@@ -206,8 +206,10 @@ public final class Player extends Syncable<Player> {
 	}
 
 	public void addAttribute(Class attribute) {
-		attributes.add(attribute.getSimpleName());
-		syncChanges();
+		if(!hasAttribute(attribute)) {
+			attributes.add(attribute.getSimpleName());
+			syncChanges();
+		}
 	}
 
 	public void removeAttribute(Class attribute) {

@@ -10,14 +10,13 @@ import vekta.terrain.LandingSite;
 import vekta.terrain.building.HouseBuilding;
 import vekta.terrain.settlement.Settlement;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static vekta.Vekta.*;
 
 public class Person extends Syncable<Person> implements MissionIssuer {
-
-	private final Map<Syncable, OpinionType> opinions = new HashMap<>();
+	private final @Sync Map<Syncable, OpinionType> opinions = new HashMap<>();
+	private final @Sync List<String> interests = new ArrayList<>();
 
 	private final String name;
 
@@ -174,6 +173,25 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 	public void downgradeOpinion(Faction faction) {
 		setOpinion(faction, getOpinion(faction).downgraded());
 		syncChanges();
+	}
+
+	public Collection<String> getInterests() {
+		return interests;
+	}
+
+	public boolean hasInterest(String interest) {
+		return interests.contains(interest);
+	}
+
+	public void addInterest(String interest) {
+		if(!hasInterest(interest)) {
+			interests.add(interest);
+			Collections.sort(interests);
+		}
+	}
+
+	public void removeInterest(String interest) {
+		interests.remove(interest);
 	}
 
 	public boolean isBusy() {

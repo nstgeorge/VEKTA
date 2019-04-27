@@ -8,10 +8,14 @@ public class TradeItem extends BasicItem {
 	private String description;
 
 	public TradeItem(String name, ItemType type) {
+		this(name, Resources.generateString("description_item_" + (type == ItemType.COMMON ? "common" : "rare"))
+				.replaceAll("\\*", name), type);
+	}
+
+	public TradeItem(String name, String description, ItemType type) {
 		super(name, type);
 
-		description = Resources.generateString("description_item_" + (getType() == ItemType.COMMON ? "common" : "rare"))
-				.replaceAll("\\*", name);
+		this.description = description;
 	}
 
 	public String getDescription() {

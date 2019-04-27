@@ -35,7 +35,7 @@ public class InfoGroup implements Iterable<String> {
 	}
 
 	public void addTrait(String trait) {
-		info.add("(Trait) " + trait);
+		info.add("* " + trait);
 	}
 
 	@Override

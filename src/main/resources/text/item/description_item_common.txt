@@ -1,4 +1,3 @@
-{description_item_rare}
 We got this * for free at an auction because literally nobody else wanted it. 
 It ain't the {item}, but it'll do.
 {item_adj_common}, {item_adj_common}, and most importantly, {item_adj_common}. 

@@ -48,5 +48,8 @@ public class PersonKnowledge extends SpaceObjectKnowledge {
 	public void onLayout(Player player, Layout layout) {
 		layout.add(new TextDisplay("Home Planet: " + getSpaceObject().getName()))
 				.customize().color(getSpaceObject().getColor());
+
+		layout.add(new TextDisplay("Enjoys: " + String.join(", ", getPerson().getInterests())));
+		//					.customize().color(100);
 	}
 }

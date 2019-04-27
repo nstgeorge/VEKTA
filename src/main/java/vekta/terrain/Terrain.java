@@ -5,6 +5,7 @@ import vekta.menu.Menu;
 import vekta.terrain.settlement.Settlement;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public abstract class Terrain extends Syncable<Terrain> {
 	public Terrain() {
 	}
 
-	public List<String> getFeatures() {
+	public Collection<String> getFeatures() {
 		return features;
 	}
 
@@ -28,7 +29,7 @@ public abstract class Terrain extends Syncable<Terrain> {
 	public void addFeature(String feature) {
 		if(!getFeatures().contains(feature)) {
 			getFeatures().add(feature);
-			Collections.sort(getFeatures());
+			Collections.sort(features);
 		}
 	}
 

@@ -37,7 +37,7 @@ public class OreItemSpawner implements ItemGenerator.ItemSpawner {
 			type = ItemType.LEGENDARY;
 			name += " from " + planetName;
 			if(refined != null) {
-				refined = planetName + " " + refined;
+				refined = refined + " (" + planetName + ")";
 			}
 		}
 

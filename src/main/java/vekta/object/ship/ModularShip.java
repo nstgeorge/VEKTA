@@ -315,6 +315,15 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	}
 
 	@Override
+	public void drawShipMarker(RenderLevel level, float r) {
+		if(getController() != null) {
+			return;
+		}
+
+		super.drawShipMarker(level, r);
+	}
+
+	@Override
 	public void onUpdate(RenderLevel level) {
 		for(Module module : getModules()) {
 			module.onUpdate();

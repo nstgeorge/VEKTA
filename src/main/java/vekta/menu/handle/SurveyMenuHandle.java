@@ -5,8 +5,6 @@ import vekta.knowledge.ObservationLevel;
 import vekta.menu.Menu;
 import vekta.terrain.LandingSite;
 
-import java.util.List;
-
 import static vekta.Vekta.*;
 
 /**
@@ -62,10 +60,12 @@ public class SurveyMenuHandle extends MenuHandle {
 		v.textAlign(LEFT, CENTER);
 		v.textSize(24);
 		v.fill(100);
-		List<String> features = site.getTerrain().getFeatures();
-		for(int i = 0; i < features.size(); i++) {
-			String feature = features.get(i);
-			v.text(feature, PLANET_SIZE * 1.5F, (i - (features.size() - 1) / 2F) * 50);
+
+		int i = 0;
+		int size = site.getTerrain().getFeatures().size();
+		for(String feature : site.getTerrain().getFeatures()) {
+			v.text(feature, PLANET_SIZE * 1.5F, (i - (size - 1) / 2F) * 50);
+			i++;
 		}
 
 		v.strokeWeight(1);

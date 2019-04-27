@@ -180,6 +180,11 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 
 	@Override
 	public void draw(RenderLevel level, float r) {
+		drawShipMarker(level, r);
+		super.draw(level, r);
+	}
+
+	public void drawShipMarker(RenderLevel level, float r) {
 		// Fade marker near ship level
 		boolean fading = RenderLevel.SHIP.isVisibleTo(level);
 		if(fading) {
@@ -190,8 +195,6 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 		if(fading) {
 			v.stroke(getColor());
 		}
-
-		super.draw(level, r);
 	}
 
 	protected void drawShip(float r, ShipModelType shape) {

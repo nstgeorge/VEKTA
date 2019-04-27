@@ -1,0 +1,2 @@
+{item_adj_common} {item_noun_artifact} : {description_item_artifact}
+{item_adj_rare} {item_noun_artifact} : {description_item_artifact}

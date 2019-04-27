@@ -440,8 +440,13 @@ public class Singleplayer implements World, PlayerListener {
 		}
 		state.updateGlobalCoords(getTimeScale());
 
-		if(level.ordinal() == prevLevel.ordinal() - 1 && !playerShip.isDestroyed()) {
+		//		if(level.ordinal() == prevLevel.ordinal() - 1 && !playerShip.isDestroyed()) {
+		//			// Center around zero for improved floating-point precision
+		//			state.addRelativePosition(playerShip.getPosition());
+		//		}
+		if(!playerShip.isDestroyed()) {
 			// Center around zero for improved floating-point precision
+//			state.addRelativePosition(playerShip.getPosition().mult(.1F));
 			state.addRelativePosition(playerShip.getPosition());
 		}
 	}

@@ -20,8 +20,8 @@ import static vekta.Vekta.*;
 
 public class PersonGenerator {
 	private static final Personality[] PERSONALITIES = Resources.findSubclassInstances(Personality.class);
-	private static final float PERSONALITY_CHANCE = .1F;
-//	private static final float PERSONALITY_CHANCE = 1;
+		private static final float PERSONALITY_CHANCE = .1F;
+	private static final float MAX_INTERESTS = 2;
 
 	public static Person createPerson() {
 		return createPerson(randomHome());
@@ -35,6 +35,10 @@ public class PersonGenerator {
 		}
 		if(v.chance(PERSONALITY_CHANCE)) {
 			person.setPersonality(v.random(PERSONALITIES));
+		}
+		int interestCt = (int)v.random(MAX_INTERESTS) + 1;
+		for(int i = 0; i < interestCt; i++) {
+			person.addInterest(randomInterest());
 		}
 		return person;
 	}
@@ -86,5 +90,9 @@ public class PersonGenerator {
 		Settlement settlement = new OutpostSettlement(FactionGenerator.randomFaction());
 		AsteroidSpawner.createAsteroid(pos, new HabitableTerrain(settlement));
 		return settlement;
+	}
+
+	public static String randomInterest() {
+		return Resources.generateString("person_interest");
 	}
 }

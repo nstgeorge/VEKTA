@@ -68,12 +68,14 @@ public class Menu implements Context {
 	}
 
 	public void setIndex(int index) {
-		this.index = index;
-		MenuOption cursor = getCursor();
-		for(MenuListener listener : listeners) {
-			listener.onHover(cursor);
+		if(this.index != index) {
+			this.index = index;
+			MenuOption cursor = getCursor();
+			for(MenuListener listener : listeners) {
+				listener.onHover(cursor);
+			}
+			handle.onChange(this);
 		}
-		handle.onChange(this);
 	}
 
 	public int size() {
@@ -119,6 +121,7 @@ public class Menu implements Context {
 			else if(index >= size()) {
 				index = size() - 1;
 			}
+			handle.onChange(this);
 			return true;
 		}
 		return false;

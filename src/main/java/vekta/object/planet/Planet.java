@@ -11,7 +11,6 @@ import static vekta.Vekta.*;
  * Model for a planet.
  */
 public abstract class Planet extends SpaceObject {
-	private static final float SURVEY_ROTATE_SPEED = .002F;
 	private static final float SURVEY_SCAN_SPEED = .01F;
 
 	private static final float SPLIT_MASS_ABSORB = .5F;
