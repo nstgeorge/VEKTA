@@ -495,7 +495,7 @@ public class Singleplayer implements World, PlayerListener {
 	@Override
 	public void mouseWheel(int amount) {
 		float prevZoom = state.getZoom();
-		float zoom = max(MIN_ZOOM_LEVEL, min(MAX_ZOOM_LEVEL, prevZoom * (1 + amount * ZOOM_FACTOR)));
+		float zoom = max(MIN_ZOOM_LEVEL, min(MAX_ZOOM_LEVEL, prevZoom * (1 + amount * ZOOM_FACTOR * Settings.getFloat("zoomSpeed"))));
 		if(zoom != prevZoom) {
 			onZoomChange(zoom);
 		}

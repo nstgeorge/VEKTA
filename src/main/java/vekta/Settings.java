@@ -15,8 +15,9 @@ public final class Settings {
 	public static void init() {
 		// Default settings
 		defaults = new JSONObject();
-		defaults.put("sound", 1);
-		defaults.put("music", 1);
+		defaults.put("sound", 1)
+				.put("music", 1)
+				.put("zoomSpeed", 1);
 		for(KeyBinding key : KeyBinding.values()) {
 			defaults.put(getKeyProp(key), serializeKeyCode(key.getDefaultKeyCode()));
 		}
@@ -49,7 +50,25 @@ public final class Settings {
 			return settings.getInt(key);
 		}
 		else {
-			return defaults.getInt(key, 0);
+			return defaults.getInt(key);
+		}
+	}
+
+	public static float getFloat(String key) {
+		if(!settings.isNull(key)) {
+			return settings.getFloat(key);
+		}
+		else {
+			return defaults.getFloat(key);
+		}
+	}
+
+	public static String getString(String key) {
+		if(!settings.isNull(key)) {
+			return settings.getString(key);
+		}
+		else {
+			return defaults.getString(key);
 		}
 	}
 
