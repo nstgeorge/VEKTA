@@ -144,7 +144,7 @@ public class TargetingModule extends ShipModule implements Targeter {
 
 	@Override
 	public void onInfo(InfoGroup info) {
-		info.addDescription("Accurate ship targeting is an essential feature for every modern spacecraft.");
+		info.addDescription("Accurate targeting is an essential feature for every modern spacecraft.");
 
 		info.addKey(KeyBinding.SHIP_TARGET, "reset target");
 		info.addKey(KeyBinding.SHIP_TARGET_PLANET, "target nearest planet");

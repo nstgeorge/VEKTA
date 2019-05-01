@@ -102,19 +102,9 @@ public class SpaceStation extends ModularShip {
 	}
 
 	@Override
-	public void draw(RenderLevel level, float r) {
-		super.draw(level, r);
-		if(getRenderLevel().isVisibleTo(level)) {
-			v.rotate(heading.heading());
-			drawRelative(level, r);
-		}
-
-		//		emitter.update(new PVector(1, 0));
-	}
-
-	@Override
 	public void drawNearby(float r) {
-		// Override to use custom draw() behavior
+		v.rotate(heading.heading());
+		drawRelative(getWorld().getRenderLevel(), r);
 	}
 
 	public void drawRelative(RenderLevel dist, float r) {
