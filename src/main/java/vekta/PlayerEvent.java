@@ -7,6 +7,7 @@ public enum PlayerEvent {
 	KEY_RELEASE(PlayerListener::onKeyRelease),
 	MENU(PlayerListener::onMenu),
 	CHANGE_SHIP(PlayerListener::onChangeShip),
+	DAMAGE_SHIP(PlayerListener::onDamageShip),
 	NOTIFICATION(PlayerListener::onNotification),
 	LAND(PlayerListener::onLand),
 	DOCK(PlayerListener::onDock),

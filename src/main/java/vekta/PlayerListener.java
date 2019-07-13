@@ -30,6 +30,9 @@ public interface PlayerListener extends Serializable {
 	default void onChangeShip(ModularShip ship) {
 	}
 
+	default void onDamageShip(ModularShip.DamageAttempt attempt) {
+	}
+
 	default void onNotification(Notification notification) {
 	}
 

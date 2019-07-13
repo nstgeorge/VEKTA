@@ -30,7 +30,10 @@ public interface Module extends Serializable {
 
 	default void onUninstall(ModularShip ship) {
 	}
-
+	
+	default void onDamageShip(ModularShip.DamageAttempt attempt) {
+	}
+	
 	default void onUpdate() {
 	}
 

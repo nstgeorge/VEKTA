@@ -21,8 +21,9 @@ import static vekta.Vekta.*;
 
 public abstract class Ship extends SpaceObject implements Renameable, InventoryListener, Damageable {
 	private static final float FADE_AMOUNT = 10; // Reticle zoom fading factor
-	private static final float CRATE_SPEED = 10;
+	private static final float CRATE_SPEED = 10; // Speed of item drops when destroyed
 	private static final int DEPART_FRAMES = 100; // Number of seconds to wait before docking/landing again
+	private static final float BLINK_RATE = 1; // Blink color decay rate
 
 	private String name;
 	private final float speed;  // Force of the vector added when engine is on
@@ -30,6 +31,8 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 
 	protected final PVector heading = new PVector();
 	private final Inventory inventory = new Inventory(this);
+
+	private int blinkColor;
 
 	private transient SpaceObject dock;
 	private transient int departTime; // Dock/land debounce frame
@@ -153,13 +156,17 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 	}
 
 	@Override
-	public boolean isDamageableFrom(Damager damager) {
-		return damager.getParentObject().getColor() != getColor();
-	}
+	public boolean damage(float amount, Damager damager) {
+		if(damager.getParentObject().getColor() == getColor()) {
+			return false;
+		}
 
-	@Override
-	public void damage(float amount, Damager damager) {
-		destroyBecause(damager.getParentObject());
+		blink(v.color(255));
+		if(amount > 0) {
+			destroyBecause(damager.getParentObject());
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -178,8 +185,14 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 		super.onDestroy(s);
 	}
 
+	public void blink(int blinkColor) {
+		this.blinkColor = blinkColor;
+	}
+
 	@Override
 	public void draw(RenderLevel level, float r) {
+		blinkColor = v.lerpColor(blinkColor, getColor(), BLINK_RATE / v.frameRate);
+		v.stroke(blinkColor);
 		drawShipMarker(level, r);
 		super.draw(level, r);
 	}
@@ -255,6 +268,7 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 		}
 	}
 
+	// TODO: convert to ShipModel class and implement as subclasses
 	protected enum ShipModelType {
 		DEFAULT,
 		CARGO_SHIP,

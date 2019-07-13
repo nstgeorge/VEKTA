@@ -6,6 +6,7 @@ public enum ModuleType {
 	ENGINE,
 	RCS,
 	WEAPON,
+	SHIELD,
 	NAVIGATION,
 	ANTENNA,
 	TELESCOPE,

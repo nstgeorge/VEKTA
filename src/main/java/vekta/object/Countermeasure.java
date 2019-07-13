@@ -89,12 +89,8 @@ public class Countermeasure extends SpaceObject implements Damageable {
 	}
 
 	@Override
-	public boolean isDamageableFrom(Damager damager) {
-		return true;
-	}
-
-	@Override
-	public void damage(float amount, Damager damager) {
+	public boolean damage(float amount, Damager damager) {
 		destroyBecause(damager.getParentObject());
+		return true;
 	}
 }  

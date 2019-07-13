@@ -102,9 +102,7 @@ public class Projectile extends SpaceObject implements Damager {
 
 	@Override
 	public void onCollide(SpaceObject s) {
-		if(s instanceof Damageable) {
-			((Damageable)s).damage(getDamage(), this);
-
+		if(s instanceof Damageable && ((Damageable)s).damage(getDamage(), this)) {
 			getWorld().playSound("explosion", getPosition());
 			destroyBecause(s);
 		}

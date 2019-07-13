@@ -340,6 +340,20 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		}
 	}
 
+	@Override
+	public boolean damage(float amount, Damager damager) {
+		if(hasController()) {
+			DamageAttempt attempt = new DamageAttempt(amount, damager);
+			getController().emit(PlayerEvent.DAMAGE_SHIP, attempt);
+			for(Module m : getModules()) {
+				m.onDamageShip(attempt);
+			}
+			amount = attempt.getAmount();
+			damager = attempt.getDamager();
+		}
+		return super.damage(amount, damager);
+	}
+
 	// TODO: update modules/UI to use these methods
 
 	public SpaceObject findNavigationTarget() {
@@ -524,6 +538,32 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 		public float getRatio() {
 			return getCharge() / getCapacity();
+		}
+	}
+
+	public static class DamageAttempt {
+		private float amount;
+		private Damager damager;
+
+		public DamageAttempt(float amount, Damager damager) {
+			this.amount = amount;
+			this.damager = damager;
+		}
+
+		public float getAmount() {
+			return amount;
+		}
+
+		public void setAmount(float amount) {
+			this.amount = amount;
+		}
+
+		public Damager getDamager() {
+			return damager;
+		}
+
+		public void setDamager(Damager damager) {
+			this.damager = damager;
 		}
 	}
 }  

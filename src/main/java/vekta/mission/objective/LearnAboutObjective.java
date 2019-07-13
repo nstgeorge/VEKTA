@@ -54,7 +54,7 @@ public class LearnAboutObjective extends Objective {
 			Dialog dialog = ((DialogMenuHandle)menu.getHandle()).getDialog();
 			if(!alreadyAsked.contains(dialog.getPerson())) {
 				alreadyAsked.add(dialog.getPerson());
-
+				
 				boolean foundInfo = v.chance(getRarity());
 				Dialog next = foundInfo
 						? new Dialog("topic", dialog.getPerson(), getDescription())
