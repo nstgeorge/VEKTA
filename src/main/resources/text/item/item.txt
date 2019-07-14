@@ -4,7 +4,6 @@
 {item_rare}
 {item_rare}
 {item_legendary}
-{item_weapon}
 {ore_common}
 {ore_rare}
 {item_clothing_common}

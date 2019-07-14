@@ -23,10 +23,10 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 	private static final float FADE_AMOUNT = 10; // Reticle zoom fading factor
 	private static final float CRATE_SPEED = 10; // Speed of item drops when destroyed
 	private static final int DEPART_FRAMES = 100; // Number of seconds to wait before docking/landing again
-	private static final float BLINK_RATE = 1; // Blink color decay rate
-
+	private static final float BLINK_RATE = 1.5F; // Blink color decay rate
+ 
 	private String name;
-	private final float speed;  // Force of the vector added when engine is on
+	private final float speed;  // Force induced when engine is on
 	private final float turnSpeed; // Rotational speed when turning
 
 	protected final PVector heading = new PVector();

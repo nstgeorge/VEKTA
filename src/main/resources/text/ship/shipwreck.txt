@@ -1,0 +1,5 @@
+{shipwreck_noun}
+{faction} {shipwreck_noun}
+{person}'s {shipwreck_noun}
+{item_adj_common} {shipwreck_noun}
+{item_adj_rare} {shipwreck_noun}

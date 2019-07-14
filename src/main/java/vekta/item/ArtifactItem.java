@@ -1,10 +1,13 @@
 package vekta.item;
 
 import vekta.InfoGroup;
-import vekta.Player;
 import vekta.menu.Menu;
 import vekta.menu.handle.DialogMenuHandle;
 import vekta.person.Dialog;
+import vekta.person.Person;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static vekta.Vekta.v;
 
@@ -12,6 +15,8 @@ public class ArtifactItem extends BasicItem {
 	private static final float IDENTIFY_CHANCE = .5F;
 
 	private final String description;
+
+	private final Set<Person> alreadyAsked = new HashSet<>();
 
 	private boolean identified;
 
@@ -47,23 +52,23 @@ public class ArtifactItem extends BasicItem {
 			info.addTrait("Unidentified");
 		}
 	}
-
-	@Override
-	public void onAdd(Player player) {
-		super.onAdd(player);
-
-	}
-
+	
 	@Override
 	public void onMenu(Menu menu) {
 		super.onMenu(menu);
 
 		if(menu.getHandle() instanceof DialogMenuHandle) {
 			DialogMenuHandle handle = (DialogMenuHandle)menu.getHandle();
-			if(handle.getPerson().hasInterest("Artifacts")) {
-				Dialog dialog = handle.getPerson().createDialog("identify");
+			Person person = handle.getPerson();
+			if(handle.getDialog().getType().equals("identify_success")) {
+				identify();
+			}
+			else if(!alreadyAsked.contains(person) && handle.getPerson().hasInterest("Artifacts")) {
+				alreadyAsked.add(person);
+
+				Dialog dialog = person.createDialog("identify");
 				if(v.chance(IDENTIFY_CHANCE)) {
-					dialog.then(new Dialog("identify_success", handle.getPerson(), getDescription(), ItemType.LEGENDARY.getColor()));
+					dialog.then(new Dialog("identify_success", person, getDescription(), ItemType.LEGENDARY.getColor()));
 				}
 				else {
 					dialog.then("identify_fail");
