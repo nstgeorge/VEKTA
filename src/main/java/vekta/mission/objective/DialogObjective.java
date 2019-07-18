@@ -2,7 +2,7 @@ package vekta.mission.objective;
 
 import vekta.menu.Menu;
 import vekta.menu.handle.DialogMenuHandle;
-import vekta.menu.option.DialogOption;
+import vekta.menu.option.DialogButton;
 import vekta.object.SpaceObject;
 import vekta.person.Dialog;
 import vekta.person.Person;
@@ -50,7 +50,7 @@ public class DialogObjective extends Objective {
 				complete();
 			}
 			else if(dialog.getPerson() == getDialog().getPerson()) {
-				menu.add(new DialogOption(getVerb(), getDialog()));
+				menu.add(new DialogButton(getVerb(), getDialog()));
 			}
 		}
 	}

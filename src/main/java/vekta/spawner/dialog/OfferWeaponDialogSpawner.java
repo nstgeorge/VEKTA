@@ -3,7 +3,7 @@ package vekta.spawner.dialog;
 import vekta.Player;
 import vekta.item.Item;
 import vekta.menu.Menu;
-import vekta.menu.option.ItemTradeOption;
+import vekta.menu.option.ItemTradeButton;
 import vekta.person.Dialog;
 import vekta.spawner.DialogGenerator;
 import vekta.spawner.item.WeaponItemSpawner;
@@ -18,6 +18,6 @@ public class OfferWeaponDialogSpawner implements DialogGenerator.DialogSpawner {
 	public void setup(Menu menu, Dialog dialog) {
 		Player player = menu.getPlayer();
 		Item item = WeaponItemSpawner.randomWeapon();
-		dialog.add(new ItemTradeOption(player.getInventory(), item, 0));
+		dialog.add(new ItemTradeButton(player.getInventory(), item, 0));
 	}
 }

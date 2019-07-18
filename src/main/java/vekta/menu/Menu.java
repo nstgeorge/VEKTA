@@ -5,7 +5,8 @@ import vekta.Player;
 import vekta.PlayerEvent;
 import vekta.context.Context;
 import vekta.menu.handle.MenuHandle;
-import vekta.menu.option.BackOption;
+import vekta.menu.option.BackButton;
+import vekta.menu.option.ButtonOption;
 import vekta.menu.option.MenuOption;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class Menu implements Context {
 	private int index;
 
 	public Menu(Menu parent, MenuHandle handle) {
-		this(parent.getPlayer(), new BackOption(parent), handle);
+		this(parent.getPlayer(), new BackButton(parent), handle);
 	}
 
 	public Menu(Player player, MenuOption def, MenuHandle handle) {
@@ -134,7 +135,7 @@ public class Menu implements Context {
 		}
 	}
 
-	public void setAuto(MenuOption option) {
+	public void setAuto(ButtonOption option) {
 		// Disambiguate multiple automatic options by adding both to the menu
 		if(autoOption != null) {
 			add(autoOption);

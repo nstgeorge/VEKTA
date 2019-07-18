@@ -20,7 +20,7 @@ public class MainMenuHandle extends MenuHandle {
 
 		Resources.setMusic("theme", false);
 	}
-
+	
 	@Override
 	public void beforeDraw() {
 		super.beforeDraw();
@@ -36,6 +36,6 @@ public class MainMenuHandle extends MenuHandle {
 		v.shape(Resources.logo, v.width / 2F, v.height / 4F, 339.26F, 100);
 
 		v.textSize(14);
-		v.text("Created by Nate St. George", v.width / 2F, (v.height / 2F) + 100 * (menu.size() + 1));
+		v.text("Created by Nate St. George & Ryan Vandersmith", v.width / 2F, (v.height / 2F) + 100 * (menu.size() + 1));
 	}
 }

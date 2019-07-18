@@ -219,7 +219,7 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public void setAutoZoom(float zoom) {
-		// Only update if player was zooming in the same direction
+		// Only setValue if player was zooming in the same direction
 		if(lastZoomOutward ? zoom > state.getZoom() : zoom < state.getZoom()) {
 			state.setZoom(max(MIN_ZOOM_LEVEL, min(MAX_ZOOM_LEVEL, zoom)));
 		}
@@ -286,7 +286,7 @@ public class Singleplayer implements World, PlayerListener {
 			objectCounts[i] = 0;
 		}
 
-		// Pre-update loop
+		// Pre-setValue loop
 		List<SpaceObject> objects = state.getObjects();
 		for(SpaceObject s : objects) {
 			if(!s.isPersistent()) {

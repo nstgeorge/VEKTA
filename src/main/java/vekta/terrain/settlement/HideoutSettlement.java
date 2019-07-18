@@ -6,7 +6,7 @@ import vekta.economy.Economy;
 import vekta.economy.NoiseModifier;
 import vekta.economy.TemporaryModifier;
 import vekta.menu.Menu;
-import vekta.menu.option.CoinMenuOption;
+import vekta.menu.option.CoinMenuButton;
 import vekta.spawner.FactionGenerator;
 import vekta.spawner.ItemGenerator;
 import vekta.spawner.item.ClothingItemSpawner;
@@ -58,6 +58,6 @@ public class HideoutSettlement extends Settlement {
 
 	@Override
 	public void onSettlementMenu(Menu menu) {
-		menu.add(new CoinMenuOption()); // Add street coin market
+		menu.add(new CoinMenuButton()); // Add street coin market
 	}
 }

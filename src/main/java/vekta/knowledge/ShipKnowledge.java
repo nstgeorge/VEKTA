@@ -3,7 +3,7 @@ package vekta.knowledge;
 import vekta.KeyBinding;
 import vekta.Player;
 import vekta.menu.Menu;
-import vekta.menu.option.ShipSwitchOption;
+import vekta.menu.option.ShipSwitchButton;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.Ship;
 
@@ -60,7 +60,7 @@ public class ShipKnowledge extends SpaceObjectKnowledge {
 		super.onMenu(menu);
 
 		if(ship instanceof ModularShip && getLevel() == ObservationLevel.OWNED) {
-			menu.add(new ShipSwitchOption((ModularShip)ship));
+			menu.add(new ShipSwitchButton((ModularShip)ship));
 		}
 	}
 }

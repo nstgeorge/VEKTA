@@ -5,9 +5,10 @@ import vekta.InfoGroup;
 import vekta.knowledge.ObservationLevel;
 import vekta.menu.Menu;
 import vekta.menu.handle.LandingMenuHandle;
-import vekta.menu.option.CustomOption;
+import vekta.menu.option.ButtonOption;
+import vekta.menu.option.CustomButton;
 import vekta.menu.option.MenuOption;
-import vekta.menu.option.SettlementOption;
+import vekta.menu.option.SettlementButton;
 import vekta.terrain.HabitableTerrain;
 import vekta.terrain.LandingSite;
 import vekta.terrain.Terrain;
@@ -51,7 +52,7 @@ public class ColonyItem extends Item {
 			Terrain terrain = site.getTerrain();
 			if(terrain instanceof HabitableTerrain && !terrain.isInhabited()) {
 				menu.getPlayer().getInventory().remove(this);
-				menu.add(new CustomOption("Colonize", m -> {
+				menu.add(new CustomButton("Colonize", m -> {
 					Faction faction = getFaction() != null ? getFaction() : m.getPlayer().getFaction();
 
 					// Set up colony settlement
@@ -68,13 +69,13 @@ public class ColonyItem extends Item {
 					// Remove other settlement menu options
 					for(int i = 0; i < m.size(); i++) {
 						MenuOption other = m.get(i);
-						if(other instanceof SettlementOption) {
+						if(other instanceof SettlementButton) {
 							m.remove(other);
 						}
 					}
 
 					// Add colony to menu
-					MenuOption option = new SettlementOption(settlement);
+					ButtonOption option = new SettlementButton(settlement);
 					m.add(0, option);
 					m.select(option);
 				}).withColor(getColor()).withRemoval());

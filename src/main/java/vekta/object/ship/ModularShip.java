@@ -27,12 +27,12 @@ import java.util.Map;
 import static vekta.Vekta.*;
 
 public abstract class ModularShip extends Ship implements ModuleUpgradeable, PlayerListener, Rechargeable {
-	private static final Map<KeyBinding, Class<? extends MenuOption>> SHORTCUT_MAP = ImmutableMap.of(
-			KeyBinding.SHIP_MISSIONS, MissionMenuOption.class,
-			KeyBinding.SHIP_LOADOUT, LoadoutMenuOption.class,
-			KeyBinding.SHIP_INTERNET, InternetMenuOption.class,
-			KeyBinding.SHIP_INVENTORY, InventoryOption.class,
-			KeyBinding.SHIP_KNOWLEDGE, PlayerKnowledgeOption.class
+	private static final Map<KeyBinding, Class<? extends ButtonOption>> SHORTCUT_MAP = ImmutableMap.of(
+			KeyBinding.SHIP_MISSIONS, MissionMenuButton.class,
+			KeyBinding.SHIP_LOADOUT, LoadoutMenuButton.class,
+			KeyBinding.SHIP_INTERNET, InternetMenuButton.class,
+			KeyBinding.SHIP_INVENTORY, InventoryButton.class,
+			KeyBinding.SHIP_KNOWLEDGE, PlayerKnowledgeButton.class
 	);
 
 	private static final float ENERGY_TIME_SCALE = 1e-4F;
@@ -354,7 +354,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		return super.damage(amount, damager);
 	}
 
-	// TODO: update modules/UI to use these methods
+	// TODO: setValue modules/UI to use these methods
 
 	public SpaceObject findNavigationTarget() {
 		Module m = getModule(ModuleType.NAVIGATION);
@@ -382,12 +382,12 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	}
 
 	public Menu openShipMenu() {
-		Menu menu = new Menu(getController(), new BackOption(getWorld()), new ObjectMenuHandle(this));
-		menu.add(new PlayerKnowledgeOption());
-		menu.add(new InventoryOption(getInventory()));
-		menu.add(new LoadoutMenuOption(this));
-		menu.add(new MissionMenuOption());
-		menu.add(new RenameOption(this));
+		Menu menu = new Menu(getController(), new BackButton(getWorld()), new ObjectMenuHandle(this));
+		menu.add(new PlayerKnowledgeButton());
+		menu.add(new InventoryButton(getInventory()));
+		menu.add(new LoadoutMenuButton(this));
+		menu.add(new MissionMenuButton());
+		menu.add(new RenameButton(this));
 		menu.addDefault();
 		setContext(menu);
 
@@ -398,9 +398,9 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	public void doLand(LandingSite site) {
 		if(hasController()) {
 			Player player = getController();
-			Menu menu = new Menu(player, new ShipTakeoffOption(site, getWorld()), new LandingMenuHandle(site));
+			Menu menu = new Menu(player, new ShipTakeoffButton(site, getWorld()), new LandingMenuHandle(site));
 			site.getTerrain().setupLandingMenu(menu);
-			menu.add(new SurveyOption(site));
+			menu.add(new SurveyButton(site));
 			menu.addDefault();
 			Resources.playSound("land");
 			this.setLanding(false);
@@ -416,7 +416,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		if(hasController()) {
 			Player player = getController();
 			if(s instanceof Ship) {
-				Menu menu = new Menu(player, new ShipUndockOption(this, getWorld()), new ObjectMenuHandle(s));
+				Menu menu = new Menu(player, new ShipUndockButton(this, getWorld()), new ObjectMenuHandle(s));
 				((Ship)s).setupDockingMenu(menu);
 				menu.addDefault();
 				this.setLanding(false);
@@ -436,7 +436,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	@Override
 	public void setupDockingMenu(Menu menu) {
-		// TODO: add ShipSwitchOption when relevant
+		// TODO: add ShipSwitchButton when relevant
 	}
 
 	//// InventoryListener hooks

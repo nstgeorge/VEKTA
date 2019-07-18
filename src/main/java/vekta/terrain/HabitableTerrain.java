@@ -1,7 +1,7 @@
 package vekta.terrain;
 
 import vekta.menu.Menu;
-import vekta.menu.option.SettlementOption;
+import vekta.menu.option.SettlementButton;
 import vekta.terrain.settlement.Settlement;
 
 import java.util.Collections;
@@ -51,6 +51,6 @@ public class HabitableTerrain extends Terrain {
 
 	@Override
 	public void setupLandingMenu(Menu menu) {
-		menu.add(new SettlementOption(getSettlement()));
+		menu.add(new SettlementButton(getSettlement()));
 	}
 }

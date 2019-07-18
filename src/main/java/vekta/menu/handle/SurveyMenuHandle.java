@@ -24,8 +24,8 @@ public class SurveyMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public int getButtonY(int i) {
-		return super.getButtonY(i) + PLANET_SIZE;
+	public int getItemY(int i) {
+		return super.getItemY(i) + PLANET_SIZE;
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class SurveyMenuHandle extends MenuHandle {
 		super.render(menu);
 
 		v.pushMatrix();
-		v.translate(getButtonX(), getButtonY(-1) - PLANET_SIZE);
+		v.translate(getItemX(), getItemY(-1) - PLANET_SIZE);
 
 		v.shapeMode(CENTER);
 		v.strokeWeight(2);

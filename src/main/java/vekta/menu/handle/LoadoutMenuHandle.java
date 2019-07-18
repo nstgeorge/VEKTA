@@ -24,23 +24,18 @@ public class LoadoutMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public int getButtonWidth() {
+	public int getItemWidth() {
 		return v.width / 3;
 	}
 
 	@Override
-	public int getButtonX() {
-		return v.width / 6 + getButtonWidth() / 2;
+	public int getItemX() {
+		return v.width / 6 + getItemWidth() / 2;
 	}
 
 	@Override
-	public int getButtonY(int i) {
-		return super.getButtonY(i - 1);
-	}
-
-	@Override
-	public String getSelectVerb() {
-		return "install";
+	public int getItemY(int i) {
+		return super.getItemY(i - 1);
 	}
 
 	@Override
@@ -55,19 +50,19 @@ public class LoadoutMenuHandle extends MenuHandle {
 		v.textSize(32);
 		v.fill(v.color(100));
 		v.textAlign(v.CENTER);
-		v.text("Available:", getButtonX(), getButtonY(-1));
+		v.text("Available:", getItemX(), getItemY(-1));
 		v.textAlign(v.LEFT);
-		v.text("Installed:", v.width - getButtonX() - 20, getLoadoutOffset(-2));
+		v.text("Installed:", v.width - getItemX() - 20, getLoadoutOffset(-2));
 
 		v.textSize(24);
 		v.fill(v.color(200));
 		for(int i = 0; i < modules.size(); i++) {
 			Module m = modules.get(i);
-			v.text(m.getName(), v.width - getButtonX(), getLoadoutOffset(i));
+			v.text(m.getName(), v.width - getItemX(), getLoadoutOffset(i));
 		}
 	}
 
 	private float getLoadoutOffset(int position) {
-		return (v.width / 4F + getButtonY(position)) / 2;
+		return (v.width / 4F + getItemY(position)) / 2;
 	}
 }

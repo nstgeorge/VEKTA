@@ -21,8 +21,8 @@ public class DistrictMenuHandle extends SettlementMenuHandle {
 	}
 
 //	@Override
-//	public int getButtonY(int i) {
-//		return super.getButtonY(i - 1);
+//	public int getItemY(int i) {
+//		return super.getItemY(i - 1);
 //	}
 
 	@Override
@@ -31,7 +31,7 @@ public class DistrictMenuHandle extends SettlementMenuHandle {
 
 		//		v.textSize(48);
 		//		v.fill(district.getSettlement().getColor());
-		//		v.text(district.getName(), v.width / 2F, getButtonY(-2));
+		//		v.text(district.getName(), v.width / 2F, getItemY(-2));
 	}
 
 	@Override

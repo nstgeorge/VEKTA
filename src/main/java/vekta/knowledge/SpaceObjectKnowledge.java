@@ -7,8 +7,8 @@ import vekta.display.Layout;
 import vekta.display.SpaceObjectDisplay;
 import vekta.menu.Menu;
 import vekta.menu.handle.KnowledgeMenuHandle;
-import vekta.menu.option.BackOption;
-import vekta.menu.option.TargetOption;
+import vekta.menu.option.BackButton;
+import vekta.menu.option.TargetButton;
 import vekta.object.SpaceObject;
 import vekta.overlay.singleplayer.TelemetryOverlay;
 
@@ -55,7 +55,7 @@ public abstract class SpaceObjectKnowledge extends ObservationKnowledge {
 	@Override
 	public void onKeyPress(Player player, KeyBinding key) {
 		if(key == KeyBinding.MENU_SELECT) {
-			Menu menu = new Menu(player, new BackOption(getContext()), new KnowledgeMenuHandle(this));
+			Menu menu = new Menu(player, new BackButton(getContext()), new KnowledgeMenuHandle(this));
 			onMenu(menu);
 			menu.addDefault();
 			setContext(menu);
@@ -72,6 +72,6 @@ public abstract class SpaceObjectKnowledge extends ObservationKnowledge {
 	}
 
 	public void onMenu(Menu menu) {
-		menu.add(new TargetOption(getSpaceObject()));
+		menu.add(new TargetButton(getSpaceObject()));
 	}
 }

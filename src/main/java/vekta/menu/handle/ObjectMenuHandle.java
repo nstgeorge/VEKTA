@@ -26,11 +26,11 @@ public class ObjectMenuHandle extends MenuHandle {
 
 		v.textSize(48);
 		v.fill(target.getColor());
-		v.text(target.getName(), v.width / 2F, getButtonY(-3));
+		v.text(target.getName(), v.width / 2F, getItemY(-3));
 
 		// Draw object preview
 		v.pushMatrix();
-		v.translate(getButtonX(), getButtonY(-2) + 40);
+		v.translate(getItemX(), getItemY(-2) + 40);
 		v.noFill();
 		v.stroke(target.getColor());
 		target.drawPreview(getSpacing() / 2F);

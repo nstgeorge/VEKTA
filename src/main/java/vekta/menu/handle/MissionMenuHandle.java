@@ -2,7 +2,7 @@ package vekta.menu.handle;
 
 import vekta.KeyBinding;
 import vekta.menu.Menu;
-import vekta.menu.option.MissionOption;
+import vekta.menu.option.MissionButton;
 import vekta.mission.Mission;
 import vekta.mission.objective.Objective;
 import vekta.mission.reward.Reward;
@@ -19,18 +19,18 @@ public class MissionMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public int getButtonWidth() {
+	public int getItemWidth() {
 		return v.width / 3;
 	}
 
 	@Override
-	public int getButtonX() {
-		return v.width / 6 + getButtonWidth() / 2;
+	public int getItemX() {
+		return v.width / 6 + getItemWidth() / 2;
 	}
 
 	@Override
-	public int getButtonY(int i) {
-		return super.getButtonY(i) - 100;
+	public int getItemY(int i) {
+		return super.getItemY(i) - 100;
 	}
 
 	@Override
@@ -45,14 +45,14 @@ public class MissionMenuHandle extends MenuHandle {
 		v.textSize(32);
 		v.fill(v.color(100));
 		v.textAlign(v.CENTER);
-		v.text("Mission:", getButtonX(), getButtonY(-1));
+		v.text("Mission:", getItemX(), getItemY(-1));
 
-		if(!(menu.getCursor() instanceof MissionOption)) {
+		if(!(menu.getCursor() instanceof MissionButton)) {
 			return;
 		}
-		Mission mission = ((MissionOption)menu.getCursor()).getMission();
+		Mission mission = ((MissionButton)menu.getCursor()).getMission();
 
-		float missionX = getButtonX() + getButtonWidth() * .75F;
+		float missionX = getItemX() + getItemWidth() * .75F;
 		float missionY = v.height / 4F;
 
 		v.textAlign(v.LEFT);

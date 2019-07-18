@@ -27,13 +27,13 @@ public class SecurityMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public int getButtonWidth() {
+	public int getItemWidth() {
 		return v.width * 2 / 3;
 	}
 
 	@Override
-	public int getButtonY(int i) {
-		return super.getButtonY(i + 1);
+	public int getItemY(int i) {
+		return super.getItemY(i + 1);
 	}
 
 	@Override
@@ -42,10 +42,10 @@ public class SecurityMenuHandle extends MenuHandle {
 
 		v.textSize(64);
 		v.fill(getFaction().getColor());
-		v.text(getFaction().getName(), getButtonX(), getButtonY(-3));
+		v.text(getFaction().getName(), getItemX(), getItemY(-3));
 
 		v.textSize(24);
 		v.fill(200);
-		v.text("You notice a heavily guarded security checkpoint ahead.", getButtonX(), getButtonY(-2));
+		v.text("You notice a heavily guarded security checkpoint ahead.", getItemX(), getItemY(-2));
 	}
 }

@@ -10,9 +10,9 @@ import vekta.context.World;
 import vekta.item.ItemType;
 import vekta.menu.Menu;
 import vekta.menu.handle.MainMenuHandle;
-import vekta.menu.option.ExitGameOption;
-import vekta.menu.option.SettingsMenuOption;
-import vekta.menu.option.WorldOption;
+import vekta.menu.option.ExitGameButton;
+import vekta.menu.option.SettingsMenuButton;
+import vekta.menu.option.WorldButton;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,7 +43,6 @@ public class Vekta extends PApplet {
 
 	// Game-balancing variables and visual settings
 	public static final float G = 6.674e-11F;
-	public static final float SCALE = 3e7F;
 	public static final float MIN_GRAVITY_MASS = 1e23F; // Minimum mass for gravity-imparting planets
 
 	// Render/spawning distances (we might want to use kilometers due to limited floating-point precision)
@@ -98,10 +97,10 @@ public class Vekta extends PApplet {
 		BODY_FONT = createFont(FONTNAME, 24);
 		v.textFont(BODY_FONT);
 
-		mainMenu = new Menu(null, new ExitGameOption("Quit"), new MainMenuHandle());
-		mainMenu.add(new WorldOption("Singleplayer", Singleplayer::new));
-		mainMenu.add(new WorldOption("Multiplayer", Multiplayer::new));
-		mainMenu.add(new SettingsMenuOption());
+		mainMenu = new Menu(null, new ExitGameButton("Quit"), new MainMenuHandle());
+		mainMenu.add(new WorldButton("Singleplayer", Singleplayer::new));
+		mainMenu.add(new WorldButton("Multiplayer", Multiplayer::new));
+		mainMenu.add(new SettingsMenuButton());
 		mainMenu.addDefault();
 		setContext(mainMenu);
 		//		setContext(new Multiplayer());///
@@ -303,19 +302,19 @@ public class Vekta extends PApplet {
 	}
 
 	/**
-	 * Return the sign (-1, 0, or 1) of a number.
-	 */
-	public float sign(float f) {
-		return f == 0 ? 0 : f > 0 ? 1 : -1;
-	}
-
-	/**
 	 * Return the squared distance between two vectors.
 	 */
 	public static float distSq(PVector a, PVector b) {
 		float x = a.x - b.x;
 		float y = a.y - b.y;
 		return x * x + y * y;
+	}
+
+	/**
+	 * Capitalize the first letter of the given string.
+	 */
+	public static String capitalize(String text) {
+		return Character.toUpperCase(text.charAt(0)) + text.substring(1);
 	}
 
 	//// Main method ////

@@ -31,7 +31,7 @@ public class TargetingModule extends ShipModule implements Targeter {
 		this.mode = mode;
 		setTarget(null);
 
-		// Immediately update ship's targeting instruments
+		// Immediately setValue ship's targeting instruments
 		getShip().updateTargets();
 	}
 
@@ -64,7 +64,7 @@ public class TargetingModule extends ShipModule implements Targeter {
 	@Override
 	public boolean isValidTarget(SpaceObject obj) {
 		if(mode == null) {
-			return obj == getTarget() && !obj.isDestroyed(); // Don't update targeter unless destroyed
+			return obj == getTarget() && !obj.isDestroyed(); // Don't setValue targeter unless destroyed
 		}
 		switch(mode) {
 		case PLANET:

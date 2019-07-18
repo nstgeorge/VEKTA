@@ -4,7 +4,7 @@ import processing.core.PVector;
 import vekta.RenderLevel;
 import vekta.context.StationLayoutContext;
 import vekta.menu.Menu;
-import vekta.menu.option.CustomOption;
+import vekta.menu.option.CustomButton;
 import vekta.module.Module;
 import vekta.module.ModuleType;
 import vekta.module.station.ComponentModule;
@@ -130,7 +130,7 @@ public class SpaceStation extends ModularShip {
 
 	@Override
 	public void setupDockingMenu(Menu menu) {
-		menu.add(new CustomOption("Customize", m ->
+		menu.add(new CustomButton("Customize", m ->
 				setContext(new StationLayoutContext(m, this, m.getPlayer()))));
 	}
 
@@ -173,7 +173,7 @@ public class SpaceStation extends ModularShip {
 		//		public void setRotation(Direction rotation) {
 		//			attached.put(rotation.back(), attached.remove(this.rotation.back()));
 		//			this.rotation = rotation;
-		//			// TODO update x, y, direction
+		//			// TODO setValue x, y, direction
 		//		}
 
 		public ComponentModule getModule() {

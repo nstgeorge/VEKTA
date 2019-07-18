@@ -2,8 +2,8 @@ package vekta.spawner.dialog;
 
 import vekta.menu.Menu;
 import vekta.menu.handle.MissionMenuHandle;
-import vekta.menu.option.CustomOption;
-import vekta.menu.option.MissionOption;
+import vekta.menu.option.CustomButton;
+import vekta.menu.option.MissionButton;
 import vekta.person.Dialog;
 import vekta.spawner.DialogGenerator;
 import vekta.spawner.MissionGenerator;
@@ -18,9 +18,9 @@ public class RequestDialogSpawner implements DialogGenerator.DialogSpawner {
 
 	@Override
 	public void setup(Menu menu, Dialog dialog) {
-		dialog.add(new CustomOption("Learn More", m -> {
+		dialog.add(new CustomButton("Learn More", m -> {
 			Menu sub = new Menu(m.getPlayer(), m.getDefault(), new MissionMenuHandle());
-			sub.add(new MissionOption(MissionGenerator.createMission(m.getPlayer(), dialog.getPerson())));
+			sub.add(new MissionButton(MissionGenerator.createMission(m.getPlayer(), dialog.getPerson())));
 			sub.addDefault();
 			setContext(sub);
 		}));

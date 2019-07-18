@@ -12,10 +12,9 @@ import vekta.context.TextInputContext;
 import vekta.menu.Menu;
 import vekta.menu.handle.MenuHandle;
 import vekta.menu.handle.ObjectMenuHandle;
-import vekta.menu.option.BackOption;
-import vekta.menu.option.CustomOption;
-import vekta.menu.option.MissionOption;
-import vekta.menu.option.PlayerOption;
+import vekta.menu.option.*;
+import vekta.menu.option.CustomButton;
+import vekta.menu.option.PlayerButton;
 import vekta.mission.Mission;
 import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
@@ -193,8 +192,8 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		//			objective.onStart(mission);
 		//		}
 
-		Menu menu = new Menu(getPlayer(), new BackOption(getContext()), new ObjectMenuHandle(sender.getShip()));
-		menu.add(new MissionOption(mission));
+		Menu menu = new Menu(getPlayer(), new BackButton(getContext()), new ObjectMenuHandle(sender.getShip()));
+		menu.add(new MissionButton(mission));
 		menu.addDefault();
 		setContext(menu);
 	}
@@ -331,10 +330,10 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		if(menu.getHandle() instanceof ObjectMenuHandle && ((ObjectMenuHandle)menu.getHandle()).getSpaceObject() == getPlayerShip()) {
 			println(playerMap);////
 			if(!playerMap.isEmpty()) {
-				menu.add(new CustomOption("Players", m -> {
-					Menu sub = new Menu(m.getPlayer(), new BackOption(m), new MenuHandle());
+				menu.add(new CustomButton("Players", m -> {
+					Menu sub = new Menu(m.getPlayer(), new BackButton(m), new MenuHandle());
 					for(Player player : playerMap.values()) {
-						sub.add(new PlayerOption(player));
+						sub.add(new PlayerButton(player));
 					}
 					setContext(sub);
 				}));

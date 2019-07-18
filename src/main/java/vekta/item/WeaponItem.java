@@ -3,7 +3,7 @@ package vekta.item;
 import vekta.Resources;
 import vekta.menu.Menu;
 import vekta.menu.handle.DialogMenuHandle;
-import vekta.menu.option.MurderOption;
+import vekta.menu.option.MurderButton;
 import vekta.person.Dialog;
 
 import java.util.Arrays;
@@ -62,6 +62,6 @@ public class WeaponItem extends Item {
 	}
 
 	public void setupDialog(Dialog dialog) {
-		dialog.add(new MurderOption(dialog.getPerson(), this));
+		dialog.add(new MurderButton(dialog.getPerson(), this));
 	}
 }

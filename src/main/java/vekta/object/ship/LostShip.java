@@ -2,7 +2,7 @@ package vekta.object.ship;
 
 import processing.core.PVector;
 import vekta.menu.Menu;
-import vekta.menu.option.LootMenuOption;
+import vekta.menu.option.LootMenuButton;
 
 public class LostShip extends Ship {
 	private static final float DEF_MASS = 500;
@@ -24,7 +24,7 @@ public class LostShip extends Ship {
 
 	@Override
 	public void setupDockingMenu(Menu menu) {
-		menu.add(new LootMenuOption("Scavenge", menu.getPlayer().getInventory(), getInventory()));
+		menu.add(new LootMenuButton("Scavenge", menu.getPlayer().getInventory(), getInventory()));
 	}
 
 	@Override

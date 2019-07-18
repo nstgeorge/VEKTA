@@ -4,7 +4,7 @@ import vekta.InfoGroup;
 import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.menu.handle.LandingMenuHandle;
-import vekta.menu.option.RechargeOption;
+import vekta.menu.option.RechargeButton;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.Rechargeable;
 import vekta.terrain.LandingSite;
@@ -98,11 +98,11 @@ public class BatteryModule extends ShipModule implements Rechargeable {
 				if(shipBatteries.contains(getBattery()) && shipBatteries.get(0) == getBattery()) {
 					// Add recharge option for ship rather than mounted battery
 					if(ship.getEnergy() <= ship.getMaxEnergy() * CHARGE_THRESHOLD) {
-						menu.add(new RechargeOption(menu.getPlayer(), price));
+						menu.add(new RechargeButton(menu.getPlayer(), price));
 					}
 				}
 				else if(getBattery().getCharge() <= getBattery().getCapacity() * CHARGE_THRESHOLD) {
-					menu.add(new RechargeOption(menu.getPlayer(), this, price));
+					menu.add(new RechargeButton(menu.getPlayer(), this, price));
 				}
 			}
 		}

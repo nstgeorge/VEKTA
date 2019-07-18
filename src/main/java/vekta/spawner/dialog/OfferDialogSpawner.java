@@ -3,7 +3,7 @@ package vekta.spawner.dialog;
 import vekta.Player;
 import vekta.item.Item;
 import vekta.menu.Menu;
-import vekta.menu.option.ItemTradeOption;
+import vekta.menu.option.ItemTradeButton;
 import vekta.person.Dialog;
 import vekta.person.OpinionType;
 import vekta.spawner.DialogGenerator;
@@ -30,6 +30,6 @@ public class OfferDialogSpawner implements DialogGenerator.DialogSpawner {
 
 		int price = opinion.isPositive() ? 0 : (int)(item.randomPrice() * v.random(.25F, 1));
 
-		dialog.add(new ItemTradeOption(player.getInventory(), item, price));
+		dialog.add(new ItemTradeButton(player.getInventory(), item, price));
 	}
 }

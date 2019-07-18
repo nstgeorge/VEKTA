@@ -2,7 +2,7 @@ package vekta.mission.objective;
 
 import vekta.menu.Menu;
 import vekta.menu.handle.LandingMenuHandle;
-import vekta.menu.option.CustomOption;
+import vekta.menu.option.CustomButton;
 import vekta.object.SpaceObject;
 import vekta.terrain.LandingSite;
 
@@ -34,7 +34,7 @@ public class TaskObjective extends Objective {
 		if(menu.getHandle() instanceof LandingMenuHandle) {
 			LandingSite site = ((LandingMenuHandle)menu.getHandle()).getSite();
 			if(getSpaceObject() == null || site.getParent() == getSpaceObject()) {
-				menu.add(new CustomOption(name, m -> complete())
+				menu.add(new CustomButton(name, m -> complete())
 						.withRemoval());
 			}
 		}

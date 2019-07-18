@@ -28,6 +28,6 @@ public class KnowledgeMenuHandle extends MenuHandle {
 
 		v.textSize(48);
 		v.fill(knowledge.getColor(menu.getPlayer()));
-		v.text(knowledge.getName(), v.width / 2F, getButtonY(-3));
+		v.text(knowledge.getName(), v.width / 2F, getItemY(-3));
 	}
 }

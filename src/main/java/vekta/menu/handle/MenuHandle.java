@@ -9,16 +9,18 @@ import vekta.menu.option.MenuOption;
 import java.io.Serializable;
 
 import static processing.core.PConstants.CENTER;
-import static vekta.Vekta.*;
+import static vekta.Vekta.BODY_FONT;
+import static vekta.Vekta.v;
 
 /**
- * Default menu renderer implementation; draws buttons and select text
+ * Default menu renderer implementation; draws buttons and selection text
  */
 public class MenuHandle implements Serializable {
 	private static final int ITEMS_BEFORE_SCROLL = 5; // Number of items before menu starts scrolling
+	private static final float SCROLL_RATE = 10; // Smooth scroll rate
 
-	// Internal menu reference for item scrolling (evaluating this approach)
-	private Menu menu;
+	// Smooth scroll offset
+	private float scrollOffset;
 
 	public MenuHandle() {
 	}
@@ -27,26 +29,19 @@ public class MenuHandle implements Serializable {
 		return 100;
 	}
 
-	public int getButtonWidth() {
+	public int getItemWidth() {
 		return 200;
 	}
 
-	public int getButtonX() {
+	public int getItemX() {
 		return v.width / 2;
 	}
 
-	public int getButtonY(int i) {
+	public int getItemY(int i) {
 		// Scroll items 
 		int y = v.height / 2 - 64 + i * getSpacing();
-		int extraOptions = menu.size() - ITEMS_BEFORE_SCROLL;
-		if(extraOptions > 0) {
-			y -= menu.getIndex() * getSpacing() * extraOptions / menu.size();
-		}
+		y -= scrollOffset;
 		return y;
-	}
-
-	public String getSelectVerb() {
-		return "select";
 	}
 
 	public KeyBinding getShortcutKey() {
@@ -57,7 +52,6 @@ public class MenuHandle implements Serializable {
 	}
 
 	public void focus(Menu menu) {
-		this.menu = menu;
 	}
 
 	public void unfocus(Menu menu) {
@@ -68,6 +62,10 @@ public class MenuHandle implements Serializable {
 	}
 
 	public void render(Menu menu) {
+		int extraOptions = menu.size() - ITEMS_BEFORE_SCROLL;
+		float targetOffset = extraOptions > 0 ? menu.getIndex() * getSpacing() * extraOptions / (float)menu.size() : 0;
+		scrollOffset += (targetOffset - scrollOffset) * SCROLL_RATE / 60;
+		
 		beforeDraw();
 
 		v.noStroke();
@@ -87,31 +85,24 @@ public class MenuHandle implements Serializable {
 		v.textAlign(CENTER);
 
 		if(menu.size() > 0 && menu.getCursor().isEnabled()) {
-			v.text(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to " + getSelectVerb(), getButtonX(), getButtonY(menu.size()) + 100);
+			v.text(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to " + menu.getCursor().getSelectVerb(), getItemX(), getItemY(menu.size()) + 100);
 		}
 	}
 
 	protected void drawButton(Menu menu, MenuOption opt, int index) {
-		float yPos = getButtonY(index);
-		boolean selected = menu.getIndex() == index;
-
-		String name = opt.getName();
-
-		// Draw border
-		v.stroke(selected ? 255 : opt == menu.getDefault() ? 100 : opt.getBorderColor());
-		v.noFill();
-		v.rect(getButtonX(), yPos, max(getButtonWidth(), v.textWidth(name) + 20) + (selected ? 10 : 0), 50);
-
-		// Draw text
-		v.fill(opt.isEnabled() ? opt.getColor() : 100);
-		v.text(name, getButtonX(), yPos - 3);
+		opt.draw(menu, index);
 	}
 
 	public void keyPressed(Menu menu, KeyBinding key) {
 		if(key == KeyBinding.MENU_CLOSE || key == getShortcutKey()) {
 			menu.close();
+			return;
 		}
-		else if(key == KeyBinding.MENU_UP) {
+		else if(menu.getCursor().interceptKeyPressed(menu, key)) {
+			return;
+		}
+
+		if(key == KeyBinding.MENU_UP) {
 			Resources.playSound("change");
 			menu.scroll(-1);
 		}

@@ -1,7 +1,7 @@
 package vekta.terrain.building;
 
 import vekta.menu.Menu;
-import vekta.menu.option.BondMenuOption;
+import vekta.menu.option.BondMenuButton;
 import vekta.terrain.LandingSite;
 import vekta.terrain.settlement.SettlementPart;
 
@@ -30,6 +30,6 @@ public class ExchangeBuilding implements SettlementPart {
 
 	@Override
 	public void setupMenu(Menu menu) {
-		menu.add(new BondMenuOption());
+		menu.add(new BondMenuButton());
 	}
 }

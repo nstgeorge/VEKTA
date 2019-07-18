@@ -30,19 +30,19 @@ public class SideLayoutMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public int getButtonWidth() {
+	public int getItemWidth() {
 		return v.width / 3;
 	}
 
 	@Override
-	public int getButtonX() {
-		int x = v.width / 6 + getButtonWidth() / 2;
+	public int getItemX() {
+		int x = v.width / 6 + getItemWidth() / 2;
 		return leftSide ? x : v.width - x;
 	}
 
 	@Override
-	public int getButtonY(int i) {
-		return super.getButtonY(i) - 100;
+	public int getItemY(int i) {
+		return super.getItemY(i) - 100;
 	}
 
 	@Override
@@ -56,13 +56,13 @@ public class SideLayoutMenuHandle extends MenuHandle {
 	public void render(Menu menu) {
 		super.render(menu);
 
-		float offset = leftSide ? 0 : getButtonWidth() / 2F;
+		float offset = leftSide ? 0 : getItemWidth() / 2F;
 
-		float infoX = v.width - getButtonX() - getButtonWidth() / 4F - offset;
+		float infoX = v.width - getItemX() - getItemWidth() / 4F - offset;
 		float infoY = v.height / 4F;
 
 		v.pushStyle();
-		layout.draw(infoX, infoY, getButtonWidth(), v.height);
+		layout.draw(infoX, infoY, getItemWidth(), v.height);
 		v.popStyle();
 	}
 

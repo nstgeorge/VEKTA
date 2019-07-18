@@ -6,7 +6,7 @@ import vekta.RenderLevel;
 import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.menu.handle.ObjectMenuHandle;
-import vekta.menu.option.DeployOption;
+import vekta.menu.option.DeployButton;
 import vekta.module.Module;
 import vekta.module.ModuleType;
 import vekta.module.ShipModule;
@@ -78,7 +78,7 @@ public class StationCoreModule extends ShipModule {
 	public void onItemMenu(Item item, Menu menu) {
 		Ship ship = menu.getPlayer().getShip();
 		if(menu.getHandle() instanceof ObjectMenuHandle && ((ObjectMenuHandle)menu.getHandle()).getSpaceObject() == ship) {
-			menu.add(new DeployOption("New Station (v" + getTier() + ")", menu.getPlayer(), item, () -> new SpaceStation(
+			menu.add(new DeployButton("New Station (v" + getTier() + ")", menu.getPlayer(), item, () -> new SpaceStation(
 					ship.getName() + " Station",
 					this,
 					ship.getPosition().add(ship.getHeading().setMag(ship.getRadius() * 2)),

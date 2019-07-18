@@ -9,7 +9,7 @@ import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.item.ItemType;
 import vekta.menu.Menu;
-import vekta.menu.option.EconomyItemOption;
+import vekta.menu.option.EconomyItemButton;
 import vekta.menu.option.MenuOption;
 
 import java.io.Serializable;
@@ -48,19 +48,19 @@ public class EconomyMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public int getButtonWidth() {
+	public int getItemWidth() {
 		return v.width / 3;
 	}
 
 	@Override
-	public int getButtonX() {
-		int x = v.width / 6 + getButtonWidth() / 2;
+	public int getItemX() {
+		int x = v.width / 6 + getItemWidth() / 2;
 		return buying ? x : v.width - x;
 	}
 
 	@Override
-	public int getButtonY(int i) {
-		return super.getButtonY(i - 2);
+	public int getItemY(int i) {
+		return super.getItemY(i - 2);
 	}
 
 	@Override
@@ -78,7 +78,7 @@ public class EconomyMenuHandle extends MenuHandle {
 
 		v.textSize(32);
 		v.fill(UI_COLOR);
-		v.text((buying ? "Buying" : "Selling") + ": [" + inv.getMoney() + " G]", getButtonX(), getButtonY(-1));
+		v.text((buying ? "Buying" : "Selling") + ": [" + inv.getMoney() + " G]", getItemX(), getItemY(-1));
 
 		int currentIndex = menu.getIndex();
 		int currentCount = 0;
@@ -88,8 +88,8 @@ public class EconomyMenuHandle extends MenuHandle {
 		v.fill(UI_COLOR);
 		for(int i = 0; i < menu.size(); i++) {
 			MenuOption opt = menu.get(i);
-			if(opt instanceof EconomyItemOption) {
-				EconomyItem item = ((EconomyItemOption)opt).getItem();
+			if(opt instanceof EconomyItemButton) {
+				EconomyItem item = ((EconomyItemButton)opt).getItem();
 				int ct = 0;
 				for(Item other : getInventory()) {
 					if(item.getName().equals(other.getName())) {
@@ -97,7 +97,7 @@ public class EconomyMenuHandle extends MenuHandle {
 					}
 				}
 				if(ct > 0) {
-					v.text("x" + ct, getButtonX() + getButtonWidth() / 2F + 50, getButtonY(i) + 6);
+					v.text("x" + ct, getItemX() + getItemWidth() / 2F + 50, getItemY(i) + 6);
 					if(i == currentIndex) {
 						currentCount = ct;
 					}
@@ -106,17 +106,17 @@ public class EconomyMenuHandle extends MenuHandle {
 		}
 
 		// Ensure that the cursor item is related to a chart
-		if(!(menu.getCursor() instanceof EconomyItemOption)) {
+		if(!(menu.getCursor() instanceof EconomyItemButton)) {
 			return;
 		}
-		EconomyItem item = ((EconomyItemOption)menu.getCursor()).getItem();
+		EconomyItem item = ((EconomyItemButton)menu.getCursor()).getItem();
 		Economy economy = item.getEconomy();
 		float[] history = economy.getHistory();
 
 		// Configure chart position
-		float chartCenter = v.width - getButtonX() + 200 * (buying ? 1 : -1);
-		float chartLeft = chartCenter - getButtonWidth() / 2F;
-		float chartRight = chartCenter + getButtonWidth() / 2F;
+		float chartCenter = v.width - getItemX() + 200 * (buying ? 1 : -1);
+		float chartLeft = chartCenter - getItemWidth() / 2F;
+		float chartRight = chartCenter + getItemWidth() / 2F;
 		float chartTop = v.height * .25F;
 		float chartBottom = v.height * .5F;
 

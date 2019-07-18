@@ -1,7 +1,7 @@
 package vekta.terrain.building;
 
 import vekta.menu.Menu;
-import vekta.menu.option.DialogOption;
+import vekta.menu.option.DialogButton;
 import vekta.person.Dialog;
 import vekta.person.Person;
 import vekta.spawner.DialogGenerator;
@@ -42,7 +42,7 @@ public class HouseBuilding implements SettlementPart {
 	public void setupMenu(Menu menu) {
 		if(!getPerson().isDead()) {
 			Dialog dialog = DialogGenerator.randomVisitDialog(menu.getPlayer(), getPerson());
-			menu.add(new DialogOption("Visit " + getPerson().getName(), dialog));
+			menu.add(new DialogButton("Visit " + getPerson().getName(), dialog));
 		}
 	}
 }

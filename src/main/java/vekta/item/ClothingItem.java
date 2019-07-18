@@ -4,7 +4,7 @@ import vekta.Faction;
 import vekta.InfoGroup;
 import vekta.menu.Menu;
 import vekta.menu.handle.SecurityMenuHandle;
-import vekta.menu.option.CustomOption;
+import vekta.menu.option.CustomButton;
 
 public class ClothingItem extends BasicItem {
 	private final Faction faction;
@@ -25,7 +25,7 @@ public class ClothingItem extends BasicItem {
 		if(faction != null && menu.getHandle() instanceof SecurityMenuHandle) {
 			SecurityMenuHandle handle = (SecurityMenuHandle)menu.getHandle();
 			if(handle.getFaction().isAlly(faction)) {
-				menu.add(new CustomOption("Wear " + getName(), handle.getNext()).withColor(faction.getColor()));
+				menu.add(new CustomButton("Wear " + getName(), handle.getNext()).withColor(faction.getColor()));
 			}
 		}
 	}

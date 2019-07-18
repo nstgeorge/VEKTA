@@ -28,13 +28,13 @@ public class DialogMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public int getButtonWidth() {
+	public int getItemWidth() {
 		return v.width * 2 / 3;
 	}
 
 	@Override
-	public int getButtonY(int i) {
-		return super.getButtonY(i + 1);
+	public int getItemY(int i) {
+		return super.getItemY(i + 1);
 	}
 
 	@Override
@@ -52,10 +52,10 @@ public class DialogMenuHandle extends MenuHandle {
 
 		v.textSize(64);
 		v.fill(dialog.getPerson().getColor());
-		v.text(dialog.getPerson().getName(), getButtonX(), getButtonY(-3));
+		v.text(dialog.getPerson().getName(), getItemX(), getItemY(-3));
 
 		v.textSize(24);
 		v.fill(dialog.getColor());
-		v.text(dialog.getMessage(), getButtonX(), getButtonY(-2));
+		v.text(dialog.getMessage(), getItemX(), getItemY(-2));
 	}
 }

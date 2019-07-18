@@ -3,8 +3,8 @@ package vekta.terrain.building;
 import vekta.item.Inventory;
 import vekta.menu.Menu;
 import vekta.menu.handle.MenuHandle;
-import vekta.menu.option.CustomOption;
-import vekta.menu.option.SellDataMenuOption;
+import vekta.menu.option.CustomButton;
+import vekta.menu.option.SellDataMenuButton;
 import vekta.terrain.LandingSite;
 import vekta.terrain.settlement.Settlement;
 import vekta.terrain.settlement.SettlementPart;
@@ -52,9 +52,9 @@ public class AcademyBuilding implements SettlementPart {
 
 	@Override
 	public void setupMenu(Menu menu) {
-		menu.add(new CustomOption(getGenericName(), m -> {
+		menu.add(new CustomButton(getGenericName(), m -> {
 			Menu sub = new Menu(m, new MenuHandle());
-			sub.add(new SellDataMenuOption(getSettlement(), getInventory()));
+			sub.add(new SellDataMenuButton(getSettlement(), getInventory()));
 			sub.addDefault();
 			setContext(sub);
 		}));

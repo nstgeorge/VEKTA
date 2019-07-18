@@ -3,8 +3,8 @@ package vekta.person;
 import vekta.Player;
 import vekta.menu.Menu;
 import vekta.menu.handle.DialogMenuHandle;
-import vekta.menu.option.CustomOption;
-import vekta.menu.option.DialogOption;
+import vekta.menu.option.CustomButton;
+import vekta.menu.option.DialogButton;
 import vekta.menu.option.MenuOption;
 import vekta.spawner.DialogGenerator;
 
@@ -119,7 +119,7 @@ public class Dialog implements Serializable {
 			}
 
 			Dialog next = getPerson().createDialog(type);
-			add(new DialogOption(response, next));
+			add(new DialogButton(response, next));
 			if(aside) {
 				next.then(this);
 			}
@@ -136,7 +136,7 @@ public class Dialog implements Serializable {
 	}
 
 	public void add(String response, Dialog dialog) {
-		add(new DialogOption(response, dialog));
+		add(new DialogButton(response, dialog));
 	}
 
 	public void openMenu(Player player, MenuOption def) {
@@ -161,13 +161,13 @@ public class Dialog implements Serializable {
 			// Add custom responses leading to next dialog
 			List<String> responses = !getResponses().isEmpty() ? getResponses() : Collections.singletonList("Next");
 			for(String response : responses) {
-				menu.add(new DialogOption(response, getNext()));
+				menu.add(new DialogButton(response, getNext()));
 			}
 		}
 		else {
 			// Add custom responses for exiting dialog
 			for(String response : getResponses()) {
-				menu.add(new CustomOption(response, menu.getDefault()::onSelect));
+				menu.add(new CustomButton(response, menu.getDefault()::onSelect));
 			}
 		}
 
@@ -176,7 +176,7 @@ public class Dialog implements Serializable {
 			Collections.shuffle(menu.getOptions());
 		}
 		else {
-			menu.add(new CustomOption("Back", menu.getDefault()::onSelect));
+			menu.add(new CustomButton("Back", menu.getDefault()::onSelect));
 			//			menu.addDefault();
 		}
 

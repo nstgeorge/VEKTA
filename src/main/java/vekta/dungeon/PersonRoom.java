@@ -1,7 +1,7 @@
 package vekta.dungeon;
 
 import vekta.menu.Menu;
-import vekta.menu.option.DialogOption;
+import vekta.menu.option.DialogButton;
 import vekta.person.Person;
 
 public class PersonRoom extends DungeonRoom {
@@ -20,7 +20,7 @@ public class PersonRoom extends DungeonRoom {
 	@Override
 	public void onEnter(Menu menu) {
 		if(!getPerson().isDead()) {
-			menu.add(new DialogOption("Talk to Person", getPerson().createDialog("dungeon")));
+			menu.add(new DialogButton("Talk to Person", getPerson().createDialog("dungeon")));
 		}
 	}
 

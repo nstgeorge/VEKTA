@@ -3,7 +3,7 @@ package vekta.module;
 import vekta.InfoGroup;
 import vekta.menu.Menu;
 import vekta.menu.handle.ObjectMenuHandle;
-import vekta.menu.option.InternetMenuOption;
+import vekta.menu.option.InternetMenuButton;
 import vekta.object.SpaceObject;
 import vekta.object.planet.TerrestrialPlanet;
 
@@ -57,7 +57,7 @@ public class AntennaModule extends ShipModule {
 	public void onMenu(Menu menu) {
 		if(menu.getHandle() instanceof ObjectMenuHandle && ((ObjectMenuHandle)menu.getHandle()).getSpaceObject() == getShip()) {
 			boolean connected = findRelay() != null;
-			menu.add(new InternetMenuOption(connected));
+			menu.add(new InternetMenuButton(connected));
 		}
 	}
 

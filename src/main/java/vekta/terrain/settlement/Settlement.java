@@ -256,7 +256,7 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 			economy.removeModifier(this);
 			return 0;
 		}
-		//		getEconomy().update();
+		//		getEconomy().setValue();
 		return getEconomy().getProductivity() * getEconomySignificance();
 	}
 }

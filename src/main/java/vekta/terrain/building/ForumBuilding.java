@@ -2,7 +2,7 @@ package vekta.terrain.building;
 
 import vekta.item.Inventory;
 import vekta.menu.Menu;
-import vekta.menu.option.EstateMenuOption;
+import vekta.menu.option.EstateMenuButton;
 import vekta.spawner.item.EstateItemSpawner;
 import vekta.terrain.LandingSite;
 import vekta.terrain.settlement.Settlement;
@@ -49,6 +49,6 @@ public class ForumBuilding implements SettlementPart {
 
 	@Override
 	public void setupMenu(Menu menu) {
-		menu.add(new EstateMenuOption(getSettlement(), getInventory()));
+		menu.add(new EstateMenuButton(getSettlement(), getInventory()));
 	}
 }

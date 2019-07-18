@@ -25,10 +25,10 @@ public class EstateMenuHandle extends MenuHandle {
 
 		v.textSize(48);
 		v.fill(menu.getPlayer().getColor());
-		v.text(estate.getName(), v.width / 2F, getButtonY(-2) - 64);
+		v.text(estate.getName(), v.width / 2F, getItemY(-2) - 64);
 
 		v.textSize(32);
 		v.fill(100);
-		v.text("Estate Area: " + (float)Math.round(estate.getSize() * 10) / 10, v.width / 2F, getButtonY(-2));
+		v.text("Estate Area: " + (float)Math.round(estate.getSize() * 10) / 10, v.width / 2F, getItemY(-2));
 	}
 }

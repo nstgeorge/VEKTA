@@ -3,7 +3,7 @@ package vekta.mission.objective;
 import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.menu.handle.DialogMenuHandle;
-import vekta.menu.option.CustomOption;
+import vekta.menu.option.CustomButton;
 import vekta.mission.Mission;
 import vekta.object.SpaceObject;
 import vekta.person.Dialog;
@@ -47,7 +47,7 @@ public class DeliverItemObjective extends Objective {
 			Dialog dialog = ((DialogMenuHandle)menu.getHandle()).getDialog();
 
 			if(dialog.getPerson() == getPerson()) {
-				menu.add(new CustomOption("Here's the " + getItem().getName() + ".", m -> {
+				menu.add(new CustomButton("Here's the " + getItem().getName() + ".", m -> {
 					m.getPlayer().getInventory().remove(getItem());
 					complete();
 					dialog.getPerson().createDialog("receive").openMenu(m.getPlayer(), m.getDefault());

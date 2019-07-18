@@ -5,8 +5,8 @@ import vekta.item.Inventory;
 import vekta.menu.Menu;
 import vekta.menu.handle.LandingMenuHandle;
 import vekta.menu.handle.ObjectMenuHandle;
-import vekta.menu.option.ExtractMenuOption;
-import vekta.menu.option.LootMenuOption;
+import vekta.menu.option.ExtractMenuButton;
+import vekta.menu.option.LootMenuButton;
 import vekta.object.RingDebris;
 import vekta.object.SpaceObject;
 import vekta.terrain.LandingSite;
@@ -59,7 +59,7 @@ public class DrillModule extends ShipModule {
 			LandingSite site = ((LandingMenuHandle)menu.getHandle()).getSite();
 
 			if(site.getTerrain().hasFeature("Mineable")) {
-				menu.add(new ExtractMenuOption(site, getShip().getInventory(), round(getEfficiency() * 2)));
+				menu.add(new ExtractMenuButton(site, getShip().getInventory(), round(getEfficiency() * 2)));
 			}
 		}
 		else if(menu.getHandle() instanceof ObjectMenuHandle) {
@@ -68,8 +68,8 @@ public class DrillModule extends ShipModule {
 			if(s instanceof RingDebris) {
 				Inventory inv = ((RingDebris)s).getInventory();
 				if(inv.itemCount() > 0) {
-					// TODO: merge logic with ExtractMenuOption
-					menu.add(new LootMenuOption("Extract", getShip().getInventory(), inv));
+					// TODO: merge logic with ExtractMenuButton
+					menu.add(new LootMenuButton("Extract", getShip().getInventory(), inv));
 				}
 			}
 		}

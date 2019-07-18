@@ -81,7 +81,7 @@ public abstract class Syncable<T extends Serializable> implements Serializable {
 	@SuppressWarnings("unchecked")
 	public void onSync(T data) {
 		try {
-			// Brute-force update for now
+			// Brute-force setValue for now
 			for(Field field : ReflectionUtils.getAllFields(getClass())) {
 				// Skip undesired fields
 				if(!shouldSyncField(field) || Modifier.isStatic(field.getModifiers())) {

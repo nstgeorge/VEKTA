@@ -4,8 +4,8 @@ import vekta.*;
 import vekta.item.Inventory;
 import vekta.menu.Menu;
 import vekta.menu.handle.LoadoutMenuHandle;
-import vekta.menu.option.BackOption;
-import vekta.menu.option.InstallModuleOption;
+import vekta.menu.option.BackButton;
+import vekta.menu.option.InstallModuleButton;
 import vekta.module.Module;
 import vekta.module.ModuleType;
 import vekta.module.ModuleUpgrader;
@@ -143,12 +143,12 @@ public class StationLayoutContext implements Context, ModuleUpgrader {
 			uninstallModule(cursor.getModule());
 		}
 		else if(isPlacing()) {
-			Menu menu = new Menu(getPlayer(), new BackOption(this), new LoadoutMenuHandle(Collections.singletonList(cursor.getModule())));
+			Menu menu = new Menu(getPlayer(), new BackButton(this), new LoadoutMenuHandle(Collections.singletonList(cursor.getModule())));
 			for(Module module : getPlayer().getShip().findUpgrades()) {
 				if(module instanceof ComponentModule) {
 					ComponentModule m = (ComponentModule)module;
 					if((isPlacing() ? cursor.isAttachable(cursor) : cursor.isReplaceable(m)) && station.canEquip(m)) {
-						menu.add(new InstallModuleOption(this, m));
+						menu.add(new InstallModuleButton(this, m));
 					}
 				}
 			}

@@ -22,12 +22,7 @@ public class InventoryMenuHandle extends SideLayoutMenuHandle {
 	public Inventory getInventory() {
 		return inv;
 	}
-
-	@Override
-	public String getSelectVerb() {
-		return "jettison";
-	}
-
+	
 	@Override
 	public KeyBinding getShortcutKey() {
 		return KeyBinding.SHIP_INVENTORY;
@@ -39,6 +34,6 @@ public class InventoryMenuHandle extends SideLayoutMenuHandle {
 
 		v.textSize(32);
 		v.fill(UI_COLOR);
-		v.text("Gold: [" + getInventory().getMoney() + " G]", getButtonX(), getButtonY(-2));
+		v.text("Gold: [" + getInventory().getMoney() + " G]", getItemX(), getItemY(-2));
 	}
 }

@@ -4,8 +4,8 @@ import processing.core.PVector;
 import vekta.Player;
 import vekta.RenderLevel;
 import vekta.menu.Menu;
-import vekta.menu.option.DialogOption;
-import vekta.menu.option.LootMenuOption;
+import vekta.menu.option.DialogButton;
+import vekta.menu.option.LootMenuButton;
 import vekta.object.SpaceObject;
 import vekta.person.Dialog;
 
@@ -80,10 +80,10 @@ public class MessengerShip extends Ship {
 	public void setupDockingMenu(Menu menu) {
 		delivered = true;
 
-		menu.setAuto(new DialogOption("Talk to Pilot", getDialog(), menu.getDefault()));
+		menu.setAuto(new DialogButton("Talk to Pilot", getDialog(), menu.getDefault()));
 		// Back and remove
 		if(getInventory().itemCount() > 0) {
-			menu.add(new LootMenuOption("Collect Item" + (getInventory().itemCount() == 1 ? "s" : ""), menu.getPlayer().getInventory(), getInventory()));
+			menu.add(new LootMenuButton("Collect Item" + (getInventory().itemCount() == 1 ? "s" : ""), menu.getPlayer().getInventory(), getInventory()));
 		}
 	}
 

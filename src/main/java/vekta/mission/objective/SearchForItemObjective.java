@@ -4,7 +4,7 @@ import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.menu.handle.LootMenuHandle;
-import vekta.menu.option.ItemTradeOption;
+import vekta.menu.option.ItemTradeButton;
 import vekta.object.SpaceObject;
 
 import java.util.HashSet;
@@ -49,7 +49,7 @@ public class SearchForItemObjective extends Objective {
 				alreadyChecked.add(inv);
 
 				if(v.chance(getRarity())) {
-					menu.add(new ItemTradeOption(inv, item, 0));
+					menu.add(new ItemTradeButton(inv, item, 0));
 					complete();
 				}
 			}

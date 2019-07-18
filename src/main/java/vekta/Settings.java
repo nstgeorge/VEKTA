@@ -37,11 +37,11 @@ public final class Settings {
 		return "key." + key.name().toLowerCase();
 	}
 
-	private static String serializeKeyCode(int keyCode) {
+	public static String serializeKeyCode(int keyCode) {
 		return KeyStroke.getKeyStroke(keyCode, 0).toString().replace("pressed ", "");
 	}
 
-	private static int deserializeKeyCode(String keyText) {
+	public static int deserializeKeyCode(String keyText) {
 		return KeyStroke.getKeyStroke("pressed " + keyText).getKeyCode();
 	}
 
@@ -97,13 +97,18 @@ public final class Settings {
 		return serializeKeyCode(getKeyCode(key));
 	}
 
-	// TODO: call this to update keys in settings UI
-	public static void set(KeyBinding key, char value) {
+	// TODO: call this to set keys in settings UI
+	public static void set(KeyBinding key, int value) {
 		set(getKeyProp(key), serializeKeyCode(value));
 	}
 
 	public static void set(String key, int value) {
 		settings.setInt(key, value);
+		save();
+	}
+
+	public static void set(String key, float value) {
+		settings.setFloat(key, value);
 		save();
 	}
 

@@ -3,7 +3,7 @@ package vekta.mission.objective;
 import vekta.knowledge.TopicKnowledge;
 import vekta.menu.Menu;
 import vekta.menu.handle.DialogMenuHandle;
-import vekta.menu.option.DialogOption;
+import vekta.menu.option.DialogButton;
 import vekta.object.SpaceObject;
 import vekta.person.Dialog;
 import vekta.person.Person;
@@ -66,7 +66,7 @@ public class LearnAboutObjective extends Objective {
 					menu.getPlayer().addKnowledge(new TopicKnowledge(getTopic(), getDescription(), (int)(1 / getRarity())));
 				}
 
-				menu.add(new DialogOption("Ask about " + getTopic(), next));
+				menu.add(new DialogButton("Ask about " + getTopic(), next));
 			}
 		}
 	}

@@ -26,7 +26,7 @@ public class LootMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public int getButtonWidth() {
+	public int getItemWidth() {
 		return v.width * 2 / 3;
 	}
 
@@ -36,6 +36,6 @@ public class LootMenuHandle extends MenuHandle {
 
 		v.textSize(32);
 		v.fill(UI_COLOR);
-		v.text("Items Found: " + inv.itemCount(), getButtonX(), getButtonY(-2));
+		v.text("Items Found: " + inv.itemCount(), getItemX(), getItemY(-2));
 	}
 }

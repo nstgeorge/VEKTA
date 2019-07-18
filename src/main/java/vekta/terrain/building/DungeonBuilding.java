@@ -2,7 +2,7 @@ package vekta.terrain.building;
 
 import vekta.dungeon.Dungeon;
 import vekta.menu.Menu;
-import vekta.menu.option.DungeonRoomOption;
+import vekta.menu.option.DungeonRoomButton;
 import vekta.terrain.LandingSite;
 import vekta.terrain.settlement.SettlementPart;
 
@@ -39,6 +39,6 @@ public class DungeonBuilding implements SettlementPart {
 	@Override
 	public void setupMenu(Menu menu) {
 		getDungeon().getStartRoom().setVisited(true); // Don't show special outline
-		menu.add(new DungeonRoomOption(getDungeon().getName(), getDungeon().getStartRoom()));
+		menu.add(new DungeonRoomButton(getDungeon().getName(), getDungeon().getStartRoom()));
 	}
 }

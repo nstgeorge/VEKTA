@@ -36,7 +36,7 @@ public class PlayerShip extends ModularShip {
 
 		//				// Test particle system
 		//				if(getRenderLevel().isVisibleTo(level)) {
-		//					emitter.update(getHeading().rotate(HALF_PI));
+		//					emitter.setValue(getHeading().rotate(HALF_PI));
 		//				}
 	}
 

@@ -3,7 +3,7 @@ package vekta.object.ship;
 import processing.core.PVector;
 import vekta.Player;
 import vekta.menu.Menu;
-import vekta.menu.option.DialogOption;
+import vekta.menu.option.DialogButton;
 import vekta.object.SpaceObject;
 import vekta.person.Person;
 
@@ -57,6 +57,6 @@ public class FollowerShip extends FighterShip {
 
 	@Override
 	public void setupDockingMenu(Menu menu) {
-		menu.setAuto(new DialogOption("Talk to " + getPerson().getName(), getPerson().createDialog("greeting")));
+		menu.setAuto(new DialogButton("Talk to " + getPerson().getName(), getPerson().createDialog("greeting")));
 	}
 }  

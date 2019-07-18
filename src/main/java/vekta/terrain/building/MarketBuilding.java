@@ -3,7 +3,7 @@ package vekta.terrain.building;
 import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;
-import vekta.menu.option.MarketOption;
+import vekta.menu.option.MarketButton;
 import vekta.spawner.ItemGenerator;
 import vekta.terrain.LandingSite;
 import vekta.terrain.settlement.SettlementPart;
@@ -60,8 +60,8 @@ public class MarketBuilding implements SettlementPart {
 		computeOffers(inv, shipOffers, offers, true);
 		computeOffers(getInventory(), offers, shipOffers, false);
 
-		menu.add(new MarketOption(this, true, inv/*, getInventory()*/, offers));
-		menu.add(new MarketOption(this, false, inv/*, getInventory()*/, shipOffers));
+		menu.add(new MarketButton(this, true, inv/*, getInventory()*/, offers));
+		menu.add(new MarketButton(this, false, inv/*, getInventory()*/, shipOffers));
 	}
 
 	public boolean canSell(Item item) {

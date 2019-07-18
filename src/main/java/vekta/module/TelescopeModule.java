@@ -5,7 +5,7 @@ import vekta.InfoGroup;
 import vekta.KeyBinding;
 import vekta.menu.Menu;
 import vekta.menu.handle.SurveyMenuHandle;
-import vekta.menu.option.BackOption;
+import vekta.menu.option.BackButton;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 import vekta.object.planet.TerrestrialPlanet;
@@ -65,7 +65,7 @@ public class TelescopeModule extends ShipModule {
 				float dist = PVector.dist(getShip().getPosition(), planet.getPosition());
 				float maxDist = getResolution() * RANGE_SCALE;
 				if(dist <= maxDist) {
-					Menu menu = new Menu(getShip().getController(), new BackOption(getWorld()), new SurveyMenuHandle(planet.getLandingSite()));
+					Menu menu = new Menu(getShip().getController(), new BackButton(getWorld()), new SurveyMenuHandle(planet.getLandingSite()));
 					menu.addDefault();
 					setContext(menu);
 				}

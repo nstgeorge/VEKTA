@@ -28,8 +28,8 @@ public class SettlementMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public int getButtonWidth() {
-		return super.getButtonWidth() * 2;
+	public int getItemWidth() {
+		return super.getItemWidth() * 2;
 	}
 
 	@Override
@@ -77,17 +77,17 @@ public class SettlementMenuHandle extends MenuHandle {
 
 		v.textSize(32);
 		v.fill(100);
-		v.text("Welcome to", v.width / 2F, getButtonY(-2) - 64);
+		v.text("Welcome to", v.width / 2F, getItemY(-2) - 64);
 
 		v.textSize(48);
 		v.fill(settlement.getColor());
 
 		v.fill(200);
-		v.text(settlement.getName(), v.width / 2F, getButtonY(-2));
+		v.text(settlement.getName(), v.width / 2F, getItemY(-2));
 
 		v.textSize(20);
 		v.fill(100);
-		v.text(getSubtext(), v.width / 2F, getButtonY(-2) + 50);
+		v.text(getSubtext(), v.width / 2F, getItemY(-2) + 50);
 	}
 
 	protected String getSubtext() {
