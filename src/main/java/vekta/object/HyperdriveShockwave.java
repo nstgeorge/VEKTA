@@ -19,12 +19,7 @@ public class HyperdriveShockwave extends Shockwave {
 	@Override
 	public void onUpdate(RenderLevel level) {
 		super.onUpdate(level);
-
-		//setVelocity(relative.velocity);
-
-		//		applyVelocity(relative.getHeading().mult(-relative.velocity.mag() * .3F)
-		//				.add(PVector.random2D().mult(v.random(1e5F))));
-
+		
 		position.set(relative.getPosition().sub(relative.getHeading().mult(getRadius() + relative.getRadius() + sq(getRadius() * .2F) / getWorld().getZoom())));
 	}
 

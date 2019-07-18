@@ -10,7 +10,7 @@ import static processing.core.PConstants.HALF_PI;
 import static vekta.Vekta.v;
 
 public class HomingProjectile extends Projectile {
-	private static final float HOMING_ACCEL = .2F;
+	private static final float HOMING_ACCEL = .1F;
 	private static final float HOMING_DAMPEN = .02F;
 
 	private @Sync SpaceObject target;
@@ -40,7 +40,7 @@ public class HomingProjectile extends Projectile {
 	public float getSpeed() {
 		return speed;
 	}
-	
+
 	@Override
 	public void onUpdate(RenderLevel level) {
 		if(target != null) {
@@ -48,11 +48,18 @@ public class HomingProjectile extends Projectile {
 				target = null;
 			}
 			else {
+				PVector relVel = relativeVelocity(target);
 				float distSq = relativePosition(target).magSq();
-				float speedSq = relativeVelocity(target).magSq();
-				PVector pos = target.getPosition().add(target.getVelocity().mult(sqrt(speedSq / distSq)));
-				addVelocity(pos.sub(getPosition()).setMag(getSpeed() * HOMING_ACCEL)
-						.add(relativeVelocity(target).mult(HOMING_DAMPEN)));
+				float speedSq = relVel.magSq();
+				PVector relPos = relativePosition(target).add(target.getVelocity().mult(sqrt(speedSq / distSq)));
+				PVector tangent = relPos.copy().rotate(HALF_PI);
+				float offsetDistSq = relPos.magSq();
+				addVelocity(relPos.setMag(getSpeed() * HOMING_ACCEL)
+						.add(tangent.mult(tangent.dot(relVel) / offsetDistSq * getSpeed() * HOMING_DAMPEN)));
+
+				if(target instanceof HomingResponder) {
+					((HomingResponder)target).respondIncoming(this);
+				}
 			}
 		}
 

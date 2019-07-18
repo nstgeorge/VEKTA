@@ -432,7 +432,7 @@ public class Singleplayer implements World, PlayerListener {
 		ModularShip playerShip = getPlayerShip();
 
 		// Set global velocity relative to player ship when zoomed in
-		if(RenderLevel.SHIP.isVisibleTo(level)) {
+		if(RenderLevel.SHIP.isVisibleTo(level)/* || Resources.getSound("hyperdriveLoop").isPlaying()*/) {
 			state.addRelativeVelocity(playerShip.getVelocity());
 		}
 		else if(level.ordinal() == prevLevel.ordinal() + 1) {
@@ -447,7 +447,7 @@ public class Singleplayer implements World, PlayerListener {
 		//		}
 		if(!playerShip.isDestroyed()) {
 			// Center around zero for improved floating-point precision
-//			state.addRelativePosition(playerShip.getPosition().mult(.1F));
+			//			state.addRelativePosition(playerShip.getPosition().mult(.1F));
 			state.addRelativePosition(playerShip.getPosition());
 		}
 	}
