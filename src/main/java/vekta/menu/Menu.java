@@ -1,5 +1,6 @@
 package vekta.menu;
 
+import processing.event.KeyEvent;
 import vekta.KeyBinding;
 import vekta.Player;
 import vekta.PlayerEvent;
@@ -199,6 +200,13 @@ public class Menu implements Context {
 	@Override
 	public void render() {
 		handle.render(this);
+	}
+
+	@Override
+	public void keyPressed(KeyEvent event) {
+		Context.super.keyPressed(event);
+
+		handle.keyPressed(this, event);
 	}
 
 	@Override

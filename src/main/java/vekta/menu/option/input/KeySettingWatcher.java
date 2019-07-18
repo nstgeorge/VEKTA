@@ -3,8 +3,8 @@ package vekta.menu.option.input;
 import vekta.KeyBinding;
 import vekta.Settings;
 
-public class KeyBindingWatcher extends SettingWatcher<KeyBinding, Integer> {
-	public KeyBindingWatcher(KeyBinding key) {
+public class KeySettingWatcher extends SettingWatcher<KeyBinding, Integer> {
+	public KeySettingWatcher(KeyBinding key) {
 		super(key);
 	}
 

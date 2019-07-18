@@ -14,6 +14,7 @@ import static vekta.spawner.WorldGenerator.orbit;
 import static vekta.spawner.WorldGenerator.randomPlanetColor;
 
 public class RingDebrisSpawner implements WorldGenerator.WorldSpawner {
+	
 	@Override
 	public float getWeight() {
 		return 1;

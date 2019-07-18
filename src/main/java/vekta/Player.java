@@ -148,6 +148,15 @@ public final class Player extends Syncable<Player> {
 		return (List<T>)findKnowledge(type::isInstance);
 	}
 
+	@SuppressWarnings("unchecked")
+	public <T extends Knowledge> List<T> findKnowledge(Class<T> type, Predicate<T> filter) {
+		return (List<T>)findKnowledge(t -> type.isInstance(t) && filter.test((T)t));
+	}
+
+	public <T extends Knowledge> boolean hasKnowledge(Class<T> type, Predicate<T> filter) {
+		return findKnowledge(type, filter).isEmpty();
+	}
+
 	public void addKnowledge(Knowledge knowledge) {
 		if(!knowledge.isValid(this)) {
 			return;

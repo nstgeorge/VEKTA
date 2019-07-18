@@ -1,5 +1,6 @@
 package vekta.menu.option.input;
 
+import processing.event.KeyEvent;
 import vekta.KeyBinding;
 import vekta.menu.Menu;
 
@@ -28,6 +29,9 @@ public interface InputController<T> extends Serializable {
 	String getSelectVerb();
 
 	void select(Menu menu, InputWatcher<T> watcher);
+
+	default void keyPressed(Menu menu, KeyEvent event, InputWatcher<T> watcher) {
+	}
 
 	default boolean interceptKeyPressed(Menu menu, KeyBinding key, InputWatcher<T> watcher) {
 		return false;

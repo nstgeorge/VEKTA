@@ -1,5 +1,6 @@
 package vekta.menu.handle;
 
+import processing.event.KeyEvent;
 import vekta.KeyBinding;
 import vekta.Resources;
 import vekta.Settings;
@@ -65,7 +66,7 @@ public class MenuHandle implements Serializable {
 		int extraOptions = menu.size() - ITEMS_BEFORE_SCROLL;
 		float targetOffset = extraOptions > 0 ? menu.getIndex() * getSpacing() * extraOptions / (float)menu.size() : 0;
 		scrollOffset += (targetOffset - scrollOffset) * SCROLL_RATE / 60;
-		
+
 		beforeDraw();
 
 		v.noStroke();
@@ -93,15 +94,19 @@ public class MenuHandle implements Serializable {
 		opt.draw(menu, index);
 	}
 
+	public void keyPressed(Menu menu, KeyEvent event) {
+		menu.getCursor().keyPressed(menu, event);
+	}
+
 	public void keyPressed(Menu menu, KeyBinding key) {
-		if(key == KeyBinding.MENU_CLOSE || key == getShortcutKey()) {
+		if(menu.getCursor().interceptKeyPressed(menu, key)) {
+			return;
+		}
+		else if(key == KeyBinding.MENU_CLOSE || key == getShortcutKey()) {
 			menu.close();
 			return;
 		}
-		else if(menu.getCursor().interceptKeyPressed(menu, key)) {
-			return;
-		}
-
+		
 		if(key == KeyBinding.MENU_UP) {
 			Resources.playSound("change");
 			menu.scroll(-1);

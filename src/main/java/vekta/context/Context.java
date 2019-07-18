@@ -22,9 +22,9 @@ public interface Context extends Overlay {
 	 * What to do when any key is pressed
 	 */
 	default void keyPressed(KeyEvent event) {
-		for(KeyBinding ctrl : KeyBinding.values()) {
-			if(Settings.getKeyCode(ctrl) == event.getKeyCode()) {
-				keyPressed(ctrl);
+		for(KeyBinding key : KeyBinding.values()) {
+			if(Settings.getKeyCode(key) == event.getKeyCode()) {
+				keyPressed(key);
 			}
 		}
 	}

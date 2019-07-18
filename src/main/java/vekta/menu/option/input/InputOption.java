@@ -1,5 +1,6 @@
 package vekta.menu.option.input;
 
+import processing.event.KeyEvent;
 import vekta.KeyBinding;
 import vekta.menu.Menu;
 import vekta.menu.handle.MenuHandle;
@@ -61,16 +62,21 @@ public class InputOption<T> implements MenuOption {
 	}
 
 	@Override
+	public void keyPressed(Menu menu, KeyEvent event) {
+		getController().keyPressed(menu, event, getWatcher());
+	}
+
+	@Override
 	public boolean interceptKeyPressed(Menu menu, KeyBinding key) {
-		T value = watcher.getValue();
-		if(key == KeyBinding.MENU_LEFT && controller.hasLeft(value)) {
-			watcher.setValue(controller.getLeft(value));
+		T value = getWatcher().getValue();
+		if(key == KeyBinding.MENU_LEFT && getController().hasLeft(value)) {
+			getWatcher().setValue(getController().getLeft(value));
 			return true;
 		}
-		if(key == KeyBinding.MENU_RIGHT && controller.hasRight(value)) {
-			watcher.setValue(controller.getRight(value));
+		if(key == KeyBinding.MENU_RIGHT && getController().hasRight(value)) {
+			getWatcher().setValue(getController().getRight(value));
 			return true;
 		}
-		return controller.interceptKeyPressed(menu, key, watcher);
+		return controller.interceptKeyPressed(menu, key, getWatcher());
 	}
 }

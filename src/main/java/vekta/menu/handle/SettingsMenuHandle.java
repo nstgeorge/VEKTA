@@ -27,7 +27,7 @@ public class SettingsMenuHandle extends MenuHandle {
 	public void beforeDraw() {
 		super.beforeDraw();
 
-				MainMenuHandle.HYPERSPACE.render();
+		//		MainMenuHandle.HYPERSPACE.render();
 	}
 
 	@Override

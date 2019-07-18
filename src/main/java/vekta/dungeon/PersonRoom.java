@@ -1,5 +1,6 @@
 package vekta.dungeon;
 
+import vekta.knowledge.PersonKnowledge;
 import vekta.menu.Menu;
 import vekta.menu.option.DialogButton;
 import vekta.person.Person;
@@ -9,7 +10,7 @@ public class PersonRoom extends DungeonRoom {
 
 	public PersonRoom(DungeonRoom parent, Person person) {
 		super(parent, person.getName(), "You see a dark silhouette in the corner.");
-		
+
 		this.person = person;
 	}
 
@@ -20,7 +21,8 @@ public class PersonRoom extends DungeonRoom {
 	@Override
 	public void onEnter(Menu menu) {
 		if(!getPerson().isDead()) {
-			menu.add(new DialogButton("Talk to Person", getPerson().createDialog("dungeon")));
+			boolean knowsPerson = menu.getPlayer().hasKnowledge(PersonKnowledge.class, k -> k.getPerson() == getPerson());
+			menu.add(new DialogButton("Talk to Person", getPerson().createDialog(knowsPerson ? "dialog_greeting" : "dungeon")));
 		}
 	}
 

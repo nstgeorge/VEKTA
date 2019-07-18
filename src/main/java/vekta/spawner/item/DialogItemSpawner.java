@@ -20,7 +20,7 @@ public class DialogItemSpawner implements ItemGenerator.ItemSpawner {
 
 	@Override
 	public float getWeight() {
-		return .1F;
+		return .02F;
 	}
 
 	@Override

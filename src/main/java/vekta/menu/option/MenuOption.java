@@ -1,5 +1,6 @@
 package vekta.menu.option;
 
+import processing.event.KeyEvent;
 import vekta.KeyBinding;
 import vekta.menu.Menu;
 
@@ -31,5 +32,8 @@ public interface MenuOption extends Serializable {
 
 	default boolean interceptKeyPressed(Menu menu, KeyBinding key) {
 		return false;
+	}
+
+	default void keyPressed(Menu menu, KeyEvent event) {
 	}
 }

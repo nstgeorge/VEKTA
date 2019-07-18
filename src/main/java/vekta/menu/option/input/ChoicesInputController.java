@@ -1,6 +1,5 @@
 package vekta.menu.option.input;
 
-import vekta.KeyBinding;
 import vekta.menu.Menu;
 import vekta.menu.handle.MenuHandle;
 
@@ -80,10 +79,5 @@ public class ChoicesInputController<T> implements InputController<T> {
 			sub.addDefault();
 			setContext(sub);
 		}
-	}
-
-	@Override
-	public boolean interceptKeyPressed(Menu menu, KeyBinding key, InputWatcher<T> watcher) {
-		return false;
 	}
 }
