@@ -1,3 +1,5 @@
+Grocery Shopping
+Hit and Run
 A Dubious {mission_noun}
 A Fool's {mission_noun}
 A Questionable {mission_noun}
@@ -32,5 +34,4 @@ By Command of {person}
 An Act Worthy of {person}
 {mission_noun} on the Side
 {mission_noun} for the Ages
-Grocery Shopping
-Hit and Run
+Operation {item_common}

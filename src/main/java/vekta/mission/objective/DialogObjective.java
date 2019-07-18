@@ -9,6 +9,7 @@ import vekta.person.Person;
 
 public class DialogObjective extends Objective {
 	private final String verb;
+	private final String response;
 	private final Dialog dialog;
 
 	public DialogObjective(Dialog dialog) {
@@ -16,12 +17,21 @@ public class DialogObjective extends Objective {
 	}
 
 	public DialogObjective(String verb, Dialog dialog) {
+		this(verb, verb, dialog);
+	}
+
+	public DialogObjective(String verb, String response, Dialog dialog) {
 		this.verb = verb;
+		this.response = response;
 		this.dialog = dialog;
 	}
 
 	public String getVerb() {
 		return verb;
+	}
+
+	public String getResponse() {
+		return response;
 	}
 
 	public Dialog getDialog() {
@@ -34,7 +44,7 @@ public class DialogObjective extends Objective {
 
 	@Override
 	public String getName() {
-		return getVerb() + " " + getPerson().getFullName() + " (" + getSpaceObject().getName() + ")";
+		return getResponse() + " " + getPerson().getFullName() + " (" + getSpaceObject().getName() + ")";
 	}
 
 	@Override

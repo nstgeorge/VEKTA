@@ -22,6 +22,6 @@ public class ConfrontObjectiveSpawner implements MissionGenerator.ObjectiveSpawn
 	@Override
 	public Objective getMainObjective(Mission mission) {
 		Person person = randomMissionPerson(mission.getIssuer());
-		return new DialogObjective(mission.getIssuer().getName() + " sent me to chat with you.", person.createDialog("confronted"));
+		return new DialogObjective("Confront", mission.getIssuer().getName() + " sent me to chat with you.", person.createDialog("confronted"));
 	}
 }

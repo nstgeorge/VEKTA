@@ -26,13 +26,14 @@ public class DestroyAroundObjective extends Objective {
 
 	@Override
 	public String getName() {
-		return name + (getSpaceObject() != null ? " orbiting " + getSpaceObject().getName() : "");
+		return name + /*(getSpaceObject() != null ? */" orbiting " + getSpaceObject().getName()/* : "")*/;
 	}
 
 	@Override
 	public SpaceObject getSpaceObject() {
 		if(orbit != null && orbit.isDestroyed()) {
-			orbit = null;
+//			orbit = null;
+			cancel();
 		}
 		return orbit;
 	}
@@ -40,7 +41,7 @@ public class DestroyAroundObjective extends Objective {
 	@Override
 	public void onDestroyObject(SpaceObject object) {
 		SpaceObject orbit = getSpaceObject();
-		if(type.isInstance(object) && (orbit == null || getWorld().findOrbitObject(object) == orbit)) {
+		if(type.isInstance(object) && /*(orbit == null || */getWorld().findOrbitObject(object) == orbit/*)*/) {
 			complete();
 		}
 	}
