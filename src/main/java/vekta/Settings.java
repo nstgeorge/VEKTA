@@ -16,7 +16,9 @@ public final class Settings {
 		// Default settings
 		defaults = new JSONObject();
 		defaults.put("sound", 1)
+				.put("muteSound", false)
 				.put("music", 1)
+				.put("muteMusic", false)
 				.put("zoomSpeed", 1);
 		for(KeyBinding key : KeyBinding.values()) {
 			defaults.put(getKeyProp(key), serializeKeyCode(key.getDefaultKeyCode()));
@@ -60,6 +62,24 @@ public final class Settings {
 		}
 		else {
 			return defaults.getFloat(key);
+		}
+	}
+
+	public static boolean getBoolean(String key) {
+		if(!settings.isNull(key)) {
+			return settings.getBoolean(key);
+		}
+		else {
+			return defaults.getBoolean(key);
+		}
+	}
+
+	public static boolean getBoolean(String key, boolean def) {
+		if(!settings.isNull(key)) {
+			return settings.getBoolean(key);
+		}
+		else {
+			return defaults.getBoolean(key, def);
 		}
 	}
 
@@ -109,6 +129,11 @@ public final class Settings {
 
 	public static void set(String key, float value) {
 		settings.setFloat(key, value);
+		save();
+	}
+
+	public static void set(String key, boolean value) {
+		settings.setBoolean(key, value);
 		save();
 	}
 

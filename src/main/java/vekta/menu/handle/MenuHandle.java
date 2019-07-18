@@ -85,8 +85,9 @@ public class MenuHandle implements Serializable {
 		v.fill(255);
 		v.textAlign(CENTER);
 
-		if(menu.size() > 0 && menu.getCursor().isEnabled()) {
-			v.text(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to " + menu.getCursor().getSelectVerb(), getItemX(), getItemY(menu.size()) + 100);
+		String selectVerb = menu.getCursor().getSelectVerb();
+		if(menu.size() > 0 && menu.getCursor().isEnabled() && selectVerb != null) {
+			v.text(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to " + selectVerb, getItemX(), getItemY(menu.size()) + 100);
 		}
 	}
 
@@ -106,19 +107,19 @@ public class MenuHandle implements Serializable {
 			menu.close();
 			return;
 		}
-		
+
 		if(key == KeyBinding.MENU_UP) {
-			Resources.playSound("change");
 			menu.scroll(-1);
+			Resources.playSound("change");
 		}
 		else if(key == KeyBinding.MENU_DOWN) {
-			Resources.playSound("change");
 			menu.scroll(1);
+			Resources.playSound("change");
 		}
 		else if(key == KeyBinding.MENU_SELECT) {
 			if(menu.getCursor().isEnabled()) {
-				Resources.playSound("select");
 				menu.selectCursor();
+				Resources.playSound("select");
 			}
 		}
 	}

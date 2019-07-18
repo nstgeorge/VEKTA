@@ -15,7 +15,7 @@ public class SettingsMenuHandle extends MenuHandle {
 
 	@Override
 	public int getSpacing() {
-		return 60;
+		return 70;
 	}
 
 	@Override

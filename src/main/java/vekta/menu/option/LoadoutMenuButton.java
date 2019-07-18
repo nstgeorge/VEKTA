@@ -1,11 +1,14 @@
 package vekta.menu.option;
 
+import vekta.context.StationLayoutContext;
 import vekta.menu.Menu;
 import vekta.menu.handle.LoadoutMenuHandle;
 import vekta.module.Module;
 import vekta.module.ModuleUpgradeable;
 import vekta.module.ModuleUpgrader;
+import vekta.object.ship.SpaceStation;
 
+import static vekta.Vekta.getWorld;
 import static vekta.Vekta.setContext;
 
 public class LoadoutMenuButton implements ButtonOption, ModuleUpgrader {
@@ -26,6 +29,12 @@ public class LoadoutMenuButton implements ButtonOption, ModuleUpgrader {
 
 	@Override
 	public void onSelect(Menu menu) {
+		// TEMP
+		if(upgradeable instanceof SpaceStation) {
+			setContext(new StationLayoutContext(getWorld(), (SpaceStation)upgradeable, menu.getPlayer()));
+			return;
+		}
+
 		Menu sub = new Menu(menu.getPlayer(), menu.getDefault(), new LoadoutMenuHandle(upgradeable.getModules()));
 		sub.addSelectListener(option -> updateMenu(sub));
 		updateMenu(sub);

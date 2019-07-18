@@ -100,7 +100,7 @@ public class StationLayoutContext implements Context, ModuleUpgrader {
 		v.fill(100);
 		v.text("Core Level: " + module.getTier(), v.width / 2F, 200);
 		v.text("Modules: " + station.getModules().size() + " / " + module.getPartLimit(), v.width / 2F, 250);
-		v.text("Modules/Type: " + module.getPartLimitPerType(), v.width / 2F, 300);
+		v.text("Modules per Type: " + module.getPartLimitPerType(), v.width / 2F, 300);
 
 		// Draw current module name
 		v.textSize(32);

@@ -311,6 +311,13 @@ public class Vekta extends PApplet {
 	}
 
 	/**
+	 * Round with low precision to avoid binary/decimal conversion artifacts
+	 */
+	public static float roundEpsilon(float f) {
+		return (float)(Math.round(f * 1E5F) * 1E-5);
+	}
+
+	/**
 	 * Capitalize the first letter of the given string.
 	 */
 	public static String capitalize(String text) {

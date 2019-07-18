@@ -9,10 +9,6 @@ import vekta.module.Module;
 import vekta.module.ModuleType;
 import vekta.module.station.ComponentModule;
 import vekta.module.station.StationCoreModule;
-import vekta.object.particle.ColorRange;
-import vekta.object.particle.ConstantColor;
-import vekta.object.particle.ParticleEmitter;
-import vekta.object.particle.ParticleStyle;
 
 import java.awt.*;
 import java.io.Serializable;
@@ -29,8 +25,6 @@ public class SpaceStation extends ModularShip {
 
 	private static final float TILE_SIZE = 20;
 
-	private ParticleEmitter emitter;
-
 	private final Component core;
 
 	private final List<Component> components = new ArrayList<>();
@@ -40,12 +34,6 @@ public class SpaceStation extends ModularShip {
 
 		this.core = new Component(null, Direction.RIGHT, coreModule);
 		addComponent(core);
-
-		ParticleStyle style = new ParticleStyle()
-				.withStartColor(new ColorRange(v.color(0, 0, 255), v.color(255, 100, 0)))
-				.withEndColor(new ConstantColor(0))
-				.withDrag(1e-2F);
-		emitter = new ParticleEmitter(this, new PVector(getRadius() * 2, 0), style, PI / 2, 1, 20, 1);
 	}
 
 	public void addComponent(Component component) {
@@ -130,8 +118,7 @@ public class SpaceStation extends ModularShip {
 
 	@Override
 	public void setupDockingMenu(Menu menu) {
-		menu.add(new CustomButton("Customize", m ->
-				setContext(new StationLayoutContext(m, this, m.getPlayer()))));
+		menu.add(new CustomButton("Customize", m -> setContext(new StationLayoutContext(m, this, m.getPlayer()))));
 	}
 
 	public final class Component implements Serializable {
@@ -161,7 +148,7 @@ public class SpaceStation extends ModularShip {
 				attached.put(dir.back(), parent);
 			}
 		}
-
+		
 		public Component getParent() {
 			return parent;
 		}

@@ -24,7 +24,7 @@ public class PlayerShip extends ModularShip {
 
 		setEnergy(getMaxEnergy());
 	}
-
+	
 	@Override
 	public float getRadius() {
 		return DEF_RADIUS;
@@ -60,7 +60,7 @@ public class PlayerShip extends ModularShip {
 		if(isRemote() && velocity.magSq() > 1) {
 			setHeading(getVelocity());
 		}
-		
+
 		drawShip(r, ShipModelType.DEFAULT);
 	}
 

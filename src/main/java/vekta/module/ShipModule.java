@@ -5,8 +5,7 @@ import vekta.module.station.ComponentModule;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.SpaceStation;
 
-import static vekta.Vekta.round;
-import static vekta.Vekta.v;
+import static vekta.Vekta.*;
 
 public abstract class ShipModule implements ComponentModule {
 	private ModularShip ship;
@@ -47,7 +46,7 @@ public abstract class ShipModule implements ComponentModule {
 	}
 
 	protected final float chooseInclusive(float min, float max, float interval) {
-		return interval * chooseInclusive((int)(min / interval), (int)(max / interval));
+		return roundEpsilon(interval * chooseInclusive((int)(min / interval), (int)(max / interval)));
 	}
 
 	@Override

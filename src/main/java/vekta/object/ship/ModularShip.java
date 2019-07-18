@@ -381,7 +381,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		}
 	}
 
-	public Menu openShipMenu() {
+	public void openShipMenu() {
 		Menu menu = new Menu(getController(), new BackButton(getWorld()), new ObjectMenuHandle(this));
 		menu.add(new PlayerKnowledgeButton());
 		menu.add(new InventoryButton(getInventory()));
@@ -390,10 +390,8 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		menu.add(new RenameButton(this));
 		menu.addDefault();
 		setContext(menu);
-
-		return menu;
 	}
-
+	
 	@Override
 	public void doLand(LandingSite site) {
 		if(hasController()) {
@@ -477,7 +475,9 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 		Class shortcutType = SHORTCUT_MAP.get(key);
 		if(key == KeyBinding.SHIP_MENU || shortcutType != null) {
-			Menu menu = openShipMenu();
+			openShipMenu();
+			applyContext();
+			Menu menu = (Menu)getContext();
 			if(shortcutType != null) {
 				for(MenuOption option : menu.getOptions()) {
 					if(shortcutType.isInstance(option) && option.isEnabled()) {

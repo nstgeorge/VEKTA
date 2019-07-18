@@ -38,9 +38,13 @@ public final class Resources {
 	private static SoundFile currentMusic;
 	private static int fadeProgress;
 
+	private static float soundVolume;
+	private static float musicVolume;
+
 	public static PShape logo; // TODO: generalize SVG file loading
 
 	public static void init() {
+		adjustFromSettings();
 
 		loadResources(Resources::addStrings, "txt");
 		loadResources(Resources::addShape, "obj", "svg");
@@ -192,7 +196,8 @@ public final class Resources {
 	}
 
 	public static void playSound(String key, float volume, float pan, float freq) {
-		if(Settings.getInt("sound") > 0) {
+		volume *= soundVolume;
+		if(volume > 0) {
 			SoundFile sound = getSound(key);
 			sound.stop();
 			sound.play(freq, pan, volume);
@@ -221,7 +226,7 @@ public final class Resources {
 	}
 
 	public static void loopSound(String key) {
-		if(Settings.getInt("sound") > 0) {
+		if(soundVolume > 0) {
 			SoundFile sound = getSound(key);
 			if(!sound.isPlaying()) {
 				sound.loop();
@@ -238,22 +243,19 @@ public final class Resources {
 	}
 
 	public static void setMusic(SoundFile sound, boolean loop) {
-		float volume = Settings.getInt("music");
-		if(volume > 0) {
-			if(sound != currentMusic) {
-				// Set up crossfading
-				stopMusic();
-				currentMusic = sound;
+		if(musicVolume > 0 && sound != currentMusic) {
+			// Set up crossfading
+			stopMusic();
+			currentMusic = sound;
 
-				// Play sound
-				//				sound.amp(volume);
-				if(loop) {
-					sound.loop();
-					sound.jump(v.random(sound.duration())); // Start at random point in music
-				}
-				else {
-					sound.play();
-				}
+			// Play sound
+			//				sound.amp(volume);
+			if(loop) {
+				sound.loop();
+				sound.jump(v.random(sound.duration())); // Start at random point in music
+			}
+			else {
+				sound.play();
 			}
 		}
 	}
@@ -270,8 +272,11 @@ public final class Resources {
 	}
 
 	public static void adjustFromSettings() {
+		soundVolume = Settings.getBoolean("muteSound") ? 0 : Settings.getFloat("sound");
+		musicVolume = Settings.getBoolean("muteMusic") ? 0 : Settings.getFloat("music");
+
 		if(currentMusic != null) {
-			currentMusic.amp(Settings.getInt("music"));
+			currentMusic.amp(musicVolume);
 		}
 	}
 

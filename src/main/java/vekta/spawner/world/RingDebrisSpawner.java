@@ -14,6 +14,7 @@ import static vekta.spawner.WorldGenerator.orbit;
 import static vekta.spawner.WorldGenerator.randomPlanetColor;
 
 public class RingDebrisSpawner implements WorldGenerator.WorldSpawner {
+	private static  final float ANYWHERE_CHANCE = 0.02F; // Chance to spawn outside of a ring system
 	
 	@Override
 	public float getWeight() {
@@ -28,7 +29,7 @@ public class RingDebrisSpawner implements WorldGenerator.WorldSpawner {
 	@Override
 	public void spawn(SpaceObject center, PVector pos) {
 		SpaceObject orbit = getWorld().findOrbitObject(center);
-		if(orbit instanceof GasGiant && ((GasGiant)orbit).isInsideRings(pos)) {
+		if(v.chance(ANYWHERE_CHANCE) || (orbit instanceof GasGiant && ((GasGiant)orbit).isInsideRings(pos))) {
 			SpaceObject s = createDebris(pos, 2, 10);
 			orbit(orbit, s, .1F);
 		}
