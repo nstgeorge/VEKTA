@@ -24,7 +24,7 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 	private static final float CRATE_SPEED = 10; // Speed of item drops when destroyed
 	private static final int DEPART_FRAMES = 100; // Number of seconds to wait before docking/landing again
 	private static final float BLINK_RATE = 1.5F; // Blink color decay rate
- 
+
 	private String name;
 	private final float speed;  // Force induced when engine is on
 	private final float turnSpeed; // Rotational speed when turning
@@ -149,9 +149,10 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 			// Add item to ship's inventory
 			getInventory().add(((CargoCrate)s).getItem());
 		}
-		else if(s instanceof Ship && isDockable(s) && ((Ship)s).isDockable(this)) {
-			// Board ship
+		else if(s != dock && s instanceof Ship && isDockable(s) && ((Ship)s).isDockable(this)) {
+			// Dock ships to each other
 			dock(s);
+			((Ship)s).dock(this);
 		}
 	}
 

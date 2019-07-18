@@ -4,6 +4,7 @@ import vekta.InfoGroup;
 import vekta.KeyBinding;
 import vekta.Resources;
 import vekta.menu.Menu;
+import vekta.object.HyperdriveShockwave;
 import vekta.object.Shockwave;
 import vekta.object.ship.ModularShip;
 
@@ -86,13 +87,13 @@ public class HyperdriveModule extends ShipModule {
 				ship.accelerate(effectiveThrust * currentBoost, ship.getVelocity());
 
 				// Create shockwave effect
-				Shockwave wave = register(new Shockwave(
+				Shockwave wave = register(new HyperdriveShockwave(
 						getShip(),
-						timeScale * 1.5e-4F * currentBoost,
-						(int)v.random(10, 15),
+						timeScale * 1.3e-4F * currentBoost,
+						(int)v.random(10, 20),
 						getShip().getColor()));
-				wave.setRadius(1);
-				wave.addVelocity(ship.getHeading().mult(-400 * timeScale / currentBoost * TUNNEL_EFFECT));
+				//wave.setRadius(1);
+				//wave.addVelocity(ship.getHeading().mult(-400 * timeScale / currentBoost * TUNNEL_EFFECT));
 			}
 		}
 	}

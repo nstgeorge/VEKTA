@@ -96,7 +96,9 @@ public class MenuHandle implements Serializable {
 	}
 
 	public void keyPressed(Menu menu, KeyEvent event) {
-		menu.getCursor().keyPressed(menu, event);
+		if(menu.size() > 0) {
+			menu.getCursor().keyPressed(menu, event);
+		}
 	}
 
 	public void keyPressed(Menu menu, KeyBinding key) {
