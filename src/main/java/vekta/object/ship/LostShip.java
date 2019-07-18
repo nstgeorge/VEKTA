@@ -4,22 +4,27 @@ import processing.core.PVector;
 import vekta.menu.Menu;
 import vekta.menu.option.LootMenuButton;
 
+import static processing.core.PApplet.sq;
+import static vekta.Vekta.v;
+
 public class LostShip extends Ship {
-	private static final float DEF_MASS = 500;
-	private static final float DEF_RADIUS = 10;
-	
+	private static final float MASS_PER_RADIUS = 10;
+
+	private final float radius = v.random(5, 30);
+	private final ShipModelType model = v.random(ShipModelType.values());
+
 	public LostShip(String name, PVector heading, PVector position, PVector velocity) {
 		super(name, heading, position, velocity, 150, 0, 0);
 	}
 
 	@Override
 	public float getMass() {
-		return DEF_MASS;
+		return sq(radius * MASS_PER_RADIUS);
 	}
 
 	@Override
 	public float getRadius() {
-		return DEF_RADIUS;
+		return radius;
 	}
 
 	@Override
@@ -29,6 +34,6 @@ public class LostShip extends Ship {
 
 	@Override
 	public void drawNearby(float r) {
-		drawShip(r, ShipModelType.FIGHTER);
+		drawShip(r, model);
 	}
 }  

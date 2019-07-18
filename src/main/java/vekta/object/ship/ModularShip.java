@@ -414,10 +414,10 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		if(hasController()) {
 			Player player = getController();
 			if(s instanceof Ship) {
+				this.setLanding(false);
 				Menu menu = new Menu(player, new ShipUndockButton(this, getWorld()), new ObjectMenuHandle(s));
 				((Ship)s).setupDockingMenu(menu);
 				menu.addDefault();
-				this.setLanding(false);
 				setContext(menu);
 			}
 

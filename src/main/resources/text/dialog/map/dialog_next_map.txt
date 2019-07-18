@@ -1,9 +1,9 @@
-CONFRONTED : CONFESSION
+confronted : confession
 
-ADVICE : ADVICE_THANK
+advice : advice_thank
 
-DUNGEON : ASK_LEAVE
-DUNGEON : GREETING
-DUNGEON : BUSY
-DUNGEON : NERVOUS_ASSASSIN
-DUNGEON : OFFER_WEAPON
+dungeon : ask_leave
+dungeon : greeting
+dungeon : busy
+dungeon : nervous_assassin
+dungeon : offer_weapon

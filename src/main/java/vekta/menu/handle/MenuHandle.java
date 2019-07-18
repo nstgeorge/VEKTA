@@ -100,7 +100,7 @@ public class MenuHandle implements Serializable {
 	}
 
 	public void keyPressed(Menu menu, KeyBinding key) {
-		if(menu.getCursor().interceptKeyPressed(menu, key)) {
+		if(menu.size() > 0 && menu.getCursor().interceptKeyPressed(menu, key)) {
 			return;
 		}
 		else if(key == KeyBinding.MENU_CLOSE || key == getShortcutKey()) {
