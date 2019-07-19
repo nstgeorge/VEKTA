@@ -36,8 +36,9 @@ public class BlackHole extends TerrestrialPlanet {
 	public void drawPreview(float r) {
 		float phase = sq(getRadius()) % 1e5F;
 		for(float f = 0; f < 1; f += .05F) {
-			float s = r * sq(f);
-			v.stroke(v.lerpColor(0, getColor(), (f * sin(v.frameCount * PREVIEW_PULSE_SPEED * f + phase) + 1) / 2));
+			float pulse = sin(v.frameCount * PREVIEW_PULSE_SPEED * f + phase);
+			float s = r * (sq(f) - pulse * .1F);
+			v.stroke(v.lerpColor(0, getColor(), (f * pulse + 1) / 2));
 			v.ellipse(0, 0, s, s);
 		}
 	}
