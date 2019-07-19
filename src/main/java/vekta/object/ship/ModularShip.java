@@ -391,13 +391,13 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		menu.addDefault();
 		setContext(menu);
 	}
-	
+
 	@Override
 	public void doLand(LandingSite site) {
 		if(hasController()) {
 			Player player = getController();
 			Menu menu = new Menu(player, new ShipTakeoffButton(site, getWorld()), new LandingMenuHandle(site));
-			site.getTerrain().setupLandingMenu(menu);
+			site.getTerrain().setupLandingMenu(site, menu);
 			menu.add(new SurveyButton(site));
 			menu.addDefault();
 			Resources.playSound("land");

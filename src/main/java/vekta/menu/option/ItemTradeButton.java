@@ -75,6 +75,11 @@ public class ItemTradeButton implements ButtonOption, LayoutBuilder {
 	}
 
 	@Override
+	public String getSelectVerb() {
+		return price == 0 ? "transfer" : buying ? "buy" : "sell";
+	}
+
+	@Override
 	public void onSelect(Menu menu) {
 		Inventory from = getFrom();
 		Inventory to = getTo();
@@ -103,9 +108,7 @@ public class ItemTradeButton implements ButtonOption, LayoutBuilder {
 			layout.add(new TextDisplay(line));
 		}
 
-		if(price > 0) {
-			layout.add(new TextDisplay(moneyString(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to " + (buying ? "buy" : "sell"), price)))
-					.customize().color(100);
-		}
+		layout.add(new TextDisplay(moneyString(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to " + getSelectVerb(), price)))
+				.customize().color(100);
 	}
 }

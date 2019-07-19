@@ -283,6 +283,27 @@ public class Vekta extends PApplet {
 		return text + (money == 0 ? "" : " [" + money + " G]");
 	}
 
+	public static String distanceString(float dist) {
+		String unit = "m";
+		if(dist > AU_DISTANCE * .01F) {
+			dist /= AU_DISTANCE;
+			unit = "AU";
+		}
+		else if(dist > 1e8) {
+			dist /= 1e9;
+			unit = "Gm"; // Gigameters
+		}
+		else if(dist > 1e5) {
+			dist /= 1e6;
+			unit = "Mm"; // Megameters
+		}
+		else if(dist > 100) {
+			dist /= 1000;
+			unit = "km";
+		}
+		return ((float)round(dist * 100) / 100) + " " + unit;
+	}
+	
 	//// Utility methods ////
 
 	public <T> T random(T[] array) {

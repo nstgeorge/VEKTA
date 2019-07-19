@@ -29,6 +29,7 @@ import vekta.spawner.EventGenerator;
 import vekta.spawner.WorldGenerator;
 import vekta.spawner.item.ClothingItemSpawner;
 import vekta.spawner.item.WeaponItemSpawner;
+import vekta.spawner.world.BlackHoleSpawner;
 import vekta.spawner.world.StarSystemSpawner;
 
 import java.io.*;
@@ -98,6 +99,9 @@ public class Singleplayer implements World, PlayerListener {
 				setup();
 			}
 		}
+		else if(state.getPlayer() == null) {
+			setup();////
+		}
 
 		Player player = getPlayer();
 
@@ -164,6 +168,9 @@ public class Singleplayer implements World, PlayerListener {
 			SpaceStation.Component panel2 = struct.attach(SpaceStation.Direction.DOWN, new SolarArrayModule(1));
 			SpaceStation.Component panel3 = struct2.attach(SpaceStation.Direction.RIGHT, new SolarArrayModule(1));
 			SpaceStation.Component sensor = struct2.attach(SpaceStation.Direction.LEFT, new SensorModule());
+
+			BlackHoleSpawner.createBlackHole(PVector.random2D().mult(v.random(40, 50) * AU_DISTANCE))
+					.observe(ObservationLevel.OWNED, getPlayer());
 		}
 
 		//		playerShip.getInventory().add(new DialogItemSpawner().create());////
@@ -242,7 +249,7 @@ public class Singleplayer implements World, PlayerListener {
 			start();
 		}
 		else {
-			save(AUTOSAVE_FILE);
+			autosave();
 		}
 	}
 
@@ -555,17 +562,17 @@ public class Singleplayer implements World, PlayerListener {
 	@Override
 	public void restart() {
 		cleanup();
-
-		Singleplayer world = new Singleplayer(new WorldState());
-		world.setup();
-		setContext(world);
-		applyContext();
+		setContext(new Singleplayer(new WorldState()));
 	}
 
 	public SpaceObject findLargestObject() {
 		float maxMass = 0;
 		SpaceObject max = null;
-		for(SpaceObject s : state.getObjects()) {
+		List<SpaceObject> objects = state.getGravityObjects();
+		if(objects.isEmpty()) {
+			objects = state.getObjects();
+		}
+		for(SpaceObject s : objects) {
 			float mass = s.getMass();
 			if(mass > maxMass) {
 				maxMass = mass;
@@ -701,6 +708,11 @@ public class Singleplayer implements World, PlayerListener {
 					.withColor(v.color(255, 0, 0));
 			return false;
 		}
+	}
+
+	@Override
+	public void autosave() {
+		save(AUTOSAVE_FILE);
 	}
 
 	// PlayerListener callbacks

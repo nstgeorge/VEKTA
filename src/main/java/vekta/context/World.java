@@ -46,9 +46,14 @@ public interface World extends Context {
 	void sendChanges(Syncable object);
 
 	void sendMessage(Player player, Message message);
+	
+	/**
+	 * Called when the world should persist data
+	 * */
+	void autosave();
 
 	/**
-	 * Called when player dies
+	 * Called when the local player dies
 	 */
 	void setDead();
 

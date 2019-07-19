@@ -10,6 +10,8 @@ import vekta.terrain.settlement.Settlement;
 
 import java.util.stream.Collectors;
 
+import static vekta.Vekta.distanceString;
+
 public class TerrestrialKnowledge extends SpaceObjectKnowledge {
 	private final TerrestrialPlanet planet;
 
@@ -43,7 +45,7 @@ public class TerrestrialKnowledge extends SpaceObjectKnowledge {
 		aware.customize().color(100).spacing(layout.getStyle().spacing() / 2);
 
 		aware.add(new TextDisplay("Mass: " + TelemetryOverlay.getMassString(getSpaceObject().getMass())));
-		aware.add(new TextDisplay("Radius: " + TelemetryOverlay.getDistanceString(getSpaceObject().getRadius())));
+		aware.add(new TextDisplay("Radius: " + distanceString(getSpaceObject().getRadius())));
 
 		// Survey info
 		if(ObservationLevel.SCANNED.isAvailableFrom(getLevel())) {

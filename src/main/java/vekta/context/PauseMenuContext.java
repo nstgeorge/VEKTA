@@ -44,7 +44,7 @@ public class PauseMenuContext implements Context {
 		v.fill(255);
 		v.textAlign(CENTER);
 		v.text(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to select", v.width / 8F, (v.height / 2) + (options.length * 100) + 100);
-//		v.hint(ENABLE_DEPTH_TEST);
+		//		v.hint(ENABLE_DEPTH_TEST);
 		//noLoop();
 	}
 
@@ -86,13 +86,14 @@ public class PauseMenuContext implements Context {
 			//			Resources.stopMusic("theme");
 			Resources.playSound("select");
 			switch(selected) {
-			case (0):
+			case 0:
 				setContext(world);
 				break;
-			case (1):
+			case 1:
 				world.restart();
 				break;
-			case (2):
+			case 2:
+				world.autosave();
 				setContext(mainMenu);
 				break;
 			}

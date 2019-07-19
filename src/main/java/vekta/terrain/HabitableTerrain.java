@@ -50,7 +50,7 @@ public class HabitableTerrain extends Terrain {
 	}
 
 	@Override
-	public void setupLandingMenu(Menu menu) {
+	public void setupLandingMenu(LandingSite site, Menu menu) {
 		menu.add(new SettlementButton(getSettlement()));
 	}
 }

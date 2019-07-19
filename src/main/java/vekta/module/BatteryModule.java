@@ -14,9 +14,10 @@ import java.util.List;
 
 import static processing.core.PApplet.round;
 import static processing.core.PApplet.sq;
+import static vekta.Vekta.v;
 
 public class BatteryModule extends ShipModule implements Rechargeable {
-	private static float CHARGE_THRESHOLD = .9F;
+	private static final float CHARGE_THRESHOLD = .9F;
 
 	private final ModularShip.Battery battery;
 
@@ -65,7 +66,7 @@ public class BatteryModule extends ShipModule implements Rechargeable {
 	@Override
 	public Module getVariant() {
 		ModularShip.Battery battery = new ModularShip.Battery(chooseInclusive(1, 50) * 10);
-		battery.setCharge(sq(choose(0, 1)) * battery.getCapacity());
+		battery.setCharge(sq(v.random(1)) * battery.getCapacity());
 		return new BatteryModule(battery);
 	}
 
@@ -83,7 +84,7 @@ public class BatteryModule extends ShipModule implements Rechargeable {
 	public void onMenu(Menu menu) {
 		if(menu.getHandle() instanceof LandingMenuHandle) {
 			LandingSite site = ((LandingMenuHandle)menu.getHandle()).getSite();
-
+			
 			if(site.getTerrain().isInhabited()) {
 				float price = .2F;
 				for(Settlement settlement : site.getTerrain().getSettlements()) {

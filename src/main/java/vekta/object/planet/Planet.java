@@ -1,6 +1,7 @@
 package vekta.object.planet;
 
 import processing.core.PVector;
+import vekta.Renameable;
 import vekta.RenderLevel;
 import vekta.Resources;
 import vekta.object.SpaceObject;
@@ -10,12 +11,12 @@ import static vekta.Vekta.*;
 /**
  * Model for a planet.
  */
-public abstract class Planet extends SpaceObject {
+public abstract class Planet extends SpaceObject implements Renameable {
 	private static final float SURVEY_SCAN_SPEED = .01F;
 
 	private static final float SPLIT_MASS_ABSORB = .5F;
 
-	private final String name;
+	private String name;
 	private final float density;
 
 	private float mass;
@@ -159,16 +160,21 @@ public abstract class Planet extends SpaceObject {
 	}
 
 	@Override
-	public float getMass() {
-		return mass;
-	}
-
-	@Override
 	public String getName() {
 		return name;
 	}
 
-	void setMass(float mass) {
+	@Override
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public float getMass() {
+		return mass;
+	}
+
+	public void setMass(float mass) {
 		this.mass = mass;
 		this.radius = pow(getMass() / getDensity(), (float)1 / 3);
 	}

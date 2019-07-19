@@ -28,3 +28,5 @@ Opportunity
 Arrangement
 Predicament
 Deal
+Foray
+Infiltration

@@ -114,7 +114,6 @@ public class WormholeModule extends ShipModule {
 		else if(ship.hasController()) {
 			ship.getController().send("Not enough energy! (" + (int)ship.getEnergy() + " / " + (int)getEnergyConsumption() + ")");
 		}
-
 	}
 
 	@Override

@@ -15,7 +15,7 @@ public class MoltenTerrain extends Terrain {
 	}
 
 	@Override
-	public void setupLandingMenu(Menu menu) {
+	public void setupLandingMenu(LandingSite site, Menu menu) {
 		
 	}
 }

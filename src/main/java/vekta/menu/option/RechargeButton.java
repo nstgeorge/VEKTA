@@ -4,6 +4,7 @@ import vekta.Player;
 import vekta.menu.Menu;
 import vekta.object.ship.Rechargeable;
 
+import static processing.core.PApplet.ceil;
 import static processing.core.PApplet.min;
 import static vekta.Vekta.moneyString;
 
@@ -11,7 +12,7 @@ public class RechargeButton implements ButtonOption {
 	private final Player player;
 	private final Rechargeable rechargeable;
 	private final float price;
-
+	
 	public RechargeButton(Player player, float price) {
 		this(player, player.getShip(), price);
 	}
@@ -28,7 +29,7 @@ public class RechargeButton implements ButtonOption {
 	}
 
 	public int getCost() {
-		return min(player.getInventory().getMoney(), 1 + (int)(price * rechargeable.getRechargeAmount()));
+		return min(player.getInventory().getMoney(), ceil(price * rechargeable.getRechargeAmount()));
 	}
 
 	@Override

@@ -51,7 +51,7 @@ public abstract class Terrain extends Syncable<Terrain> {
 
 	}
 
-	public abstract void setupLandingMenu(Menu menu);
+	public abstract void setupLandingMenu(LandingSite site, Menu menu);
 
 	//	public abstract setupSurveyMenu(Player player, Menu menu);
 }

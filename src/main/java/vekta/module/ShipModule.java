@@ -37,10 +37,6 @@ public abstract class ShipModule implements ComponentModule {
 	public void onUninstall() {
 	}
 
-	protected final float choose(float min, float max) {
-		return v.random(min, max);
-	}
-
 	protected final int chooseInclusive(int min, int max) {
 		return round(v.random(min, max));
 	}

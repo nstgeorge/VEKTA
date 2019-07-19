@@ -1,5 +1,6 @@
 {boss_modifier}
 Attachment
+Component
 Tenderizer
 Lasso
 Accessory
@@ -51,3 +52,4 @@ Tripod
 Insurance
 Box
 Packaging
+Swaddler

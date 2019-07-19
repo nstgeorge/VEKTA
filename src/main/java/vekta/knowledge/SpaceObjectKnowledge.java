@@ -10,10 +10,8 @@ import vekta.menu.handle.KnowledgeMenuHandle;
 import vekta.menu.option.BackButton;
 import vekta.menu.option.TargetButton;
 import vekta.object.SpaceObject;
-import vekta.overlay.singleplayer.TelemetryOverlay;
 
-import static vekta.Vekta.getContext;
-import static vekta.Vekta.setContext;
+import static vekta.Vekta.*;
 
 public abstract class SpaceObjectKnowledge extends ObservationKnowledge {
 	private static final int PREVIEW_SIZE = 200;
@@ -36,7 +34,7 @@ public abstract class SpaceObjectKnowledge extends ObservationKnowledge {
 
 	@Override
 	public String getSecondaryText(Player player) {
-		return TelemetryOverlay.getDistanceString(player.getShip().relativePosition(getSpaceObject()).mag());
+		return distanceString(player.getShip().relativePosition(getSpaceObject()).mag());
 	}
 
 	@Override

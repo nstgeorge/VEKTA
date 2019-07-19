@@ -2,9 +2,9 @@ package vekta.terrain;
 
 import processing.core.PVector;
 import vekta.Syncable;
+import vekta.knowledge.ObservationLevel;
 import vekta.object.SpaceObject;
 import vekta.object.ship.Ship;
-import vekta.knowledge.ObservationLevel;
 import vekta.sound.Tune;
 import vekta.spawner.TuneGenerator;
 
@@ -58,8 +58,8 @@ public class LandingSite extends Syncable<LandingSite> {
 		PVector offset = landed.getPosition().copy().sub(getParent().getPosition());
 		PVector velocity = offset.setMag(getLaunchSpeed()).add(getParent().getVelocity());
 		landed.setVelocity(velocity);
-//		landed.getPositionReference().add(velocity.mult(getWorld().getTimeScale()));
-		
+		//		landed.getPositionReference().add(velocity.mult(getWorld().getTimeScale()));
+
 		ship.setTemperature(ship.getOptimalTemperature()); // TODO: adjust based on planet temperature
 		ship.doLand(this);
 	}
@@ -74,9 +74,9 @@ public class LandingSite extends Syncable<LandingSite> {
 		landed.onDepart(getParent());
 		landed = null;
 	}
-	
+
 	public void observe(ObservationLevel level) {
-		
+
 	}
 
 	/**

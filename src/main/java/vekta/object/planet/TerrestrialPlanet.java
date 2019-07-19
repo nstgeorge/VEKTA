@@ -28,8 +28,6 @@ public class TerrestrialPlanet extends Planet {
 		super(name, mass, density, position, velocity, color);
 
 		this.site = new LandingSite(this, terrain);
-
-		//		println("[Terrestrial] mass: " + getMass() + ", radius: " + getRadius());
 	}
 
 	public LandingSite getLandingSite() {
@@ -104,6 +102,11 @@ public class TerrestrialPlanet extends Planet {
 				// Observe settlements at the next-down observation level
 				settlement.observe(level.decreased(), player);
 			}
+		}
+
+		/// TODO: consider lowering threshold for persistence
+		if(ObservationLevel.OWNED.isAvailableFrom(level)) {
+			setPersistent(true);
 		}
 	}
 }
