@@ -85,7 +85,10 @@ public class Menu implements Context {
 	}
 
 	public MenuOption get(int i) {
-		if(i >= size()) {
+		if(size() == 0) {
+			return getDefault();
+		}
+		else if(i >= size()) {
 			i = size() - 1;
 		}
 		return options.get(i);

@@ -1,0 +1,4 @@
+[nemesis person] was a truly evil person. *nemesis_plan
+Truth be told, [nemesis person] wanted to [nemesis intent_evil]. *nemesis_plan
+[nemesis person] also [main person_status], and this angered [nemesis person]. *nemesis_plan
+# TODO: filter if [main person_status] not defined

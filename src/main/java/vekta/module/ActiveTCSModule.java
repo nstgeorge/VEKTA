@@ -38,7 +38,7 @@ public class ActiveTCSModule extends PassiveTCSModule {
 	}
 
 	@Override
-	public Module getVariant() {
+	public Module createVariant() {
 		return new ActiveTCSModule(chooseInclusive(.5F, 3, .5F));
 	}
 

@@ -43,7 +43,7 @@ public class RCSModule extends ShipModule {
 	}
 
 	@Override
-	public Module getVariant() {
+	public Module createVariant() {
 		return new RCSModule(chooseInclusive(.5F, 3, .1F));
 	}
 

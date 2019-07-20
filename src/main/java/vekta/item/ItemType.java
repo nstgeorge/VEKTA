@@ -10,6 +10,7 @@ public enum ItemType {
 	LEGENDARY(v.color(200, 100, 255), 20, 2),
 	DANGEROUS(v.color(255, 100, 200), 4, 2),
 	MODULE(v.color(200, 255, 100), 10, 3),
+	RECIPE(v.color(100, 255, 200), 5, 5),
 	MISSION(MissionStatus.READY.getColor(), 2, 5),
 	ECONOMY(v.color(100, 200, 255), 1, 2),
 	COLONY(v.color(170, 80, 220), 50, 10);

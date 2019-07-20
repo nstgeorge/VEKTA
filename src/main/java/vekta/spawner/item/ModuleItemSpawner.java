@@ -7,6 +7,8 @@ import vekta.item.ModuleItem;
 import vekta.module.Module;
 import vekta.spawner.ItemGenerator;
 
+import java.util.Arrays;
+
 import static vekta.Vekta.v;
 
 public class ModuleItemSpawner implements ItemGenerator.ItemSpawner {
@@ -28,6 +30,11 @@ public class ModuleItemSpawner implements ItemGenerator.ItemSpawner {
 	}
 
 	public static Module randomModule() {
-		return v.random(MODULES).getVariant();
+		return v.random(MODULES).createVariant();
+	}
+
+	public static Module findModule(String name) {
+		return Arrays.stream(MODULES)
+				.filter(m -> m.getName().contains(name)).findFirst().orElse(null);
 	}
 }

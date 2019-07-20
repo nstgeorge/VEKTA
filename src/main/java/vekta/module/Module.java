@@ -21,7 +21,7 @@ public interface Module extends Serializable {
 
 	boolean isBetter(Module other);
 
-	Module getVariant();
+	Module createVariant();
 
 	boolean isApplicable(ModularShip ship);
 

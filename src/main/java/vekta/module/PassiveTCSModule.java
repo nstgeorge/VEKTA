@@ -40,7 +40,7 @@ public class PassiveTCSModule extends ShipModule {
 	}
 
 	@Override
-	public Module getVariant() {
+	public Module createVariant() {
 		return new PassiveTCSModule(chooseInclusive(.5F, 10, .5F));
 	}
 

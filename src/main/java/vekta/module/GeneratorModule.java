@@ -40,7 +40,7 @@ public class GeneratorModule extends ShipModule {
 	}
 
 	@Override
-	public Module getVariant() {
+	public Module createVariant() {
 		return new GeneratorModule(chooseInclusive(.5F, 2, .5F));
 	}
 

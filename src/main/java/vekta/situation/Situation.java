@@ -2,7 +2,7 @@ package vekta.situation;
 
 import vekta.Player;
 
-public interface Situation {
+public interface Situation extends Player.Attribute {
 	boolean isHappening(Player player);
 
 	default void start(Player player) {

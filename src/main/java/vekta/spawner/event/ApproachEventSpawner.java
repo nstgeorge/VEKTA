@@ -20,7 +20,9 @@ public class ApproachEventSpawner implements EventGenerator.EventSpawner {
 
 	@Override
 	public void spawn(Player player) {
-		createMessenger(player, DialogGenerator.randomApproachDialog(player, MissionGenerator.randomMissionPerson()));
+		if(!EventGenerator.hasSituation(player)) {
+			createMessenger(player, DialogGenerator.randomApproachDialog(player, MissionGenerator.randomMissionPerson()));
+		}
 	}
 
 	public static MessengerShip createMessenger(Player player, Dialog dialog) {

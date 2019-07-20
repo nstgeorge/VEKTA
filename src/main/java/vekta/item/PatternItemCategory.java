@@ -3,9 +3,13 @@ package vekta.item;
 public class PatternItemCategory extends ItemCategory {
 	private final String[] patterns;
 
+	public PatternItemCategory(String name) {
+		this(name, new String[] {name});
+	}
+
 	public PatternItemCategory(String name, String[] patterns) {
 		super(name);
-		
+
 		this.patterns = patterns;
 	}
 

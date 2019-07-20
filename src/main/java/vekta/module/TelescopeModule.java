@@ -51,7 +51,7 @@ public class TelescopeModule extends ShipModule {
 	}
 
 	@Override
-	public Module getVariant() {
+	public Module createVariant() {
 		return new TelescopeModule(chooseInclusive(.1F, 3, .1F));
 	}
 

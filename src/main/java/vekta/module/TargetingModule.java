@@ -99,7 +99,7 @@ public class TargetingModule extends ShipModule implements Targeter {
 	}
 
 	@Override
-	public Module getVariant() {
+	public Module createVariant() {
 		return new TargetingModule();
 	}
 

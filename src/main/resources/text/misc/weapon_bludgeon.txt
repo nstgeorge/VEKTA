@@ -1,0 +1,10 @@
+log
+club
+metal pipe
+crowbar
+mace
+hammer
+lumber axe
+battleaxe
+broadsword
+claymore

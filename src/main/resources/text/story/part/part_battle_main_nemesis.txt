@@ -1,0 +1,4 @@
+An epic battle ensued, and [main person] emerged victorious. *end_main_happy
+[main person] turned around, but it was too late. [nemesis person] [main person_death]. *end_main_dead
+What happened next went down in history. [main person] [nemesis person_death]. *end_main_happy
+It's impossible to know for sure what happened next, but [nemesis person] was later seen with [main person]'s [main item]. *end_main_dead

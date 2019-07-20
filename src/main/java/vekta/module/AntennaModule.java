@@ -49,7 +49,7 @@ public class AntennaModule extends ShipModule {
 	}
 
 	@Override
-	public Module getVariant() {
+	public Module createVariant() {
 		return new AntennaModule(chooseInclusive(.5F, 10, .5F));
 	}
 

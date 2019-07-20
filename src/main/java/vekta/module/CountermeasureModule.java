@@ -42,7 +42,7 @@ public class CountermeasureModule extends WeaponModule {
 	}
 
 	@Override
-	public Module getVariant() {
+	public Module createVariant() {
 		return new CountermeasureModule(chooseInclusive(1, 3));
 	}
 

@@ -49,7 +49,7 @@ public class DrillModule extends ShipModule {
 	}
 
 	@Override
-	public Module getVariant() {
+	public Module createVariant() {
 		return new DrillModule(chooseInclusive(.5F, 3, .5F));
 	}
 

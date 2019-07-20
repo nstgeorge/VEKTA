@@ -37,7 +37,7 @@ public class SensorModule implements ComponentModule {
 	}
 
 	@Override
-	public Module getVariant() {
+	public Module createVariant() {
 		return new SensorModule();
 	}
 

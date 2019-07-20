@@ -60,7 +60,7 @@ public class StationCoreModule extends ShipModule {
 	}
 
 	@Override
-	public Module getVariant() {
+	public Module createVariant() {
 		return new StationCoreModule();
 	}
 

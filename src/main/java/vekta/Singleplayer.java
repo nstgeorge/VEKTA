@@ -10,6 +10,7 @@ import vekta.economy.Economy;
 import vekta.item.ColonyItem;
 import vekta.item.ModuleItem;
 import vekta.knowledge.ObservationLevel;
+import vekta.knowledge.StoryKnowledge;
 import vekta.menu.Menu;
 import vekta.menu.handle.MainMenuHandle;
 import vekta.module.*;
@@ -26,7 +27,9 @@ import vekta.overlay.singleplayer.PlayerOverlay;
 import vekta.person.Person;
 import vekta.sound.SoundGroup;
 import vekta.spawner.EventGenerator;
+import vekta.spawner.StoryGenerator;
 import vekta.spawner.WorldGenerator;
+import vekta.spawner.item.BlueprintItemSpawner;
 import vekta.spawner.item.ClothingItemSpawner;
 import vekta.spawner.item.WeaponItemSpawner;
 import vekta.spawner.world.BlackHoleSpawner;
@@ -175,6 +178,8 @@ public class Singleplayer implements World, PlayerListener {
 
 		//		playerShip.getInventory().add(new DialogItemSpawner().create());////
 
+		getPlayer().addKnowledge(new StoryKnowledge(StoryGenerator.createStory(10), "Story"));
+
 		playerShip.addModule(new EngineModule(2)); // Upgrade engine
 		playerShip.addModule(new AutopilotModule());
 		playerShip.addModule(new AntennaModule());
@@ -193,6 +198,7 @@ public class Singleplayer implements World, PlayerListener {
 		playerShip.getInventory().add(new ModuleItem(new StationCoreModule(1)));
 		playerShip.getInventory().add(new ModuleItem(new OrbitModule(1)));
 		playerShip.getInventory().add(new ColonyItem());
+		playerShip.getInventory().add(BlueprintItemSpawner.randomBlueprint());
 		playerShip.getInventory().add(WeaponItemSpawner.randomWeapon());
 	}
 

@@ -64,7 +64,7 @@ public class BatteryModule extends ShipModule implements Rechargeable {
 	}
 
 	@Override
-	public Module getVariant() {
+	public Module createVariant() {
 		ModularShip.Battery battery = new ModularShip.Battery(chooseInclusive(1, 50) * 10);
 		battery.setCharge(sq(v.random(1)) * battery.getCapacity());
 		return new BatteryModule(battery);

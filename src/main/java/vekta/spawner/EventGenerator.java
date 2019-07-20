@@ -16,7 +16,7 @@ public class EventGenerator {
 
 	public static void updateSituations(Player player) {
 		Situation situation = v.random(SITUATIONS);
-		Class attr = situation.getClass();
+		Class<? extends Situation> attr = situation.getClass();
 		boolean happening = situation.isHappening(player);
 		boolean current = player.hasAttribute(attr);
 		if(happening) {
@@ -34,9 +34,17 @@ public class EventGenerator {
 		}
 	}
 
+	public static boolean hasSituation(Player player) {
+		for(Situation situation : SITUATIONS) {
+			if(player.hasAttribute(situation.getClass())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public interface EventSpawner extends Weighted {
 		void spawn(Player player);
 	}
-
 }
 

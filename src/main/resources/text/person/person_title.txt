@@ -7,7 +7,5 @@ the {item_noun} {person_noun}
 the {person_noun} of {settlement}
 the {person_noun} of {star}
 from {planet_prefix}{planet_suffix}
-Jr.
-Sr.
 Strongman
 {item_noun}-{item_modifier}

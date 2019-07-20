@@ -86,7 +86,7 @@ public class MenuHandle implements Serializable {
 		v.textAlign(CENTER);
 
 		String selectVerb = menu.getCursor().getSelectVerb();
-		if(menu.size() > 0 && menu.getCursor().isEnabled() && selectVerb != null) {
+		if(menu.getCursor().isEnabled() && selectVerb != null) {
 			v.text(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to " + selectVerb, getItemX(), getItemY(menu.size()) + 100);
 		}
 	}
@@ -96,13 +96,11 @@ public class MenuHandle implements Serializable {
 	}
 
 	public void keyPressed(Menu menu, KeyEvent event) {
-		if(menu.size() > 0) {
-			menu.getCursor().keyPressed(menu, event);
-		}
+		menu.getCursor().keyPressed(menu, event);
 	}
 
 	public void keyPressed(Menu menu, KeyBinding key) {
-		if(menu.size() > 0 && menu.getCursor().interceptKeyPressed(menu, key)) {
+		if(menu.getCursor().interceptKeyPressed(menu, key)) {
 			return;
 		}
 		else if(key == KeyBinding.MENU_CLOSE || key == getShortcutKey()) {

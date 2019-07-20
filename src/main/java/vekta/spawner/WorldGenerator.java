@@ -5,10 +5,7 @@ import vekta.Faction;
 import vekta.RenderLevel;
 import vekta.Resources;
 import vekta.object.SpaceObject;
-import vekta.spawner.item.ClothingItemSpawner;
-import vekta.spawner.item.ColonyItemSpawner;
-import vekta.spawner.item.MissionItemSpawner;
-import vekta.spawner.item.ModuleItemSpawner;
+import vekta.spawner.item.*;
 import vekta.terrain.*;
 import vekta.terrain.building.MarketBuilding;
 import vekta.terrain.settlement.*;
@@ -128,6 +125,9 @@ public class WorldGenerator {
 		}
 		if(v.chance(chance * .25F)) {
 			buildings.add(new MarketBuilding(shopTier, "Supplies", ItemGenerator.getSpawner(ColonyItemSpawner.class)));
+		}
+		if(v.chance(chance * .25F)) {
+			buildings.add(new MarketBuilding(shopTier, "Blueprints", ItemGenerator.getSpawner(BlueprintItemSpawner.class)));
 		}
 		return buildings;
 	}

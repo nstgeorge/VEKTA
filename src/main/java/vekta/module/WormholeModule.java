@@ -66,7 +66,7 @@ public class WormholeModule extends ShipModule {
 	}
 
 	@Override
-	public Module getVariant() {
+	public Module createVariant() {
 		SpaceObject target = v.chance(.5F) ? getWorld().findRandomObject(SpaceObject.class) : null;
 		return new WormholeModule(target);
 	}

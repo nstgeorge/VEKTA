@@ -50,7 +50,7 @@ public class OrbitModule extends ShipModule {
 	}
 
 	@Override
-	public Module getVariant() {
+	public Module createVariant() {
 		return new OrbitModule(chooseInclusive(.1F, 2, .1F));
 	}
 

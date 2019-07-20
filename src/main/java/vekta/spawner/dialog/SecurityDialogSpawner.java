@@ -24,7 +24,7 @@ public class SecurityDialogSpawner implements DialogGenerator.DialogSpawner {
 	public static Dialog randomSecurityDialog(Faction faction, MenuOption escape) {
 		Person guard = new TemporaryPerson("Security Guard", faction);
 		Dialog dialog = guard.createDialog("security");
-		dialog.add(new CustomButton("Go Quietly", m -> {
+		dialog.add(new CustomButton("Go quietly", m -> {
 			// TODO: different behavior
 			m.select(escape);
 		}));

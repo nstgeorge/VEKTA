@@ -1,0 +1,1 @@
+[main person] [main person_status]. *main_conflict

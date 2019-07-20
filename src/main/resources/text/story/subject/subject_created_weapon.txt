@@ -1,0 +1,5 @@
+tied a rope to a {weapon_bludgeon}
+drove a nail into to a wooden plank
+poisoned a {weapon_stab}
+built a remote-controlled {weapon_stab}
+jerry-rigged a motion-activated {weapon_stab}

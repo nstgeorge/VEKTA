@@ -1,4 +1,4 @@
 I'm a bit busy right now. Do you think you could come back later? *Sure. *You don't look very busy.
-Scoot off, {name_angry}. *Alright then.
+Scoot off, {impersonal_name_angry}. *Alright then.
 Can't you see I'm a bit busy with my {item_common}? *Better leave you to it.
 | They stare at you, daring you to step closer. *Okay, I'll leave. *:ask_leave Why the long face?

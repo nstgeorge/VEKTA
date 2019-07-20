@@ -44,7 +44,7 @@ public class ShieldModule extends ShipModule {
 	}
 
 	@Override
-	public Module getVariant() {
+	public Module createVariant() {
 		return new ShieldModule(chooseInclusive(1, 3, .1F));
 	}
 

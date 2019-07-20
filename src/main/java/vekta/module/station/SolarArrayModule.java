@@ -47,7 +47,7 @@ public class SolarArrayModule extends GeneratorModule {
 	}
 
 	@Override
-	public Module getVariant() {
+	public Module createVariant() {
 		return new SolarArrayModule(chooseInclusive(.5F, 5, .5F));
 	}
 

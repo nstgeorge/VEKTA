@@ -1,6 +1,5 @@
 package vekta.context;
 
-import com.google.common.collect.ImmutableList;
 import processing.event.KeyEvent;
 import vekta.KeyBinding;
 import vekta.Player;
@@ -9,6 +8,7 @@ import vekta.display.Layout;
 import vekta.display.VerticalLayout;
 import vekta.knowledge.*;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
@@ -35,11 +35,12 @@ public class KnowledgeContext implements Context, Comparator<Knowledge> {
 		this.parent = parent;
 		this.player = player;
 
-		tabs = ImmutableList.of(
+		tabs = Arrays.asList(
 				new KnowledgeTab("Planets", TerrestrialKnowledge.class),
 				new KnowledgeTab("Settlements", SettlementKnowledge.class),
 				new KnowledgeTab("People", PersonKnowledge.class),
 				new KnowledgeTab("Ships", ShipKnowledge.class),
+				new KnowledgeTab("Stories", StoryKnowledge.class),
 				new KnowledgeTab("Owned by " + player.getName(), o -> o instanceof ObservationKnowledge && ((ObservationKnowledge)o).getLevel() == ObservationLevel.OWNED),
 				new KnowledgeTab("Everything", o -> true)
 		);

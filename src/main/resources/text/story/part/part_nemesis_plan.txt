@@ -1,0 +1,2 @@
+[nemesis person] [nemesis created_weapon], and when [main person] walked past, struck them down with this cruel device. *end_main_dead
+One day, [nemesis person] decided to have a "chat" with [main person]. *battle_main_nemesis

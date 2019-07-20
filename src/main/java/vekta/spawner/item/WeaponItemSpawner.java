@@ -11,7 +11,7 @@ import java.util.Map;
 import static vekta.Vekta.v;
 
 public class WeaponItemSpawner implements ItemGenerator.ItemSpawner {
-	private static final Map<String, List<String>> WEAPONS = Resources.getStringMap("item_weapon", false);
+	private static final Map<String, List<String>> WEAPONS = Resources.getStringMap("item_weapon_map", false);
 
 	@Override
 	public float getWeight() {
@@ -34,6 +34,6 @@ public class WeaponItemSpawner implements ItemGenerator.ItemSpawner {
 		if(v.chance(.75F)) {
 			name = Resources.generateString("item_adj_common") + " " + name;
 		}
-		return new WeaponItem(name, v.random(WEAPONS.get(key)).replace("*", name));
+		return new WeaponItem(name, v.random(WEAPONS.get(key)).replaceAll("\\*", name));
 	}
 }

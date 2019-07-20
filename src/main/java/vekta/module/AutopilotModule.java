@@ -46,7 +46,7 @@ public class AutopilotModule extends TargetingModule {
 	}
 
 	@Override
-	public Module getVariant() {
+	public Module createVariant() {
 		return new AutopilotModule();
 	}
 

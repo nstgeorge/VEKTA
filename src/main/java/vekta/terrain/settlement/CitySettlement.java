@@ -28,7 +28,11 @@ public class CitySettlement extends Settlement {
 		}
 
 		if(v.chance(.75F)) {
+			if(v.chance(.75F)) {
+				add(new JunkyardBuilding());
+			}
 			add(new RefineryBuilding());
+			add(new WorkshopBuilding());
 		}
 
 		add(new ForumBuilding(this, (int)(v.random(10, 20))));

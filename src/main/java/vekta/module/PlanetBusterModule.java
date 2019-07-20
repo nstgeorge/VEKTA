@@ -27,7 +27,7 @@ public class PlanetBusterModule extends WeaponModule {
 	}
 
 	@Override
-	public Module getVariant() {
+	public Module createVariant() {
 		return new PlanetBusterModule();
 	}
 

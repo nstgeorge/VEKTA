@@ -44,7 +44,7 @@ public class DialogObjective extends Objective {
 
 	@Override
 	public String getName() {
-		return getResponse() + " " + getPerson().getFullName() + " (" + getSpaceObject().getName() + ")";
+		return getVerb() + " " + getPerson().getFullName() + " (" + getSpaceObject().getName() + ")";
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class DialogObjective extends Objective {
 				complete();
 			}
 			else if(dialog.getPerson() == getDialog().getPerson()) {
-				menu.add(new DialogButton(getVerb(), getDialog()));
+				menu.add(new DialogButton(getResponse(), getDialog()));
 			}
 		}
 	}

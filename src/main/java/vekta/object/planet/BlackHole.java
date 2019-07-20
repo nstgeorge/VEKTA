@@ -11,7 +11,7 @@ import static vekta.Vekta.v;
 public class BlackHole extends TerrestrialPlanet {
 	private static final float EVENT_HORIZON_DENSITY = 1.85e19F;
 	private static final float INTERACT_DENSITY = 10;
-	private static final float PREVIEW_PULSE_SPEED = .05F;
+	private static final float PREVIEW_PULSE_SPEED = .03F;
 
 	public BlackHole(String name, float mass, PVector position, PVector velocity, int color) {
 		super(name, mass, INTERACT_DENSITY, new BlackHoleTerrain(), position, velocity, color);

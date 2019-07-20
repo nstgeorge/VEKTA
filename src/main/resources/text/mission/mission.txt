@@ -26,7 +26,6 @@ A True {mission_noun}
 An Odd {mission_noun}
 A Perfectly Normal {mission_noun}
 An Undeniable {mission_noun}
-An Underwhelming {mission_noun}
 The Latest {mission_noun}
 The Next {mission_noun}
 Another {mission_noun}
@@ -36,4 +35,3 @@ By Command of {person}
 An Act Worthy of {person}
 {mission_noun} on the Side
 {mission_noun} for the Ages
-Operation {item_common}

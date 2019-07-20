@@ -45,7 +45,7 @@ public class StructuralModule extends ShipModule {
 	}
 
 	@Override
-	public Module getVariant() {
+	public Module createVariant() {
 		return new StructuralModule(chooseInclusive(1, 3), chooseInclusive(3, 10));
 	}
 

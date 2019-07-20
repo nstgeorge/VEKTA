@@ -4,5 +4,6 @@ Man
 Lady
 Boy
 Girl
+Gal
 Alien
 Kid

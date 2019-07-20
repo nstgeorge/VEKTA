@@ -211,18 +211,18 @@ public final class Player extends Syncable<Player> {
 		this.listeners.removeIf(type::isInstance);
 	}
 
-	public boolean hasAttribute(Class attribute) {
+	public boolean hasAttribute(Class<? extends Attribute> attribute) {
 		return attributes.contains(attribute.getSimpleName());
 	}
 
-	public void addAttribute(Class attribute) {
+	public void addAttribute(Class<? extends Attribute> attribute) {
 		if(!hasAttribute(attribute)) {
 			attributes.add(attribute.getSimpleName());
 			syncChanges();
 		}
 	}
 
-	public void removeAttribute(Class attribute) {
+	public void removeAttribute(Class<? extends Attribute> attribute) {
 		attributes.remove(attribute.getSimpleName());
 		syncChanges();
 	}
@@ -276,5 +276,8 @@ public final class Player extends Syncable<Player> {
 			// Prevent local player from syncing remote changes
 			super.onSync(data);
 		}
+	}
+	
+	public interface Attribute {
 	}
 }

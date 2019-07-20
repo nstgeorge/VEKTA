@@ -281,7 +281,7 @@ public class StationLayoutContext implements Context, ModuleUpgrader {
 		}
 
 		@Override
-		public Module getVariant() {
+		public Module createVariant() {
 			return null;
 		}
 
