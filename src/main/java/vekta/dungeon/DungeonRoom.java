@@ -53,6 +53,10 @@ public class DungeonRoom implements Serializable {
 	public void addPath(String name, DungeonRoom room) {
 		connections.put(name, room);
 	}
+	
+	public boolean isEnabled() {
+		return true;
+	}
 
 	public void onEnter(Menu menu) {
 	}

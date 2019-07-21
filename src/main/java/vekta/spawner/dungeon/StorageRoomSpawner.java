@@ -6,7 +6,7 @@ import vekta.item.Inventory;
 import vekta.spawner.DungeonGenerator;
 import vekta.spawner.ItemGenerator;
 
-public class ItemRoomSpawner implements DungeonGenerator.DungeonSpawner {
+public class StorageRoomSpawner implements DungeonGenerator.DungeonSpawner {
 	@Override
 	public float getWeight() {
 		return 1;

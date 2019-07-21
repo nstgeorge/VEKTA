@@ -114,19 +114,19 @@ public class WorldGenerator {
 		if(v.chance(chance * 2)) {
 			buildings.add(new MarketBuilding(shopTier, "Goods", null));
 		}
-		if(v.chance(chance * .5F)) {
+		if(v.chance(chance * .3F)) {
 			buildings.add(new MarketBuilding(shopTier, "Trinkets", ItemGenerator.getSpawner(MissionItemSpawner.class)));
 		}
-		if(v.chance(chance * .5F)) {
+		if(v.chance(chance * .3F)) {
 			buildings.add(new MarketBuilding(shopTier, "Modules", ItemGenerator.getSpawner(ModuleItemSpawner.class)));
 		}
-		if(v.chance(chance * .5F)) {
+		if(v.chance(chance * .3F)) {
 			buildings.add(new MarketBuilding(shopTier, "Clothing", ItemGenerator.getSpawner(ClothingItemSpawner.class)));
 		}
-		if(v.chance(chance * .25F)) {
+		if(v.chance(chance * .1F)) {
 			buildings.add(new MarketBuilding(shopTier, "Supplies", ItemGenerator.getSpawner(ColonyItemSpawner.class)));
 		}
-		if(v.chance(chance * .25F)) {
+		if(v.chance(chance * .1F)) {
 			buildings.add(new MarketBuilding(shopTier, "Blueprints", ItemGenerator.getSpawner(BlueprintItemSpawner.class)));
 		}
 		return buildings;

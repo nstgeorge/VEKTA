@@ -6,6 +6,7 @@ import processing.sound.LowPass;
 import vekta.connection.message.Message;
 import vekta.context.PauseMenuContext;
 import vekta.context.World;
+import vekta.dungeon.Dungeon;
 import vekta.economy.Economy;
 import vekta.item.ColonyItem;
 import vekta.item.ModuleItem;
@@ -16,6 +17,7 @@ import vekta.menu.handle.MainMenuHandle;
 import vekta.menu.handle.MenuHandle;
 import vekta.menu.option.BackButton;
 import vekta.menu.option.CustomButton;
+import vekta.menu.option.DungeonRoomButton;
 import vekta.module.*;
 import vekta.module.station.SensorModule;
 import vekta.module.station.SolarArrayModule;
@@ -29,10 +31,7 @@ import vekta.object.ship.SpaceStation;
 import vekta.overlay.singleplayer.PlayerOverlay;
 import vekta.person.Person;
 import vekta.sound.SoundGroup;
-import vekta.spawner.EventGenerator;
-import vekta.spawner.MissionGenerator;
-import vekta.spawner.StoryGenerator;
-import vekta.spawner.WorldGenerator;
+import vekta.spawner.*;
 import vekta.spawner.item.BlueprintItemSpawner;
 import vekta.spawner.item.ClothingItemSpawner;
 import vekta.spawner.item.WeaponItemSpawner;
@@ -483,18 +482,22 @@ public class Singleplayer implements World, PlayerListener {
 				getPlayer().send("Debug mode enabled");
 			}
 			Menu menu = new Menu(getPlayer(), new BackButton(this), new MenuHandle());
-			menu.add(new CustomButton("Add Missions", m -> {
+			menu.add(new CustomButton("Give Missions", m -> {
 				for(int i = 0; i < 10; i++) {
 					MissionGenerator.createMission(getPlayer(), MissionGenerator.randomMissionPerson(), (int)v.random(5) + 1).start();
 				}
 				m.close();
 			}));
-			menu.add(new CustomButton("Enemy Factions & Disguises", m -> {
+			menu.add(new CustomButton("Enemy Factions & Give Disguise", m -> {
 				for(Faction faction : state.getFactions()) {
 					faction.setEnemy(getPlayer().getFaction());
 					getPlayer().getInventory().add(ClothingItemSpawner.createDisguiseItem(faction));
 				}
 				m.close();
+			}));
+			menu.add(new CustomButton("Enter Dungeon", m -> {
+				Dungeon dungeon = DungeonGenerator.createDungeon(PersonGenerator.randomHome());
+				new DungeonRoomButton(dungeon.getName(), dungeon.getStartRoom()).onSelect(m);
 			}));
 			menu.addDefault();
 			setContext(menu);

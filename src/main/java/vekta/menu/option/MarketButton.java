@@ -43,7 +43,7 @@ public class MarketButton implements ButtonOption {
 		Menu sub = new Menu(menu, new TradeMenuHandle(buying, getTo()));
 		for(Item item : offers.keySet()) {
 			if(getFrom().has(item) && (buying || building.canSell(item))) {
-				sub.add(new ItemTradeButton(buying, you, them, item, offers.get(item), true));
+				sub.add(new ItemTradeButton(buying, you, them, item, offers.get(item)));
 			}
 		}
 		sub.getOptions().sort(Comparator.comparingInt(opt -> {

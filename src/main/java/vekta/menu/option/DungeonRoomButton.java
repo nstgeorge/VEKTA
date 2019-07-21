@@ -26,6 +26,11 @@ public class DungeonRoomButton implements ButtonOption {
 	}
 
 	@Override
+	public boolean isEnabled() {
+		return room.isEnabled();
+	}
+
+	@Override
 	public void onSelect(Menu menu) {
 		room.setVisited(true);
 		Menu sub = new Menu(menu, new DungeonMenuHandle(room));
