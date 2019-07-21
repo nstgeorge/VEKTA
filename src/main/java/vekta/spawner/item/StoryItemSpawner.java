@@ -32,9 +32,10 @@ public class StoryItemSpawner implements ItemGenerator.ItemSpawner {
 
 	public static Item randomStoryItem() {
 		String type = v.random(STORY_ITEM_MAP.keySet());
-		return new StoryItem(type + " (" + Resources.generateString("item_story_decorator").replace("\\*", type) + ")", p -> {
+		return new StoryItem(Resources.generateString("item_story_decorator").replaceAll("\\*", type), p -> {
 			Story story = new Story();
 			story.addPart(StoryGenerator.createPart(story, v.random(STORY_ITEM_MAP.get(type))));
+			story.proceed(10);
 			return story;
 		});
 	}

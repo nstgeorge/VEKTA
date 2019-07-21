@@ -35,7 +35,7 @@ public class BatteryModule extends ShipModule implements Rechargeable {
 
 	@Override
 	public String getName() {
-		return "Battery v" + ((float)getBattery().getCapacity() / 100) + " (" + round(getBattery().getRatio() * 100) + "%)";
+		return "Battery v" + ((float)getBattery().getCapacity() / 100) + (getShip() != null ? " (" + round(getBattery().getRatio() * 100) + "%)" : "");
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public class BatteryModule extends ShipModule implements Rechargeable {
 	public void onMenu(Menu menu) {
 		if(menu.getHandle() instanceof LandingMenuHandle) {
 			LandingSite site = ((LandingMenuHandle)menu.getHandle()).getSite();
-			
+
 			if(site.getTerrain().isInhabited()) {
 				float price = .2F;
 				for(Settlement settlement : site.getTerrain().getSettlements()) {

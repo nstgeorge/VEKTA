@@ -6,12 +6,12 @@ import static vekta.Vekta.v;
 
 public enum ItemType {
 	JUNK(v.color(150, 200, 175), .1F, 1),
-	COMMON(v.color(220), 1, 2),
+	COMMON(v.color(220), 1, 1),
 	RARE(v.color(255, 200, 100), 5, 2),
 	LEGENDARY(v.color(200, 100, 255), 20, 2),
 	DANGEROUS(v.color(255, 100, 200), 4, 2),
 	MODULE(v.color(200, 255, 100), 10, 3),
-	RECIPE(v.color(100, 255, 200), 20, 5),
+	RECIPE(v.color(100, 255, 200), 20, 20),
 	MISSION(MissionStatus.READY.getColor(), 2, 5),
 	ECONOMY(v.color(100, 200, 255), 1, 2),
 	COLONY(v.color(170, 80, 220), 50, 10);

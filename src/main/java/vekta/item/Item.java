@@ -6,8 +6,7 @@ import vekta.menu.Menu;
 
 import java.io.Serializable;
 
-import static processing.core.PApplet.max;
-import static processing.core.PApplet.round;
+import static processing.core.PApplet.*;
 import static vekta.Vekta.v;
 
 public abstract class Item implements Serializable, Comparable<Item> {
@@ -23,7 +22,7 @@ public abstract class Item implements Serializable, Comparable<Item> {
 	}
 
 	public int randomPrice() {
-		return max(0, round(v.random(2, 5) * getType().getPriceModifier()));
+		return max(0, ceil(v.random(2, 5) * getType().getPriceModifier()));
 	}
 	
 	public void onAdd(Player player) {

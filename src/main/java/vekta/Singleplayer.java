@@ -13,6 +13,9 @@ import vekta.knowledge.ObservationLevel;
 import vekta.knowledge.StoryKnowledge;
 import vekta.menu.Menu;
 import vekta.menu.handle.MainMenuHandle;
+import vekta.menu.handle.MenuHandle;
+import vekta.menu.option.BackButton;
+import vekta.menu.option.CustomButton;
 import vekta.module.*;
 import vekta.module.station.SensorModule;
 import vekta.module.station.SolarArrayModule;
@@ -27,6 +30,7 @@ import vekta.overlay.singleplayer.PlayerOverlay;
 import vekta.person.Person;
 import vekta.sound.SoundGroup;
 import vekta.spawner.EventGenerator;
+import vekta.spawner.MissionGenerator;
 import vekta.spawner.StoryGenerator;
 import vekta.spawner.WorldGenerator;
 import vekta.spawner.item.BlueprintItemSpawner;
@@ -79,6 +83,8 @@ public class Singleplayer implements World, PlayerListener {
 	private final Counter eventCt = new Counter(3600 * 5).randomize(); // Occasional random events
 	private final Counter situationCt = new Counter(30).randomize(); // Situational events
 	private final Counter economyCt = new Counter(600).randomize(); // Economic progression
+
+	private boolean debugMode;
 
 	private PlayerOverlay overlay;
 
@@ -134,8 +140,6 @@ public class Singleplayer implements World, PlayerListener {
 		playerShip.setController(player);
 
 		populateWorld();
-
-		setupTesting(); // Temporary
 	}
 
 	public void cleanup() {
@@ -472,15 +476,28 @@ public class Singleplayer implements World, PlayerListener {
 	// Temp: debug key listener
 	@Override
 	public void keyPressed(KeyEvent event) {
-		//		if(v.key == '`') {
-		//			MissionGenerator.createMission(getPlayer(), MissionGenerator.randomMissionPerson(), (int)v.random(5) + 1).start();
-		//		}
 		if(v.key == '`') {
-			for(Faction faction : state.getFactions()) {
-				faction.setEnemy(getPlayer().getFaction());
-				getPlayer().getInventory().add(ClothingItemSpawner.createDisguiseItem(faction));
-				getPlayer().send("DEBUG: everyone is your enemy and you have disguises");
+			if(!debugMode) {
+				debugMode = true;
+				setupTesting();
+				getPlayer().send("Debug mode enabled");
 			}
+			Menu menu = new Menu(getPlayer(), new BackButton(this), new MenuHandle());
+			menu.add(new CustomButton("Add Missions", m -> {
+				for(int i = 0; i < 10; i++) {
+					MissionGenerator.createMission(getPlayer(), MissionGenerator.randomMissionPerson(), (int)v.random(5) + 1).start();
+				}
+				m.close();
+			}));
+			menu.add(new CustomButton("Enemy Factions & Disguises", m -> {
+				for(Faction faction : state.getFactions()) {
+					faction.setEnemy(getPlayer().getFaction());
+					getPlayer().getInventory().add(ClothingItemSpawner.createDisguiseItem(faction));
+				}
+				m.close();
+			}));
+			menu.addDefault();
+			setContext(menu);
 		}
 		World.super.keyPressed(event);
 	}

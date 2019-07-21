@@ -37,7 +37,7 @@ public class ShipwreckSpawner implements WorldGenerator.WorldSpawner {
 	public static LostShip createShipwreck(PVector heading, PVector pos) {
 		LostShip s = new LostShip(Resources.generateString("shipwreck"), heading, pos, new PVector());
 		s.getInventory().add(new ModuleItem(randomModule()));
-		ItemGenerator.addLoot(s.getInventory(), 3);
+		ItemGenerator.addLoot(s.getInventory(), 2);
 		return register(s);
 	}
 }
