@@ -8,6 +8,9 @@ import vekta.menu.option.RenameButton;
 import vekta.object.planet.BlackHole;
 
 public class BlackHoleTerrain extends Terrain {
+	public BlackHoleTerrain() {
+		addFeature("Treacherous");
+	}
 
 	@Override
 	public String getOverview() {

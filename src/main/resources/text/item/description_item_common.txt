@@ -14,7 +14,7 @@ Watch your fingers.
 Probably your only chance to own a *.
 It's actually a repurposed {item_noun} {item_modifier}. 
 We can't seem to get rid of this thing. 
-Why wouldn't you want a *?
+Why wouldn't you want this *?
 Yes, we realize it's a *, but by the same token it's a *!
 I bet you could get a good deal for this somewhere...eventually...
 We bought this from the sketchlords at {estate_common}. Instant regret. 

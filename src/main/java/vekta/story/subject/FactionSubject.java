@@ -14,7 +14,7 @@ public class FactionSubject implements StorySubject {
 	}
 
 	@Override
-	public String chooseFullName() {
+	public String getFullName() {
 		return getFaction().getName();
 	}
 }

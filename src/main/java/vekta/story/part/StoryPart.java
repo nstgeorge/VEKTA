@@ -35,4 +35,8 @@ public class StoryPart implements Serializable {
 		}
 		return StoryGenerator.createPart(story, v.random(getPaths()));
 	}
+	
+	public boolean isConclusion() {
+		return getPaths().isEmpty();
+	}
 }

@@ -11,6 +11,7 @@ butterfly knife
 spike
 pitchfork
 trident
+bayonet
 ballista
 tactical crossbow
 sharpened twig

@@ -1,6 +1,7 @@
 package vekta.terrain.building;
 
 import vekta.menu.Menu;
+import vekta.menu.option.CraftMenuButton;
 import vekta.terrain.LandingSite;
 import vekta.terrain.settlement.SettlementPart;
 
@@ -30,6 +31,6 @@ public class WorkshopBuilding implements SettlementPart {
 
 	@Override
 	public void setupMenu(Menu menu) {
-		// TODO implement
+		menu.add(new CraftMenuButton(getName()));
 	}
 }

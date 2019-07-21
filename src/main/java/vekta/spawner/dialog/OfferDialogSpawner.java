@@ -31,8 +31,8 @@ public class OfferDialogSpawner implements DialogGenerator.DialogSpawner {
 		int price = opinion.isPositive() ? 0 : (int)(item.randomPrice() * v.random(.25F, 1));
 
 		dialog.add(new ItemTradeButton(player.getInventory(), item, price));
-		if(price > 0) {
-			dialog.addResponse("No thanks.");
-		}
+		//		if(price > 0) {
+		//			dialog.addResponse("No thanks.");
+		//		}
 	}
 }

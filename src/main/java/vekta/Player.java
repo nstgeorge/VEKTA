@@ -3,9 +3,14 @@ package vekta;
 import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.knowledge.Knowledge;
+import vekta.knowledge.StoryKnowledge;
+import vekta.menu.Menu;
+import vekta.menu.handle.DialogMenuHandle;
 import vekta.mission.Mission;
 import vekta.object.ship.ModularShip;
 import vekta.overlay.singleplayer.Notification;
+import vekta.spawner.StoryGenerator;
+import vekta.story.Story;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -86,6 +91,28 @@ public final class Player extends Syncable<Player> {
 			public void onRemoveItem(Item item) {
 				buyPrices.remove(item);
 				item.onRemove(Player.this);
+			}
+
+			// TODO refactor
+			@Override
+			public void onMenu(Menu menu) {
+				if(menu.getHandle() instanceof DialogMenuHandle) {
+					DialogMenuHandle handle = (DialogMenuHandle)menu.getHandle();
+					if(!handle.getDialog().getType().equals("story")) {
+						for(StoryKnowledge knowledge : findKnowledge(StoryKnowledge.class)) {
+							Story story = knowledge.getStory();
+							for(String key : new ArrayList<>(story.getSubjects().keySet())) {
+								String postfix = " person";
+								if(key.endsWith(postfix) && !knowledge.hasAskedForDetails(key) && handle.getPerson().getFullName().equals(story.getSubject(key).getFullName())) {
+									String name = key.substring(0, key.length() - postfix.length());
+									String[] data = StoryGenerator.chooseString(story, Resources.getStrings("story_dialog_map")).replace("\\*", name).split(":", 2);
+									String text = StoryGenerator.parseSubjects(story, data[1].trim());
+									handle.getDialog().add(data[0].trim(), handle.getPerson().createDialog("story", text));
+								}
+							}
+						}
+					}
+				}
 			}
 		});
 	}
@@ -277,7 +304,7 @@ public final class Player extends Syncable<Player> {
 			super.onSync(data);
 		}
 	}
-	
+
 	public interface Attribute {
 	}
 }

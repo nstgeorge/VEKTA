@@ -10,10 +10,7 @@ import java.util.*;
 public class Story extends Syncable<Story> {
 	private final @Sync List<StoryPart> parts = new ArrayList<>();
 	private final @Sync Map<String, StorySubject> subjects = new HashMap<>();
-
-	public Story() {
-	}
-
+	
 	public List<StoryPart> getParts() {
 		return parts;
 	}
@@ -29,14 +26,22 @@ public class Story extends Syncable<Story> {
 		return subjects;
 	}
 
+	public boolean hasSubject(String key) {
+		return getSubjects().containsKey(key);
+	}
+
+	public StorySubject getSubject(String key) {
+		return getSubjects().get(key);
+	}
+
 	@SuppressWarnings("unchecked")
-	public <T extends StorySubject> T getSubject(String key) {
-		StorySubject subject = getSubjects().get(key);
+	public <T extends StorySubject> T getSubject(String key, Class<T> subjectClass) {
+		StorySubject subject = getSubject(key);
 		try {
 			return (T)subject;
 		}
 		catch(ClassCastException e) {
-			throw new RuntimeException("Wrong story subject type for key: `" + key + "` (found " + subject + ")");
+			throw new RuntimeException("Wrong story subject type for key: `" + key + "` (expected " + subjectClass.getName() + "; found " + subject + ")");
 		}
 	}
 

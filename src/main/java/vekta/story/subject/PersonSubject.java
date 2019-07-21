@@ -14,7 +14,7 @@ public class PersonSubject implements StorySubject {
 	}
 
 	@Override
-	public String chooseFullName() {
+	public String getFullName() {
 		return getPerson().getFullName();
 	}
 

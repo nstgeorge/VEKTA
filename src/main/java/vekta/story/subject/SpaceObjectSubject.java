@@ -14,7 +14,7 @@ public class SpaceObjectSubject implements StorySubject {
 	}
 
 	@Override
-	public String chooseFullName() {
+	public String getFullName() {
 		return getSpaceObject().getName();
 	}
 }

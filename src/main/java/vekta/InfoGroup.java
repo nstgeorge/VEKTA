@@ -1,25 +1,28 @@
 package vekta;
 
+import vekta.display.Layout;
+import vekta.display.TextDisplay;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class InfoGroup implements Iterable<String> {
-	private final List<String> info = new ArrayList<>();
+	private final List<String> lines = new ArrayList<>();
 
 	public InfoGroup() {
 	}
 
 	public void clear() {
-		info.clear();
+		lines.clear();
 	}
 
 	public void addDescription(String detail) {
-		info.add(detail);
+		lines.add(detail);
 	}
 
 	public void addKey(KeyBinding key, String value) {
-		info.add("[" + Settings.getKeyText(key) + "] " + value);
+		lines.add("[" + Settings.getKeyText(key) + "] " + value);
 	}
 
 	public void addStat(String key, int value) {
@@ -31,15 +34,26 @@ public class InfoGroup implements Iterable<String> {
 	}
 
 	public void addStat(String key, String value) {
-		info.add(key + ": " + value);
+		lines.add(key + ": " + value);
 	}
 
 	public void addTrait(String trait) {
-		info.add("* " + trait);
+		lines.add("* " + trait);
+	}
+	
+	public void addAll(InfoGroup other) {
+		lines.addAll(other.lines);
+	}
+
+	public void onLayout(Layout layout) {
+		// TODO: improve
+		for(String line : lines) {
+			layout.add(new TextDisplay(line));
+		}
 	}
 
 	@Override
 	public Iterator<String> iterator() {
-		return info.iterator();
+		return lines.iterator();
 	}
 }

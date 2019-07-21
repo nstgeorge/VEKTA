@@ -56,9 +56,7 @@ public class JettisonButton implements ButtonOption, LayoutBuilder {
 		InfoGroup info = new InfoGroup();
 		info.addStat("Mass", item.getMass());
 		item.onInfo(info);
-		for(String line : info) {
-			layout.add(new TextDisplay(line));
-		}
+		info.onLayout(layout);
 
 		layout.add(new TextDisplay(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to " + getSelectVerb()))
 				.customize().color(100);

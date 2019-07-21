@@ -49,7 +49,7 @@ public class MissionItem extends Item implements MissionIssuer {
 
 	public Mission createMission(Player player) {
 		activated = true;
-		Mission mission = provider.createMission(player);
+		Mission mission = provider.provide(player);
 		Objective objective = new KeepItemObjective(this);
 		if(v.chance(.1F)) {
 			objective.optional();
@@ -88,6 +88,6 @@ public class MissionItem extends Item implements MissionIssuer {
 	}
 
 	public interface MissionProvider extends Serializable {
-		Mission createMission(Player player);
+		Mission provide(Player player);
 	}
 }

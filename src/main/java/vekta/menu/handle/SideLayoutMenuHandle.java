@@ -46,6 +46,11 @@ public class SideLayoutMenuHandle extends MenuHandle {
 	}
 
 	@Override
+	public void init(Menu menu) {
+		menu.addSelectListener(opt -> updateLayout(menu));
+	}
+
+	@Override
 	public void focus(Menu menu) {
 		super.focus(menu);
 

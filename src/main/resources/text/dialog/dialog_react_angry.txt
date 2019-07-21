@@ -5,3 +5,4 @@
 ! Too far! Actually, no that was pretty funny. 
 ! Don't make me do to you what I did to {person}... *Let's not do that.
 ! Security! *:call_security Uh oh.
+| They stare at you, daring you to continue. *Okay, I'll leave now. *:ask_leave Why the long face?

@@ -7,17 +7,26 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class BlueprintItem extends Item {
-	private final String resultName;
+	private final String name;
+	private final ItemType type;
 	private final ItemProvider provider;
 	private final ItemCategory[] materials;
 
-	public BlueprintItem(String resultName, ItemProvider provider, ItemCategory[] materials) {
-		this.resultName = resultName;
+	public BlueprintItem(String name, ItemType type, ItemProvider provider, ItemCategory[] materials) {
+		this.name = name;
+		this.type = type;
 		this.provider = provider;
 		this.materials = materials;
+	}
+
+	public String getResultName() {
+		return name;
+	}
+
+	public ItemType getResultType() {
+		return type;
 	}
 
 	public List<Item> findMaterials(Inventory inv) {
@@ -59,14 +68,20 @@ public class BlueprintItem extends Item {
 
 	@Override
 	public String getName() {
-		return "Blueprint (" + resultName + ")";
+		return "Blueprint (" + getResultName() + ")";
 	}
 
 	@Override
 	public void onInfo(InfoGroup info) {
-		info.addDescription("Materials: " + Arrays.stream(getMaterials())
-				.map(ItemCategory::getName)
-				.collect(Collectors.joining(", ")));
+		//		info.addDescription("Materials: " + Arrays.stream(getMaterials())
+		//				.map(ItemCategory::getName)
+		//				.collect(Collectors.joining(", ")));
+
+		for(ItemCategory material : getMaterials()) {
+			info.addTrait(material.getName());
+		}
+
+		//		getPrototype().onInfo(info);
 	}
 
 	public interface ItemProvider extends Serializable {

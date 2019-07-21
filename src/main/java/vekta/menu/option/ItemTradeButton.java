@@ -103,11 +103,8 @@ public class ItemTradeButton implements ButtonOption, LayoutBuilder {
 		InfoGroup info = new InfoGroup();
 		info.addStat("Mass", item.getMass());
 		item.onInfo(info);
-		for(String line : info) {
-			// TODO: convert to InfoDisplay class
-			layout.add(new TextDisplay(line));
-		}
-
+		
+		info.onLayout(layout);
 		layout.add(new TextDisplay(moneyString(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to " + getSelectVerb(), price)))
 				.customize().color(100);
 	}

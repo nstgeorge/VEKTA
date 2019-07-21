@@ -44,6 +44,6 @@ public class BlueprintItemSpawner implements ItemGenerator.ItemSpawner {
 
 	public static BlueprintItem randomModuleBlueprint() {
 		String name = v.random(MODULE_MAP.keySet());
-		return new BlueprintItem(name, (p, i) -> new ModuleItem(ModuleItemSpawner.findModule(name).createVariant()), MODULE_MAP.get(name));
+		return new BlueprintItem(name, ItemType.MODULE, (p, i) -> new ModuleItem(ModuleItemSpawner.findModule(name).createVariant()), MODULE_MAP.get(name));
 	}
 }

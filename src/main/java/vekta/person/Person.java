@@ -114,7 +114,11 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 	}
 
 	public Dialog createDialog(String type) {
-		String[] parts = Resources.generateString("dialog_" + type).split("\\*");
+		return createDialog(type, Resources.generateString("dialog_" + type));
+	}
+
+	public Dialog createDialog(String type, String data) {
+		String[] parts = data.split("\\*");
 		Personality personality = getPersonality();
 
 		String text = parts[0].trim();

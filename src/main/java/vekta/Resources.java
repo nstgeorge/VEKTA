@@ -122,7 +122,10 @@ public final class Resources {
 	}
 
 	public static String generateString(String key) {
-		String string = v.random(getStrings(key));
+		return parseString(v.random(getStrings(key)));
+	}
+
+	public static String parseString(String string) {
 		int openIndex, closeIndex;
 		while((openIndex = string.indexOf(REF_BEFORE)) != -1 && (closeIndex = string.indexOf(REF_AFTER)) > openIndex) {
 			string = string.substring(0, openIndex)

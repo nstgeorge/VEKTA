@@ -1,0 +1,4 @@
+{item_adj_common} *
+{item_adj_rare} *
+{item_adj_mission} *
+{person}'s *

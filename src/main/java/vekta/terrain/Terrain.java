@@ -48,7 +48,6 @@ public abstract class Terrain extends Syncable<Terrain> {
 	public abstract String getOverview();
 
 	public void setup(LandingSite site) {
-
 	}
 
 	public abstract void setupLandingMenu(LandingSite site, Menu menu);

@@ -1,9 +1,8 @@
 {firstname}
-{firstname} {firstname}
 {firstname} {lastname}
 {person_adj} {firstname}
-Lord {firstname} {lastname}
-Sir {firstname} {lastname}
+Lord {firstname}
+Sir {firstname}
 Big {firstname}
 Little {firstname}
 Mr. {firstname}

@@ -1,0 +1,1 @@
+{item_adj_common} {item_noun_junk}

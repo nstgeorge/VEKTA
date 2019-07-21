@@ -3,9 +3,9 @@ package vekta.story.subject;
 import java.io.Serializable;
 
 public interface StorySubject extends Serializable {
-	String chooseFullName();
+	String getFullName();
 
 	default String chooseShortName() {
-		return chooseFullName();
+		return getFullName();
 	}
 }
