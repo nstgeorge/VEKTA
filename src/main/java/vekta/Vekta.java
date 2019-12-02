@@ -70,12 +70,18 @@ public class Vekta extends PApplet {
 
 	@Override
 	public void settings() {
-		fullScreen(P2D);
 		pixelDensity(displayDensity());
+		fullScreen(JAVA2D);
 	}
 
 	public void setup() {
 		v = this;
+		
+		background(0);
+		frameRate(60);
+		noCursor();
+		
+		hint(DISABLE_DEPTH_TEST);
 
 		UI_COLOR = color(0, 255, 0);
 		DANGER_COLOR = v.color(220, 100, 0);
@@ -83,12 +89,6 @@ public class Vekta extends PApplet {
 
 		Settings.init();
 		Resources.init();
-
-		background(0);
-		frameRate(60);
-		noCursor();
-
-		hint(DISABLE_DEPTH_TEST);
 
 		textMode(SHAPE);
 
@@ -120,7 +120,7 @@ public class Vekta extends PApplet {
 		fill(255);
 		textAlign(LEFT);
 		textSize(16);
-		text("FPS = " + frameRate, 50, height - 20);
+		text("FPS = " + round(frameRate), 50, height - 20);
 	}
 
 	@Override
