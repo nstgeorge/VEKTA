@@ -32,12 +32,12 @@ public class DestroyAroundObjective extends Objective {
 	@Override
 	public SpaceObject getSpaceObject() {
 		if(orbit != null && orbit.isDestroyed()) {
-//			orbit = null;
+			//			orbit = null;
 			cancel();
 		}
 		return orbit;
 	}
-
+	
 	@Override
 	public void onDestroyObject(SpaceObject object) {
 		SpaceObject orbit = getSpaceObject();

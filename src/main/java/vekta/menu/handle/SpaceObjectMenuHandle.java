@@ -1,5 +1,6 @@
 package vekta.menu.handle;
 
+import vekta.KeyBinding;
 import vekta.menu.Menu;
 import vekta.object.SpaceObject;
 
@@ -8,16 +9,20 @@ import static vekta.Vekta.v;
 /**
  * Menu renderer for a specific SpaceObject
  */
-public class ObjectMenuHandle extends MenuHandle {
-
+public class SpaceObjectMenuHandle extends MenuHandle {
 	private final SpaceObject target;
 
-	public ObjectMenuHandle(SpaceObject target) {
+	public SpaceObjectMenuHandle(SpaceObject target) {
 		this.target = target;
 	}
 
 	public SpaceObject getSpaceObject() {
 		return target;
+	}
+
+	@Override
+	public KeyBinding getShortcutKey() {
+		return KeyBinding.SHIP_MENU;
 	}
 
 	@Override

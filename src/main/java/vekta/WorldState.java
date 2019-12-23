@@ -19,6 +19,7 @@ import static vekta.Vekta.v;
 public final class WorldState implements Serializable {
 	private Player player;
 	private float zoom = 1;
+	private float maxZoom = Float.POSITIVE_INFINITY;
 
 	private float time;
 
@@ -59,6 +60,14 @@ public final class WorldState implements Serializable {
 
 	public void setZoom(float zoom) {
 		this.zoom = zoom;
+	}
+
+	public float getMaxZoom() {
+		return maxZoom;
+	}
+
+	public void setMaxZoom(float maxZoom) {
+		this.maxZoom = maxZoom;
 	}
 
 	public float getTime() {

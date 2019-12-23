@@ -2,7 +2,7 @@ package vekta.menu.option;
 
 import vekta.Player;
 import vekta.menu.Menu;
-import vekta.menu.handle.ObjectMenuHandle;
+import vekta.menu.handle.SpaceObjectMenuHandle;
 
 import static vekta.Vekta.setContext;
 
@@ -29,7 +29,7 @@ public class PlayerButton implements ButtonOption {
 
 	@Override
 	public void onSelect(Menu menu) {
-		Menu sub = new Menu(menu.getPlayer(), menu.getDefault(), new ObjectMenuHandle(player.getShip()));
+		Menu sub = new Menu(menu.getPlayer(), menu.getDefault(), new SpaceObjectMenuHandle(player.getShip()));
 		sub.add(new TargetButton(player.getShip()));
 		if(menu.getPlayer().getCurrentMission() != null) {
 			sub.add(new CustomButton("Share Mission", m -> m.getPlayer().getCurrentMission().share(getPlayer()))

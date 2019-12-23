@@ -14,6 +14,7 @@ public class OceanMenuHandle extends MenuHandle {
 			{220, 310, .2F},
 			{50, 140, .15F},
 			{90, -120, .1F},
+			{30, 370, .05F},
 	};
 
 	private final LandingSite site;

@@ -7,12 +7,13 @@ import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 import vekta.object.ship.ModularShip;
 
+import static vekta.Vekta.getWorld;
 import static vekta.Vekta.min;
 
 public class TractorBeamModule extends ShipModule implements Targeter {
-	private static final float BASE_STRENGTH = 100;
-	private static final float MAX_FORCE = 1F;
-	private static final float VELOCITY_DECAY = .95F;
+	private static final float BASE_STRENGTH = 1;
+	private static final float MAX_FORCE = 1;
+	private static final float VELOCITY_DECAY = .05F;
 
 	private final float force;
 
@@ -83,12 +84,12 @@ public class TractorBeamModule extends ShipModule implements Targeter {
 	@Override
 	public void onUpdate() {
 		ModularShip ship = getShip();
-		SpaceObject t = getTarget();
-		if(t != null && ship.consumeEnergyOverTime(.2F * PER_SECOND)) {
+		SpaceObject target = getTarget();
+		if(target != null && ship.consumeEnergyOverTime(.2F * PER_SECOND)) {
 			float force = getForce() * BASE_STRENGTH;
-			PVector dir = ship.getPosition().sub(t.getPosition());
-			PVector vel = dir.mult(min(MAX_FORCE, force / dir.magSq()));
-			t.setVelocity(vel.add(t.getVelocity().mult(VELOCITY_DECAY)));
+			PVector dir = target.relativePosition(ship);
+			PVector vel = dir.mult(min(MAX_FORCE, force / dir.mag()));
+			target.addVelocity(vel.add(target.relativeVelocity(ship).mult(getWorld().getTimeScale() * VELOCITY_DECAY)));
 		}
 	}
 

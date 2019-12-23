@@ -9,6 +9,7 @@ import vekta.terrain.settlement.Settlement;
 
 import java.util.stream.Collectors;
 
+import static processing.core.PApplet.round;
 import static vekta.Vekta.distanceString;
 import static vekta.Vekta.massString;
 
@@ -49,6 +50,8 @@ public class TerrestrialKnowledge extends SpaceObjectKnowledge {
 
 		// Survey info
 		if(ObservationLevel.SCANNED.isAvailableFrom(getLevel())) {
+			aware.add(new TextDisplay("Density: " + round(getSpaceObject().getDensity() * 100) / 100));
+
 			Layout scanned = layout.add(new VerticalLayout());
 
 			// Terrain features

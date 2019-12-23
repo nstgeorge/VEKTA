@@ -23,7 +23,7 @@ public final class Player extends Syncable<Player> {
 	private /*@Sync */ ModularShip currentShip;
 
 	private final List<PlayerListener> listeners = new ArrayList<>();
-	private final Collection<String> attributes = new ArrayList<>();
+	private final Collection<Class<? extends Attribute>> attributes = new ArrayList<>();
 
 	private final List<Mission> missions = new ArrayList<>();
 	private Mission currentMission;
@@ -247,18 +247,18 @@ public final class Player extends Syncable<Player> {
 	}
 
 	public boolean hasAttribute(Class<? extends Attribute> attribute) {
-		return attributes.contains(attribute.getSimpleName());
+		return attributes.contains(attribute);
 	}
 
 	public void addAttribute(Class<? extends Attribute> attribute) {
 		if(!hasAttribute(attribute)) {
-			attributes.add(attribute.getSimpleName());
+			attributes.add(attribute);
 			syncChanges();
 		}
 	}
 
 	public void removeAttribute(Class<? extends Attribute> attribute) {
-		attributes.remove(attribute.getSimpleName());
+		attributes.remove(attribute);
 		syncChanges();
 	}
 

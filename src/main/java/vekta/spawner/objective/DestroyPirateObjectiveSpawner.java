@@ -17,7 +17,8 @@ import static vekta.Vekta.v;
 public class DestroyPirateObjectiveSpawner implements MissionGenerator.ObjectiveSpawner {
 	@Override
 	public float getWeight() {
-		return 1;
+//		return 1;
+		return 0; // Disabled for the time being
 	}
 
 	@Override

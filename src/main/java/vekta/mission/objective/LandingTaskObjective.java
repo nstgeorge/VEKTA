@@ -6,15 +6,15 @@ import vekta.menu.option.CustomButton;
 import vekta.object.SpaceObject;
 import vekta.terrain.LandingSite;
 
-public class TaskObjective extends Objective {
+public class LandingTaskObjective extends Objective {
 	private final String name;
 	private final SpaceObject object;
 
-	public TaskObjective(String name) {
+	public LandingTaskObjective(String name) {
 		this(name, null);
 	}
 
-	public TaskObjective(String name, SpaceObject object) {
+	public LandingTaskObjective(String name, SpaceObject object) {
 		this.name = name;
 		this.object = object;
 	}

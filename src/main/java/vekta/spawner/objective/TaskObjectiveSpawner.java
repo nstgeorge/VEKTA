@@ -5,7 +5,7 @@ import vekta.Resources;
 import vekta.mission.Mission;
 import vekta.mission.objective.LandAtObjective;
 import vekta.mission.objective.Objective;
-import vekta.mission.objective.TaskObjective;
+import vekta.mission.objective.LandingTaskObjective;
 import vekta.mission.reward.WarReward;
 import vekta.spawner.MissionGenerator;
 import vekta.terrain.LandingSite;
@@ -47,6 +47,6 @@ public class TaskObjectiveSpawner implements MissionGenerator.ObjectiveSpawner {
 			}
 		}
 		String task = Resources.generateString("task_" + type);
-		return new TaskObjective(task, site.getParent());
+		return new LandingTaskObjective(task, site.getParent());
 	}
 }

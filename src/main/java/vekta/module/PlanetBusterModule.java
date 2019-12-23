@@ -11,7 +11,7 @@ import static vekta.Vekta.getWorld;
 import static vekta.Vekta.register;
 
 public class PlanetBusterModule extends WeaponModule {
-	private boolean used; // Allow recharging
+	private boolean used; // TODO: allow recharging
 
 	public PlanetBusterModule() {
 	}

@@ -6,7 +6,7 @@ import vekta.KeyBinding;
 import vekta.Resources;
 import vekta.item.Item;
 import vekta.menu.Menu;
-import vekta.menu.handle.ObjectMenuHandle;
+import vekta.menu.handle.SpaceObjectMenuHandle;
 import vekta.menu.option.CustomButton;
 import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
@@ -127,7 +127,7 @@ public class WormholeModule extends ShipModule {
 			return;
 		}
 
-		if(menu.getHandle() instanceof ObjectMenuHandle && ((ObjectMenuHandle)menu.getHandle()).getSpaceObject() == menu.getPlayer().getShip()) {
+		if(menu.getHandle() instanceof SpaceObjectMenuHandle && ((SpaceObjectMenuHandle)menu.getHandle()).getSpaceObject() == menu.getPlayer().getShip()) {
 			menu.add(new CustomButton("Teleport (" + getTarget().getName() + ")", m -> {
 				m.close();
 				teleport(m.getPlayer().getShip());

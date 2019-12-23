@@ -11,7 +11,7 @@ import vekta.connection.message.*;
 import vekta.context.TextInputContext;
 import vekta.menu.Menu;
 import vekta.menu.handle.MenuHandle;
-import vekta.menu.handle.ObjectMenuHandle;
+import vekta.menu.handle.SpaceObjectMenuHandle;
 import vekta.menu.option.*;
 import vekta.menu.option.CustomButton;
 import vekta.menu.option.PlayerButton;
@@ -192,7 +192,7 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		//			objective.onStart(mission);
 		//		}
 
-		Menu menu = new Menu(getPlayer(), new BackButton(getContext()), new ObjectMenuHandle(sender.getShip()));
+		Menu menu = new Menu(getPlayer(), new BackButton(getContext()), new SpaceObjectMenuHandle(sender.getShip()));
 		menu.add(new MissionButton(mission));
 		menu.addDefault();
 		setContext(menu);
@@ -323,11 +323,11 @@ public class Multiplayer extends Singleplayer implements ConnectionListener {
 		super.onMenu(menu);
 
 		////
-		if(menu.getHandle() instanceof ObjectMenuHandle && ((ObjectMenuHandle)menu.getHandle()).getSpaceObject() != getPlayerShip()) {
-			println("!!!!! " + getPlayerShip().getName() + " " + ((ObjectMenuHandle)menu.getHandle()).getSpaceObject());///
+		if(menu.getHandle() instanceof SpaceObjectMenuHandle && ((SpaceObjectMenuHandle)menu.getHandle()).getSpaceObject() != getPlayerShip()) {
+			println("!!!!! " + getPlayerShip().getName() + " " + ((SpaceObjectMenuHandle)menu.getHandle()).getSpaceObject());///
 		}
 
-		if(menu.getHandle() instanceof ObjectMenuHandle && ((ObjectMenuHandle)menu.getHandle()).getSpaceObject() == getPlayerShip()) {
+		if(menu.getHandle() instanceof SpaceObjectMenuHandle && ((SpaceObjectMenuHandle)menu.getHandle()).getSpaceObject() == getPlayerShip()) {
 			println(playerMap);////
 			if(!playerMap.isEmpty()) {
 				menu.add(new CustomButton("Players", m -> {

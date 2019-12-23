@@ -9,7 +9,7 @@ import vekta.item.ModuleItem;
 import vekta.knowledge.ObservationLevel;
 import vekta.menu.Menu;
 import vekta.menu.handle.LandingMenuHandle;
-import vekta.menu.handle.ObjectMenuHandle;
+import vekta.menu.handle.SpaceObjectMenuHandle;
 import vekta.menu.option.*;
 import vekta.module.Module;
 import vekta.module.ModuleType;
@@ -383,7 +383,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	}
 
 	public void openShipMenu() {
-		Menu menu = new Menu(getController(), new BackButton(getWorld()), new ObjectMenuHandle(this));
+		Menu menu = new Menu(getController(), new BackButton(getWorld()), new SpaceObjectMenuHandle(this));
 		menu.add(new PlayerKnowledgeButton());
 		menu.add(new InventoryButton(getInventory()));
 		menu.add(new LoadoutMenuButton(this));
@@ -419,7 +419,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			Player player = getController();
 			if(s instanceof Ship) {
 				this.setLanding(false);
-				Menu menu = new Menu(player, new ShipUndockButton(this, getWorld()), new ObjectMenuHandle(s));
+				Menu menu = new Menu(player, new ShipUndockButton(this, getWorld()), new SpaceObjectMenuHandle(s));
 				((Ship)s).setupDockingMenu(menu);
 				menu.addDefault();
 				setContext(menu);

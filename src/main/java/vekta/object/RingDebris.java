@@ -5,7 +5,7 @@ import vekta.Player;
 import vekta.RenderLevel;
 import vekta.item.Inventory;
 import vekta.menu.Menu;
-import vekta.menu.handle.ObjectMenuHandle;
+import vekta.menu.handle.SpaceObjectMenuHandle;
 import vekta.menu.option.ShipUndockButton;
 import vekta.object.planet.Planet;
 import vekta.object.ship.Damageable;
@@ -92,7 +92,7 @@ public class RingDebris extends Planet implements Damageable {
 			if(ship.hasController() && ship.isDockable(this)) {
 				ship.dock(this);
 				Player player = ship.getController();
-				Menu menu = new Menu(player, new ShipUndockButton(ship, getWorld()), new ObjectMenuHandle(this));
+				Menu menu = new Menu(player, new ShipUndockButton(ship, getWorld()), new SpaceObjectMenuHandle(this));
 				menu.addDefault();
 				setContext(menu);
 				applyContext();

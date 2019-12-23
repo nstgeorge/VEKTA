@@ -25,6 +25,8 @@ public interface World extends Context {
 	void setAutoZoom(float zoom);
 
 	void setAutoZoomDirection(boolean outward);
+	
+	void setMaxZoom(float maxZoom);
 
 	default void schedule(Callback callback) {
 		schedule(0, callback);

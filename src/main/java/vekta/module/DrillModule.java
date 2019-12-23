@@ -4,7 +4,7 @@ import vekta.InfoGroup;
 import vekta.item.Inventory;
 import vekta.menu.Menu;
 import vekta.menu.handle.LandingMenuHandle;
-import vekta.menu.handle.ObjectMenuHandle;
+import vekta.menu.handle.SpaceObjectMenuHandle;
 import vekta.menu.option.ExtractMenuButton;
 import vekta.menu.option.LootMenuButton;
 import vekta.object.RingDebris;
@@ -62,8 +62,8 @@ public class DrillModule extends ShipModule {
 				menu.add(new ExtractMenuButton(site, getShip().getInventory(), round(getEfficiency() * 2)));
 			}
 		}
-		else if(menu.getHandle() instanceof ObjectMenuHandle) {
-			SpaceObject s = ((ObjectMenuHandle)menu.getHandle()).getSpaceObject();
+		else if(menu.getHandle() instanceof SpaceObjectMenuHandle) {
+			SpaceObject s = ((SpaceObjectMenuHandle)menu.getHandle()).getSpaceObject();
 
 			if(s instanceof RingDebris) {
 				Inventory inv = ((RingDebris)s).getInventory();

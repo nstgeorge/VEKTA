@@ -85,8 +85,6 @@ public class Singleplayer implements World, PlayerListener {
 	private final Counter situationCt = new Counter(30).randomize(); // Situational events
 	private final Counter economyCt = new Counter(600).randomize(); // Economic progression
 
-	private boolean debugMode;
-
 	private PlayerOverlay overlay;
 
 	public Singleplayer() {
@@ -251,7 +249,7 @@ public class Singleplayer implements World, PlayerListener {
 		if(zoom != prevZoom) {
 			onZoomChange(zoom);
 		}
-		state.setZoom(max(MIN_ZOOM_LEVEL, min(MAX_ZOOM_LEVEL, zoom)));
+		state.setZoom(max(MIN_ZOOM_LEVEL, min(MAX_ZOOM_LEVEL, state.getMaxZoom(), zoom)));
 		if(zoom > prevZoom) {
 			lastZoomOutward = true;
 		}
@@ -271,6 +269,11 @@ public class Singleplayer implements World, PlayerListener {
 	@Override
 	public void setAutoZoomDirection(boolean outward) {
 		lastZoomOutward = outward;
+	}
+
+	@Override
+	public void setMaxZoom(float maxZoom) {
+		state.setMaxZoom(maxZoom);
 	}
 
 	@Override
@@ -334,8 +337,8 @@ public class Singleplayer implements World, PlayerListener {
 				// Increment count for object's render level
 				objectCounts[s.getDespawnLevel().ordinal()]++;
 
+				// Occasionally clean up distant objects
 				if(cleanup) {
-					// Clean up distant objects
 					float despawnRadius = WorldGenerator.getRadius(s.getDespawnLevel());
 					if(playerShip.getPosition().sub(s.getPosition()).magSq() >= sq(despawnRadius)) {
 						s.despawn();
@@ -344,12 +347,12 @@ public class Singleplayer implements World, PlayerListener {
 				}
 			}
 
+			// Occasionally update targets
 			if(targeting) {
-				// Update Targeter instances
 				s.updateTargets();
 			}
 
-			s.applyGravity(state.getGravityObjects());
+			// Move to next position
 			s.applyVelocity(s.getVelocityReference());
 		}
 
@@ -360,6 +363,9 @@ public class Singleplayer implements World, PlayerListener {
 			if(state.isRemoving(s)) {
 				continue;
 			}
+
+			// Move towards gravitational objects
+			s.applyGravity(state.getGravityObjects());
 
 			// Update object
 			s.update(level);
@@ -497,12 +503,15 @@ public class Singleplayer implements World, PlayerListener {
 		// Overridden by Multiplayer
 	}
 
+	private static class DebugAttribute implements Player.Attribute {
+	}
+
 	// Temp: debug key listener
 	@Override
 	public void keyPressed(KeyEvent event) {
 		if(v.key == '`') {
-			if(!debugMode) {
-				debugMode = true;
+			if(!getPlayer().hasAttribute(DebugAttribute.class)) {
+				getPlayer().addAttribute(DebugAttribute.class);
 				setupTesting();
 				getPlayer().send("Debug mode enabled");
 			}
@@ -564,9 +573,7 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public void mouseWheel(int amount) {
-		float prevZoom = state.getZoom();
-		float zoom = max(MIN_ZOOM_LEVEL, min(MAX_ZOOM_LEVEL, prevZoom * (1 + amount * ZOOM_FACTOR * Settings.getFloat("zoomSpeed"))));
-		setZoom(zoom);
+		setZoom(state.getZoom() * (1 + amount * ZOOM_FACTOR * Settings.getFloat("zoomSpeed")));
 	}
 
 	@Override
