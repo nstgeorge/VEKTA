@@ -75,6 +75,7 @@ Rusty
 Lopsided
 Unwieldy
 Jagged
+Half-Eaten
 Splintery
 Redneck
 Spare
@@ -82,3 +83,4 @@ Redundant
 Damaged
 Fragile
 Squishy
+Refurbished

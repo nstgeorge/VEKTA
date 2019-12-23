@@ -29,6 +29,10 @@ public class ExchangeBuilding implements SettlementPart {
 	}
 
 	@Override
+	public void cleanup() {
+	}
+
+	@Override
 	public void setupMenu(Menu menu) {
 		menu.add(new BondMenuButton());
 	}

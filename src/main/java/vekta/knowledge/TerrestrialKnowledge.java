@@ -5,12 +5,12 @@ import vekta.display.Layout;
 import vekta.display.TextDisplay;
 import vekta.display.VerticalLayout;
 import vekta.object.planet.TerrestrialPlanet;
-import vekta.overlay.singleplayer.TelemetryOverlay;
 import vekta.terrain.settlement.Settlement;
 
 import java.util.stream.Collectors;
 
 import static vekta.Vekta.distanceString;
+import static vekta.Vekta.massString;
 
 public class TerrestrialKnowledge extends SpaceObjectKnowledge {
 	private final TerrestrialPlanet planet;
@@ -44,7 +44,7 @@ public class TerrestrialKnowledge extends SpaceObjectKnowledge {
 		Layout aware = layout.add(new VerticalLayout());
 		aware.customize().color(100).spacing(layout.getStyle().spacing() / 2);
 
-		aware.add(new TextDisplay("Mass: " + TelemetryOverlay.getMassString(getSpaceObject().getMass())));
+		aware.add(new TextDisplay("Mass: " + massString(getSpaceObject().getMass())));
 		aware.add(new TextDisplay("Radius: " + distanceString(getSpaceObject().getRadius())));
 
 		// Survey info

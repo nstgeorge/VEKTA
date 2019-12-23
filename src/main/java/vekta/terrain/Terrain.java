@@ -1,5 +1,6 @@
 package vekta.terrain;
 
+import vekta.Sync;
 import vekta.Syncable;
 import vekta.menu.Menu;
 import vekta.terrain.settlement.Settlement;
@@ -13,7 +14,10 @@ import java.util.List;
  * An abstract representation of planetary terrain.
  */
 public abstract class Terrain extends Syncable<Terrain> {
-	private final List<String> features = new ArrayList<>();
+	private final @Sync List<String> features = new ArrayList<>();
+	private final @Sync List<Settlement> settlements = new ArrayList<>();
+
+	private @Sync LandingSite site;
 
 	public Terrain() {
 	}
@@ -30,27 +34,60 @@ public abstract class Terrain extends Syncable<Terrain> {
 		if(!getFeatures().contains(feature)) {
 			getFeatures().add(feature);
 			Collections.sort(features);
+			syncChanges();
 		}
 	}
 
 	public void remove(String feature) {
-		getFeatures().remove(feature);
+		if(getFeatures().contains(feature)) {
+			getFeatures().remove(feature);
+			syncChanges();
+		}
 	}
 
 	public boolean isInhabited() {
-		return false;
+		return !getSettlements().isEmpty();
 	}
 
 	public List<Settlement> getSettlements() {
-		return Collections.emptyList();
+		return settlements;
+	}
+
+	public void addSettlement(Settlement settlement) {
+		if(!getSettlements().contains(settlement)) {
+			getSettlements().add(settlement);
+			if(site != null) {
+				settlement.setup(site);
+				syncChanges();
+			}
+		}
+	}
+
+	public void removeSettlement(Settlement settlement) {
+		if(getSettlements().contains(settlement)) {
+			if(site != null) {
+				settlement.cleanup();
+			}
+			getSettlements().remove(settlement);
+			syncChanges();
+		}
 	}
 
 	public abstract String getOverview();
 
 	public void setup(LandingSite site) {
+		if(this.site != null) {
+			throw new RuntimeException("Terrain was already set up");
+		}
+		this.site = site;
+
+		for(Settlement settlement : getSettlements()) {
+			settlement.setup(site);
+		}
+
+		syncChanges();
 	}
 
-	public abstract void setupLandingMenu(LandingSite site, Menu menu);
-
-	//	public abstract setupSurveyMenu(Player player, Menu menu);
+	public void setupLandingMenu(LandingSite site, Menu menu) {
+	}
 }

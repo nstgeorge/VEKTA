@@ -18,6 +18,7 @@ import vekta.module.TargetingModule;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 import vekta.terrain.LandingSite;
+import vekta.terrain.settlement.Settlement;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -397,6 +398,9 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		if(hasController()) {
 			Player player = getController();
 			Menu menu = new Menu(player, new ShipTakeoffButton(site, getWorld()), new LandingMenuHandle(site));
+			for(Settlement settlement : site.getTerrain().getSettlements()) {
+				menu.add(new SettlementButton(settlement));
+			}
 			site.getTerrain().setupLandingMenu(site, menu);
 			menu.add(new SurveyButton(site));
 			menu.addDefault();
@@ -473,7 +477,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			module.onKeyPress(key);
 		}
 
-		Class shortcutType = SHORTCUT_MAP.get(key);
+		Class<?> shortcutType = SHORTCUT_MAP.get(key);
 		if(key == KeyBinding.SHIP_MENU || shortcutType != null) {
 			openShipMenu();
 			applyContext();

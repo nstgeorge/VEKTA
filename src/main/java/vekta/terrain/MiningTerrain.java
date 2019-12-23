@@ -1,7 +1,5 @@
 package vekta.terrain;
 
-import vekta.menu.Menu;
-
 public class MiningTerrain extends Terrain {
 
 	public MiningTerrain() {
@@ -11,9 +9,5 @@ public class MiningTerrain extends Terrain {
 	@Override
 	public String getOverview() {
 		return "The surface is flecked with ore and precious metals.";
-	}
-
-	@Override
-	public void setupLandingMenu(LandingSite site, Menu menu) {
 	}
 }

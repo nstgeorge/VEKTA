@@ -23,7 +23,8 @@ public class DungeonRoom implements Serializable {
 		this.name = name;
 		this.description = description;
 
-		dungeon.getRooms().add(this); // Register room
+		// Register room
+		dungeon.getRooms().add(this);
 	}
 
 	public Dungeon getDungeon() {

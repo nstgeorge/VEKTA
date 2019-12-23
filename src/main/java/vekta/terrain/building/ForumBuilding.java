@@ -19,7 +19,7 @@ public class ForumBuilding implements SettlementPart {
 			getInventory().add(EstateItemSpawner.randomEstateItem(settlement));
 		}
 	}
-	
+
 	public Settlement getSettlement() {
 		return settlement;
 	}
@@ -45,6 +45,10 @@ public class ForumBuilding implements SettlementPart {
 
 	@Override
 	public void setup(LandingSite site) {
+	}
+
+	@Override
+	public void cleanup() {
 	}
 
 	@Override

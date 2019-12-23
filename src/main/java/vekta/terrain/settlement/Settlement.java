@@ -22,7 +22,7 @@ import static processing.core.PApplet.ceil;
 import static processing.core.PApplet.sq;
 import static vekta.Vekta.register;
 
-public abstract class Settlement extends Syncable<Settlement> implements SettlementPart, EconomyContainer, ProductivityModifier,Renameable {
+public abstract class Settlement extends Syncable<Settlement> implements SettlementPart, EconomyContainer, ProductivityModifier, Renameable {
 	private static final float POPULATION_SCALE = 1000;
 
 	private final @Sync List<SettlementPart> parts = new ArrayList<>();
@@ -35,8 +35,6 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 	private final Economy economy;
 
 	private final Visual visual;
-
-	//	private int population;
 
 	public Settlement(Faction faction, String key) {
 		this(faction, Resources.generateString(key), Resources.generateString("overview_" + key));
@@ -206,6 +204,13 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 			part.setup(site);
 		}
 		WorldGenerator.populateSettlement(this);
+	}
+
+	@Override
+	public void cleanup() {
+		for(SettlementPart part : getParts()) {
+			part.cleanup();
+		}
 	}
 
 	public void setupEconomy(Economy economy) {

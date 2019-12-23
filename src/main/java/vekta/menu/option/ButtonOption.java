@@ -18,14 +18,15 @@ public interface ButtonOption extends MenuOption {
 
 		// Draw border
 		v.stroke(selected ? 255 : menu.getDefault() == this ? 100 : getBorderColor());
-		v.noFill();
+		//		v.noFill();
+		v.fill(0);
 		v.rect(x, y, max(handle.getItemWidth(), v.textWidth(name) + 20) + (selected ? 10 : 0), 50);
 
 		// Draw text
 		v.fill(isEnabled() ? getColor() : 100);
 		v.text(name, x, y - 3);
 	}
-	
+
 	default int getBorderColor() {
 		return UI_COLOR;
 	}

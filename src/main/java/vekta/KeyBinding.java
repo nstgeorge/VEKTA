@@ -22,6 +22,8 @@ public enum KeyBinding {
 	SHIP_BACKWARD('s'),
 	SHIP_LEFT('a'),
 	SHIP_RIGHT('d'),
+	ZOOM_IN('z'),
+	ZOOM_OUT('x'),
 	SHIP_ATTACK(' '),
 	SHIP_DEFEND(CONTROL),
 	SHIP_MENU('v'),

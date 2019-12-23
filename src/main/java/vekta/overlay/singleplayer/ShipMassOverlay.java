@@ -2,9 +2,6 @@ package vekta.overlay.singleplayer;
 
 import vekta.object.ship.ModularShip;
 
-/**
- * Ship stats (energy, money, etc.)
- */
 public class ShipMassOverlay extends ShipStatOverlay {
 	public ShipMassOverlay(int x, int y, ModularShip ship) {
 		super(x, y, ship);
@@ -17,6 +14,6 @@ public class ShipMassOverlay extends ShipStatOverlay {
 
 	@Override
 	public String getValue() {
-		return String.valueOf(getShip().getMass());
+		return Math.round(getShip().getMass()) + " kg";
 	}
 }

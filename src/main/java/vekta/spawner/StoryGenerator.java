@@ -1,6 +1,10 @@
 package vekta.spawner;
 
 import vekta.Resources;
+import vekta.item.ItemType;
+import vekta.menu.option.StoryProgressButton;
+import vekta.person.Dialog;
+import vekta.person.Person;
 import vekta.story.Story;
 import vekta.story.part.StoryPart;
 import vekta.story.subject.StorySubject;
@@ -53,7 +57,7 @@ public final class StoryGenerator {
 	}
 
 	public static StoryPart createPart(Story story, String key) {
-		String[] data = chooseString(story, Resources.getStrings("part_" + key)).split("\\*");
+		String[] data = v.random(chooseStrings(story, Resources.getStrings("part_" + key))).split("\\*");
 		String text = parseSubjects(story, data[0]).trim();
 		StoryPart part = new StoryPart(text);
 		for(int i = 1; i < data.length; i++) {
@@ -69,12 +73,12 @@ public final class StoryGenerator {
 			return spawner.randomSubject(story, name);
 		}
 		else {
-			String text = chooseString(story, Resources.getStrings("subject_" + type)).replaceAll("\\*", name);
+			String text = v.random(chooseStrings(story, Resources.getStrings("subject_" + type))).replaceAll("\\*", name);
 			return new TextSubject(parseSubjects(story, text));
 		}
 	}
 
-	public static String chooseString(Story story, String[] strings) {
+	public static List<String> chooseStrings(Story story, String[] strings) {
 		List<String> relevant = new ArrayList<>();
 		List<String> other = new ArrayList<>();
 		for(String string : strings) {
@@ -88,13 +92,13 @@ public final class StoryGenerator {
 				}
 			}
 			else {
-				other.add(Resources.parseString(string));
+				other.add(string);
 			}
 		}
 		if(relevant.isEmpty()) {
-			relevant.addAll(other);
+			return Collections.singletonList(Resources.parseString(v.random(other)));
 		}
-		return v.random(relevant);
+		return relevant;
 	}
 
 	public static String parseSubjects(Story story, String string) {
@@ -120,6 +124,18 @@ public final class StoryGenerator {
 			string = string.substring(0, openIndex) + text + string.substring(closeIndex + 1);
 		}
 		return string;
+	}
+
+	public static Dialog createDialog(Person person, Story story) {
+		return createDialog(person, story, -1);
+	}
+
+	public static Dialog createDialog(Person person, Story story, int maxSteps) {
+		Dialog dialog = new Dialog("story", person, story.getCurrentPart().getText(), ItemType.MISSION.getColor());
+		if(maxSteps != 0 && !story.getCurrentPart().isConclusion()) {
+			dialog.add(new StoryProgressButton(story, person, maxSteps - 1));
+		}
+		return dialog;
 	}
 
 	public interface SubjectSpawner extends Serializable {

@@ -87,6 +87,13 @@ public class District implements SettlementPart {
 	}
 
 	@Override
+	public void cleanup() {
+		for(SettlementPart part : getParts()) {
+			part.cleanup();
+		}
+	}
+
+	@Override
 	public void setupMenu(Menu menu) {
 		if(!getParts().isEmpty()) {
 			menu.add(new CustomButton(getName(), m -> {

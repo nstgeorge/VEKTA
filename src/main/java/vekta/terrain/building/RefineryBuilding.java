@@ -41,6 +41,10 @@ public class RefineryBuilding implements SettlementPart {
 	}
 
 	@Override
+	public void cleanup() {
+	}
+
+	@Override
 	public void setupMenu(Menu menu) {
 		menu.add(new CustomButton("Refinery", m -> {
 			Menu sub = new Menu(m, new MenuHandle());

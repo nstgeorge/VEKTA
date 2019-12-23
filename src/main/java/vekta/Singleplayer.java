@@ -5,6 +5,7 @@ import processing.event.KeyEvent;
 import processing.sound.LowPass;
 import vekta.connection.message.Message;
 import vekta.context.PauseMenuContext;
+import vekta.context.TextInputContext;
 import vekta.context.World;
 import vekta.dungeon.Dungeon;
 import vekta.economy.Economy;
@@ -40,6 +41,7 @@ import vekta.spawner.world.StarSystemSpawner;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -149,6 +151,15 @@ public class Singleplayer implements World, PlayerListener {
 
 	public void populateWorld() {
 		StarSystemSpawner.createSystem(PVector.random2D().mult(2 * AU_DISTANCE));
+
+		setContext(new TextInputContext(mainMenu, "Choose a Name:", Settings.getString("singleplayer.name", Resources.generateString("person")), name -> {
+			getPlayer().getFaction().setName(name);
+			getPlayer().getFaction().setColor(0xFF000000 | Integer.parseInt(Settings.getString("singleplayer.color", String.valueOf(UI_COLOR))));
+			getPlayer().getShip().setColor(getPlayer().getFaction().getColor());
+
+			setContext(this);
+			applyContext();
+		}));
 	}
 
 	private void setupTesting() {
@@ -192,6 +203,7 @@ public class Singleplayer implements World, PlayerListener {
 		playerShip.addModule(new ActiveTCSModule(2));
 		playerShip.addModule(new CountermeasureModule());
 		playerShip.addModule(new ShieldModule());
+		playerShip.addModule(new OceanScannerModule());
 		playerShip.getInventory().add(new ModuleItem(new PlanetBusterModule()));
 		playerShip.getInventory().add(new ModuleItem(new GeneratorModule()));
 		playerShip.getInventory().add(new ModuleItem(new WormholeModule()));
@@ -234,10 +246,25 @@ public class Singleplayer implements World, PlayerListener {
 	}
 
 	@Override
+	public void setZoom(float zoom) {
+		float prevZoom = state.getZoom();
+		if(zoom != prevZoom) {
+			onZoomChange(zoom);
+		}
+		state.setZoom(max(MIN_ZOOM_LEVEL, min(MAX_ZOOM_LEVEL, zoom)));
+		if(zoom > prevZoom) {
+			lastZoomOutward = true;
+		}
+		else if(zoom < prevZoom) {
+			lastZoomOutward = false;
+		}
+	}
+
+	@Override
 	public void setAutoZoom(float zoom) {
-		// Only setValue if player was zooming in the same direction
+		// Only zoom if player was zooming in the same direction
 		if(lastZoomOutward ? zoom > state.getZoom() : zoom < state.getZoom()) {
-			state.setZoom(max(MIN_ZOOM_LEVEL, min(MAX_ZOOM_LEVEL, zoom)));
+			setZoom(zoom);
 		}
 	}
 
@@ -298,9 +325,7 @@ public class Singleplayer implements World, PlayerListener {
 		state.startUpdate();
 
 		// Reset object counts for each render distance
-		for(int i = 0; i < objectCounts.length; i++) {
-			objectCounts[i] = 0;
-		}
+		Arrays.fill(objectCounts, 0);
 
 		// Pre-setValue loop
 		List<SpaceObject> objects = state.getObjects();
@@ -361,7 +386,7 @@ public class Singleplayer implements World, PlayerListener {
 			v.noFill();
 			float r = s.getRadius() / scale;
 			float onScreenRadius = s.getOnScreenRadius(r);
-			boolean visible = abs(screenX) - onScreenRadius <= v.width / 2 && abs(screenY) - onScreenRadius <= v.height / 2;
+			boolean visible = abs(screenX) - onScreenRadius <= v.width / 2F && abs(screenY) - onScreenRadius <= v.height / 2F;
 			if(visible) {
 				s.draw(level, r);
 			}
@@ -507,7 +532,13 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public void keyPressed(KeyBinding key) {
-		if(key == KeyBinding.QUICK_LOAD) {
+		if(key == KeyBinding.ZOOM_IN) {
+			setZoom(getZoom() * ZOOM_FACTOR);
+		}
+		else if(key == KeyBinding.ZOOM_OUT) {
+			setZoom(getZoom() / ZOOM_FACTOR);
+		}
+		else if(key == KeyBinding.QUICK_LOAD) {
 			load(QUICKSAVE_FILE);
 		}
 		else if(getPlayerShip().isDestroyed()) {
@@ -535,16 +566,7 @@ public class Singleplayer implements World, PlayerListener {
 	public void mouseWheel(int amount) {
 		float prevZoom = state.getZoom();
 		float zoom = max(MIN_ZOOM_LEVEL, min(MAX_ZOOM_LEVEL, prevZoom * (1 + amount * ZOOM_FACTOR * Settings.getFloat("zoomSpeed"))));
-		if(zoom != prevZoom) {
-			onZoomChange(zoom);
-		}
-		state.setZoom(zoom);
-		if(zoom > prevZoom) {
-			lastZoomOutward = true;
-		}
-		else if(zoom < prevZoom) {
-			lastZoomOutward = false;
-		}
+		setZoom(zoom);
 	}
 
 	@Override

@@ -13,6 +13,7 @@ import vekta.spawner.world.AsteroidSpawner;
 import vekta.terrain.LandingSite;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static vekta.Vekta.getWorld;
 import static vekta.Vekta.v;
@@ -20,6 +21,8 @@ import static vekta.Vekta.v;
 public class MissionGenerator {
 	private static final ObjectiveSpawner[] OBJECTIVE_SPAWNERS = Resources.findSubclassInstances(ObjectiveSpawner.class);
 	private static final RewardSpawner[] REWARD_SPAWNERS = Resources.findSubclassInstances(RewardSpawner.class);
+
+	private static final float NEW_PERSON_RATE = .1F;
 
 	public static Mission createMission(Player player, MissionIssuer issuer) {
 		return createMission(player, issuer, issuer.chooseMissionTier(player));
@@ -68,11 +71,14 @@ public class MissionGenerator {
 	}
 
 	public static Person randomMissionPerson(MissionIssuer exclude) {
-		Person person = getWorld().findRandomObject(Person.class);
-		if(person == null || person == exclude || v.chance(.1F)) {
-			person = PersonGenerator.createPerson();
+		List<Person> people = getWorld().findObjects(Person.class);
+		if(exclude instanceof Person) {
+			people.remove(exclude);
 		}
-		return person;
+		if(people.isEmpty() || v.chance(NEW_PERSON_RATE / people.size())) {
+			return PersonGenerator.createPerson();
+		}
+		return v.random(people);
 	}
 
 	public static String randomMissionName() {

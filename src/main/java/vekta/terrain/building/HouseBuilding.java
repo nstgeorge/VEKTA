@@ -39,6 +39,11 @@ public class HouseBuilding implements SettlementPart {
 	}
 
 	@Override
+	public void cleanup() {
+//		getPerson().die();
+	}
+
+	@Override
 	public void setupMenu(Menu menu) {
 		if(!getPerson().isDead()) {
 			Dialog dialog = DialogGenerator.randomVisitDialog(menu.getPlayer(), getPerson());

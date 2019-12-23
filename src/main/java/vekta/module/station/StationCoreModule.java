@@ -78,7 +78,7 @@ public class StationCoreModule extends ShipModule {
 	public void onItemMenu(Item item, Menu menu) {
 		Ship ship = menu.getPlayer().getShip();
 		if(menu.getHandle() instanceof ObjectMenuHandle && ((ObjectMenuHandle)menu.getHandle()).getSpaceObject() == ship) {
-			menu.add(new DeployButton("New Station [v" + getTier() + "]", menu.getPlayer(), item, () -> new SpaceStation(
+			menu.add(new DeployButton("New Station [v" + getTier() + "]", item, () -> new SpaceStation(
 					ship.getName() + " Station",
 					this,
 					ship.getPosition().add(ship.getHeading().setMag(ship.getRadius() * 2)),

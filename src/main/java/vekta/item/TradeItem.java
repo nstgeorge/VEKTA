@@ -8,24 +8,28 @@ public class TradeItem extends BasicItem {
 	private String description;
 
 	public TradeItem(String name, ItemType type) {
-		this(name, Resources.generateString("description_item_" + (type == ItemType.COMMON ? "common" : "rare"))
-				.replaceAll("\\*", name), type);
+		super(name, type);
 	}
 
 	public TradeItem(String name, String description, ItemType type) {
-		super(name, type);
+		this(name, type);
 
 		this.description = description;
 	}
 
 	public String getDescription() {
+		if(description == null) {
+			description = Resources.generateString("description_item_" + (getType() == ItemType.COMMON ? "common" : "rare"))
+					.replaceAll("\\*", getName());
+		}
 		return description;
 	}
 
 	@Override
 	public void onInfo(InfoGroup info) {
-		if(getDescription() != null) {
-			info.addDescription(getDescription());
+		String desc = getDescription();
+		if(desc != null) {
+			info.addDescription(desc);
 		}
 	}
 

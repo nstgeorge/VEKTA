@@ -40,6 +40,10 @@ public class JunkyardBuilding implements SettlementPart {
 	}
 
 	@Override
+	public void cleanup() {
+	}
+
+	@Override
 	public void setupMenu(Menu menu) {
 		if(getInventory().itemCount() > 0) {
 			menu.add(new LootMenuButton("Junkyard", menu.getPlayer().getInventory(), getInventory()));

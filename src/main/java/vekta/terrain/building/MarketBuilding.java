@@ -54,6 +54,10 @@ public class MarketBuilding implements SettlementPart {
 	}
 
 	@Override
+	public void cleanup() {
+	}
+
+	@Override
 	public void setupMenu(Menu menu) {
 		Inventory inv = menu.getPlayer().getInventory();
 

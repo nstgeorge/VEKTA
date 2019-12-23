@@ -35,3 +35,6 @@ By Command of {person}
 An Act Worthy of {person}
 {mission_noun} on the Side
 {mission_noun} for the Ages
+Operation {item_noun}
+Operation {estate_noun}
+The {estate_noun} {mission_noun}

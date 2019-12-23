@@ -25,7 +25,7 @@ public class AdviceObjectiveSpawner implements ObjectiveSpawner {
 	@Override
 	public Objective getMainObjective(Mission mission) {
 		Person person = randomMissionPerson(mission.getIssuer());
-		return new DialogObjective("Advise", mission.getIssuer() + " said you needed some advice.", randomAdviceDialog(mission.getPlayer(), person));
+		return new DialogObjective("Advise", mission.getIssuer().getName() + " said you needed some advice.", randomAdviceDialog(mission.getPlayer(), person));
 	}
 
 	public static Dialog randomAdviceDialog(Player player, Person person) {

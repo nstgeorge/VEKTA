@@ -16,13 +16,13 @@ import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import static vekta.Vekta.*;
 
-public class TelemetryOverlay implements Overlay {
+public class NavigationOverlay implements Overlay {
 	private final Player player;
 
 	private Targeter targeter;
 	private String distString;
 
-	public TelemetryOverlay(Player player) {
+	public NavigationOverlay(Player player) {
 		this.player = player;
 
 		updateUIInformation();
@@ -77,7 +77,7 @@ public class TelemetryOverlay implements Overlay {
 				targetString = "PLANET [1], ASTEROID [2], SHIP [3]" + (player.getCurrentMission() != null ? ", OBJECTIVE [4]" : "");
 			}
 			else {
-				String massString = getMassString(target.getMass());
+				String massString = massString(target.getMass());
 				if(target instanceof TerrestrialPlanet) {
 					TerrestrialPlanet closestPlanet = (TerrestrialPlanet)target;
 					targetString = target.getName() + " - " + distString + " \nHabitable: " + (closestPlanet.isHabitable() ? "YES" : "NO") + "\nMass: " + massString;
@@ -105,24 +105,6 @@ public class TelemetryOverlay implements Overlay {
 				}
 			}
 		}
-	}
-	
-	public static String getMassString(float mass) {
-		String unit = "kg";
-		if(mass >= SUN_MASS * .1F) {
-			mass = (float)round(mass / SUN_MASS * 1000) / 1000;
-			unit = "Suns";
-		}
-		else if(mass >= EARTH_MASS * .1F) {
-			mass = (float)round(mass / EARTH_MASS * 1000) / 1000;
-			unit = "Earths";
-		}
-//		else if(mass >= 1e5) {
-//			int order = IntMath.log10((int)mass, RoundingMode.FLOOR);
-//			mass = (float)round(mass / pow(10, order - 3)) / 1000;
-//			unit = "* 10^" + order + " kg";
-//		}
-		return mass + " " + unit;
 	}
 
 	private void drawDial(String name, PVector info, float locX, float locY, int c) {

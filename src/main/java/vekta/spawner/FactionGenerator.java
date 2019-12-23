@@ -28,10 +28,15 @@ public class FactionGenerator {
 		return register(faction);
 	}
 
-	public static Faction randomFaction() {
+	public static Faction randomFactionPossiblyNew() {
 		List<Faction> factions = getWorld().findObjects(Faction.class);
 		return factions.isEmpty() || v.chance(NEW_FACTION_RATE / factions.size())
 				? createFaction()
 				: v.random(factions);
+	}
+
+	public static Faction randomFaction() {
+		List<Faction> factions = getWorld().findObjects(Faction.class);
+		return factions.isEmpty() ? createFaction() : v.random(factions);
 	}
 }

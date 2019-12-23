@@ -51,6 +51,10 @@ public class AcademyBuilding implements SettlementPart {
 	}
 
 	@Override
+	public void cleanup() {
+	}
+
+	@Override
 	public void setupMenu(Menu menu) {
 		menu.add(new CustomButton(getGenericName(), m -> {
 			Menu sub = new Menu(m, new MenuHandle());

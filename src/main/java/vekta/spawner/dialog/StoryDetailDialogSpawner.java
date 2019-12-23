@@ -6,10 +6,10 @@ import vekta.person.Dialog;
 import vekta.spawner.DialogGenerator;
 import vekta.story.Story;
 
-public class StoryDialogSpawner implements DialogGenerator.DialogSpawner {
+public class StoryDetailDialogSpawner implements DialogGenerator.DialogSpawner {
 	@Override
 	public String getType() {
-		return "story";
+		return "story_detail";
 	}
 
 	@Override
@@ -18,6 +18,7 @@ public class StoryDialogSpawner implements DialogGenerator.DialogSpawner {
 			Story story = knowledge.getStory();
 			for(String key : story.getSubjects().keySet()) {
 				if(dialog.getPerson().getFullName().equals(story.getSubject(key).getFullName())) {
+					// Remember already asking this person about the story
 					knowledge.setAskedForDetails(key);
 				}
 			}

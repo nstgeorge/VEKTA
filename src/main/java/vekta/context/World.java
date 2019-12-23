@@ -20,6 +20,8 @@ public interface World extends Context {
 
 	float getZoom();
 
+	void setZoom(float zoom);
+
 	void setAutoZoom(float zoom);
 
 	void setAutoZoomDirection(boolean outward);

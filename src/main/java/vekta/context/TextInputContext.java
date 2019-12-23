@@ -92,7 +92,9 @@ public class TextInputContext implements Context {
 	@Override
 	public void keyTyped(char key) {
 		startedTyping = true;
-		setText(getText() + key);
+		if(key != '\b') {
+			setText(getText() + key);
+		}
 	}
 
 	@Override

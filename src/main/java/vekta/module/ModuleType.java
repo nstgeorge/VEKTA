@@ -9,6 +9,7 @@ public enum ModuleType {
 	SHIELD,
 	NAVIGATION,
 	ANTENNA,
+	SCANNER,
 	TELESCOPE,
 	DRILL,
 	THERMAL,

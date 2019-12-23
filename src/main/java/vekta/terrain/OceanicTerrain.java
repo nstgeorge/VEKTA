@@ -1,7 +1,5 @@
 package vekta.terrain;
 
-import vekta.menu.Menu;
-
 import static vekta.Vekta.v;
 
 public class OceanicTerrain extends Terrain {
@@ -16,9 +14,5 @@ public class OceanicTerrain extends Terrain {
 	@Override
 	public String getOverview() {
 		return "You can't find anywhere to land; a vast ocean covers this planet.";
-	}
-
-	@Override
-	public void setupLandingMenu(LandingSite site, Menu menu) {
 	}
 }

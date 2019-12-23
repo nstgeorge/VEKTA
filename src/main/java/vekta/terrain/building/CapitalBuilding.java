@@ -42,6 +42,10 @@ public class CapitalBuilding implements SettlementPart {
 	}
 
 	@Override
+	public void cleanup() {
+	}
+
+	@Override
 	public void setupMenu(Menu menu) {
 		if(getSettlement().getFaction() == menu.getPlayer().getFaction()) {
 			// Add upgrade management option

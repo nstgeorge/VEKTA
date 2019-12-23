@@ -14,6 +14,6 @@ public class FactionSubjectSpawner implements StoryGenerator.SubjectSpawner {
 
 	@Override
 	public StorySubject randomSubject(Story story, String name) {
-		return new FactionSubject(FactionGenerator.randomFaction());
+		return new FactionSubject(FactionGenerator.randomFactionPossiblyNew());
 	}
 }

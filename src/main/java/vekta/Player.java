@@ -73,6 +73,10 @@ public final class Player extends Syncable<Player> {
 
 			@Override
 			public void onKeyPress(KeyBinding key) {
+				if(key == KeyBinding.MISSION_CYCLE && missions.size() > 0) {
+					int index = missions.indexOf(getCurrentMission()) + 1;
+					setCurrentMission(index == getMissions().size() ? null : missions.get(index % missions.size()));
+				}
 				if(key == KeyBinding.OBJECTIVE_CYCLE && getCurrentMission() != null) {
 					getCurrentMission().cycleObjective();
 				}
@@ -98,16 +102,20 @@ public final class Player extends Syncable<Player> {
 			public void onMenu(Menu menu) {
 				if(menu.getHandle() instanceof DialogMenuHandle) {
 					DialogMenuHandle handle = (DialogMenuHandle)menu.getHandle();
-					if(!handle.getDialog().getType().equals("story")) {
+					// Ensure non-story context
+					if(!handle.getDialog().getType().startsWith("story")) {
 						for(StoryKnowledge knowledge : findKnowledge(StoryKnowledge.class)) {
 							Story story = knowledge.getStory();
 							for(String key : new ArrayList<>(story.getSubjects().keySet())) {
 								String postfix = " person";
+								// Check if this person is relevant to a story
 								if(key.endsWith(postfix) && !knowledge.hasAskedForDetails(key) && handle.getPerson().getFullName().equals(story.getSubject(key).getFullName())) {
 									String name = key.substring(0, key.length() - postfix.length());
-									String[] data = StoryGenerator.chooseString(story, Resources.getStrings("story_dialog_map")).replace("\\*", name).split(":", 2);
-									String text = StoryGenerator.parseSubjects(story, data[1].trim());
-									handle.getDialog().add(data[0].trim(), handle.getPerson().createDialog("story", text));
+									for(String string : StoryGenerator.chooseStrings(story, Resources.getStrings("story_dialog_map"))) {
+										String[] data = string.replace("\\*", name).split(":", 2);
+										String text = StoryGenerator.parseSubjects(story, data[1].trim());
+										handle.getDialog().add(data[0].trim(), handle.getPerson().createDialog("story_detail", text));
+									}
 								}
 							}
 						}

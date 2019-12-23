@@ -10,3 +10,5 @@ Crevice
 Chasm
 Sewers
 Sinkhole
+Mines
+Burrow

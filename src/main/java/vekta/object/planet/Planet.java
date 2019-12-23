@@ -9,7 +9,7 @@ import vekta.object.SpaceObject;
 import static vekta.Vekta.*;
 
 /**
- * Model for a planet.
+ * A planet-like object.
  */
 public abstract class Planet extends SpaceObject implements Renameable {
 	private static final float SURVEY_SCAN_SPEED = .01F;

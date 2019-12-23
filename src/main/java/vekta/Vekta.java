@@ -76,11 +76,11 @@ public class Vekta extends PApplet {
 
 	public void setup() {
 		v = this;
-		
+
 		background(0);
 		frameRate(60);
 		noCursor();
-		
+
 		hint(DISABLE_DEPTH_TEST);
 
 		UI_COLOR = color(0, 255, 0);
@@ -90,7 +90,7 @@ public class Vekta extends PApplet {
 		Settings.init();
 		Resources.init();
 
-		textMode(SHAPE);
+		//		textMode(SHAPE);
 
 		// Fonts
 		HEADER_FONT = createFont(FONTNAME, 72);
@@ -105,6 +105,9 @@ public class Vekta extends PApplet {
 		setContext(mainMenu);
 		//		setContext(new Multiplayer());///
 		applyContext();
+
+		frame.toFront();
+		frame.requestFocus();
 	}
 
 	@Override
@@ -289,21 +292,45 @@ public class Vekta extends PApplet {
 			dist /= AU_DISTANCE;
 			unit = "AU";
 		}
-		else if(dist > 1e8) {
+		else if(dist >= 1e9) {
 			dist /= 1e9;
 			unit = "Gm"; // Gigameters
 		}
-		else if(dist > 1e5) {
+		else if(dist >= 1e6) {
 			dist /= 1e6;
 			unit = "Mm"; // Megameters
 		}
-		else if(dist > 100) {
+		else if(dist >= 1000) {
 			dist /= 1000;
 			unit = "km";
 		}
 		return ((float)round(dist * 100) / 100) + " " + unit;
 	}
-	
+
+	public static String massString(float mass) {
+		String unit = "kg";
+		if(mass >= SUN_MASS * .1F) {
+			mass = (float)round(mass / SUN_MASS * 1000) / 1000;
+			unit = "Suns";
+		}
+		else if(mass >= EARTH_MASS * .1F) {
+			mass = (float)round(mass / EARTH_MASS * 1000) / 1000;
+			unit = "Earths";
+		}
+		else if(mass >= 1e5) {
+			float om = mass;
+			int order = 4;
+			mass /= 1e4;
+			while(mass >= 10) {
+				mass /= 10;
+				order++;
+			}
+			mass = (float)round(mass * 1000) / 1000;
+			unit = "* 10^" + order + " kg" + " : " + om;
+		}
+		return mass + " " + unit;
+	}
+
 	//// Utility methods ////
 
 	public <T> T random(T[] array) {
