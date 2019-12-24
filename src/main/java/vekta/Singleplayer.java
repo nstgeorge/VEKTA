@@ -85,8 +85,8 @@ public class Singleplayer implements World, PlayerListener {
 	private final Counter eventCt = new Counter(3600 * 5).randomize(); // Occasional random events
 	private final Counter situationCt = new Counter(30).randomize(); // Situational events
 	private final Counter economyCt = new Counter(600).randomize(); // Economic progression
-		private final Counter ecosystemCt = new Counter(600).randomize(); // Ecosystem progression
-//	private final Counter ecosystemCt = new Counter(10).randomize();////
+	private final Counter ecosystemCt = new Counter(600).randomize(); // Ecosystem progression
+	//	private final Counter ecosystemCt = new Counter(10).randomize();////
 
 	private PlayerOverlay overlay;
 
