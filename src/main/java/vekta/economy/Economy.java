@@ -93,6 +93,8 @@ public class Economy extends Syncable<Economy> {
 	}
 
 	public void update() {
+		getContainer().updateEconomy();
+
 		float productivity = 0;
 		for(ProductivityModifier mod : getModifiers()) {
 			float p = mod.updateModifier(this);

@@ -2,6 +2,7 @@ package vekta.spawner;
 
 import processing.core.PVector;
 import vekta.Faction;
+import vekta.PlayerFaction;
 import vekta.RenderLevel;
 import vekta.Resources;
 import vekta.economy.ProductivityModifier;
@@ -15,12 +16,13 @@ import vekta.terrain.settlement.Settlement;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static vekta.Vekta.*;
 
 public class PersonGenerator {
 	private static final Personality[] PERSONALITIES = Resources.findSubclassInstances(Personality.class);
-		private static final float PERSONALITY_CHANCE = .1F;
+	private static final float PERSONALITY_CHANCE = .1F;
 	private static final float MAX_INTERESTS = 2;
 
 	public static Person createPerson() {
@@ -76,13 +78,14 @@ public class PersonGenerator {
 	}
 
 	public static Settlement randomHome() {
-		TerrestrialPlanet planet = getWorld().findRandomObject(TerrestrialPlanet.class);
-		if(planet != null) {
-			// Find a suitable existing settlement
-			List<Settlement> settlements = planet.getLandingSite().getTerrain().getSettlements();
-			if(!settlements.isEmpty()) {
-				return v.random(settlements);
-			}
+		// Find suitable existing settlements
+		List<Settlement> settlements = getWorld().findObjects(TerrestrialPlanet.class).stream()
+				.flatMap(p -> p.getLandingSite().getTerrain().getSettlements().stream())
+				.filter(s -> !(s.getFaction() instanceof PlayerFaction))
+				.collect(Collectors.toList());
+
+		if(!settlements.isEmpty()) {
+			return v.random(settlements);
 		}
 
 		// If no candidate was found, create an asteroid with a new settlement

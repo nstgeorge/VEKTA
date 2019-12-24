@@ -21,7 +21,7 @@ public class LandingTaskObjective extends Objective {
 
 	@Override
 	public String getName() {
-		return (getSpaceObject() != null ? "(" + getSpaceObject().getName() + ") " : "") + name;
+		return name + (getSpaceObject() != null ? " (" + getSpaceObject().getName() + ")" : "");
 	}
 
 	@Override

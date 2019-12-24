@@ -35,6 +35,11 @@ public class GeneratorModule extends ShipModule {
 	}
 
 	@Override
+	public float getValueScale() {
+		return 10 * getRate();
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return other instanceof GeneratorModule && getRate() > ((GeneratorModule)other).getRate();
 	}

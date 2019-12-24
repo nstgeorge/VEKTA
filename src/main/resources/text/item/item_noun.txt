@@ -71,3 +71,4 @@ Shank
 Boomwhacker
 Pipe
 Bucket
+Puppet

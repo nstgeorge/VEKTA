@@ -31,6 +31,7 @@ public enum KeyBinding {
 	SHIP_MISSIONS('q'),
 	SHIP_KNOWLEDGE('c'),
 	SHIP_INTERNET('y'),
+	SHIP_FOLLOWERS('u'),
 	SHIP_INVENTORY('i'),
 	SHIP_LAND('\t'),
 	SHIP_TARGET('t'),

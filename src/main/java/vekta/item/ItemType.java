@@ -14,6 +14,7 @@ public enum ItemType {
 	RECIPE(v.color(100, 255, 200), 20, 20),
 	MISSION(MissionStatus.READY.getColor(), 2, 5),
 	ECONOMY(v.color(100, 200, 255), 1, 2),
+	ECOSYSTEM(v.color(120, 200, 100), 1, 2),
 	COLONY(v.color(170, 80, 220), 50, 10);
 
 	private final int color;

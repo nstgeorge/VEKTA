@@ -18,6 +18,7 @@ import java.util.function.Consumer;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static vekta.Vekta.getContext;
 
 public class Menu implements Context {
 	private final Player player;
@@ -34,7 +35,7 @@ public class Menu implements Context {
 	private int index;
 
 	public Menu(Menu parent, MenuHandle handle) {
-		this(parent.getPlayer(), new BackButton(parent), handle);
+		this(parent.getPlayer(), new BackButton(getContext() instanceof Menu ? parent : getContext()/*TODO verify*/), handle);
 	}
 
 	public Menu(Player player, MenuOption def, MenuHandle handle) {

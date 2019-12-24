@@ -39,6 +39,11 @@ public class ShieldModule extends ShipModule {
 	}
 
 	@Override
+	public float getValueScale() {
+		return 2 * getEfficiency();
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return other instanceof ShieldModule && getEfficiency() > ((ShieldModule)other).getEfficiency();
 	}

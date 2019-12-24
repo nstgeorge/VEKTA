@@ -129,9 +129,11 @@ public class Faction extends Syncable<Faction> implements Renameable, EconomyCon
 		return "Faction Productivity";
 	}
 
-	/**
-	 * Return the productivity modifier of the faction.
-	 */
+	@Override
+	public void updateEconomy() {
+//		EconomyGenerator.updateFaction(this);
+	}
+
 	@Override
 	public float updateModifier(Economy economy) {
 		return BASE_PRODUCTIVITY + allies.size() * ALLY_MODIFIER - enemies.size() * ENEMY_MODIFIER;

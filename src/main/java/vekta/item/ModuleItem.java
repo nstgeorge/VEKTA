@@ -4,6 +4,9 @@ import vekta.InfoGroup;
 import vekta.menu.Menu;
 import vekta.module.Module;
 
+import static processing.core.PApplet.round;
+import static vekta.Vekta.v;
+
 public class ModuleItem extends Item {
 	private final Module module;
 
@@ -28,6 +31,11 @@ public class ModuleItem extends Item {
 	@Override
 	public ItemType getType() {
 		return ItemType.MODULE;
+	}
+
+	@Override
+	public int randomPrice() {
+		return round((super.randomPrice() + v.random(-1, 1)) * getModule().getValueScale());
 	}
 
 	@Override

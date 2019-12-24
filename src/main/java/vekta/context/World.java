@@ -1,6 +1,7 @@
 package vekta.context;
 
 import processing.core.PVector;
+import processing.event.KeyEvent;
 import vekta.Player;
 import vekta.RenderLevel;
 import vekta.Syncable;
@@ -25,7 +26,7 @@ public interface World extends Context {
 	void setAutoZoom(float zoom);
 
 	void setAutoZoomDirection(boolean outward);
-	
+
 	void setMaxZoom(float maxZoom);
 
 	default void schedule(Callback callback) {
@@ -50,10 +51,10 @@ public interface World extends Context {
 	void sendChanges(Syncable object);
 
 	void sendMessage(Player player, Message message);
-	
+
 	/**
 	 * Called when the world should persist data
-	 * */
+	 */
 	void autosave();
 
 	/**
@@ -80,6 +81,8 @@ public interface World extends Context {
 	void updateTargeter(Targeter t);
 
 	void playSound(String sound, PVector location);
+
+	boolean globalKeyPressed(KeyEvent event);
 
 	interface Callback extends Serializable {
 		void callback();

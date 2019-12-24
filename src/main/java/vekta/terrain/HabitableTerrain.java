@@ -1,8 +1,23 @@
 package vekta.terrain;
 
+import vekta.spawner.EcosystemGenerator;
 import vekta.terrain.settlement.Settlement;
 
+import static processing.core.PApplet.round;
+import static vekta.Vekta.v;
+
 public class HabitableTerrain extends Terrain {
+
+	public HabitableTerrain() {
+		addFeature("Atmosphere");
+		addFeature("Terrestrial");
+		addFeature("Habitable");
+
+		if(v.chance(.5F)) {
+			addFeature("Natural Ecosystem");
+			EcosystemGenerator.populateEcosystem(getEcosystem(), round(v.random(2, 5)));
+		}
+	}
 
 	public HabitableTerrain(Settlement settlement) {
 		this();
@@ -10,16 +25,10 @@ public class HabitableTerrain extends Terrain {
 		addSettlement(settlement);
 	}
 
-	public HabitableTerrain() {
-		addFeature("Atmosphere");
-		addFeature("Terrestrial");
-		addFeature("Habitable");
-	}
-
 	@Override
 	public String getOverview() {
 		if(getSettlements().isEmpty()) {
-			return "You land among a flourishing ecosystem of exotic life forms.";
+			return "You land in a landscape appearing ripe for colonization.";
 		}
 		return getSettlements().get(0).getOverview();
 	}

@@ -128,7 +128,7 @@ public class Vekta extends PApplet {
 
 	@Override
 	public void keyPressed(KeyEvent event) {
-		if(context != null) {
+		if((world != null && world.globalKeyPressed(event)) || context != null) {
 			context.keyPressed(event);
 			if(key == ESC) {
 				key = 0; // Suppress default behavior (exit)
@@ -282,53 +282,66 @@ public class Vekta extends PApplet {
 
 	//// Misc. UI methods ////
 
+	public static String roundString(float value) {
+		if(value >= 100) {
+			return String.valueOf(round(value));
+		}
+		else if(value >= 10) {
+			return String.format("%.1f", value);
+		}
+		return String.format("%.2f", value);
+	}
+
 	public static String moneyString(String text, int money) {
 		return text + (money == 0 ? "" : " [" + money + " G]");
 	}
 
 	public static String distanceString(float dist) {
-		String unit = "m";
-		if(dist > AU_DISTANCE * .01F) {
-			dist /= AU_DISTANCE;
-			unit = "AU";
+		if(dist >= AU_DISTANCE) {
+			return roundString(dist / AU_DISTANCE) + " AU";
 		}
-		else if(dist >= 1e9) {
-			dist /= 1e9;
-			unit = "Gm"; // Gigameters
+		else if(dist >= 1e9F) {
+			return roundString(dist / 1e9F) + " Bm";
 		}
-		else if(dist >= 1e6) {
-			dist /= 1e6;
-			unit = "Mm"; // Megameters
+		else if(dist >= 1e6F) {
+			return roundString(dist / 1e6F) + " Mm";
 		}
-		else if(dist >= 1000) {
-			dist /= 1000;
-			unit = "km";
+		else if(dist >= 1e3F) {
+			return roundString(dist / 1e3F) + " km";
 		}
-		return ((float)round(dist * 100) / 100) + " " + unit;
+		return roundString(dist) + " m";
 	}
 
 	public static String massString(float mass) {
-		String unit = "kg";
 		if(mass >= SUN_MASS * .1F) {
-			mass = (float)round(mass / SUN_MASS * 1000) / 1000;
-			unit = "Suns";
+			return roundString(mass / SUN_MASS) + " Suns";
 		}
 		else if(mass >= EARTH_MASS * .1F) {
-			mass = (float)round(mass / EARTH_MASS * 1000) / 1000;
-			unit = "Earths";
+			return roundString(mass / EARTH_MASS) + " Earths";
 		}
-		else if(mass >= 1e5) {
-			float om = mass;
+		else if(mass >= 1e5F) {
 			int order = 4;
 			mass /= 1e4;
 			while(mass >= 10) {
 				mass /= 10;
 				order++;
 			}
-			mass = (float)round(mass * 1000) / 1000;
-			unit = "* 10^" + order + " kg" + " : " + om;
+			return roundString(mass) + " * 10^" + order + " kg";
 		}
-		return mass + " " + unit;
+		return roundString(mass) + " kg";
+	}
+
+	public static String quantityString(int quantity) {
+		if(quantity >= 1e9) {
+			return roundString(quantity / 1e9F) + "B";
+		}
+		if(quantity >= 1e6) {
+			return roundString(quantity / 1e6F) + "M";
+		}
+		else if(quantity >= 1e3) {
+			return roundString(quantity / 1e3F) + "k";
+		}
+		return String.valueOf(quantity);
 	}
 
 	//// Utility methods ////

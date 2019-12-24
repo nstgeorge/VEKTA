@@ -46,6 +46,11 @@ public class TelescopeModule extends ShipModule {
 	}
 
 	@Override
+	public float getValueScale() {
+		return 1 * getResolution();
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return other instanceof TelescopeModule && getResolution() > ((TelescopeModule)other).getResolution();
 	}

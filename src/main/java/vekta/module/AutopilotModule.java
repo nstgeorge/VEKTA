@@ -41,6 +41,11 @@ public class AutopilotModule extends TargetingModule {
 	}
 
 	@Override
+	public float getValueScale() {
+		return 2;
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return other instanceof TargetingModule && !(other instanceof AutopilotModule);
 	}

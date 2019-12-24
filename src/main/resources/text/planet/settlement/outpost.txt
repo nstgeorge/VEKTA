@@ -1,4 +1,5 @@
 {settlement}
+Checkpoint {settlement}
 {person}'s Refuge
 {person}'s Hideout
 {planet} Refugees

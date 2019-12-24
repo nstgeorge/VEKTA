@@ -2,6 +2,7 @@ package vekta.terrain;
 
 import vekta.Sync;
 import vekta.Syncable;
+import vekta.ecosystem.Ecosystem;
 import vekta.menu.Menu;
 import vekta.terrain.settlement.Settlement;
 
@@ -10,12 +11,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import static vekta.Vekta.v;
+
 /**
  * An abstract representation of planetary terrain.
  */
 public abstract class Terrain extends Syncable<Terrain> {
 	private final @Sync List<String> features = new ArrayList<>();
 	private final @Sync List<Settlement> settlements = new ArrayList<>();
+	private final Ecosystem ecosystem = new Ecosystem(v.random(1e5F, 1e7F));
 
 	private @Sync LandingSite site;
 
@@ -71,6 +75,10 @@ public abstract class Terrain extends Syncable<Terrain> {
 			getSettlements().remove(settlement);
 			syncChanges();
 		}
+	}
+
+	public Ecosystem getEcosystem() {
+		return ecosystem;
 	}
 
 	public abstract String getOverview();

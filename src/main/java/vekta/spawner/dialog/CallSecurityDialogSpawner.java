@@ -20,6 +20,6 @@ public class CallSecurityDialogSpawner implements DialogGenerator.DialogSpawner 
 		Dialog security = SecurityDialogSpawner.randomSecurityDialog(dialog.getPerson().getFaction(), menu.getDefault());
 		menu.setDefault(new DialogButton("Talk to Security", security));
 
-		dialog.add(new QuicktimeButton(3, "Run Away", leave::onSelect));
+		dialog.add(new QuicktimeButton(2, "Run Away", leave::onSelect));
 	}
 }

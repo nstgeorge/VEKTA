@@ -1,10 +1,11 @@
 package vekta.overlay.singleplayer;
 
+import com.google.common.collect.ImmutableMap;
 import vekta.KeyBinding;
 import vekta.Player;
 import vekta.overlay.Overlay;
 
-import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static processing.core.PConstants.*;
 import static vekta.Vekta.UI_COLOR;
@@ -21,14 +22,15 @@ public class DirectoryOverlay implements Overlay {
 	}
 
 	// TODO: migrate to world shortcut key system
-	private static final LinkedHashMap<KeyBinding, String> PANES = new LinkedHashMap<KeyBinding, String>() {{
-		put(KeyBinding.SHIP_MENU, "Dashboard");
-		put(KeyBinding.SHIP_KNOWLEDGE, "Navigation");
-		put(KeyBinding.SHIP_LOADOUT, "Loadout");
-		put(KeyBinding.SHIP_MISSIONS, "Missions");
-		put(KeyBinding.SHIP_HYPERDRIVE, "Hyperdrive");
-		put(KeyBinding.SHIP_INTERNET, "Internet");
-	}};
+	private static final Map<KeyBinding, String> PANES = ImmutableMap.<KeyBinding, String>builder()
+			.put(KeyBinding.SHIP_MENU, "Dashboard")
+			.put(KeyBinding.SHIP_KNOWLEDGE, "Navigation")
+			.put(KeyBinding.SHIP_LOADOUT, "Loadout")
+			.put(KeyBinding.SHIP_MISSIONS, "Missions")
+			.put(KeyBinding.SHIP_HYPERDRIVE, "Hyperdrive")
+			.put(KeyBinding.SHIP_FOLLOWERS, "Followers")
+			.put(KeyBinding.SHIP_INTERNET, "Internet")
+			.build();
 
 	@Override
 	public void render() {

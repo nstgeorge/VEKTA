@@ -6,11 +6,9 @@ import vekta.economy.Economy;
 import vekta.economy.ProductivityModifier;
 import vekta.item.EconomyItem;
 import vekta.item.Inventory;
-import vekta.item.Item;
 import vekta.item.ItemType;
 import vekta.menu.Menu;
 import vekta.menu.option.EconomyItemButton;
-import vekta.menu.option.MenuOption;
 
 import java.io.Serializable;
 import java.util.List;
@@ -20,7 +18,7 @@ import static processing.core.PConstants.LEFT;
 import static vekta.Vekta.*;
 
 /**
- * Mission selector menu handle
+ * Economy menu handle
  */
 public class EconomyMenuHandle extends MenuHandle {
 	private final Inventory inv;
@@ -79,31 +77,6 @@ public class EconomyMenuHandle extends MenuHandle {
 		v.textSize(32);
 		v.fill(UI_COLOR);
 		v.text((buying ? "Buying" : "Selling") + ": [" + inv.getMoney() + " G]", getItemX(), getItemY(-1));
-
-		int currentIndex = menu.getIndex();
-		int currentCount = 0;
-
-		// Display number of owned items for each type
-		v.textSize(24);
-		v.fill(UI_COLOR);
-		for(int i = 0; i < menu.size(); i++) {
-			MenuOption opt = menu.get(i);
-			if(opt instanceof EconomyItemButton) {
-				EconomyItem item = ((EconomyItemButton)opt).getItem();
-				int ct = 0;
-				for(Item other : getInventory()) {
-					if(item.getName().equals(other.getName())) {
-						ct++;
-					}
-				}
-				if(ct > 0) {
-					v.text("x" + ct, getItemX() + getItemWidth() / 2F + 50, getItemY(i) + 6);
-					if(i == currentIndex) {
-						currentCount = ct;
-					}
-				}
-			}
-		}
 
 		// Ensure that the cursor item is related to a chart
 		if(!(menu.getCursor() instanceof EconomyItemButton)) {
@@ -174,12 +147,16 @@ public class EconomyMenuHandle extends MenuHandle {
 		v.textAlign(RIGHT);
 		v.fill(200);
 
-		// Draw left/right key binding text when appropriate
-		if(currentCount > 0 || !buying) {
-			String keyText = buying
-					? Settings.getKeyText(KeyBinding.MENU_RIGHT) + " to sell (>)"
-					: Settings.getKeyText(KeyBinding.MENU_LEFT) + " to buy (<)";
-			v.text(keyText, chartRight, chartBottom + 64);
+		if(menu.getCursor() instanceof EconomyItemButton) {
+			int currentCount = ((EconomyItemButton)menu.getCursor()).countItems();
+			
+			// Draw left/right key binding text when appropriate
+			if(currentCount > 0 == buying) {
+				String keyText = buying
+						? Settings.getKeyText(KeyBinding.MENU_RIGHT) + " to sell (>)"
+						: Settings.getKeyText(KeyBinding.MENU_LEFT) + " to buy (<)";
+				v.text(keyText, chartRight, chartBottom + 64);
+			}
 		}
 	}
 

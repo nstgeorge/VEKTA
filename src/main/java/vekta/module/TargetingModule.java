@@ -31,7 +31,7 @@ public class TargetingModule extends ShipModule implements Targeter {
 		this.mode = mode;
 		setTarget(null);
 
-		// Immediately setValue ship's targeting instruments
+		// Immediately update ship's targeting instruments
 		getShip().updateTargets();
 	}
 
@@ -64,7 +64,7 @@ public class TargetingModule extends ShipModule implements Targeter {
 	@Override
 	public boolean isValidTarget(SpaceObject obj) {
 		if(mode == null) {
-			return obj == getTarget() && !obj.isDestroyed(); // Don't setValue targeter unless destroyed
+			return obj == getTarget() && !obj.isDestroyed(); // Don't set targeter unless destroyed
 		}
 		switch(mode) {
 		case PLANET:
@@ -111,13 +111,20 @@ public class TargetingModule extends ShipModule implements Targeter {
 	@Override
 	public void onUpdate() {
 		if(target != null && getShip().isLanding()) {
-			getWorld().setAutoZoom(target.relativePosition(getShip()).mag() * AUTO_ZOOM_SCALE);
+			getWorld().setAutoZoom(getTargetZoom());
 		}
+	}
+
+	public float getTargetZoom() {
+		return target != null ? target.relativePosition(getShip()).mag() * AUTO_ZOOM_SCALE : getWorld().getZoom();
 	}
 
 	@Override
 	public void onKeyPress(KeyBinding key) {
 		switch(key) {
+		case SHIP_LAND:
+			getWorld().setZoom(getTargetZoom());
+			break;
 		case SHIP_TARGET:
 			setMode(null);
 			break;

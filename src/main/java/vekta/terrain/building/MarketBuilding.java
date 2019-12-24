@@ -11,6 +11,7 @@ import vekta.terrain.settlement.SettlementPart;
 import java.util.HashMap;
 import java.util.Map;
 
+import static vekta.Vekta.getWorld;
 import static vekta.Vekta.v;
 
 public class MarketBuilding implements SettlementPart {
@@ -19,14 +20,17 @@ public class MarketBuilding implements SettlementPart {
 	private final Map<Item, Integer> shipOffers = new HashMap<>();
 
 	private final String type;
-	private final ItemGenerator.ItemSpawner spawner;
+	private final Class<? extends ItemGenerator.ItemSpawner> spawnerType;
+	private final int shopTier;
 
-	public MarketBuilding(int shopTier, String type, ItemGenerator.ItemSpawner spawner) {
+	private float prevRestockTime;
+
+	public MarketBuilding(int shopTier, String type, Class<? extends ItemGenerator.ItemSpawner> spawnerType) {
 		this.type = type;
-		this.spawner = spawner;
+		this.spawnerType = spawnerType;
+		this.shopTier = shopTier;
 
-		inventory.add((int)(50 * (v.random(shopTier) + 1)));
-		ItemGenerator.addLoot(getInventory(), shopTier, spawner);
+		restock();
 	}
 
 	@Override
@@ -57,6 +61,14 @@ public class MarketBuilding implements SettlementPart {
 	public void cleanup() {
 	}
 
+	public void restock() {
+		prevRestockTime = getWorld().getTime();
+
+		inventory.clear();
+		inventory.add((int)(50 * (v.random(shopTier) + 1)));
+		ItemGenerator.addLoot(getInventory(), shopTier, ItemGenerator.getSpawner(spawnerType));
+	}
+
 	@Override
 	public void setupMenu(Menu menu) {
 		Inventory inv = menu.getPlayer().getInventory();
@@ -69,6 +81,7 @@ public class MarketBuilding implements SettlementPart {
 	}
 
 	public boolean canSell(Item item) {
+		ItemGenerator.ItemSpawner spawner = ItemGenerator.getSpawner(spawnerType);
 		return spawner == null || spawner.isValid(item);
 	}
 

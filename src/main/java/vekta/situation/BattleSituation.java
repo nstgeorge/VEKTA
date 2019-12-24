@@ -13,7 +13,7 @@ import static vekta.Vekta.getWorld;
 
 public class BattleSituation implements Situation {
 	private static final SoundGroup BATTLE_MUSIC = new SoundGroup("battle");
-	private static final float BATTLE_RADIUS = WorldGenerator.getRadius(RenderLevel.SHIP);
+	private static final float BATTLE_RADIUS = WorldGenerator.getRadius(RenderLevel.PARTICLE) / getDistanceUnit(RenderLevel.PARTICLE);
 
 	@Override
 	public boolean isHappening(Player player) {

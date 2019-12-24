@@ -4,7 +4,7 @@ import vekta.Player;
 import vekta.context.KnowledgeContext;
 import vekta.menu.Menu;
 
-import static vekta.Vekta.getWorld;
+import static vekta.Vekta.getContext;
 import static vekta.Vekta.setContext;
 
 public class PlayerKnowledgeButton implements ButtonOption {
@@ -19,6 +19,6 @@ public class PlayerKnowledgeButton implements ButtonOption {
 	@Override
 	public void onSelect(Menu menu) {
 		Player player = menu.getPlayer();
-		setContext(new KnowledgeContext(getWorld(), player));
+		setContext(new KnowledgeContext(getContext(), player));
 	}
 }

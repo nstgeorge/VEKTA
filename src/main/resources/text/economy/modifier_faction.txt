@@ -18,10 +18,11 @@ Foreign Credit : .5
 Debt Repayment : .5
 Investigations : .5
 Immigration : .5
+Foreign Aid : .1
 
 Market Crash : -5
+Recession : -4
 Inflation Rate : -2
-Recession : -5
 Trade War : -2
 Economic Stagnation : -2
 Disastrous Election : -2
@@ -32,15 +33,15 @@ Isolationist Policies : -1
 Public Outrage : -1
 Government Intervention : -1
 Regulation Changes : -1
+Natural Disasters : -1
 Investigations : -.5
 Complacency : -.5
-Natural Disasters : -.5
 Import Tariffs : -.5
 Debt Accumulation : -.5
 Immigration : -.5
 Emigration : -.5
-Debt Repayment : .2
+Sudden Climate Change : -.3
+Pollution : -.2
+Debt Repayment : -.2
 
-Foreign Aid : 0
 Military Spending : 0
-

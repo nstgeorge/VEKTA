@@ -35,6 +35,11 @@ public class PassiveTCSModule extends ShipModule {
 	}
 
 	@Override
+	public float getValueScale() {
+		return 3 * getEfficiency();
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return other instanceof PassiveTCSModule && getEfficiency() > ((PassiveTCSModule)other).getEfficiency();
 	}

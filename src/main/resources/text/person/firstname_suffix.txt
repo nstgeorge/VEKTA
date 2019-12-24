@@ -28,3 +28,4 @@ tsch
 gre
 sh
 seph
+ski

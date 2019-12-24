@@ -69,6 +69,11 @@ public class TerrestrialPlanet extends Planet {
 			landed.onDestroy(s);
 		}
 
+		// Clean up settlements
+		for(Settlement settlement : getTerrain().getSettlements()) {
+			settlement.cleanup();
+		}
+
 		// If player destroyed planet, immediately set enemy
 		if(s instanceof ModularShip && ((ModularShip)s).hasController()) {
 			for(Person person : getWorld().findObjects(Person.class)) {

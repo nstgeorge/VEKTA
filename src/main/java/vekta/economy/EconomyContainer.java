@@ -6,4 +6,7 @@ public interface EconomyContainer {
 	int getColor();
 
 	boolean isEconomyAlive();
+
+	default void updateEconomy() {
+	}
 }

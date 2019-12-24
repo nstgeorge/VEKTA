@@ -6,8 +6,9 @@ import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.menu.handle.EconomyMenuHandle;
+import vekta.menu.handle.MenuHandle;
 
-import static vekta.Vekta.moneyString;
+import static vekta.Vekta.*;
 
 public class EconomyItemButton implements ButtonOption {
 	private static final float FEE = 1;
@@ -76,6 +77,30 @@ public class EconomyItemButton implements ButtonOption {
 	@Override
 	public boolean isEnabled() {
 		return isBuying() ? getInventory().has(getPrice()) : getInventory().has(getItem());
+	}
+
+	public int countItems() {
+		int ct = 0;
+		for(Item other : getInventory()) {
+			if(getItem().getName().equals(other.getName())) {
+				ct++;
+			}
+		}
+		return ct;
+	}
+
+	@Override
+	public void draw(Menu menu, int index) {
+		ButtonOption.super.draw(menu, index);
+
+		MenuHandle handle = menu.getHandle();
+
+		int ct = countItems();
+		if(ct > 0) {
+			v.textSize(24);
+			v.fill(UI_COLOR);
+			v.text("x" + ct, handle.getItemX() + handle.getItemWidth() / 2F + 50, handle.getItemY(index) + 6);
+		}
 	}
 
 	@Override

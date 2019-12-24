@@ -15,6 +15,5 @@ public class EconomyGenerator {
 	public interface EconomySpawner extends Weighted {
 		void spawn(Economy economy);
 	}
-
 }
 

@@ -20,4 +20,9 @@ public class PlayerFaction extends Faction {
 		}
 		this.player = player;
 	}
+
+	@Override
+	public void updateEconomy() {
+		// Override typical faction economy behavior
+	}
 }

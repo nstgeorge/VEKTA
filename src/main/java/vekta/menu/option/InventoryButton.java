@@ -21,7 +21,7 @@ public class InventoryButton implements ButtonOption {
 
 	@Override
 	public void onSelect(Menu menu) {
-		Menu sub = new Menu(menu.getPlayer(), menu.getDefault(), new InventoryMenuHandle(inv));
+		Menu sub = new Menu(menu, new InventoryMenuHandle(inv));
 		for(Item item : inv) {
 			sub.add(new JettisonButton(item, inv));
 		}

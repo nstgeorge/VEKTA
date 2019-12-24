@@ -41,6 +41,11 @@ public class TorpedoModule extends WeaponModule {
 	}
 
 	@Override
+	public float getValueScale() {
+		return 1.5F * getSpeed();
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return other instanceof TorpedoModule && getSpeed() > ((TorpedoModule)other).getSpeed();
 	}

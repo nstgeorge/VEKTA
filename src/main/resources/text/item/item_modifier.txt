@@ -11,6 +11,7 @@ Translator
 Transmogrifier
 Box
 Cage
+Pouch
 Simulator
 Juju
 Butterer
@@ -56,3 +57,9 @@ Packaging
 Swaddler
 Nibbler
 Bisector
+Wielder
+Launcher
+Detonator
+Insulator
+Excavator
+Charger

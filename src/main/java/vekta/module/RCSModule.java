@@ -38,6 +38,11 @@ public class RCSModule extends ShipModule {
 	}
 
 	@Override
+	public float getValueScale() {
+		return .75F * getTurnSpeed();
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return other instanceof RCSModule && getTurnSpeed() > ((RCSModule)other).getTurnSpeed();
 	}

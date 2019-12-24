@@ -59,6 +59,7 @@ public abstract class Planet extends SpaceObject implements Renameable {
 		if(r > maxRadius * .9F) {
 			v.fill(v.lerpColor(0, getColor(), (maxRadius - r) / maxRadius));
 		}
+
 		v.strokeWeight(2);
 		super.draw(level, r);
 		v.strokeWeight(1);

@@ -38,6 +38,8 @@ public class AbandonedSettlement extends Settlement {
 
 	@Override
 	public void onSettlementMenu(Menu menu) {
-		menu.add(new LootMenuButton("Scavenge", menu.getPlayer().getInventory(), getInventory()));
+		if(getInventory().itemCount() > 0) {
+			menu.add(new LootMenuButton("Scavenge", menu.getPlayer().getInventory(), getInventory()));
+		}
 	}
 }

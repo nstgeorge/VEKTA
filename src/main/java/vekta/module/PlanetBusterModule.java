@@ -32,6 +32,11 @@ public class PlanetBusterModule extends WeaponModule {
 	}
 
 	@Override
+	public float getValueScale() {
+		return 5;
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return false;
 	}

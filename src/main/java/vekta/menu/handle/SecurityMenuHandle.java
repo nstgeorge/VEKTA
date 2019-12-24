@@ -7,7 +7,7 @@ import vekta.menu.Menu;
 import static vekta.Vekta.v;
 
 /**
- * Menu renderer for dialog interactions
+ * Menu renderer for security checkpoints
  */
 public class SecurityMenuHandle extends MenuHandle {
 	private final Faction faction;

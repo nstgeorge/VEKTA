@@ -36,7 +36,10 @@ public final class DialogGenerator {
 	}
 
 	public static Dialog randomVisitDialog(Player player, Person person) {
-		if(person.getOpinion(player.getFaction()) == OpinionType.UNFRIENDLY) {
+		if(person.getFaction() == player.getFaction()) {
+			return person.createDialog("follower");
+		}
+		else if(person.getOpinion(player.getFaction()) == OpinionType.UNFRIENDLY) {
 			return person.createDialog(v.chance(.5F) ? "busy" : "ask_leave");
 		}
 		else if(person.getOpinion(player.getFaction()) == OpinionType.ENEMY) {

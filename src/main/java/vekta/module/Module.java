@@ -16,8 +16,12 @@ public interface Module extends Serializable {
 	String getName();
 
 	ModuleType getType();
-	
+
 	int getMass();
+
+	default float getValueScale() {
+		return 1;
+	}
 
 	boolean isBetter(Module other);
 
@@ -30,10 +34,10 @@ public interface Module extends Serializable {
 
 	default void onUninstall(ModularShip ship) {
 	}
-	
+
 	default void onDamageShip(ModularShip.DamageAttempt attempt) {
 	}
-	
+
 	default void onUpdate() {
 	}
 

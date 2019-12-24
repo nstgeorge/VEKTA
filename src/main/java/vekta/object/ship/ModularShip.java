@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import processing.core.PVector;
 import vekta.*;
 import vekta.context.World;
+import vekta.ecosystem.Ecosystem;
 import vekta.item.Item;
 import vekta.item.ModuleItem;
 import vekta.knowledge.ObservationLevel;
@@ -28,13 +29,14 @@ import java.util.Map;
 import static vekta.Vekta.*;
 
 public abstract class ModularShip extends Ship implements ModuleUpgradeable, PlayerListener, Rechargeable {
-	private static final Map<KeyBinding, Class<? extends ButtonOption>> SHORTCUT_MAP = ImmutableMap.of(
-			KeyBinding.SHIP_MISSIONS, MissionMenuButton.class,
-			KeyBinding.SHIP_LOADOUT, LoadoutMenuButton.class,
-			KeyBinding.SHIP_INTERNET, InternetMenuButton.class,
-			KeyBinding.SHIP_INVENTORY, InventoryButton.class,
-			KeyBinding.SHIP_KNOWLEDGE, PlayerKnowledgeButton.class
-	);
+	private static final Map<KeyBinding, Class<? extends MenuOption>> SHORTCUT_MAP = ImmutableMap.<KeyBinding, Class<? extends MenuOption>>builder()
+			.put(KeyBinding.SHIP_KNOWLEDGE, PlayerKnowledgeButton.class)
+			.put(KeyBinding.SHIP_MISSIONS, MissionMenuButton.class)
+			.put(KeyBinding.SHIP_LOADOUT, LoadoutMenuButton.class)
+			.put(KeyBinding.SHIP_INTERNET, InternetMenuButton.class)
+			.put(KeyBinding.SHIP_FOLLOWERS, FollowerMenuButton.class)
+			.put(KeyBinding.SHIP_INVENTORY, InventoryButton.class)
+			.build();
 
 	private static final float ENERGY_TIME_SCALE = 1e-4F;
 	private static final float ENERGY_HEAT_SCALE = 1;
@@ -105,11 +107,13 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	public void setThrustControl(float thrust) {
 		this.thrust = thrust;
-		if(thrust != 0 && hasEnergy()) {
-			Resources.loopSound("engine");
-		}
-		else {
-			Resources.stopSound("engine");
+		if(hasController()) {
+			if(thrust != 0 && hasEnergy()) {
+				Resources.loopSound("engine");
+			}
+			else {
+				Resources.stopSound("engine");
+			}
 		}
 	}
 
@@ -355,23 +359,26 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		return super.damage(amount, damager);
 	}
 
-	// TODO: setValue modules/UI to use these methods
-
 	public SpaceObject findNavigationTarget() {
-		Module m = getModule(ModuleType.NAVIGATION);
-		if(m instanceof Targeter) {
-			return ((Targeter)m).getTarget();
+		for(Module m : getModules()) {
+			if(m.getType() == ModuleType.NAVIGATION && m instanceof Targeter) {
+				return ((Targeter)m).getTarget();
+			}
 		}
 		return null;
 	}
 
 	public void setNavigationTarget(SpaceObject target) {
-		Module m = getModule(ModuleType.NAVIGATION);
-		if(m instanceof TargetingModule) { // Reset targeting mode if using a TargetingModule
-			((TargetingModule)m).setMode(null);
-		}
-		if(m instanceof Targeter) {
-			((Targeter)m).setTarget(target);
+		for(Module m : getModules()) {
+			if(m.getType() == ModuleType.NAVIGATION) {
+				if(m instanceof TargetingModule) { // Reset targeting mode if using a TargetingModule
+					((TargetingModule)m).setMode(null);
+				}
+				if(m instanceof Targeter) {
+					((Targeter)m).setTarget(target);
+				}
+				return; // Only adjust first navigation module
+			}
 		}
 	}
 
@@ -382,15 +389,19 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		}
 	}
 
-	public void openShipMenu() {
+	public Menu createShipMenu() {
 		Menu menu = new Menu(getController(), new BackButton(getWorld()), new SpaceObjectMenuHandle(this));
 		menu.add(new PlayerKnowledgeButton());
-		menu.add(new InventoryButton(getInventory()));
-		menu.add(new LoadoutMenuButton(this));
 		menu.add(new MissionMenuButton());
+		menu.add(new LoadoutMenuButton(this));
+		menu.add(new InventoryButton(getInventory()));
+		if(hasController()) {
+			FollowerMenuButton followerButton = new FollowerMenuButton(getController());
+			menu.add(followerButton);
+		}
 		menu.add(new RenameButton(this));
 		menu.addDefault();
-		setContext(menu);
+		return menu;
 	}
 
 	@Override
@@ -400,6 +411,10 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			Menu menu = new Menu(player, new ShipTakeoffButton(site, getWorld()), new LandingMenuHandle(site));
 			for(Settlement settlement : site.getTerrain().getSettlements()) {
 				menu.add(new SettlementButton(settlement));
+			}
+			Ecosystem ecosystem = site.getTerrain().getEcosystem();
+			if(!ecosystem.getSpecies().isEmpty() || !ecosystem.getExtinctions().isEmpty()) {
+				menu.add(new EcosystemButton(ecosystem));
 			}
 			site.getTerrain().setupLandingMenu(site, menu);
 			menu.add(new SurveyButton(site));
@@ -477,15 +492,16 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			module.onKeyPress(key);
 		}
 
-		Class<?> shortcutType = SHORTCUT_MAP.get(key);
-		if(key == KeyBinding.SHIP_MENU || shortcutType != null) {
-			openShipMenu();
-			applyContext();
-			Menu menu = (Menu)getContext();
-			if(shortcutType != null) {
-				for(MenuOption option : menu.getOptions()) {
-					if(shortcutType.isInstance(option) && option.isEnabled()) {
-						menu.select(option);
+		if(key == KeyBinding.SHIP_MENU) {
+			setContext(createShipMenu());
+		}
+		else {
+			Class<? extends MenuOption> type = SHORTCUT_MAP.get(key);
+			if(type != null) {
+				Menu menu = createShipMenu();
+				for(MenuOption opt : menu.getOptions()) {
+					if(type.isInstance(opt)) {
+						menu.select(opt);
 						break;
 					}
 				}
@@ -569,5 +585,9 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		public void setDamager(Damager damager) {
 			this.damager = damager;
 		}
+	}
+
+	private interface ShortcutProvider extends Serializable {
+		MenuOption provide(ModularShip ship, Menu menu);
 	}
 }  

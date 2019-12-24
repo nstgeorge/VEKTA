@@ -138,7 +138,7 @@ public class WormholeModule extends ShipModule {
 	@Override
 	public void onInfo(InfoGroup info) {
 		info.addDescription("We can't find the scientists who invented them, but it's become the latest trend in instant transportation.");
-		
+
 		info.addDescription("Store a target in your inventory for easy access, or equip to teleport on-the-fly.");
 
 		info.addKey(KeyBinding.SHIP_SCAN, "store target");

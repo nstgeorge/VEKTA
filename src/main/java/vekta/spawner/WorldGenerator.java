@@ -115,19 +115,22 @@ public class WorldGenerator {
 			buildings.add(new MarketBuilding(shopTier, "Goods", null));
 		}
 		if(v.chance(chance * .3F)) {
-			buildings.add(new MarketBuilding(shopTier, "Trinkets", ItemGenerator.getSpawner(MissionItemSpawner.class)));
+			buildings.add(new MarketBuilding(shopTier, "Trinkets", MissionItemSpawner.class));
 		}
 		if(v.chance(chance * .3F)) {
-			buildings.add(new MarketBuilding(shopTier, "Modules", ItemGenerator.getSpawner(ModuleItemSpawner.class)));
+			buildings.add(new MarketBuilding(shopTier, "Modules", ModuleItemSpawner.class));
 		}
 		if(v.chance(chance * .3F)) {
-			buildings.add(new MarketBuilding(shopTier, "Clothing", ItemGenerator.getSpawner(ClothingItemSpawner.class)));
+			buildings.add(new MarketBuilding(shopTier, "Clothing", ClothingItemSpawner.class));
 		}
 		if(v.chance(chance * .1F)) {
-			buildings.add(new MarketBuilding(shopTier, "Supplies", ItemGenerator.getSpawner(ColonyItemSpawner.class)));
+			buildings.add(new MarketBuilding(shopTier, "Supplies", ColonyItemSpawner.class));
 		}
 		if(v.chance(chance * .1F)) {
-			buildings.add(new MarketBuilding(shopTier, "Blueprints", ItemGenerator.getSpawner(BlueprintItemSpawner.class)));
+			buildings.add(new MarketBuilding(shopTier, "Blueprints", BlueprintItemSpawner.class));
+		}
+		if(v.chance(chance * .1F)) {
+			buildings.add(new MarketBuilding(shopTier, "Wildlife", SpeciesItemSpawner.class));
 		}
 		return buildings;
 	}

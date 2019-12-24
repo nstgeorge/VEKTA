@@ -52,6 +52,11 @@ public class HyperdriveModule extends ShipModule {
 	}
 
 	@Override
+	public float getValueScale() {
+		return 10 * getBoost();
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return other instanceof HyperdriveModule && getBoost() > ((HyperdriveModule)other).getBoost();
 	}
@@ -84,7 +89,7 @@ public class HyperdriveModule extends ShipModule {
 				float effectiveThrust = thrust * max(timeScale, LOW_TIME_SCALE_SPEEDUP) / timeScale;
 				ship.setVelocity(ship.getHeading().setMag(min(currentBoost * timeScale, ship.getVelocityReference().mag())));
 				ship.accelerate(effectiveThrust * currentBoost, ship.getVelocityReference());
-				
+
 				// Create shockwave effect
 				float speed = (RenderLevel.SHIP.isVisibleTo(getWorld().getRenderLevel())
 						? getWorld().getZoom()

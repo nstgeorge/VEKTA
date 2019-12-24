@@ -207,12 +207,12 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 	}
 
 	public void die() {
-		this.dead = true;
+		dead = true;
 		setHome(null);
 		getWorld().remove(this);
 		syncChanges();
 	}
-
+	
 	@Override
 	public int chooseMissionTier(Player player) {
 		int tier = (int)v.random(2) + 1;

@@ -35,7 +35,7 @@ public class LoadoutMenuButton implements ButtonOption, ModuleUpgrader {
 			return;
 		}
 
-		Menu sub = new Menu(menu.getPlayer(), menu.getDefault(), new LoadoutMenuHandle(upgradeable.getModules()));
+		Menu sub = new Menu(menu, new LoadoutMenuHandle(upgradeable.getModules()));
 		sub.addSelectListener(option -> updateMenu(sub));
 		updateMenu(sub);
 		setContext(sub);

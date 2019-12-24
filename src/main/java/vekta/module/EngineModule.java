@@ -38,6 +38,11 @@ public class EngineModule extends ShipModule {
 	}
 
 	@Override
+	public float getValueScale() {
+		return 1.25F * getSpeed();
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return other instanceof EngineModule && getSpeed() > ((EngineModule)other).getSpeed();
 	}

@@ -35,8 +35,11 @@ public class Asteroid extends TerrestrialPlanet {
 
 	@Override
 	public void drawNearby(float r) {
+		if(r < .1F) {
+			r = .1F;
+		}
+		v.strokeWeight(1);
 		v.rotate(angle);
-
 		v.ellipse(0, 0, r, r * skew);
 	}
 }

@@ -16,7 +16,7 @@ public abstract class Reward implements MissionListener {
 	}
 
 	public abstract String getName();
-
+	
 	public int getColor() {
 		return MissionStatus.COMPLETED.getColor();
 	}

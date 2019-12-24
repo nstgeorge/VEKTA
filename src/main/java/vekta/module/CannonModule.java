@@ -43,7 +43,7 @@ public class CannonModule extends WeaponModule {
 
 	@Override
 	public void onInfo(InfoGroup info) {
-		info.addDescription("Fling chunks of molten plasma at your enemies.");
+		info.addDescription("Fling chunks of plasma at your enemies.");
 
 		super.onInfo(info);
 	}

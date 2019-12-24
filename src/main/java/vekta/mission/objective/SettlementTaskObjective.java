@@ -21,7 +21,7 @@ public class SettlementTaskObjective extends Objective {
 
 	@Override
 	public String getName() {
-		return (getSettlement() != null ? "(" + getSettlement().getName() + ") " : "") + name;
+		return name + (getSettlement() != null ? " (" + getSettlement().getName() + ")" : "");
 	}
 
 	public Settlement getSettlement() {

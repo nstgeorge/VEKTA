@@ -1,12 +1,8 @@
 package vekta.mission.reward;
 
-import processing.core.PVector;
 import vekta.Player;
 import vekta.mission.Mission;
-import vekta.object.ship.FollowerShip;
 import vekta.person.Person;
-
-import static vekta.Vekta.register;
 
 public class FollowerReward extends Reward {
 	private final Person person;
@@ -31,14 +27,15 @@ public class FollowerReward extends Reward {
 
 	@Override
 	public void onReward(Mission mission, Player player) {
-		FollowerShip ship = register(new FollowerShip(
-				getPerson(),
-				player,
-				getPerson().getFullName(),
-				PVector.random2D(),
-				player.getShip().getPosition().add(PVector.random2D().normalize().mult(1000)),
-				new PVector(),
-				player.getColor()));
-		ship.setPersistent(true);
+		//		FollowerShip ship = register(new FollowerShip(
+		//				getPerson(),
+		//				player,
+		//				getPerson().getFullName(),
+		//				PVector.random2D(),
+		//				player.getShip().getPosition().add(PVector.random2D().normalize().mult(1000)),
+		//				new PVector(),
+		//				player.getColor()));
+		//		ship.setPersistent(true);
+		getPerson().setFaction(player.getFaction());
 	}
 }

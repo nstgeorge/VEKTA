@@ -40,6 +40,11 @@ public class StructuralModule extends ShipModule {
 	}
 
 	@Override
+	public float getValueScale() {
+		return .5F;
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return false;
 	}

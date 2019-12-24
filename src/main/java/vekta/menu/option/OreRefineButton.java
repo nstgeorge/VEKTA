@@ -17,7 +17,7 @@ public class OreRefineButton implements ButtonOption {
 
 	@Override
 	public String getName() {
-		return selected ? getItem().getRefined().getName() : getItem().getName();
+		return selected ? "* " + getItem().getRefined().getName() : getItem().getName();
 	}
 
 	@Override

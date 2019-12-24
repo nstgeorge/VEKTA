@@ -3,7 +3,7 @@ package vekta.menu.option;
 import vekta.menu.Menu;
 import vekta.menu.handle.InternetMenuHandle;
 
-import static vekta.Vekta.setContext;
+import static vekta.Vekta.*;
 
 public class InternetMenuButton implements ButtonOption {
 	private final boolean connected;
@@ -29,6 +29,11 @@ public class InternetMenuButton implements ButtonOption {
 
 	@Override
 	public void onSelect(Menu menu) {
+		if(!isEnabled()) {
+			menu.getPlayer().send("Internet connection is out of range.");
+			return;
+		}
+
 		Menu sub = new Menu(menu, new InternetMenuHandle());
 
 		sub.add(new BondMenuButton());

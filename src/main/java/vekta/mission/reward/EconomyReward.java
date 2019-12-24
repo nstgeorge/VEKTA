@@ -33,6 +33,11 @@ public class EconomyReward extends Reward {
 	}
 
 	@Override
+	public String getDisplayText() {
+		return "Result: " + getName();
+	}
+
+	@Override
 	public final void onReward(Mission mission, Player player) {
 		getEconomy().addModifier(getModifier());
 	}

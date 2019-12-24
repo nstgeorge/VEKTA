@@ -31,6 +31,11 @@ public class ActiveTCSModule extends PassiveTCSModule {
 	}
 
 	@Override
+	public float getValueScale() {
+		return 2 * getEfficiency();
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return other instanceof ActiveTCSModule
 				? getEfficiency() > ((ActiveTCSModule)other).getEfficiency()

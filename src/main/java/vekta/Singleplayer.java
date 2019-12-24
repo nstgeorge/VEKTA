@@ -9,23 +9,23 @@ import vekta.context.TextInputContext;
 import vekta.context.World;
 import vekta.dungeon.Dungeon;
 import vekta.economy.Economy;
+import vekta.ecosystem.Ecosystem;
 import vekta.item.ColonyItem;
 import vekta.item.ModuleItem;
 import vekta.knowledge.ObservationLevel;
 import vekta.knowledge.StoryKnowledge;
 import vekta.menu.Menu;
+import vekta.menu.handle.DebugMenuHandle;
 import vekta.menu.handle.MainMenuHandle;
-import vekta.menu.handle.MenuHandle;
 import vekta.menu.option.BackButton;
 import vekta.menu.option.CustomButton;
 import vekta.menu.option.DungeonRoomButton;
 import vekta.module.*;
-import vekta.module.station.SensorModule;
-import vekta.module.station.SolarArrayModule;
 import vekta.module.station.StationCoreModule;
 import vekta.module.station.StructuralModule;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
+import vekta.object.planet.TerrestrialPlanet;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.PlayerShip;
 import vekta.object.ship.SpaceStation;
@@ -37,6 +37,7 @@ import vekta.spawner.item.BlueprintItemSpawner;
 import vekta.spawner.item.ClothingItemSpawner;
 import vekta.spawner.item.WeaponItemSpawner;
 import vekta.spawner.world.BlackHoleSpawner;
+import vekta.spawner.world.SpaceStationSpawner;
 import vekta.spawner.world.StarSystemSpawner;
 
 import java.io.*;
@@ -84,6 +85,8 @@ public class Singleplayer implements World, PlayerListener {
 	private final Counter eventCt = new Counter(3600 * 5).randomize(); // Occasional random events
 	private final Counter situationCt = new Counter(30).randomize(); // Situational events
 	private final Counter economyCt = new Counter(600).randomize(); // Economic progression
+		private final Counter ecosystemCt = new Counter(600).randomize(); // Ecosystem progression
+//	private final Counter ecosystemCt = new Counter(10).randomize();////
 
 	private PlayerOverlay overlay;
 
@@ -161,28 +164,13 @@ public class Singleplayer implements World, PlayerListener {
 	}
 
 	private void setupTesting() {
-		ModularShip playerShip = getPlayerShip();
+		Player player = getPlayer();
+		ModularShip playerShip = player.getShip();
 
 		if(getClass() == Singleplayer.class) {
 			// Add station to singleplayer world
-			SpaceStation station = register(new SpaceStation(
-					"OUTPOST I",
-					new StationCoreModule(),
-					new PVector(1, 0),
-					new PVector(300, 100), // Position
-					new PVector(),    // Velocity
-					playerShip.getColor()
-			));
+			SpaceStation station = SpaceStationSpawner.createStation("OUTPOST 1", PVector.random2D().mult(1000), getPlayer().getColor());
 			station.observe(ObservationLevel.OWNED, getPlayer());
-			SpaceStation.Component core = station.getCore();
-			SpaceStation.Component rcs = core.attach(SpaceStation.Direction.UP, new RCSModule(1));
-			SpaceStation.Component orbiter = core.attach(SpaceStation.Direction.RIGHT, new OrbitModule(1));
-			SpaceStation.Component struct = core.attach(SpaceStation.Direction.LEFT, new StructuralModule(10, 1));
-			SpaceStation.Component struct2 = core.attach(SpaceStation.Direction.DOWN, new StructuralModule(10, 1));
-			SpaceStation.Component panel = struct.attach(SpaceStation.Direction.LEFT, new SolarArrayModule(1));
-			SpaceStation.Component panel2 = struct.attach(SpaceStation.Direction.DOWN, new SolarArrayModule(1));
-			SpaceStation.Component panel3 = struct2.attach(SpaceStation.Direction.RIGHT, new SolarArrayModule(1));
-			SpaceStation.Component sensor = struct2.attach(SpaceStation.Direction.LEFT, new SensorModule());
 
 			BlackHoleSpawner.createBlackHole(PVector.random2D().mult(v.random(40, 50) * AU_DISTANCE))
 					.observe(ObservationLevel.OWNED, getPlayer());
@@ -190,7 +178,7 @@ public class Singleplayer implements World, PlayerListener {
 
 		//		playerShip.getInventory().add(new DialogItemSpawner().create());////
 
-		getPlayer().addKnowledge(new StoryKnowledge(StoryGenerator.createStory(10), "Story"));
+		player.addKnowledge(new StoryKnowledge(StoryGenerator.createStory(10), "Story"));
 
 		playerShip.addModule(new EngineModule(2)); // Upgrade engine
 		playerShip.addModule(new AutopilotModule());
@@ -217,10 +205,6 @@ public class Singleplayer implements World, PlayerListener {
 
 	public Player getPlayer() {
 		return state.getPlayer();
-	}
-
-	public ModularShip getPlayerShip() {
-		return getPlayer().getShip();
 	}
 
 	@Override
@@ -294,7 +278,7 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public void render() {
-		ModularShip playerShip = getPlayerShip();
+		ModularShip playerShip = getPlayer().getShip();
 
 		// Cycle background music
 		if(Resources.getMusic() == null && Settings.getInt("music") > 0) {
@@ -451,6 +435,15 @@ public class Singleplayer implements World, PlayerListener {
 			state.getEconomies().removeAll(economiesToRemove);
 		}
 
+		if(ecosystemCt.cycle()) {
+			for(SpaceObject s : state.getObjects()) {
+				if(s instanceof TerrestrialPlanet) {
+					Ecosystem ecosystem = ((TerrestrialPlanet)s).getTerrain().getEcosystem();
+					ecosystem.update();
+				}
+			}
+		}
+
 		prevLevel = level;
 		v.popMatrix();
 
@@ -476,7 +469,7 @@ public class Singleplayer implements World, PlayerListener {
 	}
 
 	protected void updateGlobal(RenderLevel level) {
-		ModularShip playerShip = getPlayerShip();
+		ModularShip playerShip = getPlayer().getShip();
 
 		// Set global velocity relative to player ship when zoomed in
 		if(RenderLevel.SHIP.isVisibleTo(level)/* || Resources.getSound("hyperdriveLoop").isPlaying()*/) {
@@ -503,19 +496,25 @@ public class Singleplayer implements World, PlayerListener {
 		// Overridden by Multiplayer
 	}
 
-	private static class DebugAttribute implements Player.Attribute {
+	@Override
+	public boolean globalKeyPressed(KeyEvent event) {
+		if(event.getKeyCode() == Settings.getKeyCode(KeyBinding.SHIP_KNOWLEDGE)) {
+
+			return true;
+		}
+		return false;
 	}
 
 	// Temp: debug key listener
 	@Override
 	public void keyPressed(KeyEvent event) {
-		if(v.key == '`') {
+		if(v.key == '`' && Settings.getBoolean("debug")) {
 			if(!getPlayer().hasAttribute(DebugAttribute.class)) {
 				getPlayer().addAttribute(DebugAttribute.class);
 				setupTesting();
 				getPlayer().send("Debug mode enabled");
 			}
-			Menu menu = new Menu(getPlayer(), new BackButton(this), new MenuHandle());
+			Menu menu = new Menu(getPlayer(), new BackButton(this), new DebugMenuHandle());
 			menu.add(new CustomButton("Give Missions", m -> {
 				for(int i = 0; i < 10; i++) {
 					MissionGenerator.createMission(getPlayer(), MissionGenerator.randomMissionPerson(), (int)v.random(5) + 1).start();
@@ -542,15 +541,15 @@ public class Singleplayer implements World, PlayerListener {
 	@Override
 	public void keyPressed(KeyBinding key) {
 		if(key == KeyBinding.ZOOM_IN) {
-			setZoom(getZoom() * ZOOM_FACTOR);
+			setZoom(getZoom() / 10);
 		}
 		else if(key == KeyBinding.ZOOM_OUT) {
-			setZoom(getZoom() / ZOOM_FACTOR);
+			setZoom(getZoom() * 10);
 		}
 		else if(key == KeyBinding.QUICK_LOAD) {
 			load(QUICKSAVE_FILE);
 		}
-		else if(getPlayerShip().isDestroyed()) {
+		else if(getPlayer().getShip().isDestroyed()) {
 			if(key == KeyBinding.MENU_SELECT) {
 				reload();
 			}
@@ -713,8 +712,10 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public void playSound(String sound, PVector location) {
-		float distance = getPlayerShip().getPosition().dist(location);
-		float distanceX = getPlayerShip().getPosition().x - location.x;
+		ModularShip playerShip = getPlayer().getShip();
+
+		float distance = playerShip.getPosition().dist(location);
+		float distanceX = playerShip.getPosition().x - location.x;
 
 		// Pan
 		float pan = (MAX_PAN_DISTANCE - distanceX) / MAX_PAN_DISTANCE;
@@ -777,5 +778,10 @@ public class Singleplayer implements World, PlayerListener {
 		if(menu.getHandle() instanceof MainMenuHandle) {
 			cleanup();
 		}
+	}
+
+	// Player tag for debug mode
+
+	private static class DebugAttribute implements Player.Attribute {
 	}
 }

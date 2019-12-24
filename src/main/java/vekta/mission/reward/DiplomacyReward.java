@@ -31,6 +31,11 @@ public abstract class DiplomacyReward extends Reward {
 	}
 
 	@Override
+	public String getDisplayText() {
+		return "Expect: " + getName();
+	}
+
+	@Override
 	public final void onReward(Mission mission, Player player) {
 		onReward(mission, a, b != null ? b : player.getFaction());
 	}

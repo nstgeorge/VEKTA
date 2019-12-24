@@ -9,8 +9,9 @@ import vekta.display.TextDisplay;
 import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;
+import vekta.menu.handle.TradeMenuHandle;
 
-import static vekta.Vekta.moneyString;
+import static vekta.Vekta.*;
 
 public class ItemTradeButton implements ButtonOption, LayoutBuilder {
 	private final boolean buying;
@@ -77,6 +78,22 @@ public class ItemTradeButton implements ButtonOption, LayoutBuilder {
 		return price == 0
 				? buying ? "take" : "give"
 				: buying ? "buy" : "sell";
+	}
+
+	@Override
+	public void draw(Menu menu, int index) {
+		ButtonOption.super.draw(menu,index);
+		
+		if(menu.getHandle() instanceof TradeMenuHandle) {
+			TradeMenuHandle handle = (TradeMenuHandle)menu.getHandle();
+
+			if(!handle.isLeftSide()) {
+				int profit = getProfit(menu.getPlayer());
+
+				v.fill(profit > 0 ? UI_COLOR : 100);
+				v.text((profit > 0 ? "+" : "") + quantityString(profit), handle.getItemX() + handle.getItemWidth() / 2F + 50, handle.getItemY(index));
+			}
+		}
 	}
 
 	@Override

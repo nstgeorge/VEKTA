@@ -19,7 +19,7 @@ public class MissionMenuButton implements ButtonOption {
 
 	@Override
 	public void onSelect(Menu menu) {
-		Menu sub = new Menu(menu.getPlayer(), menu.getDefault(), new MissionMenuHandle());
+		Menu sub = new Menu(menu, new MissionMenuHandle());
 		for(Mission mission : menu.getPlayer().getMissions()) {
 			sub.add(new MissionButton(mission));
 		}

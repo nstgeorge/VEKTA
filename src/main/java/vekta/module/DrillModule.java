@@ -44,6 +44,11 @@ public class DrillModule extends ShipModule {
 	}
 
 	@Override
+	public float getValueScale() {
+		return 2 * getEfficiency();
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return other instanceof DrillModule && getEfficiency() > ((DrillModule)other).getEfficiency();
 	}
