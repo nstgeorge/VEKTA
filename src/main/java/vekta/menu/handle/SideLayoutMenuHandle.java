@@ -3,7 +3,7 @@ package vekta.menu.handle;
 import vekta.display.Layout;
 import vekta.display.VerticalLayout;
 import vekta.menu.Menu;
-import vekta.menu.option.LayoutBuilder;
+import vekta.menu.option.LayoutAware;
 import vekta.menu.option.MenuOption;
 
 import static vekta.Vekta.v;
@@ -80,8 +80,8 @@ public class SideLayoutMenuHandle extends MenuHandle {
 		MenuOption cursor = menu.getCursor();
 		layout.clear();
 		layout.getStyle().color(cursor.getColor());
-		if(cursor instanceof LayoutBuilder) {
-			((LayoutBuilder)cursor).onLayout(layout);
+		if(cursor instanceof LayoutAware) {
+			((LayoutAware)cursor).onLayout(layout);
 		}
 	}
 }

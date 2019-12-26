@@ -38,7 +38,7 @@ public class EmptySettlement extends Settlement {
 	@Override
 	public void onSettlementMenu(Menu menu) {
 		if(getInventory().itemCount() > 0) {
-			menu.add(new LootMenuButton("Scavenge", menu.getPlayer().getInventory(), getInventory()));
+			menu.add(new LootMenuButton("Scavenge", getInventory()));
 		}
 	}
 }

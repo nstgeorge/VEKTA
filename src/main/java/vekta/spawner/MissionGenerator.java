@@ -2,6 +2,7 @@ package vekta.spawner;
 
 import processing.core.PVector;
 import vekta.Player;
+import vekta.PlayerFaction;
 import vekta.RenderLevel;
 import vekta.Resources;
 import vekta.mission.Mission;
@@ -14,6 +15,7 @@ import vekta.terrain.LandingSite;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static vekta.Vekta.getWorld;
 import static vekta.Vekta.v;
@@ -71,7 +73,9 @@ public class MissionGenerator {
 	}
 
 	public static Person randomMissionPerson(MissionIssuer exclude) {
-		List<Person> people = getWorld().findObjects(Person.class);
+		List<Person> people = getWorld().findObjects(Person.class).stream()
+				.filter(p -> !(p.getFaction() instanceof PlayerFaction))
+				.collect(Collectors.toList());
 		if(exclude instanceof Person) {
 			people.remove(exclude);
 		}

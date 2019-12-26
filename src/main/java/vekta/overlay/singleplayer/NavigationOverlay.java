@@ -60,11 +60,10 @@ public class NavigationOverlay implements Overlay {
 		v.fill(UI_COLOR);
 		PVector heading = ship.getHeading();
 		PVector velocity = ship.getVelocity();
-		if(velocity.magSq() == 0) {
-			velocity.set(heading);
-		}
 		drawDial("Heading", ship.getHeading(), v.width - 370, dialHeight, UI_COLOR);
-		drawDial("Velocity", velocity, v.width - 500, dialHeight, UI_COLOR);
+		if(velocity.magSq() < 1e-5F) {
+			drawDial("Velocity", velocity, v.width - 500, dialHeight, UI_COLOR);
+		}
 
 		// Targeter information
 		if(targeter != null) {

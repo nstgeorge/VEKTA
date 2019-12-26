@@ -2,9 +2,16 @@ package vekta.item;
 
 import vekta.Player;
 import vekta.knowledge.StoryKnowledge;
+import vekta.menu.option.BackButton;
+import vekta.person.Dialog;
+import vekta.person.Person;
+import vekta.person.TemporaryPerson;
+import vekta.spawner.StoryGenerator;
 import vekta.story.Story;
 
 import java.io.Serializable;
+
+import static vekta.Vekta.getContext;
 
 public class StoryItem extends Item {
 	private final String name;
@@ -24,7 +31,7 @@ public class StoryItem extends Item {
 
 	@Override
 	public ItemType getType() {
-		return ItemType.MISSION;
+		return ItemType.KNOWLEDGE;
 	}
 
 	@Override
@@ -37,22 +44,22 @@ public class StoryItem extends Item {
 		return super.randomPrice() * 2;
 	}
 
-	public Story findStory(Player player) {
-		if(story == null) {
-			story = provider.provide(player);
-		}
-		return story;
-	}
-
 	@Override
 	public void onAdd(Player player) {
-		boolean hadStory = player.hasKnowledge(StoryKnowledge.class, k -> k.getStory() == findStory(player));
-		player.addKnowledge(new StoryKnowledge(findStory(player), getName()));
+		Story story = provider.provide(player);
+
+		boolean hadStory = player.hasKnowledge(StoryKnowledge.class, k -> k.getStory() == story);
+		player.addKnowledge(new StoryKnowledge(story, getName()));
 		if(!hadStory) {
-			player.send("New story from " + getName()).withColor(getColor());
+			//			player.send("New story from " + getName()).withColor(getColor());
+
+			Person person = new TemporaryPerson(getName(), player.getFaction());
+			Dialog dialog = StoryGenerator.createDialog(person, story);
+
+			dialog.openMenu(player, new BackButton(getContext()));
 		}
-		
-		//TODO: story UI
+
+		player.getInventory().remove(this);
 	}
 
 	public interface StoryProvider extends Serializable {

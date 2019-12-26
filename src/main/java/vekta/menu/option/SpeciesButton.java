@@ -11,7 +11,7 @@ import vekta.menu.handle.MenuHandle;
 import static vekta.Vekta.quantityString;
 import static vekta.Vekta.v;
 
-public class SpeciesButton implements ButtonOption, LayoutBuilder {
+public class SpeciesButton implements ButtonOption, LayoutAware {
 	private final Species species;
 	private final Ecosystem ecosystem;
 

@@ -19,7 +19,7 @@ public class MissionItem extends Item implements MissionIssuer {
 	private final String name;
 	private final MissionProvider provider;
 
-	private boolean activated;
+	private boolean created;
 	private Faction faction;
 	private SpaceObject home;
 
@@ -48,7 +48,7 @@ public class MissionItem extends Item implements MissionIssuer {
 	}
 
 	public Mission createMission(Player player) {
-		activated = true;
+		created = true;
 		Mission mission = provider.provide(player);
 		Objective objective = new KeepItemObjective(this);
 		if(v.chance(.1F)) {
@@ -69,7 +69,7 @@ public class MissionItem extends Item implements MissionIssuer {
 	@Override
 	public void onAdd(Player player) {
 		home = player.getShip();
-		if(!activated) {
+		if(!created) {
 			createMission(player).start();
 		}
 	}

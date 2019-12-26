@@ -1,5 +1,6 @@
 package vekta.mission.objective;
 
+import vekta.item.ItemType;
 import vekta.menu.Menu;
 import vekta.menu.handle.LandingMenuHandle;
 import vekta.menu.option.CustomButton;
@@ -35,6 +36,7 @@ public class LandingTaskObjective extends Objective {
 			LandingSite site = ((LandingMenuHandle)menu.getHandle()).getSite();
 			if(getSpaceObject() == null || site.getParent() == getSpaceObject()) {
 				menu.add(new CustomButton(name, m -> complete())
+						.withColor(ItemType.KNOWLEDGE.getColor())
 						.withRemoval());
 			}
 		}

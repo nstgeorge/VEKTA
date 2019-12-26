@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import processing.core.PVector;
 import vekta.*;
 import vekta.context.World;
-import vekta.ecosystem.Ecosystem;
 import vekta.item.Item;
 import vekta.item.ModuleItem;
 import vekta.knowledge.ObservationLevel;
@@ -385,7 +384,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	@Override
 	public void onDestroy(SpaceObject s) {
 		if(hasController()) {
-			getWorld().setDead();// TODO: convert to event
+			getController().emit(PlayerEvent.GAME_OVER, this);
 		}
 	}
 
@@ -411,10 +410,6 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			Menu menu = new Menu(player, new ShipTakeoffButton(site, getWorld()), new LandingMenuHandle(site));
 			for(Settlement settlement : site.getTerrain().getSettlements()) {
 				menu.add(new SettlementButton(settlement));
-			}
-			Ecosystem ecosystem = site.getTerrain().getEcosystem();
-			if(!ecosystem.getSpecies().isEmpty() || !ecosystem.getExtinctions().isEmpty()) {
-				menu.add(new EcosystemButton(ecosystem));
 			}
 			site.getTerrain().setupLandingMenu(site, menu);
 			menu.add(new SurveyButton(site));

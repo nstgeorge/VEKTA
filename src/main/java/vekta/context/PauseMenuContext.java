@@ -7,18 +7,18 @@ import vekta.Settings;
 import static vekta.Vekta.*;
 
 /**
- * Pause inject implementation as a Context.
+ * Pause menu implementation as a Context.
  */
 // TODO: convert to PauseMenuHandle
 public class PauseMenuContext implements Context {
-	private final World world;
+	private static final String[] OPTIONS = {"Continue", "Restart"/*, "Settings"*/, "Quit to Menu"};
 
-	// Pause inject options
-	private final String[] options = {"Continue", "Restart", "Quit to Menu"};
+	private final Context parent;
+
 	private int selected = 0;
 
-	public PauseMenuContext(World world) {
-		this.world = world;
+	public PauseMenuContext(Context parent) {
+		this.parent = parent;
 	}
 
 	@Override
@@ -27,35 +27,34 @@ public class PauseMenuContext implements Context {
 
 	@Override
 	public void render() {
-		// Border box
+		// Border
 		v.rectMode(CORNER);
 		v.stroke(UI_COLOR);
 		v.fill(0);
 		v.rect(-1, -1, v.width / 4F, v.height + 2);
+
 		// Logo
 		v.shapeMode(CENTER);
 		v.shape(Resources.logo, v.width / 8F, 100, (v.width / 4F) - 100, ((v.width / 4F) - 100) / 3.392F);
+
 		// Options
-		for(int i = 0; i < options.length; i++) {
-			drawOption(options[i], (v.height / 2) + (i * 100), i == selected);
+		for(int i = 0; i < OPTIONS.length; i++) {
+			drawOption(OPTIONS[i], (v.height / 2) + (i * 100), i == selected);
 		}
+
+		// Helper text
 		v.textFont(BODY_FONT);
 		v.stroke(0);
 		v.fill(255);
 		v.textAlign(CENTER);
-		v.text(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to select", v.width / 8F, (v.height / 2) + (options.length * 100) + 100);
-		//		v.hint(ENABLE_DEPTH_TEST);
-		//noLoop();
+		v.text(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to select", v.width / 8F, (v.height / 2F) + (OPTIONS.length * 100) + 100);
 	}
 
-	/**
-	 * Draws an option of name "name" at yPos in the overlay
-	 */
 	private void drawOption(String name, int yPos, boolean selected) {
 		if(selected)
 			v.stroke(255);
 		else
-			v.stroke(name.equals(options[options.length - 1]) ? 100 : UI_COLOR);
+			v.stroke(name.equals(OPTIONS[OPTIONS.length - 1]) ? 100 : UI_COLOR);
 		v.fill(1);
 		v.rectMode(CENTER);
 		v.rect(v.width / 8F, yPos, 200 + (selected ? 10 : 0), 50);
@@ -70,7 +69,7 @@ public class PauseMenuContext implements Context {
 	@Override
 	public void keyPressed(KeyBinding key) {
 		if(key == KeyBinding.MENU_CLOSE) {
-			setContext(world);
+			setContext(parent);
 		}
 		else if(key == KeyBinding.MENU_UP) {
 			// Play the sound for changing inject selection
@@ -80,20 +79,24 @@ public class PauseMenuContext implements Context {
 		else if(key == KeyBinding.MENU_DOWN) {
 			// Play the sound for changing inject selection
 			Resources.playSound("change");
-			selected = Math.min(selected + 1, options.length - 1);
+			selected = Math.min(selected + 1, OPTIONS.length - 1);
 		}
 		else if(key == KeyBinding.MENU_SELECT) {
 			//			Resources.stopMusic("theme");
 			Resources.playSound("select");
 			switch(selected) {
 			case 0:
-				setContext(world);
+				setContext(getWorld());
 				break;
 			case 1:
-				world.restart();
+				getWorld().restart();
 				break;
-			case 2:
-				world.autosave();
+			//			case 2:
+			//				Menu menu = new Menu(player, new BackButton(this), new MenuHandle());
+			//				menu.select(new SettingsMenuButton());
+			//				break;
+			case 2/*3*/:
+				getWorld().autosave();
 				setContext(mainMenu);
 				break;
 			}
@@ -106,6 +109,6 @@ public class PauseMenuContext implements Context {
 
 	@Override
 	public void mouseWheel(int amount) {
-		selected = max(0, min(options.length - 1, selected + amount));
+		selected = max(0, min(OPTIONS.length - 1, selected + amount));
 	}
 }

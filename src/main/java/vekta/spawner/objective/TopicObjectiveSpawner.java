@@ -1,17 +1,16 @@
 package vekta.spawner.objective;
 
-import vekta.Resources;
 import vekta.mission.Mission;
-import vekta.mission.objective.LearnAboutObjective;
 import vekta.mission.objective.LandAtObjective;
+import vekta.mission.objective.LearnAboutObjective;
 import vekta.mission.objective.Objective;
 import vekta.person.Person;
 import vekta.spawner.MissionGenerator;
+import vekta.spawner.knowledge.TopicKnowledgeSpawner;
 
-import static vekta.Vekta.v;
 import static vekta.spawner.MissionGenerator.randomMissionPerson;
 
-public class InformationObjectiveSpawner implements MissionGenerator.ObjectiveSpawner {
+public class TopicObjectiveSpawner implements MissionGenerator.ObjectiveSpawner {
 	@Override
 	public float getWeight() {
 		return 1;
@@ -26,7 +25,6 @@ public class InformationObjectiveSpawner implements MissionGenerator.ObjectiveSp
 	public Objective getMainObjective(Mission mission) {
 		Person other = randomMissionPerson(mission.getIssuer());
 		mission.add(new LandAtObjective(other.findHomeObject()).optional());
-		String[] parts = Resources.generateString("topic").split(":");
-		return new LearnAboutObjective(parts[0].trim(), parts[1].trim(), v.random(.1F, .5F));
+		return new LearnAboutObjective(TopicKnowledgeSpawner.randomTopicKnowledge());
 	}
 }

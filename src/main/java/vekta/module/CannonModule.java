@@ -5,8 +5,7 @@ import vekta.InfoGroup;
 import vekta.object.Projectile;
 import vekta.object.ship.ModularShip;
 
-import static vekta.Vekta.getWorld;
-import static vekta.Vekta.register;
+import static vekta.Vekta.*;
 
 public class CannonModule extends WeaponModule {
 	private static final float PROJECTILE_SPEED = 20;
@@ -32,11 +31,16 @@ public class CannonModule extends WeaponModule {
 	}
 
 	@Override
+	public float getValueScale() {
+		return 1;
+	}
+
+	@Override
 	public void fireWeapon() {
 		ModularShip ship = getShip();
 		if(ship.consumeEnergyImmediate(.25F)) {
 			getWorld().playSound("laser", ship.getPosition());
-			PVector velocity = ship.getVelocity().add(ship.getHeading().setMag(PROJECTILE_SPEED));
+			PVector velocity = ship.getVelocity().add(ship.getHeading().setMag(PROJECTILE_SPEED)).mult(v.random(.9F, 1.1F));
 			register(new Projectile(ship, ship.getPosition(), velocity, ship.getColor()));
 		}
 	}

@@ -42,6 +42,11 @@ public class CountermeasureModule extends WeaponModule {
 	}
 
 	@Override
+	public float getValueScale() {
+		return 1.5F * getEfficiency();
+	}
+
+	@Override
 	public Module createVariant() {
 		return new CountermeasureModule(chooseInclusive(1, 3));
 	}
@@ -72,7 +77,7 @@ public class CountermeasureModule extends WeaponModule {
 	@Override
 	public void onInfo(InfoGroup info) {
 		info.addDescription("Keep those pesky torpedoes away from your ship.");
-		
+
 		info.addKey(getFireKey(), "deploy countermeasure");
 	}
 }

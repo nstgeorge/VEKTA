@@ -64,7 +64,7 @@ public class DrillModule extends ShipModule {
 			LandingSite site = ((LandingMenuHandle)menu.getHandle()).getSite();
 
 			if(site.getTerrain().hasFeature("Mineable")) {
-				menu.add(new ExtractMenuButton(site, getShip().getInventory(), round(getEfficiency() * 2)));
+				menu.add(new ExtractMenuButton(site, round(getEfficiency() * 2)));
 			}
 		}
 		else if(menu.getHandle() instanceof SpaceObjectMenuHandle) {
@@ -74,7 +74,7 @@ public class DrillModule extends ShipModule {
 				Inventory inv = ((RingDebris)s).getInventory();
 				if(inv.itemCount() > 0) {
 					// TODO: merge logic with ExtractMenuButton
-					menu.add(new LootMenuButton("Extract", getShip().getInventory(), inv));
+					menu.add(new LootMenuButton("Extract", inv));
 				}
 			}
 		}

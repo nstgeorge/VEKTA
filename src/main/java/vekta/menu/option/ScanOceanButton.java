@@ -4,14 +4,12 @@ import vekta.knowledge.ObservationLevel;
 import vekta.knowledge.OceanKnowledge;
 import vekta.menu.Menu;
 import vekta.menu.handle.OceanMenuHandle;
-import vekta.spawner.EcosystemGenerator;
 import vekta.spawner.ItemGenerator;
 import vekta.spawner.WorldGenerator;
 import vekta.terrain.LandingSite;
 import vekta.terrain.Terrain;
 import vekta.terrain.settlement.Settlement;
 
-import static processing.core.PApplet.round;
 import static vekta.Vekta.setContext;
 import static vekta.Vekta.v;
 
@@ -43,7 +41,7 @@ public class ScanOceanButton implements ButtonOption {
 			terrain.addFeature("Shipwrecks");
 
 			ItemGenerator.addLoot(knowledge.getInventory(), 1);
-			sub.add(new LootMenuButton("Salvage", menu.getPlayer().getInventory(), knowledge.getInventory()));
+			sub.add(new LootMenuButton("Salvage", knowledge.getInventory()));
 		}
 		if(v.chance(.2F * density)) {
 			terrain.addFeature("Habitable");
@@ -53,12 +51,6 @@ public class ScanOceanButton implements ButtonOption {
 			terrain.addSettlement(settlement);
 
 			sub.add(new SettlementButton(settlement));
-		}
-		if(terrain.getEcosystem().getSpecies().isEmpty() && v.chance(.2F * density)) {
-			terrain.addFeature("Deep Sea Life");
-
-			EcosystemGenerator.populateEcosystem(terrain.getEcosystem(), round(v.random(3, 15)));
-			sub.add(new EcosystemButton(terrain.getEcosystem()));
 		}
 
 		sub.addDefault();

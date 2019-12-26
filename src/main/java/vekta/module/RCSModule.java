@@ -39,7 +39,7 @@ public class RCSModule extends ShipModule {
 
 	@Override
 	public float getValueScale() {
-		return .75F * getTurnSpeed();
+		return .5F * getTurnSpeed();
 	}
 
 	@Override

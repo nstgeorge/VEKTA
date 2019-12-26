@@ -12,12 +12,10 @@ import static vekta.Vekta.v;
 
 public class ExtractMenuButton implements ButtonOption {
 	private final LandingSite site;
-	private final Inventory inv;
 	private final int amount;
 
-	public ExtractMenuButton(LandingSite site, Inventory inv, int amount) {
+	public ExtractMenuButton(LandingSite site, int amount) {
 		this.site = site;
-		this.inv = inv;
 		this.amount = amount;
 	}
 
@@ -34,7 +32,7 @@ public class ExtractMenuButton implements ButtonOption {
 		for(int i = 0; i < ct; i++) {
 			Item item = OreItemSpawner.randomOre(site.getParent().getName());
 			loot.add(item);
-			sub.add(new ItemTradeButton(true, inv, loot, item));
+			sub.add(new ItemTradeButton(true, menu.getPlayer(), loot, item));
 		}
 		sub.addDefault();
 		setContext(sub);

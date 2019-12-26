@@ -12,6 +12,7 @@ public enum PlayerEvent {
 	LAND(PlayerListener::onLand),
 	DOCK(PlayerListener::onDock),
 	MISSION_STATUS(PlayerListener::onMissionStatus),
+	GAME_OVER(PlayerListener::onGameOver),
 	INSTALL_MODULE(PlayerListener::onInstallModule),
 	UNINSTALL_MODULE(PlayerListener::onUninstallModule),
 	ADD_ITEM(PlayerListener::onAddItem),

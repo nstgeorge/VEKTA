@@ -9,12 +9,11 @@ import static vekta.Vekta.setContext;
 
 public class LootMenuButton implements ButtonOption {
 	private final String name;
-	private final Inventory you, them;
+	private final Inventory inv;
 
-	public LootMenuButton(String name, Inventory you, Inventory them) {
+	public LootMenuButton(String name, Inventory inv) {
 		this.name = name;
-		this.you = you;
-		this.them = them;
+		this.inv = inv;
 	}
 
 	@Override
@@ -25,12 +24,12 @@ public class LootMenuButton implements ButtonOption {
 	@Override
 	public void onSelect(Menu menu) {
 		Menu sub = new Menu(menu.getPlayer(), new BackButton(menu, () -> {
-			if(them.itemCount() == 0) {
+			if(inv.itemCount() == 0) {
 				menu.remove(this);
 			}
-		}), new LootMenuHandle(them));
-		for(Item item : them) {
-			sub.add(new ItemTradeButton(true, you, them, item));
+		}), new LootMenuHandle(inv));
+		for(Item item : inv) {
+			sub.add(new ItemTradeButton(true, menu.getPlayer(), inv, item));
 		}
 		sub.addDefault();
 		setContext(sub);

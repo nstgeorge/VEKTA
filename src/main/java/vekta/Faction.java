@@ -1,7 +1,6 @@
 package vekta;
 
 import vekta.economy.Economy;
-import vekta.economy.EconomyContainer;
 import vekta.economy.NoiseModifier;
 import vekta.economy.ProductivityModifier;
 
@@ -10,7 +9,7 @@ import java.util.Set;
 
 import static vekta.Vekta.register;
 
-public class Faction extends Syncable<Faction> implements Renameable, EconomyContainer, ProductivityModifier {
+public class Faction extends Syncable<Faction> implements Renameable, Economy.Container, ProductivityModifier {
 	private static final float BASE_PRODUCTIVITY = .2F;
 	private static final float ALLY_MODIFIER = .2F;
 	private static final float ENEMY_MODIFIER = -.3F;

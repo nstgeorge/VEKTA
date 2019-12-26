@@ -14,7 +14,7 @@ public abstract class CachingOverlay extends TextOverlay {
 	public CachingOverlay(int x, int y, int interval) {
 		super(x, y);
 
-		this.counter = new Counter(interval).ready();
+		this.counter = new Counter(interval).setReady();
 	}
 
 	public Counter getCounter() {

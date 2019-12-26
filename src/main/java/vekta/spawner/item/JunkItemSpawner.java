@@ -19,6 +19,10 @@ public class JunkItemSpawner implements ItemGenerator.ItemSpawner {
 
 	@Override
 	public Item create() {
+		return randomJunkItem();
+	}
+
+	public static JunkItem randomJunkItem() {
 		return new JunkItem(Resources.generateString("item_junk"));
 	}
 }

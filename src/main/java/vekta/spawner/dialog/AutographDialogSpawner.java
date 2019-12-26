@@ -20,6 +20,6 @@ public class AutographDialogSpawner implements DialogGenerator.DialogSpawner {
 	public void setup(Menu menu, Dialog dialog) {
 		Player player = menu.getPlayer();
 		Item item = new TradeItem("Signed " + TradeItemSpawner.randomName(ItemType.COMMON) + " (" + dialog.getPerson().getName() + ")", ItemType.RARE);
-		dialog.add(new ItemTradeButton(player.getInventory(), item, 0));
+		dialog.add(new ItemTradeButton(player, item, 0));
 	}
 }

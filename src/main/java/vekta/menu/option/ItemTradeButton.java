@@ -11,28 +11,31 @@ import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.menu.handle.TradeMenuHandle;
 
+import java.io.Serializable;
+
 import static vekta.Vekta.*;
 
-public class ItemTradeButton implements ButtonOption, LayoutBuilder {
+public class ItemTradeButton implements ButtonOption, LayoutAware {
 	private final boolean buying;
-	private final Inventory you, them;
+	private final Player player;
+	private final Inventory inv;
 	private final Item item;
 	private final int price;
 
-	public ItemTradeButton(Inventory you, Item item, int price) {
-		this(true, you, new Inventory(), item, price);
+	public ItemTradeButton(Player player, Item item, int price) {
+		this(true, player, new Inventory(), item, price);
 
-		them.add(item);
+		inv.add(item);
 	}
 
-	public ItemTradeButton(boolean buying, Inventory you, Inventory them, Item item) {
-		this(buying, you, them, item, 0);
+	public ItemTradeButton(boolean buying, Player player, Inventory inv, Item item) {
+		this(buying, player, inv, item, 0);
 	}
 
-	public ItemTradeButton(boolean buying, Inventory you, Inventory them, Item item, int price) {
+	public ItemTradeButton(boolean buying, Player player, Inventory inv, Item item, int price) {
 		this.buying = buying;
-		this.you = you;
-		this.them = them;
+		this.player = player;
+		this.inv = inv;
 		this.item = item;
 		this.price = price;
 	}
@@ -52,11 +55,11 @@ public class ItemTradeButton implements ButtonOption, LayoutBuilder {
 	}
 
 	public Inventory getFrom() {
-		return buying ? them : you;
+		return buying ? inv : player.getInventory();
 	}
 
 	public Inventory getTo() {
-		return buying ? you : them;
+		return buying ? player.getInventory() : inv;
 	}
 
 	public int getPrice() {
@@ -70,7 +73,7 @@ public class ItemTradeButton implements ButtonOption, LayoutBuilder {
 
 	@Override
 	public boolean isEnabled() {
-		return getTo().has(price) && getFrom().has(item);
+		return getTo().has(price) && getFrom().has(item) && (!(item instanceof TradeAware) || ((TradeAware)item).isTradeEnabled(player));
 	}
 
 	@Override
@@ -82,8 +85,8 @@ public class ItemTradeButton implements ButtonOption, LayoutBuilder {
 
 	@Override
 	public void draw(Menu menu, int index) {
-		ButtonOption.super.draw(menu,index);
-		
+		ButtonOption.super.draw(menu, index);
+
 		if(menu.getHandle() instanceof TradeMenuHandle) {
 			TradeMenuHandle handle = (TradeMenuHandle)menu.getHandle();
 
@@ -120,7 +123,15 @@ public class ItemTradeButton implements ButtonOption, LayoutBuilder {
 		item.onInfo(info);
 
 		info.onLayout(layout);
-		layout.add(new TextDisplay(moneyString(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to " + getSelectVerb(), price)))
-				.customize().color(100);
+		if(isEnabled()) {
+			layout.add(new TextDisplay(moneyString(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to " + getSelectVerb(), price)))
+					.customize().color(100);
+		}
+	}
+
+	public interface TradeAware extends Serializable {
+		default boolean isTradeEnabled(Player player) {
+			return true;
+		}
 	}
 }

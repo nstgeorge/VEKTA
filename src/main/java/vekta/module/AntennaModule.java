@@ -44,6 +44,11 @@ public class AntennaModule extends ShipModule {
 	}
 
 	@Override
+	public float getValueScale() {
+		return .5F * getRange();
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return other instanceof AntennaModule && getRange() > ((AntennaModule)other).getRange();
 	}

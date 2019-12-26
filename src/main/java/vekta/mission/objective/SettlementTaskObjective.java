@@ -1,5 +1,6 @@
 package vekta.mission.objective;
 
+import vekta.item.ItemType;
 import vekta.menu.Menu;
 import vekta.menu.handle.SettlementMenuHandle;
 import vekta.menu.option.CustomButton;
@@ -38,6 +39,7 @@ public class SettlementTaskObjective extends Objective {
 		if(menu.getHandle() instanceof SettlementMenuHandle) {
 			if(getSettlement() == null || getSettlement() == ((SettlementMenuHandle)menu.getHandle()).getSettlement()) {
 				menu.add(new CustomButton(name, m -> complete())
+						.withColor(ItemType.KNOWLEDGE.getColor())
 						.withRemoval());
 			}
 		}

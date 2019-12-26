@@ -31,12 +31,14 @@ public final class StoryGenerator {
 		}
 	}
 
-	public static Story createStory(int length) {
+	public static Story createStory() {
+		return createStory(10);
+	}
+
+	public static Story createStory(int maxSteps) {
 		Story story = register(new Story());
-		if(length > 0) {
-			story.addPart(createPart(story, v.random(START_FILTER)));
-			story.proceed(length - 1);
-		}
+		story.addPart(createPart(story, v.random(START_FILTER)));
+		story.proceed(maxSteps);
 		return story;
 	}
 
@@ -131,7 +133,7 @@ public final class StoryGenerator {
 	}
 
 	public static Dialog createDialog(Person person, Story story, int maxSteps) {
-		Dialog dialog = new Dialog("story", person, story.getCurrentPart().getText(), ItemType.MISSION.getColor());
+		Dialog dialog = new Dialog("story", person, story.getCurrentPart().getText(), ItemType.KNOWLEDGE.getColor());
 		if(maxSteps != 0 && !story.getCurrentPart().isConclusion()) {
 			dialog.add(new StoryProgressButton(story, person, maxSteps - 1));
 		}

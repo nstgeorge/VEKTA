@@ -2,7 +2,6 @@ package vekta.terrain.settlement;
 
 import vekta.*;
 import vekta.economy.Economy;
-import vekta.economy.EconomyContainer;
 import vekta.economy.ProductivityModifier;
 import vekta.knowledge.ObservationLevel;
 import vekta.knowledge.SettlementKnowledge;
@@ -22,7 +21,7 @@ import static processing.core.PApplet.ceil;
 import static processing.core.PApplet.sq;
 import static vekta.Vekta.register;
 
-public abstract class Settlement extends Syncable<Settlement> implements SettlementPart, EconomyContainer, ProductivityModifier, Renameable {
+public abstract class Settlement extends Syncable<Settlement> implements SettlementPart, Economy.Container, ProductivityModifier, Renameable {
 	private static final float POPULATION_SCALE = 1000;
 
 	private final @Sync List<SettlementPart> parts = new ArrayList<>();

@@ -18,12 +18,17 @@ public class SensorModule implements ComponentModule {
 
 	@Override
 	public ModuleType getType() {
-		return ModuleType.AESTHETIC;
+		return ModuleType.SCANNER;
 	}
 
 	@Override
 	public int getMass() {
 		return 1000;
+	}
+
+	@Override
+	public float getValueScale() {
+		return 1;
 	}
 
 	@Override
@@ -103,6 +108,6 @@ public class SensorModule implements ComponentModule {
 	@Override
 	public void onInfo(InfoGroup info) {
 		// TODO: perhaps add some sort of data collection functionality to SensorModule
-//		info.addDescription("");
+		//		info.addDescription("");
 	}
 }

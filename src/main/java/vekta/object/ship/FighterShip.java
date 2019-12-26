@@ -3,11 +3,11 @@ package vekta.object.ship;
 import processing.core.PVector;
 import vekta.Counter;
 import vekta.RenderLevel;
-import vekta.menu.Menu;
 import vekta.object.HomingProjectile;
 import vekta.object.Projectile;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
+import vekta.object.planet.TerrestrialPlanet;
 
 import static vekta.Vekta.*;
 
@@ -98,11 +98,7 @@ public abstract class FighterShip extends Ship implements Targeter {
 
 	@Override
 	public boolean isDockable(SpaceObject s) {
-		return false;
-	}
-
-	@Override
-	public void setupDockingMenu(Menu menu) {
+		return s instanceof TerrestrialPlanet && ((TerrestrialPlanet)s).getTerrain().isInhabited();
 	}
 
 	public float getAttackScale() {

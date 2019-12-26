@@ -101,13 +101,13 @@ public class Ecosystem extends Syncable<Ecosystem> {
 		float scarcityFactor = sq(sum / getCapacity() / speciesCount) * EPOCH_TIME_SCALE;
 		float reviveFactor = sq((1 - sum / getCapacity()) / speciesCount) * EPOCH_TIME_SCALE;
 
-//		if(sum > getCapacity()) {
-			for(Species species : amounts.keySet()) {
-				if(species.getNaturalGrowth() > 0) {
-					amounts.put(species, amounts.get(species) / (1 + v.random(scarcityFactor * speciesCount)));
-				}
+		//		if(sum > getCapacity()) {
+		for(Species species : amounts.keySet()) {
+			if(species.getNaturalGrowth() > 0) {
+				amounts.put(species, amounts.get(species) / (1 + v.random(scarcityFactor * speciesCount)));
 			}
-//		}
+		}
+		//		}
 
 		if(v.chance(scarcityFactor)) {
 			// Introduce a predator when ecosystem is approaching capacity

@@ -29,7 +29,7 @@ public class LostShip extends Ship {
 
 	@Override
 	public void setupDockingMenu(Menu menu) {
-		menu.add(new LootMenuButton("Scavenge", menu.getPlayer().getInventory(), getInventory()));
+		menu.add(new LootMenuButton("Scavenge", getInventory()));
 	}
 
 	@Override

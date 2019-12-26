@@ -1,5 +1,4 @@
 call_security
-ask_leave
 nervous_assassin
 react_angry
 recharge

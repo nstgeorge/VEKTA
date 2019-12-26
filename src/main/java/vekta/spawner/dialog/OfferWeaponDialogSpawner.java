@@ -18,6 +18,6 @@ public class OfferWeaponDialogSpawner implements DialogGenerator.DialogSpawner {
 	public void setup(Menu menu, Dialog dialog) {
 		Player player = menu.getPlayer();
 		Item item = WeaponItemSpawner.randomWeapon();
-		dialog.add(new ItemTradeButton(player.getInventory(), item, 0));
+		dialog.add(new ItemTradeButton(player, item, 0));
 	}
 }

@@ -19,9 +19,7 @@ public interface Module extends Serializable {
 
 	int getMass();
 
-	default float getValueScale() {
-		return 1;
-	}
+	float getValueScale();
 
 	boolean isBetter(Module other);
 

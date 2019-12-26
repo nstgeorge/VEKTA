@@ -59,13 +59,18 @@ public class BatteryModule extends ShipModule implements Rechargeable {
 	}
 
 	@Override
+	public float getValueScale() {
+		return getBattery().getCapacity() / 100F;
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return other instanceof BatteryModule && getBattery().getCapacity() > ((BatteryModule)other).getBattery().getCapacity();
 	}
 
 	@Override
 	public Module createVariant() {
-		ModularShip.Battery battery = new ModularShip.Battery(chooseInclusive(1, 50) * 10);
+		ModularShip.Battery battery = new ModularShip.Battery(chooseInclusive(10, 500));
 		battery.setCharge(sq(v.random(1)) * battery.getCapacity());
 		return new BatteryModule(battery);
 	}
@@ -86,10 +91,10 @@ public class BatteryModule extends ShipModule implements Rechargeable {
 			LandingSite site = ((LandingMenuHandle)menu.getHandle()).getSite();
 
 			if(site.getTerrain().isInhabited()) {
-				float price = .2F;
+				float price = .5F;
 				for(Settlement settlement : site.getTerrain().getSettlements()) {
 					if(settlement.getFaction().isAlly(menu.getPlayer().getFaction())) {
-						price = 0;
+						price = .1F;
 						break;
 					}
 				}

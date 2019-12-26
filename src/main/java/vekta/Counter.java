@@ -2,7 +2,7 @@ package vekta;
 
 import java.io.Serializable;
 
-import static vekta.Vekta.*;
+import static vekta.Vekta.v;
 
 public final class Counter implements Serializable {
 	private final int interval;
@@ -24,11 +24,12 @@ public final class Counter implements Serializable {
 		return ct;
 	}
 
-	public void setProgress(int ct) {
+	public Counter setProgress(int ct) {
 		this.ct = ct;
+		return this;
 	}
 
-	public Counter ready() {
+	public Counter setReady() {
 		ct = interval;
 		return this;
 	}

@@ -276,6 +276,11 @@ public class StationLayoutContext implements Context, ModuleUpgrader {
 		}
 
 		@Override
+		public float getValueScale() {
+			return 0;
+		}
+
+		@Override
 		public boolean isBetter(Module other) {
 			return false;
 		}

@@ -15,6 +15,7 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
+import static processing.core.PApplet.println;
 import static vekta.Vekta.v;
 
 public final class Resources {
@@ -203,15 +204,15 @@ public final class Resources {
 		if(volume > 0) {
 			SoundFile sound = getSound(key);
 			sound.stop();
+			if(sound.channels() > 1 && pan != 1) {//TODO refactor
+				println("Panning stereo sound:", key);
+			}
 			sound.play(freq, pan, volume);
 		}
 	}
 
 	public static void stopSound(String key) {
-		SoundFile sound = getSound(key);
-		if(sound != null) {
-			sound.stop();
-		}
+		getSound(key).stop();
 	}
 
 	public static void stopAllSounds() {
@@ -252,7 +253,7 @@ public final class Resources {
 			currentMusic = sound;
 
 			// Play sound
-			//				sound.amp(volume);
+			sound.amp(musicVolume);
 			if(loop) {
 				sound.loop();
 				sound.jump(v.random(sound.duration())); // Start at random point in music
@@ -266,6 +267,7 @@ public final class Resources {
 	public static void stopMusic() {
 		if(prevMusic != null) {
 			prevMusic.stop();
+			prevMusic = null;
 		}
 		if(currentMusic != null) {
 			prevMusic = currentMusic;
@@ -284,29 +286,28 @@ public final class Resources {
 	}
 
 	public static void updateAudio() {
+		if(currentMusic != null && currentMusic.percent() > 100) {
+			currentMusic.stop();
+			currentMusic = null;
+		}
+
 		if(prevMusic != null) {
-			if(fadeProgress < MUSIC_FADE_TIME) {
-				float progress = (float)fadeProgress / MUSIC_FADE_TIME;
-				if(progress > 0) {
-					prevMusic.amp(1 - progress);
-				}
-				if(currentMusic != null && progress > 0) {
-					currentMusic.amp(progress);
-				}
+			if(prevMusic.isPlaying() && fadeProgress < MUSIC_FADE_TIME) {
 				fadeProgress++;
+				float progress = (float)fadeProgress / MUSIC_FADE_TIME;
+				prevMusic.amp(musicVolume * (1 - progress));
+				if(currentMusic != null) {
+					currentMusic.amp(musicVolume * progress);
+				}
 			}
 			else {
 				prevMusic.stop();
 				prevMusic = null;
 				if(currentMusic != null) {
-					currentMusic.amp(1);
+					currentMusic.amp(musicVolume);
 				}
 				fadeProgress = 0;
 			}
-		}
-		else if(currentMusic != null && currentMusic.percent() > 100) {
-			currentMusic.stop();
-			currentMusic = null;
 		}
 	}
 }

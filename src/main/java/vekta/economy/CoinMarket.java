@@ -8,7 +8,7 @@ import java.util.List;
 
 import static vekta.Vekta.register;
 
-public class CoinMarket implements Serializable, EconomyContainer, ProductivityModifier {
+public class CoinMarket implements Serializable, Economy.Container, ProductivityModifier {
 	private final Economy economy;
 	private final List<Coin> coins = new ArrayList<>();
 

@@ -45,6 +45,9 @@ public interface PlayerListener extends Serializable {
 	default void onMissionStatus(Mission mission) {
 	}
 
+	default void onGameOver(ModularShip ship) {
+	}
+
 	default void onInstallModule(Module module) {
 	}
 

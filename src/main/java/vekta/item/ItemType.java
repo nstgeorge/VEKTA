@@ -9,6 +9,7 @@ public enum ItemType {
 	COMMON(v.color(220), 1, 1),
 	RARE(v.color(255, 200, 100), 5, 2),
 	LEGENDARY(v.color(200, 100, 255), 20, 2),
+	KNOWLEDGE(v.color(130, 140, 255), 1, 2),
 	DANGEROUS(v.color(255, 100, 200), 4, 2),
 	MODULE(v.color(200, 255, 100), 10, 3),
 	RECIPE(v.color(100, 255, 200), 20, 20),

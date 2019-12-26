@@ -1,7 +1,6 @@
 package vekta.item;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -59,8 +58,12 @@ public final class Inventory implements Serializable, Iterable<Item> {
 	}
 
 	public void add(Item item) {
-		items.add(item);
-		Collections.sort(items);
+		int index = 0;
+		while(index < items.size() && item.compareTo(items.get(index)) > 0) {
+			index++;
+		}
+		items.add(index, item);
+		//		Collections.sort(items);
 		if(listener != null) {
 			listener.onItemAdd(item);
 		}

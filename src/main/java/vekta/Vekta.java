@@ -128,6 +128,8 @@ public class Vekta extends PApplet {
 
 	@Override
 	public void keyPressed(KeyEvent event) {
+//		println(event);
+		
 		if((world != null && world.globalKeyPressed(event)) || context != null) {
 			context.keyPressed(event);
 			if(key == ESC) {

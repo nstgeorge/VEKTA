@@ -56,7 +56,7 @@ public class CargoShip extends Ship {
 
 	@Override
 	public void setupDockingMenu(Menu menu) {
-		menu.add(new LootMenuButton("Loot", menu.getPlayer().getInventory(), getInventory()));
+		menu.add(new LootMenuButton("Loot", getInventory()));
 
 		for(EscortShip escort : getWorld().findObjects(EscortShip.class)) {
 			if(escort.getTarget() == this) {

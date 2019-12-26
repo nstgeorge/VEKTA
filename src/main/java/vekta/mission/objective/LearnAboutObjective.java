@@ -14,28 +14,24 @@ import java.util.Set;
 import static vekta.Vekta.v;
 
 public class LearnAboutObjective extends Objective {
-	private final String topic;
-	private final String description;
-	private final float rarity;
+	private final TopicKnowledge knowledge;
 
 	private final Set<Person> alreadyAsked = new HashSet<>();
 
-	public LearnAboutObjective(String topic, String description, float rarity) {
-		this.topic = topic;
-		this.description = description;
-		this.rarity = rarity;
+	public LearnAboutObjective(TopicKnowledge knowledge) {
+		this.knowledge = knowledge;
 	}
 
 	public String getTopic() {
-		return topic;
+		return knowledge.getTopic();
 	}
 
 	public String getDescription() {
-		return description;
+		return knowledge.getDescription();
 	}
 
 	public float getRarity() {
-		return rarity;
+		return 1F / knowledge.getArchiveValue();
 	}
 
 	@Override
@@ -54,7 +50,7 @@ public class LearnAboutObjective extends Objective {
 			Dialog dialog = ((DialogMenuHandle)menu.getHandle()).getDialog();
 			if(!alreadyAsked.contains(dialog.getPerson())) {
 				alreadyAsked.add(dialog.getPerson());
-				
+
 				boolean foundInfo = v.chance(getRarity());
 				Dialog next = foundInfo
 						? new Dialog("topic", dialog.getPerson(), getDescription())

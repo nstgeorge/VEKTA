@@ -20,7 +20,7 @@ public class ArtifactRoomSpawner implements DungeonGenerator.DungeonSpawner {
 	@Override
 	public DungeonRoom create(DungeonRoom parent, int depth) {
 		Inventory inv = new Inventory();
-		inv.add(ArtifactItemSpawner.randomArtifact());
+		inv.add(ArtifactItemSpawner.randomArtifactItem());
 		return new InventoryRoom(parent, "Artifact Room", "You find something on the floor.", inv);
 	}
 }

@@ -94,6 +94,11 @@ public class TargetingModule extends ShipModule implements Targeter {
 	}
 
 	@Override
+	public float getValueScale() {
+		return 1;
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return false;
 	}

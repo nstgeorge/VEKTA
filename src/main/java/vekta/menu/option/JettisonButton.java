@@ -15,7 +15,7 @@ import vekta.object.ship.Ship;
 import static vekta.Vekta.register;
 import static vekta.Vekta.v;
 
-public class JettisonButton implements ButtonOption, LayoutBuilder {
+public class JettisonButton implements ButtonOption, LayoutAware {
 	private final Item item;
 	private final Inventory inv;
 
@@ -58,7 +58,9 @@ public class JettisonButton implements ButtonOption, LayoutBuilder {
 		item.onInfo(info);
 		info.onLayout(layout);
 
-		layout.add(new TextDisplay(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to " + getSelectVerb()))
-				.customize().color(100);
+		if(isEnabled()) {
+			layout.add(new TextDisplay(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to " + getSelectVerb()))
+					.customize().color(100);
+		}
 	}
 }

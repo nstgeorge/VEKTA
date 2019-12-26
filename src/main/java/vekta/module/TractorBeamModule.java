@@ -47,6 +47,11 @@ public class TractorBeamModule extends ShipModule implements Targeter {
 	}
 
 	@Override
+	public float getValueScale() {
+		return 1 * getForce();
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return other instanceof TractorBeamModule && getForce() > ((TractorBeamModule)other).getForce();
 	}

@@ -2,6 +2,7 @@ package vekta.knowledge;
 
 import vekta.KeyBinding;
 import vekta.Player;
+import vekta.Resources;
 import vekta.Settings;
 import vekta.display.Layout;
 import vekta.display.SpaceObjectDisplay;
@@ -60,6 +61,7 @@ public abstract class SpaceObjectKnowledge extends ObservationKnowledge {
 		}
 		else if(key == KeyBinding.SHIP_TARGET) {
 			player.getShip().setNavigationTarget(getSpaceObject());
+			Resources.playSound("select");
 		}
 	}
 

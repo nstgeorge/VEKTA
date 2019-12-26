@@ -55,13 +55,18 @@ public class StationCoreModule extends ShipModule {
 	}
 
 	@Override
+	public float getValueScale() {
+		return 2 * getTier();
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return other instanceof StationCoreModule && getTier() > ((StationCoreModule)other).getTier();
 	}
 
 	@Override
 	public Module createVariant() {
-		return new StationCoreModule();
+		return new StationCoreModule(chooseInclusive(1, 3));
 	}
 
 	@Override

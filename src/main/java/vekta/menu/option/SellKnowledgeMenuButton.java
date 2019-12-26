@@ -10,14 +10,13 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static vekta.Vekta.moneyString;
 import static vekta.Vekta.setContext;
 
-public class SellDataMenuButton implements ButtonOption {
+public class SellKnowledgeMenuButton implements ButtonOption {
 	private final Settlement settlement;
 	private final Inventory inventory;
 
-	public SellDataMenuButton(Settlement settlement, Inventory inventory) {
+	public SellKnowledgeMenuButton(Settlement settlement, Inventory inventory) {
 		this.settlement = settlement;
 		this.inventory = inventory;
 	}
@@ -43,15 +42,7 @@ public class SellDataMenuButton implements ButtonOption {
 		List<Knowledge> knowledge = new ArrayList<>(menu.getPlayer().getKnowledgePrices().keySet());
 		knowledge.sort(Comparator.comparingInt(k -> -k.getArchiveValue()));
 		for(Knowledge k : knowledge) {
-			// TODO: convert to DataTradeOption and use SideLayoutMenuHandle
-			// TODO: data items
-			sub.add(new CustomButton(moneyString(k.getName() + " Data", k.getArchiveValue()), m -> {
-				int price = m.getPlayer().getKnowledgePrices().get(k);
-				if(getInventory().remove(price)) {
-					m.getPlayer().getInventory().add(price);
-					m.getPlayer().getKnowledgePrices().remove(k);
-				}
-			}).withColor(k.getColor(menu.getPlayer())).withRemoval());
+			sub.add(new SellDataButton(getInventory(), menu.getPlayer(), k));
 		}
 		sub.addDefault();
 		setContext(sub);

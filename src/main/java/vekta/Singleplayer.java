@@ -4,6 +4,7 @@ import processing.core.PVector;
 import processing.event.KeyEvent;
 import processing.sound.LowPass;
 import vekta.connection.message.Message;
+import vekta.context.KnowledgeContext;
 import vekta.context.PauseMenuContext;
 import vekta.context.TextInputContext;
 import vekta.context.World;
@@ -13,7 +14,9 @@ import vekta.ecosystem.Ecosystem;
 import vekta.item.ColonyItem;
 import vekta.item.ModuleItem;
 import vekta.knowledge.ObservationLevel;
+import vekta.knowledge.SettlementKnowledge;
 import vekta.knowledge.StoryKnowledge;
+import vekta.knowledge.TerrestrialKnowledge;
 import vekta.menu.Menu;
 import vekta.menu.handle.DebugMenuHandle;
 import vekta.menu.handle.MainMenuHandle;
@@ -39,6 +42,7 @@ import vekta.spawner.item.WeaponItemSpawner;
 import vekta.spawner.world.BlackHoleSpawner;
 import vekta.spawner.world.SpaceStationSpawner;
 import vekta.spawner.world.StarSystemSpawner;
+import vekta.terrain.settlement.Settlement;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -178,7 +182,7 @@ public class Singleplayer implements World, PlayerListener {
 
 		//		playerShip.getInventory().add(new DialogItemSpawner().create());////
 
-		player.addKnowledge(new StoryKnowledge(StoryGenerator.createStory(10), "Story"));
+		player.addKnowledge(new StoryKnowledge(StoryGenerator.createStory(), "Story"));
 
 		playerShip.addModule(new EngineModule(2)); // Upgrade engine
 		playerShip.addModule(new AutopilotModule());
@@ -189,7 +193,8 @@ public class Singleplayer implements World, PlayerListener {
 		playerShip.addModule(new ActiveTCSModule(2));
 		playerShip.addModule(new CountermeasureModule());
 		playerShip.addModule(new ShieldModule());
-		playerShip.addModule(new OceanScannerModule());
+		playerShip.getInventory().add(new ModuleItem(new OceanScannerModule()));
+		playerShip.getInventory().add(new ModuleItem(new EcosystemScannerModule()));
 		playerShip.getInventory().add(new ModuleItem(new PlanetBusterModule()));
 		playerShip.getInventory().add(new ModuleItem(new GeneratorModule()));
 		playerShip.getInventory().add(new ModuleItem(new WormholeModule()));
@@ -229,6 +234,9 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public void setZoom(float zoom) {
+		if(!Float.isFinite(zoom)) {
+			zoom = 1;
+		}
 		float prevZoom = state.getZoom();
 		if(zoom != prevZoom) {
 			onZoomChange(zoom);
@@ -498,8 +506,8 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public boolean globalKeyPressed(KeyEvent event) {
-		if(event.getKeyCode() == Settings.getKeyCode(KeyBinding.SHIP_KNOWLEDGE)) {
-
+		if(event.getKeyCode() == Settings.getKeyCode(KeyBinding.SHIP_KNOWLEDGE) && !(getContext() instanceof KnowledgeContext)) {
+			setContext(new KnowledgeContext(getContext(), getPlayer()));
 			return true;
 		}
 		return false;
@@ -520,6 +528,15 @@ public class Singleplayer implements World, PlayerListener {
 					MissionGenerator.createMission(getPlayer(), MissionGenerator.randomMissionPerson(), (int)v.random(5) + 1).start();
 				}
 				m.close();
+			}));
+			menu.add(new CustomButton("Give Knowledge", m -> {
+				for(TerrestrialPlanet planet : findObjects(TerrestrialPlanet.class)) {
+					getPlayer().addKnowledge(new TerrestrialKnowledge(ObservationLevel.VISITED, planet));
+					for(Settlement settlement : planet.getTerrain().getSettlements()) {
+						getPlayer().addKnowledge(new SettlementKnowledge(ObservationLevel.VISITED, settlement));
+					}
+				}
+				setContext(new KnowledgeContext(this, getPlayer()));
 			}));
 			menu.add(new CustomButton("Enemy Factions & Give Disguise", m -> {
 				for(Faction faction : state.getFactions()) {
@@ -558,8 +575,8 @@ public class Singleplayer implements World, PlayerListener {
 			if(key == KeyBinding.QUICK_SAVE && save(QUICKSAVE_FILE)) {
 				getPlayer().send("Progress saved");
 			}
-			if(key == KeyBinding.MENU_CLOSE) {
-				setContext(new PauseMenuContext(this));
+			else if(key == KeyBinding.MENU_CLOSE) {
+				setContext(new PauseMenuContext(getContext()));
 			}
 			getPlayer().emit(PlayerEvent.KEY_PRESS, key);
 		}
@@ -593,17 +610,6 @@ public class Singleplayer implements World, PlayerListener {
 	@Override
 	public void sendMessage(Player player, Message message) {
 		println("Attempted to send " + message.getClass().getSimpleName() + " to unavailable player: " + player.getName());
-	}
-
-	// TODO: convert to player event callback
-	@Override
-	public void setDead() {
-		// TODO: custom death soundtrack instead of low pass filter?
-		if(Resources.getMusic() != null) {
-			lowPass.process(Resources.getMusic(), 800);
-		}
-		Resources.stopAllSoundsExceptMusic();
-		Resources.playSound("death");
 	}
 
 	@Override
@@ -778,6 +784,16 @@ public class Singleplayer implements World, PlayerListener {
 		if(menu.getHandle() instanceof MainMenuHandle) {
 			cleanup();
 		}
+	}
+
+	@Override
+	public void onGameOver(ModularShip ship) {
+		// TODO: custom death soundtrack instead of low pass filter?
+		if(Resources.getMusic() != null) {
+			lowPass.process(Resources.getMusic(), 800);
+		}
+		Resources.stopAllSoundsExceptMusic();
+		Resources.playSound("death");
 	}
 
 	// Player tag for debug mode

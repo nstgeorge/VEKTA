@@ -17,7 +17,7 @@ import java.util.List;
 import static vekta.Vekta.DANGER_COLOR;
 import static vekta.Vekta.UI_COLOR;
 
-public class CraftButton implements ButtonOption, LayoutBuilder {
+public class CraftButton implements ButtonOption, LayoutAware {
 	private final Inventory inv;
 	private final BlueprintItem blueprint;
 

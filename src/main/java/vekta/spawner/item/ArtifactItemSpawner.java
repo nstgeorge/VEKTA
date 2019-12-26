@@ -19,10 +19,10 @@ public class ArtifactItemSpawner implements ItemGenerator.ItemSpawner {
 
 	@Override
 	public Item create() {
-		return randomArtifact();
+		return randomArtifactItem();
 	}
 
-	public static ArtifactItem randomArtifact() {
+	public static ArtifactItem randomArtifactItem() {
 		String[] data = Resources.generateString("item_artifact").split(":", 2);
 		String name = data[0].trim();
 		String description = data[1].trim().replace("*", name);

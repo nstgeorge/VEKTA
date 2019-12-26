@@ -26,5 +26,4 @@ Oceanic
 Oceanic, Islands
 Oceanic, Tsunamis
 Space Worms
-Bioluminescent
 Terraformation

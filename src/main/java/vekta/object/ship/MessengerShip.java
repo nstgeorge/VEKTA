@@ -83,7 +83,7 @@ public class MessengerShip extends Ship {
 		menu.setAuto(new DialogButton("Talk to Pilot", getDialog(), menu.getDefault()));
 		// Back and remove
 		if(getInventory().itemCount() > 0) {
-			menu.add(new LootMenuButton("Collect Item" + (getInventory().itemCount() == 1 ? "s" : ""), menu.getPlayer().getInventory(), getInventory()));
+			menu.add(new LootMenuButton("Collect Item" + (getInventory().itemCount() == 1 ? "s" : ""), getInventory()));
 		}
 	}
 

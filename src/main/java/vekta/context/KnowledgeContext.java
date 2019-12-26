@@ -8,10 +8,9 @@ import vekta.display.Layout;
 import vekta.display.VerticalLayout;
 import vekta.knowledge.*;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import static processing.core.PConstants.*;
 import static vekta.Vekta.*;
@@ -35,7 +34,7 @@ public class KnowledgeContext implements Context, Comparator<Knowledge> {
 		this.parent = parent;
 		this.player = player;
 
-		tabs = Arrays.asList(
+		tabs = new ArrayList<>(Arrays.asList(
 				new KnowledgeTab("Planets", TerrestrialKnowledge.class),
 				new KnowledgeTab("Settlements", SettlementKnowledge.class),
 				new KnowledgeTab("People", PersonKnowledge.class),
@@ -43,14 +42,28 @@ public class KnowledgeContext implements Context, Comparator<Knowledge> {
 				new KnowledgeTab("Ships", ShipKnowledge.class),
 				new KnowledgeTab("Faction (" + player.getName() + ")", o -> o instanceof ObservationKnowledge && ((ObservationKnowledge)o).getLevel() == ObservationLevel.OWNED),
 				new KnowledgeTab("Everything", o -> true)
-		);
+		));
 
 		player.cleanupKnowledge();
 		setTabIndex(0);
 	}
 
 	public List<Knowledge> getKnowledgeList() {
-		return tab.getKnowledgeList();
+		return tab.findKnowledgeList();
+	}
+
+	public KnowledgeContext withTab(String title, Knowledge knowledge) {
+		return withTab(title, Collections.singletonList(knowledge));
+	}
+
+	public KnowledgeContext withTab(String title, List<Knowledge> knowledgeList) {
+		return withTab(new KnowledgeTab(title, knowledgeList));
+	}
+
+	public KnowledgeContext withTab(KnowledgeTab tab) {
+		tabs.add(0, tab);
+		setTabIndex(0);
+		return this;
 	}
 
 	public void setTabIndex(int index) {
@@ -59,6 +72,7 @@ public class KnowledgeContext implements Context, Comparator<Knowledge> {
 
 		this.tabIndex = index;
 		this.tab = tabs.get(index);
+		this.tab.updateKnowledgeList();
 		setCursorIndex(0);
 	}
 
@@ -201,12 +215,10 @@ public class KnowledgeContext implements Context, Comparator<Knowledge> {
 	public void keyPressed(KeyEvent event) {
 		Context.super.keyPressed(event);
 
-		////temp
-		if(event.getKey() == '1') {
-			setTabIndex(0);
-		}
-		if(event.getKey() == '2') {
-			setTabIndex(1);
+		for(int i = 0; i < 10 && i < tabs.size(); i++) {
+			if(event.getKey() == '0' + (i + 1) % 10) {
+				setTabIndex(i);
+			}
 		}
 	}
 
@@ -253,30 +265,53 @@ public class KnowledgeContext implements Context, Comparator<Knowledge> {
 		setCursorIndex(max(0, min(getKnowledgeList().size() - 1, cursorIndex + amount)));
 	}
 
-	protected class KnowledgeTab {
+	public class KnowledgeTab {
 		private final String title;
-		private final Predicate<Knowledge> predicate;
-		private List<Knowledge> knowledges;
+		private Supplier<List<Knowledge>> supplier;
+		private List<Knowledge> knowledgeList;
+
+		public KnowledgeTab(String title, List<Knowledge> knowledgeList) {
+			this(title, () -> knowledgeList);
+		}
 
 		public KnowledgeTab(String title, Class<? extends Knowledge> type) {
 			this(title, type::isInstance);
 		}
 
 		public KnowledgeTab(String title, Predicate<Knowledge> predicate) {
+			this(title);
+			this.supplier = () -> KnowledgeContext.this.player.findKnowledge(predicate);
+		}
+
+		public KnowledgeTab(String title, Supplier<List<Knowledge>> supplier) {
+			this(title);
+			this.supplier = supplier;
+		}
+
+		public KnowledgeTab(String title) {
 			this.title = title;
-			this.predicate = predicate;
 		}
 
 		public String getTitle() {
 			return title;
 		}
 
-		public List<Knowledge> getKnowledgeList() {
-			if(knowledges == null) {
-				knowledges = player.findKnowledge(predicate);
-				knowledges.sort(KnowledgeContext.this);
+		public List<Knowledge> findKnowledgeList() {
+			if(knowledgeList == null) {
+				updateKnowledgeList();
 			}
-			return knowledges;
+			return knowledgeList;
+		}
+
+		public void setKnowledgeList(List<Knowledge> knowledgeList) {
+			this.knowledgeList = new ArrayList<>(knowledgeList);
+			knowledgeList.sort(KnowledgeContext.this);
+		}
+
+		public void updateKnowledgeList() {
+			if(supplier != null) {
+				setKnowledgeList(supplier.get());
+			}
 		}
 	}
 }

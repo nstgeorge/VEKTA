@@ -1,0 +1,5 @@
+{story_noun}
+Tome
+Rune
+Scroll
+Book

@@ -73,7 +73,7 @@ public class Hyperspace {
 		public void render() {
 			v.noFill();
 			v.stroke(Math.max((((time * 10) - 255) - (dist * 100)) / 4, 0));
-			v.line(loc.x, loc.y, -1, loc.x - (velocity.x * time / 9), loc.y - (velocity.y * time / 9), -1);
+			v.line(loc.x, loc.y, loc.x - (velocity.x * time / 9), loc.y - (velocity.y * time / 9));
 		}
 	
 		public void update() {

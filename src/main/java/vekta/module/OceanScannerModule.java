@@ -41,6 +41,11 @@ public class OceanScannerModule extends ShipModule {
 	}
 
 	@Override
+	public float getValueScale() {
+		return 1.5F * getStrength();
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return other instanceof OceanScannerModule && getStrength() > ((OceanScannerModule)other).getStrength();
 	}
@@ -63,7 +68,7 @@ public class OceanScannerModule extends ShipModule {
 				else {
 					for(OceanKnowledge knowledge : knowledgeList) {
 						if(knowledge.getInventory().itemCount() > 0) {
-							menu.add(new LootMenuButton("Salvage", menu.getPlayer().getInventory(), knowledge.getInventory()));
+							menu.add(new LootMenuButton("Salvage", knowledge.getInventory()));
 						}
 					}
 				}

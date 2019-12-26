@@ -31,7 +31,7 @@ public class OfferDialogSpawner implements DialogGenerator.DialogSpawner {
 		int price = opinion == OpinionType.GRATEFUL || dialog.getPerson().getFaction().isAlly(player.getFaction())
 				? 0 : (int)(item.randomPrice() * v.random(.25F, 1));
 
-		dialog.add(new ItemTradeButton(player.getInventory(), item, price));
+		dialog.add(new ItemTradeButton(player, item, price));
 		if(price > 0) {
 			dialog.addResponse("No thanks.");
 		}

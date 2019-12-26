@@ -58,11 +58,6 @@ public interface World extends Context {
 	void autosave();
 
 	/**
-	 * Called when the local player dies
-	 */
-	void setDead();
-
-	/**
 	 * Called when the gamemode reloads from an autosave
 	 */
 	void reload();

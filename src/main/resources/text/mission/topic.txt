@@ -4,5 +4,5 @@ Space Worms : They are a common nuisance in our galaxy.
 {planet} : That planet used to be part of this star system before it collided with {planet}.
 {city} : It was the the original city on the planet {planet}. 
 {city} : A long time ago, {faction} built this city in secret, for unknown reasons. 
-{town} : How did you know about that? It's the original name for {city} before it was burned down and replaced by a dictatorship. 
+{town} : It's the original name for {city} before it was burned down and replaced by a dictatorship. 
 {person} {person_title} : That is one of the many pseudonyms of {person} {person_title}.

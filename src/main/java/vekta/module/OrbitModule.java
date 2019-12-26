@@ -45,6 +45,11 @@ public class OrbitModule extends ShipModule {
 	}
 
 	@Override
+	public float getValueScale() {
+		return .5F * getSpeed();
+	}
+
+	@Override
 	public boolean isBetter(Module other) {
 		return other instanceof OrbitModule && getSpeed() > ((OrbitModule)other).getSpeed();
 	}

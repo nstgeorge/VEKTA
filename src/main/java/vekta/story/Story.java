@@ -5,12 +5,15 @@ import vekta.Syncable;
 import vekta.story.part.StoryPart;
 import vekta.story.subject.StorySubject;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Story extends Syncable<Story> {
 	private final @Sync List<StoryPart> parts = new ArrayList<>();
 	private final @Sync Map<String, StorySubject> subjects = new HashMap<>();
-	
+
 	public List<StoryPart> getParts() {
 		return parts;
 	}
@@ -55,9 +58,6 @@ public class Story extends Syncable<Story> {
 
 	public List<StoryPart> proceed(int maxSteps) {
 		StoryPart part = getCurrentPart();
-		if(part == null) {
-			return Collections.emptyList();
-		}
 		List<StoryPart> parts = new ArrayList<>();
 		for(int i = 0; i < maxSteps; i++) {
 			StoryPart next = part.chooseNext(this);
