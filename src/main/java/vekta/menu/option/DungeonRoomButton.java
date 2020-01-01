@@ -34,6 +34,7 @@ public class DungeonRoomButton implements ButtonOption {
 	public void onSelect(Menu menu) {
 		room.setVisited(true);
 		Menu sub = new Menu(menu, new DungeonMenuHandle(room));
+		room.onMenu(sub);
 		for(String path : room.getPathMap().keySet()) {
 			sub.add(new DungeonRoomButton(path, room.getPathMap().get(path)));
 		}

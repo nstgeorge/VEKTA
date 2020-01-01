@@ -1,7 +1,7 @@
 package vekta.item;
 
-import vekta.Faction;
-import vekta.Player;
+import vekta.faction.Faction;
+import vekta.player.Player;
 import vekta.mission.Mission;
 import vekta.mission.MissionIssuer;
 import vekta.mission.objective.KeepItemObjective;

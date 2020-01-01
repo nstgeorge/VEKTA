@@ -1,7 +1,7 @@
 package vekta.terrain;
 
 import processing.core.PVector;
-import vekta.Syncable;
+import vekta.sync.Syncable;
 import vekta.knowledge.ObservationLevel;
 import vekta.object.SpaceObject;
 import vekta.object.ship.Ship;

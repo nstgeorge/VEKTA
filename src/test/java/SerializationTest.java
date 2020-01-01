@@ -1,7 +1,7 @@
 import org.junit.Test;
 import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
-import vekta.WorldState;
+import vekta.world.WorldState;
 import vekta.connection.message.Message;
 
 import java.io.Externalizable;

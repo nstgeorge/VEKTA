@@ -204,8 +204,8 @@ public final class Resources {
 		if(volume > 0) {
 			SoundFile sound = getSound(key);
 			sound.stop();
-			if(sound.channels() > 1 && pan != 1) {//TODO refactor
-				println("Panning stereo sound:", key);
+			if(sound.channels() > 1 && pan != 0) {//TODO refactor
+				println(":: Panning stereo sound:", key);
 			}
 			sound.play(freq, pan, volume);
 		}

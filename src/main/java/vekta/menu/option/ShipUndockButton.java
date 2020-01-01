@@ -1,6 +1,6 @@
 package vekta.menu.option;
 
-import vekta.context.World;
+import vekta.world.World;
 import vekta.menu.Menu;
 import vekta.object.ship.Ship;
 

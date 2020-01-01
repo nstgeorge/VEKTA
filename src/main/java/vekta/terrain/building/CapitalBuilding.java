@@ -12,9 +12,11 @@ import vekta.terrain.settlement.Settlement;
 import vekta.terrain.settlement.SettlementPart;
 
 public class CapitalBuilding implements SettlementPart {
+	private final String title;
 	private final Settlement settlement;
 
-	public CapitalBuilding(Settlement settlement) {
+	public CapitalBuilding(String title, Settlement settlement) {
+		this.title = title;
 		this.settlement = settlement;
 	}
 
@@ -29,7 +31,7 @@ public class CapitalBuilding implements SettlementPart {
 
 	@Override
 	public String getGenericName() {
-		return "Town Hall";
+		return title;
 	}
 
 	@Override
@@ -52,8 +54,8 @@ public class CapitalBuilding implements SettlementPart {
 			menu.add(new UpgradeMenuButton(menu.getPlayer(), getSettlement()));
 
 			// Add advisement option
-			Person person = new TemporaryPerson("Mayor of " + getSettlement().getName(), getSettlement().getFaction());
-			menu.add(new DialogButton("Advise Mayor", AdviceObjectiveSpawner.randomAdviceDialog(menu.getPlayer(), person)));
+			Person person = new TemporaryPerson(title + " of " + getSettlement().getName(), getSettlement().getFaction());
+			menu.add(new DialogButton("Advise" + title, AdviceObjectiveSpawner.randomAdviceDialog(menu.getPlayer(), person)));
 
 			menu.add(new RenameButton(getSettlement()));
 		}

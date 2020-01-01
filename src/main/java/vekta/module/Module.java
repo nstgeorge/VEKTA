@@ -1,10 +1,10 @@
 package vekta.module;
 
-import vekta.InfoGroup;
 import vekta.KeyBinding;
 import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.object.ship.ModularShip;
+import vekta.util.InfoGroup;
 
 import java.io.Serializable;
 
@@ -21,7 +21,9 @@ public interface Module extends Serializable {
 
 	float getValueScale();
 
-	boolean isBetter(Module other);
+	default boolean isBetter(Module other) {
+		return getValueScale() > other.getValueScale();
+	}
 
 	Module createVariant();
 

@@ -1,7 +1,7 @@
 package vekta.module;
 
 import processing.core.PVector;
-import vekta.InfoGroup;
+import vekta.util.InfoGroup;
 import vekta.KeyBinding;
 import vekta.menu.Menu;
 import vekta.menu.handle.SurveyMenuHandle;

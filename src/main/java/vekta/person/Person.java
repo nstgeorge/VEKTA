@@ -1,11 +1,15 @@
 package vekta.person;
 
 import vekta.*;
+import vekta.faction.Faction;
 import vekta.mission.Mission;
 import vekta.mission.MissionIssuer;
 import vekta.object.SpaceObject;
 import vekta.person.personality.Personality;
+import vekta.player.Player;
 import vekta.spawner.PersonGenerator;
+import vekta.sync.Sync;
+import vekta.sync.Syncable;
 import vekta.terrain.LandingSite;
 import vekta.terrain.building.HouseBuilding;
 import vekta.terrain.settlement.Settlement;
@@ -118,6 +122,10 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 	}
 
 	public Dialog createDialog(String type, String data) {
+		if(isDead()) {
+			type = "dead";
+		}
+
 		String[] parts = data.split("\\*");
 		Personality personality = getPersonality();
 
@@ -212,7 +220,7 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 		getWorld().remove(this);
 		syncChanges();
 	}
-	
+
 	@Override
 	public int chooseMissionTier(Player player) {
 		int tier = (int)v.random(2) + 1;

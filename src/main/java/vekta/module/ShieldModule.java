@@ -1,6 +1,6 @@
 package vekta.module;
 
-import vekta.InfoGroup;
+import vekta.util.InfoGroup;
 import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
 

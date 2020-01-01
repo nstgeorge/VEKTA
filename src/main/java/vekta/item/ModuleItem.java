@@ -1,6 +1,6 @@
 package vekta.item;
 
-import vekta.InfoGroup;
+import vekta.util.InfoGroup;
 import vekta.menu.Menu;
 import vekta.module.Module;
 

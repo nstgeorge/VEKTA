@@ -1,6 +1,6 @@
 package vekta.mission.reward;
 
-import vekta.Faction;
+import vekta.faction.Faction;
 import vekta.mission.Mission;
 
 public class PeaceReward extends DiplomacyReward {

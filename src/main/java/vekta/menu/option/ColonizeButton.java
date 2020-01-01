@@ -1,6 +1,6 @@
 package vekta.menu.option;
 
-import vekta.Faction;
+import vekta.faction.Faction;
 import vekta.item.ColonyItem;
 import vekta.knowledge.ObservationLevel;
 import vekta.menu.Menu;
@@ -44,7 +44,7 @@ public class ColonizeButton implements ButtonOption {
 		settlement.setOverview("You land close to your recently established colony.");
 		settlement.getEconomy().setValue(.1F);
 		settlement.clear();
-		settlement.add(new CapitalBuilding(settlement));
+		settlement.add(new CapitalBuilding("Governor", settlement));
 		site.getTerrain().addSettlement(settlement);
 
 		// Ensure that the colony object doesn't despawn

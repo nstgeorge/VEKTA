@@ -1,7 +1,7 @@
 package vekta.person;
 
-import vekta.ConditionalRegister;
-import vekta.Faction;
+import vekta.sync.ConditionalRegister;
+import vekta.faction.Faction;
 
 public class TemporaryPerson extends Person implements ConditionalRegister {
 	public TemporaryPerson(String name, Faction faction) {

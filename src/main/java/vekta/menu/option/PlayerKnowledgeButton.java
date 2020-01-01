@@ -1,6 +1,6 @@
 package vekta.menu.option;
 
-import vekta.Player;
+import vekta.player.Player;
 import vekta.context.KnowledgeContext;
 import vekta.menu.Menu;
 

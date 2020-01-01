@@ -1,7 +1,7 @@
 package vekta.connection.message;
 
 import processing.core.PVector;
-import vekta.WorldState;
+import vekta.world.WorldState;
 import vekta.connection.MessageListener;
 import vekta.connection.Peer;
 import vekta.object.SpaceObject;

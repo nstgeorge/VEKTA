@@ -1,8 +1,8 @@
 package vekta.spawner.world;
 
 import processing.core.PVector;
-import vekta.Faction;
-import vekta.Player;
+import vekta.faction.Faction;
+import vekta.player.Player;
 import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.PatrolShip;

@@ -2,8 +2,8 @@ package vekta.menu;
 
 import processing.event.KeyEvent;
 import vekta.KeyBinding;
-import vekta.Player;
-import vekta.PlayerEvent;
+import vekta.player.Player;
+import vekta.player.PlayerEvent;
 import vekta.context.Context;
 import vekta.menu.handle.MenuHandle;
 import vekta.menu.option.BackButton;

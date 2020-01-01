@@ -1,7 +1,7 @@
 package vekta.spawner.objective;
 
 import processing.core.PVector;
-import vekta.RenderLevel;
+import vekta.world.RenderLevel;
 import vekta.mission.Mission;
 import vekta.mission.objective.DefeatObjective;
 import vekta.mission.objective.Objective;

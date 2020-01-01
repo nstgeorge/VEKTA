@@ -1,6 +1,6 @@
 package vekta.spawner.item;
 
-import vekta.Faction;
+import vekta.faction.Faction;
 import vekta.Resources;
 import vekta.item.ClothingItem;
 import vekta.item.Item;

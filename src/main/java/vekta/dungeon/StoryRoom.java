@@ -22,12 +22,8 @@ public class StoryRoom extends DungeonRoom {
 	}
 
 	@Override
-	public void onEnter(Menu menu) {
+	public void onMenu(Menu menu) {
 		Person person = new TemporaryPerson(getName(), menu.getPlayer().getFaction());
 		menu.add(new DialogButton("Read Story", StoryGenerator.createDialog(person, getStory())));
-	}
-
-	@Override
-	public void onLeave(Menu menu) {
 	}
 }

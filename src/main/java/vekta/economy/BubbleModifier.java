@@ -1,6 +1,6 @@
 package vekta.economy;
 
-import vekta.item.ItemCategory;
+import vekta.item.category.ItemCategory;
 
 import static vekta.Vekta.v;
 

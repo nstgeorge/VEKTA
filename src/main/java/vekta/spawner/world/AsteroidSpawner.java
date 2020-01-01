@@ -1,8 +1,8 @@
 package vekta.spawner.world;
 
 import processing.core.PVector;
-import vekta.Faction;
-import vekta.RenderLevel;
+import vekta.faction.Faction;
+import vekta.world.RenderLevel;
 import vekta.Resources;
 import vekta.object.SpaceObject;
 import vekta.object.planet.Asteroid;

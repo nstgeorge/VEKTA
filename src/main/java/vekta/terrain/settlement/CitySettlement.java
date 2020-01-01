@@ -1,6 +1,6 @@
 package vekta.terrain.settlement;
 
-import vekta.Faction;
+import vekta.faction.Faction;
 import vekta.economy.Economy;
 import vekta.economy.NoiseModifier;
 import vekta.spawner.PersonGenerator;
@@ -20,7 +20,7 @@ public class CitySettlement extends Settlement {
 		add(new District(this, "Financial District", BuildingType.ECONOMY));
 		//		add(new District(this, "Government Offices", BuildingType.GOVERNMENT));
 
-		add(new CapitalBuilding(this));
+		add(new CapitalBuilding("Governor", this));
 		add(new AcademyBuilding(this));
 
 		for(MarketBuilding building : WorldGenerator.randomMarkets(3, .4F)) {

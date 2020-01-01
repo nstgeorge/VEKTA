@@ -1,6 +1,6 @@
 package vekta.mission.objective;
 
-import vekta.Sync;
+import vekta.sync.Sync;
 import vekta.object.SpaceObject;
 
 import static vekta.Vekta.getWorld;

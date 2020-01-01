@@ -1,7 +1,7 @@
 package vekta.object.ship;
 
 import processing.core.PVector;
-import vekta.RenderLevel;
+import vekta.world.RenderLevel;
 import vekta.object.Countermeasure;
 import vekta.object.HomingResponder;
 

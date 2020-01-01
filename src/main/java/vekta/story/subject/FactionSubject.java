@@ -1,6 +1,6 @@
 package vekta.story.subject;
 
-import vekta.Faction;
+import vekta.faction.Faction;
 
 public class FactionSubject implements StorySubject {
 	private final Faction faction;

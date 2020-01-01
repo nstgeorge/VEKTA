@@ -1,8 +1,8 @@
 package vekta.object.ship;
 
 import processing.core.PVector;
-import vekta.Player;
-import vekta.RenderLevel;
+import vekta.player.Player;
+import vekta.world.RenderLevel;
 import vekta.menu.Menu;
 import vekta.menu.option.DialogButton;
 import vekta.menu.option.LootMenuButton;

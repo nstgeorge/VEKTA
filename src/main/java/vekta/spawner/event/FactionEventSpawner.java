@@ -1,7 +1,7 @@
 package vekta.spawner.event;
 
-import vekta.Faction;
-import vekta.Player;
+import vekta.faction.Faction;
+import vekta.player.Player;
 import vekta.economy.ProductivityModifier;
 import vekta.economy.TemporaryModifier;
 import vekta.spawner.EventGenerator;

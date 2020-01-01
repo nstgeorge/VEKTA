@@ -1,7 +1,7 @@
 package vekta.knowledge;
 
 import vekta.KeyBinding;
-import vekta.Player;
+import vekta.player.Player;
 import vekta.menu.Menu;
 import vekta.menu.option.ShipSwitchButton;
 import vekta.object.ship.ModularShip;

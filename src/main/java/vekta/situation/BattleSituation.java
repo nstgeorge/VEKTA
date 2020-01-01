@@ -1,19 +1,20 @@
 package vekta.situation;
 
 import processing.sound.SoundFile;
-import vekta.Player;
-import vekta.RenderLevel;
 import vekta.Resources;
 import vekta.object.ship.FighterShip;
+import vekta.player.Player;
 import vekta.sound.SoundGroup;
 import vekta.spawner.WorldGenerator;
+import vekta.world.AttributeZoomController;
+import vekta.world.RenderLevel;
 
 import static vekta.Vekta.getDistanceUnit;
 import static vekta.Vekta.getWorld;
 
 public class BattleSituation implements Situation {
 	private static final SoundGroup BATTLE_MUSIC = new SoundGroup("battle");
-	private static final float BATTLE_RADIUS = WorldGenerator.getRadius(RenderLevel.PARTICLE) / getDistanceUnit(RenderLevel.PARTICLE);
+	private static final float BATTLE_RADIUS = WorldGenerator.getRadius(RenderLevel.PARTICLE);
 
 	@Override
 	public boolean isHappening(Player player) {
@@ -32,18 +33,11 @@ public class BattleSituation implements Situation {
 		SoundFile sound = BATTLE_MUSIC.random();
 		Resources.setMusic(sound, true);
 
-		during(player);
-	}
-
-	@Override
-	public void during(Player player) {
-		getWorld().setMaxZoom(getDistanceUnit(RenderLevel.SHIP));
+		getWorld().addZoomController(new AttributeZoomController(getClass(), getDistanceUnit(RenderLevel.SHIP)));
 	}
 
 	@Override
 	public void end(Player player) {
 		Resources.stopMusic();
-
-		getWorld().setMaxZoom(Float.POSITIVE_INFINITY);
 	}
 }

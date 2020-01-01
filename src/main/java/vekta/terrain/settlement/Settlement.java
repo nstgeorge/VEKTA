@@ -3,11 +3,15 @@ package vekta.terrain.settlement;
 import vekta.*;
 import vekta.economy.Economy;
 import vekta.economy.ProductivityModifier;
+import vekta.faction.Faction;
 import vekta.knowledge.ObservationLevel;
 import vekta.knowledge.SettlementKnowledge;
 import vekta.menu.Menu;
 import vekta.object.SpaceObject;
+import vekta.player.Player;
 import vekta.spawner.WorldGenerator;
+import vekta.sync.Sync;
+import vekta.sync.Syncable;
 import vekta.terrain.LandingSite;
 import vekta.terrain.Terrain;
 import vekta.terrain.building.BuildingType;
@@ -17,8 +21,7 @@ import vekta.terrain.visual.Visual;
 import java.util.ArrayList;
 import java.util.List;
 
-import static processing.core.PApplet.ceil;
-import static processing.core.PApplet.sq;
+import static processing.core.PApplet.*;
 import static vekta.Vekta.register;
 
 public abstract class Settlement extends Syncable<Settlement> implements SettlementPart, Economy.Container, ProductivityModifier, Renameable {
@@ -136,7 +139,7 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 	}
 
 	public int getPopulation() {
-		return ceil(sq(getEconomy().getValue()) * POPULATION_SCALE);
+		return ceil(pow(getEconomy().getValue(), 4) * POPULATION_SCALE);
 	}
 
 	public List<SettlementPart> getParts() {

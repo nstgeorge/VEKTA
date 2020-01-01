@@ -1,6 +1,6 @@
 package vekta.connection.message;
 
-import vekta.Player;
+import vekta.player.Player;
 import vekta.connection.MessageListener;
 import vekta.connection.Peer;
 

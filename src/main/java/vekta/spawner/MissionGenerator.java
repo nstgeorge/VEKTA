@@ -1,9 +1,9 @@
 package vekta.spawner;
 
 import processing.core.PVector;
-import vekta.Player;
-import vekta.PlayerFaction;
-import vekta.RenderLevel;
+import vekta.player.Player;
+import vekta.faction.PlayerFaction;
+import vekta.world.RenderLevel;
 import vekta.Resources;
 import vekta.mission.Mission;
 import vekta.mission.MissionIssuer;

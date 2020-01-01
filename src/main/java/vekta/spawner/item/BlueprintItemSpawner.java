@@ -2,6 +2,8 @@ package vekta.spawner.item;
 
 import vekta.Resources;
 import vekta.item.*;
+import vekta.item.category.ItemCategory;
+import vekta.item.category.PatternItemCategory;
 import vekta.spawner.ItemGenerator;
 
 import java.util.HashMap;

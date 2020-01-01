@@ -1,6 +1,6 @@
 package vekta.module;
 
-import vekta.InfoGroup;
+import vekta.util.InfoGroup;
 import vekta.item.Inventory;
 import vekta.menu.Menu;
 import vekta.menu.handle.LandingMenuHandle;

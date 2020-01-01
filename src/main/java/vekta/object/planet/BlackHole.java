@@ -1,7 +1,7 @@
 package vekta.object.planet;
 
 import processing.core.PVector;
-import vekta.RenderLevel;
+import vekta.world.RenderLevel;
 import vekta.terrain.BlackHoleTerrain;
 
 import static processing.core.PApplet.sin;

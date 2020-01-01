@@ -1,6 +1,6 @@
 package vekta.connection.message;
 
-import vekta.Syncable;
+import vekta.sync.Syncable;
 import vekta.connection.MessageListener;
 import vekta.connection.Peer;
 

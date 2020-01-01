@@ -1,6 +1,6 @@
 package vekta.terrain.settlement;
 
-import vekta.Faction;
+import vekta.faction.Faction;
 import vekta.economy.Economy;
 import vekta.economy.NoiseModifier;
 import vekta.menu.Menu;

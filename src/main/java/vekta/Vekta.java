@@ -6,13 +6,17 @@ import processing.core.PVector;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 import vekta.context.Context;
-import vekta.context.World;
+import vekta.world.World;
 import vekta.item.ItemType;
 import vekta.menu.Menu;
 import vekta.menu.handle.MainMenuHandle;
 import vekta.menu.option.ExitGameButton;
 import vekta.menu.option.SettingsMenuButton;
 import vekta.menu.option.WorldButton;
+import vekta.sync.Syncable;
+import vekta.world.Multiplayer;
+import vekta.world.RenderLevel;
+import vekta.world.Singleplayer;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -128,8 +132,8 @@ public class Vekta extends PApplet {
 
 	@Override
 	public void keyPressed(KeyEvent event) {
-//		println(event);
-		
+		//		println(event);
+
 		if((world != null && world.globalKeyPressed(event)) || context != null) {
 			context.keyPressed(event);
 			if(key == ESC) {
@@ -328,7 +332,7 @@ public class Vekta extends PApplet {
 				mass /= 10;
 				order++;
 			}
-			return roundString(mass) + " * 10^" + order + " kg";
+			return roundString(mass) + "*10^" + order + " kg";
 		}
 		return roundString(mass) + " kg";
 	}
@@ -357,7 +361,7 @@ public class Vekta extends PApplet {
 	}
 
 	public <T> T random(Collection<T> collection) {
-		return random(new ArrayList<>(collection)); // TODO: optimize
+		return random(new ArrayList<>(collection));
 	}
 
 	public boolean chance(float chance) {

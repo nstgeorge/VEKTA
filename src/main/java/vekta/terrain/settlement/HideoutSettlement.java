@@ -1,7 +1,7 @@
 package vekta.terrain.settlement;
 
-import vekta.Faction;
-import vekta.Player;
+import vekta.faction.Faction;
+import vekta.player.Player;
 import vekta.economy.Economy;
 import vekta.economy.NoiseModifier;
 import vekta.economy.TemporaryModifier;
@@ -18,6 +18,10 @@ public class HideoutSettlement extends Settlement {
 
 	public HideoutSettlement(Faction faction) {
 		super(faction, "hideout");
+
+		if(v.chance(.25F)) {
+			// Mercenaries
+		}
 
 		if(v.chance(.5F)) {
 			add(new MarketBuilding(2, "Weapons", WeaponItemSpawner.class));

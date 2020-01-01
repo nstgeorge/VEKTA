@@ -1,6 +1,6 @@
 package vekta.overlay;
 
-import vekta.Counter;
+import vekta.util.Counter;
 
 /**
  * General-purpose overlay with external state management.

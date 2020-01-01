@@ -1,7 +1,8 @@
 package vekta.item;
 
-import vekta.InfoGroup;
-import vekta.Player;
+import vekta.item.category.ItemCategory;
+import vekta.player.Player;
+import vekta.util.InfoGroup;
 
 import java.io.Serializable;
 import java.util.ArrayList;

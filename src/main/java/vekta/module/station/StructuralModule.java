@@ -1,7 +1,7 @@
 package vekta.module.station;
 
-import vekta.InfoGroup;
-import vekta.RenderLevel;
+import vekta.util.InfoGroup;
+import vekta.world.RenderLevel;
 import vekta.module.Module;
 import vekta.module.ModuleType;
 import vekta.module.ShipModule;

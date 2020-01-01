@@ -1,6 +1,6 @@
 package vekta.spawner.dialog;
 
-import vekta.Faction;
+import vekta.faction.Faction;
 import vekta.menu.Menu;
 import vekta.menu.option.BackButton;
 import vekta.menu.option.CustomButton;

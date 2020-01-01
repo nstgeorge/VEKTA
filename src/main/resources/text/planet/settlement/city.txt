@@ -3,3 +3,4 @@
 {settlement} Spaceport
 New {settlement}
 Greater {settlement}
+{settlement}-{settlement}

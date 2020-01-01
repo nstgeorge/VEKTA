@@ -1,6 +1,5 @@
 package vekta.menu.option;
 
-import vekta.InfoGroup;
 import vekta.KeyBinding;
 import vekta.Resources;
 import vekta.Settings;
@@ -9,8 +8,9 @@ import vekta.display.TextDisplay;
 import vekta.item.BlueprintItem;
 import vekta.item.Inventory;
 import vekta.item.Item;
-import vekta.item.ItemCategory;
+import vekta.item.category.ItemCategory;
 import vekta.menu.Menu;
+import vekta.util.InfoGroup;
 
 import java.util.List;
 
@@ -64,7 +64,8 @@ public class CraftButton implements ButtonOption, LayoutAware {
 	@Override
 	public void onLayout(Layout layout) {
 		layout.customize()
-				.color(blueprint.getResultType().getColor());
+				.color(blueprint.getResultType().getColor())
+				.spacing(layout.getStyle().spacing() / 2);
 
 		layout.add(new TextDisplay(blueprint.getResultName())).customize().fontSize(32);
 

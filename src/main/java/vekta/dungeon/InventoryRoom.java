@@ -18,13 +18,13 @@ public class InventoryRoom extends DungeonRoom {
 		return inventory;
 	}
 
-	@Override
-	public boolean isEnabled() {
-		return getInventory().itemCount() > 0;
-	}
+//	@Override
+//	public boolean isEnabled() {
+//		return getInventory().itemCount() > 0;
+//	}
 
 	@Override
-	public void onEnter(Menu menu) {
+	public void onMenu(Menu menu) {
 		for(Item item : getInventory()) {
 			menu.add(new ItemTradeButton(true, menu.getPlayer(), getInventory(), item));
 		}

@@ -1,6 +1,6 @@
 package vekta.terrain.settlement;
 
-import vekta.Faction;
+import vekta.faction.Faction;
 import vekta.economy.Economy;
 import vekta.economy.NoiseModifier;
 import vekta.item.Inventory;
@@ -17,7 +17,7 @@ public class ColonySettlement extends Settlement {
 	public ColonySettlement(Faction faction) {
 		super(faction, "colony");
 
-		add(new CapitalBuilding(this));
+		add(new CapitalBuilding("Leader", this));
 		add(WorldGenerator.createMarket(1));
 
 		if(v.chance(.75F)) {

@@ -1,6 +1,6 @@
 package vekta.terrain.settlement;
 
-import vekta.Faction;
+import vekta.faction.Faction;
 import vekta.Resources;
 import vekta.economy.Economy;
 import vekta.economy.NoiseModifier;
@@ -22,7 +22,7 @@ public class TownSettlement extends Settlement {
 			add(new District(this, Resources.generateString("town_social"), BuildingType.RESIDENTIAL));
 		}
 
-		add(new CapitalBuilding(this));
+		add(new CapitalBuilding("Mayor", this));
 
 		add(new ForumBuilding(this, (int)(v.random(5, 10))));
 

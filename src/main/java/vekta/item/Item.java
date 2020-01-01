@@ -1,7 +1,7 @@
 package vekta.item;
 
-import vekta.InfoGroup;
-import vekta.Player;
+import vekta.util.InfoGroup;
+import vekta.player.Player;
 import vekta.menu.Menu;
 
 import java.io.Serializable;

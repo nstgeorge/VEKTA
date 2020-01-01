@@ -1,6 +1,6 @@
 package vekta.mission.reward;
 
-import vekta.Player;
+import vekta.player.Player;
 import vekta.economy.Economy;
 import vekta.economy.ProductivityModifier;
 import vekta.mission.Mission;

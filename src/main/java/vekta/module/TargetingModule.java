@@ -1,6 +1,5 @@
 package vekta.module;
 
-import vekta.InfoGroup;
 import vekta.KeyBinding;
 import vekta.Resources;
 import vekta.knowledge.ObservationLevel;
@@ -12,11 +11,16 @@ import vekta.object.Targeter;
 import vekta.object.planet.Asteroid;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.object.ship.Ship;
+import vekta.util.InfoGroup;
+import vekta.world.RenderLevel;
 
+import static processing.core.PApplet.max;
+import static processing.core.PApplet.sqrt;
+import static vekta.Vekta.getDistanceUnit;
 import static vekta.Vekta.getWorld;
 
 public class TargetingModule extends ShipModule implements Targeter {
-	private static final float AUTO_ZOOM_SCALE = .015F;
+	private static final float AUTO_ZOOM_SCALE = 150;
 
 	private TargetingMode mode;
 	private SpaceObject target;
@@ -121,7 +125,7 @@ public class TargetingModule extends ShipModule implements Targeter {
 	}
 
 	public float getTargetZoom() {
-		return target != null ? target.relativePosition(getShip()).mag() * AUTO_ZOOM_SCALE : getWorld().getZoom();
+		return target != null ? max(getDistanceUnit(RenderLevel.SHIP), sqrt(target.relativePosition(getShip()).mag()) * AUTO_ZOOM_SCALE) : getWorld().getZoom();
 	}
 
 	@Override

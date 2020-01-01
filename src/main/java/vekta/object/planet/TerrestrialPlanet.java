@@ -1,14 +1,15 @@
 package vekta.object.planet;
 
 import processing.core.PVector;
-import vekta.Faction;
-import vekta.Player;
 import vekta.economy.TemporaryModifier;
+import vekta.faction.Faction;
 import vekta.knowledge.ObservationLevel;
 import vekta.knowledge.TerrestrialKnowledge;
 import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
+import vekta.object.ship.Ship;
 import vekta.person.Person;
+import vekta.player.Player;
 import vekta.terrain.LandingSite;
 import vekta.terrain.Terrain;
 import vekta.terrain.settlement.Settlement;
@@ -49,8 +50,8 @@ public class TerrestrialPlanet extends Planet {
 
 	@Override
 	public void onCollide(SpaceObject s) {
-		if(s instanceof ModularShip) {
-			ModularShip ship = (ModularShip)s;
+		if(s instanceof Ship) {
+			Ship ship = (Ship)s;
 			if(ship.isDockable(this)) {
 				site.land(ship);
 			}

@@ -1,10 +1,10 @@
 package vekta.object;
 
 import processing.core.PVector;
-import vekta.Player;
-import vekta.PlayerEvent;
-import vekta.RenderLevel;
-import vekta.Syncable;
+import vekta.player.Player;
+import vekta.player.PlayerEvent;
+import vekta.world.RenderLevel;
+import vekta.sync.Syncable;
 import vekta.knowledge.ObservationLevel;
 import vekta.object.ship.ModularShip;
 

@@ -2,7 +2,7 @@ package vekta.object.planet;
 
 import processing.core.PVector;
 import vekta.Renameable;
-import vekta.RenderLevel;
+import vekta.world.RenderLevel;
 import vekta.Resources;
 import vekta.object.SpaceObject;
 

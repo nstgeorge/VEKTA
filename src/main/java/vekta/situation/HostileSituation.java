@@ -1,6 +1,6 @@
 package vekta.situation;
 
-import vekta.Player;
+import vekta.player.Player;
 import vekta.Resources;
 import vekta.object.SpaceObject;
 import vekta.object.planet.TerrestrialPlanet;

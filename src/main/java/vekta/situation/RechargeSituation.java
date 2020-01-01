@@ -1,6 +1,6 @@
 package vekta.situation;
 
-import vekta.Player;
+import vekta.player.Player;
 import vekta.menu.option.RechargeButton;
 import vekta.person.Dialog;
 import vekta.spawner.MissionGenerator;

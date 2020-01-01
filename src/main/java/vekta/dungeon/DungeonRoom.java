@@ -8,10 +8,12 @@ import java.util.Map;
 
 public class DungeonRoom implements Serializable {
 	private final Dungeon dungeon;
-	private final String name;
-	private final String description;
+
+	private String name;
+	private String description;
+
 	private final Map<String, DungeonRoom> connections = new HashMap<>();
-	
+
 	private boolean visited;
 
 	public DungeonRoom(DungeonRoom parent, String name, String description) {
@@ -35,8 +37,16 @@ public class DungeonRoom implements Serializable {
 		return name;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public String getDescription() {
 		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public boolean isVisited() {
@@ -54,9 +64,12 @@ public class DungeonRoom implements Serializable {
 	public void addPath(String name, DungeonRoom room) {
 		connections.put(name, room);
 	}
-	
+
 	public boolean isEnabled() {
 		return true;
+	}
+
+	public void onMenu(Menu menu) {
 	}
 
 	public void onEnter(Menu menu) {

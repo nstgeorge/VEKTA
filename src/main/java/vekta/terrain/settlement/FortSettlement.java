@@ -1,9 +1,10 @@
 package vekta.terrain.settlement;
 
-import vekta.Faction;
-import vekta.Player;
+import vekta.faction.Faction;
+import vekta.player.Player;
 import vekta.economy.Economy;
 import vekta.economy.NoiseModifier;
+import vekta.terrain.building.CapitalBuilding;
 
 import static vekta.Vekta.v;
 
@@ -12,7 +13,7 @@ public class FortSettlement extends Settlement {
 	public FortSettlement(Faction faction) {
 		super(faction, "fort");
 
-		
+		add(new CapitalBuilding("Officer", this));
 	}
 
 	@Override

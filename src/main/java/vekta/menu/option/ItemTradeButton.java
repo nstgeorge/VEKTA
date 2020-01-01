@@ -1,25 +1,19 @@
 package vekta.menu.option;
 
-import vekta.InfoGroup;
-import vekta.KeyBinding;
-import vekta.Player;
-import vekta.Settings;
-import vekta.display.Layout;
-import vekta.display.TextDisplay;
 import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.menu.handle.TradeMenuHandle;
+import vekta.player.Player;
 
 import java.io.Serializable;
 
 import static vekta.Vekta.*;
 
-public class ItemTradeButton implements ButtonOption, LayoutAware {
+public class ItemTradeButton extends ItemButton {
 	private final boolean buying;
 	private final Player player;
 	private final Inventory inv;
-	private final Item item;
 	private final int price;
 
 	public ItemTradeButton(Player player, Item item, int price) {
@@ -33,25 +27,16 @@ public class ItemTradeButton implements ButtonOption, LayoutAware {
 	}
 
 	public ItemTradeButton(boolean buying, Player player, Inventory inv, Item item, int price) {
+		super(item);
 		this.buying = buying;
 		this.player = player;
 		this.inv = inv;
-		this.item = item;
 		this.price = price;
 	}
 
 	@Override
 	public String getName() {
-		return moneyString(item.getName(), price);
-	}
-
-	@Override
-	public int getColor() {
-		return getItem().getColor();
-	}
-
-	public Item getItem() {
-		return item;
+		return moneyString(getItem().getName(), price);
 	}
 
 	public Inventory getFrom() {
@@ -73,6 +58,7 @@ public class ItemTradeButton implements ButtonOption, LayoutAware {
 
 	@Override
 	public boolean isEnabled() {
+		Item item = getItem();
 		return getTo().has(price) && getFrom().has(item) && (!(item instanceof TradeAware) || ((TradeAware)item).isTradeEnabled(player));
 	}
 
@@ -85,7 +71,7 @@ public class ItemTradeButton implements ButtonOption, LayoutAware {
 
 	@Override
 	public void draw(Menu menu, int index) {
-		ButtonOption.super.draw(menu, index);
+		super.draw(menu, index);
 
 		if(menu.getHandle() instanceof TradeMenuHandle) {
 			TradeMenuHandle handle = (TradeMenuHandle)menu.getHandle();
@@ -101,6 +87,7 @@ public class ItemTradeButton implements ButtonOption, LayoutAware {
 
 	@Override
 	public void onSelect(Menu menu) {
+		Item item = getItem();
 		Inventory from = getFrom();
 		Inventory to = getTo();
 		to.remove(price);
@@ -111,22 +98,6 @@ public class ItemTradeButton implements ButtonOption, LayoutAware {
 			menu.getPlayer().setBuyPrice(item, price);
 		}
 		menu.remove(this);
-	}
-
-	@Override
-	public void onLayout(Layout layout) {
-		layout.add(new TextDisplay(getItem().getName()))
-				.customize().fontSize(32);
-
-		InfoGroup info = new InfoGroup();
-		info.addStat("Mass", item.getMass());
-		item.onInfo(info);
-
-		info.onLayout(layout);
-		if(isEnabled()) {
-			layout.add(new TextDisplay(moneyString(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to " + getSelectVerb(), price)))
-					.customize().color(100);
-		}
 	}
 
 	public interface TradeAware extends Serializable {

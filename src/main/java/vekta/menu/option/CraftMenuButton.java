@@ -42,5 +42,7 @@ public class CraftMenuButton implements ButtonOption {
 		}
 		sub.addDefault();
 		setContext(sub);
+
+		menu.remove(this);
 	}
 }

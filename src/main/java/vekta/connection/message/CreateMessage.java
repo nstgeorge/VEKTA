@@ -1,7 +1,7 @@
 package vekta.connection.message;
 
-import vekta.GlobalOffset;
-import vekta.Syncable;
+import vekta.world.GlobalOffset;
+import vekta.sync.Syncable;
 import vekta.connection.MessageListener;
 import vekta.connection.Peer;
 

@@ -1,7 +1,7 @@
 package vekta.economy;
 
-import vekta.Sync;
-import vekta.Syncable;
+import vekta.sync.Sync;
+import vekta.sync.Syncable;
 
 import java.util.HashMap;
 import java.util.List;

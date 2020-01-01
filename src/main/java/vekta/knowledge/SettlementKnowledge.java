@@ -1,6 +1,6 @@
 package vekta.knowledge;
 
-import vekta.Player;
+import vekta.player.Player;
 import vekta.display.Layout;
 import vekta.display.TextDisplay;
 import vekta.display.VerticalLayout;
@@ -8,6 +8,7 @@ import vekta.display.VisualDisplay;
 import vekta.object.SpaceObject;
 import vekta.terrain.settlement.Settlement;
 
+import static vekta.Vekta.quantityString;
 import static vekta.Vekta.v;
 
 public class SettlementKnowledge extends SpaceObjectKnowledge {
@@ -74,7 +75,7 @@ public class SettlementKnowledge extends SpaceObjectKnowledge {
 			scanned.add(new TextDisplay("Type: " + getSettlement().getGenericName()));
 
 			scanned.add(new TextDisplay(getSettlement().isInhabited()
-					? "Population: " + getSettlement().getPopulation()
+					? "Population: " + quantityString(getSettlement().getPopulation())
 					: "Uninhabited"));
 		}
 	}

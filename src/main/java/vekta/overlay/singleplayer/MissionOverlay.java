@@ -1,6 +1,6 @@
 package vekta.overlay.singleplayer;
 
-import vekta.Player;
+import vekta.player.Player;
 import vekta.mission.Mission;
 import vekta.mission.objective.Objective;
 import vekta.overlay.Overlay;

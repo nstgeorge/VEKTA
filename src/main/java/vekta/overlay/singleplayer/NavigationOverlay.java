@@ -1,7 +1,6 @@
 package vekta.overlay.singleplayer;
 
 import processing.core.PVector;
-import vekta.Player;
 import vekta.mission.Mission;
 import vekta.mission.objective.Objective;
 import vekta.module.ModuleType;
@@ -10,6 +9,7 @@ import vekta.object.Targeter;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.object.ship.ModularShip;
 import vekta.overlay.Overlay;
+import vekta.player.Player;
 
 import static processing.core.PApplet.*;
 import static processing.core.PConstants.CENTER;
@@ -61,7 +61,7 @@ public class NavigationOverlay implements Overlay {
 		PVector heading = ship.getHeading();
 		PVector velocity = ship.getVelocity();
 		drawDial("Heading", ship.getHeading(), v.width - 370, dialHeight, UI_COLOR);
-		if(velocity.magSq() < 1e-5F) {
+		if(velocity.magSq() >= 1) {
 			drawDial("Velocity", velocity, v.width - 500, dialHeight, UI_COLOR);
 		}
 
@@ -82,14 +82,12 @@ public class NavigationOverlay implements Overlay {
 					targetString = target.getName() + " - " + distString + " \nHabitable: " + (closestPlanet.isHabitable() ? "YES" : "NO") + "\nMass: " + massString;
 				}
 				else {
-					targetString = target.getName() + " - " + distString + " \nSpeed: " + (float)round(target.getVelocity().mag() * 100) / 100 + "\nMass: " + massString;
+					targetString = target.getName() + " - " + distString + " \n\nMass: " + massString;
 				}
 				// Closest object arrow
 				drawDial("Direction", target.getPosition().sub(ship.getPosition()), 450, dialHeight, target.getColor());
 				v.fill(target.getColor());
 				v.stroke(target.getColor());
-
-				//				println(ship.getPosition().div(SCALE), target.getPosition().div(SCALE));////
 			}
 			v.text("Target: " + targetString, 50, v.height - 100);
 

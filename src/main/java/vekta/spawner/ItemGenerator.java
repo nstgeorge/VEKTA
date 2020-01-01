@@ -3,8 +3,8 @@ package vekta.spawner;
 import vekta.Resources;
 import vekta.item.Inventory;
 import vekta.item.Item;
-import vekta.item.ItemCategory;
-import vekta.item.PatternItemCategory;
+import vekta.item.category.ItemCategory;
+import vekta.item.category.PatternItemCategory;
 
 import java.util.Arrays;
 import java.util.List;

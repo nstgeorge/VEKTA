@@ -1,8 +1,8 @@
 package vekta.module.station;
 
 import processing.core.PVector;
-import vekta.InfoGroup;
-import vekta.RenderLevel;
+import vekta.util.InfoGroup;
+import vekta.world.RenderLevel;
 import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.menu.handle.SpaceObjectMenuHandle;

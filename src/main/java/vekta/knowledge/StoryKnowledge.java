@@ -1,7 +1,7 @@
 package vekta.knowledge;
 
 import vekta.KeyBinding;
-import vekta.Player;
+import vekta.player.Player;
 import vekta.display.Layout;
 import vekta.display.TextDisplay;
 import vekta.item.ItemType;

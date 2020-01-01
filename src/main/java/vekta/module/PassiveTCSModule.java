@@ -1,6 +1,6 @@
 package vekta.module;
 
-import vekta.InfoGroup;
+import vekta.util.InfoGroup;
 
 public class PassiveTCSModule extends ShipModule {
 	private static final float EFFICIENCY_SCALE = 1e3F;

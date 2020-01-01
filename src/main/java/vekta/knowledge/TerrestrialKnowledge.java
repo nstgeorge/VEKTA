@@ -1,6 +1,6 @@
 package vekta.knowledge;
 
-import vekta.Player;
+import vekta.player.Player;
 import vekta.display.Layout;
 import vekta.display.TextDisplay;
 import vekta.display.VerticalLayout;

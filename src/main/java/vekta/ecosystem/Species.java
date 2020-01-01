@@ -1,6 +1,6 @@
 package vekta.ecosystem;
 
-import vekta.InfoGroup;
+import vekta.util.InfoGroup;
 
 import java.io.Serializable;
 import java.util.HashMap;

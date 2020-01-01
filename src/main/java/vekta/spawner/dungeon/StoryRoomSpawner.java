@@ -8,7 +8,7 @@ import vekta.spawner.StoryGenerator;
 public class StoryRoomSpawner implements DungeonGenerator.DungeonSpawner {
 	@Override
 	public float getWeight() {
-		return .5F;
+		return 1;
 	}
 
 	@Override

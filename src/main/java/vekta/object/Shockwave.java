@@ -1,6 +1,6 @@
 package vekta.object;
 
-import vekta.RenderLevel;
+import vekta.world.RenderLevel;
 
 import static vekta.Vekta.*;
 

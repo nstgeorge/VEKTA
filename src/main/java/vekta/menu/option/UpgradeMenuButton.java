@@ -1,6 +1,6 @@
 package vekta.menu.option;
 
-import vekta.Player;
+import vekta.player.Player;
 import vekta.Resources;
 import vekta.menu.Menu;
 import vekta.menu.handle.MenuHandle;

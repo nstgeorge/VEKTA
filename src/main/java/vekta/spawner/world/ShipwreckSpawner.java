@@ -1,7 +1,7 @@
 package vekta.spawner.world;
 
 import processing.core.PVector;
-import vekta.RenderLevel;
+import vekta.world.RenderLevel;
 import vekta.Resources;
 import vekta.item.ModuleItem;
 import vekta.object.SpaceObject;

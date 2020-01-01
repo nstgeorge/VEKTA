@@ -1,7 +1,7 @@
 package vekta.terrain.settlement;
 
-import vekta.Faction;
-import vekta.Player;
+import vekta.faction.Faction;
+import vekta.player.Player;
 import vekta.item.Inventory;
 import vekta.menu.Menu;
 import vekta.menu.option.LootMenuButton;
@@ -23,7 +23,7 @@ public class EmptySettlement extends Settlement {
 
 	@Override
 	public float getValueScale() {
-		return .5F;
+		return .1F;
 	}
 
 	public Inventory getInventory() {

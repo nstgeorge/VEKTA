@@ -20,6 +20,7 @@ public class TerrestrialKnowledgeSpawner implements KnowledgeGenerator.Knowledge
 	}
 
 	public static TerrestrialKnowledge randomTerrestrialKnowledge() {
-		return new TerrestrialKnowledge(ObservationLevel.VISITED, getWorld().findRandomObject(TerrestrialPlanet.class));
+		TerrestrialPlanet planet = getWorld().findRandomObject(TerrestrialPlanet.class);
+		return new TerrestrialKnowledge(ObservationLevel.SCANNED, planet);
 	}
 }

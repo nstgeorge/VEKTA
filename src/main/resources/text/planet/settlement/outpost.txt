@@ -5,3 +5,4 @@ Checkpoint {settlement}
 {planet} Refugees
 {star} Emigrants
 {star} Embassy
+{tribe}

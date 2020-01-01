@@ -2,7 +2,7 @@ package vekta.context;
 
 import processing.event.KeyEvent;
 import vekta.KeyBinding;
-import vekta.Player;
+import vekta.player.Player;
 import vekta.Resources;
 import vekta.display.Layout;
 import vekta.display.VerticalLayout;

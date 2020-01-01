@@ -18,6 +18,6 @@ public class SettlementKnowledgeSpawner implements KnowledgeGenerator.KnowledgeS
 	}
 
 	public static SettlementKnowledge randomSettlementKnowledge() {
-		return new SettlementKnowledge(ObservationLevel.VISITED, PersonGenerator.randomHome());
+		return new SettlementKnowledge(ObservationLevel.SCANNED, PersonGenerator.randomHome());
 	}
 }

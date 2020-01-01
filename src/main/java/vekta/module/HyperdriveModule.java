@@ -1,8 +1,8 @@
 package vekta.module;
 
-import vekta.InfoGroup;
+import vekta.util.InfoGroup;
 import vekta.KeyBinding;
-import vekta.RenderLevel;
+import vekta.world.RenderLevel;
 import vekta.Resources;
 import vekta.menu.Menu;
 import vekta.object.HyperdriveShockwave;

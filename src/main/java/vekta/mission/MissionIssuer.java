@@ -1,7 +1,7 @@
 package vekta.mission;
 
-import vekta.Faction;
-import vekta.Player;
+import vekta.faction.Faction;
+import vekta.player.Player;
 import vekta.object.SpaceObject;
 
 import java.io.Serializable;

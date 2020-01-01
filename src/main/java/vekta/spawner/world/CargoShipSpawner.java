@@ -1,7 +1,7 @@
 package vekta.spawner.world;
 
 import processing.core.PVector;
-import vekta.Faction;
+import vekta.faction.Faction;
 import vekta.object.SpaceObject;
 import vekta.object.ship.CargoShip;
 import vekta.object.ship.EscortShip;

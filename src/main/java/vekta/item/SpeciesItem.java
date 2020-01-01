@@ -1,6 +1,6 @@
 package vekta.item;
 
-import vekta.InfoGroup;
+import vekta.util.InfoGroup;
 import vekta.ecosystem.Species;
 
 import static processing.core.PApplet.ceil;

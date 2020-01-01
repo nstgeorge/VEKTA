@@ -1,8 +1,8 @@
 package vekta.object.planet;
 
 import processing.core.PVector;
-import vekta.Counter;
-import vekta.RenderLevel;
+import vekta.util.Counter;
+import vekta.world.RenderLevel;
 import vekta.spawner.WorldGenerator;
 import vekta.terrain.Terrain;
 

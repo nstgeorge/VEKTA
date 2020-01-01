@@ -1,6 +1,6 @@
 package vekta.person;
 
-import vekta.Player;
+import vekta.player.Player;
 import vekta.menu.Menu;
 import vekta.menu.handle.DialogMenuHandle;
 import vekta.menu.option.CustomButton;

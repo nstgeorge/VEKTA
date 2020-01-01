@@ -1,6 +1,6 @@
 package vekta.mission.reward;
 
-import vekta.Player;
+import vekta.player.Player;
 import vekta.knowledge.StoryKnowledge;
 import vekta.mission.Mission;
 import vekta.story.part.StoryPart;

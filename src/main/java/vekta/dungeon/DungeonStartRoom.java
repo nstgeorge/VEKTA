@@ -2,6 +2,8 @@ package vekta.dungeon;
 
 import vekta.Resources;
 import vekta.context.Context;
+import vekta.knowledge.DungeonKnowledge;
+import vekta.knowledge.ObservationLevel;
 import vekta.menu.Menu;
 import vekta.menu.handle.DungeonMenuHandle;
 import vekta.sound.SoundGroup;
@@ -16,6 +18,11 @@ public class DungeonStartRoom extends DungeonRoom {
 
 	public DungeonStartRoom(Dungeon dungeon, String description) {
 		super(dungeon, dungeon.getName(), description);
+	}
+
+	@Override
+	public void onMenu(Menu menu) {
+		menu.getPlayer().addKnowledge(new DungeonKnowledge(ObservationLevel.VISITED, getDungeon()));
 	}
 
 	@Override

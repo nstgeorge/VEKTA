@@ -1,6 +1,6 @@
 package vekta.module;
 
-import vekta.InfoGroup;
+import vekta.util.InfoGroup;
 
 public class GeneratorModule extends ShipModule {
 	private static final float GENERATOR_HEAT = 5e4F;

@@ -3,17 +3,39 @@ package vekta.spawner;
 import vekta.Resources;
 import vekta.dungeon.Dungeon;
 import vekta.dungeon.DungeonRoom;
+import vekta.object.planet.TerrestrialPlanet;
 import vekta.terrain.building.DungeonBuilding;
 import vekta.terrain.settlement.Settlement;
+import vekta.terrain.settlement.SettlementPart;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static processing.core.PApplet.round;
+import static vekta.Vekta.getWorld;
 import static vekta.Vekta.v;
 
 public class DungeonGenerator {
 	private static final DungeonSpawner[] SPAWNERS = Resources.findSubclassInstances(DungeonSpawner.class);
 	private static final int MAX_DEPTH = 10;
+
+	public static Dungeon randomDungeon() {
+		List<Dungeon> dungeons = new ArrayList<>();
+		for(TerrestrialPlanet planet : getWorld().findObjects(TerrestrialPlanet.class)) {
+			for(Settlement settlement : planet.getTerrain().getSettlements()) {
+				for(SettlementPart part : settlement.getParts()) {
+					if(part instanceof DungeonBuilding) {
+						dungeons.add(((DungeonBuilding)part).getDungeon());
+					}
+				}
+			}
+		}
+		if(dungeons.isEmpty()) {
+			dungeons.add(createDungeon(PersonGenerator.randomHome()));
+		}
+		return v.random(dungeons);
+	}
 
 	public static Dungeon createDungeon(Settlement settlement) {
 		Dungeon dungeon = new Dungeon(settlement.getSite(), Resources.generateString("dungeon"), Resources.generateString("overview_dungeon"));
@@ -39,8 +61,7 @@ public class DungeonGenerator {
 	}
 
 	public static DungeonRoom randomRoom() {
-		Settlement settlement = PersonGenerator.randomHome();
-		Dungeon dungeon = createDungeon(settlement);
+		Dungeon dungeon = randomDungeon();
 		return v.random(dungeon.getRooms());
 	}
 

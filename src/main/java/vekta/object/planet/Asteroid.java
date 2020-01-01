@@ -1,7 +1,7 @@
 package vekta.object.planet;
 
 import processing.core.PVector;
-import vekta.RenderLevel;
+import vekta.world.RenderLevel;
 import vekta.terrain.Terrain;
 
 import static processing.core.PConstants.TWO_PI;

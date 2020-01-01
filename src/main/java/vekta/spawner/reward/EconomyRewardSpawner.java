@@ -1,6 +1,6 @@
 package vekta.spawner.reward;
 
-import vekta.Faction;
+import vekta.faction.Faction;
 import vekta.economy.Economy;
 import vekta.economy.ProductivityModifier;
 import vekta.economy.TemporaryModifier;

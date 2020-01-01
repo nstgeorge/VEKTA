@@ -1,7 +1,7 @@
 package vekta.module;
 
 import processing.core.PVector;
-import vekta.InfoGroup;
+import vekta.util.InfoGroup;
 import vekta.object.HomingProjectile;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;

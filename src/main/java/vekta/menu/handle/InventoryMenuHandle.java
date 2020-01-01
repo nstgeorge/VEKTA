@@ -7,9 +7,6 @@ import vekta.menu.Menu;
 import static vekta.Vekta.UI_COLOR;
 import static vekta.Vekta.v;
 
-/**
- * Menu renderer for trade interactions
- */
 public class InventoryMenuHandle extends SideLayoutMenuHandle {
 	private final Inventory inv;
 

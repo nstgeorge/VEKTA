@@ -1,9 +1,9 @@
 package vekta.mission;
 
-import vekta.Player;
-import vekta.PlayerEvent;
+import vekta.player.Player;
+import vekta.player.PlayerEvent;
 import vekta.Resources;
-import vekta.Syncable;
+import vekta.sync.Syncable;
 import vekta.connection.message.ShareMissionMessage;
 import vekta.mission.objective.Objective;
 import vekta.mission.reward.Reward;

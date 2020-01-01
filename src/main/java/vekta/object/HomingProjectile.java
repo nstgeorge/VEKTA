@@ -1,8 +1,8 @@
 package vekta.object;
 
 import processing.core.PVector;
-import vekta.RenderLevel;
-import vekta.Sync;
+import vekta.world.RenderLevel;
+import vekta.sync.Sync;
 import vekta.spawner.WorldGenerator;
 
 import static processing.core.PApplet.*;

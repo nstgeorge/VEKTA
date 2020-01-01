@@ -1,7 +1,7 @@
 package vekta.object;
 
 import processing.core.PVector;
-import vekta.RenderLevel;
+import vekta.world.RenderLevel;
 import vekta.object.particle.*;
 import vekta.object.planet.Planet;
 

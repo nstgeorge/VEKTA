@@ -1,7 +1,7 @@
 package vekta.object.ship;
 
 import processing.core.PVector;
-import vekta.Faction;
+import vekta.faction.Faction;
 import vekta.object.SpaceObject;
 
 public class PatrolShip extends FighterShip {

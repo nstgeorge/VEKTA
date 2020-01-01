@@ -1,7 +1,7 @@
 package vekta.item;
 
-import vekta.Faction;
-import vekta.InfoGroup;
+import vekta.faction.Faction;
+import vekta.util.InfoGroup;
 import vekta.menu.Menu;
 import vekta.menu.handle.LandingMenuHandle;
 import vekta.menu.option.ColonizeButton;

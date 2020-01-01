@@ -1,7 +1,7 @@
 package vekta.story;
 
-import vekta.Sync;
-import vekta.Syncable;
+import vekta.sync.Sync;
+import vekta.sync.Syncable;
 import vekta.story.part.StoryPart;
 import vekta.story.subject.StorySubject;
 

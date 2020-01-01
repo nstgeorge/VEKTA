@@ -1,6 +1,6 @@
 package vekta.market;
 
-import vekta.Syncable;
+import vekta.sync.Syncable;
 import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;

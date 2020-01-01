@@ -1,7 +1,7 @@
 package vekta.menu.option;
 
 import com.google.common.collect.Lists;
-import vekta.Faction;
+import vekta.faction.Faction;
 import vekta.menu.Menu;
 import vekta.menu.handle.EconomyMenuHandle;
 import vekta.spawner.item.BondItemSpawner;

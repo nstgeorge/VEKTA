@@ -1,9 +1,9 @@
 package vekta.spawner;
 
 import processing.core.PVector;
-import vekta.Faction;
-import vekta.PlayerFaction;
-import vekta.RenderLevel;
+import vekta.faction.Faction;
+import vekta.faction.PlayerFaction;
+import vekta.world.RenderLevel;
 import vekta.Resources;
 import vekta.economy.ProductivityModifier;
 import vekta.object.planet.TerrestrialPlanet;

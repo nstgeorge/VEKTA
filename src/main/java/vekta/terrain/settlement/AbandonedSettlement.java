@@ -1,7 +1,7 @@
 package vekta.terrain.settlement;
 
-import vekta.Faction;
-import vekta.Player;
+import vekta.faction.Faction;
+import vekta.player.Player;
 import vekta.Resources;
 import vekta.item.Inventory;
 import vekta.menu.Menu;

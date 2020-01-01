@@ -1,6 +1,6 @@
 package vekta.menu.option;
 
-import vekta.Faction;
+import vekta.faction.Faction;
 import vekta.menu.Menu;
 import vekta.menu.handle.SecurityMenuHandle;
 import vekta.menu.handle.SettlementMenuHandle;

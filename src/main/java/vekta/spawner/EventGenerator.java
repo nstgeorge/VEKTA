@@ -1,6 +1,6 @@
 package vekta.spawner;
 
-import vekta.Player;
+import vekta.player.Player;
 import vekta.Resources;
 import vekta.situation.Situation;
 

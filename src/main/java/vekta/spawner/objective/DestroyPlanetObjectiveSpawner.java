@@ -1,7 +1,7 @@
 package vekta.spawner.objective;
 
-import vekta.Faction;
-import vekta.RenderLevel;
+import vekta.faction.Faction;
+import vekta.world.RenderLevel;
 import vekta.mission.Mission;
 import vekta.mission.objective.DestroyObjective;
 import vekta.mission.objective.Objective;

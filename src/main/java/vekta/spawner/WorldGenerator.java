@@ -1,8 +1,9 @@
 package vekta.spawner;
 
+import com.google.common.collect.ImmutableList;
 import processing.core.PVector;
-import vekta.Faction;
-import vekta.RenderLevel;
+import vekta.faction.Faction;
+import vekta.world.RenderLevel;
 import vekta.Resources;
 import vekta.object.SpaceObject;
 import vekta.spawner.item.*;
@@ -13,11 +14,29 @@ import vekta.terrain.settlement.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
+import static processing.core.PApplet.max;
+import static processing.core.PApplet.sqrt;
+import static processing.core.PConstants.HALF_PI;
+import static processing.core.PConstants.QUARTER_PI;
 import static vekta.Vekta.*;
 
 public class WorldGenerator {
-	private static final WorldSpawner[][] SPAWNERS; // Externally defined weighted world spawners
+	private static final WorldSpawner[][] SPAWNERS;
+
+	private static final List<WeightedOption<Function<Faction, Settlement>>> SETTLEMENTS = ImmutableList.<WeightedOption<Function<Faction, Settlement>>>builder()
+			.add(new WeightedOption<>(2, CitySettlement::new))
+			.add(new WeightedOption<>(2, TownSettlement::new))
+			.add(new WeightedOption<>(1, FortSettlement::new))
+			.add(new WeightedOption<>(1, HideoutSettlement::new))
+			.add(new WeightedOption<>(1, ColonySettlement::new))
+			.add(new WeightedOption<>(1, OutpostSettlement::new))
+			.add(new WeightedOption<>(1, EmptySettlement::new))
+			.add(new WeightedOption<>(1, faction -> new AbandonedSettlement(faction, Resources.generateString("settlement"))))
+			.add(new WeightedOption<>(.5F, ShipyardSettlement::new))
+			.add(new WeightedOption<>(.5F, TribeSettlement::new))
+			.build();
 
 	static {
 		// Load SPAWNERS from classpath
@@ -72,31 +91,7 @@ public class WorldGenerator {
 
 	public static Settlement createSettlement() {
 		Faction faction = FactionGenerator.randomFaction();
-		float r = v.random(1);
-		if(r > .8) {
-			return new CitySettlement(faction);
-		}
-		else if(r > .6) {
-			return new TownSettlement(faction);
-		}
-		else if(r > .5) {
-			return new FortSettlement(faction);
-		}
-		else if(r > .4) {
-			return new HideoutSettlement(faction);
-		}
-		else if(r > .3) {
-			return new ColonySettlement(faction);
-		}
-		else if(r > .2) {
-			return new OutpostSettlement(faction);
-		}
-		else if(r > .1) {
-			return new EmptySettlement(faction);
-		}
-		else {
-			return new AbandonedSettlement(faction, Resources.generateString("settlement"));
-		}
+		return Weighted.random(SETTLEMENTS).getValue().apply(faction);
 	}
 
 	public static void populateSettlement(Settlement settlement) {
@@ -114,8 +109,8 @@ public class WorldGenerator {
 		if(v.chance(chance * 2)) {
 			buildings.add(new MarketBuilding(shopTier, "Goods", null));
 		}
-		if(v.chance(chance * .3F)) {
-			buildings.add(new MarketBuilding(shopTier, "Trinkets", MissionItemSpawner.class));
+		if(v.chance(chance * .1F)) {
+			buildings.add(new MarketBuilding(max(1, shopTier - 1), "Trinkets", MissionItemSpawner.class));
 		}
 		if(v.chance(chance * .3F)) {
 			buildings.add(new MarketBuilding(shopTier, "Modules", ModuleItemSpawner.class));
@@ -129,7 +124,7 @@ public class WorldGenerator {
 		if(v.chance(chance * .1F)) {
 			buildings.add(new MarketBuilding(shopTier, "Blueprints", BlueprintItemSpawner.class));
 		}
-		if(v.chance(chance * .1F)) {
+		if(v.chance(chance * .02F)) {
 			buildings.add(new MarketBuilding(shopTier, "Wildlife", SpeciesItemSpawner.class));
 		}
 		return buildings;

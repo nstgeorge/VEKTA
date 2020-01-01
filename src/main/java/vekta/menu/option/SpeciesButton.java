@@ -1,6 +1,6 @@
 package vekta.menu.option;
 
-import vekta.InfoGroup;
+import vekta.util.InfoGroup;
 import vekta.display.Layout;
 import vekta.ecosystem.Ecosystem;
 import vekta.ecosystem.Species;

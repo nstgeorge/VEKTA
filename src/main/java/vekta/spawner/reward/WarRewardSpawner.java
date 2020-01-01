@@ -1,6 +1,6 @@
 package vekta.spawner.reward;
 
-import vekta.Faction;
+import vekta.faction.Faction;
 import vekta.mission.Mission;
 import vekta.mission.reward.DiplomacyReward;
 import vekta.mission.reward.PeaceReward;

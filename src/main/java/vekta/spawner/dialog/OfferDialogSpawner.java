@@ -1,6 +1,6 @@
 package vekta.spawner.dialog;
 
-import vekta.Player;
+import vekta.player.Player;
 import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.menu.option.ItemTradeButton;

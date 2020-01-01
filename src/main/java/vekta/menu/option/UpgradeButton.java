@@ -1,6 +1,6 @@
 package vekta.menu.option;
 
-import vekta.Player;
+import vekta.player.Player;
 import vekta.menu.Menu;
 import vekta.terrain.building.upgrade.SettlementUpgrade;
 import vekta.terrain.settlement.Settlement;

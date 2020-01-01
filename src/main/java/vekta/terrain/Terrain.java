@@ -1,7 +1,7 @@
 package vekta.terrain;
 
-import vekta.Sync;
-import vekta.Syncable;
+import vekta.sync.Sync;
+import vekta.sync.Syncable;
 import vekta.ecosystem.Ecosystem;
 import vekta.menu.Menu;
 import vekta.terrain.settlement.Settlement;

@@ -1,6 +1,6 @@
 package vekta.menu.option;
 
-import vekta.Player;
+import vekta.player.Player;
 import vekta.display.Layout;
 import vekta.item.Inventory;
 import vekta.knowledge.Knowledge;

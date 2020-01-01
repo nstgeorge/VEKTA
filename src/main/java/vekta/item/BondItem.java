@@ -1,6 +1,6 @@
 package vekta.item;
 
-import vekta.Faction;
+import vekta.faction.Faction;
 import vekta.economy.Economy;
 
 public class BondItem extends EconomyItem {

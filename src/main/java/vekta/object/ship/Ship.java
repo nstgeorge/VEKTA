@@ -1,9 +1,7 @@
 package vekta.object.ship;
 
 import processing.core.PVector;
-import vekta.Player;
 import vekta.Renameable;
-import vekta.RenderLevel;
 import vekta.item.Inventory;
 import vekta.item.InventoryListener;
 import vekta.item.Item;
@@ -13,7 +11,9 @@ import vekta.menu.Menu;
 import vekta.object.CargoCrate;
 import vekta.object.Shockwave;
 import vekta.object.SpaceObject;
+import vekta.player.Player;
 import vekta.terrain.LandingSite;
+import vekta.world.RenderLevel;
 
 import static processing.core.PConstants.CLOSE;
 import static processing.core.PConstants.HALF_PI;

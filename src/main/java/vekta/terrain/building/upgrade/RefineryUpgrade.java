@@ -1,6 +1,6 @@
 package vekta.terrain.building.upgrade;
 
-import vekta.Player;
+import vekta.player.Player;
 import vekta.economy.TemporaryModifier;
 import vekta.terrain.building.RefineryBuilding;
 import vekta.terrain.settlement.Settlement;

@@ -1,6 +1,6 @@
 package vekta.terrain.building.upgrade;
 
-import vekta.Player;
+import vekta.player.Player;
 import vekta.terrain.settlement.Settlement;
 
 import java.io.Serializable;

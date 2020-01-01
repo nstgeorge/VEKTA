@@ -1,7 +1,7 @@
 package vekta.overlay.singleplayer;
 
-import vekta.Player;
-import vekta.PlayerListener;
+import vekta.player.Player;
+import vekta.player.PlayerListener;
 import vekta.object.ship.ModularShip;
 import vekta.overlay.Overlay;
 

@@ -1,6 +1,6 @@
 package vekta.module;
 
-import vekta.InfoGroup;
+import vekta.util.InfoGroup;
 import vekta.object.PlanetBusterProjectile;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;

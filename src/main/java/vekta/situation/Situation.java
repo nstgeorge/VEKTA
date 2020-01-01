@@ -1,6 +1,6 @@
 package vekta.situation;
 
-import vekta.Player;
+import vekta.player.Player;
 
 public interface Situation extends Player.Attribute {
 	boolean isHappening(Player player);

@@ -1,7 +1,7 @@
 package vekta.mission.objective;
 
-import vekta.PlayerListener;
-import vekta.Syncable;
+import vekta.player.PlayerListener;
+import vekta.sync.Syncable;
 import vekta.mission.Mission;
 import vekta.mission.MissionListener;
 import vekta.mission.MissionStatus;

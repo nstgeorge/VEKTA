@@ -1,6 +1,6 @@
 package vekta.spawner.item;
 
-import vekta.Faction;
+import vekta.faction.Faction;
 import vekta.item.BondItem;
 import vekta.item.Item;
 import vekta.spawner.FactionGenerator;

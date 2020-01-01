@@ -1,11 +1,11 @@
 package vekta.object.ship;
 
 import processing.core.PVector;
-import vekta.Player;
 import vekta.menu.Menu;
 import vekta.menu.option.DialogButton;
 import vekta.object.SpaceObject;
 import vekta.person.Person;
+import vekta.player.Player;
 
 public class FollowerShip extends FighterShip {
 	private final Person person;
@@ -33,7 +33,7 @@ public class FollowerShip extends FighterShip {
 
 	@Override
 	public boolean shouldUpdateTarget() {
-		return getTarget() == getPlayer().getShip() || super.shouldUpdateTarget();
+		return getTarget() != getPlayer().getShip() && super.shouldUpdateTarget();
 	}
 
 	@Override
@@ -58,5 +58,12 @@ public class FollowerShip extends FighterShip {
 	@Override
 	public void setupDockingMenu(Menu menu) {
 		menu.setAuto(new DialogButton("Talk to " + getPerson().getName(), getPerson().createDialog("greeting")));
+	}
+
+	@Override
+	public void onDestroy(SpaceObject s) {
+		super.onDestroy(s);
+
+		getPerson().die();
 	}
 }  

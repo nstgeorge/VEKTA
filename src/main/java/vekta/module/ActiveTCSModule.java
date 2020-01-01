@@ -1,6 +1,6 @@
 package vekta.module;
 
-import vekta.InfoGroup;
+import vekta.util.InfoGroup;
 
 public class ActiveTCSModule extends PassiveTCSModule {
 	private static final float EFFICIENCY_BOOST = 30;
