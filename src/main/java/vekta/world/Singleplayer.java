@@ -97,9 +97,10 @@ public class Singleplayer implements World, PlayerListener {
 	private final Counter situationCt = new Counter(30).randomize(); // Situational events
 	private final Counter economyCt = new Counter(600).randomize(); // Economic progression
 	private final Counter ecosystemCt = new Counter(600).randomize(); // Ecosystem progression
-	//	private final Counter ecosystemCt = new Counter(10).randomize();////
 
 	private PlayerOverlay overlay;
+
+	private float cameraImpact;
 
 	public Singleplayer() {
 	}
@@ -282,6 +283,11 @@ public class Singleplayer implements World, PlayerListener {
 	}
 
 	@Override
+	public void addCameraImpact(float amount) {
+		cameraImpact += amount;
+	}
+
+	@Override
 	public void schedule(float delay, Callback callback) {
 		state.schedule(delay, callback);
 	}
@@ -325,6 +331,12 @@ public class Singleplayer implements World, PlayerListener {
 
 		v.pushMatrix();
 		v.translate(v.width / 2F, v.height / 2F);
+
+		if(cameraImpact > 1e-3F) {
+			v.fill(v.lerpColor(0, 255, min(1, cameraImpact)));
+			v.rect(0, 0, v.width + 2, v.height + 2);
+			cameraImpact *= .95F;
+		}
 
 		List<ZoomController> zoomControllers = state.getZoomControllers();
 		for(int i = zoomControllers.size() - 1; i >= 0; i--) {
@@ -495,6 +507,13 @@ public class Singleplayer implements World, PlayerListener {
 			v.textFont(BODY_FONT);
 			v.text(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to load autosave", v.width / 2F, (v.height / 2F) + 97);
 		}
+
+		//		if(cameraImpact > 1) {
+		//			v.fill(v.lerpColor(255, 100, 1 / cameraImpact));
+		//			v.rectMode(CORNERS);
+		//			v.rect(0, 0, v.width, v.height);
+		//			v.rectMode(CENTER);
+		//		}
 	}
 
 	protected void updateGlobal(RenderLevel level) {

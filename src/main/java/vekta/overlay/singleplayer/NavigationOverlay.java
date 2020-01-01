@@ -122,7 +122,7 @@ public class NavigationOverlay implements Overlay {
 	}
 
 	private void drawArrow(PVector heading, float length, float locX, float locY) {
-		heading.normalize().mult(length);
+		heading.setMag(length);
 		v.line(locX, locY, locX + heading.x, locY + heading.y);
 		float angle = heading.heading();
 		float x = cos(angle);

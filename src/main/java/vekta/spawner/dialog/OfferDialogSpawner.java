@@ -25,15 +25,15 @@ public class OfferDialogSpawner implements DialogGenerator.DialogSpawner {
 		OpinionType opinion = dialog.getPerson().getOpinion(player.getFaction());
 
 		Item item = opinion == OpinionType.GRATEFUL || v.chance(.4F)
-				? ItemGenerator.randomItem() // Always give a non-mission item if grateful
+				? ItemGenerator.randomItem() // Always give a random item if grateful
 				: MissionItemSpawner.randomMissionItem(p -> MissionGenerator.createMission(p, dialog.getPerson()));
 
 		int price = opinion == OpinionType.GRATEFUL || dialog.getPerson().getFaction().isAlly(player.getFaction())
 				? 0 : (int)(item.randomPrice() * v.random(.25F, 1));
 
 		dialog.add(new ItemTradeButton(player, item, price));
-		if(price > 0) {
-			dialog.addResponse("No thanks.");
-		}
+//		if(price > 0) {
+//			dialog.addResponse("No thanks.");
+//		}
 	}
 }

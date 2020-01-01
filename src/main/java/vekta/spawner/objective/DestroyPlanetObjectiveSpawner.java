@@ -1,7 +1,6 @@
 package vekta.spawner.objective;
 
 import vekta.faction.Faction;
-import vekta.world.RenderLevel;
 import vekta.mission.Mission;
 import vekta.mission.objective.DestroyObjective;
 import vekta.mission.objective.Objective;
@@ -12,6 +11,7 @@ import vekta.spawner.WorldGenerator;
 import vekta.spawner.world.AsteroidSpawner;
 import vekta.terrain.AsteroidTerrain;
 import vekta.terrain.settlement.Settlement;
+import vekta.world.RenderLevel;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,8 +46,7 @@ public class DestroyPlanetObjectiveSpawner implements MissionGenerator.Objective
 
 		SpaceObject obj = !candidates.isEmpty()
 				? v.random(candidates)
-				: AsteroidSpawner.createAsteroid(
-				WorldGenerator.randomSpawnPosition(RenderLevel.PLANET, mission.getPlayer().getShip().getPosition()),
+				: AsteroidSpawner.createAsteroid(WorldGenerator.randomSpawnPosition(RenderLevel.PLANET, mission.getPlayer().getShip().getPosition()),
 				new AsteroidTerrain());
 
 		return new DestroyObjective(obj);

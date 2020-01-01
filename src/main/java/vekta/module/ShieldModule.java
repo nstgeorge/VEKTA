@@ -1,8 +1,8 @@
 package vekta.module;
 
-import vekta.util.InfoGroup;
 import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
+import vekta.util.InfoGroup;
 
 import static vekta.Vekta.getWorld;
 
@@ -57,11 +57,12 @@ public class ShieldModule extends ShipModule {
 	public void onDamageShip(ModularShip.DamageAttempt attempt) {
 		ModularShip ship = getShip();
 		if(ship.consumeEnergyImmediate(BASE_DAMAGE_ENERGY / getEfficiency())) {
+			getWorld().addCameraImpact(.1F);
 			getWorld().playSound("deflection", ship.getPosition());
 			attempt.setAmount(0);
 			SpaceObject projectile = attempt.getDamager().getAttackObject();
 			projectile.setVelocity(ship.getVelocity()
-					.add(projectile.relativePosition(ship).normalize().mult(-projectile.relativeVelocity(ship).mag())));
+					.add(projectile.relativePosition(ship).setMag(-projectile.relativeVelocity(ship).mag())));
 		}
 	}
 

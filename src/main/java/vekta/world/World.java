@@ -29,6 +29,8 @@ public interface World extends Context {
 
 	void addZoomController(ZoomController controller);
 
+	void addCameraImpact(float amount);
+
 	default void schedule(Callback callback) {
 		schedule(0, callback);
 	}

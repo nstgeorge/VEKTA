@@ -61,8 +61,8 @@ public class FollowerShip extends FighterShip {
 	}
 
 	@Override
-	public void onDestroy(SpaceObject s) {
-		super.onDestroy(s);
+	public void onDestroyed(SpaceObject s) {
+		super.onDestroyed(s);
 
 		getPerson().die();
 	}

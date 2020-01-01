@@ -11,12 +11,12 @@ import vekta.object.Targeter;
 import vekta.object.planet.Asteroid;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.object.ship.Ship;
+import vekta.spawner.WorldGenerator;
 import vekta.util.InfoGroup;
 import vekta.world.RenderLevel;
 
-import static processing.core.PApplet.max;
+import static processing.core.PApplet.sq;
 import static processing.core.PApplet.sqrt;
-import static vekta.Vekta.getDistanceUnit;
 import static vekta.Vekta.getWorld;
 
 public class TargetingModule extends ShipModule implements Targeter {
@@ -125,7 +125,13 @@ public class TargetingModule extends ShipModule implements Targeter {
 	}
 
 	public float getTargetZoom() {
-		return target != null ? max(getDistanceUnit(RenderLevel.SHIP), sqrt(target.relativePosition(getShip()).mag()) * AUTO_ZOOM_SCALE) : getWorld().getZoom();
+		if(target != null) {
+			float distSq = target.relativePosition(getShip()).magSq();
+			if(!RenderLevel.SHIP.isVisibleTo(getWorld().getRenderLevel()) || distSq > sq(WorldGenerator.getRadius(RenderLevel.SHIP))) {
+				return sqrt(sqrt(distSq)) * AUTO_ZOOM_SCALE;
+			}
+		}
+		return getWorld().getZoom();
 	}
 
 	@Override

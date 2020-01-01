@@ -1,9 +1,9 @@
 package vekta.object;
 
 import processing.core.PVector;
-import vekta.world.RenderLevel;
 import vekta.object.ship.Damageable;
 import vekta.object.ship.Damager;
+import vekta.world.RenderLevel;
 
 import static vekta.Vekta.getWorld;
 import static vekta.Vekta.v;
@@ -17,6 +17,8 @@ public class Projectile extends SpaceObject implements Damager {
 		super(position, velocity, color);
 
 		this.parent = parent;
+
+		setTemperature(1000);
 	}
 
 	public int getDespawnTime() {

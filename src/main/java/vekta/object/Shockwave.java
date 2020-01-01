@@ -13,7 +13,7 @@ public class Shockwave extends SpaceObject {
 	private int aliveTime;
 
 	public Shockwave(SpaceObject relative, float speed, int time, int color) {
-		super(relative.getPosition(), relative.getVelocity().mult(.5F), color); // Velocity is 50% relative
+		super(relative.getPosition(), relative.getVelocity(), color);
 
 		this.relative = relative;
 		this.radius = relative.getRadius();
@@ -69,7 +69,7 @@ public class Shockwave extends SpaceObject {
 
 		radius += speed * pow(radius, 1 / 3F) * getWorld().getTimeScale();
 
-		applyVelocity(relative.relativeVelocity(this).mult(.5F)); // Update partial relative velocity
+//		applyVelocity(relative.relativeVelocity(this).mult(.5F)); // Update partial relative velocity
 	}
 
 	@Override

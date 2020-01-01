@@ -2,9 +2,9 @@ package vekta.object.planet;
 
 import processing.core.PVector;
 import vekta.Renameable;
-import vekta.world.RenderLevel;
 import vekta.Resources;
 import vekta.object.SpaceObject;
+import vekta.world.RenderLevel;
 
 import static vekta.Vekta.*;
 
@@ -118,7 +118,7 @@ public abstract class Planet extends SpaceObject implements Renameable {
 	}
 
 	@Override
-	public void onDestroy(SpaceObject s) {
+	public void onDestroyed(SpaceObject s) {
 		// Split planet into pieces
 		// Use mass-weighted collision velocity for base debris velocity
 		float xWeight = getVelocity().x * getMass() + s.getVelocity().x * s.getMass();

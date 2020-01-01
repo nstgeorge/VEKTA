@@ -44,7 +44,7 @@ public final class WorldState implements Serializable {
 
 	private final GlobalOffset globalOffset = new GlobalOffset();
 
-	private boolean updating;
+	private transient boolean updating;
 
 	private Object readResolve() throws ObjectStreamException {
 		syncMap = new HashMap<>();
@@ -226,6 +226,7 @@ public final class WorldState implements Serializable {
 
 			if(updating) {
 				objectsToAdd.add(s);
+				s.applyVelocity(s.getVelocity().mult(-1));///
 			}
 			else {
 				addImmediately(s);

@@ -171,7 +171,7 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 	}
 
 	@Override
-	public void onDestroy(SpaceObject s) {
+	public void onDestroyed(SpaceObject s) {
 		// Add shockwaves
 		for(int i = 0; i < 3; i++) {
 			register(new Shockwave(this, sq(v.random(.5F, 1)), (int)v.random(10, 60), v.chance(.5F) ? 255 : getColor()));
@@ -183,7 +183,7 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 		}
 
 		// Inherit behavior
-		super.onDestroy(s);
+		super.onDestroyed(s);
 	}
 
 	public void blink(int blinkColor) {

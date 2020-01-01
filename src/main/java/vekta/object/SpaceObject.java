@@ -1,12 +1,12 @@
 package vekta.object;
 
 import processing.core.PVector;
-import vekta.player.Player;
-import vekta.player.PlayerEvent;
-import vekta.world.RenderLevel;
-import vekta.sync.Syncable;
 import vekta.knowledge.ObservationLevel;
 import vekta.object.ship.ModularShip;
+import vekta.player.Player;
+import vekta.player.PlayerEvent;
+import vekta.sync.Syncable;
+import vekta.world.RenderLevel;
 
 import java.io.Serializable;
 import java.util.List;
@@ -38,24 +38,12 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 		this.trail = new PVector[getTrailLength()];
 	}
 
-	/**
-	 * Gets the name of the object
-	 */
 	public abstract String getName();
 
-	/**
-	 * Gets the mass of the object
-	 */
 	public abstract float getMass();
 
-	/**
-	 * Gets the radius of the object (for collision purposes, not all objects are circular)
-	 */
 	public abstract float getRadius();
 
-	/**
-	 * Gets the color of the object
-	 */
 	public int getColor() {
 		return color;
 	}
@@ -100,60 +88,34 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 		// TODO implement
 	}
 
-	/**
-	 * Gets the position of the object
-	 */
 	public final PVector getPosition() {
 		return position.copy();
 	}
 
-	/**
-	 * Gets a reference to the object's position
-	 */
 	public final PVector getPositionReference() {
 		return position;
 	}
 
-	/**
-	 * Gets the velocity of the object
-	 */
 	public final PVector getVelocity() {
 		return velocity.copy();
 	}
 
-	/**
-	 * Gets a reference to the object's velocity
-	 */
 	public final PVector getVelocityReference() {
 		return velocity;
 	}
 
-	/**
-	 * Sets the velocity of the object
-	 */
 	public final void setVelocity(PVector velocity) {
 		this.velocity.set(velocity);
 	}
 
-	/**
-	 * Adds velocity to the object
-	 */
 	public final void addVelocity(PVector delta) {
 		this.velocity.add(delta);
 	}
 
-	/**
-	 * Subtracts velocity from object
-	 *
-	 * @param delta
-	 */
 	public final void subVelocity(PVector delta) {
 		this.velocity.sub(delta);
 	}
 
-	/**
-	 * Applies the given velocity to the object
-	 */
 	public final void applyVelocity(PVector velocity) {
 		this.position.add(velocity.copy().mult(getWorld().getTimeScale()));
 	}
@@ -241,7 +203,7 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 			return;
 		}
 		destroyed = true;
-		onDestroy(reason);
+		onDestroyed(reason);
 		getWorld().remove(this);
 
 		if(reason instanceof ModularShip && ((ModularShip)reason).hasController()) {
@@ -252,7 +214,7 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	/**
 	 * Invoked when destroyed by SpaceObject `s`
 	 */
-	public void onDestroy(SpaceObject s) {
+	public void onDestroyed(SpaceObject s) {
 	}
 
 	public float getOnScreenRadius(float r) {
@@ -345,11 +307,11 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 
 	//// Convenience methods
 
-	public PVector relativePosition(SpaceObject other) {
+	public final PVector relativePosition(SpaceObject other) {
 		return other.getPosition().sub(getPosition());
 	}
 
-	public PVector relativeVelocity(SpaceObject other) {
+	public final PVector relativeVelocity(SpaceObject other) {
 		return other.getVelocity().sub(getVelocity());
 	}
 }

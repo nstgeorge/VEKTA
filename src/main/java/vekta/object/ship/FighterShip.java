@@ -109,11 +109,13 @@ public abstract class FighterShip extends Ship implements Targeter {
 				}
 
 				if(target instanceof ModularShip && interceptDebounce.isReady() && v.chance(INTERCEPT_CHANCE)) {
+					interceptDebounce.reset();
+					
 					ModularShip ship = (ModularShip)target;
 					if(ship.hasController() && offsetSq <= sq(getInterceptDistance())) {
 						getPositionReference().set(PVector.random2D()
 								.normalize()
-								.mult(v.random(.2F, .5F) * getEngageDistance())
+								.mult(v.random(.1F, .2F) * getEngageDistance())
 								.add(target.getPositionReference()));
 
 						float zoom = getDistanceUnit(RenderLevel.SHIP);

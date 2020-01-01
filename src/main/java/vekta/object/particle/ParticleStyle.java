@@ -17,7 +17,7 @@ public final class ParticleStyle implements Serializable {
 		return lifetime;
 	}
 
-	public ParticleStyle withLifetime(float lifetime) {
+	public ParticleStyle lifetime(float lifetime) {
 		this.lifetime = lifetime;
 		return this;
 	}
@@ -35,7 +35,7 @@ public final class ParticleStyle implements Serializable {
 		return startColor;
 	}
 
-	public ParticleStyle withStartColor(ColorSelector selector) {
+	public ParticleStyle startColor(ColorSelector selector) {
 		this.startColor = selector;
 		return this;
 	}
@@ -44,7 +44,7 @@ public final class ParticleStyle implements Serializable {
 		return endColor;
 	}
 
-	public ParticleStyle withEndColor(ColorSelector selector) {
+	public ParticleStyle endColor(ColorSelector selector) {
 		this.endColor = selector;
 		return this;
 	}

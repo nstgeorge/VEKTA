@@ -26,7 +26,7 @@ public class Particle extends SpaceObject {
 
 		this.endColor = style.getEndColor().selectColor();
 		
-		// TEMP
+		/// TEMP
 		applyVelocity(getVelocity().mult(-1));
 	}
 
@@ -41,7 +41,7 @@ public class Particle extends SpaceObject {
 
 	@Override
 	public void onUpdate(RenderLevel level) {
-		addVelocity(relativeVelocity(parent).mult(getStyle().getDrag()));
+//		addVelocity(relativeVelocity(parent).mult(getStyle().getDrag()));
 
 		aliveTime += 1 / v.frameRate;
 		if(aliveTime >= getStyle().getLifetime()) {

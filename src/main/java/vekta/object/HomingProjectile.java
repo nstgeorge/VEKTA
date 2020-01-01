@@ -1,18 +1,18 @@
 package vekta.object;
 
 import processing.core.PVector;
-import vekta.world.RenderLevel;
-import vekta.sync.Sync;
 import vekta.spawner.WorldGenerator;
+import vekta.sync.Sync;
+import vekta.world.RenderLevel;
 
-import static processing.core.PApplet.*;
+import static processing.core.PApplet.sqrt;
 import static processing.core.PConstants.CLOSE;
 import static processing.core.PConstants.HALF_PI;
 import static vekta.Vekta.v;
 
 public class HomingProjectile extends Projectile {
 	private static final float HOMING_ACCEL = .1F;
-	private static final float HOMING_DAMPEN = .02F;
+	private static final float HOMING_DAMPEN = .1F;
 	private static final float MAX_SPEEDUP_DIST = WorldGenerator.getRadius(RenderLevel.PARTICLE);
 
 	private @Sync SpaceObject target;
@@ -53,11 +53,15 @@ public class HomingProjectile extends Projectile {
 				PVector relVel = relativeVelocity(target);
 				float distSq = relativePosition(target).magSq();
 				float speedSq = relVel.magSq();
-				PVector relPos = relativePosition(target).add(target.getVelocity().mult(sqrt(speedSq / distSq)));
-				PVector tangent = relPos.copy().rotate(HALF_PI);
-				float offsetDistSq = min(sq(MAX_SPEEDUP_DIST), relPos.magSq());
-				addVelocity(relPos.setMag(getSpeed() * HOMING_ACCEL)
-						.add(tangent.mult(tangent.dot(relVel) / offsetDistSq * getSpeed() * HOMING_DAMPEN)));
+				PVector relPos = relativePosition(target);//.add(relativeVelocity(target).mult(sqrt(speedSq / distSq)));
+
+				float relSq = relPos.magSq();
+//				if(relSq <= sq(MAX_SPEEDUP_DIST)) {
+					PVector tangent = relPos.copy().rotate(HALF_PI);
+					addVelocity(tangent.setMag(tangent.dot(relVel.normalize()) / sqrt(relSq)/*max(relSq, MAX_SPEEDUP_DIST)*/ * getSpeed() * HOMING_DAMPEN));
+//				}
+
+				addVelocity(relPos.setMag(getSpeed() * HOMING_ACCEL));
 
 				if(target instanceof HomingResponder) {
 					((HomingResponder)target).respondIncoming(this);

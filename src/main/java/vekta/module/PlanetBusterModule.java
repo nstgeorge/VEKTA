@@ -1,11 +1,11 @@
 package vekta.module;
 
-import vekta.util.InfoGroup;
 import vekta.object.PlanetBusterProjectile;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 import vekta.object.planet.Planet;
 import vekta.object.ship.ModularShip;
+import vekta.util.InfoGroup;
 
 import static vekta.Vekta.getWorld;
 import static vekta.Vekta.register;
@@ -52,17 +52,17 @@ public class PlanetBusterModule extends WeaponModule {
 		if(m instanceof Targeter) {
 			SpaceObject target = ((Targeter)m).getTarget();
 			if(target instanceof Planet) {
-				if(ship.consumeEnergyImmediate(10)) {
+				if(ship.consumeEnergyImmediate(20)) {
 					used = true;
 					getWorld().playSound("laser", ship.getPosition());
 					register(new PlanetBusterProjectile(ship, target, ship.getPosition(), ship.getVelocity(), ship.getColor()));
 				}
 				else if(ship.hasController()) {
-					ship.getController().send("Planet Buster requires more energy");
+					ship.getController().send(getName() + " requires more energy");
 				}
 			}
 			else if(ship.hasController()) {
-				ship.getController().send("Planet Buster requires a planetary target");
+				ship.getController().send(getName() + "requires a planetary target");
 			}
 		}
 	}

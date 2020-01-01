@@ -61,13 +61,13 @@ public class TerrestrialPlanet extends Planet {
 	}
 
 	@Override
-	public void onDestroy(SpaceObject s) {
-		super.onDestroy(s);
+	public void onDestroyed(SpaceObject s) {
+		super.onDestroyed(s);
 
 		// If something landed on this planet, destroy it as well
 		SpaceObject landed = site.getLanded();
 		if(landed != null) {
-			landed.onDestroy(s);
+			landed.onDestroyed(s);
 		}
 
 		// Clean up settlements
@@ -91,7 +91,7 @@ public class TerrestrialPlanet extends Planet {
 				faction.setEnemy(((ModularShip)s).getController().getFaction());
 				faction.getEconomy().addModifier(new TemporaryModifier(
 						"Destruction of " + getName(),
-						-faction.getEconomy().getValue() * .1F,
+						-faction.getEconomy().getValue(),
 						.1F));
 			}
 		}

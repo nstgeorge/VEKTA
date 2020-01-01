@@ -386,7 +386,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	}
 
 	@Override
-	public void onDestroy(SpaceObject s) {
+	public void onDestroyed(SpaceObject s) {
 		if(hasController()) {
 			getController().emit(PlayerEvent.GAME_OVER, this);
 		}
