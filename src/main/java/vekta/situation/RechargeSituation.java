@@ -1,8 +1,6 @@
 package vekta.situation;
 
 import vekta.player.Player;
-import vekta.menu.option.RechargeButton;
-import vekta.person.Dialog;
 import vekta.spawner.MissionGenerator;
 import vekta.spawner.event.ApproachEventSpawner;
 
@@ -14,8 +12,6 @@ public class RechargeSituation implements Situation {
 
 	@Override
 	public void start(Player player) {
-		Dialog dialog = MissionGenerator.randomMissionPerson().createDialog("recharge");
-		dialog.add(new RechargeButton(player, .5F));
-		ApproachEventSpawner.createMessenger(player, dialog);
+		ApproachEventSpawner.createMessenger(player, MissionGenerator.randomMissionPerson().createDialog("recharge"));
 	}
 }

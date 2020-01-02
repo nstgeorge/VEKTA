@@ -1,8 +1,6 @@
 package vekta.module.station;
 
 import processing.core.PVector;
-import vekta.util.InfoGroup;
-import vekta.world.RenderLevel;
 import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.menu.handle.SpaceObjectMenuHandle;
@@ -13,6 +11,8 @@ import vekta.module.ShipModule;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.Ship;
 import vekta.object.ship.SpaceStation;
+import vekta.util.InfoGroup;
+import vekta.world.RenderLevel;
 
 import static vekta.Vekta.v;
 
@@ -51,7 +51,7 @@ public class StationCoreModule extends ShipModule {
 
 	@Override
 	public int getMass() {
-		return 5000;
+		return 5000 * getTier();
 	}
 
 	@Override

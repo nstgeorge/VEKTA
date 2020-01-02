@@ -1,12 +1,12 @@
 package vekta.module;
 
-import vekta.util.InfoGroup;
 import vekta.knowledge.OceanKnowledge;
 import vekta.menu.Menu;
 import vekta.menu.handle.LandingMenuHandle;
 import vekta.menu.option.LootMenuButton;
 import vekta.menu.option.ScanOceanButton;
 import vekta.terrain.LandingSite;
+import vekta.util.InfoGroup;
 
 import java.util.List;
 

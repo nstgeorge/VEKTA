@@ -1,11 +1,12 @@
 package vekta.market;
 
-import vekta.sync.Syncable;
 import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.menu.option.MarketButton;
+import vekta.sync.Syncable;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +24,10 @@ public class Market extends Syncable<Market> {
 
 	public Market(String name, Stock stock) {
 		this(name, stock, new Inventory());
+	}
+
+	public Market(String name, Inventory inventory) {
+		this(name, new DefaultStock(), inventory);
 	}
 
 	public Market(String name, Stock stock, Inventory inventory) {
@@ -92,7 +97,7 @@ public class Market extends Syncable<Market> {
 		}
 	}
 
-	public interface Stock {
+	public interface Stock extends Serializable {
 		boolean isBuyable(Market market, Item item);
 
 		float onRestock(Market market);
@@ -103,6 +108,18 @@ public class Market extends Syncable<Market> {
 
 		default boolean shouldKeepItemsOnRestock() {
 			return false;
+		}
+	}
+
+	private static class DefaultStock implements Stock {
+		@Override
+		public boolean isBuyable(Market market, Item item) {
+			return true;
+		}
+
+		@Override
+		public float onRestock(Market market) {
+			return Float.POSITIVE_INFINITY;
 		}
 	}
 }

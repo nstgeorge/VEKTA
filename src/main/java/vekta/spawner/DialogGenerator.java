@@ -1,11 +1,11 @@
 package vekta.spawner;
 
-import vekta.player.Player;
 import vekta.Resources;
 import vekta.menu.Menu;
 import vekta.person.Dialog;
 import vekta.person.OpinionType;
 import vekta.person.Person;
+import vekta.player.Player;
 
 import java.util.Arrays;
 import java.util.List;
@@ -45,7 +45,7 @@ public final class DialogGenerator {
 		else if(person.getOpinion(player.getFaction()) == OpinionType.ENEMY) {
 			return person.createDialog(v.chance(.8F) ? "call_security" : "ask_leave");
 		}
-		else if(person.isBusy()) {
+		else if(person.isBusy() || v.chance(1 - 1F / player.getMissions().size())) {
 			return person.createDialog("greeting").then("busy");
 		}
 		else {

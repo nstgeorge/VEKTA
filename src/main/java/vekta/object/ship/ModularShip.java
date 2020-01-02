@@ -71,7 +71,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	}
 
 	public float getBaseMass() {
-		return 1000;
+		return 10000;
 	}
 
 	public final boolean hasController() {

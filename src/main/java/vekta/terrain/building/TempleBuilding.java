@@ -3,7 +3,7 @@ package vekta.terrain.building;
 import vekta.Resources;
 import vekta.deity.Deity;
 import vekta.menu.Menu;
-import vekta.menu.option.OfferMenuButton;
+import vekta.menu.option.TempleButton;
 import vekta.terrain.LandingSite;
 import vekta.terrain.settlement.SettlementPart;
 
@@ -49,6 +49,6 @@ public class TempleBuilding implements SettlementPart {
 
 	@Override
 	public void setupMenu(Menu menu) {
-		menu.add(new OfferMenuButton(getDeity()));
+		menu.add(new TempleButton(getName(), getDeity()));
 	}
 }

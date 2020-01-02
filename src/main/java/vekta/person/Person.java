@@ -1,6 +1,6 @@
 package vekta.person;
 
-import vekta.*;
+import vekta.Resources;
 import vekta.faction.Faction;
 import vekta.mission.Mission;
 import vekta.mission.MissionIssuer;
@@ -208,6 +208,10 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 
 	public boolean isBusy() {
 		return busy;
+	}
+
+	public void setBusy(boolean busy) {
+		this.busy = busy;
 	}
 
 	public boolean isDead() {

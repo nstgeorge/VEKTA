@@ -88,11 +88,10 @@ public class TerrestrialPlanet extends Planet {
 					.collect(Collectors.toSet());
 
 			for(Faction faction : factions) {
+				float value = faction.getEconomy().getValue();
 				faction.setEnemy(((ModularShip)s).getController().getFaction());
 				faction.getEconomy().addModifier(new TemporaryModifier(
-						"Destruction of " + getName(),
-						-faction.getEconomy().getValue(),
-						.1F));
+						"Destruction of " + getName(), -value, value / 10));
 			}
 		}
 	}

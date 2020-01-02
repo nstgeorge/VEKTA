@@ -1,9 +1,9 @@
 package vekta.module;
 
-import vekta.util.InfoGroup;
 import vekta.KeyBinding;
 import vekta.menu.Menu;
 import vekta.object.ship.ModularShip;
+import vekta.util.InfoGroup;
 
 import static com.jogamp.opengl.math.FloatUtil.abs;
 
@@ -57,7 +57,7 @@ public class EngineModule extends ShipModule {
 		ModularShip ship = getShip();
 		float thrust = ship.getThrustControl();
 		if(ship.consumeEnergyOverTime(20 * getSpeed() * abs(thrust) * PER_MINUTE)) {
-			ship.accelerate(thrust * getSpeed());
+			ship.accelerate(thrust * getSpeed()/* * ship.getBaseMass() / ship.getMass()*/);
 		}
 	}
 

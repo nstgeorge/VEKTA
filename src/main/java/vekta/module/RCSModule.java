@@ -1,9 +1,9 @@
 package vekta.module;
 
-import vekta.util.InfoGroup;
 import vekta.KeyBinding;
 import vekta.menu.Menu;
 import vekta.object.ship.ModularShip;
+import vekta.util.InfoGroup;
 
 import static java.lang.Math.abs;
 
@@ -57,7 +57,7 @@ public class RCSModule extends ShipModule {
 		ModularShip ship = getShip();
 		float turn = ship.getTurnControl();
 		if(ship.consumeEnergyOverTime(5 * getTurnSpeed() * abs(turn) * PER_MINUTE)) {
-			ship.turn(turn * getTurnSpeed());
+			ship.turn(turn * getTurnSpeed()/* * ship.getBaseMass() / ship.getMass()*/);
 		}
 	}
 
