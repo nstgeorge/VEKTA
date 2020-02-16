@@ -25,6 +25,10 @@ public class Projectile extends SpaceObject implements Damager {
 		return 1000;
 	}
 
+	protected int getAliveTime() {
+		return aliveTime;
+	}
+
 	public float getDamage() {
 		return 1;
 	}

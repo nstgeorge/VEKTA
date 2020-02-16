@@ -209,6 +209,7 @@ public class Singleplayer implements World, PlayerListener {
 		playerShip.getInventory().add(new ModuleItem(new GeneratorModule()));
 		playerShip.getInventory().add(new ModuleItem(new WormholeModule()));
 		playerShip.getInventory().add(new ModuleItem(new TorpedoModule(2)));
+		playerShip.getInventory().add(new ModuleItem(new FractalGunModule(2)));
 		playerShip.getInventory().add(new ModuleItem(new TractorBeamModule(1)));
 		playerShip.getInventory().add(new ModuleItem(new StructuralModule(3, 1)));
 		playerShip.getInventory().add(new ModuleItem(new StationCoreModule(1)));
