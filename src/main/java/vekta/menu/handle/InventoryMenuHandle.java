@@ -8,29 +8,45 @@ import static vekta.Vekta.UI_COLOR;
 import static vekta.Vekta.v;
 
 public class InventoryMenuHandle extends SideLayoutMenuHandle {
-	private final Inventory inv;
+    private final Inventory inv;
 
-	public InventoryMenuHandle(Inventory inv) {
-		super(false);
+    private String title;
 
-		this.inv = inv;
-	}
+    public InventoryMenuHandle(Inventory inv) {
+        super(false);
 
-	public Inventory getInventory() {
-		return inv;
-	}
-	
-	@Override
-	public KeyBinding getShortcutKey() {
-		return KeyBinding.SHIP_INVENTORY;
-	}
+        this.inv = inv;
+    }
 
-	@Override
-	public void render(Menu menu) {
-		super.render(menu);
+    public Inventory getInventory() {
+        return inv;
+    }
 
-		v.textSize(32);
-		v.fill(UI_COLOR);
-		v.text("Gold: [" + getInventory().getMoney() + " G]", getItemX(), getItemY(-2));
-	}
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    @Override
+    public KeyBinding getShortcutKey() {
+        return KeyBinding.SHIP_INVENTORY;
+    }
+
+    @Override
+    public void render(Menu menu) {
+        super.render(menu);
+
+        if(getTitle() != null) {
+            v.textSize(24);
+            v.fill(200);
+            v.text(getTitle(), getItemX(), getItemY(-3));
+        }
+
+        v.textSize(32);
+        v.fill(UI_COLOR);
+        v.text("Gold: [" + getInventory().getMoney() + " G]", getItemX(), getItemY(-2));
+    }
 }

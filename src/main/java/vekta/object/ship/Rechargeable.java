@@ -1,6 +1,8 @@
 package vekta.object.ship;
 
-public interface Rechargeable {
+import java.io.Serializable;
+
+public interface Rechargeable extends Serializable {
 	String getName();
 
 	float getRechargeAmount();

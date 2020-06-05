@@ -1,8 +1,8 @@
 import org.junit.Test;
 import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
-import vekta.world.WorldState;
 import vekta.connection.message.Message;
+import vekta.world.WorldState;
 
 import java.io.Externalizable;
 import java.io.Serializable;
@@ -36,7 +36,7 @@ public class SerializationTest {
 			for(Class<?> type : current) {
 				println(type);////
 				boolean isExternalizable = Externalizable.class.isAssignableFrom(type);
-				if(!Serializable.class.isAssignableFrom(type) && !isExternalizable && !type.isEnum() && !type.isPrimitive()) {
+				if(!isExternalizable && !Serializable.class.isAssignableFrom(type) && !type.isEnum() && !type.isPrimitive()) {
 					Set<Class<?>> references = new HashSet<>();
 					for(Class<?> past : visited) {
 						// Find field references of type
@@ -57,7 +57,7 @@ public class SerializationTest {
 							getFieldTypes(type), // Check instance fields
 							REFLECTIONS.getSubTypesOf(type).stream()) // Check subclasses
 							.forEach(t -> {
-								if(!visited.contains(t) && !t.getName().startsWith("java.util.")) {
+								if(!visited.contains(t) && !t.getName().startsWith("java.util.") && !t.getName().startsWith("java.lang.")) {
 									next.add(t);
 								}
 							});
