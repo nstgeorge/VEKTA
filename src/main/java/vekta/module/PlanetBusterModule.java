@@ -62,7 +62,7 @@ public class PlanetBusterModule extends WeaponModule {
 				}
 			}
 			else if(ship.hasController()) {
-				ship.getController().send(getName() + "requires a planetary target");
+				ship.getController().send(getName() + " requires a planetary target");
 			}
 		}
 	}

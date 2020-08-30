@@ -332,10 +332,25 @@ public class Singleplayer implements World, PlayerListener {
 		v.pushMatrix();
 		v.translate(v.width / 2F, v.height / 2F);
 
-		if(cameraImpact > 1e-3F) {
-			v.fill(v.lerpColor(0, 255, min(1, cameraImpact)));
-			v.rect(0, 0, v.width + 2, v.height + 2);
-			cameraImpact *= .95F;
+		float zoom = state.getZoom();
+		float zoomRatio = zoom / smoothZoom;
+		if(zoomRatio > 1) {
+			zoomRatio = 1 / zoomRatio;
+		}
+		float zoomStrength = 1 - zoomRatio;
+		if(zoomStrength > 1e-5F) {
+			v.noFill();
+			float minZoom = 1 / smoothZoom;
+			float maxZoom = MAX_ZOOM_LEVEL / smoothZoom;
+			for(float r = minZoom; r < maxZoom; r *= 10) {
+				if(r >= 1) {
+					break;
+				}
+				if(r >= 1e-3F) {
+					v.stroke(v.lerpColor(0, 50, zoomStrength * r));
+					v.rect(0, 0, r * v.width, r * v.height);
+				}
+			}
 		}
 
 		List<ZoomController> zoomControllers = state.getZoomControllers();
@@ -343,6 +358,12 @@ public class Singleplayer implements World, PlayerListener {
 			if(zoomControllers.get(i).shouldCancelZoomControl(player)) {
 				zoomControllers.remove(i);
 			}
+		}
+
+		if(cameraImpact > 1e-3F) {
+			v.fill(v.lerpColor(0, 255, min(1, cameraImpact)));
+			v.rect(0, 0, v.width + 2, v.height + 2);
+			cameraImpact *= .95F;
 		}
 
 		boolean targeting = targetCt.cycle();

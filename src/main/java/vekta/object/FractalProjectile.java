@@ -9,10 +9,12 @@ import static vekta.Vekta.v;
 public class FractalProjectile extends Projectile {
 
 	private static final float SPLITS_PER_SECOND = 2;
-	private static final float MAX_SPLIT = 3;
+	private static final float MAX_SPLIT = 4;
 	private static final float MAX_SPLIT_ANGLE = .3F;
 
 	private final int charge;
+
+	private boolean depleted;
 
 	public FractalProjectile(SpaceObject parent, PVector position, PVector velocity, int color, int charge) {
 		super(parent, position, velocity, color);
@@ -34,6 +36,10 @@ public class FractalProjectile extends Projectile {
 		return getTrailColor();
 	}
 
+	@Override public int getTrailLength() {
+		return super.getTrailLength() / 3;
+	}
+
 	@Override
 	public int getTrailColor() {
 		return v.lerpColor(super.getTrailColor(), 0, (float)getAliveTime() / getDespawnTime());
@@ -43,7 +49,8 @@ public class FractalProjectile extends Projectile {
 	public void onUpdate(RenderLevel level) {
 		super.onUpdate(level);
 
-		if(getCharge() > 0 && v.chance(SPLITS_PER_SECOND / v.frameRate)) {
+		if(!depleted && getCharge() > 0 && v.chance(SPLITS_PER_SECOND / v.frameRate)) {
+			depleted = true;
 			int splits = (int)v.random(MAX_SPLIT) + 1;
 			for(int i = 0; i < splits; i++) {
 				float rotation = v.random(-MAX_SPLIT_ANGLE, MAX_SPLIT_ANGLE);
@@ -55,7 +62,7 @@ public class FractalProjectile extends Projectile {
 						getCharge() - 1));
 				projectile.copyTrail(this);
 			}
-			despawn();
+			//			despawn();
 		}
 	}
 }  

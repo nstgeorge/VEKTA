@@ -52,7 +52,7 @@ public class FractalGunModule extends WeaponModule {
 	@Override
 	public void fireWeapon() {
 		ModularShip ship = getShip();
-		if(ship.consumeEnergyImmediate(1)) {
+		if(ship.consumeEnergyImmediate(2)) {
 			getWorld().playSound("laser", ship.getPosition());
 			PVector velocity = ship.getVelocity().add(ship.getHeading().setMag(PROJECTILE_SPEED)).mult(v.random(.9F, 1.1F));
 			register(new FractalProjectile(ship, ship.getPosition(), velocity, ship.getColor(), 3));
