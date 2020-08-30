@@ -61,6 +61,7 @@ public class KnowledgeItem extends Item implements ItemTradeButton.TradeAware {
 	public void onAdd(Player player) {
 		Knowledge knowledge = findKnowledge(player);
 		player.addKnowledge(knowledge);
+		player.getKnowledgePrices().remove(knowledge);
 
 		setContext(new KnowledgeContext(getContext(), player)
 				.withTab(getName(), knowledge));

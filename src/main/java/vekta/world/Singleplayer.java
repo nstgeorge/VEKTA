@@ -2,7 +2,6 @@ package vekta.world;
 
 import processing.core.PVector;
 import processing.event.KeyEvent;
-import processing.sound.LowPass;
 import vekta.Format;
 import vekta.KeyBinding;
 import vekta.Resources;
@@ -76,12 +75,12 @@ public class Singleplayer implements World, PlayerListener {
 
 	private static final SoundGroup MUSIC = new SoundGroup("atmosphere");
 
-	private int[] objectCounts = new int[RenderLevel.values().length];
+	private final int[] objectCounts = new int[RenderLevel.values().length];
 
 	private boolean started;
 
 	// Low pass filter
-	private final transient LowPass lowPass = new LowPass(v);
+	//    private final transient LowPass lowPass = new LowPass(v);
 
 	protected WorldState state;
 
@@ -93,7 +92,7 @@ public class Singleplayer implements World, PlayerListener {
 	private final Counter targetCt = new Counter(30).randomize(); // Update Targeter instances
 	private final Counter spawnCt = new Counter(10).randomize(); // Spawn objects
 	private final Counter cleanupCt = new Counter(100).randomize(); // Despawn objects
-	private final Counter eventCt = new Counter(3600 * 5).randomize(); // Occasional random events
+	private final Counter eventCt = new Counter(3600 * 10).randomize(); // Occasional random events
 	private final Counter situationCt = new Counter(30).randomize(); // Situational events
 	private final Counter economyCt = new Counter(600).randomize(); // Economic progression
 	private final Counter ecosystemCt = new Counter(600).randomize(); // Ecosystem progression
@@ -159,7 +158,7 @@ public class Singleplayer implements World, PlayerListener {
 	public void cleanup() {
 		// Cleanup behavior on exiting/restarting the world
 		getPlayer().removeListener(this);
-		lowPass.stop();
+		//        lowPass.stop();
 	}
 
 	public void populateWorld() {
@@ -833,9 +832,9 @@ public class Singleplayer implements World, PlayerListener {
 	@Override
 	public void onGameOver(ModularShip ship) {
 		// TODO: custom death soundtrack instead of low pass filter?
-		if(Resources.getMusic() != null) {
-			lowPass.process(Resources.getMusic(), 800);
-		}
+		//        if (Resources.getMusic() != null) {
+		//            lowPass.process(Resources.getMusic(), 800);
+		//        }
 		Resources.stopAllSoundsExceptMusic();
 		Resources.playSound("death");
 	}

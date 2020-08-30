@@ -24,7 +24,7 @@ public class PlayerShip extends ModularShip {
 
 		setEnergy(getMaxEnergy());
 	}
-	
+
 	@Override
 	public float getRadius() {
 		return DEF_RADIUS;
@@ -46,7 +46,7 @@ public class PlayerShip extends ModularShip {
 
 		if(getRenderLevel().isVisibleTo(level)) {
 			// Draw engine emission
-			if(getThrustControl() > 0) {
+			if(getThrustControl() > 0 && hasEnergy()) {
 				float addition = v.random(1, 2);
 				v.line(-r / 2, r * 2, 0, r * (2 + addition));
 				v.line(r / 2, r * 2, 0, r * (2 + addition));

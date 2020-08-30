@@ -24,7 +24,7 @@ public class KnowledgeItemSpawner implements ItemGenerator.ItemSpawner {
 	}
 
 	public static KnowledgeItem randomKnowledgeItem() {
-		return new KnowledgeItem(() -> KnowledgeGenerator.createKnowledge());
+		return new KnowledgeItem(KnowledgeGenerator::createKnowledge);
 	}
 
 	public static KnowledgeItem randomKnowledgeItem(KnowledgeSource source) {
