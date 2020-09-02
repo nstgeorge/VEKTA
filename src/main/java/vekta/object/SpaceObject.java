@@ -265,6 +265,17 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 		return DEFAULT_TRAIL_LENGTH;
 	}
 
+	public void copyTrail(SpaceObject s) {
+		for(int i = 0; i < trail.length; i++) {
+			if(i < s.trail.length) {
+				trail[i] = s.trail[i];
+			}
+			else {
+				trail[i] = null;
+			}
+		}
+	}
+
 	public void updateTrail() {
 		// Update trail vectors
 		System.arraycopy(trail, 0, trail, 1, trail.length - 1);

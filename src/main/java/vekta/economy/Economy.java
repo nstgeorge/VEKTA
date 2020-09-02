@@ -3,6 +3,7 @@ package vekta.economy;
 import vekta.sync.Sync;
 import vekta.sync.Syncable;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,7 +109,7 @@ public class Economy extends Syncable<Economy> {
 		syncChanges();
 	}
 
-	public interface Container {
+	public interface Container extends Serializable {
 		String getName();
 
 		int getColor();

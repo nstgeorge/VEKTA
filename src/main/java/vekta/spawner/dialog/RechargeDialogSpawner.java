@@ -22,7 +22,7 @@ public class RechargeDialogSpawner implements DialogGenerator.DialogSpawner {
 		Inventory inv = new Inventory();
 		inv.add((int)v.random(50, 100));
 
-		Market market = new Market(dialog.getPerson().getName(), inv);
+		Market market = new Market("items", inv);
 		market.setupMenu(menu, false, true);
 	}
 }

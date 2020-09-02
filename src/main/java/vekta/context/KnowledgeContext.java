@@ -8,6 +8,7 @@ import vekta.display.Layout;
 import vekta.display.VerticalLayout;
 import vekta.knowledge.*;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -265,7 +266,7 @@ public class KnowledgeContext implements Context, Comparator<Knowledge> {
 		setCursorIndex(max(0, min(getKnowledgeList().size() - 1, cursorIndex + amount)));
 	}
 
-	public class KnowledgeTab {
+	public class KnowledgeTab implements Serializable {
 		private final String title;
 		private Supplier<List<Knowledge>> supplier;
 		private List<Knowledge> knowledgeList;

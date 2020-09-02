@@ -2,7 +2,6 @@ package vekta.world;
 
 import processing.core.PVector;
 import processing.event.KeyEvent;
-import processing.sound.LowPass;
 import vekta.Format;
 import vekta.KeyBinding;
 import vekta.Resources;
@@ -76,12 +75,12 @@ public class Singleplayer implements World, PlayerListener {
 
 	private static final SoundGroup MUSIC = new SoundGroup("atmosphere");
 
-	private int[] objectCounts = new int[RenderLevel.values().length];
+	private final int[] objectCounts = new int[RenderLevel.values().length];
 
 	private boolean started;
 
 	// Low pass filter
-	private final transient LowPass lowPass = new LowPass(v);
+	//    private final transient LowPass lowPass = new LowPass(v);
 
 	protected WorldState state;
 
@@ -93,7 +92,7 @@ public class Singleplayer implements World, PlayerListener {
 	private final Counter targetCt = new Counter(30).randomize(); // Update Targeter instances
 	private final Counter spawnCt = new Counter(10).randomize(); // Spawn objects
 	private final Counter cleanupCt = new Counter(100).randomize(); // Despawn objects
-	private final Counter eventCt = new Counter(3600 * 5).randomize(); // Occasional random events
+	private final Counter eventCt = new Counter(3600 * 20).randomize(); // Occasional random events
 	private final Counter situationCt = new Counter(30).randomize(); // Situational events
 	private final Counter economyCt = new Counter(600).randomize(); // Economic progression
 	private final Counter ecosystemCt = new Counter(600).randomize(); // Ecosystem progression
@@ -159,7 +158,7 @@ public class Singleplayer implements World, PlayerListener {
 	public void cleanup() {
 		// Cleanup behavior on exiting/restarting the world
 		getPlayer().removeListener(this);
-		lowPass.stop();
+		//        lowPass.stop();
 	}
 
 	public void populateWorld() {
@@ -209,6 +208,7 @@ public class Singleplayer implements World, PlayerListener {
 		playerShip.getInventory().add(new ModuleItem(new GeneratorModule()));
 		playerShip.getInventory().add(new ModuleItem(new WormholeModule()));
 		playerShip.getInventory().add(new ModuleItem(new TorpedoModule(2)));
+		playerShip.getInventory().add(new ModuleItem(new FractalGunModule(2)));
 		playerShip.getInventory().add(new ModuleItem(new TractorBeamModule(1)));
 		playerShip.getInventory().add(new ModuleItem(new StructuralModule(3, 1)));
 		playerShip.getInventory().add(new ModuleItem(new StationCoreModule(1)));
@@ -332,10 +332,25 @@ public class Singleplayer implements World, PlayerListener {
 		v.pushMatrix();
 		v.translate(v.width / 2F, v.height / 2F);
 
-		if(cameraImpact > 1e-3F) {
-			v.fill(v.lerpColor(0, 255, min(1, cameraImpact)));
-			v.rect(0, 0, v.width + 2, v.height + 2);
-			cameraImpact *= .95F;
+		float zoom = state.getZoom();
+		float zoomRatio = zoom / smoothZoom;
+		if(zoomRatio > 1) {
+			zoomRatio = 1 / zoomRatio;
+		}
+		float zoomStrength = 1 - zoomRatio;
+		if(zoomStrength > 1e-5F) {
+			v.noFill();
+			float minZoom = 1 / smoothZoom;
+			float maxZoom = MAX_ZOOM_LEVEL / smoothZoom;
+			for(float r = minZoom; r < maxZoom; r *= 10) {
+				if(r >= 1) {
+					break;
+				}
+				if(r >= 1e-3F) {
+					v.stroke(v.lerpColor(0, 50, zoomStrength * r));
+					v.rect(0, 0, r * v.width, r * v.height);
+				}
+			}
 		}
 
 		List<ZoomController> zoomControllers = state.getZoomControllers();
@@ -343,6 +358,12 @@ public class Singleplayer implements World, PlayerListener {
 			if(zoomControllers.get(i).shouldCancelZoomControl(player)) {
 				zoomControllers.remove(i);
 			}
+		}
+
+		if(cameraImpact > 1e-3F) {
+			v.fill(v.lerpColor(0, 255, min(1, cameraImpact)));
+			v.rect(0, 0, v.width + 2, v.height + 2);
+			cameraImpact *= .95F;
 		}
 
 		boolean targeting = targetCt.cycle();
@@ -454,7 +475,7 @@ public class Singleplayer implements World, PlayerListener {
 			}
 		}
 
-		if(eventCt.cycle()) {
+		if(eventCt.cycle() && Settings.getBoolean("randomEvents", true)) {
 			eventCt.randomize();
 			EventGenerator.spawnEvent(player);
 		}
@@ -832,9 +853,9 @@ public class Singleplayer implements World, PlayerListener {
 	@Override
 	public void onGameOver(ModularShip ship) {
 		// TODO: custom death soundtrack instead of low pass filter?
-		if(Resources.getMusic() != null) {
-			lowPass.process(Resources.getMusic(), 800);
-		}
+		//        if (Resources.getMusic() != null) {
+		//            lowPass.process(Resources.getMusic(), 800);
+		//        }
 		Resources.stopAllSoundsExceptMusic();
 		Resources.playSound("death");
 	}

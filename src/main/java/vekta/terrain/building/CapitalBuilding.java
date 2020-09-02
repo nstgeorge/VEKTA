@@ -55,7 +55,7 @@ public class CapitalBuilding implements SettlementPart {
 
 			// Add advisement option
 			Person person = new TemporaryPerson(title + " of " + getSettlement().getName(), getSettlement().getFaction());
-			menu.add(new DialogButton("Advise" + title, AdviceObjectiveSpawner.randomAdviceDialog(menu.getPlayer(), person)));
+			menu.add(new DialogButton("Advise " + title, AdviceObjectiveSpawner.randomAdviceDialog(menu.getPlayer(), person)));
 
 			menu.add(new RenameButton(getSettlement()));
 		}
