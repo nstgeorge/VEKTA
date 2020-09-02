@@ -92,7 +92,7 @@ public class Singleplayer implements World, PlayerListener {
 	private final Counter targetCt = new Counter(30).randomize(); // Update Targeter instances
 	private final Counter spawnCt = new Counter(10).randomize(); // Spawn objects
 	private final Counter cleanupCt = new Counter(100).randomize(); // Despawn objects
-	private final Counter eventCt = new Counter(3600 * 15).randomize(); // Occasional random events
+	private final Counter eventCt = new Counter(3600 * 20).randomize(); // Occasional random events
 	private final Counter situationCt = new Counter(30).randomize(); // Situational events
 	private final Counter economyCt = new Counter(600).randomize(); // Economic progression
 	private final Counter ecosystemCt = new Counter(600).randomize(); // Ecosystem progression
@@ -475,7 +475,7 @@ public class Singleplayer implements World, PlayerListener {
 			}
 		}
 
-		if(eventCt.cycle()) {
+		if(eventCt.cycle() && Settings.getBoolean("randomEvents", true)) {
 			eventCt.randomize();
 			EventGenerator.spawnEvent(player);
 		}

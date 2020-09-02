@@ -4,6 +4,8 @@ import vekta.menu.Menu;
 import vekta.menu.handle.SettingsMenuHandle;
 import vekta.menu.option.input.*;
 
+import java.util.Arrays;
+
 import static vekta.Vekta.setContext;
 
 public class SettingsMenuButton implements ButtonOption {
@@ -27,8 +29,12 @@ public class SettingsMenuButton implements ButtonOption {
 
 		sub.add(new InputOption<>("Scroll speed",
 				new FloatSettingWatcher("zoomSpeed"),
-				new FloatRangeInputController(0.1F, 10, .1F)));
-		
+				new FloatRangeInputController(.1F, 10, .1F)));
+
+		sub.add(new InputOption<>("Random events",
+				new BooleanSettingWatcher("randomEvents"),
+				new ChoicesInputController<>(Arrays.asList(true, false), b -> b ? "Yes" : "No")));
+
 		sub.add(new KeyBindingMenuButton());
 		sub.addDefault();
 		setContext(sub);
