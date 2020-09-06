@@ -6,6 +6,7 @@ import vekta.Format;
 import vekta.KeyBinding;
 import vekta.Resources;
 import vekta.Settings;
+import vekta.benchmarking.FrameTimer;
 import vekta.connection.message.Message;
 import vekta.context.KnowledgeContext;
 import vekta.context.PauseMenuContext;
@@ -33,6 +34,7 @@ import vekta.object.planet.TerrestrialPlanet;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.PlayerShip;
 import vekta.object.ship.SpaceStation;
+import vekta.overlay.singleplayer.DebugOverlay;
 import vekta.overlay.singleplayer.PlayerOverlay;
 import vekta.person.Person;
 import vekta.player.Player;
@@ -50,6 +52,7 @@ import vekta.sync.Syncable;
 import vekta.terrain.settlement.Settlement;
 import vekta.util.Counter;
 
+import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -98,6 +101,7 @@ public class Singleplayer implements World, PlayerListener {
 	private final Counter ecosystemCt = new Counter(600).randomize(); // Ecosystem progression
 
 	private PlayerOverlay overlay;
+	private FrameTimer timer;
 
 	private float cameraImpact;
 
@@ -128,7 +132,8 @@ public class Singleplayer implements World, PlayerListener {
 		Player player = getPlayer();
 
 		// Configure UI overlay
-		overlay = new PlayerOverlay(player);
+		timer = new FrameTimer();
+		overlay = new PlayerOverlay(player, timer);
 		player.removeListeners(PlayerOverlay.class);
 		player.addListener(overlay);
 	}
@@ -577,7 +582,7 @@ public class Singleplayer implements World, PlayerListener {
 	// Temp: debug key listener
 	@Override
 	public void keyPressed(KeyEvent event) {
-		if(v.key == '`' && Settings.getBoolean("debug")) {
+		if(v.key == '~' && Settings.getBoolean("debug")) {
 			if(!getPlayer().hasAttribute(DebugAttribute.class)) {
 				getPlayer().addAttribute(DebugAttribute.class);
 				setupTesting();
@@ -634,6 +639,9 @@ public class Singleplayer implements World, PlayerListener {
 			if(key == KeyBinding.MENU_SELECT) {
 				reload();
 			}
+		}
+		else if(key == KeyBinding.DEBUG_OVERLAY) {
+			overlay.toggleDebugOverlay();
 		}
 		else {
 			if(key == KeyBinding.QUICK_SAVE && save(QUICKSAVE_FILE)) {

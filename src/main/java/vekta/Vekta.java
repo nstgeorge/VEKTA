@@ -123,11 +123,11 @@ public class Vekta extends PApplet {
 
 		Resources.updateAudio();
 
-		// FPS OVERLAY
-		fill(255);
-		textAlign(LEFT);
-		textSize(16);
-		text("FPS = " + round(frameRate), 50, height - 20);
+//		// FPS OVERLAY
+//		fill(255);
+//		textAlign(LEFT);
+//		textSize(16);
+//		text("FPS = " + round(frameRate), 50, height - 20);
 	}
 
 	@Override
