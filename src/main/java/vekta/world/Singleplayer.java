@@ -569,7 +569,7 @@ public class Singleplayer implements World, PlayerListener {
 		v.translate(screenX, screenY);
 
 		// Draw trail
-		if(s == playerShip || s.getRenderLevel().isVisibleTo(level)) {
+		if((s == playerShip || s.getRenderLevel().isVisibleTo(level)) && Settings.getBoolean("drawTrails")) {
 			s.updateTrail();
 			s.drawTrail(scale);
 		}

@@ -20,7 +20,8 @@ public final class Settings {
 				.put("music", 1)
 				.put("muteMusic", false)
 				.put("zoomSpeed", 1)
-				.put("randomEvents", true);
+				.put("randomEvents", true)
+				.put("drawTrails", true);
 		for(KeyBinding key : KeyBinding.values()) {
 			defaults.put(getKeyProp(key), serializeKeyCode(key.getDefaultKeyCode()));
 		}
