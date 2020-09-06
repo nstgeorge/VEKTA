@@ -427,80 +427,30 @@ public class Singleplayer implements World, PlayerListener {
 		if(overlay.debugIsEnabled()) {
 			// Gravity loop
 			for(int i = 0, size = objects.size(); i < size; i++) {
-				SpaceObject s = objects.get(i);
 				// Skip despawned/destroyed objects
-				if(state.isRemoving(s)) {
+				if(state.isRemoving(objects.get(i))) {
 					continue;
 				}
-
-				// Move towards gravitational objects
-				s.applyGravity(state.getGravityObjects());
-
-				// Update object
-				s.update(level);
+				updateGravity(objects, level, i);
 			}
 			timer.addTimeStamp("Gravity application");
 			// Drawing loop
 			for(int i = 0, size = objects.size(); i < size; i++) {
-				SpaceObject s = objects.get(i);
-				// Start drawing object
-				v.pushMatrix();
-
-				// Set up object position
-				PVector position = s.getPositionReference();
-				PVector cameraPos = playerShip.getPositionReference();
-				float scale = getZoom();
-				float screenX = (position.x - cameraPos.x) / scale;
-				float screenY = (position.y - cameraPos.y) / scale;
-				v.translate(screenX, screenY);
-
-				// Draw trail
-				s.updateTrail();
-				if(s == playerShip || s.getRenderLevel().isVisibleTo(level)) {
-					s.drawTrail(scale);
+				// Skip despawned/destroyed objects
+				if(state.isRemoving(objects.get(i))) {
+					continue;
 				}
-
-				// Draw object
-				v.stroke(s.getColor());
-				v.noFill();
-				float r = s.getRadius() / scale;
-				float onScreenRadius = s.getOnScreenRadius(r);
-				boolean visible = abs(screenX) - onScreenRadius <= v.width / 2F && abs(screenY) - onScreenRadius <= v.height / 2F;
-				if(visible) {
-					s.draw(level, r);
-				}
-
-				// End drawing object
-				v.popMatrix();
+				drawObjects(objects, level, i, playerShip);
 			}
 			timer.addTimeStamp("Draw objects");
 
 			// Collision loop
 			for(int i = 0, size = objects.size(); i < size; i++) {
-				SpaceObject s = objects.get(i);
-				float scale = getZoom();
-				PVector position = s.getPositionReference();
-				PVector cameraPos = playerShip.getPositionReference();
-				float screenX = (position.x - cameraPos.x) / scale;
-				float screenY = (position.y - cameraPos.y) / scale;
-				float r = s.getRadius() / scale;
-				float onScreenRadius = s.getOnScreenRadius(r);
-				boolean visible = abs(screenX) - onScreenRadius <= v.width / 2F && abs(screenY) - onScreenRadius <= v.height / 2F;
-				// Check collisions when on screen
-				if(visible) {
-					for(int j = i + 1; j < size; j++) {
-						SpaceObject other = objects.get(j);
-
-						// Ensure collision is reasonable
-						if(s.getRenderLevel().isVisibleTo(level) || other.getRenderLevel().isVisibleTo(level)) {
-							// Check both collision conditions before interacting
-							if(s.collidesWith(level, other) && other.collidesWith(level, s)) {
-								s.onCollide(other);
-								other.onCollide(s);
-							}
-						}
-					}
+				// Skip despawned/destroyed objects
+				if(state.isRemoving(objects.get(i))) {
+					continue;
 				}
+				resolveCollisions(objects, level, i, playerShip);
 			}
 			timer.addTimeStamp("Resolve collisions");
 		} else {
@@ -511,57 +461,9 @@ public class Singleplayer implements World, PlayerListener {
 					continue;
 				}
 
-				// Move towards gravitational objects
-				s.applyGravity(state.getGravityObjects());
-
-				// Update object
-				s.update(level);
-
-				// Start drawing object
-				v.pushMatrix();
-
-				// Set up object position
-				PVector position = s.getPositionReference();
-				PVector cameraPos = playerShip.getPositionReference();
-				float scale = getZoom();
-				float screenX = (position.x - cameraPos.x) / scale;
-				float screenY = (position.y - cameraPos.y) / scale;
-				v.translate(screenX, screenY);
-
-				// Draw trail
-				s.updateTrail();
-				if(s == playerShip || s.getRenderLevel().isVisibleTo(level)) {
-					s.drawTrail(scale);
-				}
-
-				// Draw object
-				v.stroke(s.getColor());
-				v.noFill();
-				float r = s.getRadius() / scale;
-				float onScreenRadius = s.getOnScreenRadius(r);
-				boolean visible = abs(screenX) - onScreenRadius <= v.width / 2F && abs(screenY) - onScreenRadius <= v.height / 2F;
-				if(visible) {
-					s.draw(level, r);
-				}
-
-				// End drawing object
-				v.popMatrix();
-
-				// Check collisions when on screen
-				if(visible) {
-					for(int j = i + 1; j < size; j++) {
-						SpaceObject other = objects.get(j);
-
-						// Ensure collision is reasonable
-						if(s.getRenderLevel().isVisibleTo(level) || other.getRenderLevel().isVisibleTo(level)) {
-							// Check both collision conditions before interacting
-							if(s.collidesWith(level, other) && other.collidesWith(level, s)) {
-								s.onCollide(other);
-								other.onCollide(s);
-							}
-						}
-					}
-				}
+				updateGravity(objects, level, i);
+				drawObjects(objects, level, i, playerShip);
+				resolveCollisions(objects, level, i, playerShip);
 			}
 		}
 
@@ -641,6 +543,76 @@ public class Singleplayer implements World, PlayerListener {
 		//			v.rect(0, 0, v.width, v.height);
 		//			v.rectMode(CENTER);
 		//		}
+	}
+
+	private void updateGravity(List<SpaceObject> objects, RenderLevel level, int i) {
+		SpaceObject s = objects.get(i);
+
+		// Move towards gravitational objects
+		s.applyGravity(state.getGravityObjects());
+
+		// Update object
+		s.update(level);
+	}
+
+	private void drawObjects(List<SpaceObject> objects, RenderLevel level, int i, ModularShip playerShip) {
+		SpaceObject s = objects.get(i);
+		// Start drawing object
+		v.pushMatrix();
+
+		// Set up object position
+		PVector position = s.getPositionReference();
+		PVector cameraPos = playerShip.getPositionReference();
+		float scale = getZoom();
+		float screenX = (position.x - cameraPos.x) / scale;
+		float screenY = (position.y - cameraPos.y) / scale;
+		v.translate(screenX, screenY);
+
+		// Draw trail
+		if(s == playerShip || s.getRenderLevel().isVisibleTo(level)) {
+			s.updateTrail();
+			s.drawTrail(scale);
+		}
+
+		// Draw object
+		v.stroke(s.getColor());
+		v.noFill();
+		float r = s.getRadius() / scale;
+		float onScreenRadius = s.getOnScreenRadius(r);
+		boolean visible = abs(screenX) - onScreenRadius <= v.width / 2F && abs(screenY) - onScreenRadius <= v.height / 2F;
+		if(visible) {
+			s.draw(level, r);
+		}
+
+		// End drawing object
+		v.popMatrix();
+	}
+
+	private void resolveCollisions(List<SpaceObject> objects, RenderLevel level, int i, ModularShip playerShip) {
+		SpaceObject s = objects.get(i);
+		float scale = getZoom();
+		PVector position = s.getPositionReference();
+		PVector cameraPos = playerShip.getPositionReference();
+		float screenX = (position.x - cameraPos.x) / scale;
+		float screenY = (position.y - cameraPos.y) / scale;
+		float r = s.getRadius() / scale;
+		float onScreenRadius = s.getOnScreenRadius(r);
+		boolean visible = abs(screenX) - onScreenRadius <= v.width / 2F && abs(screenY) - onScreenRadius <= v.height / 2F;
+		// Check collisions when on screen
+		if(visible) {
+			for(int j = i + 1; j < objects.size(); j++) {
+				SpaceObject other = objects.get(j);
+
+				// Ensure collision is reasonable
+				if(s.getRenderLevel().isVisibleTo(level) || other.getRenderLevel().isVisibleTo(level)) {
+					// Check both collision conditions before interacting
+					if(s.collidesWith(level, other) && other.collidesWith(level, s)) {
+						s.onCollide(other);
+						other.onCollide(s);
+					}
+				}
+			}
+		}
 	}
 
 	protected void updateGlobal(RenderLevel level) {
