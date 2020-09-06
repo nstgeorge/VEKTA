@@ -19,7 +19,7 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	private static final int DEFAULT_TRAIL_LENGTH = 50;
 	private static final float MOTION_SYNC_FACTOR = .2F; // How much to over/undercorrect object motion
 
-	protected final PVector[] trail;
+	protected final float[][] trail;
 
 	private boolean persistent;
 	private boolean destroyed;
@@ -35,7 +35,7 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 		this.velocity.set(velocity);
 		this.color = color;
 
-		this.trail = new PVector[getTrailLength()];
+		this.trail = new float[getTrailLength()][2];
 	}
 
 	public abstract String getName();
@@ -278,24 +278,28 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 
 	public void updateTrail() {
 		// Update trail vectors
-		System.arraycopy(trail, 0, trail, 1, trail.length - 1);
+		// System.arraycopy(trail, 0, trail, 1, trail.length - 1);
+		for(int i = trail.length - 1; i > 0; i--) {
+			trail[i] = trail[i-1];
+		}
 		//		trail[0] = getPosition();
-		trail[0] = new PVector();
+		trail[0] = new float[]{0, 0};
 	}
 
 	public void drawTrail(float scale) {
 		int color = getTrailColor();
 		PVector relative = getVelocity().mult(-getWorld().getTimeScale());
 		for(int i = 1; i < trail.length; i++) {
-			PVector oldPos = trail[i - 1];
-			PVector newPos = trail[i];
+			float[] oldPos = trail[i - 1];
+			float[] newPos = trail[i];
 			if(newPos == null) {
 				break;
 			}
-			newPos.add(relative);
+			newPos[0] += relative.x;
+			newPos[1] += relative.y;
 			// Set the color and draw the line segment
 			v.stroke(v.lerpColor(color, 0, (float)i / trail.length));
-			v.line((oldPos.x/* - position.x*/) / scale, (oldPos.y/* - position.y*/) / scale, (newPos.x/* - position.x*/) / scale, (newPos.y/* - position.y*/) / scale);
+			v.line((oldPos[0]/* - position.x*/) / scale, (oldPos[1]/* - position.y*/) / scale, (newPos[0]/* - position.x*/) / scale, (newPos[1]/* - position.y*/) / scale);
 		}
 	}
 

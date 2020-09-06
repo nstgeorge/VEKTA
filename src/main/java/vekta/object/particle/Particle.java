@@ -85,9 +85,10 @@ public class Particle extends SpaceObject {
 
 		// Update relative to parent
 		PVector offset = parent.getVelocity().mult(getWorld().getTimeScale());
-		for(PVector pos : trail) {
+		for(float[] pos : trail) {
 			if(pos != null) {
-				pos.add(offset);
+				pos[0] += offset.x;
+				pos[1] += offset.y;
 			}
 		}
 	}
