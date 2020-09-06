@@ -11,8 +11,8 @@ public class FrameTimer implements Serializable {
         clearTimings();
     }
 
-    public void addTimeStamp(String descriptor, Long timestamp) {
-        timings.add(new Timing(descriptor, timestamp));
+    public void addTimeStamp(String descriptor) {
+        timings.add(new Timing(descriptor, System.currentTimeMillis()));
     }
 
     public ArrayList<Timing> getTimings() {

@@ -310,6 +310,10 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public void render() {
+		// Take timestamp: render loop begin
+		timer.clearTimings();
+		timer.addTimeStamp("Frame Start");
+
 		Player player = getPlayer();
 		ModularShip playerShip = player.getShip();
 
@@ -329,6 +333,9 @@ public class Singleplayer implements World, PlayerListener {
 		if(level == RenderLevel.PLANET && timeScale < MIN_PLANET_TIME_SCALE) {
 			timeScale = MIN_PLANET_TIME_SCALE;
 		}
+
+		// Take timestamp: Setup
+		timer.addTimeStamp("Setup and Zoom");
 
 		v.clear();
 		v.rectMode(CENTER);
@@ -358,6 +365,8 @@ public class Singleplayer implements World, PlayerListener {
 			}
 		}
 
+		timer.addTimeStamp("Zoom box drawing");
+
 		List<ZoomController> zoomControllers = state.getZoomControllers();
 		for(int i = zoomControllers.size() - 1; i >= 0; i--) {
 			if(zoomControllers.get(i).shouldCancelZoomControl(player)) {
@@ -375,6 +384,8 @@ public class Singleplayer implements World, PlayerListener {
 		boolean cleanup = cleanupCt.cycle();
 
 		updateGlobal(level);
+
+		timer.addTimeStamp("Begin update");
 
 		state.startUpdate();
 
@@ -407,61 +418,147 @@ public class Singleplayer implements World, PlayerListener {
 			s.applyVelocity(s.getVelocityReference());
 		}
 
+		timer.addTimeStamp("Object cleanup and target updates");
+
 		// Custom behavior loop
-		for(int i = 0, size = objects.size(); i < size; i++) {
-			SpaceObject s = objects.get(i);
-			// Skip despawned/destroyed objects
-			if(state.isRemoving(s)) {
-				continue;
+		// If the debug overlay is enabled, separate the loop in several independent ones to determine performance
+		// This is obviously way worse for performance, but I don't think there's any way around it right now
+		// TODO: Make this neater
+		if(overlay.debugIsEnabled()) {
+			// Gravity loop
+			for(int i = 0, size = objects.size(); i < size; i++) {
+				SpaceObject s = objects.get(i);
+				// Skip despawned/destroyed objects
+				if(state.isRemoving(s)) {
+					continue;
+				}
+
+				// Move towards gravitational objects
+				s.applyGravity(state.getGravityObjects());
+
+				// Update object
+				s.update(level);
 			}
+			timer.addTimeStamp("Gravity application");
+			// Drawing loop
+			for(int i = 0, size = objects.size(); i < size; i++) {
+				SpaceObject s = objects.get(i);
+				// Start drawing object
+				v.pushMatrix();
 
-			// Move towards gravitational objects
-			s.applyGravity(state.getGravityObjects());
+				// Set up object position
+				PVector position = s.getPositionReference();
+				PVector cameraPos = playerShip.getPositionReference();
+				float scale = getZoom();
+				float screenX = (position.x - cameraPos.x) / scale;
+				float screenY = (position.y - cameraPos.y) / scale;
+				v.translate(screenX, screenY);
 
-			// Update object
-			s.update(level);
+				// Draw trail
+				s.updateTrail();
+				if(s == playerShip || s.getRenderLevel().isVisibleTo(level)) {
+					s.drawTrail(scale);
+				}
 
-			// Start drawing object
-			v.pushMatrix();
+				// Draw object
+				v.stroke(s.getColor());
+				v.noFill();
+				float r = s.getRadius() / scale;
+				float onScreenRadius = s.getOnScreenRadius(r);
+				boolean visible = abs(screenX) - onScreenRadius <= v.width / 2F && abs(screenY) - onScreenRadius <= v.height / 2F;
+				if(visible) {
+					s.draw(level, r);
+				}
 
-			// Set up object position
-			PVector position = s.getPositionReference();
-			PVector cameraPos = playerShip.getPositionReference();
-			float scale = getZoom();
-			float screenX = (position.x - cameraPos.x) / scale;
-			float screenY = (position.y - cameraPos.y) / scale;
-			v.translate(screenX, screenY);
-
-			// Draw trail
-			s.updateTrail();
-			if(s == playerShip || s.getRenderLevel().isVisibleTo(level)) {
-				s.drawTrail(scale);
+				// End drawing object
+				v.popMatrix();
 			}
+			timer.addTimeStamp("Draw objects");
 
-			// Draw object
-			v.stroke(s.getColor());
-			v.noFill();
-			float r = s.getRadius() / scale;
-			float onScreenRadius = s.getOnScreenRadius(r);
-			boolean visible = abs(screenX) - onScreenRadius <= v.width / 2F && abs(screenY) - onScreenRadius <= v.height / 2F;
-			if(visible) {
-				s.draw(level, r);
+			// Collision loop
+			for(int i = 0, size = objects.size(); i < size; i++) {
+				SpaceObject s = objects.get(i);
+				float scale = getZoom();
+				PVector position = s.getPositionReference();
+				PVector cameraPos = playerShip.getPositionReference();
+				float screenX = (position.x - cameraPos.x) / scale;
+				float screenY = (position.y - cameraPos.y) / scale;
+				float r = s.getRadius() / scale;
+				float onScreenRadius = s.getOnScreenRadius(r);
+				boolean visible = abs(screenX) - onScreenRadius <= v.width / 2F && abs(screenY) - onScreenRadius <= v.height / 2F;
+				// Check collisions when on screen
+				if(visible) {
+					for(int j = i + 1; j < size; j++) {
+						SpaceObject other = objects.get(j);
+
+						// Ensure collision is reasonable
+						if(s.getRenderLevel().isVisibleTo(level) || other.getRenderLevel().isVisibleTo(level)) {
+							// Check both collision conditions before interacting
+							if(s.collidesWith(level, other) && other.collidesWith(level, s)) {
+								s.onCollide(other);
+								other.onCollide(s);
+							}
+						}
+					}
+				}
 			}
+			timer.addTimeStamp("Resolve collisions");
+		} else {
+			for(int i = 0, size = objects.size(); i < size; i++) {
+				SpaceObject s = objects.get(i);
+				// Skip despawned/destroyed objects
+				if(state.isRemoving(s)) {
+					continue;
+				}
 
-			// End drawing object
-			v.popMatrix();
+				// Move towards gravitational objects
+				s.applyGravity(state.getGravityObjects());
 
-			// Check collisions when on screen
-			if(visible) {
-				for(int j = i + 1; j < size; j++) {
-					SpaceObject other = objects.get(j);
+				// Update object
+				s.update(level);
 
-					// Ensure collision is reasonable
-					if(s.getRenderLevel().isVisibleTo(level) || other.getRenderLevel().isVisibleTo(level)) {
-						// Check both collision conditions before interacting
-						if(s.collidesWith(level, other) && other.collidesWith(level, s)) {
-							s.onCollide(other);
-							other.onCollide(s);
+				// Start drawing object
+				v.pushMatrix();
+
+				// Set up object position
+				PVector position = s.getPositionReference();
+				PVector cameraPos = playerShip.getPositionReference();
+				float scale = getZoom();
+				float screenX = (position.x - cameraPos.x) / scale;
+				float screenY = (position.y - cameraPos.y) / scale;
+				v.translate(screenX, screenY);
+
+				// Draw trail
+				s.updateTrail();
+				if(s == playerShip || s.getRenderLevel().isVisibleTo(level)) {
+					s.drawTrail(scale);
+				}
+
+				// Draw object
+				v.stroke(s.getColor());
+				v.noFill();
+				float r = s.getRadius() / scale;
+				float onScreenRadius = s.getOnScreenRadius(r);
+				boolean visible = abs(screenX) - onScreenRadius <= v.width / 2F && abs(screenY) - onScreenRadius <= v.height / 2F;
+				if(visible) {
+					s.draw(level, r);
+				}
+
+				// End drawing object
+				v.popMatrix();
+
+				// Check collisions when on screen
+				if(visible) {
+					for(int j = i + 1; j < size; j++) {
+						SpaceObject other = objects.get(j);
+
+						// Ensure collision is reasonable
+						if(s.getRenderLevel().isVisibleTo(level) || other.getRenderLevel().isVisibleTo(level)) {
+							// Check both collision conditions before interacting
+							if(s.collidesWith(level, other) && other.collidesWith(level, s)) {
+								s.onCollide(other);
+								other.onCollide(s);
+							}
 						}
 					}
 				}
@@ -511,6 +608,8 @@ public class Singleplayer implements World, PlayerListener {
 			}
 		}
 
+		timer.addTimeStamp("Spawns, event, economy, and ecosystem");
+
 		prevLevel = level;
 		v.popMatrix();
 
@@ -533,6 +632,8 @@ public class Singleplayer implements World, PlayerListener {
 			v.textFont(BODY_FONT);
 			v.text(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to load autosave", v.width / 2F, (v.height / 2F) + 97);
 		}
+
+		timer.addTimeStamp("Overlay");
 
 		//		if(cameraImpact > 1) {
 		//			v.fill(v.lerpColor(255, 100, 1 / cameraImpact));

@@ -45,6 +45,15 @@ public class PlayerOverlay implements Overlay, PlayerListener {
 		}
 	}
 
+	public boolean debugIsEnabled() {
+		for(Overlay overlay : overlays) {
+			if(overlay instanceof DebugOverlay) {
+				return ((DebugOverlay) overlay).isEnabled();
+			}
+		}
+		return false;
+	}
+
 	@Override
 	public void render() {
 		// Set overlay text settings

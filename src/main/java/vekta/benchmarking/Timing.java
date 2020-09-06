@@ -1,6 +1,8 @@
 package vekta.benchmarking;
 
-public class Timing {
+import java.io.Serializable;
+
+public class Timing implements Serializable {
     private String descriptor;
     private Long timestamp;
     public Timing(String descriptor, Long timestamp) {
