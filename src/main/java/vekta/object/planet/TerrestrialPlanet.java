@@ -13,6 +13,8 @@ import vekta.player.Player;
 import vekta.terrain.LandingSite;
 import vekta.terrain.Terrain;
 import vekta.terrain.settlement.Settlement;
+import vekta.util.Counter;
+import vekta.world.RenderLevel;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,17 +27,22 @@ import static vekta.Vekta.getWorld;
 public class TerrestrialPlanet extends Planet {
 	private final LandingSite site;
 
-	private Planet systemParent;
+	private SpaceObject orbitObject;
 
-	public TerrestrialPlanet(String name, float mass, float density, Terrain terrain, PVector position, PVector velocity, int color, Planet systemParent) {
+	private final Counter orbitCt = new Counter(10).randomize();
+
+	public TerrestrialPlanet(String name, float mass, float density, Terrain terrain, PVector position, PVector velocity, int color) {
 		super(name, mass, density, position, velocity, color);
 
 		this.site = new LandingSite(this, terrain);
-		this.systemParent = systemParent;
 	}
 
 	public LandingSite getLandingSite() {
 		return site;
+	}
+
+	public SpaceObject getOrbitObject() {
+		return orbitObject;
 	}
 
 	public Terrain getTerrain() {
@@ -51,8 +58,12 @@ public class TerrestrialPlanet extends Planet {
 		return 1;
 	}
 
-	public Planet getSystemParent() {
-		return systemParent;
+	@Override
+	public void onUpdate(RenderLevel level) {
+		if(orbitCt.cycle()) {
+			orbitObject = getWorld().findOrbitObject(this);
+		}
+		super.onUpdate(level);
 	}
 
 	@Override

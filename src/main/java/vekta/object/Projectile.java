@@ -11,8 +11,6 @@ import static vekta.Vekta.v;
 public class Projectile extends SpaceObject implements Damager {
 	private final SpaceObject parent;
 
-	private int aliveTime = 0;
-
 	public Projectile(SpaceObject parent, PVector position, PVector velocity, int color) {
 		super(position, velocity, color);
 
@@ -23,10 +21,6 @@ public class Projectile extends SpaceObject implements Damager {
 
 	public int getDespawnTime() {
 		return 1000;
-	}
-
-	protected int getAliveTime() {
-		return aliveTime;
 	}
 
 	public float getDamage() {
@@ -85,7 +79,7 @@ public class Projectile extends SpaceObject implements Damager {
 
 	@Override
 	public void onUpdate(RenderLevel level) {
-		if(++aliveTime >= getDespawnTime()) {
+		if(getAliveTime() >= getDespawnTime()) {
 			despawn();
 		}
 	}

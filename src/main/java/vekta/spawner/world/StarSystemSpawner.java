@@ -34,7 +34,7 @@ public class StarSystemSpawner implements WorldGenerator.WorldSpawner {
 		int planetCt = (int)v.random(1, 8);
 		for(int i = 0; i <= planetCt; i++) {
 			float distance = v.random(.5F, 4) * AU_DISTANCE;
-			Planet planet = createPlanet(star.getPosition().add(PVector.random2D().mult(distance)), star);
+			Planet planet = createPlanet(star.getPosition().add(PVector.random2D().mult(distance)));
 			orbit(star, planet, 0);
 		}
 
@@ -61,7 +61,7 @@ public class StarSystemSpawner implements WorldGenerator.WorldSpawner {
 		));
 	}
 
-	public static Planet createPlanet(PVector pos, Planet parent) {
+	public static Planet createPlanet(PVector pos) {
 		float mass = pow(10, v.random(23, 25));
 		float density = v.random(3.5F, 4);
 		TerrestrialPlanet planet = register(new TerrestrialPlanet(
@@ -71,8 +71,7 @@ public class StarSystemSpawner implements WorldGenerator.WorldSpawner {
 				createPlanetTerrain(), 	// Terrain
 				pos,  					// Coords
 				new PVector(),  		// Velocity
-				randomPlanetColor(), 	// Color
-				parent					// System parent
+				randomPlanetColor() 	// Color
 		));
 		int moonCt = (int)v.random(3);
 		for(int i = 0; i < moonCt; i++) {
@@ -115,8 +114,7 @@ public class StarSystemSpawner implements WorldGenerator.WorldSpawner {
 				createPlanetTerrain(), // Terrain
 				pos,  // Coords
 				new PVector(),  // Velocity
-				randomPlanetColor(), // Color
-				planet
+				randomPlanetColor() // Color
 		));
 	}
 }

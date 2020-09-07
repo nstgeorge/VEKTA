@@ -12,7 +12,6 @@ public class Particle extends SpaceObject {
 	private final ParticleStyle style;
 
 	private final int endColor;
-	private float aliveTime;
 
 	public Particle(SpaceObject parent, PVector position, PVector velocity, ParticleStyle style) {
 		super(position, velocity, style.getStartColor().selectColor());
@@ -25,7 +24,7 @@ public class Particle extends SpaceObject {
 		this.style = style;
 
 		this.endColor = style.getEndColor().selectColor();
-		
+
 		/// TEMP
 		applyVelocity(getVelocity().mult(-1));
 	}
@@ -36,15 +35,14 @@ public class Particle extends SpaceObject {
 
 	@Override
 	public int getColor() {
-		return v.lerpColor(super.getColor(), endColor, aliveTime / getStyle().getLifetime());
+		return v.lerpColor(super.getColor(), endColor, getAliveTime() / getStyle().getLifetime());
 	}
 
 	@Override
 	public void onUpdate(RenderLevel level) {
-//		addVelocity(relativeVelocity(parent).mult(getStyle().getDrag()));
+		//		addVelocity(relativeVelocity(parent).mult(getStyle().getDrag()));
 
-		aliveTime += 1 / v.frameRate;
-		if(aliveTime >= getStyle().getLifetime()) {
+		if(getAliveTime() >= getStyle().getLifetime()) {
 			despawn();
 		}
 	}
