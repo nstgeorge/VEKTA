@@ -10,6 +10,7 @@ import vekta.benchmarking.FrameTimer;
 import vekta.connection.message.Message;
 import vekta.context.KnowledgeContext;
 import vekta.context.PauseMenuContext;
+import vekta.context.Starfield;
 import vekta.context.TextInputContext;
 import vekta.dungeon.Dungeon;
 import vekta.economy.Economy;
@@ -64,6 +65,8 @@ import static vekta.Vekta.*;
 public class Singleplayer implements World, PlayerListener {
 	private static final File QUICKSAVE_FILE = new File("quicksave.vekta");
 	private static final File AUTOSAVE_FILE = new File("autosave.vekta");
+
+	private static Starfield starfield;
 
 	private static final float ZOOM_FACTOR = .3F;
 	private static final float ZOOM_SMOOTH = .1F;
@@ -136,6 +139,8 @@ public class Singleplayer implements World, PlayerListener {
 		overlay = new PlayerOverlay(player, timer);
 		player.removeListeners(PlayerOverlay.class);
 		player.addListener(overlay);
+
+		starfield = new Starfield(player.getShip(), this);
 	}
 
 	public void setup() {
@@ -419,6 +424,12 @@ public class Singleplayer implements World, PlayerListener {
 		}
 
 		timer.addTimeStamp("Object cleanup and target updates");
+
+		v.pushMatrix();
+		starfield.draw();
+		v.popMatrix();
+
+		timer.addTimeStamp("Starfield drawing");
 
 		// Custom behavior loop
 		// If the debug overlay is enabled, separate the loop in several independent ones to determine performance
