@@ -52,6 +52,7 @@ public class NavigationOverlay implements Overlay {
 		// Draw telemetry bar
 		v.fill(0);
 		v.stroke(UI_COLOR);
+		v.strokeWeight(1);
 		v.rectMode(CORNERS);
 		v.rect(-1, v.height - 130, v.width + 1, v.height + 1);
 		v.rectMode(CENTER);
@@ -64,6 +65,9 @@ public class NavigationOverlay implements Overlay {
 		if(velocity.magSq() >= 1) {
 			drawDial("Velocity", velocity, v.width - 500, dialHeight, UI_COLOR);
 		}
+
+		// New heading dial
+		drawHeadingIndicator(ship.getHeading(), targeter.getTarget());
 
 		// Targeter information
 		if(targeter != null) {
@@ -134,5 +138,23 @@ public class NavigationOverlay implements Overlay {
 		// render the arms
 		v.line(locX + endpoint.x, locY + endpoint.y, locX + cos(angle - .3F) * (length * .8F), locY + sin(angle - .3F) * (length * .8F));
 		v.line(locX + endpoint.x, locY + endpoint.y, locX + cos(angle + .3F) * (length * .8F), locY + sin(angle + .3F) * (length * .8F));
+	}
+
+	private void drawHeadingIndicator(PVector heading, SpaceObject target) {
+		int resolution = 17;		// Number of bars to draw
+		int top = 40;				// Distance (px) from top of screen
+		int height = 20;			// Height of the largest indicator bars
+		int offset = 10;			// Offset in height of the smaller bars
+		float width = v.width / 2;	// Width of the indicator as a whole
+
+		int left = (int) ((v.width - width) / 2);
+
+		for(int i = 0; i < resolution; i++) {
+			float sinModifier = sin((float) (Math.PI * (i / (float)resolution)));
+			int horizontalLocation = (int) (left + (i * (width / resolution) - 100) + (100 * sinModifier));
+
+			v.stroke(0, 255, 0, 255 * sinModifier);
+			v.line(horizontalLocation, top, horizontalLocation, top + height - (offset * ((i + 1) % 2)));
+		}
 	}
 }
