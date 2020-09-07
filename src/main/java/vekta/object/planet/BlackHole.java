@@ -14,7 +14,7 @@ public class BlackHole extends TerrestrialPlanet {
 	private static final float PREVIEW_PULSE_SPEED = .03F;
 
 	public BlackHole(String name, float mass, PVector position, PVector velocity, int color) {
-		super(name, mass, INTERACT_DENSITY, new BlackHoleTerrain(), position, velocity, color);
+		super(name, mass, INTERACT_DENSITY, new BlackHoleTerrain(), position, velocity, color, null);
 	}
 
 	@Override

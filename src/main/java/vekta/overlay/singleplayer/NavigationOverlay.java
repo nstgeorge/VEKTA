@@ -79,7 +79,7 @@ public class NavigationOverlay implements Overlay {
 				String massString = massString(target.getMass());
 				if(target instanceof TerrestrialPlanet) {
 					TerrestrialPlanet closestPlanet = (TerrestrialPlanet)target;
-					targetString = target.getName() + " - " + distString + " \nHabitable: " + (closestPlanet.isHabitable() ? "YES" : "NO") + "\nMass: " + massString;
+					targetString = target.getName() + " - " + distString + " \nHabitable: " + (closestPlanet.isHabitable() ? "YES" : "NO") + "\nMass: " + massString + "\nSystem: " + (closestPlanet.getSystemParent() == null ? "None" : closestPlanet.getSystemParent().getName());
 				}
 				else {
 					targetString = target.getName() + " - " + distString + " \n\nMass: " + massString;

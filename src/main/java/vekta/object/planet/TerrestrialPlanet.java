@@ -25,10 +25,13 @@ import static vekta.Vekta.getWorld;
 public class TerrestrialPlanet extends Planet {
 	private final LandingSite site;
 
-	public TerrestrialPlanet(String name, float mass, float density, Terrain terrain, PVector position, PVector velocity, int color) {
+	private Planet systemParent;
+
+	public TerrestrialPlanet(String name, float mass, float density, Terrain terrain, PVector position, PVector velocity, int color, Planet systemParent) {
 		super(name, mass, density, position, velocity, color);
 
 		this.site = new LandingSite(this, terrain);
+		this.systemParent = systemParent;
 	}
 
 	public LandingSite getLandingSite() {
@@ -46,6 +49,10 @@ public class TerrestrialPlanet extends Planet {
 
 	public float getValueScale() {
 		return 1;
+	}
+
+	public Planet getSystemParent() {
+		return systemParent;
 	}
 
 	@Override

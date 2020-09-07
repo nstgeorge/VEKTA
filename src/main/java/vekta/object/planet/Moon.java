@@ -16,8 +16,8 @@ public class Moon extends TerrestrialPlanet {
 	//	private final PVector lastParentPosition = new PVector();
 	//	private float lastTimeScale = 1;
 
-	public Moon(Planet parent, String name, float mass, float density, Terrain terrain, PVector position, PVector velocity, int color) {
-		super(name, mass, density, terrain, position, velocity, color);
+	public Moon(Planet parent, String name, float mass, float density, Terrain terrain, PVector position, PVector velocity, int color, Planet systemParent) {
+		super(name, mass, density, terrain, position, velocity, color, systemParent);
 
 		this.parent = parent;
 		this.orbitDistance = parent.getPosition().sub(position).mag();
