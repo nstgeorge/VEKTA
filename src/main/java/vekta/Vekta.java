@@ -6,11 +6,10 @@ import processing.core.PVector;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 import ch.bildspur.postfx.builder.*;
-import ch.bildspur.postfx.pass.*;
-import ch.bildspur.postfx.*;
 import processing.opengl.PGraphicsOpenGL;
 import vekta.context.Context;
 import vekta.context.PauseMenuContext;
+import vekta.shaders.ScanLinePass;
 import vekta.world.World;
 import vekta.item.ItemType;
 import vekta.menu.Menu;
@@ -92,6 +91,7 @@ public class Vekta extends PApplet {
 		fx = new PostFX(this, displayWidth, displayHeight);
 
 		hint(DISABLE_DEPTH_TEST);
+		hint(DISABLE_TEXTURE_MIPMAPS);
 		((PGraphicsOpenGL)g).textureSampling(2);
 
 		UI_COLOR = color(0, 255, 0);
@@ -131,6 +131,7 @@ public class Vekta extends PApplet {
 				fx.render()
 					.bloom(0.8f, (int)Settings.getFloat("bloomIntensity"), 50)
 					.noise(0.005f * Settings.getFloat("noiseAmount"), 0.7f)
+					.custom(new ScanLinePass())
 					.compose();
 			}
 

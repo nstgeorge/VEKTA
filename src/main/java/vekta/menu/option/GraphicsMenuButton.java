@@ -26,6 +26,10 @@ public class GraphicsMenuButton implements ButtonOption {
                 new FloatSettingWatcher("bloomIntensity"),
                 new FloatRangeInputController(0, 10, 1)));
 
+        sub.add(new InputOption<>("Scan Line Intensity",
+                new FloatSettingWatcher("scanLineIntensity"),
+                new FloatRangeInputController(0, 10, 1)));
+
         sub.add(new InputOption<>("Draw trails",
                 new BooleanSettingWatcher("drawTrails"),
                 new ChoicesInputController<>(Arrays.asList(true, false), b -> b ? "Yes" : "No")));

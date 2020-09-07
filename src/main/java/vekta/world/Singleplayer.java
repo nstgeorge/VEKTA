@@ -725,6 +725,7 @@ public class Singleplayer implements World, PlayerListener {
 			}
 		}
 		else if(key == KeyBinding.DEBUG_OVERLAY) {
+			System.out.println("Overlay toggled");
 			overlay.toggleDebugOverlay();
 		}
 		else {

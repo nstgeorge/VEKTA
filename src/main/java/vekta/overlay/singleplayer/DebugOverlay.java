@@ -21,6 +21,7 @@ public class DebugOverlay implements Overlay {
 
     public void toggle() {
         enabled = !enabled;
+        System.out.println("Overlay: " + enabled);
     }
 
     public boolean isEnabled() {
@@ -33,6 +34,7 @@ public class DebugOverlay implements Overlay {
             v.textFont(BODY_FONT);
             v.textAlign(LEFT);
             v.textSize(16);
+            v.color(255);
 
             // FPS
             v.text("FPS = " + v.round(v.frameRate), 50, v.height - 20);
