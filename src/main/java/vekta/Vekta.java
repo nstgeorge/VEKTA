@@ -9,7 +9,7 @@ import ch.bildspur.postfx.builder.*;
 import processing.opengl.PGraphicsOpenGL;
 import vekta.context.Context;
 import vekta.context.PauseMenuContext;
-import vekta.shaders.ScanLinePass;
+import vekta.shader.ScanLinePass;
 import vekta.world.World;
 import vekta.item.ItemType;
 import vekta.menu.Menu;

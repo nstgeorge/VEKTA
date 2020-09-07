@@ -23,7 +23,8 @@ public final class Settings {
 				.put("randomEvents", true)
 				.put("drawTrails", true)
 				.put("bloomIntensity", 6)
-				.put("noiseAmount", 10);
+				.put("noiseAmount", 10)
+				.put("scanLineIntensity", 5);
 		for(KeyBinding key : KeyBinding.values()) {
 			defaults.put(getKeyProp(key), serializeKeyCode(key.getDefaultKeyCode()));
 		}

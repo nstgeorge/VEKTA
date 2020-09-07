@@ -278,10 +278,10 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 
 	public void updateTrail() {
 		// Update trail vectors
-		// System.arraycopy(trail, 0, trail, 1, trail.length - 1);
-		for(int i = trail.length - 1; i > 0; i--) {
-			trail[i] = trail[i-1];
-		}
+		 System.arraycopy(trail, 0, trail, 1, trail.length - 1);
+//		for(int i = trail.length - 1; i > 0; i--) {
+//			trail[i] = trail[i-1];
+//		}
 		//		trail[0] = getPosition();
 
 		trail[0] = new float[]{0, 0};

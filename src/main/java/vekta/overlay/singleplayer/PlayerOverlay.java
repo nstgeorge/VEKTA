@@ -16,6 +16,7 @@ public class PlayerOverlay implements Overlay, PlayerListener {
 
 	private Overlay[] overlays;
 	private NotificationOverlay notifications;
+	private DebugOverlay debug;
 
 	public PlayerOverlay(Player player, FrameTimer timer) {
 		this.player = player;
@@ -28,30 +29,23 @@ public class PlayerOverlay implements Overlay, PlayerListener {
 				new NavigationOverlay(player),
 				new MissionOverlay(player),
 				new ShipComputerOverlay(50, -150, player.getShip()),
-//				new ShipMoneyOverlay(-300, -90, player.getShip()),
+				//				new ShipMoneyOverlay(-300, -90, player.getShip()),
 				new ShipMassOverlay(-300, -90, player.getShip()),
 				new ShipEnergyOverlay(-300, -60, player.getShip()),
 				new ShipTemperatureOverlay(-300, -30, player.getShip()),
 				new DirectoryOverlay(player),
 				new TimeScaleOverlay(),
-				new DebugOverlay(timer),
 				notifications = new NotificationOverlay(-20, 80),
+				debug = new DebugOverlay(timer),
 		};
 	}
 
-	public void toggleDebugOverlay() { // TODO: Make less bad. It's been too long since I wrote code
-		for(Overlay overlay : overlays) {
-			if(overlay instanceof DebugOverlay) ((DebugOverlay) overlay).toggle();
-		}
+	public boolean isDebugEnabled() {
+		return debug.isEnabled();
 	}
 
-	public boolean debugIsEnabled() {
-		for(Overlay overlay : overlays) {
-			if(overlay instanceof DebugOverlay) {
-				return ((DebugOverlay) overlay).isEnabled();
-			}
-		}
-		return false;
+	public void toggleDebug() {
+		debug.toggle();
 	}
 
 	@Override

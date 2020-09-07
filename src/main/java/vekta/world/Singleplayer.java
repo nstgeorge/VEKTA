@@ -35,7 +35,6 @@ import vekta.object.planet.TerrestrialPlanet;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.PlayerShip;
 import vekta.object.ship.SpaceStation;
-import vekta.overlay.singleplayer.DebugOverlay;
 import vekta.overlay.singleplayer.PlayerOverlay;
 import vekta.person.Person;
 import vekta.player.Player;
@@ -53,7 +52,6 @@ import vekta.sync.Syncable;
 import vekta.terrain.settlement.Settlement;
 import vekta.util.Counter;
 
-import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -435,7 +433,7 @@ public class Singleplayer implements World, PlayerListener {
 		// If the debug overlay is enabled, separate the loop in several independent ones to determine performance
 		// This is obviously way worse for performance, but I don't think there's any way around it right now
 		// TODO: Make this neater
-		if(overlay.debugIsEnabled()) {
+		if(overlay.isDebugEnabled()) {
 			// Gravity loop
 			for(int i = 0, size = objects.size(); i < size; i++) {
 				// Skip despawned/destroyed objects
@@ -464,7 +462,8 @@ public class Singleplayer implements World, PlayerListener {
 				resolveCollisions(objects, level, i, playerShip);
 			}
 			timer.addTimeStamp("Resolve collisions");
-		} else {
+		}
+		else {
 			for(int i = 0, size = objects.size(); i < size; i++) {
 				SpaceObject s = objects.get(i);
 				// Skip despawned/destroyed objects
@@ -663,51 +662,6 @@ public class Singleplayer implements World, PlayerListener {
 		return false;
 	}
 
-	// Temp: debug key listener
-	@Override
-	public void keyPressed(KeyEvent event) {
-		if(v.key == '~' && Settings.getBoolean("debug")) {
-			if(!getPlayer().hasAttribute(DebugAttribute.class)) {
-				getPlayer().addAttribute(DebugAttribute.class);
-				setupTesting();
-				getPlayer().send("Debug mode enabled");
-			}
-			Menu menu = new Menu(getPlayer(), new BackButton(this), new DebugMenuHandle());
-			menu.add(new CustomButton("Give Missions", m -> {
-				for(int i = 0; i < 10; i++) {
-					MissionGenerator.createMission(getPlayer(), MissionGenerator.randomMissionPerson(), (int)v.random(5) + 1).start();
-				}
-				m.close();
-			}));
-			menu.add(new CustomButton("Give Knowledge", m -> {
-				for(TerrestrialPlanet planet : findObjects(TerrestrialPlanet.class)) {
-					getPlayer().addKnowledge(new TerrestrialKnowledge(ObservationLevel.VISITED, planet));
-					for(Settlement settlement : planet.getTerrain().getSettlements()) {
-						getPlayer().addKnowledge(new SettlementKnowledge(ObservationLevel.VISITED, settlement));
-					}
-				}
-				for(Person person : findObjects(Person.class)) {
-					getPlayer().addKnowledge(new PersonKnowledge(ObservationLevel.VISITED, person));
-				}
-				setContext(new KnowledgeContext(this, getPlayer()));
-			}));
-			menu.add(new CustomButton("Enemy Factions & Give Disguise", m -> {
-				for(Faction faction : state.getFactions()) {
-					faction.setEnemy(getPlayer().getFaction());
-					getPlayer().getInventory().add(ClothingItemSpawner.createDisguiseItem(faction));
-				}
-				m.close();
-			}));
-			menu.add(new CustomButton("Enter Dungeon", m -> {
-				Dungeon dungeon = DungeonGenerator.createDungeon(PersonGenerator.randomHome());
-				new DungeonRoomButton(dungeon.getName(), dungeon.getStartRoom()).onSelect(m);
-			}));
-			menu.addDefault();
-			setContext(menu);
-		}
-		World.super.keyPressed(event);
-	}
-
 	@Override
 	public void keyPressed(KeyBinding key) {
 		if(key == KeyBinding.ZOOM_IN) {
@@ -723,10 +677,6 @@ public class Singleplayer implements World, PlayerListener {
 			if(key == KeyBinding.MENU_SELECT) {
 				reload();
 			}
-		}
-		else if(key == KeyBinding.DEBUG_OVERLAY) {
-			System.out.println("Overlay toggled");
-			overlay.toggleDebugOverlay();
 		}
 		else {
 			if(key == KeyBinding.QUICK_SAVE && save(QUICKSAVE_FILE)) {
@@ -951,6 +901,54 @@ public class Singleplayer implements World, PlayerListener {
 		//        }
 		Resources.stopAllSoundsExceptMusic();
 		Resources.playSound("death");
+	}
+
+	@Override
+	public void keyPressed(KeyEvent event) {
+		if(event.getKey() == '`' && Settings.getBoolean("debug")) {
+			if(!getPlayer().hasAttribute(DebugAttribute.class)) {
+				getPlayer().addAttribute(DebugAttribute.class);
+				setupTesting();
+				getPlayer().send("Debug mode enabled");
+			}
+			Menu menu = new Menu(getPlayer(), new BackButton(this), new DebugMenuHandle());
+			menu.add(new CustomButton("Toggle Overlay", m -> {
+				overlay.toggleDebug();
+				m.close();
+			}));
+			menu.add(new CustomButton("Give Missions", m -> {
+				for(int i = 0; i < 10; i++) {
+					MissionGenerator.createMission(getPlayer(), MissionGenerator.randomMissionPerson(), (int)v.random(5) + 1).start();
+				}
+				m.close();
+			}));
+			menu.add(new CustomButton("Give Knowledge", m -> {
+				for(TerrestrialPlanet planet : findObjects(TerrestrialPlanet.class)) {
+					getPlayer().addKnowledge(new TerrestrialKnowledge(ObservationLevel.VISITED, planet));
+					for(Settlement settlement : planet.getTerrain().getSettlements()) {
+						getPlayer().addKnowledge(new SettlementKnowledge(ObservationLevel.VISITED, settlement));
+					}
+				}
+				for(Person person : findObjects(Person.class)) {
+					getPlayer().addKnowledge(new PersonKnowledge(ObservationLevel.VISITED, person));
+				}
+				setContext(new KnowledgeContext(this, getPlayer()));
+			}));
+			menu.add(new CustomButton("Enemy Factions & Give Disguise", m -> {
+				for(Faction faction : state.getFactions()) {
+					faction.setEnemy(getPlayer().getFaction());
+					getPlayer().getInventory().add(ClothingItemSpawner.createDisguiseItem(faction));
+				}
+				m.close();
+			}));
+			menu.add(new CustomButton("Enter Dungeon", m -> {
+				Dungeon dungeon = DungeonGenerator.createDungeon(PersonGenerator.randomHome());
+				new DungeonRoomButton(dungeon.getName(), dungeon.getStartRoom()).onSelect(m);
+			}));
+			menu.addDefault();
+			setContext(menu);
+		}
+		World.super.keyPressed(event);
 	}
 
 	// Player tag for debug mode
