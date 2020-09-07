@@ -36,7 +36,7 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 		this.velocity.set(velocity);
 		this.color = color;
 
-		this.trail = new float[getTrailLength()][2];
+		this.trail = new float[getTrailLength()][];
 	}
 
 	public abstract String getName();
@@ -91,6 +91,7 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	 */
 	public void transferTemperature(float other, float duration) {
 		// TODO implement
+		throw new RuntimeException("NYI");
 	}
 
 	public final PVector getPosition() {
@@ -287,13 +288,18 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 		//		for(int i = trail.length - 1; i > 0; i--) {
 		//			trail[i] = trail[i-1];
 		//		}
-		//		trail[0] = getPosition();
-
-		trail[0] = new float[] {0, 0};
+//				trail[0] = getPosition();
+		trail[0] = new float[] {getPosition().x, getPosition().y};
 	}
 
 	public void drawTrail(float scale) {
+		if(trail.length == 0){
+			return;
+		}
+
 		int color = getTrailColor();
+
+		PVector relative = getVelocity().mult(-getWorld().getTimeScale());
 
 		for(int i = 1; i < trail.length; i++) {
 			float[] oldPos = trail[i - 1];
@@ -301,9 +307,9 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 			if(trail[i] == null) {
 				break;
 			}
-			PVector relative = getVelocity().mult(-getWorld().getTimeScale());
-			newPos[0] = relative.x;
-			newPos[1] = relative.y;
+
+			newPos[0] += relative.x;
+			newPos[1] += relative.y;
 
 			// Set the color and draw the line segment
 			v.stroke(v.lerpColor(color, 0, (float)i / trail.length));

@@ -1,7 +1,7 @@
 package vekta.overlay.singleplayer;
 
-import vekta.benchmarking.FrameTimer;
-import vekta.benchmarking.Timing;
+import vekta.profiler.Profiler;
+import vekta.profiler.Timing;
 import vekta.overlay.Overlay;
 
 import static processing.core.PConstants.LEFT;
@@ -11,52 +11,43 @@ import static vekta.Vekta.v;
 
 public class DebugOverlay implements Overlay {
 
-    private FrameTimer timer;
-    private boolean enabled;
+	private final Profiler profiler;
 
-    public DebugOverlay(FrameTimer timer) {
-        this.timer = timer;
-        enabled = false;
-    }
+	public DebugOverlay(Profiler profiler) {
+		this.profiler = profiler;
+	}
 
-    public void toggle() {
-        enabled = !enabled;
-        System.out.println("Overlay: " + enabled);
-    }
+	public Profiler getProfiler() {
+		return profiler;
+	}
 
-    public boolean isEnabled() {
-        return enabled;
-    }
+	@Override
+	public void render() {
+		v.textFont(BODY_FONT);
+		v.textAlign(LEFT);
+		v.textSize(16);
+		v.color(255);
 
-    @Override
-    public void render() {
-        if(enabled) {
-            v.textFont(BODY_FONT);
-            v.textAlign(LEFT);
-            v.textSize(16);
-            v.color(255);
+		// FPS
+		v.text("FPS = " + v.round(v.frameRate), 50, v.height - 20);
 
-            // FPS
-            v.text("FPS = " + v.round(v.frameRate), 50, v.height - 20);
+		v.textAlign(RIGHT);
+		v.textSize(12);
 
-            v.textAlign(RIGHT);
-            v.textSize(12);
+		// Frame timings
+		v.text(generateTimingString(), v.width - 20, 70);
+	}
 
-            // Frame timings
-            v.text(generateTimingString(), v.width - 20, 70);
-        }
-    }
+	private String generateTimingString() {
+		StringBuilder result = new StringBuilder();
 
-    private String generateTimingString() {
-        String result = "";
+		// Set the last timestamp to the first result (frame start)
+		long lastTimestamp = profiler.getTimings().get(0).getTimestamp();
 
-        // Set the last timestamp to the first result (frame start)
-        long lastTimestamp = timer.getTimings().get(0).getTimestamp();
-
-        for(Timing timing: timer.getTimings()) {
-            result += timing.getDescriptor() + ": " + (timing.getTimestamp() - lastTimestamp) + "ms\n";
-            lastTimestamp = timing.getTimestamp();
-        }
-        return result;
-    }
+		for(Timing timing : profiler.getTimings()) {
+			result.append(timing.getDescriptor()).append(": ").append(timing.getTimestamp() - lastTimestamp).append("ms\n");
+			lastTimestamp = timing.getTimestamp();
+		}
+		return result.toString();
+	}
 }

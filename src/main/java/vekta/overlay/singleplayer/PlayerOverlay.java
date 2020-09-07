@@ -1,6 +1,5 @@
 package vekta.overlay.singleplayer;
 
-import vekta.benchmarking.FrameTimer;
 import vekta.player.Player;
 import vekta.player.PlayerListener;
 import vekta.object.ship.ModularShip;
@@ -12,15 +11,13 @@ import static vekta.Vekta.v;
 
 public class PlayerOverlay implements Overlay, PlayerListener {
 	private final Player player;
-	private FrameTimer timer;
 
 	private Overlay[] overlays;
 	private NotificationOverlay notifications;
 	private DebugOverlay debug;
 
-	public PlayerOverlay(Player player, FrameTimer timer) {
+	public PlayerOverlay(Player player) {
 		this.player = player;
-		this.timer = timer;
 		reset();
 	}
 
@@ -36,16 +33,7 @@ public class PlayerOverlay implements Overlay, PlayerListener {
 				new DirectoryOverlay(player),
 				new TimeScaleOverlay(),
 				notifications = new NotificationOverlay(-20, 80),
-				debug = new DebugOverlay(timer),
 		};
-	}
-
-	public boolean isDebugEnabled() {
-		return debug.isEnabled();
-	}
-
-	public void toggleDebug() {
-		debug.toggle();
 	}
 
 	@Override

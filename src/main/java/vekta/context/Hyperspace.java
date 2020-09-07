@@ -2,12 +2,14 @@ package vekta.context;
 
 import processing.core.PVector;
 
+import java.io.Serializable;
+
 import static vekta.Vekta.*;
 
-public class Hyperspace {
-	private PVector origin;
-	private float accel;
-	private HyperspaceParticle[] particles;
+public class Hyperspace implements Serializable {
+	private final PVector origin;
+	private final float accel;
+	private final HyperspaceParticle[] particles;
 	private final float INIT_VELOCITY = .2F;
 
 	public Hyperspace(PVector origin, float accel, int particleNum) {
@@ -37,12 +39,12 @@ public class Hyperspace {
 	}
 
 	public void render() {
-//		v.hint(ENABLE_DEPTH_TEST);
+		//		v.hint(ENABLE_DEPTH_TEST);
 		update();
 		for(HyperspaceParticle p : particles) {
 			p.render();
 		}
-//		v.hint(DISABLE_DEPTH_TEST);
+		//		v.hint(DISABLE_DEPTH_TEST);
 	}
 
 	public void update() {
@@ -56,12 +58,12 @@ public class Hyperspace {
 	}
 
 	private static class HyperspaceParticle {
-		private PVector loc;
-		private PVector accel;
-		private PVector velocity;
-		private float dist;
+		private final PVector loc;
+		private final PVector accel;
+		private final PVector velocity;
+		private final float dist;
 		private float time;
-	
+
 		public HyperspaceParticle(PVector loc, PVector initVelocity, PVector accel) {
 			this.loc = loc;
 			this.accel = accel;
@@ -69,20 +71,20 @@ public class Hyperspace {
 			this.velocity = initVelocity.mult(dist);
 			time = 0;
 		}
-	
+
 		public void render() {
 			v.noFill();
 			v.stroke(Math.max((((time * 10) - 255) - (dist * 100)) / 4, 0));
 			v.strokeWeight(2);
 			v.line(loc.x, loc.y, loc.x - (velocity.x * time / 9), loc.y - (velocity.y * time / 9));
 		}
-	
+
 		public void update() {
 			loc.add(velocity);
 			velocity.add(accel);
 			time++;
 		}
-	
+
 		public PVector getPosition() {
 			return loc;
 		}

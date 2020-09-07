@@ -6,7 +6,8 @@ import vekta.Format;
 import vekta.KeyBinding;
 import vekta.Resources;
 import vekta.Settings;
-import vekta.benchmarking.FrameTimer;
+import vekta.overlay.singleplayer.DebugOverlay;
+import vekta.profiler.Profiler;
 import vekta.connection.message.Message;
 import vekta.context.KnowledgeContext;
 import vekta.context.PauseMenuContext;
@@ -101,8 +102,9 @@ public class Singleplayer implements World, PlayerListener {
 	private final Counter economyCt = new Counter(600).randomize(); // Economic progression
 	private final Counter ecosystemCt = new Counter(600).randomize(); // Ecosystem progression
 
+	private final Profiler profiler = new Profiler();
 	private PlayerOverlay overlay;
-	private FrameTimer timer;
+	private DebugOverlay debugOverlay;
 
 	private float cameraImpact;
 
@@ -133,12 +135,11 @@ public class Singleplayer implements World, PlayerListener {
 		Player player = getPlayer();
 
 		// Configure UI overlay
-		timer = new FrameTimer();
-		overlay = new PlayerOverlay(player, timer);
+		overlay = new PlayerOverlay(player);
 		player.removeListeners(PlayerOverlay.class);
 		player.addListener(overlay);
 
-		starfield = new Starfield(player.getShip(), this);
+		starfield = new Starfield(this);
 	}
 
 	public void setup() {
@@ -314,8 +315,8 @@ public class Singleplayer implements World, PlayerListener {
 	@Override
 	public void render() {
 		// Take timestamp: render loop begin
-		timer.clearTimings();
-		timer.addTimeStamp("Frame Start");
+		profiler.reset();
+		profiler.addTimeStamp("Frame Start");
 
 		Player player = getPlayer();
 		ModularShip playerShip = player.getShip();
@@ -338,7 +339,7 @@ public class Singleplayer implements World, PlayerListener {
 		}
 
 		// Take timestamp: Setup
-		timer.addTimeStamp("Setup and Zoom");
+		profiler.addTimeStamp("Setup and Zoom");
 
 		v.clear();
 		v.rectMode(CENTER);
@@ -368,7 +369,7 @@ public class Singleplayer implements World, PlayerListener {
 			}
 		}
 
-		timer.addTimeStamp("Zoom box drawing");
+		profiler.addTimeStamp("Zoom box drawing");
 
 		List<ZoomController> zoomControllers = state.getZoomControllers();
 		for(int i = zoomControllers.size() - 1; i >= 0; i--) {
@@ -388,7 +389,7 @@ public class Singleplayer implements World, PlayerListener {
 
 		updateGlobal(level);
 
-		timer.addTimeStamp("Begin update");
+		profiler.addTimeStamp("Begin update");
 
 		state.startUpdate();
 
@@ -421,19 +422,19 @@ public class Singleplayer implements World, PlayerListener {
 			s.applyVelocity(s.getVelocityReference());
 		}
 
-		timer.addTimeStamp("Object cleanup and target updates");
+		profiler.addTimeStamp("Object cleanup and target updates");
 
 		v.pushMatrix();
-		starfield.draw();
+		starfield.draw(playerShip);
 		v.popMatrix();
 
-		timer.addTimeStamp("Starfield drawing");
+		profiler.addTimeStamp("Starfield drawing");
 
 		// Custom behavior loop
 		// If the debug overlay is enabled, separate the loop in several independent ones to determine performance
 		// This is obviously way worse for performance, but I don't think there's any way around it right now
 		// TODO: Make this neater
-		if(overlay.isDebugEnabled()) {
+		if(debugOverlay != null) {
 			// Gravity loop
 			for(int i = 0, size = objects.size(); i < size; i++) {
 				// Skip despawned/destroyed objects
@@ -442,7 +443,7 @@ public class Singleplayer implements World, PlayerListener {
 				}
 				updateGravity(objects, level, i);
 			}
-			timer.addTimeStamp("Gravity application");
+			profiler.addTimeStamp("Gravity application");
 			// Drawing loop
 			for(int i = 0, size = objects.size(); i < size; i++) {
 				// Skip despawned/destroyed objects
@@ -451,7 +452,7 @@ public class Singleplayer implements World, PlayerListener {
 				}
 				drawObjects(objects, level, i, playerShip);
 			}
-			timer.addTimeStamp("Draw objects");
+			profiler.addTimeStamp("Draw objects");
 
 			// Collision loop
 			for(int i = 0, size = objects.size(); i < size; i++) {
@@ -461,7 +462,7 @@ public class Singleplayer implements World, PlayerListener {
 				}
 				resolveCollisions(objects, level, i, playerShip);
 			}
-			timer.addTimeStamp("Resolve collisions");
+			profiler.addTimeStamp("Resolve collisions");
 		}
 		else {
 			for(int i = 0, size = objects.size(); i < size; i++) {
@@ -520,7 +521,7 @@ public class Singleplayer implements World, PlayerListener {
 			}
 		}
 
-		timer.addTimeStamp("Spawns, event, economy, and ecosystem");
+		profiler.addTimeStamp("Spawns, event, economy, and ecosystem");
 
 		prevLevel = level;
 		v.popMatrix();
@@ -545,7 +546,7 @@ public class Singleplayer implements World, PlayerListener {
 			v.text(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to load autosave", v.width / 2F, (v.height / 2F) + 97);
 		}
 
-		timer.addTimeStamp("Overlay");
+		profiler.addTimeStamp("Overlay");
 
 		//		if(cameraImpact > 1) {
 		//			v.fill(v.lerpColor(255, 100, 1 / cameraImpact));
@@ -913,7 +914,12 @@ public class Singleplayer implements World, PlayerListener {
 			}
 			Menu menu = new Menu(getPlayer(), new BackButton(this), new DebugMenuHandle());
 			menu.add(new CustomButton("Toggle Overlay", m -> {
-				overlay.toggleDebug();
+				if(debugOverlay == null) {
+					debugOverlay = new DebugOverlay(profiler);
+				}
+				else {
+					debugOverlay = null;
+				}
 				m.close();
 			}));
 			menu.add(new CustomButton("Give Missions", m -> {
