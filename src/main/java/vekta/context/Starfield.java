@@ -36,7 +36,7 @@ public class Starfield {
         for(int i = 0; i < DENSITY; i++) {
             BackgroundStar star = stars[i];
             if(star.getLocation().x > (float)v.width / 2 + 300 || star.getLocation().y > (float)v.height / 2 + 200 || star.getLocation().x < -((float)v.width / 2 + 300) || star.getLocation().y < -((float)v.height / 2 + 200)) {
-                stars[i] = new BackgroundStar(new PVector(v.random(0, v.width), v.random(0, v.height)), v.random(1));
+                stars[i] = new BackgroundStar(new PVector(v.random(-(float)v.width / 2, (float)v.width / 2), v.random(-(float)v.height / 2, (float)v.height / 2)), v.random(1));
             }
             star.draw(playerShip.getVelocity());
         }
