@@ -5,7 +5,12 @@ import processing.core.PFont;
 import processing.core.PVector;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
+import ch.bildspur.postfx.builder.*;
+import ch.bildspur.postfx.pass.*;
+import ch.bildspur.postfx.*;
+import processing.opengl.PGraphicsOpenGL;
 import vekta.context.Context;
+import vekta.context.PauseMenuContext;
 import vekta.world.World;
 import vekta.item.ItemType;
 import vekta.menu.Menu;
@@ -38,6 +43,7 @@ public class Vekta extends PApplet {
 	public static final String FONTNAME = "font/undefined-medium.ttf";
 
 	private static final Random RANDOM = new Random();
+	private static PostFX fx;
 
 	public static Menu mainMenu;
 
@@ -75,17 +81,18 @@ public class Vekta extends PApplet {
 	@Override
 	public void settings() {
 		pixelDensity(displayDensity());
-		fullScreen(JAVA2D);
+		fullScreen(P2D);
 	}
 
 	public void setup() {
 		v = this;
-
-		background(0);
 		frameRate(60);
 		noCursor();
+		background(0);
+		fx = new PostFX(this, displayWidth, displayHeight);
 
 		hint(DISABLE_DEPTH_TEST);
+		((PGraphicsOpenGL)g).textureSampling(2);
 
 		UI_COLOR = color(0, 255, 0);
 		DANGER_COLOR = v.color(220, 100, 0);
@@ -119,6 +126,14 @@ public class Vekta extends PApplet {
 		applyContext();
 		if(context != null) {
 			context.render();
+
+			if(!(context instanceof PauseMenuContext)) {
+				fx.render()
+					.bloom(0.8f, (int)Settings.getFloat("bloomIntensity"), 50)
+					.noise(0.005f * Settings.getFloat("noiseAmount"), 0.7f)
+					.compose();
+			}
+
 		}
 
 		Resources.updateAudio();

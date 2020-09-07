@@ -212,6 +212,7 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 	}
 
 	protected void drawShip(float r, ShipModelType shape) {
+		v.strokeWeight(2f);
 		float theta = heading.heading() + HALF_PI;
 		v.rotate(theta);
 		v.beginShape();

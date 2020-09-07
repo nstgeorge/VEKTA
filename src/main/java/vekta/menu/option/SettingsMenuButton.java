@@ -1,5 +1,6 @@
 package vekta.menu.option;
 
+import com.google.common.graph.Graph;
 import vekta.menu.Menu;
 import vekta.menu.handle.SettingsMenuHandle;
 import vekta.menu.option.input.*;
@@ -35,10 +36,7 @@ public class SettingsMenuButton implements ButtonOption {
 				new BooleanSettingWatcher("randomEvents"),
 				new ChoicesInputController<>(Arrays.asList(true, false), b -> b ? "Yes" : "No")));
 
-		sub.add(new InputOption<>("Draw trails",
-				new BooleanSettingWatcher("drawTrails"),
-				new ChoicesInputController<>(Arrays.asList(true, false), b -> b ? "Yes" : "No")));
-
+		sub.add(new GraphicsMenuButton());
 		sub.add(new KeyBindingMenuButton());
 		sub.addDefault();
 		setContext(sub);

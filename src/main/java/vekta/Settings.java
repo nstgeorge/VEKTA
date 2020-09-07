@@ -21,7 +21,9 @@ public final class Settings {
 				.put("muteMusic", false)
 				.put("zoomSpeed", 1)
 				.put("randomEvents", true)
-				.put("drawTrails", true);
+				.put("drawTrails", true)
+				.put("bloomIntensity", 6)
+				.put("noiseAmount", 10);
 		for(KeyBinding key : KeyBinding.values()) {
 			defaults.put(getKeyProp(key), serializeKeyCode(key.getDefaultKeyCode()));
 		}

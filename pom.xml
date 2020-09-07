@@ -40,6 +40,13 @@
             <systemPath>${project.basedir}/lib/processing/sound/library/sound.jar</systemPath>
         </dependency>
         <dependency>
+            <groupId>org.cansik</groupId>
+            <artifactId>postfx</artifactId>
+            <version>0.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/processing/postfx/PostFX.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>jsyn</groupId>
             <artifactId>jsyn</artifactId>
             <version>0.0.0</version>
