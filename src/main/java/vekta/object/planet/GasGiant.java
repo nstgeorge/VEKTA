@@ -52,7 +52,7 @@ public class GasGiant extends Planet {
 			for(int i = 0; i < ringDistances.length; i++) {
 				float rd = ringDistances[i];
 				v.stroke(ringColors[i]);
-				PShape ring = v.createShape(ELLIPSE, 0, 0, rd, rd * ringRatio);
+				PShape ring = v.createShape(ELLIPSE, rd, rd * ringRatio, rd, rd * ringRatio);
 				rings[i] = ring;
 			}
 		}

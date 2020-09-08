@@ -13,117 +13,126 @@ import java.util.Map;
 import static vekta.Vekta.getWorld;
 
 public class Market extends Syncable<Market> {
-    private final String name;
-    private final Stock stock;
-    private final Inventory inventory;
+	private final String name;
+	private final Stock stock;
+	private final Inventory inventory;
 
-    private final Map<Item, Integer> merchantOffers = new HashMap<>();
-    private final Map<Item, Integer> playerOffers = new HashMap<>();
+	private final Map<Item, Integer> merchantOffers = new HashMap<>();
+	private final Map<Item, Integer> playerOffers = new HashMap<>();
 
-    private float nextRestockTime;
+	private float nextRestockTime;
 
-    public Market(String name, Stock stock) {
-        this(name, stock, new Inventory());
-    }
+	public Market(String name, Stock stock) {
+		this(name, stock, new Inventory());
+	}
 
-    public Market(String name, Inventory inventory) {
-        this(name, new DefaultStock(), inventory);
-    }
+	public Market(String name, Inventory inventory) {
+		this(name, new DefaultStock(), inventory);
+	}
 
-    public Market(String name, Stock stock, Inventory inventory) {
-        this.name = name;
-        this.stock = stock;
-        this.inventory = inventory;
-    }
+	public Market(String name, Stock stock, Inventory inventory) {
+		this.name = name;
+		this.stock = stock;
+		this.inventory = inventory;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public Inventory getInventory() {
-        return inventory;
-    }
+	public Inventory getInventory() {
+		return inventory;
+	}
 
-    public boolean isBuyable(Item item) {
-        return stock.isBuyable(this, item);
-    }
+	public boolean isBuyable(Item item) {
+		return stock.isBuyable(this, item);
+	}
 
-    public void restock() {
-        if(!stock.shouldKeepOffersOnRestock()) {
-            merchantOffers.clear();
-            playerOffers.clear();
-        }
+	public boolean isSellable(Item item) {
+		return stock.isSellable(this, item);
+	}
 
-        if(!stock.shouldKeepItemsOnRestock()) {
-            inventory.clear();
-        }
+	public void restock() {
+		if(!stock.shouldKeepOffersOnRestock()) {
+			merchantOffers.clear();
+			playerOffers.clear();
+		}
 
-        nextRestockTime = getWorld().getTime() + stock.onRestock(this);
-    }
+		if(!stock.shouldKeepItemsOnRestock()) {
+			inventory.clear();
+		}
 
-    public void setupMenu(Menu menu, boolean buy, boolean sell) {
-        if(getWorld().getTime() >= nextRestockTime) {
-            restock();
-        }
+		nextRestockTime = getWorld().getTime() + stock.onRestock(this);
+	}
 
-        Inventory playerInventory = menu.getPlayer().getInventory();
+	public void setupMenu(Menu menu, boolean buy, boolean sell) {
+		if(getWorld().getTime() >= nextRestockTime) {
+			restock();
+		}
 
-        computeOffers(playerInventory, playerOffers, merchantOffers, true);
-        computeOffers(getInventory(), merchantOffers, playerOffers, false);
+		Inventory playerInventory = menu.getPlayer().getInventory();
 
-        if(buy) {
-            menu.add(new MarketButton(this, true, playerInventory, merchantOffers));
-        }
-        if(sell) {
-            menu.add(new MarketButton(this, false, playerInventory, playerOffers));
-        }
-    }
+		computeOffers(playerInventory, playerOffers, merchantOffers, true);
+		computeOffers(getInventory(), merchantOffers, playerOffers, false);
 
-    private void computeOffers(Inventory inv, Map<Item, Integer> thisSide, Map<Item, Integer> otherSide, boolean buying) {
-        // TODO: adjust based on economy
-        for(Item item : inv) {
-            if(otherSide.containsKey(item)) {
-                float markup = item.getType().getMarkupFactor();
-                if(buying) {
-                    markup = 1 / markup;
-                }
-                int price = (int) (otherSide.get(item) * markup);
-                thisSide.put(item, price);
-            } else if(!thisSide.containsKey(item)) {
-                int price = item.randomPrice();
-                thisSide.put(item, price);
-            }
-        }
-    }
+		if(buy) {
+			menu.add(new MarketButton(this, true, playerInventory, merchantOffers));
+		}
+		if(sell) {
+			menu.add(new MarketButton(this, false, playerInventory, playerOffers));
+		}
+	}
 
-    public interface Stock extends Serializable {
-        boolean isBuyable(Market market, Item item);
+	private void computeOffers(Inventory inv, Map<Item, Integer> thisSide, Map<Item, Integer> otherSide, boolean buying) {
+		// TODO: adjust based on economy
+		for(Item item : inv) {
+			if(otherSide.containsKey(item)) {
+				float markup = item.getType().getMarkupFactor();
+				if(buying) {
+					markup = 1 / markup;
+				}
+				int price = (int)(otherSide.get(item) * markup);
+				thisSide.put(item, price);
+			}
+			else if(!thisSide.containsKey(item)) {
+				int price = item.randomPrice();
+				thisSide.put(item, price);
+			}
+		}
+	}
 
-        float onRestock(Market market);
+	public interface Stock extends Serializable {
+		boolean isBuyable(Market market, Item item);
 
-        default boolean shouldKeepOffersOnRestock() {
-            return false;
-        }
+		default boolean isSellable(Market market, Item item) {
+			return isBuyable(market, item);
+		}
 
-        default boolean shouldKeepItemsOnRestock() {
-            return false;
-        }
-    }
+		float onRestock(Market market);
 
-    private static class DefaultStock implements Stock {
-        @Override
-        public boolean isBuyable(Market market, Item item) {
-            return true;
-        }
+		default boolean shouldKeepOffersOnRestock() {
+			return false;
+		}
 
-        @Override
-        public float onRestock(Market market) {
-            return Float.POSITIVE_INFINITY;
-        }
+		default boolean shouldKeepItemsOnRestock() {
+			return false;
+		}
+	}
 
-        @Override
-        public boolean shouldKeepItemsOnRestock() {
-            return true;
-        }
-    }
+	private static class DefaultStock implements Stock {
+		@Override
+		public boolean isBuyable(Market market, Item item) {
+			return true;
+		}
+
+		@Override
+		public float onRestock(Market market) {
+			return Float.POSITIVE_INFINITY;
+		}
+
+		@Override
+		public boolean shouldKeepItemsOnRestock() {
+			return true;
+		}
+	}
 }

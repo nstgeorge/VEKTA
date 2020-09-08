@@ -76,3 +76,4 @@ Regulation
 Sacred
 Blessed
 Cursed
+Bona Fide

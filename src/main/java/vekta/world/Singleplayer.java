@@ -443,7 +443,8 @@ public class Singleplayer implements World, PlayerListener {
 				}
 				updateGravity(objects, level, i);
 			}
-			profiler.addTimeStamp("Gravity application");
+			profiler.addTimeStamp("Apply gravity");
+
 			// Drawing loop
 			for(int i = 0, size = objects.size(); i < size; i++) {
 				// Skip despawned/destroyed objects
@@ -529,6 +530,9 @@ public class Singleplayer implements World, PlayerListener {
 		// GUI setup
 		if(!playerShip.isDestroyed()) {
 			overlay.render();
+			if(debugOverlay != null) {
+				debugOverlay.render();
+			}
 		}
 		else {
 			v.textFont(HEADER_FONT);

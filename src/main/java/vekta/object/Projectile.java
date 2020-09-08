@@ -19,8 +19,8 @@ public class Projectile extends SpaceObject implements Damager {
 		setTemperature(1000);
 	}
 
-	public int getDespawnTime() {
-		return 1000;
+	public float getDespawnTime() {
+		return 10;
 	}
 
 	public float getDamage() {

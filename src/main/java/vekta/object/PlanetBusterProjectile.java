@@ -25,8 +25,8 @@ public class PlanetBusterProjectile extends HomingProjectile {
 	}
 
 	@Override
-	public int getDespawnTime() {
-		return Integer.MAX_VALUE; // Don't despawn anytime soon
+	public float getDespawnTime() {
+		return 1000; // Don't despawn anytime soon
 	}
 
 	@Override

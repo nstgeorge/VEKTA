@@ -41,7 +41,7 @@ public class MarketButton implements ButtonOption {
 	public void onSelect(Menu menu) {
 		Menu sub = new Menu(menu, new TradeMenuHandle(buying, getTo()));
 		for(Item item : offers.keySet()) {
-			if(getFrom().has(item) && (buying || market.isBuyable(item))) {
+			if(getFrom().has(item) && (buying ? market.isBuyable(item) : market.isSellable(item))) {
 				sub.add(new ItemTradeButton(buying, sub.getPlayer(), market.getInventory(), item, offers.get(item)));
 			}
 		}

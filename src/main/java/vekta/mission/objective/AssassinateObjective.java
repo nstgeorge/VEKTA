@@ -42,10 +42,10 @@ public class AssassinateObjective extends Objective {
 			else if(speaker == getPerson()) {
 				dialog.then("nervous_assassin");
 			}
-			else if(!askedForWeapon && speaker.getOpinion(menu.getPlayer().getFaction()).isPositive()) {
-				dialog.add("Hypothetically speaking, how can I assassinate " + getPerson().getName() + "?",
-						person.createDialog(HELP_DIALOG_TYPE));
-			}
+//			else if(!askedForWeapon && speaker.getOpinion(menu.getPlayer().getFaction()).isPositive()) {
+//				dialog.add("Hypothetically speaking, how can I assassinate " + getPerson().getName() + "?",
+//						person.createDialog(HELP_DIALOG_TYPE));
+//			}
 		}
 	}
 

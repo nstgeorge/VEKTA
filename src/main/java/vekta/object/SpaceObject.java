@@ -288,18 +288,17 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 		//		for(int i = trail.length - 1; i > 0; i--) {
 		//			trail[i] = trail[i-1];
 		//		}
-//				trail[0] = getPosition();
-		trail[0] = new float[] {getPosition().x, getPosition().y};
+		//				trail[0] = getPosition();
+		trail[0] = new float[] {0, 0};
 	}
 
 	public void drawTrail(float scale) {
-		if(trail.length == 0){
+		if(trail.length == 0) {
 			return;
 		}
 
-		int color = getTrailColor();
-
 		PVector relative = getVelocity().mult(-getWorld().getTimeScale());
+		int color = getTrailColor();
 
 		for(int i = 1; i < trail.length; i++) {
 			float[] oldPos = trail[i - 1];
@@ -313,7 +312,7 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 
 			// Set the color and draw the line segment
 			v.stroke(v.lerpColor(color, 0, (float)i / trail.length));
-			v.line((oldPos[0]) / scale, (oldPos[1]) / scale, (newPos[0]) / scale, (newPos[1]) / scale);
+			v.line(oldPos[0] / scale, oldPos[1] / scale, newPos[0] / scale, newPos[1] / scale);
 		}
 	}
 

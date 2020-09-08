@@ -52,7 +52,7 @@ public class FractalGunModule extends WeaponModule {
 	@Override
 	public void fireWeapon() {
 		ModularShip ship = getShip();
-		if(ship.consumeEnergyImmediate(2)) {
+		if(ship.consumeEnergyImmediate(4)) {
 			getWorld().playSound("laser", ship.getPosition());
 			PVector velocity = ship.getVelocity().add(ship.getHeading().setMag(PROJECTILE_SPEED)).mult(v.random(.9F, 1.1F));
 			register(new FractalProjectile(ship, ship.getPosition(), velocity, ship.getColor(), 3));
@@ -61,7 +61,7 @@ public class FractalGunModule extends WeaponModule {
 
 	@Override
 	public void onInfo(InfoGroup info) {
-		info.addDescription("Terrify and (sometimes) pulverize your foes.");
+		info.addDescription("Terrify and (occasionally) pulverize your foes.");
 
 		super.onInfo(info);
 	}

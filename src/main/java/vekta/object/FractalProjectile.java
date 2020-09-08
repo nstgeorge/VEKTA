@@ -9,7 +9,7 @@ import static vekta.Vekta.v;
 public class FractalProjectile extends Projectile {
 
 	private static final float SPLITS_PER_SECOND = 2;
-	private static final float MAX_SPLIT = 4;
+	private static final float MAX_SPLIT = 3;
 	private static final float MAX_SPLIT_ANGLE = .3F;
 
 	private final int charge;
@@ -27,8 +27,8 @@ public class FractalProjectile extends Projectile {
 	}
 
 	@Override
-	public int getDespawnTime() {
-		return 200;
+	public float getDespawnTime() {
+		return 10;
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class FractalProjectile extends Projectile {
 	}
 
 	@Override public int getTrailLength() {
-		return super.getTrailLength() / 3;
+		return super.getTrailLength() / 4;
 	}
 
 	@Override

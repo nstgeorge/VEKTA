@@ -63,3 +63,4 @@ Detonator
 Insulator
 Excavator
 Charger
+Activator

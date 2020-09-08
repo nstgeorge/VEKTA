@@ -32,7 +32,7 @@ public abstract class FighterShip extends Ship implements Targeter {
 	private SpaceObject target;
 	private final Counter attackCt = new Counter();
 
-	private final Debounce interceptDebounce = new Debounce(60);
+	private final Debounce interceptDebounce = new Debounce(30).setReady();
 
 	public FighterShip(String name, PVector heading, PVector position, PVector velocity, int color) {
 		super(name, heading, position, velocity, color, DEF_SPEED, DEF_TURN);
@@ -110,7 +110,7 @@ public abstract class FighterShip extends Ship implements Targeter {
 
 				if(target instanceof ModularShip && interceptDebounce.isReady() && v.chance(INTERCEPT_CHANCE)) {
 					interceptDebounce.reset();
-					
+
 					ModularShip ship = (ModularShip)target;
 					if(ship.hasController() && offsetSq <= sq(getInterceptDistance())) {
 						getPositionReference().set(PVector.random2D()
@@ -123,7 +123,7 @@ public abstract class FighterShip extends Ship implements Targeter {
 							getWorld().setZoom(zoom);
 						}
 						setVelocity(target.getVelocityReference());
-						//						applyVelocity(getVelocity());////
+//						applyVelocity(getVelocity());////
 
 						ship.getController().send("Intercepted!").withColor(getColor());
 						EventGenerator.updateSituations(ship.getController());
