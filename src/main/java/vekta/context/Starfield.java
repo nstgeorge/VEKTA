@@ -105,7 +105,7 @@ public class Starfield implements Serializable {
 		}
 
 		public void update(ModularShip ship) {
-			location.sub(ship.getVelocity().mult(closeness * VELOCITY_SCALE * logTimeScale * (hyperdrive ? 2 : 1)));
+			location.sub(ship.getVelocity().mult(closeness * VELOCITY_SCALE * logTimeScale * (hyperdrive ? 3 : 1)));
 		}
 
 		public PVector getLocation() {
