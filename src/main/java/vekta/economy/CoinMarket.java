@@ -7,8 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static vekta.Vekta.register;
+import static vekta.Vekta.v;
 
 public class CoinMarket implements Serializable, Economy.Container, ProductivityModifier {
+	private static final float PUMP_CHANCE = 0.01F;
+	private static final float DOWN_SCALE = 1.1F;
+
 	private final Economy economy;
 	private final List<Coin> coins = new ArrayList<>();
 
@@ -49,6 +53,6 @@ public class CoinMarket implements Serializable, Economy.Container, Productivity
 
 	@Override
 	public float updateModifier(Economy economy) {
-		return 0;
+		return getEconomy().getValue() * (v.chance(PUMP_CHANCE) ? PUMP_CHANCE : -DOWN_SCALE / PUMP_CHANCE);
 	}
 }

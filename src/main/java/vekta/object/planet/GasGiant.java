@@ -48,7 +48,8 @@ public class GasGiant extends Planet {
 		// Initialize in draw loop for consistent rendering parameters
 		if(rings == null) {
 			rings = new PShape[ringDistances.length];
-			v.shapeMode(CENTER);/// TODO: ensure that this fixes the ring rendering issue
+			v.noFill();
+			v.shapeMode(CENTER);
 			for(int i = 0; i < ringDistances.length; i++) {
 				float rd = ringDistances[i];
 				v.stroke(ringColors[i]);

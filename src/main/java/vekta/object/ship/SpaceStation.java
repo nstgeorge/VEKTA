@@ -1,6 +1,7 @@
 package vekta.object.ship;
 
 import processing.core.PVector;
+import vekta.menu.option.ShipSwitchButton;
 import vekta.world.RenderLevel;
 import vekta.context.StationLayoutContext;
 import vekta.menu.Menu;
@@ -118,7 +119,10 @@ public class SpaceStation extends ModularShip {
 
 	@Override
 	public void setupDockingMenu(Menu menu) {
-		menu.add(new CustomButton("Customize", m -> setContext(new StationLayoutContext(m, this, m.getPlayer()))));
+		if(menu.getPlayer().getColor() == getColor()) {
+			menu.add(new CustomButton("Customize", m -> setContext(new StationLayoutContext(m, this, m.getPlayer()))));
+			menu.add(new ShipSwitchButton(this));
+		}
 	}
 
 	public final class Component implements Serializable {
@@ -148,7 +152,7 @@ public class SpaceStation extends ModularShip {
 				attached.put(dir.back(), parent);
 			}
 		}
-		
+
 		public Component getParent() {
 			return parent;
 		}

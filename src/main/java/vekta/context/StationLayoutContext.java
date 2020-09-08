@@ -90,6 +90,12 @@ public class StationLayoutContext implements Context, ModuleUpgrader {
 
 		v.textAlign(CENTER);
 
+		v.fill(v.color(0, 0, 0, 200));
+		v.noStroke();
+
+		v.rect(v.width / 2F, 175, 600, 350);
+		v.rect(v.width / 2F, v.height - 100, 400, 200);
+
 		// Draw title
 		v.textSize(48);
 		v.fill(station.getColor());

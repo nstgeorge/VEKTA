@@ -29,6 +29,10 @@ public abstract class Planet extends SpaceObject implements Renameable {
 		setMass(mass); // Configure mass and radius
 	}
 
+	public String getLabel() {
+		return getName();
+	}
+
 	public boolean impartsGravity() {
 		return getMass() >= MIN_GRAVITY_MASS;
 	}
@@ -52,10 +56,10 @@ public abstract class Planet extends SpaceObject implements Renameable {
 	public void draw(RenderLevel level, float r) {
 		// Temp: fade out planet if zoomed in too much to render
 		float maxRadius = 1000;
-		if (r > maxRadius) {
+		if(r > maxRadius) {
 			return;
 		}
-		if (r > maxRadius * .9F) {
+		if(r > maxRadius * .9F) {
 			v.fill(v.lerpColor(0, getColor(), (maxRadius - r) / maxRadius));
 		}
 
@@ -67,6 +71,12 @@ public abstract class Planet extends SpaceObject implements Renameable {
 	@Override
 	public void drawNearby(float r) {
 		v.ellipse(0, 0, r, r);
+
+		String label = getLabel();
+		if(label != null) {
+			v.fill(getColor());
+			v.text(label, r * 1.1F + 10, 5);
+		}
 	}
 
 	@Override
@@ -96,7 +106,7 @@ public abstract class Planet extends SpaceObject implements Renameable {
 		v.arc(0, 0, r * scanScale, r, -HALF_PI, HALF_PI);
 
 		// Draw planet
-		for (float f = 0; f < TWO_PI; f += TWO_PI / resolution) {
+		for(float f = 0; f < TWO_PI; f += TWO_PI / resolution) {
 			float angle = f + rotate;
 			float xScale = cos(angle);
 			v.stroke(v.lerpColor(0, color, sq(cos(f / 2 + perspective))));
@@ -108,8 +118,8 @@ public abstract class Planet extends SpaceObject implements Renameable {
 
 	@Override
 	public void onCollide(SpaceObject s) {
-		if (getMass() * 2 >= s.getMass()) {
-			if (s instanceof Moon && ((Moon) s).getParent() == this) { // TODO: move to Moon when collision checking is upgraded
+		if(getMass() * 2 >= s.getMass()) {
+			if(s instanceof Moon && ((Moon)s).getOrbitObject() == this) { // TODO: move to Moon when collision checking is upgraded
 				return;
 			}
 			s.destroyBecause(this);
@@ -128,11 +138,11 @@ public abstract class Planet extends SpaceObject implements Renameable {
 		//			Terrain terrain = new MoltenTerrain();
 
 		int splitsRemaining = getSplitsRemaining() - 1;
-		if (splitsRemaining > 0) {
-			int parts = (int) v.random(10, 20);
+		if(splitsRemaining > 0) {
+			int parts = (int)v.random(10, 20);
 			float partMass = mass / parts;
 			float partDensity = getDensity();
-			for (int i = 0; i < parts; i++) {
+			for(int i = 0; i < parts; i++) {
 				float massFactor = sq(v.random(.25F, 1));
 				PVector offset = PVector.random2D().mult(v.random(getRadius() * .5F));
 				PVector velocity = offset.mult(v.random(.05F, .1F) * .0001F / massFactor);
@@ -149,8 +159,8 @@ public abstract class Planet extends SpaceObject implements Renameable {
 		}
 
 		// If this is a planetary collision, add some additional mass to the other planet
-		if (mass > 0 && s instanceof Planet) {
-			Planet p = (Planet) s;
+		if(mass > 0 && s instanceof Planet) {
+			Planet p = (Planet)s;
 			p.setMass(p.getMass() + mass * SPLIT_MASS_ABSORB);
 		}
 	}
@@ -176,7 +186,7 @@ public abstract class Planet extends SpaceObject implements Renameable {
 
 	public void setMass(float mass) {
 		this.mass = mass;
-		this.radius = pow(getMass() / getDensity(), (float) 1 / 3);
+		this.radius = pow(getMass() / getDensity(), (float)1 / 3);
 	}
 
 	@Override

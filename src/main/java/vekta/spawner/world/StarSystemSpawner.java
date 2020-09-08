@@ -7,6 +7,10 @@ import vekta.object.SpaceObject;
 import vekta.object.planet.*;
 import vekta.spawner.WorldGenerator;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
 import static processing.core.PApplet.pow;
 import static vekta.Vekta.*;
 import static vekta.spawner.WorldGenerator.*;
@@ -66,19 +70,14 @@ public class StarSystemSpawner implements WorldGenerator.WorldSpawner {
 		float density = v.random(3.5F, 4);
 		TerrestrialPlanet planet = register(new TerrestrialPlanet(
 				Resources.generateString("planet"),
-				mass, 					// Mass
-				density,  				// Density
-				createPlanetTerrain(), 	// Terrain
-				pos,  					// Coords
-				new PVector(),  		// Velocity
-				randomPlanetColor() 	// Color
+				mass,                    // Mass
+				density,                // Density
+				createPlanetTerrain(),    // Terrain
+				pos,                    // Coords
+				new PVector(),        // Velocity
+				randomPlanetColor()    // Color
 		));
-		int moonCt = (int)v.random(3);
-		for(int i = 0; i < moonCt; i++) {
-			float distance = v.random(.3F, 2) * LUNAR_DISTANCE;
-			Planet moon = createMoon(planet, distance);
-			orbit(planet, moon, 0);
-		}
+		createMoons(planet, (int)v.random(3), .3F * LUNAR_DISTANCE, 2 * LUNAR_DISTANCE);
 		return planet;
 	}
 
@@ -93,13 +92,23 @@ public class StarSystemSpawner implements WorldGenerator.WorldSpawner {
 				new PVector(), // Velocity
 				randomPlanetColor() // Color
 		));
-		int moonCt = (int)v.random(3, 6);
-		for(int i = 0; i < moonCt; i++) {
-			float distance = v.random(1, 20) * LUNAR_DISTANCE;
-			Planet moon = createMoon(planet, distance);
-			orbit(planet, moon, 0);
-		}
+		createMoons(planet, (int)v.random(3, 6), 1 * LUNAR_DISTANCE, 20 * LUNAR_DISTANCE);
 		return planet;
+	}
+
+	public static List<Moon> createMoons(Planet planet, int count, float minDist, float maxDist) {
+		List<Moon> moons = new ArrayList<>();
+		for(int i = 0; i < count; i++) {
+			float distance = v.random(minDist, maxDist);
+			Moon moon = createMoon(planet, distance);
+			orbit(planet, moon, 0);
+			moons.add(moon);
+		}
+		moons.sort(Comparator.comparingDouble(Moon::getOrbitDistance));
+		for(int i = 0; i < moons.size(); i++) {
+			moons.get(i).setName((i + 1) + " " + planet.getName());
+		}
+		return moons;
 	}
 
 	public static Moon createMoon(Planet planet, float distance) {

@@ -14,7 +14,7 @@ public enum RenderLevel {
 		if(ordinal() == 0) {
 			return null;
 		}
-		return values()[Integer.min(0, ordinal() - 1)];
+		return values()[ordinal() - 1];
 	}
 
 	public RenderLevel getAbove() {

@@ -73,7 +73,7 @@ public class PlanetBusterProjectile extends HomingProjectile {
 				register(new Shockwave(s, v.random(.2F, 2), (int)(sq(v.random(.2F, 1)) * 250), color));
 			}
 
-			register(new SoundShockwave("planetExplosion", 3, s, 10, 500, 100));
+			register(new SoundShockwave("planetExplosion", 3, s, 5, 500, 100));
 
 			s.destroyBecause(getParentObject());
 		}

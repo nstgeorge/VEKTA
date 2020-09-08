@@ -14,6 +14,7 @@ import static processing.core.PApplet.max;
 public class Economy extends Syncable<Economy> {
 	private static final int HISTORY_LENGTH = 100;
 	private static final float PRODUCTIVITY_EFFECT_SCALE = .05F;
+	private static final float MIN_ECONOMY_VALUE = 1e-5F;
 
 	private final Container container;
 
@@ -104,6 +105,9 @@ public class Economy extends Syncable<Economy> {
 		}
 		this.productivity = productivity;
 		value *= 1 + productivity / getValue() * PRODUCTIVITY_EFFECT_SCALE;
+		if(value <= 0) {
+			value = MIN_ECONOMY_VALUE;
+		}
 		addHistory(value);
 
 		syncChanges();

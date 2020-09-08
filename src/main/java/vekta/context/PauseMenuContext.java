@@ -3,6 +3,12 @@ package vekta.context;
 import vekta.KeyBinding;
 import vekta.Resources;
 import vekta.Settings;
+import vekta.menu.Menu;
+import vekta.menu.handle.MenuHandle;
+import vekta.menu.option.BackButton;
+import vekta.menu.option.ButtonOption;
+import vekta.menu.option.SettingsMenuButton;
+import vekta.player.Player;
 
 import static vekta.Vekta.*;
 
@@ -14,11 +20,13 @@ public class PauseMenuContext implements Context {
 	private static final String[] OPTIONS = {"Continue", "Restart"/*, "Settings"*/, "Quit to Menu"};
 
 	private final Context parent;
+//	private final Player player;
 
 	private int selected = 0;
 
-	public PauseMenuContext(Context parent) {
+	public PauseMenuContext(Context parent, Player player) {
 		this.parent = parent;
+//		this.player = player;
 	}
 
 	@Override
@@ -92,7 +100,7 @@ public class PauseMenuContext implements Context {
 				getWorld().restart();
 				break;
 			//			case 2:
-			//				Menu menu = new Menu(player, new BackButton(this), new MenuHandle());
+			//				Menu menu = new Menu(player, new BackButton(parent), new MenuHandle());
 			//				menu.select(new SettingsMenuButton());
 			//				break;
 			case 2/*3*/:

@@ -3,6 +3,8 @@ package vekta.object.planet;
 import processing.core.PVector;
 import vekta.economy.TemporaryModifier;
 import vekta.faction.Faction;
+import vekta.knowledge.Knowledge;
+import vekta.knowledge.KnowledgeDelta;
 import vekta.knowledge.ObservationLevel;
 import vekta.knowledge.TerrestrialKnowledge;
 import vekta.object.SpaceObject;
@@ -19,17 +21,23 @@ import vekta.world.RenderLevel;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static vekta.Vekta.getWorld;
+import static processing.core.PApplet.print;
+import static processing.core.PApplet.sq;
+import static vekta.Vekta.*;
 
 /**
  * Terrestrial (landable) planet
  */
 public class TerrestrialPlanet extends Planet {
+	//	private static final float LABEL_THRESHOLD = 5e4F;
+
 	private final LandingSite site;
 
 	private SpaceObject orbitObject;
 
 	private final Counter orbitCt = new Counter(10).randomize();
+
+	private ObservationLevel levelCache;
 
 	public TerrestrialPlanet(String name, float mass, float density, Terrain terrain, PVector position, PVector velocity, int color) {
 		super(name, mass, density, position, velocity, color);
@@ -43,6 +51,10 @@ public class TerrestrialPlanet extends Planet {
 
 	public SpaceObject getOrbitObject() {
 		return orbitObject;
+	}
+
+	protected void setOrbitObject(SpaceObject orbitObject) {
+		this.orbitObject = orbitObject;
 	}
 
 	public Terrain getTerrain() {
@@ -59,11 +71,23 @@ public class TerrestrialPlanet extends Planet {
 	}
 
 	@Override
-	public void onUpdate(RenderLevel level) {
-		if(orbitCt.cycle()) {
-			orbitObject = getWorld().findOrbitObject(this);
+	public String getLabel() {
+		if(levelCache == null /*|| (getOrbitObject() != null &&  getOrbitObject().getMass() < sq(getWorld().getZoom() * LABEL_THRESHOLD))*/) {
+			return null;
 		}
+		return super.getLabel();
+	}
+
+	@Override
+	public void onUpdate(RenderLevel level) {
+		updateOrbitObject();
 		super.onUpdate(level);
+	}
+
+	protected void updateOrbitObject() {
+		if(orbitCt.cycle()) {
+			setOrbitObject(getWorld().findOrbitObject(this));
+		}
 	}
 
 	@Override
@@ -117,6 +141,8 @@ public class TerrestrialPlanet extends Planet {
 	@Override
 	public void observe(ObservationLevel level, Player player) {
 		super.observe(level, player);
+
+		levelCache = level;
 
 		player.addKnowledge(new TerrestrialKnowledge(level, this));
 

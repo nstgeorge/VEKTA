@@ -688,7 +688,7 @@ public class Singleplayer implements World, PlayerListener {
 				getPlayer().send("Progress saved");
 			}
 			else if(key == KeyBinding.MENU_CLOSE) {
-				setContext(new PauseMenuContext(getContext()));
+				setContext(new PauseMenuContext(getContext(), getPlayer()));
 			}
 			getPlayer().emit(PlayerEvent.KEY_PRESS, key);
 		}
@@ -798,9 +798,9 @@ public class Singleplayer implements World, PlayerListener {
 		SpaceObject bestOrbit = null;
 		for(SpaceObject s : state.getGravityObjects()) {
 			if(s != object) {
-				float weightSq = object.getGravityAcceleration(Collections.singletonList(s)).magSq() / s.getMass();
-				if(weightSq > maxSq) {
-					maxSq = weightSq;
+				float relSq = s.getMass() / distSq(object.getPositionReference(), s.getPositionReference());
+				if(relSq > maxSq) {
+					maxSq = relSq;
 					bestOrbit = s;
 				}
 			}
