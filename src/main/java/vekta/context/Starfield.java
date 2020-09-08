@@ -13,7 +13,7 @@ import static vekta.Vekta.v;
 
 public class Starfield implements Serializable {
 
-	private static final float VELOCITY_SCALE = 0.00001f; // Affects how quickly the stars move relative to player's velocity
+	private static final float VELOCITY_SCALE = 0.000005f; // Affects how quickly the stars move relative to player's velocity
 	private static final float BLUR_SCALE = 10;           // Affects the blur effect on each star
 	private static final float DILATE_SCALE = 0.02f;      // Affects the amount of spatial dilation at higher velocities
 
@@ -101,11 +101,11 @@ public class Starfield implements Serializable {
 		}
 
 		private float dilate(ModularShip ship, float r, float dot) {
-			return 1 / (1 + speed * (!hyperdrive ? closeness : 1) * VELOCITY_SCALE * DILATE_SCALE * logTimeScale) - (!hyperdrive ? sq(dot) - 1 : 1) * sqrt(r) / sqrt(v.width) + 1;
+			return 1 / (1 + speed * (hyperdrive ? 2 : closeness) * VELOCITY_SCALE * DILATE_SCALE * logTimeScale) - (hyperdrive ? 1 : sq(dot) - 1) * sqrt(r) / sqrt(v.width) + 1;
 		}
 
 		public void update(ModularShip ship) {
-			location.sub(ship.getVelocity().mult(closeness * VELOCITY_SCALE * logTimeScale));
+			location.sub(ship.getVelocity().mult(closeness * VELOCITY_SCALE * logTimeScale * (hyperdrive ? 2 : 1)));
 		}
 
 		public PVector getLocation() {
