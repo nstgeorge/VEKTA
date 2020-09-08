@@ -13,7 +13,7 @@ public class Starfield implements Serializable {
 
 	private static final float VELOCITY_SCALE = 0.00001f; // Affects how quickly the stars move relative to player's velocity
 	private static final float BLUR_SCALE = 10;           // Affects the blur effect on each star
-	private static final float DILATE_SCALE = 0.02f; 	  // Affects the amount of spatial dilation at higher velocities
+	private static final float DILATE_SCALE = 0.02f;      // Affects the amount of spatial dilation at higher velocities
 
 	private final BackgroundStar[] stars = new BackgroundStar[200];
 
@@ -84,7 +84,7 @@ public class Starfield implements Serializable {
 		}
 
 		private float dilate(ModularShip ship, float r) {
-			return 1 + 1 / (1 + ship.getVelocity().mag()*closeness * VELOCITY_SCALE * DILATE_SCALE * logTimeScale) - sqrt(r) / sqrt(v.width);
+			return 1 + 1 / (1 + ship.getVelocity().mag() * closeness * VELOCITY_SCALE * DILATE_SCALE * logTimeScale) - sqrt(r) / sqrt(v.width);
 		}
 
 		public void update(ModularShip ship) {
