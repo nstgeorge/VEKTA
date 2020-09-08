@@ -6,45 +6,53 @@ import vekta.world.World;
 
 import java.io.Serializable;
 
-import static processing.core.PApplet.log;
+import static processing.core.PApplet.*;
 import static vekta.Vekta.v;
 
 public class Starfield implements Serializable {
 
-	private static final int DENSITY = 200;                 // How many stars should be drawn on screen
-	private static final float VELOCITY_SCALING = 0.00001f; // Affects how quickly the stars move relative to player's velocity
-	private static final float BLUR_SCALING = 10;           // Affects the blur effect on each star
+	private static final float VELOCITY_SCALE = 0.00001f; // Affects how quickly the stars move relative to player's velocity
+	private static final float BLUR_SCALE = 10;           // Affects the blur effect on each star
+	private static final float DILATE_SCALE = 0.02f; 	  // Affects the amount of spatial dilation at higher velocities
 
-	private static BackgroundStar[] stars;
+	private final BackgroundStar[] stars = new BackgroundStar[200];
 
 	private final World world;
+
+	private float logTimeScale;
 
 	public Starfield(World world) {
 		this.world = world;
 		setup();
 	}
 
+	private BackgroundStar createStar() {
+		return new BackgroundStar(new PVector(v.random(-(float)v.width / 2, (float)v.width / 2), v.random(-(float)v.height / 2, (float)v.height / 2)), v.random(1));
+	}
+
 	public void setup() {
-		stars = new BackgroundStar[DENSITY];
-		for(int i = 0; i < DENSITY; i++) {
-			stars[i] = new BackgroundStar(new PVector(v.random(-(float)v.width / 2, (float)v.width / 2), v.random(-(float)v.height / 2, (float)v.height / 2)), v.random(1));
+		for(int i = 0; i < stars.length; i++) {
+			stars[i] = createStar();
 		}
 	}
 
-	public void draw(ModularShip playerShip) {
-		update(playerShip);
-		for(int i = 0; i < DENSITY; i++) {
+	public void draw(ModularShip ship) {
+		update(ship);
+
+		for(int i = 0; i < stars.length; i++) {
 			BackgroundStar star = stars[i];
 			if(star.getLocation().x > (float)v.width / 2 + 300 || star.getLocation().y > (float)v.height / 2 + 200 || star.getLocation().x < -((float)v.width / 2 + 300) || star.getLocation().y < -((float)v.height / 2 + 200)) {
-				stars[i] = new BackgroundStar(new PVector(v.random(-(float)v.width / 2, (float)v.width / 2), v.random(-(float)v.height / 2, (float)v.height / 2)), v.random(1));
+				stars[i] = createStar();
 			}
-			star.draw(playerShip.getVelocity());
+			star.draw(ship);
 		}
 	}
 
-	public void update(ModularShip playerShip) {
+	public void update(ModularShip ship) {
+		logTimeScale = log(world.getTimeScale());
+
 		for(BackgroundStar star : stars) {
-			star.update(playerShip.getVelocity());
+			star.update(ship);
 		}
 	}
 
@@ -57,13 +65,30 @@ public class Starfield implements Serializable {
 			this.closeness = closeness;
 		}
 
-		public void draw(PVector velocity) {
+		public void draw(ModularShip ship) {
+			PVector velocity = ship.getVelocity();
+
+			float x1 = location.x;
+			float y1 = location.y;
+			float r1 = sqrt(sq(x1) + sq(y1));
+
+			float x2 = x1 - (velocity.x * VELOCITY_SCALE * BLUR_SCALE);
+			float y2 = y1 - (velocity.y * VELOCITY_SCALE * BLUR_SCALE);
+			float r2 = sqrt(sq(x2) + sq(y2));
+
+			float d1 = dilate(ship, r1);
+			float d2 = dilate(ship, r2);
+
 			v.stroke(v.lerpColor(0, 100, closeness));
-			v.line(location.x, location.y, location.x - (velocity.x * VELOCITY_SCALING * BLUR_SCALING), location.y - (velocity.y * VELOCITY_SCALING * BLUR_SCALING));
+			v.line(x1 * d1, y1 * d1, x2 * d2, y2 * d2);
 		}
 
-		public void update(PVector velocity) {
-			location.sub(velocity.mult(closeness * VELOCITY_SCALING * log(world.getTimeScale())));
+		private float dilate(ModularShip ship, float r) {
+			return 1 + 1 / (1 + ship.getVelocity().mag()*closeness * VELOCITY_SCALE * DILATE_SCALE * logTimeScale) - sqrt(r) / sqrt(v.width);
+		}
+
+		public void update(ModularShip ship) {
+			location.sub(ship.getVelocity().mult(closeness * VELOCITY_SCALE * logTimeScale));
 		}
 
 		public PVector getLocation() {
