@@ -101,7 +101,7 @@ public class Starfield implements Serializable {
 		}
 
 		private float dilate(ModularShip ship, float r, float dot) {
-			return 1 / (1 + speed * (hyperdrive ? closeness : 1) * VELOCITY_SCALE * DILATE_SCALE * logTimeScale) - (hyperdrive ? sq(dot) - 1 : 1) * sqrt(r) / sqrt(v.width) + 1;
+			return 1 / (1 + speed * (!hyperdrive ? closeness : 1) * VELOCITY_SCALE * DILATE_SCALE * logTimeScale) - (!hyperdrive ? sq(dot) - 1 : 1) * sqrt(r) / sqrt(v.width) + 1;
 		}
 
 		public void update(ModularShip ship) {
