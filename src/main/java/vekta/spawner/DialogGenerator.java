@@ -40,13 +40,16 @@ public final class DialogGenerator {
 		if(person.getFaction() == player.getFaction()) {
 			return person.createDialog("follower");
 		}
+		else if(player.getMissions().stream().anyMatch(m -> m.getIssuer() == person)) {
+			return person.createDialog("mission_waiting");
+		}
 		else if(person.getOpinion(player.getFaction()) == OpinionType.UNFRIENDLY) {
 			return person.createDialog(v.chance(.5F) ? "busy" : "ask_leave");
 		}
 		else if(person.getOpinion(player.getFaction()) == OpinionType.ENEMY) {
 			return person.createDialog(v.chance(.8F) ? "call_security" : "ask_leave");
 		}
-		else if(person.isBusy() || v.chance(1 - 1F / (1 + player.getMissions().size()))) {
+		else if(!person.isBusy() && v.chance(1 - .5F / (1 + player.getMissions().size()))) {
 			return randomApproachDialog(player, person);
 		}
 		else {
@@ -59,6 +62,9 @@ public final class DialogGenerator {
 		if(person.getOpinion(player.getFaction()) == OpinionType.GRATEFUL && v.chance(.4F)) {
 			dialog = person.createDialog("offer");
 			person.setOpinion(player.getFaction(), OpinionType.FRIENDLY);
+		}
+		else if(v.chance(.3F)) {
+			dialog = person.createDialog("merchant");
 		}
 		else if(v.chance(.3F)) {
 			dialog = person.createDialog("offer");

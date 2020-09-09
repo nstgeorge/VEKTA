@@ -27,12 +27,12 @@ public class Market extends Syncable<Market> {
 	}
 
 	public Market(String name, Inventory inventory) {
-		this(name, new DefaultStock(), inventory);
+		this(name, null, inventory);
 	}
 
 	public Market(String name, Stock stock, Inventory inventory) {
 		this.name = name;
-		this.stock = stock;
+		this.stock = stock == null ? new DefaultStock() : stock;
 		this.inventory = inventory;
 	}
 

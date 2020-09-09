@@ -8,6 +8,7 @@ import vekta.spawner.ItemGenerator;
 import vekta.terrain.LandingSite;
 import vekta.terrain.settlement.SettlementPart;
 
+import static vekta.Vekta.register;
 import static vekta.Vekta.v;
 
 public class MarketBuilding implements SettlementPart, Market.Stock {
@@ -17,9 +18,13 @@ public class MarketBuilding implements SettlementPart, Market.Stock {
 	private final Market market;
 
 	public MarketBuilding(int shopTier, String shopName, Class<? extends ItemGenerator.ItemSpawner> spawnerType) {
+		this(shopTier, shopName, spawnerType, null);
+	}
+
+	public MarketBuilding(int shopTier, String shopName, Class<? extends ItemGenerator.ItemSpawner> spawnerType, Market.Stock stock) {
 		this.spawnerType = spawnerType;
 		this.shopTier = shopTier;
-		this.market = new Market(shopName, this);
+		this.market = register(new Market(shopName, stock != null ? stock : this));
 
 		market.restock();
 	}

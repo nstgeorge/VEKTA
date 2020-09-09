@@ -1,5 +1,6 @@
 package vekta.module;
 
+import vekta.player.Player;
 import vekta.util.InfoGroup;
 import vekta.KeyBinding;
 import vekta.world.RenderLevel;
@@ -7,10 +8,11 @@ import vekta.Resources;
 import vekta.menu.Menu;
 import vekta.object.HyperdriveShockwave;
 import vekta.object.ship.ModularShip;
+import vekta.world.ZoomController;
 
 import static vekta.Vekta.*;
 
-public class HyperdriveModule extends ShipModule {
+public class HyperdriveModule extends ShipModule implements ZoomController {
 	private static final float LOW_TIME_SCALE_SPEEDUP = 50;
 	private static final float MIN_BOOST = 10;
 	private static final float MAX_BOOST = 100;
@@ -120,6 +122,7 @@ public class HyperdriveModule extends ShipModule {
 			active = true;
 			Resources.playSound("hyperdriveHit");
 			Resources.loopSound("hyperdriveLoop");
+			getWorld().addZoomController(this);
 		}
 	}
 
@@ -142,5 +145,15 @@ public class HyperdriveModule extends ShipModule {
 		info.addDescription("At long last, scientists have found an efficient way to distort the fabric of space-time with standard-grade spacecraft energy. Just make sure not to run out of charge while in hyperspace...");
 
 		info.addKey(KeyBinding.SHIP_HYPERDRIVE, "start hyperdrive");
+	}
+
+	@Override
+	public boolean shouldCancelZoomControl(Player player) {
+		return !isActive();
+	}
+
+	@Override
+	public float controlZoom(Player player, float zoom) {
+		return zoom > SHIP_LEVEL ? STAR_LEVEL : zoom;
 	}
 }

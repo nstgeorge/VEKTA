@@ -28,8 +28,12 @@ public class ItemGenerator {
 		return type != null ? Arrays.stream(SPAWNERS).filter(type::isInstance).findFirst().orElse(null) : null;
 	}
 
+	public static ItemSpawner randomItemSpawner() {
+		return Weighted.random(SPAWNERS);
+	}
+
 	public static Item randomItem() {
-		return Weighted.random(SPAWNERS).create();
+		return randomItemSpawner().create();
 	}
 
 	public static ItemCategory randomCategory() {

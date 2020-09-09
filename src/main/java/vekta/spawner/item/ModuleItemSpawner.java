@@ -29,6 +29,10 @@ public class ModuleItemSpawner implements ItemGenerator.ItemSpawner {
 		return new ModuleItem(randomModule());
 	}
 
+	public static Module[] getModulePrototypes() {
+		return MODULES;
+	}
+
 	public static Module randomModule() {
 		return v.random(MODULES).createVariant();
 	}

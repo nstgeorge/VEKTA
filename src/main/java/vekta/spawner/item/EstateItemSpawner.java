@@ -16,7 +16,7 @@ public class EstateItemSpawner implements ItemGenerator.ItemSpawner {
 
 	@Override
 	public float getWeight() {
-		return .01F; // Very rare to find naturally
+		return 0; // Unable to find naturally
 	}
 
 	@Override

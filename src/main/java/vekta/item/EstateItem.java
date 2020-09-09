@@ -2,6 +2,7 @@ package vekta.item;
 
 import vekta.economy.Economy;
 import vekta.economy.Estate;
+import vekta.util.InfoGroup;
 
 public class EstateItem extends EconomyItem {
 	private final Estate estate;
@@ -16,7 +17,7 @@ public class EstateItem extends EconomyItem {
 
 	@Override
 	public String getName() {
-		return getEstate().getName() + " (" + estate.getSettlement().getName() + ")";
+		return getEstate().getName()/* + " (" + estate.getSettlement().getName() + ")"*/;
 	}
 
 	@Override
@@ -32,5 +33,12 @@ public class EstateItem extends EconomyItem {
 	@Override
 	public float getValueScale() {
 		return getEstate().getSize() * getEstate().getValue();
+	}
+
+	@Override
+	public void onInfo(InfoGroup info) {
+		super.onInfo(info);
+
+		info.addStat("Settlement", getEstate().getSettlement().getName());
 	}
 }
