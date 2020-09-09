@@ -1,6 +1,7 @@
 package vekta.person.personality;
 
 import vekta.person.Dialog;
+import vekta.person.Person;
 
 public class ThirdPersonPersonality extends Personality {
 	private static final String[] WORDS = {"I", "me", "myself"};

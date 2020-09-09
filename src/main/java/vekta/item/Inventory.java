@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Stream;
 
 public final class Inventory implements Serializable, Iterable<Item> {
 	private final InventoryListener listener;
@@ -100,6 +101,10 @@ public final class Inventory implements Serializable, Iterable<Item> {
 			other.add(item);
 		}
 		clear();
+	}
+
+	public Stream<Item> stream() {
+		return getItems().stream();
 	}
 
 	@Override

@@ -3,8 +3,6 @@ package vekta.object.planet;
 import processing.core.PVector;
 import vekta.Renameable;
 import vekta.Resources;
-import vekta.knowledge.Knowledge;
-import vekta.knowledge.ObservationLevel;
 import vekta.object.SpaceObject;
 import vekta.world.RenderLevel;
 

@@ -4,6 +4,7 @@ import vekta.*;
 import vekta.economy.Economy;
 import vekta.economy.ProductivityModifier;
 import vekta.faction.Faction;
+import vekta.knowledge.FactionKnowledge;
 import vekta.knowledge.ObservationLevel;
 import vekta.knowledge.SettlementKnowledge;
 import vekta.menu.Menu;
@@ -241,6 +242,7 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 
 	public void observe(ObservationLevel level, Player player) {
 		player.addKnowledge(new SettlementKnowledge(level, this));
+		player.addKnowledge(new FactionKnowledge(getFaction()));
 
 		if(level == ObservationLevel.OWNED) {
 			getParent().setPersistent(true);

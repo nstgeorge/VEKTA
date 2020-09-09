@@ -10,3 +10,10 @@ Journal
 Radio
 Instructions
 Leaflet
+Notes
+Album
+Photo
+VHS Tape
+Floppy Disk
+Painting
+Laptop

@@ -149,6 +149,7 @@ public class Singleplayer implements World, PlayerListener {
 		Player player = register(new Player(playerFaction));
 		player.addListener(this);
 		state.setPlayer(player);
+		player.addKnowledge(new FactionKnowledge(getPlayer().getFaction()));
 
 		PlayerShip playerShip = register(new PlayerShip(
 				player.getFaction().getName(),

@@ -44,7 +44,7 @@ public class AsteroidSpawner implements WorldGenerator.WorldSpawner {
 		Faction faction = FactionGenerator.randomFaction();
 		Terrain terrain;
 		float r = v.random(1);
-		if(r > .6F) {
+		if(r > .8F) {
 			terrain = new AsteroidTerrain();
 		}
 		else if(r > .4F) {

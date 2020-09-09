@@ -11,13 +11,13 @@ import static vekta.Vekta.v;
 
 public class CoinMarket implements Serializable, Economy.Container, ProductivityModifier {
 	private static final float PUMP_CHANCE = 0.01F;
-	private static final float DOWN_SCALE = 1.1F;
+	private static final float DOWN_SCALE = 1.01F;
 
 	private final Economy economy;
 	private final List<Coin> coins = new ArrayList<>();
 
 	public CoinMarket() {
-		this.economy = register(new Economy(this, 10));
+		this.economy = register(new Economy(this, 100));
 		economy.addModifier(new NoiseModifier(2));
 		economy.addModifier(this);
 		economy.fillHistory();

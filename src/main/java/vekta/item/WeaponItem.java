@@ -5,23 +5,14 @@ import vekta.menu.Menu;
 import vekta.menu.handle.DialogMenuHandle;
 import vekta.menu.option.MurderButton;
 import vekta.person.Dialog;
+import vekta.spawner.DialogGenerator;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 public class WeaponItem extends Item {
-	private static final Set<String> DIALOG_FILTER;
-
-	static {
-		String[] types = Resources.getStrings("dialog_weapon_filter");
-		for(String type : types) {
-			if(!Resources.hasStrings("dialog_" + type)) {
-				throw new RuntimeException("Missing weapon dialog filter type: `" + type + "`");
-			}
-		}
-		DIALOG_FILTER = new HashSet<>(Arrays.asList(types));
-	}
+	private static final Set<String> DIALOG_FILTER = DialogGenerator.getDialogFilter("dialog_weapon_filter");
 
 	private final String name;
 	private final String action;

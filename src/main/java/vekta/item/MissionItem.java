@@ -23,9 +23,9 @@ public class MissionItem extends Item implements MissionIssuer {
 	private Faction faction;
 	private SpaceObject home;
 
-	public MissionItem(String name, Mission mission) {
-		this(name, player -> mission);
-	}
+//	public MissionItem(String name, Mission mission) {
+//		this(name, player -> mission);
+//	}
 
 	public MissionItem(String name, MissionProvider provider) {
 		this.name = name;
@@ -58,6 +58,13 @@ public class MissionItem extends Item implements MissionIssuer {
 		return mission;
 	}
 
+	public void activate(Player player) {
+		home = player.getShip();
+		if(!created) {
+			createMission(player).start();
+		}
+	}
+
 	@Override
 	public Faction getFaction() {
 		if(faction == null) {
@@ -68,10 +75,7 @@ public class MissionItem extends Item implements MissionIssuer {
 
 	@Override
 	public void onAdd(Player player) {
-		home = player.getShip();
-		if(!created) {
-			createMission(player).start();
-		}
+		activate(player);
 	}
 
 	@Override

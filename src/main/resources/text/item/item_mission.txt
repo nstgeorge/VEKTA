@@ -7,4 +7,5 @@ Decryption Key
 {item_adj_rare} {item_noun_mission}
 {item_noun_mission}
 {item_adj_mission} {item_noun_mission}
+{adj_shape} {item_noun_mission}
 {item_adj_mission} {item_noun}

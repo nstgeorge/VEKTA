@@ -1,5 +1,6 @@
 package vekta.mission.objective;
 
+import vekta.Resources;
 import vekta.knowledge.TopicKnowledge;
 import vekta.menu.Menu;
 import vekta.menu.handle.DialogMenuHandle;
@@ -7,18 +8,22 @@ import vekta.menu.option.DialogButton;
 import vekta.object.SpaceObject;
 import vekta.person.Dialog;
 import vekta.person.Person;
+import vekta.spawner.DialogGenerator;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 import static vekta.Vekta.v;
 
-public class AskAboutObjective extends Objective {
+public class LearnAboutObjective extends Objective {
+	private static final Set<String> DIALOG_FILTER = DialogGenerator.getDialogFilter("dialog_ask_filter");
+
 	private final TopicKnowledge knowledge;
 
 	private final Set<Person> alreadyAsked = new HashSet<>();
 
-	public AskAboutObjective(TopicKnowledge knowledge) {
+	public LearnAboutObjective(TopicKnowledge knowledge) {
 		this.knowledge = knowledge;
 	}
 
@@ -48,21 +53,23 @@ public class AskAboutObjective extends Objective {
 	public void onMenu(Menu menu) {
 		if(menu.getHandle() instanceof DialogMenuHandle) {
 			Dialog dialog = ((DialogMenuHandle)menu.getHandle()).getDialog();
-			if(getMissions().stream().allMatch(m -> m.getIssuer() != dialog.getPerson()) && !alreadyAsked.contains(dialog.getPerson())) {
-				alreadyAsked.add(dialog.getPerson());
+			if(DIALOG_FILTER.contains(dialog.getType())) {
+				if(getMissions().stream().allMatch(m -> m.getIssuer() != dialog.getPerson()) && !alreadyAsked.contains(dialog.getPerson())) {
+					alreadyAsked.add(dialog.getPerson());
 
-				boolean foundInfo = v.chance(getRarity());
-				Dialog next = foundInfo
-						? new Dialog("topic", dialog.getPerson(), getDescription())
-						: dialog.getPerson().createDialog("topic_unknown");
+					boolean foundInfo = v.chance(getRarity());
+					Dialog next = foundInfo
+							? new Dialog("topic", dialog.getPerson(), getDescription())
+							: dialog.getPerson().createDialog("topic_unknown");
 
-				if(foundInfo) {
-					next.addResponse("Thanks for the help!");
-					complete();
-					menu.getPlayer().addKnowledge(new TopicKnowledge(getTopic(), getDescription(), (int)(1 / getRarity())));
+					if(foundInfo) {
+						next.addResponse("Thanks for the help!");
+						complete();
+						menu.getPlayer().addKnowledge(new TopicKnowledge(getTopic(), getDescription(), (int)(1 / getRarity())));
+					}
+
+					menu.add(new DialogButton("Ask about " + getTopic(), next));
 				}
-
-				menu.add(new DialogButton("Ask about " + getTopic(), next));
 			}
 		}
 	}

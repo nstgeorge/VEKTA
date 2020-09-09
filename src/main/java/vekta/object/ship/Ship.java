@@ -5,6 +5,7 @@ import vekta.Renameable;
 import vekta.item.Inventory;
 import vekta.item.InventoryListener;
 import vekta.item.Item;
+import vekta.knowledge.FactionKnowledge;
 import vekta.knowledge.ObservationLevel;
 import vekta.knowledge.ShipKnowledge;
 import vekta.menu.Menu;

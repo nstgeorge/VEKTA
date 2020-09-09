@@ -42,7 +42,7 @@ public class DeityKnowledge implements Knowledge {
 
 	@Override
 	public int getArchiveValue() {
-		return 50;
+		return 20;
 	}
 
 	@Override

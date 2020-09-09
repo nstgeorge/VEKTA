@@ -22,6 +22,7 @@ ska
 kin
 ler
 nus
+ster
 bat
 snake
 fish

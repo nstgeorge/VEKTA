@@ -1,0 +1,13 @@
+How's the weather, eh? *In space? *I haven't checked.
+Someone told me you've been to {star}. Is that true? *I can't remember. *No.
+I'm glad you took the time to visit. It gets lonely around here sometimes. *Okay.
+| They stare at you for a while. *So...
+| You listen politely as they tell you their entire life story. *Very good.
+I heard you enjoy {person_interest}. *You know it! *What?
+How long will you be staying around here? *Just passing through.
+What's your favorite planet? *{planet}. *All of them.
+
+We need more chat dialog! (text/dialog/dialog_chat) *I know right!
+We need more chat dialog! (text/dialog/dialog_chat) *I know right!
+We need more chat dialog! (text/dialog/dialog_chat) *I know right!
+We need more chat dialog! (text/dialog/dialog_chat) *I know right!

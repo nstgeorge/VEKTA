@@ -16,6 +16,7 @@ public class ItemTypeCategory extends ItemCategory {
 
 	public ItemTypeCategory(String name, ItemType type) {
 		super(name);
+
 		this.type = type;
 	}
 

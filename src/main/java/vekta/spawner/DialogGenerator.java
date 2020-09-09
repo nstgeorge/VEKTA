@@ -7,9 +7,7 @@ import vekta.person.OpinionType;
 import vekta.person.Person;
 import vekta.player.Player;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -21,6 +19,16 @@ public final class DialogGenerator {
 			.collect(Collectors.toMap(DialogSpawner::getType, Function.identity()));
 
 	private static final Map<String, List<String>> NEXT_MAP = Resources.getStringMap("dialog_next_map", false);
+
+	public static Set<String> getDialogFilter(String key) {
+		String[] types = Resources.getStrings(key);
+		for(String type : types) {
+			if(!Resources.hasStrings("dialog_" + type)) {
+				throw new RuntimeException("Missing dialog filter type: `" + type + "`");
+			}
+		}
+		return new HashSet<>(Arrays.asList(types));
+	}
 
 	public static void initDialog(Dialog dialog) {
 		List<String> nextList = NEXT_MAP.get(dialog.getType());
@@ -53,7 +61,7 @@ public final class DialogGenerator {
 			return randomApproachDialog(player, person);
 		}
 		else {
-			return person.createDialog("greeting").then("busy");
+			return person.createDialog("greeting").then("chat").then("farewell");
 		}
 	}
 

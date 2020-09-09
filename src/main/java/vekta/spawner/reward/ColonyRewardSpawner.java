@@ -13,7 +13,7 @@ public class ColonyRewardSpawner implements MissionGenerator.RewardSpawner {
 
 	@Override
 	public boolean isValid(Mission mission) {
-		return mission.getTier() >= 2;
+		return mission.getTier() >= 3;
 	}
 
 	@Override
