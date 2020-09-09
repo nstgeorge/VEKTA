@@ -13,12 +13,12 @@ import java.util.Set;
 
 import static vekta.Vekta.v;
 
-public class LearnAboutObjective extends Objective {
+public class AskAboutObjective extends Objective {
 	private final TopicKnowledge knowledge;
 
 	private final Set<Person> alreadyAsked = new HashSet<>();
 
-	public LearnAboutObjective(TopicKnowledge knowledge) {
+	public AskAboutObjective(TopicKnowledge knowledge) {
 		this.knowledge = knowledge;
 	}
 
@@ -48,7 +48,7 @@ public class LearnAboutObjective extends Objective {
 	public void onMenu(Menu menu) {
 		if(menu.getHandle() instanceof DialogMenuHandle) {
 			Dialog dialog = ((DialogMenuHandle)menu.getHandle()).getDialog();
-			if(!alreadyAsked.contains(dialog.getPerson())) {
+			if(getMissions().stream().allMatch(m -> m.getIssuer() != dialog.getPerson()) && !alreadyAsked.contains(dialog.getPerson())) {
 				alreadyAsked.add(dialog.getPerson());
 
 				boolean foundInfo = v.chance(getRarity());

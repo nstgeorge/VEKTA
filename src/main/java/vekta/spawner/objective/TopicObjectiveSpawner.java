@@ -2,7 +2,7 @@ package vekta.spawner.objective;
 
 import vekta.mission.Mission;
 import vekta.mission.objective.LandAtObjective;
-import vekta.mission.objective.LearnAboutObjective;
+import vekta.mission.objective.AskAboutObjective;
 import vekta.mission.objective.Objective;
 import vekta.person.Person;
 import vekta.spawner.MissionGenerator;
@@ -25,6 +25,6 @@ public class TopicObjectiveSpawner implements MissionGenerator.ObjectiveSpawner 
 	public Objective getMainObjective(Mission mission) {
 		Person other = randomMissionPerson(mission.getIssuer());
 		mission.add(new LandAtObjective(other.findHomeObject()).optional());
-		return new LearnAboutObjective(TopicKnowledgeSpawner.randomTopicKnowledge());
+		return new AskAboutObjective(TopicKnowledgeSpawner.randomTopicKnowledge());
 	}
 }

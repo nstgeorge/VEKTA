@@ -77,7 +77,7 @@ public class TerrestrialPlanet extends Planet {
 		}
 		return super.getLabel();
 
-//		return levelCache != null ? levelCache.name() : "----";
+		//		return levelCache != null ? levelCache.name() : "----";
 	}
 
 	@Override
@@ -149,7 +149,9 @@ public class TerrestrialPlanet extends Planet {
 	public void observe(ObservationLevel level, Player player) {
 		super.observe(level, player);
 
-		levelCache = level;
+		if(level.isBetter(levelCache)) {
+			levelCache = level;
+		}
 
 		player.addKnowledge(new TerrestrialKnowledge(level, this));
 
