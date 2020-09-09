@@ -79,6 +79,11 @@ public class TerrestrialPlanet extends Planet {
 	}
 
 	@Override
+	public int getLabelColor() {
+		return ObservationLevel.VISITED.isAvailableFrom(levelCache) ? super.getLabelColor() : 100;
+	}
+
+	@Override
 	public void onUpdate(RenderLevel level) {
 		updateOrbitObject();
 		super.onUpdate(level);

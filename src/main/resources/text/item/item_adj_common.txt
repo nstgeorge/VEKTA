@@ -47,6 +47,8 @@ Bendy
 Hazardous
 Deformed
 Crude
+Trusty
+Serrated
 Rough-Edged
 Miniature
 Foreign
@@ -84,3 +86,4 @@ Damaged
 Fragile
 Squishy
 Refurbished
+Leaky

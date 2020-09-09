@@ -3,6 +3,8 @@ package vekta.object.planet;
 import processing.core.PVector;
 import vekta.Renameable;
 import vekta.Resources;
+import vekta.knowledge.Knowledge;
+import vekta.knowledge.ObservationLevel;
 import vekta.object.SpaceObject;
 import vekta.world.RenderLevel;
 
@@ -31,6 +33,10 @@ public abstract class Planet extends SpaceObject implements Renameable {
 
 	public String getLabel() {
 		return getName();
+	}
+
+	public int getLabelColor() {
+		return getColor();
 	}
 
 	public boolean impartsGravity() {
@@ -74,7 +80,7 @@ public abstract class Planet extends SpaceObject implements Renameable {
 
 		String label = getLabel();
 		if(label != null) {
-			v.fill(getColor());
+			v.fill(getLabelColor());
 			v.text(label, r * 1.1F + 10, 5);
 		}
 	}

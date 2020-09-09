@@ -10,7 +10,7 @@ public enum ObservationLevel {
 	OWNED;
 
 	public boolean isBetter(ObservationLevel level) {
-		return ordinal() > level.ordinal();
+		return level == null || ordinal() > level.ordinal();
 	}
 
 	public boolean isAvailableFrom(ObservationLevel level) {

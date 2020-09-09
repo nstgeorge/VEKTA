@@ -1,4 +1,5 @@
 {color}
+{adj_shape}
 Glistening
 Gilded
 Glossy
@@ -77,3 +78,5 @@ Sacred
 Blessed
 Cursed
 Bona Fide
+Quaternionic
+Octonionic

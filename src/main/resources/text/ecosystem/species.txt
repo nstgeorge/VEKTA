@@ -1,1 +1,2 @@
 {species_prefix}{species_suffix}
+{species_adj} {species_prefix}{species_suffix}

@@ -8,12 +8,12 @@ import vekta.spawner.ItemGenerator;
 public class ColonyItemSpawner implements ItemGenerator.ItemSpawner {
 	@Override
 	public float getWeight() {
-		return .1F; // Rare to find naturally
+		return .01F; // Very rare to find naturally
 	}
 
 	@Override
 	public boolean isValid(Item item) {
-		return item instanceof CoinItem;
+		return item instanceof ColonyItem;
 	}
 
 	@Override

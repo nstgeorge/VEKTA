@@ -40,18 +40,6 @@ public class Starfield implements Serializable {
 		}
 	}
 
-	public void draw(ModularShip ship) {
-		update(ship);
-
-		for(int i = 0; i < stars.length; i++) {
-			BackgroundStar star = stars[i];
-			if(star.getLocation().x > (float)v.width / 2 + 300 || star.getLocation().y > (float)v.height / 2 + 200 || star.getLocation().x < -((float)v.width / 2 + 300) || star.getLocation().y < -((float)v.height / 2 + 200)) {
-				stars[i] = createStar();
-			}
-			star.draw(ship);
-		}
-	}
-
 	public void update(ModularShip ship) {
 		speed = ship.getVelocityReference().mag();
 		logTimeScale = log(world.getTimeScale());
@@ -68,6 +56,18 @@ public class Starfield implements Serializable {
 		}
 	}
 
+	public void draw(ModularShip ship) {
+		update(ship);
+
+		for(int i = 0; i < stars.length; i++) {
+			BackgroundStar star = stars[i];
+			if(star.getLocation().x > (float)v.width / 2 + 300 || star.getLocation().y > (float)v.height / 2 + 200 || star.getLocation().x < -((float)v.width / 2 + 300) || star.getLocation().y < -((float)v.height / 2 + 200)) {
+				stars[i] = createStar();
+			}
+			star.draw(ship);
+		}
+	}
+
 	private class BackgroundStar {
 		private final PVector location;       // Location of the star within the screen
 		private final float closeness;        // Closeness to the player - affects parallax. 0: Infinitely far, 1: on the same plane as player
@@ -75,6 +75,10 @@ public class Starfield implements Serializable {
 		public BackgroundStar(PVector location, float closeness) {
 			this.location = location;
 			this.closeness = closeness;
+		}
+
+		public void update(ModularShip ship) {
+			location.sub(ship.getVelocity().mult(closeness * VELOCITY_SCALE * logTimeScale * (hyperdrive ? (3 - location.magSq() / sq(v.width)) : 1)));
 		}
 
 		public void draw(ModularShip ship) {
@@ -102,10 +106,6 @@ public class Starfield implements Serializable {
 
 		private float dilate(ModularShip ship, float r, float dot) {
 			return 1 / (1 + speed * (hyperdrive ? 2 : closeness) * VELOCITY_SCALE * DILATE_SCALE * logTimeScale) - (hyperdrive ? 1 : sq(dot) - 1) * sqrt(r) / sqrt(v.width) + 1;
-		}
-
-		public void update(ModularShip ship) {
-			location.sub(ship.getVelocity().mult(closeness * VELOCITY_SCALE * logTimeScale * (hyperdrive ? 3 : 1)));
 		}
 
 		public PVector getLocation() {

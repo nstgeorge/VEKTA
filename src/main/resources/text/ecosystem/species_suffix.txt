@@ -22,3 +22,9 @@ ska
 kin
 ler
 nus
+bat
+snake
+fish
+tree
+plant
+-Beast

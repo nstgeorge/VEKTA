@@ -1,5 +1,6 @@
 package vekta;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 import org.reflections.scanners.SubTypesScanner;
@@ -8,6 +9,7 @@ import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
 import processing.core.PShape;
 import processing.sound.SoundFile;
+import vekta.config.Config;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
@@ -26,6 +28,9 @@ public final class Resources {
 					new SubTypesScanner().filterResultsBy(new FilterBuilder().includePackage(PACKAGE)),
 					new ResourcesScanner()));
 
+	private static final ObjectMapper CONFIG_MAPPER = new ObjectMapper();
+
+	private static final Map<String, Config> CONFIGS = new HashMap<>();
 	private static final Map<String, String[]> STRINGS = new HashMap<>();
 	private static final Map<String, SoundFile> SOUNDS = new HashMap<>();
 	private static final Map<String, PShape> SHAPES = new HashMap<>();
@@ -48,6 +53,7 @@ public final class Resources {
 		adjustFromSettings();
 
 		loadResources(Resources::addStrings, "txt");
+		loadResources(Resources::addConfigs, "json");
 		loadResources(Resources::addShape, "obj", "svg");
 		loadResources(Resources::addSound, "wav", "mp3");
 
@@ -81,6 +87,27 @@ public final class Resources {
 					}
 				})
 				.toArray(i -> (T[])Array.newInstance(type, i));
+	}
+
+	private static void addConfigs(String path, String key) {
+		if(CONFIGS.containsKey(key)) {
+			throw new RuntimeException("Multiple config files for key: `" + key + "`");
+		}
+		try {
+			Config config = CONFIG_MAPPER.readValue(Objects.requireNonNull(Resources.class.getResourceAsStream("/" + path)), Config.class);
+			CONFIGS.put(key, config);
+		}
+		catch(Exception e) {
+			throw new RuntimeException("Failed to load config: " + path, e);
+		}
+	}
+
+	public static Config getConfig(String key) {
+		Config config = CONFIGS.get(key);
+		if(config == null) {
+			throw new RuntimeException("No config data found for key: `" + key + "`");
+		}
+		return config;
 	}
 
 	private static void addStrings(String path, String key) {

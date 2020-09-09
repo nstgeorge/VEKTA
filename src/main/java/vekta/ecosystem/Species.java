@@ -37,8 +37,11 @@ public class Species implements Serializable {
 		return name;
 	}
 
+	//	public String getFullName() {
+	//		return (hasAncestor() ? getAncestor().getName() + " " : "") + getName();
+	//	}
 	public String getFullName() {
-		return (hasAncestor() ? getAncestor().getName() + " " : "") + getName();
+		return getName();
 	}
 
 	public float getNaturalGrowth() {

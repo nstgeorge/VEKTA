@@ -4,7 +4,7 @@ Cran
 Scrub
 Grum
 Blob
-Humph
+Hump
 Bart
 Hob
 Gro
@@ -16,3 +16,7 @@ Osp
 Quoth
 Stub
 Kro
+Lon
+Wom
+Bone
+Fire
