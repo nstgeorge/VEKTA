@@ -12,22 +12,20 @@ import static vekta.Vekta.getContext;
 import static vekta.Vekta.setContext;
 
 public class KnowledgeItem extends Item implements ItemTradeButton.TradeAware {
+	private final String name;
 	private final KnowledgeProvider provider;
 
 	private Knowledge knowledge;
 	private Player player;
-//	boolean enabled;
 
-	public KnowledgeItem(KnowledgeProvider provider) {
+	public KnowledgeItem(String name, KnowledgeProvider provider) {
+		this.name = name;
 		this.provider = provider;
 	}
 
 	@Override
 	public String getName() {
-		if(knowledge != null) {
-			return knowledge.getName();
-		}
-		return "Unknown";
+		return name;
 	}
 
 	@Override
@@ -66,17 +64,17 @@ public class KnowledgeItem extends Item implements ItemTradeButton.TradeAware {
 		setContext(new KnowledgeContext(getContext(), player)
 				.withTab(getName(), knowledge));
 
-		player.getInventory().remove(this);
+//		player.getInventory().remove(this);
 	}
 
 	private Knowledge findKnowledge(Player player) {
 		if(knowledge == null || player != this.player) {
 			this.knowledge = provider.provide();
 			this.player = player;
-//			this.enabled = !player.hasKnowledge(knowledge.getClass(), k -> {
-//				KnowledgeDelta delta = knowledge.getDelta(k);
-//				return delta == KnowledgeDelta.SAME || delta == KnowledgeDelta.WORSE;
-//			});
+			//			this.enabled = !player.hasKnowledge(knowledge.getClass(), k -> {
+			//				KnowledgeDelta delta = knowledge.getDelta(k);
+			//				return delta == KnowledgeDelta.SAME || delta == KnowledgeDelta.WORSE;
+			//			});
 		}
 		return knowledge;
 	}

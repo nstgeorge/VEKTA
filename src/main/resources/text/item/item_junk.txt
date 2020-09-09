@@ -1,2 +1,2 @@
+{item_noun_junk}
 {item_adj_common} {item_noun_junk}
-{adj_shape} {item_noun_junk}

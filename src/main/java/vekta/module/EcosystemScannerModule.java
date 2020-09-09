@@ -8,7 +8,7 @@ import vekta.menu.option.EcosystemButton;
 import vekta.terrain.LandingSite;
 
 public class EcosystemScannerModule extends ShipModule {
-	private float strength;
+	private final float strength;
 
 	public EcosystemScannerModule() {
 		this(1);

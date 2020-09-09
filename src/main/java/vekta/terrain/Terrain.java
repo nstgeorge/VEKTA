@@ -19,11 +19,14 @@ import static vekta.Vekta.v;
 public abstract class Terrain extends Syncable<Terrain> {
 	private final @Sync List<String> features = new ArrayList<>();
 	private final @Sync List<Settlement> settlements = new ArrayList<>();
-	private final Ecosystem ecosystem = new Ecosystem(v.random(1e5F, 1e7F));
+	private final Ecosystem ecosystem;
 
 	private @Sync LandingSite site;
 
 	public Terrain() {
+
+		// TODO: change capacity based on planet features
+		ecosystem = new Ecosystem(v.random(1e5F, 1e7F));
 	}
 
 	public Collection<String> getFeatures() {

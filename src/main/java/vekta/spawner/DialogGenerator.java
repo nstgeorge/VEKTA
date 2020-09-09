@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static processing.core.PApplet.sq;
 import static vekta.Vekta.v;
 
 public final class DialogGenerator {
@@ -45,11 +46,11 @@ public final class DialogGenerator {
 		else if(person.getOpinion(player.getFaction()) == OpinionType.ENEMY) {
 			return person.createDialog(v.chance(.8F) ? "call_security" : "ask_leave");
 		}
-		else if(person.isBusy() || v.chance(1 - 1F / player.getMissions().size())) {
-			return person.createDialog("greeting").then("busy");
+		else if(person.isBusy() || v.chance(1 - 1F / (1 + player.getMissions().size()))) {
+			return randomApproachDialog(player, person);
 		}
 		else {
-			return randomApproachDialog(player, person);
+			return person.createDialog("greeting").then("busy");
 		}
 	}
 

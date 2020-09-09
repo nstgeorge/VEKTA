@@ -76,6 +76,8 @@ public class TerrestrialPlanet extends Planet {
 			return null;
 		}
 		return super.getLabel();
+
+//		return levelCache != null ? levelCache.name() : "----";
 	}
 
 	@Override

@@ -62,6 +62,10 @@ public class Ecosystem extends Syncable<Ecosystem> {
 	}
 
 	public void update() {
+		if(amounts.isEmpty()) {
+			return;
+		}
+ 
 		Map<Species, Float> prevAmounts = new HashMap<>(amounts);
 
 		int speciesCount = prevAmounts.size();

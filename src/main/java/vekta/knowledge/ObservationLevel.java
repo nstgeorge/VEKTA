@@ -14,7 +14,7 @@ public enum ObservationLevel {
 	}
 
 	public boolean isAvailableFrom(ObservationLevel level) {
-		return level == this || level.isBetter(this);
+		return level == this || (level != null && level.isBetter(this));
 	}
 
 	public ObservationLevel increased() {
