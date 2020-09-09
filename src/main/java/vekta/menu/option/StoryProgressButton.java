@@ -4,7 +4,7 @@ import vekta.menu.Menu;
 import vekta.person.Dialog;
 import vekta.person.Person;
 import vekta.spawner.StoryGenerator;
-import vekta.story.Story;
+import vekta.story.part.Story;
 
 public class StoryProgressButton implements ButtonOption {
 	private final Story story;

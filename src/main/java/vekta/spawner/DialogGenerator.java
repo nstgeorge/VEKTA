@@ -57,11 +57,14 @@ public final class DialogGenerator {
 		else if(person.getOpinion(player.getFaction()) == OpinionType.ENEMY) {
 			return person.createDialog(v.chance(.8F) ? "call_security" : "ask_leave");
 		}
-		else if(!person.isBusy() && v.chance(1 - .5F / (1 + player.getMissions().size()))) {
-			return randomApproachDialog(player, person);
+		else if(person.isBusy()) {
+			return person.createDialog("greeting").then("busy");
+		}
+		else if(v.chance(.5F / (1 + player.getMissions().size()))) {
+			return person.createDialog("greeting").then("chat").then("farewell");
 		}
 		else {
-			return person.createDialog("greeting").then("chat").then("farewell");
+			return randomApproachDialog(player, person);
 		}
 	}
 

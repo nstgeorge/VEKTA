@@ -4,7 +4,7 @@ import vekta.knowledge.StoryKnowledge;
 import vekta.menu.Menu;
 import vekta.person.Dialog;
 import vekta.spawner.DialogGenerator;
-import vekta.story.Story;
+import vekta.story.part.Story;
 
 public class StoryDetailDialogSpawner implements DialogGenerator.DialogSpawner {
 	@Override

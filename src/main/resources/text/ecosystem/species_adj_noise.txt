@@ -14,3 +14,5 @@ Loud-Breathing
 Growling
 Echolocating
 Squeaky
+Howling
+Ventriloquizing

@@ -1,7 +1,7 @@
-package vekta.story.part;
+package vekta.story;
 
 import vekta.spawner.StoryGenerator;
-import vekta.story.Story;
+import vekta.story.part.Story;
 
 import java.io.Serializable;
 import java.util.ArrayList;

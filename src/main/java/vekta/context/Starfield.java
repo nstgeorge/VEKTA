@@ -3,13 +3,17 @@ package vekta.context;
 import processing.core.PVector;
 import vekta.module.HyperdriveModule;
 import vekta.module.Module;
+import vekta.object.SpaceObject;
+import vekta.object.planet.BlackHole;
 import vekta.object.ship.ModularShip;
+import vekta.player.Player;
+import vekta.situation.BlackHoleSituation;
 import vekta.world.World;
 
 import java.io.Serializable;
 
 import static processing.core.PApplet.*;
-import static vekta.Vekta.v;
+import static vekta.Vekta.*;
 
 public class Starfield implements Serializable {
 
@@ -21,9 +25,11 @@ public class Starfield implements Serializable {
 
 	private final World world;
 
-	private float speed;
+	private PVector shipVelocity;
+	private float shipSpeed;
 	private float logTimeScale;
 	private boolean hyperdrive;
+	private PVector blackHoleCoords;
 
 	public Starfield(World world) {
 		this.world = world;
@@ -41,8 +47,9 @@ public class Starfield implements Serializable {
 	}
 
 	public void update(ModularShip ship) {
-		speed = ship.getVelocityReference().mag();
+		shipVelocity = ship.getVelocity();
 		logTimeScale = log(world.getTimeScale());
+
 		hyperdrive = false;
 		for(Module module : ship.getModules()) {
 			if(module instanceof HyperdriveModule && ((HyperdriveModule)module).isActive()) {
@@ -50,6 +57,25 @@ public class Starfield implements Serializable {
 				break;
 			}
 		}
+
+		Player player = ship.getController();
+		if(player != null && player.hasAttribute(BlackHoleSituation.class)) {
+			SpaceObject orbit = getWorld().findOrbitObject(ship);
+			if(orbit instanceof BlackHole) {
+				blackHoleCoords = ship.relativePosition(orbit).div(getWorld().getZoom());
+			}
+		}
+		else {
+			blackHoleCoords = null;
+		}
+
+		if(blackHoleCoords != null) {
+			//			shipVelocity.add(ship.getAccelerationReference().copy().mult(-2));
+			//			float distSq = blackHoleCoords.magSq();
+			//				dir.add(singularityCoords.normalize().div(distSq));
+		}
+
+		shipSpeed = shipVelocity.mag();
 
 		for(BackgroundStar star : stars) {
 			star.update(ship);
@@ -61,7 +87,7 @@ public class Starfield implements Serializable {
 
 		for(int i = 0; i < stars.length; i++) {
 			BackgroundStar star = stars[i];
-			if(star.getLocation().x > (float)v.width / 2 + 300 || star.getLocation().y > (float)v.height / 2 + 200 || star.getLocation().x < -((float)v.width / 2 + 300) || star.getLocation().y < -((float)v.height / 2 + 200)) {
+			if(star.shouldReplace()) {
 				stars[i] = createStar();
 			}
 			star.draw(ship);
@@ -72,27 +98,37 @@ public class Starfield implements Serializable {
 		private final PVector location;       // Location of the star within the screen
 		private final float closeness;        // Closeness to the player - affects parallax. 0: Infinitely far, 1: on the same plane as player
 
+		private PVector velocity;
+
 		public BackgroundStar(PVector location, float closeness) {
 			this.location = location;
 			this.closeness = closeness;
 		}
 
 		public void update(ModularShip ship) {
-			location.sub(ship.getVelocity().mult(closeness * VELOCITY_SCALE * logTimeScale * (hyperdrive ? (3 - location.magSq() / sq(v.width)) : 1)));
+			velocity = shipVelocity.copy();
+			if(!hyperdrive && blackHoleCoords != null) {
+				PVector vec = blackHoleCoords.copy().div(2).sub(location);
+				float dist = vec.mag();
+				velocity = velocity.mult(1 - v.min(1, 2 * v.width / dist)).add(vec.mult(-2e5F / dist));
+			}
+
+			location.sub(velocity.copy().mult(closeness * VELOCITY_SCALE * logTimeScale * (hyperdrive ? (3 - location.magSq() / sq(v.width)) : 1)));
 		}
 
 		public void draw(ModularShip ship) {
-			PVector velocity = ship.getVelocity();
 
 			float x1 = location.x;
 			float y1 = location.y;
 			float r1 = sqrt(sq(x1) + sq(y1));
 
-			float x2 = x1 - (velocity.x * VELOCITY_SCALE * BLUR_SCALE);
-			float y2 = y1 - (velocity.y * VELOCITY_SCALE * BLUR_SCALE);
+			float lineScale = VELOCITY_SCALE * BLUR_SCALE * (hyperdrive ? 3 : 1);
+
+			float x2 = x1 - (velocity.x * lineScale);
+			float y2 = y1 - (velocity.y * lineScale);
 			float r2 = sqrt(sq(x2) + sq(y2));
 
-			float dot = velocity.dot(x1, y1, 0) / speed / v.width;
+			float dot = velocity.dot(x1, y1, 0) / shipSpeed / v.width;
 
 			float d1 = dilate(ship, r1, dot);
 			float d2 = dilate(ship, r2, dot);
@@ -105,11 +141,18 @@ public class Starfield implements Serializable {
 		}
 
 		private float dilate(ModularShip ship, float r, float dot) {
-			return 1 / (1 + speed * (hyperdrive ? 2 : closeness) * VELOCITY_SCALE * DILATE_SCALE * logTimeScale) - (hyperdrive ? 1 : sq(dot) - 1) * sqrt(r) / sqrt(v.width) + 1;
+			return 1 / (1 + shipSpeed * (hyperdrive ? 2 : closeness) * VELOCITY_SCALE * DILATE_SCALE * logTimeScale) - (hyperdrive ? 1 : sq(dot) - 1) * sqrt(r) / sqrt(v.width) + 1;
 		}
 
-		public PVector getLocation() {
+		public PVector getLocationReference() {
 			return location;
+		}
+
+		public boolean shouldReplace() {
+			if(blackHoleCoords != null && v.chance(sq(100) / distSq(location, blackHoleCoords))) {
+				return true;
+			}
+			return location.x > (float)v.width / 2 + 300 || location.y > (float)v.height / 2 + 200 || location.x < -((float)v.width / 2 + 300) || location.y < -((float)v.height / 2 + 200);
 		}
 	}
 }

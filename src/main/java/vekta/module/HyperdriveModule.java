@@ -87,7 +87,7 @@ public class HyperdriveModule extends ShipModule implements ZoomController {
 				endHyperdrive();
 			}
 
-			if(ship.consumeEnergyOverTime(.05F * currentBoost * PER_SECOND)) {
+			if(ship.consumeEnergyOverTime(1 * currentBoost * PER_MINUTE)) {
 				float effectiveThrust = thrust * max(timeScale, LOW_TIME_SCALE_SPEEDUP) / timeScale;
 				ship.setVelocity(ship.getHeading().setMag(min(currentBoost * timeScale, ship.getVelocityReference().mag())));
 				ship.accelerate(effectiveThrust * currentBoost, ship.getVelocityReference());

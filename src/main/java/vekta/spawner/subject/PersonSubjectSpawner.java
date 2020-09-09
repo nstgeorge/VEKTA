@@ -2,7 +2,7 @@ package vekta.spawner.subject;
 
 import vekta.spawner.PersonGenerator;
 import vekta.spawner.StoryGenerator;
-import vekta.story.Story;
+import vekta.story.part.Story;
 import vekta.story.subject.PersonSubject;
 import vekta.story.subject.StorySubject;
 

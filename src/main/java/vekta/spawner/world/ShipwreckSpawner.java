@@ -36,12 +36,12 @@ public class ShipwreckSpawner implements WorldGenerator.WorldSpawner {
 
 	public static LostShip createShipwreck(PVector heading, PVector pos) {
 		LostShip s = new LostShip(Resources.generateString("shipwreck"), heading, pos, new PVector());
-		int junkCt = round(v.random(1, 5));
+		int junkCt = round(v.random(1, 3));
 		for(int i = 0; i < junkCt; i++) {
 			s.getInventory().add(ItemGenerator.getSpawner(JunkItemSpawner.class).create());
 		}
 		s.getInventory().add(new ModuleItem(randomModule()));
-		ItemGenerator.addLoot(s.getInventory(), 2);
+		ItemGenerator.addLoot(s.getInventory(), 1);
 		return register(s);
 	}
 }

@@ -41,7 +41,7 @@ public class KnowledgeContext implements Context, Comparator<Knowledge> {
 				new KnowledgeTab("People", PersonKnowledge.class),
 				new KnowledgeTab("Stories", StoryKnowledge.class),
 				new KnowledgeTab("Ships", ShipKnowledge.class),
-				new KnowledgeTab("Faction", FactionKnowledge.class),
+				new KnowledgeTab("Factions", FactionKnowledge.class),
 				new KnowledgeTab("You (" + player.getName() + ")", o -> o instanceof ObservationKnowledge && ((ObservationKnowledge)o).getLevel() == ObservationLevel.OWNED),
 				new KnowledgeTab("Everything", o -> true)
 		));
@@ -248,16 +248,16 @@ public class KnowledgeContext implements Context, Comparator<Knowledge> {
 			}
 			break;
 		case MENU_LEFT:
-			if(tabIndex > 0) {
-				Resources.playSound("change");
-				setTabIndex(--tabIndex);
-			}
+			//			if(tabIndex > 0) {
+			Resources.playSound("change");
+			setTabIndex((tabIndex - 1 + tabs.size()) % tabs.size());
+			//			}
 			break;
 		case MENU_RIGHT:
-			if(tabIndex < tabs.size() - 1) {
-				Resources.playSound("change");
-				setTabIndex(++tabIndex);
-			}
+			//			if(tabIndex < tabs.size() - 1) {
+			Resources.playSound("change");
+			setTabIndex((tabIndex + 1) % tabs.size());
+			//			}
 			break;
 		}
 	}

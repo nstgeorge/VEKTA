@@ -6,7 +6,7 @@ import vekta.menu.option.DialogButton;
 import vekta.person.Person;
 import vekta.person.TemporaryPerson;
 import vekta.spawner.StoryGenerator;
-import vekta.story.Story;
+import vekta.story.part.Story;
 
 public class StoryRoom extends DungeonRoom {
 	private final Story story;

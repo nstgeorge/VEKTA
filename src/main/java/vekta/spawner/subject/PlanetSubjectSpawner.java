@@ -2,7 +2,7 @@ package vekta.spawner.subject;
 
 import vekta.spawner.MissionGenerator;
 import vekta.spawner.StoryGenerator;
-import vekta.story.Story;
+import vekta.story.part.Story;
 import vekta.story.subject.SpaceObjectSubject;
 import vekta.story.subject.StorySubject;
 

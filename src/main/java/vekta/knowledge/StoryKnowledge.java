@@ -5,8 +5,8 @@ import vekta.player.Player;
 import vekta.display.Layout;
 import vekta.display.TextDisplay;
 import vekta.item.ItemType;
-import vekta.story.Story;
-import vekta.story.part.StoryPart;
+import vekta.story.part.Story;
+import vekta.story.StoryPart;
 
 import java.util.HashSet;
 import java.util.Set;

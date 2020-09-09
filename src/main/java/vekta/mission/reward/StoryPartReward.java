@@ -3,7 +3,7 @@ package vekta.mission.reward;
 import vekta.player.Player;
 import vekta.knowledge.StoryKnowledge;
 import vekta.mission.Mission;
-import vekta.story.part.StoryPart;
+import vekta.story.StoryPart;
 
 public class StoryPartReward extends Reward {
 	private final StoryKnowledge knowledge;

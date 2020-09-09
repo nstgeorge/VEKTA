@@ -1,6 +1,8 @@
 package vekta.person;
 
 import vekta.Resources;
+import vekta.detail.Detailed;
+import vekta.detail.Details;
 import vekta.faction.Faction;
 import vekta.mission.Mission;
 import vekta.mission.MissionIssuer;
@@ -18,9 +20,10 @@ import java.util.*;
 
 import static vekta.Vekta.*;
 
-public class Person extends Syncable<Person> implements MissionIssuer {
+public class Person extends Syncable<Person> implements MissionIssuer, Detailed {
 	private final @Sync Map<Syncable, OpinionType> opinions = new HashMap<>();
 	private final @Sync List<String> interests = new ArrayList<>();
+	private final @Sync Details details = new Details();
 
 	private final String name;
 
@@ -30,7 +33,7 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 	private @Sync Settlement home;
 	private @Sync boolean busy;
 
-	private boolean dead;
+	private @Sync boolean dead;
 
 	public Person(String name, Faction faction) {
 		this.name = name;
@@ -185,6 +188,11 @@ public class Person extends Syncable<Person> implements MissionIssuer {
 	public void downgradeOpinion(Faction faction) {
 		setOpinion(faction, getOpinion(faction).downgraded());
 		syncChanges();
+	}
+
+	@Override
+	public Details getDetails() {
+		return details;
 	}
 
 	public Collection<String> getInterests() {

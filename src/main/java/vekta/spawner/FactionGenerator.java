@@ -2,8 +2,10 @@ package vekta.spawner;
 
 import vekta.faction.Faction;
 import vekta.Resources;
+import vekta.faction.PlayerFaction;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static vekta.Vekta.*;
 
@@ -28,15 +30,19 @@ public class FactionGenerator {
 		return register(faction);
 	}
 
+	public static List<Faction> findNonPlayerFactions() {
+		return getWorld().findObjects(Faction.class).stream().filter(f -> !(f instanceof PlayerFaction)).collect(Collectors.toList());
+	}
+
 	public static Faction randomFactionPossiblyNew() {
-		List<Faction> factions = getWorld().findObjects(Faction.class);
+		List<Faction> factions = findNonPlayerFactions();
 		return factions.isEmpty() || v.chance(NEW_FACTION_RATE / factions.size())
 				? createFaction()
 				: v.random(factions);
 	}
 
 	public static Faction randomFaction() {
-		List<Faction> factions = getWorld().findObjects(Faction.class);
+		List<Faction> factions = findNonPlayerFactions();
 		return factions.isEmpty() ? createFaction() : v.random(factions);
 	}
 }

@@ -7,7 +7,7 @@ import vekta.person.Dialog;
 import vekta.person.Person;
 import vekta.person.TemporaryPerson;
 import vekta.spawner.StoryGenerator;
-import vekta.story.Story;
+import vekta.story.part.Story;
 
 import java.io.Serializable;
 

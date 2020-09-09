@@ -15,7 +15,7 @@ import vekta.mission.Mission;
 import vekta.object.ship.ModularShip;
 import vekta.overlay.singleplayer.Notification;
 import vekta.spawner.StoryGenerator;
-import vekta.story.Story;
+import vekta.story.part.Story;
 
 import java.util.*;
 import java.util.function.Predicate;

@@ -14,6 +14,10 @@ Kli
 Spo
 Osp
 Quoth
+Gnar
+Lar
+Heth
+Bal
 Stub
 Kro
 Lon

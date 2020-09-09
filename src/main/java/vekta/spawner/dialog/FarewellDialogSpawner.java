@@ -12,6 +12,6 @@ public class FarewellDialogSpawner implements DialogGenerator.DialogSpawner {
 
 	@Override
 	public void setup(Menu menu, Dialog dialog) {
-		dialog.getPerson().setBusy(true);
+//		dialog.getPerson().setBusy(true);
 	}
 }

@@ -5,6 +5,7 @@ Clever
 Cowering
 Cuddling
 Smoochy
+Furious
 Wrathful
 Lofty
 Vain
@@ -42,3 +43,10 @@ Ghostly
 Recluse
 Psychic
 Slumbering
+Flaming
+Flashing
+Exploding
+Tripping
+Stabbing
+Punching
+Gnashing

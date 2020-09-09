@@ -1,8 +1,8 @@
-package vekta.story;
+package vekta.story.part;
 
+import vekta.story.StoryPart;
 import vekta.sync.Sync;
 import vekta.sync.Syncable;
-import vekta.story.part.StoryPart;
 import vekta.story.subject.StorySubject;
 
 import java.util.ArrayList;

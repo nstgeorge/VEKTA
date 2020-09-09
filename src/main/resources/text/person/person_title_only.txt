@@ -6,6 +6,7 @@ the {item_noun} {impersonal_name}
 the {item_noun} {person_noun}
 the {person_noun} of {settlement}
 the {person_noun} of {star}
+the {species}
 from {planet_prefix}{planet_suffix}
 Strongman
 {item_noun}-{item_modifier}

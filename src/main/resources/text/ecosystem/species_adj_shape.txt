@@ -24,3 +24,6 @@ Wiry
 Fuzzy
 Bladed
 Fanged
+Toothy
+Prickly
+Chunky
