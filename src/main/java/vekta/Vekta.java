@@ -42,7 +42,8 @@ public class Vekta extends PApplet {
 	public static final String FONTNAME = "font/undefined-medium.ttf";
 
 	private static final Random RANDOM = new Random();
-	private static PostFX fx;
+
+	private static PostFX postFX;
 
 	public static Menu mainMenu;
 
@@ -70,6 +71,7 @@ public class Vekta extends PApplet {
 	public static final float LUNAR_DISTANCE = 3.844e8F;
 
 	public static int UI_COLOR;
+	public static int BUTTON_COLOR;
 	public static int DANGER_COLOR;
 	public static int MISSION_COLOR;
 
@@ -88,14 +90,15 @@ public class Vekta extends PApplet {
 		frameRate(60);
 		noCursor();
 		background(0);
-		fx = new PostFX(this, displayWidth, displayHeight);
+		postFX = new PostFX(this, displayWidth, displayHeight);
 
 		hint(DISABLE_DEPTH_TEST);
 		hint(DISABLE_TEXTURE_MIPMAPS);
 		((PGraphicsOpenGL)g).textureSampling(2);
 
 		UI_COLOR = color(0, 255, 0);
-		DANGER_COLOR = v.color(220, 100, 0);
+		BUTTON_COLOR = color(8);
+		DANGER_COLOR = color(220, 100, 0);
 		MISSION_COLOR = ItemType.MISSION.getColor();
 
 		Settings.init();
@@ -128,22 +131,17 @@ public class Vekta extends PApplet {
 			context.render();
 
 			if(!(context instanceof PauseMenuContext)) {
-				fx.render()
-					.bloom(0.8f, (int)Settings.getFloat("bloomIntensity"), 50)
-					.noise(0.005f * Settings.getFloat("noiseAmount"), 0.7f)
-					.custom(new ScanLinePass())
-					.compose();
-			}
+				// TODO: fix the pause menu
 
+				postFX.render()
+						.bloom(0.8f, (int)Settings.getFloat("bloomIntensity"), 50)
+						.noise(0.005f * Settings.getFloat("noiseAmount"), 0.7f)
+						.custom(new ScanLinePass())
+						.compose();
+			}
 		}
 
 		Resources.updateAudio();
-
-//		// FPS OVERLAY
-//		fill(255);
-//		textAlign(LEFT);
-//		textSize(16);
-//		text("FPS = " + round(frameRate), 50, height - 20);
 	}
 
 	@Override

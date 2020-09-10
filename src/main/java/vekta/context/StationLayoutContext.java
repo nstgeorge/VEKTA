@@ -151,7 +151,7 @@ public class StationLayoutContext implements Context, ModuleUpgrader {
 			uninstallModule(cursor.getModule());
 		}
 		else if(isPlacing()) {
-			Menu menu = new Menu(getPlayer(), new BackButton(this), new LoadoutMenuHandle(Collections.singletonList(cursor.getModule())));
+			Menu menu = new Menu(getPlayer(), new BackButton(this), new LoadoutMenuHandle(Collections.singletonList(cursor.getModule()), false));
 			for(Module module : getPlayer().getShip().findUpgrades()) {
 				if(module instanceof ComponentModule) {
 					ComponentModule m = (ComponentModule)module;

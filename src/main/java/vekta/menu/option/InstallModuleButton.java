@@ -15,15 +15,22 @@ public class InstallModuleButton implements ButtonOption {
 		this.upgrader = upgrader;
 		this.module = module;
 
-		Module best = upgrader.getRelevantModule(module);
-		if(best == null || module.isBetter(best)) {
-			status = ModuleStatus.BETTER;
+		this.status = getModuleStatus(upgrader.getRelevantModule(module));
+	}
+
+	public Module getModule() {
+		return module;
+	}
+
+	public ModuleStatus getModuleStatus(Module module) {
+		if(module == null || getModule().isBetter(module)) {
+			return ModuleStatus.BETTER;
 		}
-		else if(best.isBetter(module)) {
-			status = ModuleStatus.WORSE;
+		else if(module.isBetter(getModule())) {
+			return ModuleStatus.WORSE;
 		}
 		else {
-			status = ModuleStatus.DIFFERENT;
+			return ModuleStatus.DIFFERENT;
 		}
 	}
 

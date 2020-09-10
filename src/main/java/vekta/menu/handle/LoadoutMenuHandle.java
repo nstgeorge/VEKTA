@@ -1,21 +1,27 @@
 package vekta.menu.handle;
 
 import vekta.KeyBinding;
+import vekta.item.ItemType;
 import vekta.menu.Menu;
+import vekta.menu.option.InstallModuleButton;
+import vekta.menu.option.MenuOption;
 import vekta.module.Module;
+import vekta.module.ModuleType;
 
 import java.util.List;
 
-import static vekta.Vekta.v;
+import static vekta.Vekta.*;
 
 /**
  * Module loadout menu renderer
  */
 public class LoadoutMenuHandle extends MenuHandle {
 	private final List<Module> modules;
+	private final boolean replace;
 
-	public LoadoutMenuHandle(List<Module> modules) {
+	public LoadoutMenuHandle(List<Module> modules, boolean replace) {
 		this.modules = modules;
+		this.replace = replace;
 	}
 
 	@Override
@@ -54,11 +60,20 @@ public class LoadoutMenuHandle extends MenuHandle {
 		v.textAlign(v.LEFT);
 		v.text("Installed:", v.width - getItemX() - 20, getLoadoutOffset(-2));
 
+		ModuleType type = null;
+		if(replace) {
+			MenuOption item = menu.getCursor();
+			if(item instanceof InstallModuleButton) {
+				type = ((InstallModuleButton)item).getModule().getType();
+			}
+		}
+
 		v.textSize(24);
-		v.fill(v.color(200));
 		for(int i = 0; i < modules.size(); i++) {
 			Module m = modules.get(i);
-			v.text(m.getName(), v.width - getItemX(), getLoadoutOffset(i));
+			boolean relevant = m.getType() == type;
+			v.fill(relevant ? 100 : 200);
+			v.text(m.getName(), v.width - getItemX() + (relevant ? -10 : 0), getLoadoutOffset(i));
 		}
 	}
 

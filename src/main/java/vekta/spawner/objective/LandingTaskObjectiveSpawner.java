@@ -43,7 +43,7 @@ public class LandingTaskObjectiveSpawner implements MissionGenerator.ObjectiveSp
 						// Only declare war on player if already at war with issuer faction
 						mission.add(new WarReward(faction));
 					}
-					return new SettlementTaskObjective("task_sabotage", settlement);
+					return new SettlementTaskObjective(Resources.generateString("task_sabotage"), settlement);
 				}
 			}
 		}

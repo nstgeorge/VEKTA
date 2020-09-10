@@ -4,8 +4,7 @@ import vekta.menu.Menu;
 import vekta.menu.handle.MenuHandle;
 
 import static processing.core.PApplet.max;
-import static vekta.Vekta.UI_COLOR;
-import static vekta.Vekta.v;
+import static vekta.Vekta.*;
 
 public interface ButtonOption extends MenuOption {
 	@Override
@@ -19,8 +18,8 @@ public interface ButtonOption extends MenuOption {
 		// Draw border
 		v.stroke(selected ? 255 : menu.getDefault() == this ? 100 : getBorderColor());
 		//		v.noFill();
-		v.fill(0);
-		v.rect(x, y, max(handle.getItemWidth(), v.textWidth(name) + 20) + (selected ? 10 : 0), 50);
+		v.fill(BUTTON_COLOR);
+		v.rect(x, y, max(handle.getItemWidth(), v.textWidth(name) + 20) + (selected ? 15 : 0), 50);
 
 		// Draw text
 		v.fill(isEnabled() ? getColor() : 100);

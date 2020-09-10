@@ -29,7 +29,7 @@ public class BossBattleObjectiveSpawner implements MissionGenerator.ObjectiveSpa
 
 	@Override
 	public Objective getMainObjective(Mission mission) {
-		PVector pos = WorldGenerator.randomSpawnPosition(RenderLevel.PLANET, mission.getPlayer().getShip().getPosition());
+		PVector pos = WorldGenerator.randomSpawnPosition(RenderLevel.STAR, mission.getPlayer().getShip().getPosition());
 		Ship ship = createBossShip(mission.getTier(), pos);
 
 		return new DefeatObjective(ship);

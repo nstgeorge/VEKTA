@@ -1,5 +1,6 @@
 package vekta.context;
 
+import processing.core.PImage;
 import vekta.KeyBinding;
 import vekta.Resources;
 import vekta.Settings;
@@ -20,13 +21,13 @@ public class PauseMenuContext implements Context {
 	private static final String[] OPTIONS = {"Continue", "Restart"/*, "Settings"*/, "Quit to Menu"};
 
 	private final Context parent;
-//	private final Player player;
+	//	private final Player player;
 
 	private int selected = 0;
 
 	public PauseMenuContext(Context parent, Player player) {
 		this.parent = parent;
-//		this.player = player;
+		//		this.player = player;
 	}
 
 	@Override
@@ -38,7 +39,7 @@ public class PauseMenuContext implements Context {
 		// Border
 		v.rectMode(CORNER);
 		v.stroke(UI_COLOR);
-		v.fill(0);
+		v.fill(BUTTON_COLOR);
 		v.rect(-1, -1, v.width / 4F, v.height + 2);
 
 		// Logo

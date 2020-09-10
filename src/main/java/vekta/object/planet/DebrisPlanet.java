@@ -23,6 +23,11 @@ public class DebrisPlanet extends Planet {
 	}
 
 	@Override
+	public String getLabel() {
+		return null;
+	}
+
+	@Override
 	public boolean impartsGravity() {
 		return false; // For now
 	}

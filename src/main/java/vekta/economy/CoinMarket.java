@@ -11,7 +11,7 @@ import static vekta.Vekta.v;
 
 public class CoinMarket implements Serializable, Economy.Container, ProductivityModifier {
 	private static final float PUMP_CHANCE = 0.01F;
-	private static final float DOWN_SCALE = 1.01F;
+	private static final float DOWN_SCALE = 2F;
 
 	private final Economy economy;
 	private final List<Coin> coins = new ArrayList<>();
@@ -53,6 +53,6 @@ public class CoinMarket implements Serializable, Economy.Container, Productivity
 
 	@Override
 	public float updateModifier(Economy economy) {
-		return getEconomy().getValue() * (v.chance(PUMP_CHANCE) ? PUMP_CHANCE : -DOWN_SCALE / PUMP_CHANCE);
+		return v.chance(PUMP_CHANCE) ? 1 / PUMP_CHANCE : -DOWN_SCALE * PUMP_CHANCE;
 	}
 }
