@@ -9,6 +9,8 @@ import static java.lang.Math.abs;
 
 public class RCSModule extends ShipModule {
 	private final float turnSpeed;
+	private long turnStart;								// Timestamp of when the key was first pressed - used in calculating turn acceleration
+	private static final float turnAcceleration = 4.7f; // For now, all RCS modules accelerate at the same rate
 
 	public RCSModule() {
 		this(1);
@@ -57,12 +59,14 @@ public class RCSModule extends ShipModule {
 		ModularShip ship = getShip();
 		float turn = ship.getTurnControl();
 		if(ship.consumeEnergyOverTime(5 * getTurnSpeed() * abs(turn) * PER_MINUTE)) {
-			ship.turn(turn * getTurnSpeed()/* * ship.getBaseMass() / ship.getMass()*/);
+			float time = (System.currentTimeMillis() - turnStart) / 1000.0f;
+			ship.turn((turn * getTurnSpeed()) / (float)(1 + Math.pow(Math.E, -turnAcceleration * (time - (5 - turnAcceleration))))/* * ship.getBaseMass() / ship.getMass()*/);
 		}
 	}
 
 	@Override
 	public void onKeyPress(KeyBinding key) {
+		turnStart = System.currentTimeMillis();
 		if(key == KeyBinding.SHIP_LEFT) {
 			getShip().setTurnControl(-1);
 		}
@@ -73,7 +77,7 @@ public class RCSModule extends ShipModule {
 
 	@Override
 	public void onKeyRelease(KeyBinding key) {
-		if(key == KeyBinding.SHIP_LEFT || key == KeyBinding.SHIP_RIGHT) {
+		if(key == KeyBinding.SHIP_LEFT && getShip().getTurnControl() == -1 || key == KeyBinding.SHIP_RIGHT && getShip().getTurnControl() == 1) {
 			getShip().setTurnControl(0);
 		}
 	}
