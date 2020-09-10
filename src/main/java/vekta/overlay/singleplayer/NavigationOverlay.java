@@ -145,7 +145,7 @@ public class NavigationOverlay implements Overlay {
 	}
 
 	private void drawHeadingIndicator(PVector heading, SpaceObject target) {
-		int resolution = 17;		// Number of bars to draw
+		int resolution = 36;		// Number of bars to draw
 		int top = 40;				// Distance (px) from top of screen
 		int height = 20;			// Height of the largest indicator bars
 		int offset = 10;			// Offset in height of the smaller bars
@@ -153,12 +153,32 @@ public class NavigationOverlay implements Overlay {
 
 		int left = (int) ((v.width - width) / 2);
 
-		for(int i = 0; i < resolution; i++) {
-			float sinModifier = sin((float) (Math.PI * (i / (float)resolution)));
-			int horizontalLocation = (int) (left + (i * (width / resolution) - 100) + (100 * sinModifier));
+		// Draw arrow
+		v.stroke(0, 255, 0);
+		v.line(v.width / 2 + 10, 75, v.width / 2, 65);
+		v.line(v.width / 2 - 10, 75, v.width / 2, 65);
+
+		// Write current heading
+		int headingNumber = (int)Math.toDegrees(heading.heading());
+		if(Math.signum(headingNumber) == -1) headingNumber += 360;
+		v.color(0, 255, 0);
+		v.textAlign(CENTER);
+		v.text(headingNumber, v.width / 2, 90);
+
+		// Draw lines
+		for(int i = 0; i < resolution * 3; i++) {
+			int horizontalLocation = (int)(left + ((i - resolution) * (width / resolution)) - ((float)((headingNumber - 180.0) / 360.0) * (width)));
+			float sinModifier = sin((float) (Math.PI * ((horizontalLocation - left - (headingNumber - 180.0) / 360.0) / width)));
 
 			v.stroke(0, 255, 0, 255 * sinModifier);
-			v.line(horizontalLocation, top, horizontalLocation, top + height - (offset * ((i + 1) % 2)));
+			v.line(horizontalLocation, top, horizontalLocation, top + height - (i % 4 == 0 ? 0 : offset));
+
+			if((i % 4) == 0) {
+				v.fill(0, 255, 0, 255 * sinModifier);
+				v.textSize(14);
+				v.text((i % resolution) * 360 / resolution, horizontalLocation, top + height + 16);
+			}
 		}
+		v.textAlign(LEFT);
 	}
 }
