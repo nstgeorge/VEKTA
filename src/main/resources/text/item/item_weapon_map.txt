@@ -31,5 +31,5 @@ Mystery Shank : Banish using *
 Mystery Shank : Crush into black hole using *
 Mystery Shank : Induce lethal G-force using *
 Mystery Shank : Dehydrate into a shriveled prune using *
-Mystery Shank : Evaporate using *
-Mystery Shank : Airblast using *
+Mystery Shank : Hang using *
+Mystery Shank : Evacuate lungs using *

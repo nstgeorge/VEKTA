@@ -60,10 +60,12 @@ public class PauseMenuContext implements Context {
 	}
 
 	private void drawOption(String name, int yPos, boolean selected) {
-		if(selected)
+		if(selected) {
 			v.stroke(255);
-		else
+		}
+		else {
 			v.stroke(name.equals(OPTIONS[OPTIONS.length - 1]) ? 100 : UI_COLOR);
+		}
 		v.fill(BUTTON_COLOR);
 		v.rectMode(CENTER);
 		v.rect(v.width / 8F, yPos, 200 + (selected ? 10 : 0), 50);
