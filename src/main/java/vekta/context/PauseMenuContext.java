@@ -39,7 +39,7 @@ public class PauseMenuContext implements Context {
 		// Border
 		v.rectMode(CORNER);
 		v.stroke(UI_COLOR);
-		v.fill(BUTTON_COLOR);
+		v.fill(0);
 		v.rect(-1, -1, v.width / 4F, v.height + 2);
 
 		// Logo
@@ -64,7 +64,7 @@ public class PauseMenuContext implements Context {
 			v.stroke(255);
 		else
 			v.stroke(name.equals(OPTIONS[OPTIONS.length - 1]) ? 100 : UI_COLOR);
-		v.fill(1);
+		v.fill(BUTTON_COLOR);
 		v.rectMode(CENTER);
 		v.rect(v.width / 8F, yPos, 200 + (selected ? 10 : 0), 50);
 		// Text ----------------------

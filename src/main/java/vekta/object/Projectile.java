@@ -5,6 +5,7 @@ import vekta.object.ship.Damageable;
 import vekta.object.ship.Damager;
 import vekta.world.RenderLevel;
 
+import static processing.core.PApplet.println;
 import static vekta.Vekta.getWorld;
 import static vekta.Vekta.v;
 
@@ -86,7 +87,7 @@ public class Projectile extends SpaceObject implements Damager {
 
 	@Override
 	public void drawNearby(float r) {
-		v.ellipse(0, 0, r, r);
+		v.point(0, 0);
 	}
 
 	@Override

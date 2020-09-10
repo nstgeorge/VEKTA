@@ -452,7 +452,7 @@ public class Singleplayer implements World, PlayerListener {
 				if(state.isRemoving(objects.get(i))) {
 					continue;
 				}
-				drawObjects(objects, level, i, playerShip);
+				drawObject(objects, level, i, playerShip);
 			}
 			profiler.addTimeStamp("Draw objects");
 
@@ -475,7 +475,7 @@ public class Singleplayer implements World, PlayerListener {
 				}
 
 				updateGravity(objects, level, i);
-				drawObjects(objects, level, i, playerShip);
+				drawObject(objects, level, i, playerShip);
 				resolveCollisions(objects, level, i, playerShip);
 			}
 		}
@@ -571,7 +571,7 @@ public class Singleplayer implements World, PlayerListener {
 		s.update(level);
 	}
 
-	private void drawObjects(List<SpaceObject> objects, RenderLevel level, int i, ModularShip playerShip) {
+	private void drawObject(List<SpaceObject> objects, RenderLevel level, int i, ModularShip playerShip) {
 		SpaceObject s = objects.get(i);
 		// Start drawing object
 		v.pushMatrix();

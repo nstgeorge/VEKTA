@@ -110,7 +110,7 @@ public class Starfield implements Serializable {
 			if(!hyperdrive && blackHoleCoords != null) {
 				PVector vec = blackHoleCoords.copy().div(2).sub(location);
 				float dist = vec.mag();
-				velocity = velocity.mult(1 - v.min(1, 2 * v.width / dist)).add(vec.mult(-2e5F / dist));
+				velocity.mult(1 - v.min(1, 2 * v.width / dist)).add(vec.mult(-3e4F / dist));
 			}
 
 			location.sub(velocity.copy().mult(closeness * VELOCITY_SCALE * logTimeScale * (hyperdrive ? (3 - location.magSq() / sq(v.width)) : 1)));
@@ -149,7 +149,7 @@ public class Starfield implements Serializable {
 		}
 
 		public boolean shouldReplace() {
-			if(blackHoleCoords != null && v.chance(sq(100) / distSq(location, blackHoleCoords))) {
+			if(blackHoleCoords != null && v.chance(sq(50) / distSq(location, blackHoleCoords))) {
 				return true;
 			}
 			return location.x > (float)v.width / 2 + 300 || location.y > (float)v.height / 2 + 200 || location.x < -((float)v.width / 2 + 300) || location.y < -((float)v.height / 2 + 200);

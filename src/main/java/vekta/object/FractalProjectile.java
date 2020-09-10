@@ -36,13 +36,14 @@ public class FractalProjectile extends Projectile {
 		return getTrailColor();
 	}
 
-	@Override public int getTrailLength() {
+	@Override
+	public int getTrailLength() {
 		return super.getTrailLength() / 4;
 	}
 
 	@Override
 	public int getTrailColor() {
-		return v.lerpColor(super.getTrailColor(), 0, (float)getAliveTime() / getDespawnTime());
+		return v.lerpColor(super.getTrailColor(), 0, getAliveTime() / getDespawnTime());
 	}
 
 	@Override
