@@ -133,7 +133,7 @@ public class Starfield implements Serializable {
 			float d1 = dilate(ship, r1, dot);
 			float d2 = dilate(ship, r2, dot);
 
-			int color = hyperdrive ? v.lerpColor(v.color(100), dot > 0 ? v.color(150, 150, 255) : v.color(255, 50, 50), (dot + 1) / 2) : v.color(100);
+			int color = hyperdrive ? v.lerpColor(v.color(150), dot > 0 ? v.color(150, 150, 255) : v.color(255, 50, 50), (dot + 1) / 2) : v.color(100);
 
 			//			v.stroke(v.lerpColor(0, 100, closeness));
 			v.stroke(v.lerpColor(v.color(0), color, closeness * .5F));

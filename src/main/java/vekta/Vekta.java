@@ -1,27 +1,29 @@
 package vekta;
 
+import ch.bildspur.postfx.builder.PostFX;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PVector;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
-import ch.bildspur.postfx.builder.*;
 import processing.opengl.PGraphicsOpenGL;
+import processing.opengl.PShader;
 import vekta.context.Context;
 import vekta.context.PauseMenuContext;
-import vekta.shader.ScanLinePass;
-import vekta.world.World;
 import vekta.item.ItemType;
 import vekta.menu.Menu;
 import vekta.menu.handle.MainMenuHandle;
 import vekta.menu.option.ExitGameButton;
 import vekta.menu.option.SettingsMenuButton;
 import vekta.menu.option.WorldButton;
+import vekta.shader.ScanLinePass;
 import vekta.sync.Syncable;
 import vekta.world.Multiplayer;
 import vekta.world.RenderLevel;
 import vekta.world.Singleplayer;
+import vekta.world.World;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -87,7 +89,6 @@ public class Vekta extends PApplet {
 
 	public void setup() {
 		v = this;
-		frameRate(60);
 		noCursor();
 		background(0);
 		postFX = new PostFX(this, displayWidth, displayHeight);
@@ -122,6 +123,8 @@ public class Vekta extends PApplet {
 
 		frame.toFront();
 		frame.requestFocus();
+
+		frameRate(60);
 	}
 
 	@Override
@@ -405,9 +408,20 @@ public class Vekta extends PApplet {
 		return Character.toUpperCase(text.charAt(0)) + text.substring(1);
 	}
 
-	//// Main method ////
+	//// Patches to existing Processing methods ////
 
-	public static void main(String[] argv) {
-		PApplet.main(Vekta.class, argv);
+	/**
+	 * Redirect ch.bildspur.postfx.pass.BasePass shaders to classpath
+	 */
+	@Override
+	public PShader loadShader(String fragFilename) {
+		if(fragFilename.endsWith(".glsl")) {
+			File file = new File(fragFilename);
+			if(file.isAbsolute()) {
+				fragFilename = "shader/external/" + file.getName();
+				println("Redirecting shader (" + file.getPath() + ") to classpath (" + fragFilename + ")");
+			}
+		}
+		return super.loadShader(fragFilename);
 	}
 }

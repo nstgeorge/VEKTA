@@ -1,3 +1,4 @@
+Space Dollar
 {item_coin} Cash
 Lite{item_coin}
 Dark{item_coin}

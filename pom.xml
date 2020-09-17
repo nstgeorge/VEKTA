@@ -10,6 +10,7 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <processing.lib>${project.basedir}/lib</processing.lib>
     </properties>
     <dependencies>
         <!-- Processing dependencies -->
@@ -28,46 +29,38 @@
         <dependency>
             <groupId>org.processing</groupId>
             <artifactId>core</artifactId>
-            <version>0.0.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/processing/core.jar</systemPath>
+            <version>0.0.1</version>
+            <!--            <scope>system</scope>-->
+            <!--            <systemPath>${processing.lib}/processing/core.jar</systemPath>-->
         </dependency>
         <dependency>
             <groupId>org.processing</groupId>
             <artifactId>sound</artifactId>
-            <version>0.0.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/processing/sound/library/sound.jar</systemPath>
+            <version>0.0.1</version>
+            <!--            <scope>system</scope>-->
+            <!--            <systemPath>${processing.lib}/processing/sound/library/sound.jar</systemPath>-->
         </dependency>
         <dependency>
             <groupId>org.cansik</groupId>
             <artifactId>postfx</artifactId>
-            <version>0.0.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/processing/postfx/PostFX.jar</systemPath>
+            <version>0.0.1</version>
+            <!--            <scope>system</scope>-->
+            <!--            <systemPath>${processing.lib}/processing/postfx/PostFX.jar</systemPath>-->
         </dependency>
         <dependency>
             <groupId>jsyn</groupId>
             <artifactId>jsyn</artifactId>
-            <version>0.0.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/processing/sound/library/jsyn-20171016.jar</systemPath>
+            <version>0.0.1</version>
+            <!--            <scope>system</scope>-->
+            <!--            <systemPath>${processing.lib}/processing/sound/library/jsyn-20171016.jar</systemPath>-->
         </dependency>
         <dependency>
             <groupId>javamp3</groupId>
             <artifactId>javamp3</artifactId>
-            <version>0.0.0</version>
+            <version>0.0.1</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/processing/sound/library/javamp3-1.0.3.jar</systemPath>
+            <systemPath>${processing.lib}/processing/sound/library/javamp3-1.0.3.jar</systemPath>
         </dependency>
-
-        <!-- OpenCL/JavaCL -->
-        <!--<dependency>-->
-        <!--<groupId>com.nativelibs4java</groupId>-->
-        <!--<artifactId>javacl</artifactId>-->
-        <!--<version>1.0.0-RC4</version>-->
-        <!--<type>bundle</type>-->
-        <!--</dependency>-->
 
         <!-- JSON configuration -->
         <dependency>
@@ -85,7 +78,6 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.11.2</version>
         </dependency>
-
 
         <!-- Reflections / IoC -->
         <dependency>
@@ -108,9 +100,27 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.2</version>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -118,19 +128,55 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                    <compilerArgument>-XDignore.symbol.file</compilerArgument>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
                 <configuration>
                     <archive>
                         <manifest>
+                            <mainClass>vekta.Main</mainClass>
                             <addClasspath>true</addClasspath>
-                            <mainClass>vekta.Vekta</mainClass>
+                            <!--                            <classpathPrefix>libs/</classpathPrefix>-->
+                            <mainClass>vekta.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
+            </plugin>
+            <!--            <plugin>-->
+            <!--                <groupId>org.codehaus.mojo</groupId>-->
+            <!--                <artifactId>exec-maven-plugin</artifactId>-->
+            <!--                <version>3.0.0</version>-->
+            <!--                <configuration>-->
+            <!--                    <includePluginDependencies>true</includePluginDependencies>-->
+            <!--                    <mainClass>vekta.Main</mainClass>-->
+            <!--                </configuration>-->
+            <!--            </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <mainClass>vekta.Main</mainClass>
+                                </manifest>
+                            </archive>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

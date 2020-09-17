@@ -11,6 +11,8 @@ import vekta.menu.option.ButtonOption;
 import vekta.menu.option.SettingsMenuButton;
 import vekta.player.Player;
 
+import java.util.stream.IntStream;
+
 import static vekta.Vekta.*;
 
 /**

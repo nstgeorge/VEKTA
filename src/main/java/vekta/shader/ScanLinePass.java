@@ -2,15 +2,14 @@ package vekta.shader;
 
 import ch.bildspur.postfx.Supervisor;
 import ch.bildspur.postfx.pass.Pass;
-import jdk.internal.util.xml.impl.Input;
+import com.jogamp.common.util.IOUtil;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
 import sun.misc.IOUtils;
 import vekta.Settings;
 
-import java.io.*;
-import java.nio.Buffer;
-import java.util.Objects;
+import java.io.File;
+import java.io.IOException;
 
 import static vekta.Vekta.v;
 
@@ -18,6 +17,19 @@ public class ScanLinePass implements Pass {
 	private final PShader shader;
 
 	public ScanLinePass() {
+		String name = "ScanLineFrag";
+
+		//		try {
+		//			File file = File.createTempFile(name, ".glsl");
+		//
+		//			IOUtil.copyStream2File(getClass().getResourceAsStream("/shader/ScanLineFrag.glsl"), file, -1);
+		//
+		//			shader = v.loadShader(file.getAbsolutePath());
+		//		}
+		//		catch(IOException e) {
+		//			throw new RuntimeException("Failed to load shader: " + name, e);
+		//		}
+
 		shader = v.loadShader("shader/ScanLineFrag.glsl");
 	}
 
