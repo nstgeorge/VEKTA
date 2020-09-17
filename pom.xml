@@ -6,7 +6,7 @@
 
     <groupId>vekta</groupId>
     <artifactId>vekta</artifactId>
-    <version>1.0.0</version>
+    <version>0.1.0</version>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -58,8 +58,8 @@
             <groupId>javamp3</groupId>
             <artifactId>javamp3</artifactId>
             <version>0.0.1</version>
-            <scope>system</scope>
-            <systemPath>${processing.lib}/processing/sound/library/javamp3-1.0.3.jar</systemPath>
+<!--            <scope>system</scope>-->
+<!--            <systemPath>${processing.lib}/processing/sound/library/javamp3-1.0.3.jar</systemPath>-->
         </dependency>
 
         <!-- JSON configuration -->
@@ -131,21 +131,21 @@
                     <compilerArgument>-XDignore.symbol.file</compilerArgument>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>vekta.Main</mainClass>
-                            <addClasspath>true</addClasspath>
-                            <!--                            <classpathPrefix>libs/</classpathPrefix>-->
-                            <mainClass>vekta.Main</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
+            <!--            <plugin>-->
+            <!--                <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                <artifactId>maven-jar-plugin</artifactId>-->
+            <!--                <version>2.4</version>-->
+            <!--                <configuration>-->
+            <!--                    <archive>-->
+            <!--                        <manifest>-->
+            <!--                            <mainClass>vekta.Main</mainClass>-->
+            <!--                            <addClasspath>true</addClasspath>-->
+            <!--                            &lt;!&ndash;                            <classpathPrefix>libs/</classpathPrefix>&ndash;&gt;-->
+            <!--                            <mainClass>vekta.Main</mainClass>-->
+            <!--                        </manifest>-->
+            <!--                    </archive>-->
+            <!--                </configuration>-->
+            <!--            </plugin>-->
             <!--            <plugin>-->
             <!--                <groupId>org.codehaus.mojo</groupId>-->
             <!--                <artifactId>exec-maven-plugin</artifactId>-->
