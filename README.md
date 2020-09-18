@@ -9,7 +9,7 @@ Vekta is a retro-style procedural space exploration game made with Java and Proc
 
 Last Name       | First Name      | GitHub User Name     | Scrum Role
 --------------- | --------------- | -------------------- | ---------------
-TBD             | TBD             | TBD                  | TBDDeveloper
+Lytle           | Jared           | reviveddarkness      | Development Team
 Becerra         | Juan            | juanbecerra0         | Scrum Master
 St. George      | Nate            | nstgeorge            | Product Owner 
 
