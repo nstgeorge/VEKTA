@@ -1,9 +1,9 @@
-## Team Name: TBD
+## Team Name: VEKTA Bois
 
-## Project Name: TBD
+## Project Name: VEKTA
 
 ## Project Description:
-TBD (e.g., build a TBD app for TBD)
+Vekta is a retro-style procedural space exploration game made with Java and Processing 3.
 
 ## Team Members:
 
