@@ -11,7 +11,7 @@ Last Name       | First Name      | GitHub User Name     | Scrum Role
 --------------- | --------------- | -------------------- | ---------------
 TBD             | TBD             | TBD                  | TBDDeveloper
 TBD             | TBD             | TBD                  | TBDScrum Master
-TBD             | TBD             | TBD                  | TBDProduct Owner
+St. George             | Nate          | nstgeorge          | Product Owner 
 TBD             | TBD             | TBD                  | TBD
 TBD             | TBD             | TBD                  | TBD
 
