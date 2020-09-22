@@ -127,6 +127,7 @@ public class HyperdriveModule extends ShipModule implements ZoomController {
 	public void startHyperdrive() {
 		if(!isActive()) {
 			getShip().setHyperdriving(true);
+			getShip().setLanding(false);
 			Resources.playSound("hyperdriveHit");
 			Resources.loopSound("hyperdriveLoop"/*, true*/);
 			getWorld().addZoomController(this);
@@ -149,10 +150,10 @@ public class HyperdriveModule extends ShipModule implements ZoomController {
 		}
 	}
 
-//	@Override
-//	public void onMenu(Menu menu) {
-//		endHyperdrive();
-//	}
+	//	@Override
+	//	public void onMenu(Menu menu) {
+	//		endHyperdrive();
+	//	}
 
 	@Override
 	public void onInfo(InfoGroup info) {

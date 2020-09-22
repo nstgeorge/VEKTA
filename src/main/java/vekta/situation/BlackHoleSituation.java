@@ -9,20 +9,21 @@ import vekta.sound.SoundGroup;
 import vekta.terrain.LandingSite;
 import vekta.terrain.settlement.Settlement;
 
-import static vekta.Vekta.DANGER_COLOR;
-import static vekta.Vekta.getWorld;
+import static vekta.Vekta.*;
 
 public class BlackHoleSituation implements Situation {
-	//	private static final SoundGroup SINGULARITY_MUSIC = new SoundGroup("singularity");
+
+	private static final float MAX_DISTANCE = 30 * AU_DISTANCE;
 
 	@Override
 	public boolean isHappening(Player player) {
-		return getWorld().findOrbitObject(player.getShip()) instanceof BlackHole;
+		SpaceObject orbitObject = getWorld().findOrbitObject(player.getShip());
+		return orbitObject instanceof BlackHole && orbitObject.relativePosition(player.getShip()).magSq() <= sq(MAX_DISTANCE);
 	}
 
 	@Override
 	public void start(Player player) {
-		//		Resources.setMusic(SINGULARITY_MUSIC.random(), true);
+		Resources.setMusic("singularity", false);
 	}
 
 	@Override
@@ -31,6 +32,6 @@ public class BlackHoleSituation implements Situation {
 
 	@Override
 	public void end(Player player) {
-		//		Resources.stopMusic();
+		Resources.stopMusic();
 	}
 }

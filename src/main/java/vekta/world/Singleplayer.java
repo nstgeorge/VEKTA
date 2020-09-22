@@ -333,7 +333,7 @@ public class Singleplayer implements World, PlayerListener {
 		ModularShip playerShip = player.getShip();
 
 		// Cycle background music
-		if(Resources.getMusic() == null && Settings.getInt("music") > 0) {
+		if(Resources.getMusic() == null && Settings.getFloat("music") > 0) {
 			Resources.setMusic(MUSIC.random(), false);
 		}
 
