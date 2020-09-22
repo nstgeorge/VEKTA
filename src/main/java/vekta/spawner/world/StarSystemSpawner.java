@@ -23,7 +23,7 @@ public class StarSystemSpawner implements WorldGenerator.WorldSpawner {
 
 	@Override
 	public RenderLevel getSpawnLevel() {
-		return RenderLevel.STAR;
+		return RenderLevel.INTERSTELLAR;
 	}
 
 	@Override

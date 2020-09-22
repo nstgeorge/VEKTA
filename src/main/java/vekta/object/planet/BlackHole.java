@@ -18,6 +18,11 @@ public class BlackHole extends TerrestrialPlanet {
 	}
 
 	@Override
+	public RenderLevel getRenderLevel() {
+		return RenderLevel.INTERSTELLAR;
+	}
+
+	@Override
 	public float getValueScale() {
 		return 10;
 	}

@@ -2,6 +2,7 @@ package vekta.object.planet;
 
 import processing.core.PShape;
 import processing.core.PVector;
+import vekta.world.RenderLevel;
 
 import static processing.core.PApplet.sq;
 import static processing.core.PConstants.CENTER;
@@ -39,6 +40,11 @@ public class GasGiant extends Planet {
 	@Override
 	public float getOnScreenRadius(float r) {
 		return r * maxRadius;
+	}
+
+	@Override
+	public RenderLevel getRenderLevel() {
+		return RenderLevel.INTERSTELLAR;
 	}
 
 	@Override

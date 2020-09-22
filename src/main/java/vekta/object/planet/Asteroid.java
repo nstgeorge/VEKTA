@@ -29,6 +29,11 @@ public class Asteroid extends TerrestrialPlanet {
 	}
 
 	@Override
+	public RenderLevel getDespawnLevel() {
+		return RenderLevel.PLANET;
+	}
+
+	@Override
 	public boolean impartsGravity() {
 		return false;
 	}

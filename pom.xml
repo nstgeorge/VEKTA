@@ -29,35 +29,35 @@
         <dependency>
             <groupId>org.processing</groupId>
             <artifactId>core</artifactId>
-            <version>0.0.1</version>
+            <version>0.0.0</version>
             <!--            <scope>system</scope>-->
             <!--            <systemPath>${processing.lib}/processing/core.jar</systemPath>-->
         </dependency>
         <dependency>
-            <groupId>org.processing</groupId>
-            <artifactId>sound</artifactId>
-            <version>0.0.1</version>
-            <!--            <scope>system</scope>-->
-            <!--            <systemPath>${processing.lib}/processing/sound/library/sound.jar</systemPath>-->
-        </dependency>
-        <dependency>
             <groupId>org.cansik</groupId>
             <artifactId>postfx</artifactId>
-            <version>0.0.1</version>
+            <version>0.0.0</version>
             <!--            <scope>system</scope>-->
             <!--            <systemPath>${processing.lib}/processing/postfx/PostFX.jar</systemPath>-->
         </dependency>
         <dependency>
+            <groupId>org.processing</groupId>
+            <artifactId>sound</artifactId>
+            <version>0.0.0</version>
+            <!--            <scope>system</scope>-->
+            <!--            <systemPath>${processing.lib}/processing/sound/library/sound.jar</systemPath>-->
+        </dependency>
+        <dependency>
             <groupId>jsyn</groupId>
             <artifactId>jsyn</artifactId>
-            <version>0.0.1</version>
+            <version>0.0.0</version>
             <!--            <scope>system</scope>-->
             <!--            <systemPath>${processing.lib}/processing/sound/library/jsyn-20171016.jar</systemPath>-->
         </dependency>
         <dependency>
             <groupId>javamp3</groupId>
             <artifactId>javamp3</artifactId>
-            <version>0.0.1</version>
+            <version>0.0.0</version>
 <!--            <scope>system</scope>-->
 <!--            <systemPath>${processing.lib}/processing/sound/library/javamp3-1.0.3.jar</systemPath>-->
         </dependency>

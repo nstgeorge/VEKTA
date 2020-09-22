@@ -3,6 +3,7 @@ package vekta.object.ship;
 import com.google.common.collect.ImmutableMap;
 import processing.core.PVector;
 import vekta.*;
+import vekta.module.*;
 import vekta.world.World;
 import vekta.item.Item;
 import vekta.item.ModuleItem;
@@ -11,10 +12,6 @@ import vekta.menu.Menu;
 import vekta.menu.handle.LandingMenuHandle;
 import vekta.menu.handle.SpaceObjectMenuHandle;
 import vekta.menu.option.*;
-import vekta.module.Module;
-import vekta.module.ModuleType;
-import vekta.module.ModuleUpgradeable;
-import vekta.module.TargetingModule;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 import vekta.player.Player;
@@ -49,6 +46,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	private boolean landing;
 	private float thrust;
 	private float turn;
+	private boolean hyperdriving;
 
 	private float mass;
 
@@ -96,6 +94,10 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		}
 	}
 
+	public float getMaxZoomLevel() {
+		return isHyperdriving() ? INTERSTELLAR_LEVEL : STAR_LEVEL;
+	}
+
 	public boolean isLanding() {
 		return landing;
 	}
@@ -110,7 +112,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	public void setThrustControl(float thrust) {
 		this.thrust = thrust;
-		if(hasController()) {
+		if(!isHyperdriving() && hasController()) {
 			if(thrust != 0 && hasEnergy()) {
 				Resources.loopSound("engine");
 			}
@@ -126,6 +128,14 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	public void setTurnControl(float turn) {
 		this.turn = turn;
+	}
+
+	public boolean isHyperdriving() {
+		return hyperdriving;
+	}
+
+	public void setHyperdriving(boolean hyperdriving) {
+		this.hyperdriving = hyperdriving;
 	}
 
 	public float getOverheatTemperature() {

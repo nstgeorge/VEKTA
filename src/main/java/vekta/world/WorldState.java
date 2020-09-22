@@ -5,6 +5,7 @@ import vekta.economy.Economy;
 import vekta.faction.Faction;
 import vekta.faction.PlayerFaction;
 import vekta.object.SpaceObject;
+import vekta.object.particle.Particle;
 import vekta.person.Person;
 import vekta.player.Player;
 import vekta.sync.ConditionalRegister;

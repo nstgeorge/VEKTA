@@ -4,7 +4,8 @@ public enum RenderLevel {
 	PARTICLE,
 	SHIP,
 	PLANET,
-	STAR;
+	STAR,
+	INTERSTELLAR;
 
 	public boolean isVisibleTo(RenderLevel dist) {
 		return ordinal() >= dist.ordinal();

@@ -6,11 +6,12 @@ import vekta.object.ship.ModularShip;
 import vekta.util.InfoGroup;
 
 import static java.lang.Math.abs;
+import static vekta.Vekta.v;
 
 public class RCSModule extends ShipModule {
 	private final float turnSpeed;
-	private long turnStart;								// Timestamp of when the key was first pressed - used in calculating turn acceleration
-	private static final float turnAcceleration = 4.7f; // For now, all RCS modules accelerate at the same rate
+	private long turnStart;                                // Timestamp of when the key was first pressed - used in calculating turn acceleration
+	private static final float turnAcceleration = 4.7F; // For now, all RCS modules accelerate at the same rate
 
 	public RCSModule() {
 		this(1);
@@ -60,24 +61,29 @@ public class RCSModule extends ShipModule {
 		float turn = ship.getTurnControl();
 		if(ship.consumeEnergyOverTime(5 * getTurnSpeed() * abs(turn) * PER_MINUTE)) {
 			float time = (System.currentTimeMillis() - turnStart) / 1000.0f;
-			ship.turn((turn * getTurnSpeed()) / (float)(1 + Math.pow(Math.E, -turnAcceleration * (time - (5 - turnAcceleration))))/* * ship.getBaseMass() / ship.getMass()*/);
+			ship.turn((turn * getTurnSpeed()) / (1 + v.exp(-turnAcceleration * (time - (5 - turnAcceleration)))));
 		}
+	}
+
+	private void resetTurn(){
+		turnStart = System.currentTimeMillis();
 	}
 
 	@Override
 	public void onKeyPress(KeyBinding key) {
-		turnStart = System.currentTimeMillis();
 		if(key == KeyBinding.SHIP_LEFT) {
+			resetTurn();
 			getShip().setTurnControl(-1);
 		}
 		if(key == KeyBinding.SHIP_RIGHT) {
+			resetTurn();
 			getShip().setTurnControl(1);
 		}
 	}
 
 	@Override
 	public void onKeyRelease(KeyBinding key) {
-		if(key == KeyBinding.SHIP_LEFT && getShip().getTurnControl() == -1 || key == KeyBinding.SHIP_RIGHT && getShip().getTurnControl() == 1) {
+		if((key == KeyBinding.SHIP_LEFT && getShip().getTurnControl() == -1) || (key == KeyBinding.SHIP_RIGHT && getShip().getTurnControl() == 1)) {
 			getShip().setTurnControl(0);
 		}
 	}

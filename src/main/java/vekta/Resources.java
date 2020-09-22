@@ -238,6 +238,15 @@ public final class Resources {
 		}
 	}
 
+	public static void randomizeSoundProgress(String key) {
+		SoundFile sound = getSound(key);
+		randomizeSoundProgress(sound);
+	}
+
+	private static void randomizeSoundProgress(SoundFile sound) {
+		sound.jump(v.random(sound.duration()));
+	}
+
 	public static void stopSound(String key) {
 		getSound(key).stop();
 	}
@@ -256,11 +265,18 @@ public final class Resources {
 		}
 	}
 
-	public static void loopSound(String key) {
+//	public static void loopSound(String key) {
+//		loopSound(key, false);
+//	}
+
+	public static void loopSound(String key/*, boolean randomize*/) {
 		if(soundVolume > 0) {
 			SoundFile sound = getSound(key);
 			if(!sound.isPlaying()) {
 				sound.loop();
+//				if(randomize) {
+//					randomizeSoundProgress(sound);
+//				}
 			}
 		}
 	}
@@ -283,7 +299,7 @@ public final class Resources {
 			sound.amp(musicVolume);
 			if(loop) {
 				sound.loop();
-				sound.jump(v.random(sound.duration())); // Start at random point in music
+				randomizeSoundProgress(sound);
 			}
 			else {
 				sound.play();

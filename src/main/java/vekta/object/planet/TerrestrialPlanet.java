@@ -71,6 +71,11 @@ public class TerrestrialPlanet extends Planet {
 	}
 
 	@Override
+	public RenderLevel getDespawnLevel() {
+		return RenderLevel.INTERSTELLAR;
+	}
+
+	@Override
 	public String getLabel() {
 		if(levelCache == null /*|| (getOrbitObject() != null &&  getOrbitObject().getMass() < sq(getWorld().getZoom() * LABEL_THRESHOLD))*/) {
 			return null;

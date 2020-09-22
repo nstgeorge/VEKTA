@@ -62,9 +62,9 @@ public class Vekta extends PApplet {
 	public static final float SHIP_LEVEL = 1e2F;
 	public static final float PLANET_LEVEL = 1e7F;
 	public static final float STAR_LEVEL = 3e8F;
+	public static final float INTERSTELLAR_LEVEL = 3e9F;
 
 	public static final float MIN_ZOOM_LEVEL = .5F;
-	public static final float MAX_ZOOM_LEVEL = STAR_LEVEL; // TODO: add modules to change max zoom level
 
 	// Reference constants
 	public static final float EARTH_MASS = 5.9736e24F;
@@ -149,8 +149,6 @@ public class Vekta extends PApplet {
 
 	@Override
 	public void keyPressed(KeyEvent event) {
-		//		println(event);
-
 		if((world != null && world.globalKeyPressed(event)) || context != null) {
 			context.keyPressed(event);
 			if(key == ESC) {
@@ -255,6 +253,8 @@ public class Vekta extends PApplet {
 			return PLANET_LEVEL;
 		case STAR:
 			return STAR_LEVEL;
+		case INTERSTELLAR:
+			return INTERSTELLAR_LEVEL;
 		default:
 			throw new RuntimeException("Unknown distance unit: " + distance);
 		}
@@ -267,7 +267,9 @@ public class Vekta extends PApplet {
 						RenderLevel.SHIP :
 						unit <= PLANET_LEVEL ?
 								RenderLevel.PLANET :
-								RenderLevel.STAR;
+								unit <= STAR_LEVEL ?
+										RenderLevel.STAR :
+										RenderLevel.INTERSTELLAR;
 	}
 
 	//// Static world-related methods ////
@@ -386,7 +388,7 @@ public class Vekta extends PApplet {
 	}
 
 	/**
-	 * Return the squared distance between two vectors.
+	 * Compute the squared distance between two vectors
 	 */
 	public static float distSq(PVector a, PVector b) {
 		float x = a.x - b.x;

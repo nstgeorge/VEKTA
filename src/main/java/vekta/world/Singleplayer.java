@@ -2,10 +2,7 @@ package vekta.world;
 
 import processing.core.PVector;
 import processing.event.KeyEvent;
-import vekta.Format;
-import vekta.KeyBinding;
-import vekta.Resources;
-import vekta.Settings;
+import vekta.*;
 import vekta.overlay.singleplayer.DebugOverlay;
 import vekta.profiler.Profiler;
 import vekta.connection.message.Message;
@@ -78,6 +75,8 @@ public class Singleplayer implements World, PlayerListener {
 
 	private static final float MIN_PLANET_TIME_SCALE = 10; // Make traveling between ship-level objects much faster
 
+	private static final float HYPERDRIVE_TRANSITION_RATE = .01F; // Smoothly adjust hyperdrive curvature
+
 	private static final SoundGroup MUSIC = new SoundGroup("atmosphere");
 
 	private final int[] objectCounts = new int[RenderLevel.values().length];
@@ -107,6 +106,9 @@ public class Singleplayer implements World, PlayerListener {
 	private DebugOverlay debugOverlay;
 
 	private float cameraImpact;
+
+	// TODO: refactor to some kind of animation container
+	private float hyperdriveStrength;
 
 	public Singleplayer() {
 	}
@@ -181,15 +183,20 @@ public class Singleplayer implements World, PlayerListener {
 
 			setContext(this);
 			applyContext();
+
+			if(Settings.getBoolean("debug", false)) {
+				setupDebugMode();
+				save(AUTOSAVE_FILE);
+			}
 		}));
 	}
 
-	private void setupTesting() {
+	private void setupDebugMode() {
 		Player player = getPlayer();
 		ModularShip playerShip = player.getShip();
 
+		// Add extra objects to singleplayer world
 		if(getClass() == Singleplayer.class) {
-			// Add station to singleplayer world
 			SpaceStation station = SpaceStationSpawner.createStation("OUTPOST 1", PVector.random2D().mult(1000), getPlayer().getColor());
 			station.observe(ObservationLevel.OWNED, getPlayer());
 
@@ -226,6 +233,9 @@ public class Singleplayer implements World, PlayerListener {
 		playerShip.getInventory().add(new ColonyItem());
 		playerShip.getInventory().add(BlueprintItemSpawner.randomBlueprint());
 		playerShip.getInventory().add(WeaponItemSpawner.randomWeapon());
+
+		getPlayer().addAttribute(DebugAttribute.class);
+		getPlayer().send("Debug mode enabled");
 	}
 
 	public Player getPlayer() {
@@ -264,7 +274,7 @@ public class Singleplayer implements World, PlayerListener {
 		if(zoom != prevZoom) {
 			onZoomChange(zoom);
 		}
-		state.setZoom(max(MIN_ZOOM_LEVEL, min(MAX_ZOOM_LEVEL, zoom)));
+		state.setZoom(max(MIN_ZOOM_LEVEL, min(getPlayer().getShip().getMaxZoomLevel(), zoom)));
 		if(zoom > prevZoom) {
 			lastZoomOutward = true;
 		}
@@ -358,7 +368,7 @@ public class Singleplayer implements World, PlayerListener {
 		if(zoomStrength > 1e-5F) {
 			v.noFill();
 			float minZoom = 1 / smoothZoom;
-			float maxZoom = MAX_ZOOM_LEVEL / smoothZoom;
+			float maxZoom = playerShip.getMaxZoomLevel() / smoothZoom;
 			for(float r = minZoom; r < maxZoom; r *= 10) {
 				if(r >= 1) {
 					break;
@@ -385,12 +395,19 @@ public class Singleplayer implements World, PlayerListener {
 			cameraImpact *= .95F;
 		}
 
+		if(getPlayer().getShip().isHyperdriving()) {
+			hyperdriveStrength += (1 - hyperdriveStrength) * HYPERDRIVE_TRANSITION_RATE;
+		}
+		else {
+			hyperdriveStrength *= 1 - HYPERDRIVE_TRANSITION_RATE;
+		}
+
 		boolean targeting = targetCt.cycle();
 		boolean cleanup = cleanupCt.cycle();
 
-		updateGlobal(level);
-
 		profiler.addTimeStamp("Begin update");
+
+		updateGlobal(level);
 
 		state.startUpdate();
 
@@ -473,7 +490,6 @@ public class Singleplayer implements World, PlayerListener {
 				if(state.isRemoving(s)) {
 					continue;
 				}
-
 				updateGravity(objects, level, i);
 				drawObject(objects, level, i, playerShip);
 				resolveCollisions(objects, level, i, playerShip);
@@ -573,15 +589,21 @@ public class Singleplayer implements World, PlayerListener {
 
 	private void drawObject(List<SpaceObject> objects, RenderLevel level, int i, ModularShip playerShip) {
 		SpaceObject s = objects.get(i);
+
 		// Start drawing object
 		v.pushMatrix();
 
 		// Set up object position
+		// TODO: DRY them sqrts
 		PVector position = s.getPositionReference();
 		PVector cameraPos = playerShip.getPositionReference();
 		float scale = getZoom();
-		float screenX = (position.x - cameraPos.x) / scale;
-		float screenY = (position.y - cameraPos.y) / scale;
+		float screenX = getScreenX(position, cameraPos);
+		float screenY = getScreenY(position, cameraPos);
+		float curvature = getCurvature(sqrt(screenX * screenX + screenY * screenY));
+		screenX *= curvature;
+		screenY *= curvature;
+
 		v.translate(screenX, screenY);
 
 		// Draw trail
@@ -593,9 +615,9 @@ public class Singleplayer implements World, PlayerListener {
 		// Draw object
 		v.stroke(s.getColor());
 		v.noFill();
-		float r = s.getRadius() / scale;
+		float r = getObjectRadius(s, s.getRadius() / scale, position, cameraPos, curvature);
 		float onScreenRadius = s.getOnScreenRadius(r);
-		boolean visible = abs(screenX) - onScreenRadius <= v.width / 2F && abs(screenY) - onScreenRadius <= v.height / 2F;
+		boolean visible = isVisibleOnScreen(screenX, screenY, onScreenRadius);
 		if(visible) {
 			s.draw(level, r);
 		}
@@ -606,14 +628,20 @@ public class Singleplayer implements World, PlayerListener {
 
 	private void resolveCollisions(List<SpaceObject> objects, RenderLevel level, int i, ModularShip playerShip) {
 		SpaceObject s = objects.get(i);
-		float scale = getZoom();
+
 		PVector position = s.getPositionReference();
 		PVector cameraPos = playerShip.getPositionReference();
-		float screenX = (position.x - cameraPos.x) / scale;
-		float screenY = (position.y - cameraPos.y) / scale;
-		float r = s.getRadius() / scale;
+		float scale = getZoom();
+		float screenX = getScreenX(position, cameraPos);
+		float screenY = getScreenY(position, cameraPos);
+		float curvature = getCurvature(sqrt(screenX * screenX + screenY * screenY));
+		screenX *= curvature;
+		screenY *= curvature;
+
+		float r = getObjectRadius(s, s.getRadius() / scale, position, cameraPos, curvature);
 		float onScreenRadius = s.getOnScreenRadius(r);
-		boolean visible = abs(screenX) - onScreenRadius <= v.width / 2F && abs(screenY) - onScreenRadius <= v.height / 2F;
+		boolean visible = isVisibleOnScreen(screenX, screenY, onScreenRadius);
+
 		// Check collisions when on screen
 		if(visible) {
 			for(int j = i + 1; j < objects.size(); j++) {
@@ -629,6 +657,27 @@ public class Singleplayer implements World, PlayerListener {
 				}
 			}
 		}
+	}
+
+	private float getCurvature(float dist) {
+		return hyperdriveStrength > 0 ? 1 / (1 + sqrt(hyperdriveStrength * dist / 1000)) : 1;
+	}
+
+	private float getScreenX(PVector position, PVector cameraPos) {
+		return (position.x - cameraPos.x) / getZoom();
+	}
+
+	private float getScreenY(PVector position, PVector cameraPos) {
+		return (position.y - cameraPos.y) / getZoom();
+	}
+
+	private float getObjectRadius(SpaceObject s, float r, PVector position, PVector cameraPos, float curvature) {
+		return r * curvature;
+		//		return v.log(s.getRadius());
+	}
+
+	private boolean isVisibleOnScreen(float screenX, float screenY, float boundary) {
+		return abs(screenX) - boundary <= v.width / 2F && abs(screenY) - boundary <= v.height / 2F;
 	}
 
 	protected void updateGlobal(RenderLevel level) {
@@ -913,9 +962,7 @@ public class Singleplayer implements World, PlayerListener {
 	public void keyPressed(KeyEvent event) {
 		if(event.getKey() == '`' && Settings.getBoolean("debug")) {
 			if(!getPlayer().hasAttribute(DebugAttribute.class)) {
-				getPlayer().addAttribute(DebugAttribute.class);
-				setupTesting();
-				getPlayer().send("Debug mode enabled");
+				setupDebugMode();
 			}
 			Menu menu = new Menu(getPlayer(), new BackButton(this), new DebugMenuHandle());
 			menu.add(new CustomButton("Toggle Overlay", m -> {

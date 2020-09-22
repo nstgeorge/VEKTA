@@ -10,6 +10,7 @@ import vekta.terrain.settlement.SettlementPart;
 public class TempleBuilding implements SettlementPart {
 	private final Deity deity;
 	private String name;
+	private boolean offered;
 
 	public TempleBuilding(Deity deity) {
 		this.deity = deity;

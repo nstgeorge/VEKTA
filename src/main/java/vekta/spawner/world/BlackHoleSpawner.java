@@ -18,7 +18,7 @@ public class BlackHoleSpawner implements WorldSpawner {
 
 	@Override
 	public RenderLevel getSpawnLevel() {
-		return RenderLevel.STAR;
+		return RenderLevel.INTERSTELLAR;
 	}
 
 	@Override

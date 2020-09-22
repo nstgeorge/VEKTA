@@ -1,5 +1,6 @@
 package vekta.module;
 
+import processing.core.PVector;
 import vekta.player.Player;
 import vekta.util.InfoGroup;
 import vekta.KeyBinding;
@@ -8,18 +9,20 @@ import vekta.Resources;
 import vekta.menu.Menu;
 import vekta.object.HyperdriveShockwave;
 import vekta.object.ship.ModularShip;
+import vekta.world.World;
 import vekta.world.ZoomController;
 
 import static vekta.Vekta.*;
 
 public class HyperdriveModule extends ShipModule implements ZoomController {
+	private static final float ENERGY_CONSUME_SCALE = .1F;
 	private static final float LOW_TIME_SCALE_SPEEDUP = 50;
+	private static final float THRUST_SCALE = .1F;
 	private static final float MIN_BOOST = 10;
-	private static final float MAX_BOOST = 100;
+	private static final float MAX_BOOST = 1000;
 
 	private final float boost;
 
-	private boolean active;
 	private float currentBoost;
 
 	public HyperdriveModule() {
@@ -35,7 +38,7 @@ public class HyperdriveModule extends ShipModule implements ZoomController {
 	}
 
 	public boolean isActive() {
-		return active;
+		return getShip().isHyperdriving();
 	}
 
 	@Override
@@ -75,32 +78,30 @@ public class HyperdriveModule extends ShipModule implements ZoomController {
 
 	@Override
 	public void onUpdate() {
-		ModularShip ship = getShip();
-
-		float timeScale = getWorld().getTimeScale();
-		float thrust = ship.isLanding() ? -1 : ship.getThrustControl();
-		currentBoost = max(0, min(MAX_BOOST, ship.getVelocity().dot(ship.getHeading()))) * getBoost();
-
 		if(isActive()) {
+			World world = getWorld();
+			ModularShip ship = getShip();
+
+			float zoom = world.getZoom();
+			float timeScale = world.getTimeScale();
+			float thrust = ship.isLanding() ? -1 : ship.getThrustControl();
+			currentBoost = max(0, min(MAX_BOOST, sqrt(abs(ship.getVelocity().dot(ship.getHeading())))));
+
+			float effectiveBoost = currentBoost * getBoost() * (zoom / INTERSTELLAR_LEVEL);
+
 			boolean movingFast = ship.getVelocity().magSq() >= sq(MIN_BOOST * timeScale);
 			if((!movingFast && thrust < 0) || !ship.hasEnergy()) {
 				endHyperdrive();
 			}
 
-			if(ship.consumeEnergyOverTime(1 * currentBoost * PER_MINUTE)) {
+			if(ship.consumeEnergyOverTime(ENERGY_CONSUME_SCALE * effectiveBoost * PER_MINUTE)) {
 				float effectiveThrust = thrust * max(timeScale, LOW_TIME_SCALE_SPEEDUP) / timeScale;
-				ship.setVelocity(ship.getHeading().setMag(min(currentBoost * timeScale, ship.getVelocityReference().mag())));
-				ship.accelerate(effectiveThrust * currentBoost, ship.getVelocityReference());
+				ship.setVelocity(ship.getHeading().setMag(min(effectiveBoost * timeScale, ship.getVelocityReference().mag())));
+				ship.accelerate(effectiveThrust * effectiveBoost * THRUST_SCALE, ship.getVelocityReference());
 
 				// Create shockwave effect
-				float speed = (RenderLevel.SHIP.isVisibleTo(getWorld().getRenderLevel())
-						? getWorld().getZoom()
-						: timeScale * 5e-5F) * currentBoost;
-				register(new HyperdriveShockwave(
-						getShip(),
-						speed,
-						(int)v.random(20, 25),
-						getShip().getColor()));
+				float speed = (RenderLevel.SHIP.isVisibleTo(world.getRenderLevel()) ? zoom : timeScale * 5e-5F) * effectiveBoost;
+				register(new HyperdriveShockwave(ship, speed, (int)v.random(20, 25), ship.getColor()));
 			}
 		}
 	}
@@ -109,36 +110,49 @@ public class HyperdriveModule extends ShipModule implements ZoomController {
 	public void onKeyPress(KeyBinding key) {
 		if(key == KeyBinding.SHIP_HYPERDRIVE) {
 			if(!isActive()) {
-				startHyperdrive();
+				if(getShip().getThrustControl() > 0) {
+					startHyperdrive();
+				}
+				else {
+					Resources.playSound("hyperdriveSputter");
+				}
 			}
 			else {
 				getShip().setLanding(true);
+				//				endHyperdrive();
 			}
 		}
 	}
 
 	public void startHyperdrive() {
 		if(!isActive()) {
-			active = true;
+			getShip().setHyperdriving(true);
 			Resources.playSound("hyperdriveHit");
-			Resources.loopSound("hyperdriveLoop");
+			Resources.loopSound("hyperdriveLoop"/*, true*/);
 			getWorld().addZoomController(this);
+
+			Resources.stopSound("engine");////
+			getWorld().setZoom(STAR_LEVEL);//////
 		}
 	}
 
 	public void endHyperdrive() {
 		if(isActive()) {
-			active = false;
+			getShip().setHyperdriving(false);
 			currentBoost = 0;
 			Resources.stopSound("hyperdriveLoop");
 			Resources.playSound("hyperdriveEnd");
+
+			if(getWorld().getZoom() > STAR_LEVEL) {
+				getWorld().setZoom(STAR_LEVEL);//////
+			}
 		}
 	}
 
-	@Override
-	public void onMenu(Menu menu) {
-		endHyperdrive();
-	}
+//	@Override
+//	public void onMenu(Menu menu) {
+//		endHyperdrive();
+//	}
 
 	@Override
 	public void onInfo(InfoGroup info) {
@@ -154,6 +168,7 @@ public class HyperdriveModule extends ShipModule implements ZoomController {
 
 	@Override
 	public float controlZoom(Player player, float zoom) {
-		return zoom > SHIP_LEVEL ? STAR_LEVEL : zoom;
+		return zoom > SHIP_LEVEL ? INTERSTELLAR_LEVEL : zoom;
+		//		return zoom > SHIP_LEVEL ? max(STAR_LEVEL, zoom) : zoom;
 	}
 }

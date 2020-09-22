@@ -66,11 +66,10 @@ public class NavigationOverlay implements Overlay {
 			drawDial("Velocity", velocity, v.width - 500, dialHeight, UI_COLOR);
 		}
 
-		// New heading dial
-		drawHeadingIndicator(ship.getHeading(), targeter.getTarget());
-
 		// Targeter information
 		if(targeter != null) {
+			drawHeadingIndicator(ship.getHeading(), targeter.getTarget());
+
 			SpaceObject target = targeter.getTarget();
 			String targetString;
 			if(target == null) {
