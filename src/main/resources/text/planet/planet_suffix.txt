@@ -31,3 +31,6 @@ zam
 wag
 bu
 thomir
+guini
+r
+max
