@@ -1,5 +1,6 @@
 package vekta.terrain;
 
+import vekta.object.SpaceObject;
 import vekta.sync.Sync;
 import vekta.sync.Syncable;
 import vekta.ecosystem.Ecosystem;
@@ -100,5 +101,8 @@ public abstract class Terrain extends Syncable<Terrain> {
 	}
 
 	public void setupLandingMenu(LandingSite site, Menu menu) {
+	}
+
+	public void onOrbit(SpaceObject orbitObject) {
 	}
 }

@@ -70,7 +70,9 @@ public class PauseMenuContext implements Context {
 		}
 		v.fill(BUTTON_COLOR);
 		v.rectMode(CENTER);
+		v.strokeWeight(selected ? 2 : 1);
 		v.rect(v.width / 8F, yPos, 200 + (selected ? 10 : 0), 50);
+		v.strokeWeight(1);
 		// Text ----------------------
 		v.textFont(BODY_FONT);
 		v.stroke(0);

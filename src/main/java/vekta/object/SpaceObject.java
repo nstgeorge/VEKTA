@@ -53,6 +53,11 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 		this.color = color;
 	}
 
+	//	// Returns whether or not the object is affected by spacetime curvature
+	//	public boolean isCurvable() {
+	//		return true;
+	//	}
+
 	public abstract RenderLevel getRenderLevel();
 
 	public RenderLevel getDespawnLevel() {

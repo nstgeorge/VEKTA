@@ -32,7 +32,7 @@ public class OceanScannerModule extends ShipModule {
 
 	@Override
 	public ModuleType getType() {
-		return ModuleType.SCANNER;
+		return ModuleType.OCEAN;
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package vekta.menu.handle;
 
+import vekta.knowledge.FactionKnowledge;
 import vekta.knowledge.ObservationLevel;
 import vekta.knowledge.PersonKnowledge;
 import vekta.menu.Menu;
@@ -43,6 +44,7 @@ public class DialogMenuHandle extends MenuHandle {
 
 		if(!(getPerson() instanceof TemporaryPerson)) {
 			menu.getPlayer().addKnowledge(new PersonKnowledge(ObservationLevel.VISITED, getPerson()));
+			menu.getPlayer().addKnowledge(new FactionKnowledge(getPerson().getFaction()));
 		}
 	}
 

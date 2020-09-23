@@ -3,7 +3,9 @@ package vekta.knowledge;
 import vekta.display.Layout;
 import vekta.display.TextDisplay;
 import vekta.faction.Faction;
+import vekta.menu.option.PlayerKnowledgeButton;
 import vekta.player.Player;
+import vekta.util.InfoGroup;
 
 import static vekta.Vekta.v;
 
@@ -11,7 +13,7 @@ public class FactionKnowledge implements Knowledge {
 	private final Faction faction;
 
 	public FactionKnowledge(Faction faction) {
-		this.faction=faction;
+		this.faction = faction;
 	}
 
 	public Faction getFaction() {
@@ -37,11 +39,22 @@ public class FactionKnowledge implements Knowledge {
 	public KnowledgeDelta getDelta(Knowledge other) {
 		return other instanceof FactionKnowledge && getName().equals(other.getName()) ? KnowledgeDelta.BETTER : KnowledgeDelta.DIFFERENT;
 	}
-	
+
 	@Override
 	public void onLayout(Player player, Layout layout) {
-//		layout.add(new TextDisplay(getFaction().getDescription()));
+		//		layout.add(new TextDisplay(getFaction().getDescription()));
 
+		InfoGroup info = new InfoGroup();
+		for(Faction faction : getFaction().getAllies()) {
+			info.addStat("Ally", faction.getName());
+		}
+		for(Faction faction : getFaction().getEnemies()) {
+			info.addStat("Enemy", faction.getName());
+		}
+		for(PersonKnowledge knowledge : player.findKnowledge(PersonKnowledge.class, k -> k.getPerson().getFaction() == getFaction())) {
+			info.addTrait(knowledge.getPerson().getFullName());
+		}
+		info.onLayout(layout);
 
 	}
 }

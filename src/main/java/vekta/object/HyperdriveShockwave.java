@@ -16,10 +16,15 @@ public class HyperdriveShockwave extends Shockwave {
 		this.relative = relative;
 	}
 
+//	@Override
+//	public boolean isCurvable() {
+//		return false;
+//	}
+
 	@Override
 	public void onUpdate(RenderLevel level) {
 		super.onUpdate(level);
-		
+
 		position.set(relative.getPosition().sub(relative.getHeading().mult(getRadius() + relative.getRadius() + sq(getRadius() * .2F) / getWorld().getZoom())));
 	}
 

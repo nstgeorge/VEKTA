@@ -110,7 +110,7 @@ public class HyperdriveModule extends ShipModule implements ZoomController {
 	public void onKeyPress(KeyBinding key) {
 		if(key == KeyBinding.SHIP_HYPERDRIVE) {
 			if(!isActive()) {
-				if(getShip().getThrustControl() > 0) {
+				if(getShip().getThrustControl() > 0 && !RenderLevel.SHIP.isVisibleTo(getWorld().getRenderLevel())) {
 					startHyperdrive();
 				}
 				else {
@@ -150,10 +150,12 @@ public class HyperdriveModule extends ShipModule implements ZoomController {
 		}
 	}
 
-	//	@Override
-	//	public void onMenu(Menu menu) {
-	//		endHyperdrive();
-	//	}
+	@Override
+	public void onMenu(Menu menu) {
+		//			endHyperdrive();
+
+		Resources.stopSound("hyperdriveLoop");///TODO re-enable sound on close menu
+	}
 
 	@Override
 	public void onInfo(InfoGroup info) {

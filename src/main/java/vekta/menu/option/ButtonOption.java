@@ -16,10 +16,12 @@ public interface ButtonOption extends MenuOption {
 		boolean selected = menu.getIndex() == index;
 
 		// Draw border
+		v.strokeWeight(selected ? 2 : 1);
 		v.stroke(selected ? 255 : menu.getDefault() == this ? 100 : getBorderColor());
 		//		v.noFill();
 		v.fill(BUTTON_COLOR);
 		v.rect(x, y, max(handle.getItemWidth(), v.textWidth(name) + 20) + (selected ? 15 : 0), 50);
+		v.strokeWeight(1);
 
 		// Draw text
 		v.fill(isEnabled() ? getColor() : 100);

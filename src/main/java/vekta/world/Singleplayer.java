@@ -200,7 +200,7 @@ public class Singleplayer implements World, PlayerListener {
 			SpaceStation station = SpaceStationSpawner.createStation("OUTPOST 1", PVector.random2D().mult(1000), getPlayer().getColor());
 			station.observe(ObservationLevel.OWNED, getPlayer());
 
-			BlackHoleSpawner.createBlackHole(PVector.random2D().mult(v.random(40, 50) * AU_DISTANCE))
+			BlackHoleSpawner.createBlackHole(PVector.random2D().mult(v.random(300, 400) * AU_DISTANCE))
 					.observe(ObservationLevel.OWNED, getPlayer());
 		}
 
@@ -219,8 +219,9 @@ public class Singleplayer implements World, PlayerListener {
 		playerShip.addModule(new ActiveTCSModule(2));
 		playerShip.addModule(new CountermeasureModule());
 		playerShip.addModule(new ShieldModule());
-		playerShip.getInventory().add(new ModuleItem(new OceanScannerModule()));
-		playerShip.getInventory().add(new ModuleItem(new EcosystemScannerModule()));
+		playerShip.addModule(new OceanScannerModule());
+		playerShip.addModule(new EcosystemScannerModule());
+		playerShip.getInventory().add(new ModuleItem(new BatteryModule(new ModularShip.Battery(200, true))));
 		playerShip.getInventory().add(new ModuleItem(new PlanetBusterModule()));
 		playerShip.getInventory().add(new ModuleItem(new GeneratorModule()));
 		playerShip.getInventory().add(new ModuleItem(new WormholeModule()));
@@ -446,6 +447,8 @@ public class Singleplayer implements World, PlayerListener {
 		starfield.draw(playerShip);
 		v.popMatrix();
 
+		boolean drawTrails = Settings.getBoolean("drawTrails");
+
 		profiler.addTimeStamp("Starfield drawing");
 
 		// Custom behavior loop
@@ -469,7 +472,7 @@ public class Singleplayer implements World, PlayerListener {
 				if(state.isRemoving(objects.get(i))) {
 					continue;
 				}
-				drawObject(objects, level, i, playerShip);
+				drawObject(objects, level, i, playerShip, drawTrails);
 			}
 			profiler.addTimeStamp("Draw objects");
 
@@ -491,7 +494,7 @@ public class Singleplayer implements World, PlayerListener {
 					continue;
 				}
 				updateGravity(objects, level, i);
-				drawObject(objects, level, i, playerShip);
+				drawObject(objects, level, i, playerShip, drawTrails);
 				resolveCollisions(objects, level, i, playerShip);
 			}
 		}
@@ -587,7 +590,7 @@ public class Singleplayer implements World, PlayerListener {
 		s.update(level);
 	}
 
-	private void drawObject(List<SpaceObject> objects, RenderLevel level, int i, ModularShip playerShip) {
+	private void drawObject(List<SpaceObject> objects, RenderLevel level, int i, ModularShip playerShip, boolean drawTrails) {
 		SpaceObject s = objects.get(i);
 
 		// Start drawing object
@@ -606,9 +609,9 @@ public class Singleplayer implements World, PlayerListener {
 
 		v.translate(screenX, screenY);
 
-		// Draw trail
-		if((s == playerShip || s.getRenderLevel().isVisibleTo(level)) && Settings.getBoolean("drawTrails")) {
-			s.updateTrail();
+		// Update trail and draw if necessary
+		s.updateTrail();
+		if(drawTrails && (s == playerShip || s.getRenderLevel().isVisibleTo(level))) {
 			s.drawTrail(scale);
 		}
 
@@ -629,6 +632,8 @@ public class Singleplayer implements World, PlayerListener {
 	private void resolveCollisions(List<SpaceObject> objects, RenderLevel level, int i, ModularShip playerShip) {
 		SpaceObject s = objects.get(i);
 
+		// Set up object position
+		// TODO: DRY them sqrts
 		PVector position = s.getPositionReference();
 		PVector cameraPos = playerShip.getPositionReference();
 		float scale = getZoom();
@@ -660,6 +665,9 @@ public class Singleplayer implements World, PlayerListener {
 	}
 
 	private float getCurvature(float dist) {
+		//		if(dist > v.width + v.height) {
+		//			return 1;
+		//		}
 		return hyperdriveStrength > 0 ? 1 / (1 + sqrt(hyperdriveStrength * dist / 1000)) : 1;
 	}
 

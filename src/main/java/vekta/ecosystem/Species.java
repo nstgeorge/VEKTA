@@ -83,7 +83,7 @@ public class Species implements Serializable {
 
 	public void onInfo(InfoGroup info) {
 
-		info.addStat("Ancestor", hasAncestor() ? getAncestor().getFullName() : "(Unknown)");
+		info.addStat("Ancestor", hasAncestor() ? getAncestor().getFullName() : "(unknown)");
 
 		info.addStat("Growth Rate", String.format("%.2f", getNaturalGrowth()));
 		info.addStat("Size", String.format("%.2f", getMass()));

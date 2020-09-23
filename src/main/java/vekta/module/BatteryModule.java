@@ -12,9 +12,7 @@ import vekta.terrain.settlement.Settlement;
 
 import java.util.List;
 
-import static processing.core.PApplet.round;
-import static processing.core.PApplet.sq;
-import static vekta.Vekta.v;
+import static processing.core.PApplet.*;
 
 public class BatteryModule extends ShipModule implements Rechargeable {
 	private static final float CHARGE_THRESHOLD = .9F;
@@ -35,7 +33,7 @@ public class BatteryModule extends ShipModule implements Rechargeable {
 
 	@Override
 	public String getName() {
-		return "Battery v" + ((float)getBattery().getCapacity() / 100) + (getShip() != null ? " (" + round(getBattery().getRatio() * 100) + "%)" : "");
+		return "Battery v" + ((float)getBattery().getCapacity() / 100) + (getBattery().getCharge() > 0 ? " (" + round(getBattery().getRatio() * 100) + "%)" : "");
 	}
 
 	@Override
@@ -45,6 +43,9 @@ public class BatteryModule extends ShipModule implements Rechargeable {
 
 	@Override
 	public void recharge(float amount) {
+		if(getShip() != null) {
+			throw new RuntimeException("Cannot recharge mounted battery");
+		}
 		getBattery().addCharge(amount);
 	}
 
@@ -65,13 +66,17 @@ public class BatteryModule extends ShipModule implements Rechargeable {
 
 	@Override
 	public boolean isBetter(Module other) {
-		return other instanceof BatteryModule && getBattery().getCapacity() > ((BatteryModule)other).getBattery().getCapacity();
+		return other instanceof BatteryModule && getRating() > ((BatteryModule)other).getRating();
+	}
+
+	private float getRating() {
+		return getShip() != null ? getShip().getEnergy() : getBattery().getCharge();
 	}
 
 	@Override
 	public Module createVariant() {
-		ModularShip.Battery battery = new ModularShip.Battery(chooseInclusive(10, 500));
-		battery.setCharge(sq(v.random(1)) * battery.getCapacity());
+		ModularShip.Battery battery = new ModularShip.Battery(chooseInclusive(1, 40) * 10);
+		//		battery.setCharge(sq(v.random(1)) * battery.getCapacity());
 		return new BatteryModule(battery);
 	}
 

@@ -1,5 +1,6 @@
 package vekta.module;
 
+// TODO: deprecate
 public enum ModuleType {
 	CORE,
 	BATTERY,
@@ -9,7 +10,9 @@ public enum ModuleType {
 	SHIELD,
 	NAVIGATION,
 	ANTENNA,
-	SCANNER,
+	SENSOR,
+	OCEAN,
+	ECOSYSTEM,
 	TELESCOPE,
 	DRILL,
 	THERMAL,

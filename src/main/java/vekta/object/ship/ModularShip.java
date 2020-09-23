@@ -95,7 +95,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	}
 
 	public float getMaxZoomLevel() {
-		return isHyperdriving() ? INTERSTELLAR_LEVEL : STAR_LEVEL;
+		return isHyperdriving() ? INTERSTELLAR_LEVEL : STAR_LEVEL * .99F; // Slightly below STAR_LEVEL to pacify smooth zooming
 	}
 
 	public boolean isLanding() {
@@ -163,6 +163,9 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			batteries.add(battery);
 			maxEnergy += battery.getCapacity();
 			energy += battery.getCharge();
+			if(energy > maxEnergy) {
+				energy = maxEnergy;
+			}
 			battery.setCharge(0);
 		}
 	}
@@ -171,7 +174,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		if(hasBattery(battery)) {
 			batteries.remove(battery);
 			maxEnergy -= battery.getCapacity();
-			float chargeTransfer = max(0, energy - battery.getCapacity());
+			float chargeTransfer = min(energy, battery.getCapacity());
 			energy -= chargeTransfer;
 			battery.setCharge(chargeTransfer);
 		}
@@ -264,15 +267,16 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	@Override
 	public void addModule(Module module) {
-		// Ensure only one module per type when necessary
-		if(isModuleTypeExclusive(module.getType())) {
-			for(Module m : new ArrayList<>(modules)) {
-				if(m.getType() == module.getType()) {
-					removeModule(m);
-				}
+		boolean exclusive = isModuleTypeExclusive(module.getType());
+		for(Module m : new ArrayList<>(modules)) {
+			if(module == m) {
+				return;
+			}
+			if(exclusive && m.getType() == module.getType()) {
+				removeModule(m);
 			}
 		}
-		// Remove corresponding item_common.txt if found in inventory
+		// Remove corresponding item if found in inventory
 		for(Item item : getInventory()) {
 			if(item instanceof ModuleItem && ((ModuleItem)item).getModule() == module) {
 				getInventory().remove(item);
@@ -544,6 +548,14 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 		public Battery(int capacity) {
 			this.capacity = capacity;
+		}
+
+		public Battery(int capacity, boolean charged) {
+			this(capacity);
+
+			if(charged) {
+				setCharge(capacity);
+			}
 		}
 
 		public int getCapacity() {

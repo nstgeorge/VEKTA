@@ -29,7 +29,7 @@ public class EcosystemScannerModule extends ShipModule {
 
 	@Override
 	public ModuleType getType() {
-		return ModuleType.SCANNER;
+		return ModuleType.ECOSYSTEM;
 	}
 
 	@Override

@@ -18,7 +18,7 @@ public class SensorModule implements ComponentModule {
 
 	@Override
 	public ModuleType getType() {
-		return ModuleType.SCANNER;
+		return ModuleType.SENSOR;
 	}
 
 	@Override

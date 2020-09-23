@@ -65,7 +65,7 @@ public class Ecosystem extends Syncable<Ecosystem> {
 		if(amounts.isEmpty()) {
 			return;
 		}
- 
+
 		Map<Species, Float> prevAmounts = new HashMap<>(amounts);
 
 		int speciesCount = prevAmounts.size();
@@ -128,7 +128,14 @@ public class Ecosystem extends Syncable<Ecosystem> {
 	}
 
 	public void onInfo(InfoGroup info, Species species) {
-		info.addStat("Population", count(species));
+
+		int count = count(species);
+		if(count > 0) {
+			info.addStat("Population", count(species));
+		}
+		else {
+			info.addStat("Population", "(extinct)");
+		}
 
 		species.onInfo(info);
 

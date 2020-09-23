@@ -99,6 +99,7 @@ public class TerrestrialPlanet extends Planet {
 	protected void updateOrbitObject() {
 		if(orbitCt.cycle()) {
 			setOrbitObject(getWorld().findOrbitObject(this));
+			getLandingSite().getTerrain().onOrbit(orbitObject);
 		}
 	}
 
