@@ -29,3 +29,5 @@ ska
 nar
 zam
 wag
+bu
+thomir
