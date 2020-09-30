@@ -1,0 +1,4 @@
+{settlement} {hideout_noun}
+{firstname} {hideout_noun}
+{lastname} {hideout_noun}
+{tribe}

@@ -1,0 +1,4 @@
+I'm a bit busy right now. Do you think you could come back later? *Sure. *:acting_suspicious You don't look very busy.
+Scoot off, {impersonal_name_angry}. *Alright then.
+Can't you see I'm a bit busy with my {item_common}? *Better leave you to it.
+Let's talk later. *Alrighty.

@@ -1,0 +1,12 @@
+ate the {item}
+murdered {person}
+held everyone hostage at {settlement}
+executed {person}
+stepped on my {item}
+stole military secrets from {faction}
+burnt down {settlement}
+took bribes from {hideout}
+{weapon_stab_verb_past} {person} with a {weapon_stab}
+{weapon_bludgeon_verb_past} {person} with a {weapon_bludgeon}
+vandalized {estate}
+betrayed {person}

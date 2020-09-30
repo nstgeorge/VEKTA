@@ -1,0 +1,31 @@
+# <name substring> : <category>
+
+AI : High Tech
+Robot : High Tech
+Graphics Card : High Tech
+CPU : High Tech
+Gadget : High Tech
+Circuit : High Tech
+Machine : High Tech
+Phone : High Tech
+
+Ancient : Artifact
+Relic : Artifact
+
+Weapon : Weapon
+Military : Weapon
+Militarized : Weapon
+Shank : Weapon
+Meathook : Weapon
+Bonesaw : Weapon
+Hacksaw : Weapon
+Razor : Weapon
+Toothpick : Weapon
+Spoon : Weapon
+
+Radioactive : Nuclear
+Uranium : Nuclear
+Plutonium : Nuclear
+Glowing : Nuclear
+
+Bonds : Financial

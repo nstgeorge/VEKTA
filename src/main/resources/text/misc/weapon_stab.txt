@@ -1,0 +1,17 @@
+sword
+spear
+pike
+javelin
+glaive
+rapier
+longsword
+dagger
+knife
+butterfly knife
+spike
+pitchfork
+trident
+bayonet
+ballista
+tactical crossbow
+sharpened twig

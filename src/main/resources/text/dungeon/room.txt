@@ -1,0 +1,12 @@
+Curious {room_noun} : You find yourself in a large open room filled with unfamiliar objects.
+Abandoned {room_noun} : You come across what appears to be an abandoned hideout. 
+Tidy {room_noun} : Something seems eerily tidy about this room. Someone must have been here recently. 
+Sketchy {room_noun} : It sounds as though someone or something else might be nearby. 
+Humming {room_noun} : You hear a loud humming noise emanating from somewhere below you. 
+Smelly {room_noun} : This room has a very strong smell with no obvious source. 
+Creaky {room_noun} : You hear creaking from somewhere in the walls. 
+Echoing {room_noun} : The room echoes with your every step. 
+Misty {room_noun} : You can barely see through the thick mist in this room. 
+Dark {room_noun} : Even with a light source, you can barely see anything at all. 
+Whispering {room_noun} : You hear echoing whispers, moving ever closer as you stand to listen. 
+Empty {room_noun} : You find yourself in a completely empty room. 

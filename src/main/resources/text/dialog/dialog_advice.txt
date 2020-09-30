@@ -1,0 +1,6 @@
+Space worms are eating all our crops! What should we do? *Worm-o makes 'em squirm-o. *Send in the army! *They're just crops...
+{person} has stolen the town's {item_rare}. What should we do as punishment? *To the gallows! *It's forgivable, just reprimand him. *He stole the what?
+A mysterious creature from {star} has arrived demanding payments. How should we proceed? *Have you tried talking to it? *Use lethal force. *Don't make eye contact. 
+{person} {action_past_bad}! What's your take? *That's a shame. *Break their legs. 
+A rare {species} is terrorizing the population! *Flee and hide! *Stand and fight!
+I don't know what I'm doing! *I agree! *Leadership is a journey.

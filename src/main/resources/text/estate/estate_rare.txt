@@ -1,0 +1,4 @@
+{planet} {estate_noun}
+{person}'s {estate_noun}
+{item_adj_rare} {estate_noun}
+{item_adj_rare} {estate_noun}

@@ -1,0 +1,7 @@
+Hey, I remember hearing about you! : Oh yes. I'm {amount_adverb} {famous_adj} in these parts. *:autograph Wow! Can I have an autograph? *Cool.
+Wait, I recognize your name... : Many stories have been written about my adventures. *:autograph Can I get your autograph? *:^flexed_upon Same.
+?[* item] Can I see your [* item]? : Sure! It's very dear to me, so don't break it. *Whoooa. *Cool.
+?[* created_weapon] Did you really [* created_weapon]? : Oh, that. I actually [*_correct created_weapon], but don't tell anyone. *Gotcha.
+?[* person_status] Aren't you that person who [* person_status]? : Yeah! *Cool.
+?[* intent_evil] I can't believe you wanted to [* intent_evil]. : Eh? What are you talking about? *:confession The story said so. *:ask_leave Hmm.
+?[* person_death] Wait. I thought you were killed! : Sadly, yes...but I lived! *Wow! *I'm a bit skeptical of that story now.

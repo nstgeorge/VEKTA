@@ -1,0 +1,8 @@
+{person}
+{firstname_boss} {person_title}
+{firstname_boss} {boss_title}
+{firstname} {boss_title}
+{firstname} {lastname} {boss_title}
+{item_adj_common} {firstname_boss}
+{item_adj_common} {firstname_boss} {boss_title}
+The {item_adj_common} {boss_noun} {boss_modifier}

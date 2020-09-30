@@ -1,0 +1,8 @@
+{settlement}
+Checkpoint {settlement}
+{person}'s Refuge
+{person}'s Hideout
+{planet} Refugees
+{star} Emigrants
+{star} Embassy
+{tribe}

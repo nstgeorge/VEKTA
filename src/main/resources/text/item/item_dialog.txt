@@ -1,0 +1,13 @@
+# Format: <name> <start_dialog>::<next_dialog> <response>
+# Alternative: <name> <start_dialog> : <response>
+
+Worm-o Spray Can advice::react_worm Hit 'em with some Worm-o.
+Worm-o Spray Can advice::react_worm Try using my Worm-o.
+Worm-o Spray Can advice::react_worm You could try the Worm-o.
+Worm-o Spray Can advice::react_worm Use the Worm-o.
+Worm-o Spray Can advice::react_worm How about using a bit of Worm-o?
+Worm-o Spray Can advice::react_worm One word: Worm-o.
+Worm-o Spray Can advice::react_worm If it's fixable, it's fixable with Worm-o!
+Worm-o Spray Can busy::react_angry Spray with Worm-o
+Worm-o Spray Can react_joke::react_angry Spray with Worm-o
+Worm-o Spray Can security::^react_worm Spray with Worm-o

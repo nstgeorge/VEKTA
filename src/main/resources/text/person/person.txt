@@ -1,0 +1,14 @@
+{firstname}
+{firstname} {lastname}
+{person_adj} {firstname}
+Lord {firstname}
+Sir {firstname}
+Big {firstname}
+Little {firstname}
+Mr. {firstname}
+Ms. {firstname}
+Dr. {firstname}
+The {firstname}
+Some {person_adj} {impersonal_name}
+{item_noun} {impersonal_name}
+{boss}

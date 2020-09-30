@@ -1,0 +1,6 @@
+{fort_noun} {greek}
+{greek} {fort_noun}
+{settlement} {fort_noun}
+{settlement} {fort_noun} {greek}
+{person} {fort_noun}
+{boss_noun}-{boss_modifier} {fort_noun}

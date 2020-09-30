@@ -1,0 +1,8 @@
+Space Worms : They are a common nuisance in our galaxy.
+{star} : It's a distant star system known for its eccentric leader, {person} {person_title}.
+{star} : After a great war, inhabitants of this star system fled to escape persecution. 
+{planet} : That planet used to be part of this star system before it collided with {planet}.
+{city} : It was the the original city on the planet {planet}. 
+{city} : A long time ago, {faction} built this city in secret, for unknown reasons. 
+{town} : It's the original name for {city} before it was burned down and replaced by a dictatorship. 
+{person} {person_title} : That is one of the many pseudonyms of {person} {person_title}.

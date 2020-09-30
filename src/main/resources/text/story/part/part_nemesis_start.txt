@@ -1,0 +1,2 @@
+[nemesis person] was a truly evil person. *nemesis_plan
+Truth be told, [nemesis person] wanted to [nemesis intent_evil]. *nemesis_plan

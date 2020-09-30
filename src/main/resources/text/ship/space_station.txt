@@ -1,0 +1,6 @@
+{settlement} Observatory
+{settlement} Station
+{settlement} Space Station
+{settlement} Logistics Station
+{settlement} Staging Center
+{settlement} Cupola

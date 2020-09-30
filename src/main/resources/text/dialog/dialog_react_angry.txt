@@ -1,0 +1,9 @@
+! What the heck!? 
+! Excuse you!
+! Bro!
+! Some kind of day you must be having... *It's been pretty great, actually. *Don't mess with me, {impersonal_name_angry}. 
+! Too far! Actually, no that was pretty funny. 
+! Don't make me do to you what I did to {person}... *Let's not do that.
+! Security! *:call_security Uh oh.
+| They stare at you, daring you to continue. *Okay, I'll leave now. *:ask_leave Why the long face?
+You're a {species}! *That's right. *:call_security Say that again...

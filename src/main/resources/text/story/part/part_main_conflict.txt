@@ -1,0 +1,5 @@
+Enter [nemesis person]. *nemesis_start
+However, [main person] happened to be mortal enemies with [nemesis person]. *nemesis_start
+Unfortunately, [nemesis person] didn't like that [main person] [main person_status]. *nemesis_plan
+One day, [main person] decided to explore [setting planet]. *adventure_start
+"I'd sure like to go on an adventure," [main person] said to themselves one day. *adventure_start

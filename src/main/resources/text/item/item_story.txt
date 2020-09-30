@@ -1,0 +1,4 @@
+Story: {item_adj_common} {item_knowledge_noun}
+Story: {item_adj_rare} {item_knowledge_noun}
+Story: The {item_adj_mission} {item_knowledge_noun}
+Story: {person}'s {item_knowledge_noun}

@@ -1,0 +1,6 @@
+{task_planet}
+Browse Public Archives
+Promote {item_common}
+Promote {item_rare}
+Research {item_legendary}
+Research {star}

@@ -1,0 +1,28 @@
+{landmark_noun}
+Estate
+House
+Mansion
+Flat
+Place
+Point
+Square
+Plaza
+Hotel
+Apartments
+Reservoir
+Mine
+Farm
+Ranch
+Castle
+Palace
+Barrow
+Spa
+Factory
+Skyscraper
+Restaurant
+{item_noun} Shop
+{item_noun} Store
+Supermarket
+Guild
+Garden
+Greenhouse

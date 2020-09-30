@@ -1,0 +1,4 @@
+{settlement}
+New {settlement}
+Baby {settlement}
+{tribe}

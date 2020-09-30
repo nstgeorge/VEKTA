@@ -1,0 +1,24 @@
+Wig
+Powdered Wig
+Hat
+Feather Hat
+Beanie
+Cloak
+Plate Armor
+Monocle
+Fake Moustache
+Gown
+Hoodie
+Suit
+Parka
+Jacket
+Skin Suit
+Towel
+Toga
+Wrappings
+Shell
+Bracelet
+Headband
+Armband
+Tiara
+Helmet

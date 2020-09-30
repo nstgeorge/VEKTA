@@ -1,0 +1,10 @@
+{mission_noun}
+Story
+Tale
+Legend
+Fable
+Epic
+Lore
+Ballad
+Riddle
+Poem

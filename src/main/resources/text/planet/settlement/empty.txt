@@ -1,0 +1,6 @@
+Forgotten {town_noun}
+Deserted {town_noun}
+Quiet {town_noun}
+{item_adj_common} {town_noun}
+Old {settlement}
+Ancient {settlement}

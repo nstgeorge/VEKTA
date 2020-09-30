@@ -1,0 +1,16 @@
+{description_item_common}
+You'll be hard-pressed to find a better *.
+Probably the only * in this entire star system. Hence the price. 
+We made this ourselves!
+Guaranteed to work at least once! 
+{person} sold us this one. 
+Legend has it that {person} {action_past_bad} using this very *. 
+You look like the kind of person who wants this *.
+Fresh from {city}!
+You can think of it as the modern successor of the {item_common}. 
+If you turn it upside down, it's suddenly a full-featured {item_rare}.
+Also known as the {item} in some circles. 
+We have absolutely no idea why people keep buying this. 
+{boss} used to own this before...you know...
+This * made the news!
+It's autographed by {person}.

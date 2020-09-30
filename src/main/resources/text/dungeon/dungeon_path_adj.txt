@@ -1,0 +1,15 @@
+{item_adj_common}
+{item_adj_rare}
+Hidden
+Inconspicuous
+Subtle
+Barely Visible
+Dust-Covered
+Reinforced
+Rotting
+Broken
+Crumbling
+Camoflaged
+Spiked
+Embedded
+Inset

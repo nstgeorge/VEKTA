@@ -1,0 +1,2 @@
+{item_adj_rare} {item_noun_clothing}
+{person}'s {item_noun_clothing}

@@ -1,0 +1,4 @@
+{item_noun}
+{item_noun} {item_modifier}
+{item_adj_common} {item_noun}
+{item_adj_common} {item_noun} {item_modifier}

@@ -1,0 +1,9 @@
+confronted : confession
+
+advice : advice_thank
+
+dungeon : ask_leave
+dungeon : greeting
+dungeon : busy
+dungeon : nervous_assassin
+dungeon : offer_weapon

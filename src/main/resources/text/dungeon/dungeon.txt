@@ -1,0 +1,3 @@
+The {dungeon_noun} of {settlement}
+{settlement} {dungeon_noun}
+{dungeon_noun} near {estate_common}

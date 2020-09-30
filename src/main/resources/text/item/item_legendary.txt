@@ -1,0 +1,3 @@
+{item_rare} of {planet}
+{item_rare} of {person}
+{item_rare} from {star}

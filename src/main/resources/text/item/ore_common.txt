@@ -1,0 +1,15 @@
+Iron Ore : Iron Ingots
+Aluminum Ore : Aluminum Foil
+Coal Ore
+Bismuth
+Granite
+Silt
+Sandstone
+Copper Ore : Copper Ingots
+Obscure Gemstones
+Imperfect Gemstones
+Odd Crystals
+Shiny Rocks : Very Shiny Rocks
+Salt
+Quartz
+Silicon : Circuitry

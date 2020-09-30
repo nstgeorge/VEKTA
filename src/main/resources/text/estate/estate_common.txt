@@ -1,0 +1,5 @@
+{planet} {estate_noun}
+{person}'s {estate_noun}
+{item_adj_common} {estate_noun}
+{item_adj_common} {estate_noun}
+{item_adj_mission} {estate_noun}

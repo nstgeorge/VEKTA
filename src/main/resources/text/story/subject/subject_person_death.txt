@@ -1,0 +1,2 @@
+{combat_adverb} {weapon_stab_verb_past} [* person] with a {weapon_stab}
+{weapon_bludgeon_verb_past} [* person] with a {weapon_bludgeon}

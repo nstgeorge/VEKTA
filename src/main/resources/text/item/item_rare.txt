@@ -1,0 +1,2 @@
+{item_adj_rare} {item_noun}
+{item_adj_rare} {item_noun} {item_modifier}

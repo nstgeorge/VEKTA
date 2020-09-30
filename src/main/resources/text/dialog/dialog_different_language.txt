@@ -1,0 +1,9 @@
+| You can't understand what they are saying at all. *Come again?
+| You have absolutely no idea what they're saying. *Could you repeat that?
+| You can't understand their language at all. *I'm not sure I understand you. 
+| They say something vaguely related to {star} or {settlement}. It's not entirely clear. *Huh?
+| It sounds as though they are speaking in an obscure foreign language. *Not sure I understand. 
+| They make a loud snorting noise. 
+| They honk enthusiastically. 
+| Their voice transcends your range of hearing. *I can't hear you speak. 
+| They stare at you for a while. *Yes?

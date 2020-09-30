@@ -1,0 +1,5 @@
+{settlement}town
+{settlement}ville
+{settlement} {town_noun}
+Little {settlement}
+Lesser {settlement}

@@ -1,0 +1,14 @@
+Dungeon
+Containment Zone
+Caves
+Caverns
+Pits
+Tunnels
+Catacombs
+Pyramids
+Crevice
+Chasm
+Sewers
+Sinkhole
+Mines
+Burrow

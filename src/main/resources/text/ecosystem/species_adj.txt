@@ -1,0 +1,4 @@
+{species_adj_appearance}
+{species_adj_behavior}
+{species_adj_movement}
+{species_adj_noise}

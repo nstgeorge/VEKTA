@@ -1,0 +1,10 @@
+You'd better leave while you have the chance. *Will do.
+You probably don't want to be here right now. *Fair enough. 
+Get out of here. 
+Better leave while you can. 
+I'm going to give you one chance to leave. *Will do.
+I'd recommend running as far and fast as you can before I break out the {item_common}. *Sounds fair. 
+Leave!
+Out!
+Flee!
+Away!

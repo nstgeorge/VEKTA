@@ -1,0 +1,23 @@
+Trapdoor
+Lever
+Switch
+Latch
+Handle
+Manhole
+Hole
+Burrow
+Compartment
+Rubble
+Access Hatch
+Passageway
+Tunnel
+Pipeworks
+Mechanism
+Machinery
+Staircase
+Door
+Gate
+Steps
+Vent
+Ladder
+Pitfall

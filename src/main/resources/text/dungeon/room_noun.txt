@@ -1,0 +1,11 @@
+Room
+Opening
+Junction
+Intersection
+Hallway
+Chamber
+Enclave
+Stairwell
+Doorway
+Wall
+Gate

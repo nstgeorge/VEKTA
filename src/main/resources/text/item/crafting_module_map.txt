@@ -1,0 +1,16 @@
+Structural Beam : Scrap Metal
+
+Battery : Scrap Metal
+Battery : Machinery
+Battery : Capacitor
+Battery : Wires
+
+Engine : Scrap Metal
+Engine : Machinery
+Engine : Pipes
+Engine : Motor
+
+Autopilot Computer : Computer Parts
+Autopilot Computer : Circuit Board
+Autopilot Computer : Wires
+Autopilot Computer : Gyroscope

@@ -1,0 +1,8 @@
+Shipwreck
+Hulk
+Ship Debris
+Ship Remains
+Escape Pod
+Lost Ship
+Destroyed Ship
+Abandoned Ship

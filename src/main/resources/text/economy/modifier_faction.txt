@@ -1,0 +1,47 @@
+Infrastructure Expansion : 3
+R&D Breakthrough : 3
+Institutional Accumulation : 2
+Technology Upgrades : 2
+Regulation Changes : 2
+Uncontested Election : 2
+Emergency Funding : 2
+Interest Rates : 1
+Foreign Investments : 1
+Government Projects : 1
+Deregulation : 1
+{item_common} Legalization : 1
+Inflation Rate : 1
+Export Diversification : .5
+Economic Outsourcing : .5
+Complacency : .5
+Foreign Credit : .5
+Debt Repayment : .5
+Investigations : .5
+Immigration : .5
+Foreign Aid : .1
+
+Market Crash : -5
+Recession : -4
+Inflation Rate : -2
+Trade War : -2
+Economic Stagnation : -2
+Disastrous Election : -2
+Government Scandal : -1
+Interest Rates : -1
+Foreign Investments : -1
+Isolationist Policies : -1
+Public Outrage : -1
+Government Intervention : -1
+Regulation Changes : -1
+Natural Disasters : -1
+Investigations : -.5
+Complacency : -.5
+Import Tariffs : -.5
+Debt Accumulation : -.5
+Immigration : -.5
+Emigration : -.5
+Sudden Climate Change : -.3
+Pollution : -.2
+Debt Repayment : -.2
+
+Military Spending : 0

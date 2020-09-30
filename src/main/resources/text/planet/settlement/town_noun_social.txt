@@ -1,0 +1,7 @@
+Pub
+Bar
+Inn
+Tavern
+Hotel
+Speakeasy
+Watering Hole

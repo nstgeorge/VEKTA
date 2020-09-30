@@ -1,0 +1,4 @@
+Tome
+Rune
+Scroll
+Book

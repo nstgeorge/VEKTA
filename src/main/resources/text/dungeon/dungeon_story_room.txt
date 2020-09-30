@@ -1,0 +1,5 @@
+Wall of the {item}
+Wall of the {landmark_noun}
+Memoir of {settlement}
+{person}'s Tomb
+{item_knowledge}

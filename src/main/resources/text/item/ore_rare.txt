@@ -1,0 +1,7 @@
+Silver Ore : Silver Ingots
+Gold Ore : Gold Ingots
+Unique Gemstones
+Perfect Gemstones
+Small Diamond
+Marble Slabs
+Glowing Rocks : Refined Plutonium
