@@ -1,19 +1,17 @@
-## Team Name: TBD
+## Team Name: VEKTA Bois
 
-## Project Name: TBD
+## Project Name: VEKTA
 
 ## Project Description:
-TBD (e.g., build a TBD app for TBD)
+Vekta is a retro-style procedural space exploration game made with Java and Processing 3.
 
 ## Team Members:
 
 Last Name       | First Name      | GitHub User Name     | Scrum Role
 --------------- | --------------- | -------------------- | ---------------
-TBD             | TBD             | TBD                  | TBDDeveloper
-TBD             | TBD             | TBD                  | TBDScrum Master
-St. George             | Nate          | nstgeorge          | Product Owner 
-TBD             | TBD             | TBD                  | TBD
-TBD             | TBD             | TBD                  | TBD
+Lytle           | Jared           | reviveddarkness      | Developer
+Becerra         | Juan            | juanbecerra0         | Scrum Master
+St. George      | Nate            | nstgeorge            | Product Owner 
 
 ## :eyes: :memo: Scrum Linter Reports:
 Access the [Scrum Linter Report](http://cs.boisestate.edu/~bdit/ScrumLinter/CS471F20ScrumLinterReports/CS471-F20-Team16_oGvv2wlRhfv8y0XlOLyIYUmPmwdbhPYe34kw1nN1/). A new report will be automatically generated every few hours.
