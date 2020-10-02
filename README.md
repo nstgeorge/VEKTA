@@ -23,7 +23,7 @@ See the [grading rubric, team project grade and instructor feedback](https://doc
 - is shared **only** with the team members
 - will be updated after each major project milestone (e.g., initial planning, sprint)
 
-## Code Styling and Contribution Guidelines
+## Code Styling
 
 If you're using an IDE, there is an [EditorConfig](https://editorconfig.org/) file provided in the root directory that will allow you to automatically format your code as expected.
 See [IntelliJ's documentation on EditorConfig files](https://www.jetbrains.com/help/idea/configuring-code-style.html#editorconfig) to see how it's used, or [install this addon for Eclipse](https://marketplace.eclipse.org/content/editorconfig-eclipse).
@@ -37,7 +37,7 @@ If you're not able to use the EditorConfig file, here are some of the more impor
 - Getters and setters should be prefixed with `get` and `set` respectively, like `getVelocity()` or `setMass()`.
 - Methods should generally be under 50 lines.
 
-### Contribution Guidelines
+## Contribution Guidelines
 
 All contributions should follow good software engineering practices. Epics, stories, and tasks should be created in Github's Issues feature, and moved accordingly within the scrum board project.
 Commits should reference which task they are implementing, e.g. "Implements #7".
