@@ -23,6 +23,35 @@ See the [grading rubric, team project grade and instructor feedback](https://doc
 - is shared **only** with the team members
 - will be updated after each major project milestone (e.g., initial planning, sprint)
 
+## Building the Code
+This program is build using the build automation tool Maven. As such, Maven is currently **required** to build and
+play the game. The instructions below will detail installing Maven:
+
+1. Acquire the Maven package appropriate for your operating system at [Maven Downloads](https://maven.apache.org/download.cgi).
+2. Place the extracted Maven folder in any directory. It is reccomended that you put Maven in your root or program install
+directory to prevent accidentally changing or deleting it, however this is not required.
+3. Add Maven to your system path:
+    A. For Windows 10, there are several different ways to do this. The easiest way is to search path in the start menu
+    where you will then recieve a result called "Edit the system environment variables".
+    [Start Menu](https://imgur.com/RW0BGxn)
+    Click on this and then click on Environment Variables located at the bottom of the page that comes up.
+    [Enviro Variables](https://imgur.com/ipa6q1D)
+    At the bottom of this page, click the "new" option to create a new entry called "MAVEN_HOME" under system variables and add
+    the path to your Maven install folder. (e.g. C:\apache-maven-3.6.3)
+    Finally, find the Path system variable, click edit, click new in the list that comes up, and add the entry "%MAVEN_HOME%\bin"
+    to the list. You should now be able to use Maven.
+    B. For Linux, simply type the command in bash "export PATH="path to bin folder in Maven directory."". 
+    (e.g. export PATH="$HOME\apache-maven-3.6.3\bin")
+    C. For MacOS, open a terminal and type "sudo nano /etc/paths". Then create a newline at the bottom of the file and add your
+    path to your bin directory. (e.g. /etc/apache-maven-3.6.3). Save this file and the path should be added to your system path.
+    D. **NOTE:** It is absolutely essential that you take care when adding additional system paths. Destruction of other essential
+    system paths could inhibit your computer's console from doing essential native tasks.
+4. Clone the project directory.
+5. Build the project:
+    A. Run the build script provided in the project root directory. This should provide two jar executables in the "Target" folder
+    which you can then run the jar "with-dependencies" to run the program. 
+    B. If you are using an IDE and have Maven properly configured you can also use that to run the project and build with Maven. 
+    
 ## Code Styling
 
 If you're using an IDE, there is an [EditorConfig](https://editorconfig.org/) file provided in the root directory that will allow you to automatically format your code as expected.
