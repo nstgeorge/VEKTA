@@ -56,3 +56,22 @@ directory to prevent accidentally changing or deleting it, however this is not r
     A. Run the build script provided in the project root directory. This should provide two jar executables in the "Target" folder
     which you can then run the jar "with-dependencies" to run the program. 
     B. If you are using an IDE and have Maven properly configured you can also use that to run the project and build with Maven. 
+    
+## Code Styling and Contribution Guidelines
+
+If you're using an IDE, there is an [EditorConfig](https://editorconfig.org/) file provided in the root directory that will allow you to automatically format your code as expected.
+See [IntelliJ's documentation on EditorConfig files](https://www.jetbrains.com/help/idea/configuring-code-style.html#editorconfig) to see how it's used, or [install this addon for Eclipse](https://marketplace.eclipse.org/content/editorconfig-eclipse).
+
+If you're not able to use the EditorConfig file, here are some of the more important points:
+
+- Indents should be four spaces.
+- Open brackets should be placed on the lines with keywords: `for (...) { ...`, `while (...) {...`
+- Close brackets get their own line.
+- All variables, methods, and classes should be camelCase (First word capitalized for classes) except for constants, which should be all caps with underscores between words (for example, `EARTH_MASS`).
+- Getters and setters should be prefixed with `get` and `set` respectively, like `getVelocity()` or `setMass()`.
+- Methods should generally be under 50 lines.
+
+### Contribution Guidelines
+
+All contributions should follow good software engineering practices. Epics, stories, and tasks should be created in Github's Issues feature, and moved accordingly within the scrum board project.
+Commits should reference which task they are implementing, e.g. "Implements #7".
