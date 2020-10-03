@@ -55,6 +55,23 @@ directory to prevent accidentally changing or deleting it, however this is not r
     which you can then run the jar "with-dependencies" to run the program. 
     - If you are using an IDE and have Maven properly configured you can also use that to run the project and build with Maven. 
     
+# Running and Development Workflow
+
+After building the project, the game’s executable can be launched at “/target/vekta-X.X.X-jar-with-dependencies”. Upon launch, the ‘W’, ‘A’, ‘S’, and ‘D’ keys cane be used to navigate the main menu.
+
+While the “build.bat” script can fully rebuild upon any code changes, it is recommend that you use an IDE for long-term development. We recommend using the newest version of Intellij IDEA due to its useful project configurations with Maven and Ant. Here are the steps for setting up a development environment using Intellij.
+1. Confirm that the project builds successfully using the “build.bat” script. If so, all dependencies should be set up correctly.
+2. Open the root directory as a “File Project” (File -> Open -> *open root directory*).
+3. Select the “Build Configurations bar on top of the IDE, and select “Edit Configurations”.
+4. Select the JAR Application Template.
+    - Set “Path to JAR” to “…\[root-directory]\target\vekta-0.1.0-jar-with-dependencies.jar”.
+    - Ensure that a valid runtime environment is selected under “JRE:”.
+    - Ensure that the “<whole project>” is selected under “Search sources using module’s classpath”
+    - Select “Apply” and “OK”
+5. Selecting “Build Project” will now build the project after code changes.
+6. Selecting “Run” will now build and run the project after code changes.
+
+    
 ## Code Styling
 
 If you're using an IDE, there is an [EditorConfig](https://editorconfig.org/) file provided in the root directory that will allow you to automatically format your code as expected.
