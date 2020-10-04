@@ -11,7 +11,7 @@ Last Name       | First Name      | GitHub User Name     | Scrum Role
 --------------- | --------------- | -------------------- | ---------------
 Lytle           | Jared           | reviveddarkness      | Developer
 Becerra         | Juan            | juanbecerra0         | Scrum Master
-St. George      | Nate            | nstgeorge            | Product Owner 
+St George       | Nate            | nstgeorge            | Product Owner 
 
 ## :eyes: :memo: Scrum Linter Reports:
 Access the [Scrum Linter Report](http://cs.boisestate.edu/~bdit/ScrumLinter/CS471F20ScrumLinterReports/CS471-F20-Team16_oGvv2wlRhfv8y0XlOLyIYUmPmwdbhPYe34kw1nN1/). A new report will be automatically generated every few hours.
