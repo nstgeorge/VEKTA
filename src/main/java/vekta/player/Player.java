@@ -322,4 +322,18 @@ public final class Player extends Syncable<Player> {
 
 	public interface Attribute {
 	}
+
+	// Player score API
+
+	public long getScore() { return playerScore; }
+
+	public void setScore(long newScore) { playerScore = newScore; }
+
+	public void changeScore(long scoreDelta) {
+		setScore(getScore() + scoreDelta);
+
+		if (getScore() < 0)
+			setScore(0);
+	}
+
 }
