@@ -40,6 +40,8 @@ public final class Player extends Syncable<Player> {
 
 	private final Map<SkillType, Float> skills = new EnumMap<>(SkillType.class);
 
+	private long playerScore = 0;
+
 	public Player(PlayerFaction faction) {
 		setFaction(faction);
 		faction.setPlayer(this);
