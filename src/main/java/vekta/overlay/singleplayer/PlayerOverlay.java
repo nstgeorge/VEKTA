@@ -30,7 +30,7 @@ public class PlayerOverlay implements Overlay, PlayerListener {
 				new ShipMassOverlay(-300, -90, player.getShip()),
 				new ShipEnergyOverlay(-300, -60, player.getShip()),
 				new ShipTemperatureOverlay(-300, -30, player.getShip()),
-				new PlayerScoreOverlay(30, -30, player),
+				new PlayerScoreOverlay(v.displayWidth/2, -30, player),
 				new DirectoryOverlay(player),
 				new TimeScaleOverlay(),
 				notifications = new NotificationOverlay(-20, 80),
