@@ -71,6 +71,7 @@ public class Vekta extends PApplet {
 	public static final float SUN_MASS = 1.989e30F;
 	public static final float AU_DISTANCE = 1.496e11F;
 	public static final float LUNAR_DISTANCE = 3.844e8F;
+	public static final double STEFAN_BOLTZMANN = 5.670373 * (float)Math.pow(10, -8);	// Stefan-Boltzmann constant, used to calculate temperature and luminosity related values
 
 	public static int UI_COLOR;
 	public static int BUTTON_COLOR;

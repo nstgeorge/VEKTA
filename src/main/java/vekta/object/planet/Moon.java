@@ -1,5 +1,6 @@
 package vekta.object.planet;
 
+import ch.bildspur.postfx.PostFXSupervisor;
 import processing.core.PVector;
 import vekta.object.SpaceObject;
 import vekta.util.Counter;
@@ -7,8 +8,7 @@ import vekta.world.RenderLevel;
 import vekta.spawner.WorldGenerator;
 import vekta.terrain.Terrain;
 
-import static vekta.Vekta.STAR_LEVEL;
-import static vekta.Vekta.getWorld;
+import static vekta.Vekta.*;
 
 public class Moon extends TerrestrialPlanet {
 
@@ -113,4 +113,30 @@ public class Moon extends TerrestrialPlanet {
 	//	public void updateOrigin(PVector offset) {
 	//		lastParentPosition.add(offset);
 	//	}
+
+	/**
+	 * Update the temperature of the planet based on expected temperature equations.
+	 * See https://astronomy.stackexchange.com/a/10116
+	 */
+	public void updateTemperature() {
+		SpaceObject orbitObject = this.getOrbitObject();
+		if(orbitObject != null) {
+			if(orbitObject instanceof TerrestrialPlanet) {
+				Planet parentOrbitParent = (Planet)((TerrestrialPlanet) orbitObject).getOrbitObject();
+				if(parentOrbitParent instanceof Star) {
+					Star star = (Star)parentOrbitParent;
+					setTemperature((float)Math.pow((star.getLuminosity() * (1 - .3)) / (16 * Math.PI * Math.pow(super.relativePosition(star).mag(), 2) * v.STEFAN_BOLTZMANN), .25));
+				} else {
+					// Temporary temperature value for planets orbiting gas giants and black holes
+					setTemperature(-1);
+				}
+			} else {
+				// Temporary temperature value for planets orbiting gas giants and black holes
+				setTemperature(-1);
+			}
+		} else {
+			// Temporary temperature value for planets orbiting gas giants and black holes
+			setTemperature(-1);
+		}
+	}
 }

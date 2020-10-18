@@ -18,6 +18,7 @@ import vekta.terrain.settlement.Settlement;
 import vekta.util.Counter;
 import vekta.world.RenderLevel;
 
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -30,6 +31,9 @@ import static vekta.Vekta.*;
  */
 public class TerrestrialPlanet extends Planet {
 	//	private static final float LABEL_THRESHOLD = 5e4F;
+	private static final float HEAT_LOSS_COEFFICIENT = 0.1f;							// Affects how rapidly planets lose heat relative to their atmosphere thickness
+	private static final float TEMPERATURE_SCALE = 1.0f * (float)Math.pow(10, 20);		// Scales all temperatures to somewhat reasonable values
+	private static final float MAXIMUM_ATMOSPHERE = 100f;								//Maximum possible atmospheric density
 
 	private final LandingSite site;
 
@@ -39,8 +43,14 @@ public class TerrestrialPlanet extends Planet {
 
 	private ObservationLevel levelCache;
 
+	private float atmosphereThickness; // Thickness of the atmosphere relative to Earth's
+
 	public TerrestrialPlanet(String name, float mass, float density, Terrain terrain, PVector position, PVector velocity, int color) {
 		super(name, mass, density, position, velocity, color);
+
+		Random rand = new Random();
+
+		atmosphereThickness = Math.min(Math.abs(1.0f + (float)(rand.nextGaussian() * 20)), MAXIMUM_ATMOSPHERE);
 
 		this.site = new LandingSite(this, terrain);
 	}
@@ -57,6 +67,14 @@ public class TerrestrialPlanet extends Planet {
 		this.orbitObject = orbitObject;
 	}
 
+	/**
+	 * Returns the thickness of the atmosphere relative to Earth.
+	 * @return Atmosphere thickness (E)
+	 */
+	public float getAtmosphereThickness() {
+		return atmosphereThickness;
+	}
+
 	public Terrain getTerrain() {
 		return getLandingSite().getTerrain();
 	}
@@ -68,6 +86,22 @@ public class TerrestrialPlanet extends Planet {
 
 	public float getValueScale() {
 		return 1;
+	}
+
+	/**
+	 * Update the temperature of the planet based on expected temperature equations.
+	 * See https://astronomy.stackexchange.com/a/10116
+	 */
+	public void updateTemperature() {
+		if(orbitObject != null) {
+			if(orbitObject instanceof Star) {
+				Star star = (Star)orbitObject;
+				setTemperature((float)Math.pow((star.getLuminosity() * (1 - .3)) / (16 * Math.PI * Math.pow(super.relativePosition(star).mag(), 2) * v.STEFAN_BOLTZMANN), .25));
+			} else {
+				// Temporary temperature value for planets orbiting gas giants and black holes
+				setTemperature(-1);
+			}
+		}
 	}
 
 	@Override
@@ -93,6 +127,7 @@ public class TerrestrialPlanet extends Planet {
 	@Override
 	public void onUpdate(RenderLevel level) {
 		updateOrbitObject();
+		updateTemperature();
 		super.onUpdate(level);
 	}
 
