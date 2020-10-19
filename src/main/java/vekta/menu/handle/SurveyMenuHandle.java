@@ -4,6 +4,7 @@ import vekta.KeyBinding;
 import vekta.knowledge.ObservationLevel;
 import vekta.menu.Menu;
 import vekta.terrain.LandingSite;
+import vekta.terrain.feature.Feature;
 
 import static vekta.Vekta.*;
 
@@ -63,8 +64,8 @@ public class SurveyMenuHandle extends MenuHandle {
 
 		int i = 0;
 		int size = site.getTerrain().getFeatures().size();
-		for(String feature : site.getTerrain().getFeatures()) {
-			v.text(feature, PLANET_SIZE * 1.5F, (i - (size - 1) / 2F) * 50);
+		for(Feature feature : site.getTerrain().getFeatures()) {
+			v.text(feature.getName(), PLANET_SIZE * 1.5F, (i - (size - 1) / 2F) * 50);
 			i++;
 		}
 

@@ -3,6 +3,7 @@ package vekta.spawner;
 import com.google.common.collect.ImmutableList;
 import processing.core.PVector;
 import vekta.faction.Faction;
+import vekta.terrain.feature.FeatureManager;
 import vekta.world.RenderLevel;
 import vekta.Resources;
 import vekta.object.SpaceObject;
@@ -80,10 +81,7 @@ public class WorldGenerator {
 		if(features) {
 			int featureCt = (int)v.random(2, 6);
 			for(int i = 0; i < featureCt; i++) {
-				String feature = Resources.generateString("planet_feature");
-				for(String s : feature.split(",")) {
-					terrain.addFeature(s.trim());
-				}
+				terrain.addFeature(FeatureManager.randomFeature());
 			}
 		}
 		return terrain;

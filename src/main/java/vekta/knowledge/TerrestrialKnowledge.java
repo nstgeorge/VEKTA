@@ -55,7 +55,7 @@ public class TerrestrialKnowledge extends SpaceObjectKnowledge {
 			Layout scanned = layout.add(new VerticalLayout());
 
 			// Terrain features
-			scanned.add(new TextDisplay(String.join(", ", planet.getTerrain().getFeatures())));
+			scanned.add(new TextDisplay(String.join(", ", planet.getTerrain().getFeatureNames())));
 		}
 
 		// Landing info

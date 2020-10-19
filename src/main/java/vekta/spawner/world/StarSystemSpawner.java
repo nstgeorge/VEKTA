@@ -1,6 +1,8 @@
 package vekta.spawner.world;
 
 import processing.core.PVector;
+import vekta.context.PauseMenuContext;
+import vekta.terrain.feature.Feature;
 import vekta.world.RenderLevel;
 import vekta.Resources;
 import vekta.object.SpaceObject;
@@ -77,6 +79,9 @@ public class StarSystemSpawner implements WorldGenerator.WorldSpawner {
 				new PVector(),        // Velocity
 				randomPlanetColor()    // Color
 		));
+		for(Feature f : planet.getTerrain().getFeatures()) {
+			f.setPlanet(planet);
+		}
 		createMoons(planet, (int)v.random(3), .3F * LUNAR_DISTANCE, 2 * LUNAR_DISTANCE);
 		return planet;
 	}
@@ -115,7 +120,7 @@ public class StarSystemSpawner implements WorldGenerator.WorldSpawner {
 		PVector pos = planet.getPosition().add(PVector.random2D().mult(planet.getRadius() + distance));
 		float mass = pow(10, v.random(18, 23));
 		float density = v.random(3, 4);
-		return register(new Moon(
+		Moon moon = register(new Moon(
 				planet,
 				Resources.generateString("moon"),
 				mass, // Mass
@@ -125,5 +130,9 @@ public class StarSystemSpawner implements WorldGenerator.WorldSpawner {
 				new PVector(),  // Velocity
 				randomPlanetColor() // Color
 		));
+		for(Feature f : moon.getTerrain().getFeatures()) {
+			f.setPlanet(moon);
+		}
+		return moon;
 	}
 }
