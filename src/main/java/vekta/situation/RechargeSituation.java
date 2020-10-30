@@ -1,5 +1,6 @@
 package vekta.situation;
 
+import vekta.faction.PlayerFaction;
 import vekta.person.Person;
 import vekta.player.Player;
 import vekta.spawner.MissionGenerator;
@@ -11,7 +12,7 @@ public class RechargeSituation implements Situation {
 
 	public static Person findRechargePerson() {
 		return getWorld().findObjects(Person.class).stream()
-				.filter(p -> !p.isDead())
+				.filter(p -> !p.isDead() && !(p.getFaction() instanceof PlayerFaction))
 				.findFirst().orElseGet(MissionGenerator::randomMissionPerson);
 	}
 
