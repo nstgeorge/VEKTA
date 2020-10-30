@@ -217,6 +217,8 @@ public class TerrestrialPlanet extends Planet {
 		super.observe(level, player);
 
 		if(level.isBetter(levelCache)) {
+			if(level == ObservationLevel.VISITED)
+				player.changeScore(100);
 			levelCache = level;
 		}
 
