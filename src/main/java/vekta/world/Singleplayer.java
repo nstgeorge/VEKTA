@@ -359,6 +359,7 @@ public class Singleplayer implements World, PlayerListener {
 
 		v.pushMatrix();
 		v.translate(v.width / 2F, v.height / 2F);
+		v.rotate(getCameraAngle());
 
 		float zoom = state.getZoom();
 		float zoomRatio = zoom / smoothZoom;
@@ -686,6 +687,18 @@ public class Singleplayer implements World, PlayerListener {
 
 	private boolean isVisibleOnScreen(float screenX, float screenY, float boundary) {
 		return abs(screenX) - boundary <= v.width / 2F && abs(screenY) - boundary <= v.height / 2F;
+	}
+
+	public float getCameraAngle() {
+//		ModularShip ship = getPlayer().getShip();
+//		if(ship.isLanding()) {
+//			SpaceObject target = ship.findNavigationTarget();
+//			if(target != null) {
+//				PVector position = target.relativePosition(ship);
+//				return atan(position.y / position.x);
+//			}
+//		}
+		return 0;
 	}
 
 	protected void updateGlobal(RenderLevel level) {
