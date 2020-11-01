@@ -18,6 +18,7 @@ import vekta.terrain.feature.Feature;
 import vekta.terrain.settlement.Settlement;
 import vekta.util.Counter;
 import vekta.world.RenderLevel;
+import vekta.world.Singleplayer;
 
 import java.util.Random;
 import java.util.Set;
@@ -33,6 +34,8 @@ import static vekta.Vekta.*;
 public class TerrestrialPlanet extends Planet {
 	//	private static final float LABEL_THRESHOLD = 5e4F;
 
+	private static final float EARTH_ATMOS_ALTITUDE = 100000000F;
+
 	private final LandingSite site;
 
 	private SpaceObject orbitObject;
@@ -41,7 +44,8 @@ public class TerrestrialPlanet extends Planet {
 
 	private ObservationLevel levelCache;
 
-	private float atmosphereThickness; 		// Thickness of the atmosphere relative to Earth's
+	private float atmosphereDensity; 		// Thickness of the atmosphere relative to Earth's
+	private float atmosphereAltitude;		// Altitude at which the atmosphere of the planet is completely gone. (Earth: approx 193121280m)
 	private float magneticFieldStrength;	// Strength of the magnetic field relative to Earth's
 
 	private float escapeVelocity;			// For reference
@@ -55,8 +59,11 @@ public class TerrestrialPlanet extends Planet {
 
 		Random rand = new Random();
 
-		// Set atmospheric thickness slightly influenced by mass
-		atmosphereThickness = Math.abs((float)(rand.nextGaussian() * 20)) * (mass / v.EARTH_MASS);
+		// Set atmospheric density slightly influenced by mass
+		atmosphereDensity = Math.abs((float)(rand.nextGaussian() * 10)) * (mass / v.EARTH_MASS);
+
+		// Set atmospheric altitude distributed normally relative to Earth's atmospheric altitude
+		atmosphereAltitude = (EARTH_ATMOS_ALTITUDE + (float)(rand.nextGaussian() * 1000)) * (atmosphereDensity * 0.5f);
 
 		// 30% chance to have a magnetic field, then randomly set a normally distributed value
 		magneticFieldStrength = v.chance(.3f) ? 0 : Math.abs((float)(rand.nextGaussian() * 50));
@@ -81,7 +88,11 @@ public class TerrestrialPlanet extends Planet {
 	 * @return Atmosphere thickness (E)
 	 */
 	public float getAtmosphereThickness() {
-		return atmosphereThickness;
+		return atmosphereDensity;
+	}
+
+	public float getAtmosphereAltitude() {
+		return atmosphereAltitude;
 	}
 
 	public float getMagneticFieldStrength() {
@@ -113,12 +124,12 @@ public class TerrestrialPlanet extends Planet {
 
 				// Estimate atmospheric escape
 				if(getTemperature() > Math.pow(escapeVelocity, 2)) {
-					atmosphereThickness -= 0.0000001 * (getTemperature() - Math.pow(escapeVelocity, 2));
+					atmosphereDensity -= 0.0000001 * (getTemperature() - Math.pow(escapeVelocity, 2));
 				}
 				if(magneticFieldStrength < 0.01) {
-					atmosphereThickness -= 0.00000001;
+					atmosphereDensity -= 0.00000001;
 				}
-				atmosphereThickness = Math.max(0, atmosphereThickness);
+				atmosphereDensity = Math.max(0, atmosphereDensity);
 			} else {
 				// Temporary temperature value for planets orbiting gas giants and black holes
 				setTemperature(-1);
@@ -155,6 +166,25 @@ public class TerrestrialPlanet extends Planet {
 		updateOrbitObject();
 		updateCharacteristics();
 		super.onUpdate(level);
+	}
+
+	@Override
+	public void draw(RenderLevel level, float r) {
+		super.draw(level, r);
+
+		// Draw atmosphere
+		if(level.isVisibleTo(RenderLevel.PLANET)) {
+			float atmosRadius = (atmosphereAltitude / getRadius()) * r;
+			if(((Singleplayer)v.getWorld()).getPlayer().getShip().findNavigationTarget() == this) {
+				System.out.println("Radius: " + getRadius() + " ---- Drawn radius: " + r + " ---- atmospheric radius: " + atmosphereAltitude + " ---- Drawn atmosphere: " + atmosRadius);
+			}
+			// Temporary - draw only the Karman line in white
+			v.strokeWeight(1);
+			v.stroke(100, 255);
+			v.fill(0, 0);
+			v.ellipse(0, 0, r + atmosRadius, r + atmosRadius);
+		}
+
 	}
 
 	protected void updateOrbitObject() {
