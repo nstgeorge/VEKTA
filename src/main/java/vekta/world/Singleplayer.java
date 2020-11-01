@@ -66,6 +66,7 @@ public class Singleplayer implements World, PlayerListener {
 
 	private static final float ZOOM_FACTOR = .3F;
 	private static final float ZOOM_SMOOTH = .1F;
+	private static final float ROTATE_SMOOTH = .05F;
 	private static final float TIME_SCALE = .001F;
 	private static final float TIME_FALLOFF = .1F;
 	private static final int MAX_OBJECTS_PER_DIST = 5; // TODO: increase as we add more object types
@@ -90,6 +91,8 @@ public class Singleplayer implements World, PlayerListener {
 
 	private boolean lastZoomOutward; // Was last user-controlled zoom directed outward?
 	private float smoothZoom = 10; // Time-smoothed zoom factor
+	private float smoothRotateAngle = 0; 	// Time smooth rotation angle
+	private float targetAngle = 0;			// Unsmoothed rotation angle
 	private float timeScale = 1; // World time scale
 	private RenderLevel prevLevel = RenderLevel.PARTICLE;
 
@@ -97,7 +100,7 @@ public class Singleplayer implements World, PlayerListener {
 	private final Counter spawnCt = new Counter(10).randomize(); // Spawn objects
 	private final Counter cleanupCt = new Counter(100).randomize(); // Despawn objects
 	private final Counter eventCt = new Counter(3600 * 20).randomize(); // Occasional random events
-	private final Counter situationCt = new Counter(30).randomize(); // Situational events
+	private final Counter situationCt = new Counter(10).randomize(); // Situational events
 	private final Counter economyCt = new Counter(600).randomize(); // Economic progression
 	private final Counter ecosystemCt = new Counter(600).randomize(); // Ecosystem progression
 
@@ -284,6 +287,25 @@ public class Singleplayer implements World, PlayerListener {
 		}
 	}
 
+	public float getAngle() { return smoothRotateAngle; }
+
+	/**
+	 * Set the new desired angle
+	 * @param newAngle
+	 */
+	public void setAngle(float newAngle) {
+		targetAngle = newAngle;
+	}
+
+	/**
+	 * Override the smooth angle transition
+	 * @param newAngle
+	 */
+	public void overrideAngle(float newAngle) {
+		smoothRotateAngle = newAngle;
+		targetAngle = newAngle;
+	}
+
 	@Override
 	public void setAutoZoom(float zoom) {
 		// Only zoom if player was zooming in the same direction
@@ -338,6 +360,9 @@ public class Singleplayer implements World, PlayerListener {
 			Resources.setMusic(MUSIC.random(), false);
 		}
 
+		// Update camera rotation
+		smoothRotateAngle += (targetAngle - smoothRotateAngle) * ROTATE_SMOOTH;
+
 		// Update time factor
 		smoothZoom += (state.getZoom() - smoothZoom) * ZOOM_SMOOTH;
 		timeScale = max(1, smoothZoom * TIME_SCALE) / (1 + smoothZoom * TIME_SCALE * TIME_SCALE * TIME_FALLOFF);
@@ -359,6 +384,10 @@ public class Singleplayer implements World, PlayerListener {
 
 		v.pushMatrix();
 		v.translate(v.width / 2F, v.height / 2F);
+		v.beginCamera();
+		v.camera();
+		v.rotate(targetAngle);
+		v.endCamera();
 
 		float zoom = state.getZoom();
 		float zoomRatio = zoom / smoothZoom;

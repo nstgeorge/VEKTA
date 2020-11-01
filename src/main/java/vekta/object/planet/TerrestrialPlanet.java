@@ -175,9 +175,6 @@ public class TerrestrialPlanet extends Planet {
 		// Draw atmosphere
 		if(level.isVisibleTo(RenderLevel.PLANET)) {
 			float atmosRadius = (atmosphereAltitude / getRadius()) * r;
-			if(((Singleplayer)v.getWorld()).getPlayer().getShip().findNavigationTarget() == this) {
-				System.out.println("Radius: " + getRadius() + " ---- Drawn radius: " + r + " ---- atmospheric radius: " + atmosphereAltitude + " ---- Drawn atmosphere: " + atmosRadius);
-			}
 			// Temporary - draw only the Karman line in white
 			v.strokeWeight(1);
 			v.stroke(100, 255);
