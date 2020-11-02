@@ -173,14 +173,12 @@ public class TerrestrialPlanet extends Planet {
 		super.draw(level, r);
 
 		// Draw atmosphere
-		if(level.isVisibleTo(RenderLevel.PLANET)) {
-			float atmosRadius = (atmosphereAltitude / getRadius()) * r;
-			// Temporary - draw only the Karman line in white
-			v.strokeWeight(1);
-			v.stroke(100, 255);
-			v.fill(0, 0);
-			v.ellipse(0, 0, r + atmosRadius, r + atmosRadius);
-		}
+		float atmosRadius = (atmosphereAltitude / getRadius()) * r;
+		// Temporary - draw only the Karman line in white
+		v.strokeWeight(1);
+		v.stroke(100, 255);
+		v.fill(0, 0);
+		v.ellipse(0, 0, r + atmosRadius, r + atmosRadius);
 
 	}
 

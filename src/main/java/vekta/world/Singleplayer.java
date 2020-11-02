@@ -384,10 +384,6 @@ public class Singleplayer implements World, PlayerListener {
 
 		v.pushMatrix();
 		v.translate(v.width / 2F, v.height / 2F);
-		v.beginCamera();
-		v.camera();
-		v.rotate(targetAngle);
-		v.endCamera();
 
 		float zoom = state.getZoom();
 		float zoomRatio = zoom / smoothZoom;
@@ -649,6 +645,9 @@ public class Singleplayer implements World, PlayerListener {
 		v.noFill();
 		float r = getObjectRadius(s, s.getRadius() / scale, position, cameraPos, curvature);
 		float onScreenRadius = s.getOnScreenRadius(r);
+		if(s instanceof TerrestrialPlanet) {
+			onScreenRadius += ((TerrestrialPlanet)s).getAtmosphereAltitude() / scale;
+		}
 		boolean visible = isVisibleOnScreen(screenX, screenY, onScreenRadius);
 		if(visible) {
 			s.draw(level, r);

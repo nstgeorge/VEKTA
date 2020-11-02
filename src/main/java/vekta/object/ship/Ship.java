@@ -12,6 +12,7 @@ import vekta.menu.Menu;
 import vekta.object.CargoCrate;
 import vekta.object.Shockwave;
 import vekta.object.SpaceObject;
+import vekta.object.planet.TerrestrialPlanet;
 import vekta.player.Player;
 import vekta.terrain.LandingSite;
 import vekta.world.RenderLevel;
@@ -25,6 +26,7 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 	private static final float CRATE_SPEED = 10; // Speed of item drops when destroyed
 	private static final int DEPART_FRAMES = 100; // Number of seconds to wait before docking/landing again
 	private static final float BLINK_RATE = 1.5F; // Blink color decay rate
+	private static final float REENTRY_ANIMATION_DIST = 10000000F;	// Distance from the Karman line at which the re-entry effect begins and ends
 
 	private String name;
 	private final float speed;  // Force induced when engine is on
@@ -199,6 +201,30 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 		super.draw(level, r);
 	}
 
+	public void drawReentryEffect(float r, TerrestrialPlanet nearestPlanet) {
+		int numberOfArcs = 10;
+		int startColor = v.color(255, 255, 255, 255);
+		int endColor = v.color(252, 86, 3, 255);
+
+		float distToKarmanLine = Math.abs(getPosition().dist(nearestPlanet.getPosition()) - (nearestPlanet.getRadius() + nearestPlanet.getAtmosphereAltitude()));
+
+		if(distToKarmanLine <= REENTRY_ANIMATION_DIST /*&& getRenderLevel().isVisibleTo(level) */) {
+			float relativeVelocityAngle = getVelocity().sub(nearestPlanet.getVelocity()).heading();
+			v.rotate(relativeVelocityAngle);
+			for(int i = 1; i <= numberOfArcs; i++) {
+				float strength = v.random(.8f) * ((distToKarmanLine - REENTRY_ANIMATION_DIST) / REENTRY_ANIMATION_DIST);
+				float offset = v.PI * (strength * i) / numberOfArcs;
+
+				v.noFill();
+				v.stroke(v.lerpColor(startColor, endColor, (float)i / numberOfArcs));
+				v.strokeWeight(2);
+				v.arc((numberOfArcs - i) * 2 * v.random(.9f, 1.1f), 0, r * 5, (r * 3 + (Math.abs(getVelocity().heading() % v.PI - getHeading().heading() % v.PI))), offset, -offset, v.OPEN);
+			}
+			v.rotate(-relativeVelocityAngle);
+		}
+
+	}
+
 	public void drawShipMarker(RenderLevel level, float r) {
 		// Fade marker near ship level
 		boolean fading = RenderLevel.SHIP.isVisibleTo(level);
@@ -214,6 +240,7 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 
 	protected void drawShip(float r, ShipModelType shape) {
 		v.strokeWeight(2f);
+		v.color(getColor());
 		float theta = heading.heading() + HALF_PI;
 		v.rotate(theta);
 		v.beginShape();
@@ -259,6 +286,18 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 	}
 
 	public void onDepart(SpaceObject obj) {
+	}
+
+	public TerrestrialPlanet getNearestPlanet() {
+		float bestDist = Float.MAX_VALUE;
+		TerrestrialPlanet nearest = null;
+		for(TerrestrialPlanet p : getWorld().findObjects(TerrestrialPlanet.class)) {
+			if(getPosition().dist(p.getPosition()) < bestDist) {
+				bestDist = getPosition().dist(p.getPosition());
+				nearest = p;
+			}
+		}
+		return nearest;
 	}
 
 	@Override
