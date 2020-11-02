@@ -60,6 +60,7 @@ public class Vekta extends PApplet {
 	// Render/spawning distances (we might want to use kilometers due to limited floating-point precision)
 	public static final float DETAIL_LEVEL = 1e1F;
 	public static final float SHIP_LEVEL = 1e2F;
+	public static final float ATMOSPHERE_LEVEL = 1e5F;
 	public static final float PLANET_LEVEL = 1e7F;
 	public static final float STAR_LEVEL = 3e8F;
 	public static final float INTERSTELLAR_LEVEL = 3e9F;
@@ -250,6 +251,8 @@ public class Vekta extends PApplet {
 			return DETAIL_LEVEL;
 		case SHIP:
 			return SHIP_LEVEL;
+		case ATMOSPHERE:
+			return ATMOSPHERE_LEVEL;
 		case PLANET:
 			return PLANET_LEVEL;
 		case STAR:
@@ -266,11 +269,13 @@ public class Vekta extends PApplet {
 				RenderLevel.PARTICLE :
 				unit <= SHIP_LEVEL ?
 						RenderLevel.SHIP :
-						unit <= PLANET_LEVEL ?
-								RenderLevel.PLANET :
-								unit <= STAR_LEVEL ?
-										RenderLevel.STAR :
-										RenderLevel.INTERSTELLAR;
+						unit <= ATMOSPHERE_LEVEL ?
+								RenderLevel.ATMOSPHERE :
+								unit <= PLANET_LEVEL ?
+										RenderLevel.PLANET :
+										unit <= STAR_LEVEL ?
+												RenderLevel.STAR :
+												RenderLevel.INTERSTELLAR;
 	}
 
 	//// Static world-related methods ////

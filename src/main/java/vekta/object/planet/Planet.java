@@ -59,13 +59,13 @@ public abstract class Planet extends SpaceObject implements Renameable {
 	@Override
 	public void draw(RenderLevel level, float r) {
 		// Temp: fade out planet if zoomed in too much to render
-		float maxRadius = 1000;
-		if(r > maxRadius) {
-			return;
-		}
+		float maxRadius = 10000;
+//		if(r > maxRadius) {
+//			return;
+//		}
 
 		if(r > maxRadius * .9F) {
-			v.fill(v.lerpColor(0, getColor(), (maxRadius - r) / maxRadius));
+//			v.fill(v.lerpColor(0, getColor(), (maxRadius - r) / maxRadius));
 		}
 		else if(r < .5F && level.isVisibleTo(RenderLevel.INTERSTELLAR) /* TODO refactor optimization */) {
 			v.point(0, 0);
