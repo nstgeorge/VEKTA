@@ -29,13 +29,4 @@ public class EcosystemMenuHandle extends SideLayoutMenuHandle {
 	//		v.fill(container.getColor());
 	//		v.text(container.getName());
 	//	}
-
-	@Override
-	protected void drawButton(Menu menu, MenuOption opt, int index) {
-		super.drawButton(menu, opt, index);
-
-		if(opt instanceof SpeciesButton) {
-			
-		}
-	}
 }
