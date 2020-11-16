@@ -7,7 +7,7 @@ import vekta.display.Layout;
 import vekta.display.TextDisplay;
 import vekta.item.Item;
 
-public abstract class ItemButton implements ButtonOption, LayoutAware {
+public abstract class ItemButton extends ButtonOption implements LayoutAware {
 	private final Item item;
 
 	public ItemButton(Item item) {

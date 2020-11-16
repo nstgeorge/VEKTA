@@ -14,7 +14,7 @@ import java.util.List;
 
 import static vekta.Vekta.setContext;
 
-public class UpgradeMenuButton implements ButtonOption {
+public class UpgradeMenuButton extends ButtonOption {
 	private static final SettlementUpgrade[] UPGRADES = Resources.findSubclassInstances(SettlementUpgrade.class);
 
 	private final Player player;

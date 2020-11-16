@@ -6,7 +6,7 @@ import vekta.menu.Menu;
 
 import static vekta.Vekta.setContext;
 
-public class RenameButton implements ButtonOption {
+public class RenameButton extends ButtonOption {
 	private final Renameable renameable;
 
 	public RenameButton(Renameable renameable) {

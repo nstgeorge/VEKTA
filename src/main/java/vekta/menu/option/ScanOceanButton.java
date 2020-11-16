@@ -13,7 +13,7 @@ import vekta.terrain.settlement.Settlement;
 import static vekta.Vekta.setContext;
 import static vekta.Vekta.v;
 
-public class ScanOceanButton implements ButtonOption {
+public class ScanOceanButton extends ButtonOption {
 	private final LandingSite site;
 	private final float density;
 

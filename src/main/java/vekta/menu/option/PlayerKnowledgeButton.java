@@ -7,7 +7,7 @@ import vekta.menu.Menu;
 import static vekta.Vekta.getContext;
 import static vekta.Vekta.setContext;
 
-public class PlayerKnowledgeButton implements ButtonOption {
+public class PlayerKnowledgeButton extends ButtonOption {
 	public PlayerKnowledgeButton() {
 	}
 

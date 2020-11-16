@@ -8,7 +8,7 @@ import vekta.menu.option.MenuOption;
 
 import static vekta.Vekta.v;
 
-public class InputOption<T> implements MenuOption {
+public class InputOption<T> extends MenuOption {
 	private final String name;
 	private final InputWatcher<T> watcher;
 	private final InputController<T> controller;
@@ -33,11 +33,11 @@ public class InputOption<T> implements MenuOption {
 	}
 
 	@Override
-	public void draw(Menu menu, int index) {
+	public void render(Menu menu, int index) {
 		String name = getName();
 		MenuHandle handle = menu.getHandle();
 		float x = handle.getItemX();
-		float y = handle.getItemY(index);
+		float y = handle.getY() + handle.getItemY(index);
 		float xOffset = handle.getItemWidth() / 2F;
 		boolean selected = menu.getIndex() == index;
 		String valueText = getController().getName(getWatcher().getValue());

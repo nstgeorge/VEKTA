@@ -174,7 +174,7 @@ public class TerrestrialPlanet extends Planet {
 
 		// Draw atmosphere
 		float atmosRadius = (atmosphereAltitude / getRadius()) * r;
-		// Temporary - draw only the Karman line in white
+		// Temporary - render only the Karman line in white
 		v.strokeWeight(1);
 		v.stroke(100, 255);
 		v.fill(0, 0);

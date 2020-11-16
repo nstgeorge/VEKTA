@@ -1,0 +1,22 @@
+Initializing bootup sequence...
+ 
+This computer property of
+ _    __________ ___________
+| |  / / ____/ //_/_  __/   |
+| | / / __/ / ,<   / / / /| |
+| |/ / /___/ /| | / / / ___ |
+|___/_____/_/ |_|/_/ /_/  |_|
+ 
+Galactic Navigation and Combat Systems Ltd.
+ 
+Probing PCIe devices...
+Found 14 devices. (Run with "-v" for full list.)
+ 
+Sending wake signal to RADAR and weapons subsystems...
+Subsystems online.
+ 
+Finalizing bootup sequence...
+Sequence complete.
+ 
+Welcome, Navigator. May your path be peaceful and trades fruitful.
+ 

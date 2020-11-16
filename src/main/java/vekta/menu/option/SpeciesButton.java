@@ -11,7 +11,7 @@ import vekta.menu.handle.MenuHandle;
 import static vekta.Vekta.quantityString;
 import static vekta.Vekta.v;
 
-public class SpeciesButton implements ButtonOption, LayoutAware {
+public class SpeciesButton extends ButtonOption implements LayoutAware {
 	private final Species species;
 	private final Ecosystem ecosystem;
 
@@ -40,8 +40,8 @@ public class SpeciesButton implements ButtonOption, LayoutAware {
 	}
 
 	@Override
-	public void draw(Menu menu, int index) {
-		ButtonOption.super.draw(menu, index);
+	public void render(Menu menu, int index) {
+		super.render(menu, index);
 
 		if(getPopulation() > 0) {
 			MenuHandle handle = menu.getHandle();

@@ -6,7 +6,7 @@ import vekta.module.Module;
 
 import static vekta.Vekta.v;
 
-public class InstallModuleButton implements ButtonOption {
+public class InstallModuleButton extends ButtonOption {
 	private final ModuleUpgrader upgrader;
 	private final Module module;
 	private final ModuleStatus status;

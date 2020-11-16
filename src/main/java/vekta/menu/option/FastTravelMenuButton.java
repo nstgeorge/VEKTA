@@ -12,7 +12,7 @@ import java.util.List;
 import static vekta.Vekta.getWorld;
 import static vekta.Vekta.setContext;
 
-public class FastTravelMenuButton implements ButtonOption {
+public class FastTravelMenuButton extends ButtonOption {
 	private final BlackHole from;
 
 	public FastTravelMenuButton(BlackHole from) {

@@ -16,7 +16,8 @@ public class MainMenuHandle extends MenuHandle {
 
 	@Override
 	public void focus(Menu menu) {
-		super.focus(menu);
+		super.focus(getMenu());
+		disableBlockingElements();
 
 		Resources.setMusic("theme", false);
 	}
@@ -29,13 +30,13 @@ public class MainMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public void render(Menu menu) {
-		super.render(menu);
+	public void render() {
+		super.render();
 
 		v.shapeMode(CENTER);
-		v.shape(Resources.logo, v.width / 2F, v.height / 4F, 339.26F, 100);
+		v.shape(Resources.logo, v.width / 2F, v.height / 4F, 646.15F, 100);
 
 		v.textSize(14);
-		v.text("Created by Nate St. George & Ryan Vandersmith", v.width / 2F, (v.height / 2F) + 100 * (menu.size() + 1));
+		v.text("Created by Nate St. George & Ryan Vandersmith", v.width / 2F, (v.height / 2F) + 100 * (getMenu().size() + 1));
 	}
 }

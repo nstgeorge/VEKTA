@@ -9,7 +9,7 @@ import vekta.terrain.settlement.Settlement;
 
 import static vekta.Vekta.setContext;
 
-public class SettlementButton implements ButtonOption {
+public class SettlementButton extends ButtonOption {
 	private final Settlement settlement;
 
 	public SettlementButton(Settlement settlement) {

@@ -77,7 +77,7 @@ public class Menu implements Context {
 			for(MenuListener listener : listeners) {
 				listener.onHover(cursor);
 			}
-			handle.onChange(this);
+			handle.onChange();
 		}
 	}
 
@@ -109,10 +109,14 @@ public class Menu implements Context {
 
 	public void add(MenuOption item) {
 		options.add(item);
+		handle.addElement(item);
+		item.init(this);
 	}
 
 	public void add(int index, MenuOption item) {
 		options.add(index, item);
+		handle.addElement(item);
+		item.init(this);
 	}
 
 	public void addDefault() {
@@ -121,13 +125,14 @@ public class Menu implements Context {
 
 	public boolean remove(MenuOption item) {
 		if(options.remove(item)) {
+			handle.removeElement(item);
 			if(size() == 0) {
 				close();
 			}
 			else if(index >= size()) {
 				index = size() - 1;
 			}
-			handle.onChange(this);
+			handle.onChange();
 			return true;
 		}
 		return false;
@@ -203,19 +208,19 @@ public class Menu implements Context {
 
 	@Override
 	public void render() {
-		handle.render(this);
+		handle.render();
 	}
 
 	@Override
 	public void keyPressed(KeyEvent event) {
 		Context.super.keyPressed(event);
 
-		handle.keyPressed(this, event);
+		handle.keyPressed(event);
 	}
 
 	@Override
 	public void keyPressed(KeyBinding key) {
-		handle.keyPressed(this, key);
+		handle.keyPressed(key);
 	}
 
 	@Override

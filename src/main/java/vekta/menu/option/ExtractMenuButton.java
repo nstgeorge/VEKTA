@@ -10,7 +10,7 @@ import vekta.terrain.LandingSite;
 import static vekta.Vekta.setContext;
 import static vekta.Vekta.v;
 
-public class ExtractMenuButton implements ButtonOption {
+public class ExtractMenuButton extends ButtonOption {
 	private final LandingSite site;
 	private final int amount;
 

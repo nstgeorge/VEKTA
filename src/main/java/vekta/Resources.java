@@ -61,7 +61,7 @@ public final class Resources {
 			checkStrings(key, STRINGS.get(key));
 		}
 
-		logo = v.loadShape("VEKTA.svg");
+		logo = v.loadShape("vekta_wordmark.svg");
 	}
 
 	private static void loadResources(BiConsumer<String, String> load, String... ext) {

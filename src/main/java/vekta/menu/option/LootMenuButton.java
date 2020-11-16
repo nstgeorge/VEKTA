@@ -7,7 +7,7 @@ import vekta.menu.handle.LootMenuHandle;
 
 import static vekta.Vekta.setContext;
 
-public class LootMenuButton implements ButtonOption {
+public class LootMenuButton extends ButtonOption {
 	private final String name;
 	private final Inventory inv;
 

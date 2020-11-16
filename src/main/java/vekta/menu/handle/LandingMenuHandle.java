@@ -22,12 +22,13 @@ public class LandingMenuHandle extends MenuHandle {
 
 	@Override
 	public void init(Menu menu) {
+		setMenu(menu);
 		site.getTune().reset();
 	}
 
 	@Override
-	public void render(Menu menu) {
-		super.render(menu);
+	public void render() {
+		super.render();
 
 		site.getTune().update();
 

@@ -20,6 +20,7 @@ public class LoadoutMenuHandle extends MenuHandle {
 	private final boolean replace;
 
 	public LoadoutMenuHandle(List<Module> modules, boolean replace) {
+		super(0, 200, v.width, v.height - 300);
 		this.modules = modules;
 		this.replace = replace;
 	}
@@ -39,10 +40,10 @@ public class LoadoutMenuHandle extends MenuHandle {
 		return v.width / 6 + getItemWidth() / 2;
 	}
 
-	@Override
-	public int getItemY(int i) {
-		return super.getItemY(i - 1);
-	}
+//	@Override
+//	public int getItemY(int i) {
+//		return super.getItemY(i - 1);
+//	}
 
 	@Override
 	public KeyBinding getShortcutKey() {
@@ -50,8 +51,8 @@ public class LoadoutMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public void render(Menu menu) {
-		super.render(menu);
+	public void render() {
+		super.render();
 
 		v.textSize(32);
 		v.fill(v.color(100));
@@ -62,7 +63,7 @@ public class LoadoutMenuHandle extends MenuHandle {
 
 		ModuleType type = null;
 		if(replace) {
-			MenuOption item = menu.getCursor();
+			MenuOption item = getMenu().getCursor();
 			if(item instanceof InstallModuleButton) {
 				type = ((InstallModuleButton)item).getModule().getType();
 			}

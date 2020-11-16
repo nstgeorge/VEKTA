@@ -7,7 +7,7 @@ import vekta.mission.Mission;
 import static vekta.Vekta.setContext;
 import static vekta.Vekta.v;
 
-public class MissionMenuButton implements ButtonOption {
+public class MissionMenuButton extends ButtonOption {
 
 	public MissionMenuButton() {
 	}

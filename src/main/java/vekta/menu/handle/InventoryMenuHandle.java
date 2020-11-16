@@ -36,13 +36,13 @@ public class InventoryMenuHandle extends SideLayoutMenuHandle {
     }
 
     @Override
-    public void render(Menu menu) {
-        super.render(menu);
+    public void render() {
+        super.render();
 
         if(getTitle() != null) {
             v.textSize(24);
             v.fill(200);
-            v.text(getTitle(), getItemX(), getItemY(-3));
+            v.text(getTitle(), getItemX(), getY() - (getY() / 2));
         }
 
         v.textSize(32);

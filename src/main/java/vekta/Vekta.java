@@ -10,6 +10,7 @@ import processing.opengl.PGraphicsOpenGL;
 import processing.opengl.PShader;
 import vekta.context.Context;
 import vekta.context.PauseMenuContext;
+import vekta.context.StartSceneContext;
 import vekta.item.ItemType;
 import vekta.menu.Menu;
 import vekta.menu.handle.MainMenuHandle;
@@ -114,13 +115,16 @@ public class Vekta extends PApplet {
 		BODY_FONT = createFont(FONTNAME, 24);
 		v.textFont(BODY_FONT);
 
+		// Build main menu
 		mainMenu = new Menu(null, new ExitGameButton("Quit"), new MainMenuHandle());
 		mainMenu.add(new WorldButton("Singleplayer", Singleplayer::new));
 		mainMenu.add(new WorldButton("Multiplayer", Multiplayer::new));
 		mainMenu.add(new SettingsMenuButton());
 		mainMenu.addDefault();
-		setContext(mainMenu);
-		//		setContext(new Multiplayer());///
+
+		// Start opening scene
+		StartSceneContext startScene = new StartSceneContext();
+		setContext(startScene);
 		applyContext();
 
 		frame.toFront();

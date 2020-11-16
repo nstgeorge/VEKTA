@@ -11,7 +11,7 @@ import vekta.object.ship.SpaceStation;
 import static vekta.Vekta.getWorld;
 import static vekta.Vekta.setContext;
 
-public class LoadoutMenuButton implements ButtonOption, ModuleUpgrader {
+public class LoadoutMenuButton extends ButtonOption implements ModuleUpgrader {
 	private final ModuleUpgradeable upgradeable;
 
 	public LoadoutMenuButton(ModuleUpgradeable upgradeable) {

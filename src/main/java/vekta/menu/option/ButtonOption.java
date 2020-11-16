@@ -6,13 +6,14 @@ import vekta.menu.handle.MenuHandle;
 import static processing.core.PApplet.max;
 import static vekta.Vekta.*;
 
-public interface ButtonOption extends MenuOption {
+public abstract class ButtonOption extends MenuOption {
+
 	@Override
-	default void draw(Menu menu, int index) {
+	public void render(Menu menu, int index) {
 		String name = getName();
 		MenuHandle handle = menu.getHandle();
 		float x = handle.getItemX();
-		float y = handle.getItemY(index);
+		float y = handle.getY() + handle.getItemY(index);
 		boolean selected = menu.getIndex() == index;
 
 		// Draw border
@@ -20,7 +21,7 @@ public interface ButtonOption extends MenuOption {
 		v.stroke(selected ? 255 : menu.getDefault() == this ? 100 : getBorderColor());
 		//		v.noFill();
 		v.fill(BUTTON_COLOR);
-		v.rect(x, y, max(handle.getItemWidth(), v.textWidth(name) + 20) + (selected ? 15 : 0), 50);
+		v.rect(x, y, max(handle.getItemWidth(), v.textWidth(name) + 20) + (selected ? 15 : 0), handle.getItemHeight());
 		v.strokeWeight(1);
 
 		// Draw text
@@ -28,7 +29,7 @@ public interface ButtonOption extends MenuOption {
 		v.text(name, x, y - 3);
 	}
 
-	default int getBorderColor() {
+	public int getBorderColor() {
 		return UI_COLOR;
 	}
 }

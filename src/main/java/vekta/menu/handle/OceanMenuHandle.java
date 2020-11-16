@@ -28,8 +28,8 @@ public class OceanMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public void render(Menu menu) {
-		super.render(menu);
+	public void render() {
+		super.render();
 
 		float width = v.width * .75F;
 		v.stroke(site.getParent().getColor());

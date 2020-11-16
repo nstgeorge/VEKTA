@@ -6,7 +6,7 @@ import vekta.menu.handle.TempleMenuHandle;
 
 import static vekta.Vekta.setContext;
 
-public class TempleButton implements ButtonOption {
+public class TempleButton extends ButtonOption {
 	private final String name;
 	private final Deity deity;
 

@@ -12,7 +12,7 @@ import java.util.List;
 
 import static vekta.Vekta.setContext;
 
-public class SellKnowledgeMenuButton implements ButtonOption {
+public class SellKnowledgeMenuButton extends ButtonOption {
 	private final Settlement settlement;
 	private final Inventory inventory;
 

@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import static vekta.Vekta.getWorld;
 import static vekta.Vekta.setContext;
 
-public class FollowerMenuButton implements ButtonOption {
+public class FollowerMenuButton extends ButtonOption {
 	private final List<Person> followers;
 
 	public FollowerMenuButton(Player player) {

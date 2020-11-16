@@ -10,7 +10,7 @@ import vekta.menu.handle.OfferingMenuHandle;
 
 import static vekta.Vekta.setContext;
 
-public class OfferMenuButton implements ButtonOption {
+public class OfferMenuButton extends ButtonOption {
 	private final Deity deity;
 
 	public OfferMenuButton(Deity deity) {
@@ -33,7 +33,7 @@ public class OfferMenuButton implements ButtonOption {
 	@Override
 	public int getColor() {
 		ItemCategory category = getCategory();
-		return category instanceof ItemTypeCategory ? ((ItemTypeCategory)category).getType().getColor() : ButtonOption.super.getColor();
+		return category instanceof ItemTypeCategory ? ((ItemTypeCategory)category).getType().getColor() : super.getColor();
 	}
 
 	@Override

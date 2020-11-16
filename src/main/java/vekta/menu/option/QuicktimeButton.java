@@ -5,7 +5,7 @@ import vekta.menu.Menu;
 import static vekta.Vekta.DANGER_COLOR;
 import static vekta.Vekta.v;
 
-public class QuicktimeButton implements ButtonOption {
+public class QuicktimeButton extends ButtonOption {
 	private float time;
 	private final String name;
 	private final CustomButton.MenuAction action;

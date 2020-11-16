@@ -8,8 +8,9 @@ import vekta.menu.option.input.*;
 import java.util.Arrays;
 
 import static vekta.Vekta.setContext;
+import static vekta.Vekta.v;
 
-public class SettingsMenuButton implements ButtonOption {
+public class SettingsMenuButton extends ButtonOption {
 
 	@Override
 	public String getName() {

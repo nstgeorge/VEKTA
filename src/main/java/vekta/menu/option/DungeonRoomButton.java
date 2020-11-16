@@ -6,7 +6,7 @@ import vekta.menu.handle.DungeonMenuHandle;
 
 import static vekta.Vekta.*;
 
-public class DungeonRoomButton implements ButtonOption {
+public class DungeonRoomButton extends ButtonOption {
 	private final String name;
 	private final DungeonRoom room;
 

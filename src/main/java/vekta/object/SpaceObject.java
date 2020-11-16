@@ -261,7 +261,7 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 
 	public void drawPreview(float r) {
 		v.rotate(v.frameCount * PREVIEW_ROTATE_SPEED);
-		//		draw(RenderLevel.PARTICLE, r / 3);
+		//		render(RenderLevel.PARTICLE, r / 3);
 		drawNearby(r / 3);
 	}
 
@@ -325,7 +325,7 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 			newPos[0] += relative.x;
 			newPos[1] += relative.y;
 
-			// Set the color and draw the line segment
+			// Set the color and render the line segment
 			v.stroke(v.lerpColor(color, 0, (float)i / trail.length));
 			v.line(oldPos[0] / scale, oldPos[1] / scale, newPos[0] / scale, newPos[1] / scale);
 		}

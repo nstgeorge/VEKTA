@@ -3,37 +3,61 @@ package vekta.menu.option;
 import processing.event.KeyEvent;
 import vekta.KeyBinding;
 import vekta.menu.Menu;
+import vekta.ui.container.ContainerMember;
 
 import java.io.Serializable;
 
 import static vekta.Vekta.UI_COLOR;
 
-public interface MenuOption extends Serializable {
-	String getName();
+public abstract class MenuOption implements Serializable, ContainerMember {
 
-	void draw(Menu menu, int index);
+	private Menu menu;
 
-	default int getColor() {
+	public final void init(Menu menu) {
+		this.menu = menu;
+	}
+
+	public abstract String getName();
+
+	public abstract void render(Menu menu, int index);
+
+	@Override
+	public void render() {
+		render(menu, menu.getOptions().indexOf(this));
+	}
+
+	public int getColor() {
 		return UI_COLOR;
 	}
 
-	default String getSelectVerb() {
+	public String getSelectVerb() {
 		return "select";
 	}
 
-	default boolean isEnabled() {
+	public boolean isEnabled() {
 		return true;
 	}
 
-	default void onUpdate(Menu menu) {
+	public void onUpdate(Menu menu) {
 	}
 
-	void onSelect(Menu menu);
+	public abstract void onSelect(Menu menu);
 
-	default boolean interceptKeyPressed(Menu menu, KeyBinding key) {
+	public boolean interceptKeyPressed(Menu menu, KeyBinding key) {
 		return false;
 	}
 
-	default void keyPressed(Menu menu, KeyEvent event) {
+	public void keyPressed(Menu menu, KeyEvent event) {
+	}
+
+	@Override
+	public float getSizeY() {
+		//return menu.getHandle().getItemY(menu.getOptions().indexOf(this));
+		return 50;
+	}
+
+	@Override
+	public float getYPadding() {
+		return menu.getHandle().getSpacing();
 	}
 }

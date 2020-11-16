@@ -8,7 +8,7 @@ import vekta.menu.Menu;
 
 import static vekta.Vekta.moneyString;
 
-public class SellDataButton implements ButtonOption, LayoutAware {
+public class SellDataButton extends ButtonOption implements LayoutAware {
 	private final Inventory inventory;
 	private final Player player;
 	private final Knowledge knowledge;

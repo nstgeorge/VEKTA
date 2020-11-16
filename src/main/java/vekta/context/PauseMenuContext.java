@@ -46,7 +46,7 @@ public class PauseMenuContext implements Context {
 
 		// Logo
 		v.shapeMode(CENTER);
-		v.shape(Resources.logo, v.width / 8F, 100, (v.width / 4F) - 100, ((v.width / 4F) - 100) / 3.392F);
+		v.shape(Resources.logo, v.width / 8F, 100, 484.6125F, 75);
 
 		// Options
 		for(int i = 0; i < OPTIONS.length; i++) {

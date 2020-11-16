@@ -39,7 +39,13 @@ public class SurveyObjectiveSpawner implements MissionGenerator.ObjectiveSpawner
 	}
 
 	public static String randomSurveyFeature() {
-		Terrain terrain = MissionGenerator.randomLandingSite().getTerrain();
+		Terrain terrain = null;
+		int features = 0;
+		while(features == 0) {
+			terrain = MissionGenerator.randomLandingSite().getTerrain();
+			features = terrain.getFeatures().size();
+		}
+
 		return v.random(terrain.getFeatures()).getName();
 	}
 }

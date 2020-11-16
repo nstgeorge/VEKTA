@@ -51,7 +51,7 @@ public class GasGiant extends Planet {
 	public void drawNearby(float r) {
 		super.drawNearby(r);
 
-		// Initialize in draw loop for consistent rendering parameters
+		// Initialize in render loop for consistent rendering parameters
 		if(rings == null) {
 			rings = new PShape[ringDistances.length];
 			v.noFill();

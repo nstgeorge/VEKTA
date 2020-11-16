@@ -20,11 +20,11 @@ public class EstateMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public void render(Menu menu) {
-		super.render(menu);
+	public void render() {
+		super.render();
 
 		v.textSize(48);
-		v.fill(menu.getPlayer().getColor());
+		v.fill(getMenu().getPlayer().getColor());
 		v.text(estate.getName(), v.width / 2F, getItemY(-2) - 64);
 
 		v.textSize(32);

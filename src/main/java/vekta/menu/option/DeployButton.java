@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 
 import static vekta.Vekta.register;
 
-public class DeployButton implements ButtonOption {
+public class DeployButton extends ButtonOption {
 	private final String name;
 	private final Item item;
 	private final Supplier<SpaceObject> supplier;

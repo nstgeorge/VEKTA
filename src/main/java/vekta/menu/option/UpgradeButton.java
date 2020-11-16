@@ -7,7 +7,7 @@ import vekta.terrain.settlement.Settlement;
 
 import static vekta.Vekta.moneyString;
 
-public class UpgradeButton implements ButtonOption {
+public class UpgradeButton extends ButtonOption {
 	private final Player player;
 	private final Settlement settlement;
 	private final SettlementUpgrade upgrade;

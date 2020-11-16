@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 import static vekta.Vekta.setContext;
 
-public class GraphicsMenuButton implements ButtonOption {
+public class GraphicsMenuButton extends ButtonOption {
     @Override
     public String getName() {
         return "Graphics";

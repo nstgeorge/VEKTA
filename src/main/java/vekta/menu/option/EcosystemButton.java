@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 import static vekta.Vekta.setContext;
 
-public class EcosystemButton implements ButtonOption {
+public class EcosystemButton extends ButtonOption {
 	private final Ecosystem ecosystem;
 
 	public EcosystemButton(Ecosystem ecosystem) {

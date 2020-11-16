@@ -7,7 +7,7 @@ import vekta.menu.handle.InventoryMenuHandle;
 
 import static vekta.Vekta.setContext;
 
-public class InventoryButton implements ButtonOption {
+public class InventoryButton extends ButtonOption {
     private final Inventory inv;
 
     public InventoryButton(Inventory inv) {

@@ -60,7 +60,7 @@ public class TextDisplay extends StyledDisplay {
 		List<String> lines = getLines(width);
 		for(String line : lines) {
 			//			if(y >= height) {
-			//				break; // Don't draw overflowing lines
+			//				break; // Don't render overflowing lines
 			//			}
 
 			v.text(line, x, y);

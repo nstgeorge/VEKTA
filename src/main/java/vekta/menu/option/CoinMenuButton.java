@@ -8,7 +8,7 @@ import vekta.spawner.item.CoinItemSpawner;
 
 import static vekta.Vekta.setContext;
 
-public class CoinMenuButton implements ButtonOption {
+public class CoinMenuButton extends ButtonOption {
 	private final CoinMarket market;
 
 	public CoinMenuButton() {

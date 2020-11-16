@@ -82,9 +82,9 @@ public class Moon extends TerrestrialPlanet {
 	}
 
 	//	@Override
-	//	public void draw(RenderLevel level, float r) {
+	//	public void render(RenderLevel level, float r) {
 	//		if(RenderLevel.PLANET.isVisibleTo(level)) {
-	//			super.draw(level, r);
+	//			super.render(level, r);
 	//		}
 	//	}
 

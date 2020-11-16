@@ -11,7 +11,7 @@ import java.util.Map;
 
 import static vekta.Vekta.setContext;
 
-public class MarketButton implements ButtonOption {
+public class MarketButton extends ButtonOption {
 	private final Market market;
 	private final boolean buying;
 	private final Inventory you;

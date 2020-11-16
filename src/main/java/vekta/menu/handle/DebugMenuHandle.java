@@ -5,11 +5,11 @@ import vekta.menu.Menu;
 
 public class DebugMenuHandle extends MenuHandle {
 	@Override
-	public void keyPressed(Menu menu, KeyEvent event) {
-		super.keyPressed(menu, event);
+	public void keyPressed(KeyEvent event) {
+		super.keyPressed(event);
 
 		if(event.getKey() == '`') {
-			menu.close();
+			getMenu().close();
 		}
 	}
 }

@@ -6,7 +6,7 @@ import vekta.terrain.LandingSite;
 
 import static vekta.Vekta.setContext;
 
-public class SurveyButton implements ButtonOption {
+public class SurveyButton extends ButtonOption {
 	private final LandingSite site;
 
 	public SurveyButton(LandingSite site) {

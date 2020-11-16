@@ -47,19 +47,20 @@ public class SideLayoutMenuHandle extends MenuHandle {
 
 	@Override
 	public void init(Menu menu) {
-		menu.addSelectListener(opt -> updateLayout(menu));
+		super.init(menu);
+		menu.addSelectListener(opt -> updateLayout(getMenu()));
 	}
 
 	@Override
 	public void focus(Menu menu) {
-		super.focus(menu);
+		super.focus(getMenu());
 
-		updateLayout(menu);
+		updateLayout(getMenu());
 	}
 
 	@Override
-	public void render(Menu menu) {
-		super.render(menu);
+	public void render() {
+		super.render();
 
 		float offset = leftSide ? 0 : getItemWidth() / 2F;
 
@@ -72,8 +73,8 @@ public class SideLayoutMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public void onChange(Menu menu) {
-		updateLayout(menu);
+	public void onChange() {
+		updateLayout(getMenu());
 	}
 
 	private void updateLayout(Menu menu) {

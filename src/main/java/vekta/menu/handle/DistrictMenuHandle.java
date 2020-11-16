@@ -26,8 +26,8 @@ public class DistrictMenuHandle extends SettlementMenuHandle {
 //	}
 
 	@Override
-	public void render(Menu menu) {
-		super.render(menu);
+	public void render() {
+		super.render();
 
 		//		v.textSize(48);
 		//		v.fill(district.getSettlement().getColor());
@@ -55,7 +55,7 @@ public class DistrictMenuHandle extends SettlementMenuHandle {
 	}
 
 	@Override
-	protected float getY() {
+    public float getY() {
 		return getDistrict().getY();
 	}
 }

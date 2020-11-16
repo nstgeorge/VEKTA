@@ -5,7 +5,7 @@ import vekta.menu.handle.InternetMenuHandle;
 
 import static vekta.Vekta.*;
 
-public class InternetMenuButton implements ButtonOption {
+public class InternetMenuButton extends ButtonOption {
 	private final boolean connected;
 
 	public InternetMenuButton(boolean connected) {

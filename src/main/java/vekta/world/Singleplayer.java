@@ -634,7 +634,7 @@ public class Singleplayer implements World, PlayerListener {
 
 		v.translate(screenX, screenY);
 
-		// Update trail and draw if necessary
+		// Update trail and render if necessary
 		s.updateTrail();
 		if(drawTrails && (s == playerShip || s.getRenderLevel().isVisibleTo(level))) {
 			s.drawTrail(scale);

@@ -10,7 +10,7 @@ import vekta.menu.handle.MenuHandle;
 
 import static vekta.Vekta.*;
 
-public class EconomyItemButton implements ButtonOption {
+public class EconomyItemButton extends ButtonOption {
 	private static final float FEE = 1;
 
 	private final Inventory inventory;
@@ -90,8 +90,8 @@ public class EconomyItemButton implements ButtonOption {
 	}
 
 	@Override
-	public void draw(Menu menu, int index) {
-		ButtonOption.super.draw(menu, index);
+	public void render(Menu menu, int index) {
+		super.render(menu, index);
 
 		MenuHandle handle = menu.getHandle();
 

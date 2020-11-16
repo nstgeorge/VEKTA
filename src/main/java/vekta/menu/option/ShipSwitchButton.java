@@ -3,7 +3,7 @@ package vekta.menu.option;
 import vekta.menu.Menu;
 import vekta.object.ship.ModularShip;
 
-public class ShipSwitchButton implements ButtonOption {
+public class ShipSwitchButton extends ButtonOption {
 	private final ModularShip ship;
 
 	public ShipSwitchButton(ModularShip ship) {
