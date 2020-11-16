@@ -44,6 +44,10 @@ public class ScanLinePass implements Pass {
 		shader.set("vigInnerRad", 0.25f);
 		shader.set("vigOuterRad", 1.35f);
 		shader.set("vigOpacity", 0.25f);
+
+		// Dithering uniforms
+		shader.set("dithMixScale", 0.95f);
+		shader.set("dithNoiseScale", 5.0f);
 	}
 
 	@Override
