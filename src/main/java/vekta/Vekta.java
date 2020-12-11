@@ -1,6 +1,13 @@
 package vekta;
 
 import ch.bildspur.postfx.builder.PostFX;
+import com.github.strikerx3.jxinput.XInputAxes;
+import com.github.strikerx3.jxinput.XInputAxesDelta;
+import com.github.strikerx3.jxinput.XInputDevice;
+import com.github.strikerx3.jxinput.enums.XInputButton;
+import com.github.strikerx3.jxinput.exceptions.XInputNotLoadedException;
+import com.github.strikerx3.jxinput.listener.SimpleXInputDeviceListener;
+import com.github.strikerx3.jxinput.listener.XInputDeviceListener;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PVector;
@@ -8,6 +15,7 @@ import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 import processing.opengl.PGraphicsOpenGL;
 import processing.opengl.PShader;
+import com.github.strikerx3.jxinput.enums.XInputButton;
 import vekta.context.Context;
 import vekta.context.PauseMenuContext;
 import vekta.context.StartSceneContext;
@@ -84,6 +92,8 @@ public class Vekta extends PApplet {
 	public static PFont HEADER_FONT;
 	public static PFont BODY_FONT;
 
+	public static XInputDevice device;
+
 	@Override
 	public void settings() {
 		pixelDensity(displayDensity());
@@ -107,6 +117,16 @@ public class Vekta extends PApplet {
 
 		Settings.init();
 		Resources.init();
+
+		try {
+			XInputDevice[] devices = XInputDevice.getAllDevices();
+			// Retrieve the device for player 1
+			device = XInputDevice.getDeviceFor(0);
+			device.addListener(listener);
+		}
+		catch(XInputNotLoadedException e) {
+			e.printStackTrace();
+		}
 
 		//		textMode(SHAPE);
 
@@ -135,6 +155,7 @@ public class Vekta extends PApplet {
 
 	@Override
 	public void draw() {
+		device.poll();
 		applyContext();
 		if(context != null) {
 			context.render();
@@ -152,6 +173,16 @@ public class Vekta extends PApplet {
 
 		Resources.updateAudio();
 	}
+
+	XInputDeviceListener listener = new SimpleXInputDeviceListener() {
+
+		public void buttonChanged(final XInputButton button, final boolean pressed) {
+			if(pressed == true)
+				context.buttonPressed(button);
+			else
+				context.buttonReleased(button);
+		}
+	};
 
 	@Override
 	public void keyPressed(KeyEvent event) {

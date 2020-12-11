@@ -1,9 +1,13 @@
 package vekta.context;
 
+import com.github.strikerx3.jxinput.enums.XInputButton;
+import com.github.strikerx3.jxinput.listener.SimpleXInputDeviceListener;
+import com.github.strikerx3.jxinput.listener.XInputDeviceListener;
 import processing.event.KeyEvent;
 import vekta.KeyBinding;
 import vekta.Settings;
 import vekta.overlay.Overlay;
+import com.github.strikerx3.jxinput.XInputDevice14;
 
 public interface Context extends Overlay {
 	/**
@@ -16,6 +20,28 @@ public interface Context extends Overlay {
 	 * Called whenever the context is replaced
 	 */
 	default void unfocus() {
+	}
+
+
+
+	default void buttonPressed(XInputButton button) {
+		for(KeyBinding key : KeyBinding.values())
+		{
+			if(key.getButton() == button)
+			{
+				keyPressed(key);
+			}
+		}
+	}
+
+	default void buttonReleased(XInputButton button) {
+		for(KeyBinding key : KeyBinding.values())
+		{
+			if(key.getButton() == button)
+			{
+				keyReleased(key);
+			}
+		}
 	}
 
 	/**

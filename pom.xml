@@ -100,6 +100,13 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
+		
+		<!-- Xinput -->
+		<dependency>
+			<groupId>com.github.strikerx3</groupId>
+			<artifactId>jxinput</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 
     </dependencies>
     <build>
