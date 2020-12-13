@@ -9,7 +9,9 @@ import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
 import processing.core.PShape;
 import processing.sound.SoundFile;
+import processing.sound.Sound;
 import vekta.config.Config;
+import vekta.context.PauseMenuContext;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
@@ -38,7 +40,7 @@ public final class Resources {
 	private static final char REF_BEFORE = '{';
 	private static final char REF_AFTER = '}';
 
-	private static final int MUSIC_FADE_TIME = 100;
+	private static final int MUSIC_FADE_TIME = 500;
 
 	private static SoundFile prevMusic;
 	private static SoundFile currentMusic;
@@ -231,10 +233,15 @@ public final class Resources {
 		if(volume > 0) {
 			SoundFile sound = getSound(key);
 			sound.stop();
-			if(sound.channels() > 1) {//TODO refactor
-				println(":: Stereo sound:", key);
+			if(pan != 0) {
+				if(sound.channels() > 1) {//TODO refactor
+					println(":: Stereo sound:", key);
+				}
+				sound.play(freq, pan, volume);
+			} else {
+				sound.play(freq, volume);
 			}
-			sound.play(freq, pan, volume);
+
 		}
 	}
 

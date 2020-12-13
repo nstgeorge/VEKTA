@@ -6,6 +6,8 @@ import static vekta.Vekta.v;
 
 public class Typewriter implements Element {
 
+	private static final float VOLUME = 0.2f;
+
 	private enum Mode {
 
 		NORMAL(50, "typewriter_normal"),
@@ -53,7 +55,7 @@ public class Typewriter implements Element {
 			if(v.millis() >= lastCharTime + (1000 / mode.outputSpeed) && !pause) {
 				lastCharTime = v.millis();
 
-				Resources.playSound(mode.sound);
+				Resources.playSound(mode.sound, VOLUME);
 				index++;
 
 				// Handle mode checking

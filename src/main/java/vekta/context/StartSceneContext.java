@@ -25,6 +25,11 @@ public class StartSceneContext implements Context {
 	}
 
 	@Override
+	public void focus() {
+		Resources.setMusic("intro_and_menu", false);
+	}
+
+	@Override
 	public void render() {
 		v.background(0);
 

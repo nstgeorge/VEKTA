@@ -1,5 +1,6 @@
 package vekta.situation;
 
+import vekta.Resources;
 import vekta.object.planet.BlackHole;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.player.Player;
@@ -27,6 +28,7 @@ public class InKarmanLineSituation implements Situation {
 	@Override
 	public void start(Player player) {
 		getWorld().addZoomController(new AttributeZoomController(getClass(), getDistanceUnit(RenderLevel.ATMOSPHERE)));
+		Resources.setMusic("subatmosphere_0", true);
 	}
 
 	@Override

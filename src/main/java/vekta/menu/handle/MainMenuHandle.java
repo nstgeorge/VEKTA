@@ -19,7 +19,7 @@ public class MainMenuHandle extends MenuHandle {
 		super.focus(getMenu());
 		disableBlockingElements();
 
-		Resources.setMusic("theme", false);
+		Resources.setMusic("intro_and_menu", false);
 	}
 	
 	@Override
