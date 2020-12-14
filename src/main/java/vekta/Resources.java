@@ -281,7 +281,7 @@ public final class Resources {
 	public static void loopSound(String key, float volume, float pan) {
 		loopSound(key, volume, pan, 1);
 	}
-
+  
 	public static void loopSound(String key, float volume, float pan, float freq) {
 		volume *= soundVolume;
 		if(volume > 0) {

@@ -70,7 +70,6 @@ public class Typewriter implements Element {
 				} else {
 					mode = Mode.NORMAL;
 				}
-
 			}
 		}
 	}
