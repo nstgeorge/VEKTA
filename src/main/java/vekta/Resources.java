@@ -272,18 +272,29 @@ public final class Resources {
 		}
 	}
 
-//	public static void loopSound(String key) {
-//		loopSound(key, false);
-//	}
+	public static void loopSound(String key) {
+		loopSound(key, 1);
+	}
 
-	public static void loopSound(String key/*, boolean randomize*/) {
-		if(soundVolume > 0) {
+	public static void loopSound(String key, float volume) { loopSound(key, volume, 0); }
+
+	public static void loopSound(String key, float volume, float pan) {
+		loopSound(key, volume, pan, 1);
+	}
+
+	public static void loopSound(String key, float volume, float pan, float freq) {
+		volume *= soundVolume;
+		if(volume > 0) {
 			SoundFile sound = getSound(key);
 			if(!sound.isPlaying()) {
-				sound.loop();
+				sound.loop(freq, pan, volume);
 //				if(randomize) {
 //					randomizeSoundProgress(sound);
 //				}
+			} else {
+				sound.amp(volume);
+				sound.pan(pan);
+				sound.rate(freq);
 			}
 		}
 	}

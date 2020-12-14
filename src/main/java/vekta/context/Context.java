@@ -22,8 +22,9 @@ public interface Context extends Overlay {
 	default void unfocus() {
 	}
 
-
-
+	/**
+	 * What to do when a button on a controller is pressed.
+	 */
 	default void buttonPressed(XInputButton button) {
 		for(KeyBinding key : KeyBinding.values())
 		{
@@ -34,6 +35,9 @@ public interface Context extends Overlay {
 		}
 	}
 
+	/**
+	 * What to do when a button on a controller is released.
+	 */
 	default void buttonReleased(XInputButton button) {
 		for(KeyBinding key : KeyBinding.values())
 		{
@@ -42,6 +46,18 @@ public interface Context extends Overlay {
 				keyReleased(key);
 			}
 		}
+	}
+
+	/**
+	 * What to do with one of the back controller triggers is pressed
+	 */
+	default void analogKeyPressed(float value){
+	}
+
+	/**
+	 * What to do when the control stick is moved.
+	 */
+	default void controlStickMoved(float x, float y, String LR) {
 	}
 
 	/**

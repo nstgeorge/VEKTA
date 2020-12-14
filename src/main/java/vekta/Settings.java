@@ -19,6 +19,7 @@ public final class Settings {
 				.put("muteSound", false)
 				.put("music", 1)
 				.put("muteMusic", false)
+				.put("rumbleAmount", .7)
 				.put("zoomSpeed", 1)
 				.put("randomEvents", true)
 				.put("drawTrails", true)

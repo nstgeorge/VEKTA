@@ -754,6 +754,19 @@ public class Singleplayer implements World, PlayerListener {
 	}
 
 	@Override
+	public void controlStickMoved(float x, float y, String LR)
+	{
+		if(LR.equals("left"))
+			getPlayer().getShip().setHeading(new PVector(x,-y));
+	}
+
+	@Override
+	public void analogKeyPressed(float value)
+	{
+		getPlayer().getShip().getModule(ModuleType.ENGINE).onAnalogKeyPress(value);
+	}
+
+	@Override
 	public void keyPressed(KeyBinding key) {
 		if(key == KeyBinding.ZOOM_IN) {
 			setZoom(getZoom() / 10);

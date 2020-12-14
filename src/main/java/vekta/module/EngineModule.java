@@ -62,6 +62,12 @@ public class EngineModule extends ShipModule {
 	}
 
 	@Override
+	public void onAnalogKeyPress(float value)
+	{
+		getShip().setThrustControl(value);
+	}
+
+	@Override
 	public void onKeyPress(KeyBinding key) {
 		if(key == KeyBinding.SHIP_FORWARD) {
 			getShip().setThrustControl(1);

@@ -1,9 +1,7 @@
 package vekta;
 
 import ch.bildspur.postfx.builder.PostFX;
-import com.github.strikerx3.jxinput.XInputAxes;
-import com.github.strikerx3.jxinput.XInputAxesDelta;
-import com.github.strikerx3.jxinput.XInputDevice;
+import com.github.strikerx3.jxinput.*;
 import com.github.strikerx3.jxinput.enums.XInputButton;
 import com.github.strikerx3.jxinput.exceptions.XInputNotLoadedException;
 import com.github.strikerx3.jxinput.listener.SimpleXInputDeviceListener;
@@ -15,7 +13,6 @@ import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 import processing.opengl.PGraphicsOpenGL;
 import processing.opengl.PShader;
-import com.github.strikerx3.jxinput.enums.XInputButton;
 import vekta.context.Context;
 import vekta.context.PauseMenuContext;
 import vekta.context.StartSceneContext;
@@ -93,6 +90,7 @@ public class Vekta extends PApplet {
 	public static PFont BODY_FONT;
 
 	public static XInputDevice device;
+	public static float accel;
 
 	@Override
 	public void settings() {
@@ -155,7 +153,9 @@ public class Vekta extends PApplet {
 
 	@Override
 	public void draw() {
-		device.poll();
+		device.poll(); //Xbox action listener
+		analogTriggerResponse();
+
 		applyContext();
 		if(context != null) {
 			context.render();
@@ -183,6 +183,26 @@ public class Vekta extends PApplet {
 				context.buttonReleased(button);
 		}
 	};
+
+	public void analogTriggerResponse()
+	{
+		/*
+			Poll analog controls regardless of if they're pressed at all or not.
+		*/
+		XInputAxes axes = device.getComponents().getAxes();
+
+		/*
+			If you are accelerating you cannot deccelerate at the same time with analog and vice versa.
+		 */
+		if(axes.lt == 0)
+			context.analogKeyPressed(axes.rt);
+		if(axes.rt == 0)
+			context.analogKeyPressed(-axes.lt);
+
+		context.controlStickMoved(axes.lx, axes.ly, "left");
+		context.controlStickMoved(axes.rx, axes.ry, "right");
+	}
+
 
 	@Override
 	public void keyPressed(KeyEvent event) {
