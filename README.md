@@ -21,11 +21,11 @@ VEKTA is an early-development space exploration game with an infinite universe t
 
 ## Code Styling
 
-If you're using an IDE, there is an [EditorConfig](https://editorconfig.org/) file provided in the root directory that will allow you automatically format your code as expected.
+There is an [EditorConfig](https://editorconfig.org/) file provided in the root directory that will allow you automatically format your code as expected.
 See [IntelliJ's documentation on EditorConfig files](https://www.jetbrains.com/help/idea/configuring-code-style.html#editorconfig) to see how it's used, or [install this addon for Eclipse](https://marketplace.eclipse.org/content/editorconfig-eclipse).
 
 ## Contributors
 
 [Ryan Vandersmith](https://github.com/rvanasa)
 
-[Nate St. George](https://github.com/StGerGer)
+[Nate St. George](https://github.com/nstgeorge)
