@@ -73,6 +73,8 @@ public class Vekta extends PApplet {
 
 	public static final float MIN_ZOOM_LEVEL = .5F;
 
+	public static final float CONTROLLER_DEADZONE = .15F;
+
 	// Reference constants
 	public static final float EARTH_MASS = 5.9736e24F;
 	public static final float SUN_MASS = 1.989e30F;
@@ -98,8 +100,8 @@ public class Vekta extends PApplet {
 	public void settings() {
 		pixelDensity(displayDensity());
 		System.setProperty("jogl.disable.openglcore", "true");
-		//fullScreen(P2D);
-		size(1920, 1080, P2D);
+		fullScreen(P2D);
+		//size(1920, 1080, P2D);
 		noSmooth();
 	}
 

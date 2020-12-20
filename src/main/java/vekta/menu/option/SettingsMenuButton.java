@@ -39,6 +39,10 @@ public class SettingsMenuButton extends ButtonOption {
 				sub.add(new InputOption<>("Rumble Amount",
 						new FloatSettingWatcher("rumbleAmount"),
 						new FloatRangeInputController(0, 1, .1F)));
+
+				sub.add(new InputOption<>("Deadzone",
+						new FloatSettingWatcher("deadzone"),
+						new FloatRangeInputController(1, 10, 1F)));
 			}
 		}
 

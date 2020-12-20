@@ -756,8 +756,12 @@ public class Singleplayer implements World, PlayerListener {
 	@Override
 	public void controlStickMoved(float x, float y, String LR)
 	{
-		if(LR.equals("left"))
-			getPlayer().getShip().setHeading(new PVector(x,-y));
+		if(LR.equals("left")) {
+			System.out.println(Math.sqrt(Math.abs(x) + Math.abs(y)));
+			if(Math.sqrt(Math.abs(x) + Math.abs(y)) > CONTROLLER_DEADZONE * Settings.getInt("deadzone")) {
+				getPlayer().getShip().setHeading(new PVector(x,-y));
+			}
+		}
 	}
 
 	@Override
