@@ -9,6 +9,7 @@ import java.util.Arrays;
 
 import static vekta.Vekta.setContext;
 import static vekta.Vekta.device;
+import static vekta.Vekta.OPERATING_SYSTEM;
 
 public class SettingsMenuButton extends ButtonOption {
 
@@ -33,10 +34,12 @@ public class SettingsMenuButton extends ButtonOption {
 				new FloatSettingWatcher("zoomSpeed"),
 				new FloatRangeInputController(.1F, 10, .1F)));
 
-		if(device.isConnected()) {
-			sub.add(new InputOption<>("Rumble Amount",
-					new FloatSettingWatcher("rumbleAmount"),
-					new FloatRangeInputController(0, 1, .1F)));
+		if(OPERATING_SYSTEM.contains("Windows")) {
+			if(device.isConnected()) {
+				sub.add(new InputOption<>("Rumble Amount",
+						new FloatSettingWatcher("rumbleAmount"),
+						new FloatRangeInputController(0, 1, .1F)));
+			}
 		}
 
 

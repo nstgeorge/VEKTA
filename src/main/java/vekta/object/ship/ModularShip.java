@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import processing.core.PVector;
 import vekta.*;
 import vekta.module.*;
+import vekta.module.Module;
 import vekta.object.planet.Planet;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.situation.NearPlanetSituation;
@@ -114,7 +115,9 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	}
 
 	public void setThrustControl(float thrust) {
-		device.setVibration((int)(Math.abs(thrust) * 65535 * Settings.getFloat("rumbleAmount")), (int)(Math.abs(thrust) * 65535 * Settings.getFloat("rumbleAmount")));
+		if(OPERATING_SYSTEM.contains("Windows")) {
+			device.setVibration((int)(Math.abs(thrust) * 65535 * Settings.getFloat("rumbleAmount")), (int)(Math.abs(thrust) * 65535 * Settings.getFloat("rumbleAmount")));
+		}
 		this.thrust = thrust;
 		if(!isHyperdriving() && hasController()) {
 			if(thrust != 0 && hasEnergy()) {

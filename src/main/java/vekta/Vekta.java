@@ -92,10 +92,15 @@ public class Vekta extends PApplet {
 	public static XInputDevice device;
 	public static float accel;
 
+	public static final String OPERATING_SYSTEM = System.getProperty("os.name");
+
 	@Override
 	public void settings() {
 		pixelDensity(displayDensity());
-		fullScreen(P2D);
+		System.setProperty("jogl.disable.openglcore", "true");
+		//fullScreen(P2D);
+		size(1920, 1080, P2D);
+		noSmooth();
 	}
 
 	public void setup() {
@@ -117,10 +122,13 @@ public class Vekta extends PApplet {
 		Resources.init();
 
 		try {
-			XInputDevice[] devices = XInputDevice.getAllDevices();
-			// Retrieve the device for player 1
-			device = XInputDevice.getDeviceFor(0);
-			device.addListener(listener);
+			if(OPERATING_SYSTEM.contains("Windows")) {
+				XInputDevice[] devices = XInputDevice.getAllDevices();
+				// Retrieve the device for player 1
+				device = XInputDevice.getDeviceFor(0);
+				device.addListener(listener);
+			}
+
 		}
 		catch(XInputNotLoadedException e) {
 			e.printStackTrace();
@@ -153,8 +161,10 @@ public class Vekta extends PApplet {
 
 	@Override
 	public void draw() {
-		device.poll(); //Xbox action listener
-		analogTriggerResponse();
+		if(OPERATING_SYSTEM.contains("Windows")) {
+			device.poll(); //Xbox action listener
+			analogTriggerResponse();
+		}
 
 		applyContext();
 		if(context != null) {
