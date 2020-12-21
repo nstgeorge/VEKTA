@@ -35,7 +35,7 @@ public class GraphicsMenuButton extends ButtonOption {
 
 			sub.add(new InputOption<>("Resolution",
 					new ResolutionSettingWatcher("resolution"),
-					new resolutionChoicesController<>(Arrays.asList(Resources.getStrings("resolutions_16:9")), Arrays.asList(Resources.getStrings("resolutions_21:9")), Arrays.asList(Resources.getStrings("resolutions_3:4")), aspectRatio)));
+					new resolutionChoicesController<>(Arrays.asList(Resources.getStrings("resolutions_16x9")), Arrays.asList(Resources.getStrings("resolutions_21x9")), Arrays.asList(Resources.getStrings("resolutions_3x4")), aspectRatio)));
 		}
 
         sub.add(new InputOption<>("Noise Amount",
