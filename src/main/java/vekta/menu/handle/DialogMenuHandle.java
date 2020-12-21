@@ -33,14 +33,14 @@ public class DialogMenuHandle extends MenuHandle {
 		return v.width * 2 / 3;
 	}
 
-	@Override
-	public int getItemY(int i) {
-		return super.getItemY(i + 1);
-	}
+//	@Override
+//	public int getItemY(int i) {
+//		return super.getItemY(i + 1);
+//	}
 
 	@Override
 	public void focus(Menu menu) {
-		super.focus(menu);
+		super.focus(getMenu());
 
 		if(!(getPerson() instanceof TemporaryPerson)) {
 			menu.getPlayer().addKnowledge(new PersonKnowledge(ObservationLevel.VISITED, getPerson()));
@@ -49,15 +49,15 @@ public class DialogMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public void render(Menu menu) {
-		super.render(menu);
+	public void render() {
+		super.render();
 
 		v.textSize(64);
 		v.fill(dialog.getPerson().getColor());
-		v.text(dialog.getPerson().getName(), getItemX(), getItemY(-3));
+		v.text(dialog.getPerson().getName(), getItemX(), getY() - (getY() / 2));
 
 		v.textSize(24);
 		v.fill(dialog.getColor());
-		v.text(dialog.getMessage(), getItemX(), getItemY(-2));
+		v.text(dialog.getMessage(), getItemX(), getY() - (getY() / 2) + 100);
 	}
 }

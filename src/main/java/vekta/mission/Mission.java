@@ -104,6 +104,7 @@ public class Mission extends Syncable<Mission> {
 		}
 
 		if(hasCompleted) {
+			player.changeScore(50*tier);
 			complete(); // Complete mission if an optional objective completed and the rest are optional
 		}
 		else {

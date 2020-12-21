@@ -40,6 +40,8 @@ public final class Player extends Syncable<Player> {
 
 	private final Map<SkillType, Float> skills = new EnumMap<>(SkillType.class);
 
+	private long playerScore = 0;
+
 	public Player(PlayerFaction faction) {
 		setFaction(faction);
 		faction.setPlayer(this);
@@ -320,4 +322,18 @@ public final class Player extends Syncable<Player> {
 
 	public interface Attribute {
 	}
+
+	// Player score API
+
+	public long getScore() { return playerScore; }
+
+	public void setScore(long newScore) { playerScore = newScore; }
+
+	public void changeScore(long scoreDelta) {
+		setScore(getScore() + scoreDelta);
+
+		if (getScore() < 0)
+			setScore(0);
+	}
+
 }

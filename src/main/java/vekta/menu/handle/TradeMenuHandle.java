@@ -19,8 +19,8 @@ public class TradeMenuHandle extends SideLayoutMenuHandle {
 	}
 
 	@Override
-	public void render(Menu menu) {
-		super.render(menu);
+	public void render() {
+		super.render();
 
 		boolean buying = isLeftSide();
 

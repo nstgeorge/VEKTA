@@ -11,7 +11,7 @@ import java.util.List;
 import static vekta.Vekta.getWorld;
 import static vekta.Vekta.setContext;
 
-public class BondMenuButton implements ButtonOption {
+public class BondMenuButton extends ButtonOption {
 	private final List<Faction> factions;
 
 	public BondMenuButton() {

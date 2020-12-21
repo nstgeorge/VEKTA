@@ -4,7 +4,7 @@ import vekta.menu.Menu;
 
 import static vekta.Vekta.v;
 
-public class ExitGameButton implements ButtonOption {
+public class ExitGameButton extends ButtonOption {
 	private final String name;
 
 	public ExitGameButton(String name) {

@@ -31,18 +31,18 @@ public class SecurityMenuHandle extends MenuHandle {
 		return v.width * 2 / 3;
 	}
 
-	@Override
-	public int getItemY(int i) {
-		return super.getItemY(i + 1);
-	}
+//	@Override
+//	public int getItemY(int i) {
+//		return super.getItemY(i + 1);
+//	}
 
 	@Override
-	public void render(Menu menu) {
-		super.render(menu);
+	public void render() {
+		super.render();
 
 		v.textSize(64);
 		v.fill(getFaction().getColor());
-		v.text(getFaction().getName(), getItemX(), getItemY(-3));
+		v.text(getFaction().getName(), getItemX(), getY() - (getY() / 2));
 
 		v.textSize(24);
 		v.fill(200);

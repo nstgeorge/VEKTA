@@ -1,6 +1,11 @@
 package vekta;
 
 import ch.bildspur.postfx.builder.PostFX;
+import com.github.strikerx3.jxinput.*;
+import com.github.strikerx3.jxinput.enums.XInputButton;
+import com.github.strikerx3.jxinput.exceptions.XInputNotLoadedException;
+import com.github.strikerx3.jxinput.listener.SimpleXInputDeviceListener;
+import com.github.strikerx3.jxinput.listener.XInputDeviceListener;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PVector;
@@ -10,6 +15,7 @@ import processing.opengl.PGraphicsOpenGL;
 import processing.opengl.PShader;
 import vekta.context.Context;
 import vekta.context.PauseMenuContext;
+import vekta.context.StartSceneContext;
 import vekta.item.ItemType;
 import vekta.menu.Menu;
 import vekta.menu.handle.MainMenuHandle;
@@ -60,17 +66,21 @@ public class Vekta extends PApplet {
 	// Render/spawning distances (we might want to use kilometers due to limited floating-point precision)
 	public static final float DETAIL_LEVEL = 1e1F;
 	public static final float SHIP_LEVEL = 1e2F;
+	public static final float ATMOSPHERE_LEVEL = 1e5F;
 	public static final float PLANET_LEVEL = 1e7F;
 	public static final float STAR_LEVEL = 3e8F;
 	public static final float INTERSTELLAR_LEVEL = 3e9F;
 
 	public static final float MIN_ZOOM_LEVEL = .5F;
 
+	public static final float CONTROLLER_DEADZONE = .15F;
+
 	// Reference constants
 	public static final float EARTH_MASS = 5.9736e24F;
 	public static final float SUN_MASS = 1.989e30F;
 	public static final float AU_DISTANCE = 1.496e11F;
 	public static final float LUNAR_DISTANCE = 3.844e8F;
+	public static final double STEFAN_BOLTZMANN = 5.670373 * (float)Math.pow(10, -8);	// Stefan-Boltzmann constant, used to calculate temperature and luminosity related values
 
 	public static int UI_COLOR;
 	public static int BUTTON_COLOR;
@@ -81,17 +91,37 @@ public class Vekta extends PApplet {
 	public static PFont HEADER_FONT;
 	public static PFont BODY_FONT;
 
+	public static XInputDevice device;
+	public static float accel;
+
+	public static final String OPERATING_SYSTEM = System.getProperty("os.name");
+
 	@Override
 	public void settings() {
+		v = this;
+
+		Settings.init();
+		Resources.initStrings();
+
 		pixelDensity(displayDensity());
-		fullScreen(P2D);
+		System.setProperty("jogl.disable.openglcore", "true");
+		if(Settings.getBoolean("fullscreen")) {
+			fullScreen(P2D);
+		} else {
+			size(Settings.getInt("resolutionWidth"), Settings.getInt("resolutionHeight"), P2D);
+		}
+
+		System.out.println("Starting VEKTA " + (Settings.getBoolean("fullscreen") ? "fullscreen" : "windowed") + " at " + Settings.getInt("resolutionWidth") + "x" + Settings.getInt("resolutionHeight") + " with pixel density " + displayDensity());
+
+		noSmooth();
 	}
 
 	public void setup() {
-		v = this;
 		noCursor();
 		background(0);
-		postFX = new PostFX(this, displayWidth, displayHeight);
+		postFX = new PostFX(this, width, height);
+
+		Resources.init();
 
 		hint(DISABLE_DEPTH_TEST);
 		hint(DISABLE_TEXTURE_MIPMAPS);
@@ -102,8 +132,18 @@ public class Vekta extends PApplet {
 		DANGER_COLOR = color(220, 100, 0);
 		MISSION_COLOR = ItemType.MISSION.getColor();
 
-		Settings.init();
-		Resources.init();
+		try {
+			if(OPERATING_SYSTEM.contains("Windows")) {
+				XInputDevice[] devices = XInputDevice.getAllDevices();
+				// Retrieve the device for player 1
+				device = XInputDevice.getDeviceFor(0);
+				device.addListener(listener);
+			}
+
+		}
+		catch(XInputNotLoadedException e) {
+			e.printStackTrace();
+		}
 
 		//		textMode(SHAPE);
 
@@ -112,13 +152,16 @@ public class Vekta extends PApplet {
 		BODY_FONT = createFont(FONTNAME, 24);
 		v.textFont(BODY_FONT);
 
+		// Build main menu
 		mainMenu = new Menu(null, new ExitGameButton("Quit"), new MainMenuHandle());
 		mainMenu.add(new WorldButton("Singleplayer", Singleplayer::new));
 		mainMenu.add(new WorldButton("Multiplayer", Multiplayer::new));
 		mainMenu.add(new SettingsMenuButton());
 		mainMenu.addDefault();
-		setContext(mainMenu);
-		//		setContext(new Multiplayer());///
+
+		// Start opening scene
+		StartSceneContext startScene = new StartSceneContext();
+		setContext(startScene);
 		applyContext();
 
 		frame.toFront();
@@ -129,6 +172,11 @@ public class Vekta extends PApplet {
 
 	@Override
 	public void draw() {
+		if(OPERATING_SYSTEM.contains("Windows")) {
+			device.poll(); //Xbox action listener
+			analogTriggerResponse();
+		}
+
 		applyContext();
 		if(context != null) {
 			context.render();
@@ -146,6 +194,36 @@ public class Vekta extends PApplet {
 
 		Resources.updateAudio();
 	}
+
+	XInputDeviceListener listener = new SimpleXInputDeviceListener() {
+
+		public void buttonChanged(final XInputButton button, final boolean pressed) {
+			if(pressed == true)
+				context.buttonPressed(button);
+			else
+				context.buttonReleased(button);
+		}
+	};
+
+	public void analogTriggerResponse()
+	{
+		/*
+			Poll analog controls regardless of if they're pressed at all or not.
+		*/
+		XInputAxes axes = device.getComponents().getAxes();
+
+		/*
+			If you are accelerating you cannot deccelerate at the same time with analog and vice versa.
+		 */
+		if(axes.lt == 0)
+			context.analogKeyPressed(axes.rt);
+		if(axes.rt == 0)
+			context.analogKeyPressed(-axes.lt);
+
+		context.controlStickMoved(axes.lx, axes.ly, "left");
+		context.controlStickMoved(axes.rx, axes.ry, "right");
+	}
+
 
 	@Override
 	public void keyPressed(KeyEvent event) {
@@ -249,6 +327,8 @@ public class Vekta extends PApplet {
 			return DETAIL_LEVEL;
 		case SHIP:
 			return SHIP_LEVEL;
+		case ATMOSPHERE:
+			return ATMOSPHERE_LEVEL;
 		case PLANET:
 			return PLANET_LEVEL;
 		case STAR:
@@ -265,11 +345,13 @@ public class Vekta extends PApplet {
 				RenderLevel.PARTICLE :
 				unit <= SHIP_LEVEL ?
 						RenderLevel.SHIP :
-						unit <= PLANET_LEVEL ?
-								RenderLevel.PLANET :
-								unit <= STAR_LEVEL ?
-										RenderLevel.STAR :
-										RenderLevel.INTERSTELLAR;
+						unit <= ATMOSPHERE_LEVEL ?
+								RenderLevel.ATMOSPHERE :
+								unit <= PLANET_LEVEL ?
+										RenderLevel.PLANET :
+										unit <= STAR_LEVEL ?
+												RenderLevel.STAR :
+												RenderLevel.INTERSTELLAR;
 	}
 
 	//// Static world-related methods ////

@@ -19,12 +19,17 @@ public final class Settings {
 				.put("muteSound", false)
 				.put("music", 1)
 				.put("muteMusic", false)
+				.put("rumbleAmount", .7)
+				.put("deadzone", 4)
 				.put("zoomSpeed", 1)
 				.put("randomEvents", true)
 				.put("drawTrails", true)
 				.put("bloomIntensity", 6)
 				.put("noiseAmount", 10)
 				.put("scanLineIntensity", 5)
+				.put("fullscreen", true)
+				.put("resolutionWidth", v.displayWidth)
+				.put("resolutionHeight", v.displayHeight)
 				.put("debug", false);
 		for(KeyBinding key : KeyBinding.values()) {
 			defaults.put(getKeyProp(key), serializeKeyCode(key.getDefaultKeyCode()));

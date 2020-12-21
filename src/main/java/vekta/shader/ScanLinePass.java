@@ -5,7 +5,7 @@ import ch.bildspur.postfx.pass.Pass;
 import com.jogamp.common.util.IOUtil;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
-import sun.misc.IOUtils;
+//import sun.misc.IOUtils;
 import vekta.Settings;
 
 import java.io.File;
@@ -35,10 +35,23 @@ public class ScanLinePass implements Pass {
 
 	@Override
 	public void prepare(Supervisor supervisor) {
+		// Scan-line uniforms
 		shader.set("count", 50.0f);
 		shader.set("resolution", (float)v.width, (float)v.height);
 		shader.set("brightnessBoost", 0.001f * Settings.getFloat("scanLineIntensity"));
 		shader.set("time", (float)v.millis() / 1000.0f);
+
+		// Vignette uniforms
+		shader.set("vigInnerRad", 0.25f);
+		shader.set("vigOuterRad", 1.35f);
+		shader.set("vigOpacity", 0.12f);
+
+		// Dithering uniforms
+		shader.set("dithMixScale", 0.4f);
+		shader.set("dithNoiseScale", 5.0f);
+
+		// Fisheye uniforms
+		shader.set("fishLensPower", 0.98f);
 	}
 
 	@Override

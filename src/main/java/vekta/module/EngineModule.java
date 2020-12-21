@@ -6,6 +6,8 @@ import vekta.object.ship.ModularShip;
 import vekta.util.InfoGroup;
 
 import static com.jogamp.opengl.math.FloatUtil.abs;
+import static vekta.Vekta.OPERATING_SYSTEM;
+import static vekta.Vekta.device;
 
 public class EngineModule extends ShipModule {
 	private final float speed;
@@ -59,6 +61,18 @@ public class EngineModule extends ShipModule {
 		if(ship.consumeEnergyOverTime(20 * getSpeed() * abs(thrust) * PER_MINUTE)) {
 			ship.accelerate(thrust * getSpeed()/* * ship.getBaseMass() / ship.getMass()*/);
 		}
+	}
+
+	@Override
+	public void onAnalogKeyPress(float value)
+	{
+		if(OPERATING_SYSTEM.contains("Windows")) {
+			if(device.isConnected()) {
+				getShip().setThrustControl(value);
+			}
+		}
+
+
 	}
 
 	@Override

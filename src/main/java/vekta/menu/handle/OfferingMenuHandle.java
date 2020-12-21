@@ -17,8 +17,8 @@ public class OfferingMenuHandle extends SideLayoutMenuHandle {
 	}
 
 	@Override
-	public void render(Menu menu) {
-		super.render(menu);
+	public void render() {
+		super.render();
 
 	}
 }

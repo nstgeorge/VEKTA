@@ -8,7 +8,7 @@ import java.io.Serializable;
 import static vekta.Vekta.applyContext;
 import static vekta.Vekta.setContext;
 
-public class WorldButton implements ButtonOption {
+public class WorldButton extends ButtonOption {
 	private final String name;
 	private final WorldProvider provider;
 

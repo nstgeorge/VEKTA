@@ -41,6 +41,9 @@ public interface Module extends Serializable {
 	default void onUpdate() {
 	}
 
+	default void onAnalogKeyPress(float value) {
+	}
+
 	default void onKeyPress(KeyBinding key) {
 	}
 

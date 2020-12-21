@@ -9,7 +9,7 @@ import vekta.terrain.settlement.Settlement;
 
 import static vekta.Vekta.setContext;
 
-public class EstateMenuButton implements ButtonOption {
+public class EstateMenuButton extends ButtonOption {
 	private final Settlement settlement;
 	private final Inventory inventory;
 

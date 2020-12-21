@@ -8,8 +8,10 @@ import vekta.menu.option.input.*;
 import java.util.Arrays;
 
 import static vekta.Vekta.setContext;
+import static vekta.Vekta.device;
+import static vekta.Vekta.OPERATING_SYSTEM;
 
-public class SettingsMenuButton implements ButtonOption {
+public class SettingsMenuButton extends ButtonOption {
 
 	@Override
 	public String getName() {
@@ -31,6 +33,18 @@ public class SettingsMenuButton implements ButtonOption {
 		sub.add(new InputOption<>("Scroll speed",
 				new FloatSettingWatcher("zoomSpeed"),
 				new FloatRangeInputController(.1F, 10, .1F)));
+
+		if(OPERATING_SYSTEM.contains("Windows")) {
+			if(device.isConnected()) {
+				sub.add(new InputOption<>("Rumble Amount",
+						new FloatSettingWatcher("rumbleAmount"),
+						new FloatRangeInputController(0, 1, .1F)));
+
+				sub.add(new InputOption<>("Deadzone",
+						new FloatSettingWatcher("deadzone"),
+						new FloatRangeInputController(1, 10, 1F)));
+			}
+		}
 
 		sub.add(new InputOption<>("Random events",
 				new BooleanSettingWatcher("randomEvents"),

@@ -4,6 +4,7 @@ import vekta.KeyBinding;
 import vekta.knowledge.ObservationLevel;
 import vekta.menu.Menu;
 import vekta.terrain.LandingSite;
+import vekta.terrain.feature.Feature;
 
 import static vekta.Vekta.*;
 
@@ -16,6 +17,7 @@ public class SurveyMenuHandle extends MenuHandle {
 	private final LandingSite site;
 
 	public SurveyMenuHandle(LandingSite site) {
+		super(0, PLANET_SIZE, v.width, v.height - PLANET_SIZE);
 		this.site = site;
 	}
 
@@ -25,7 +27,7 @@ public class SurveyMenuHandle extends MenuHandle {
 
 	@Override
 	public int getItemY(int i) {
-		return super.getItemY(i) + PLANET_SIZE;
+		return super.getItemY(i) + PLANET_SIZE * 2;
 	}
 
 	@Override
@@ -35,17 +37,23 @@ public class SurveyMenuHandle extends MenuHandle {
 
 	@Override
 	public void focus(Menu menu) {
-		super.focus(menu);
+		super.focus(getMenu());
 
 		getSite().getParent().observe(ObservationLevel.SCANNED, menu.getPlayer());
 	}
 
 	@Override
-	public void render(Menu menu) {
-		super.render(menu);
+	public void render() {
+		super.render();
 
 		v.pushMatrix();
-		v.translate(getItemX(), getItemY(-1) - PLANET_SIZE);
+		v.translate(getItemX(), getY() + PLANET_SIZE);
+
+		v.textAlign(CENTER);
+		v.textSize(36);
+		v.fill(getSite().getParent().getColor());
+
+		v.text(getSite().getParent().getName(), 0, -PLANET_SIZE - 50);
 
 		v.shapeMode(CENTER);
 		v.strokeWeight(2);
@@ -63,8 +71,8 @@ public class SurveyMenuHandle extends MenuHandle {
 
 		int i = 0;
 		int size = site.getTerrain().getFeatures().size();
-		for(String feature : site.getTerrain().getFeatures()) {
-			v.text(feature, PLANET_SIZE * 1.5F, (i - (size - 1) / 2F) * 50);
+		for(Feature feature : site.getTerrain().getFeatures()) {
+			v.text(feature.getName(), PLANET_SIZE * 1.5F, (i - (size - 1) / 2F) * 50);
 			i++;
 		}
 

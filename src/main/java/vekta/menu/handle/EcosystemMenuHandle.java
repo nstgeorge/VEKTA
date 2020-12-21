@@ -22,11 +22,20 @@ public class EcosystemMenuHandle extends SideLayoutMenuHandle {
 	}
 
 	//	@Override
-	//	public void render(Menu menu) {
-	//		super.render(menu);
+	//	public void render() {
+	//		super.render();
 	//
 	//		v.textSize(32);
 	//		v.fill(container.getColor());
 	//		v.text(container.getName());
 	//	}
+
+	@Override
+	protected void drawButton(MenuOption opt, int index) {
+		super.drawButton(opt, index);
+
+		if(opt instanceof SpeciesButton) {
+			
+		}
+	}
 }

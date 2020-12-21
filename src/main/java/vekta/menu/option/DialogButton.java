@@ -4,7 +4,7 @@ import vekta.menu.Menu;
 import vekta.menu.handle.DialogMenuHandle;
 import vekta.person.Dialog;
 
-public class DialogButton implements ButtonOption {
+public class DialogButton extends ButtonOption {
 	private final String name;
 	private final Dialog dialog;
 	private final MenuOption defaultOption;

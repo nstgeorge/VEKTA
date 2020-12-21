@@ -23,11 +23,11 @@ public class KnowledgeMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public void render(Menu menu) {
-		super.render(menu);
+	public void render() {
+		super.render();
 
 		v.textSize(48);
-		v.fill(knowledge.getColor(menu.getPlayer()));
-		v.text(knowledge.getName(), v.width / 2F, getItemY(-3));
+		v.fill(knowledge.getColor(getMenu().getPlayer()));
+		v.text(knowledge.getName(), v.width / 2F, getY() - (getY() / 2));
 	}
 }

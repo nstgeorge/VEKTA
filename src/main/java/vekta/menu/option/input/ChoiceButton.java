@@ -3,7 +3,7 @@ package vekta.menu.option.input;
 import vekta.menu.Menu;
 import vekta.menu.option.ButtonOption;
 
-public class ChoiceButton<T> implements ButtonOption {
+public class ChoiceButton<T> extends ButtonOption {
 	private final InputWatcher<T> watcher;
 	private final InputController<T> controller;
 	private final T value;

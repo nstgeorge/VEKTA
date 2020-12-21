@@ -4,6 +4,10 @@ import com.google.common.collect.ImmutableMap;
 import processing.core.PVector;
 import vekta.*;
 import vekta.module.*;
+import vekta.module.Module;
+import vekta.object.planet.Planet;
+import vekta.object.planet.TerrestrialPlanet;
+import vekta.situation.NearPlanetSituation;
 import vekta.world.World;
 import vekta.item.Item;
 import vekta.item.ModuleItem;
@@ -111,10 +115,13 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	}
 
 	public void setThrustControl(float thrust) {
+		if(OPERATING_SYSTEM.contains("Windows")) {
+			device.setVibration((int)(Math.abs(thrust) * 65535 * Settings.getFloat("rumbleAmount")), (int)(Math.abs(thrust) * 65535 * Settings.getFloat("rumbleAmount")));
+		}
 		this.thrust = thrust;
 		if(!isHyperdriving() && hasController()) {
 			if(thrust != 0 && hasEnergy()) {
-				Resources.loopSound("engine");
+				Resources.loopSound("engine", thrust);
 			}
 			else {
 				Resources.stopSound("engine");
@@ -331,6 +338,12 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			v.stroke(255, 0, 0);
 			v.line(0, 0, (acceleration.x * 100 / t), (acceleration.y * 100 / t));
 		}
+
+//		if(hasController()) {
+//			if(getController().hasAttribute(NearPlanetSituation.class)) {
+//
+//			}
+//		}
 
 		v.stroke(getColor());
 		super.draw(level, r);

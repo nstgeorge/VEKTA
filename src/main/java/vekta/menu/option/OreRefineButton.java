@@ -4,7 +4,7 @@ import vekta.item.Inventory;
 import vekta.item.OreItem;
 import vekta.menu.Menu;
 
-public class OreRefineButton implements ButtonOption {
+public class OreRefineButton extends ButtonOption {
 	private final OreItem item;
 	private final Inventory inventory;
 

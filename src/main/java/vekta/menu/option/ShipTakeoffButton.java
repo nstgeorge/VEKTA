@@ -6,7 +6,7 @@ import vekta.world.World;
 
 import static vekta.Vekta.setContext;
 
-public class ShipTakeoffButton implements ButtonOption {
+public class ShipTakeoffButton extends ButtonOption {
 	private final LandingSite site;
 	private final World world;
 

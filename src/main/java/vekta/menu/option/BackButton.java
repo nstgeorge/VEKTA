@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 import static vekta.Vekta.setContext;
 
-public class BackButton implements ButtonOption {
+public class BackButton extends ButtonOption {
 	private final Context parent;
 	private final OptionCallback callback;
 

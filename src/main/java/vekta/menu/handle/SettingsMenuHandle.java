@@ -8,6 +8,15 @@ import static vekta.Vekta.v;
  * Menu renderer for game settings
  */
 public class SettingsMenuHandle extends MenuHandle {
+
+	public SettingsMenuHandle() {
+		this(0, 300, v.width, v.height - 400);
+	}
+
+	public SettingsMenuHandle(int x, int y, int width, int height) {
+		super(x, y, width, height);
+	}
+
 	@Override
 	public int getItemWidth() {
 		return super.getItemWidth() * 2;
@@ -15,12 +24,7 @@ public class SettingsMenuHandle extends MenuHandle {
 
 	@Override
 	public int getSpacing() {
-		return 70;
-	}
-
-	@Override
-	public int getItemY(int i) {
-		return super.getItemY(i - 3);
+		return 20;
 	}
 
 	@Override
@@ -31,11 +35,11 @@ public class SettingsMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public void render(Menu menu) {
-		super.render(menu);
+	public void render() {
+		super.render();
 
 		v.textSize(32);
 		v.fill(255);
-		v.text("Settings", getItemX(), getItemY(-2));
+		v.text("Settings", getItemX(), getY() - (getY() / 2));
 	}
 }

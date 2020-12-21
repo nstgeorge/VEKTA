@@ -4,7 +4,7 @@ import vekta.menu.Menu;
 import vekta.module.Module;
 import vekta.module.ModuleUpgrader;
 
-public class UninstallModuleButton implements ButtonOption {
+public class UninstallModuleButton extends ButtonOption {
 	private final ModuleUpgrader upgrader;
 	private final Module module;
 

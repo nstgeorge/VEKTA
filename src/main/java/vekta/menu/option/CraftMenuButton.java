@@ -12,7 +12,7 @@ import java.util.List;
 
 import static vekta.Vekta.setContext;
 
-public class CraftMenuButton implements ButtonOption {
+public class CraftMenuButton extends ButtonOption {
 
 	private final String name;
 

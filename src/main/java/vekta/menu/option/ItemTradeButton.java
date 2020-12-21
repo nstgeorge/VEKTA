@@ -70,8 +70,8 @@ public class ItemTradeButton extends ItemButton {
 	}
 
 	@Override
-	public void draw(Menu menu, int index) {
-		super.draw(menu, index);
+	public void render(Menu menu, int index) {
+		super.render(menu, index);
 
 		if(menu.getHandle() instanceof TradeMenuHandle) {
 			TradeMenuHandle handle = (TradeMenuHandle)menu.getHandle();
@@ -97,6 +97,10 @@ public class ItemTradeButton extends ItemButton {
 		if(buying) {
 			menu.getPlayer().setBuyPrice(item, price);
 		}
+
+		// Add to the player's score
+		player.changeScore((long)(4f * (float)price * (buying ? 0.5f : 1.0f)));
+
 		menu.remove(this);
 	}
 

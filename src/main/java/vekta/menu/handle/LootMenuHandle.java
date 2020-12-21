@@ -31,8 +31,8 @@ public class LootMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public void render(Menu menu) {
-		super.render(menu);
+	public void render() {
+		super.render();
 
 		v.textSize(32);
 		v.fill(UI_COLOR);

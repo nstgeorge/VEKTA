@@ -11,6 +11,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <processing.lib>${project.basedir}/lib</processing.lib>
+        <argLine>-Djava.library.path=${java.library.path}</argLine>
     </properties>
     <dependencies>
         <!-- Processing dependencies -->
@@ -97,9 +98,24 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.13.1</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
+		
+		<!-- Xinput -->
+		<dependency>
+			<groupId>com.github.strikerx3</groupId>
+			<artifactId>jxinput</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.xenoamess/JXInput -->
+<!--        <dependency>-->
+<!--            <groupId>com.xenoamess</groupId>-->
+<!--            <artifactId>JXInput</artifactId>-->
+<!--            <version>1.0.1</version>-->
+<!--        </dependency>-->
+
 
     </dependencies>
     <build>

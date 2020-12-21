@@ -8,7 +8,7 @@ import static processing.core.PApplet.ceil;
 import static processing.core.PApplet.min;
 import static vekta.Vekta.moneyString;
 
-public class RechargeButton implements ButtonOption {
+public class RechargeButton extends ButtonOption {
 	private final Player player;
 	private final Rechargeable rechargeable;
 	private final float price;

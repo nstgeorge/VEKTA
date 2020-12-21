@@ -3,6 +3,7 @@ package vekta.world;
 public enum RenderLevel {
 	PARTICLE,
 	SHIP,
+	ATMOSPHERE,
 	PLANET,
 	STAR,
 	INTERSTELLAR;

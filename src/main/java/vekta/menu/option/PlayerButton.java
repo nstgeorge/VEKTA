@@ -6,7 +6,7 @@ import vekta.menu.handle.SpaceObjectMenuHandle;
 
 import static vekta.Vekta.setContext;
 
-public class PlayerButton implements ButtonOption {
+public class PlayerButton extends ButtonOption {
 	private final Player player;
 
 	public PlayerButton(Player player) {

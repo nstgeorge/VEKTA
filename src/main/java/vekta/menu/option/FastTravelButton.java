@@ -9,7 +9,7 @@ import vekta.spawner.WorldGenerator;
 
 import static vekta.Vekta.*;
 
-public class FastTravelButton implements ButtonOption {
+public class FastTravelButton extends ButtonOption {
 	private final Player player;
 	private final BlackHole target;
 

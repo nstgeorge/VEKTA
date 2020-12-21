@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 import static vekta.Vekta.setContext;
 
-public class CustomButton implements ButtonOption {
+public class CustomButton extends ButtonOption {
 	private final String name;
 	private final MenuAction action;
 	private int color;
@@ -20,7 +20,7 @@ public class CustomButton implements ButtonOption {
 	public CustomButton(String name, MenuAction action) {
 		this.name = name;
 		this.action = action;
-		this.color = ButtonOption.super.getColor();
+		this.color = super.getColor();
 	}
 
 	@Override

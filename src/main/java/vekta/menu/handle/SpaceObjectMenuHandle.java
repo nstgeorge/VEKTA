@@ -26,12 +26,12 @@ public class SpaceObjectMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public void render(Menu menu) {
-		super.render(menu);
+	public void render() {
+		super.render();
 
 		v.textSize(48);
 		v.fill(target.getColor());
-		v.text(target.getName(), v.width / 2F, getItemY(-3));
+		v.text(target.getName(), v.width / 2F, getY() - (getY() / 2));
 
 		// Draw object preview
 		v.pushMatrix();

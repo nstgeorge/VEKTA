@@ -3,7 +3,7 @@ package vekta.menu.option;
 import vekta.menu.Menu;
 import vekta.object.SpaceObject;
 
-public class TargetButton implements ButtonOption {
+public class TargetButton extends ButtonOption {
 	private final SpaceObject target;
 
 	public TargetButton(SpaceObject target) {

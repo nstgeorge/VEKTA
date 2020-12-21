@@ -6,7 +6,7 @@ import vekta.object.ship.Ship;
 
 import static vekta.Vekta.setContext;
 
-public class ShipUndockButton implements ButtonOption {
+public class ShipUndockButton extends ButtonOption {
 	private final Ship ship;
 	private final World world;
 

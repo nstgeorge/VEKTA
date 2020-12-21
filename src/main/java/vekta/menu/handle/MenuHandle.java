@@ -6,6 +6,7 @@ import vekta.Resources;
 import vekta.Settings;
 import vekta.menu.Menu;
 import vekta.menu.option.MenuOption;
+import vekta.ui.container.ScrollableContainer;
 
 import java.io.Serializable;
 
@@ -16,19 +17,25 @@ import static vekta.Vekta.v;
 /**
  * Default menu renderer implementation; draws buttons and selection text
  */
-public class MenuHandle implements Serializable {
-	private static final int ITEMS_BEFORE_SCROLL = 5; // Number of items before menu starts scrolling
-	private static final float SCROLL_RATE = 10; // Smooth scroll rate
+public class MenuHandle extends ScrollableContainer implements Serializable {
 
-	// Smooth scroll offset
-	private float scrollOffset;
+	private Menu menu;
+	private boolean drawBlocks;
 
 	public MenuHandle() {
+		this(0, v.height / 2 - 128, v.width, v.height / 2 + 128);
+	}
+
+	public MenuHandle(int x, int y, int width, int height) {
+		super(x, y, width, height);
+		drawBlocks = true;
 	}
 
 	public int getSpacing() {
-		return 100;
+		return 50;
 	}
+
+	public int getItemHeight() { return 50; }
 
 	public int getItemWidth() {
 		return 200;
@@ -39,17 +46,23 @@ public class MenuHandle implements Serializable {
 	}
 
 	public int getItemY(int i) {
-		// Scroll items 
-		int y = v.height / 2 - 64 + i * getSpacing();
-		y -= scrollOffset;
-		return y;
+		return (i + 1) * (getSpacing() + getItemHeight());
 	}
 
 	public KeyBinding getShortcutKey() {
 		return null;
 	}
 
+	public Menu getMenu() {
+		return menu;
+	}
+
+	public void setMenu(Menu menu) {
+		this.menu = menu;
+	}
+
 	public void init(Menu menu) {
+		setMenu(menu);
 	}
 
 	public void focus(Menu menu) {
@@ -62,44 +75,59 @@ public class MenuHandle implements Serializable {
 		v.clear();
 	}
 
-	public void render(Menu menu) {
-		int extraOptions = menu.size() - ITEMS_BEFORE_SCROLL;
-		float targetOffset = extraOptions > 0 ? menu.getIndex() * getSpacing() * extraOptions / (float)menu.size() : 0;
-		scrollOffset += (targetOffset - scrollOffset) * SCROLL_RATE / 60;
+	public void disableBlockingElements() {
+		drawBlocks = false;
+	}
+
+	@Override
+	public void render() {
+//		float targetOffset = extraOptions > 0 ? menu.getIndex() * getSpacing() * extraOptions / (float)menu.size() : 0;
+//		scrollOffset += (targetOffset - scrollOffset) * SCROLL_RATE / 60;
 
 		beforeDraw();
 
-		v.noStroke();
-		v.fill(255);
-		v.textFont(BODY_FONT);
-		v.textSize(24);
-		v.textAlign(CENTER, CENTER);
-		v.rectMode(CENTER);
-		for(int i = 0; i < menu.size(); i++) {
-			MenuOption opt = menu.get(i);
-			opt.onUpdate(menu);
-			drawButton(menu, opt, i);
-		}
+		if(menu != null) {
 
-		v.noStroke();
-		v.fill(255);
-		v.textAlign(CENTER);
+			v.noStroke();
+			v.fill(255);
+			v.textFont(BODY_FONT);
+			v.textSize(24);
+			v.textAlign(CENTER, CENTER);
+			v.rectMode(CENTER);
+			beginScrolledContext();
 
-		String selectVerb = menu.getCursor().getSelectVerb();
-		if(menu.getCursor().isEnabled() && selectVerb != null) {
-			v.text(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to " + selectVerb, getItemX(), getItemY(menu.size()) + 100);
+			for(int i = 0; i < menu.size(); i++) {
+				MenuOption opt = menu.get(i);
+				opt.onUpdate(menu);
+				drawButton(opt, i);
+			}
+
+			endScrolledContext();
+
+			if(drawBlocks) {
+				drawBlockingElements();
+			}
+
+			v.noStroke();
+			v.fill(255);
+			v.textAlign(CENTER);
+
+			String selectVerb = menu.getCursor().getSelectVerb();
+			if(menu.getCursor().isEnabled() && selectVerb != null) {
+				v.text(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to " + selectVerb, getItemX(), getItemY(menu.size()) + getY() + 100);
+			}
 		}
 	}
 
-	protected void drawButton(Menu menu, MenuOption opt, int index) {
-		opt.draw(menu, index);
+	protected void drawButton(MenuOption opt, int index) {
+		opt.render(menu, index);
 	}
 
-	public void keyPressed(Menu menu, KeyEvent event) {
+	public void keyPressed(KeyEvent event) {
 		menu.getCursor().keyPressed(menu, event);
 	}
 
-	public void keyPressed(Menu menu, KeyBinding key) {
+	public void keyPressed(KeyBinding key) {
 		if(menu.getCursor().interceptKeyPressed(menu, key)) {
 			return;
 		}
@@ -109,11 +137,11 @@ public class MenuHandle implements Serializable {
 		}
 
 		if(key == KeyBinding.MENU_UP) {
-			menu.scroll(-1);
+			scroll(-1);
 			Resources.playSound("change");
 		}
 		else if(key == KeyBinding.MENU_DOWN) {
-			menu.scroll(1);
+			scroll(1);
 			Resources.playSound("change");
 		}
 		else if(key == KeyBinding.MENU_SELECT) {
@@ -124,6 +152,10 @@ public class MenuHandle implements Serializable {
 		}
 	}
 
-	public void onChange(Menu menu) {
+	public void onChange() { }
+
+	@Override
+	public void onScroll(int amount) {
+		menu.scroll(amount);
 	}
 }

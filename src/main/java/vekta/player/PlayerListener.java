@@ -21,6 +21,12 @@ public interface PlayerListener extends Serializable {
 
 	default void onKeyRelease(KeyBinding key) {
 	}
+	
+	default void onControllerPress(KeyBinding key) {
+	}
+	
+	default void onControllerRelease(KeyBinding key) {
+	}
 
 	default void onMenu(Menu menu) {
 	}

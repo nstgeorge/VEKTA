@@ -5,10 +5,11 @@ import vekta.sync.Sync;
 import vekta.sync.Syncable;
 import vekta.ecosystem.Ecosystem;
 import vekta.menu.Menu;
+import vekta.terrain.feature.Feature;
+import vekta.terrain.feature.FeatureManager;
 import vekta.terrain.settlement.Settlement;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import static vekta.Vekta.v;
  * An abstract representation of planetary terrain.
  */
 public abstract class Terrain extends Syncable<Terrain> {
-	private final @Sync List<String> features = new ArrayList<>();
+	private final @Sync List<Feature> features = new ArrayList<>();
 	private final @Sync List<Settlement> settlements = new ArrayList<>();
 	private final Ecosystem ecosystem;
 
@@ -30,8 +31,19 @@ public abstract class Terrain extends Syncable<Terrain> {
 		ecosystem = new Ecosystem(v.random(1e5F, 1e7F));
 	}
 
-	public Collection<String> getFeatures() {
+	public List<Feature> getFeatures() {
 		return features;
+	}
+
+	public String[] getFeatureNames() {
+		String[] result = new String[features.size()];
+
+		int i = 0;
+		for(Feature f : features) {
+			result[i] = f.getName();
+			i++;
+		}
+		return result;
 	}
 
 	public boolean hasFeature(String prop) {
@@ -39,9 +51,18 @@ public abstract class Terrain extends Syncable<Terrain> {
 	}
 
 	public void addFeature(String feature) {
-		if(!getFeatures().contains(feature)) {
+		Feature newFeature = FeatureManager.searchFor(feature);
+		if(newFeature != null && !getFeatures().contains(newFeature)) {
+			getFeatures().add(newFeature);
+			// Collections.sort(features);
+			syncChanges();
+		}
+	}
+
+	public void addFeature(Feature feature) {
+		if(feature != null && !getFeatures().contains(feature)) {
 			getFeatures().add(feature);
-			Collections.sort(features);
+			// Collections.sort(features);
 			syncChanges();
 		}
 	}

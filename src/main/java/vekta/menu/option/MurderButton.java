@@ -5,7 +5,7 @@ import vekta.menu.Menu;
 import vekta.person.Person;
 import vekta.spawner.dialog.SecurityDialogSpawner;
 
-public class MurderButton implements ButtonOption {
+public class MurderButton extends ButtonOption {
 	private final Person person;
 	private final WeaponItem weapon;
 

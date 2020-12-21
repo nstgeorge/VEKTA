@@ -8,8 +8,9 @@ import vekta.menu.option.input.KeyBindingInputController;
 import vekta.menu.option.input.KeySettingWatcher;
 
 import static vekta.Vekta.setContext;
+import static vekta.Vekta.v;
 
-public class KeyBindingMenuButton implements ButtonOption {
+public class KeyBindingMenuButton extends ButtonOption {
 
 	@Override
 	public String getName() {
@@ -19,11 +20,8 @@ public class KeyBindingMenuButton implements ButtonOption {
 	@Override
 	public void onSelect(Menu menu) {
 		Menu sub = new Menu(menu, new SettingsMenuHandle());
-		for(KeyBinding key : KeyBinding.values()) {
-			sub.add(new InputOption<>(
-					key.name().replace("_", " ").toLowerCase(),
-					new KeySettingWatcher(key),
-					new KeyBindingInputController()));
+		for(KeyBinding.Section section : KeyBinding.Section.values()) {
+			sub.add(new KeybindMenuSubsectionButton(section.name().replace("_", " ").toLowerCase()));
 		}
 		sub.addDefault();
 		setContext(sub);

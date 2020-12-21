@@ -30,7 +30,7 @@ public class VerticalLayout extends Layout {
 		v.pushMatrix();
 		for(Display item : getItems()) {
 			//			if(height <= 0) {
-			//				break; // Don't draw beyond overflowing item
+			//				break; // Don't render beyond overflowing item
 			//			}
 
 			// Get preferred height of item

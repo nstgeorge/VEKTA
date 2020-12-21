@@ -6,7 +6,7 @@ import vekta.person.Person;
 import vekta.spawner.StoryGenerator;
 import vekta.story.part.Story;
 
-public class StoryProgressButton implements ButtonOption {
+public class StoryProgressButton extends ButtonOption {
 	private final Story story;
 	private final Person person;
 	private final int steps;

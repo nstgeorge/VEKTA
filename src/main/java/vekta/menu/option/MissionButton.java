@@ -6,7 +6,7 @@ import vekta.mission.MissionStatus;
 
 import static vekta.Vekta.MISSION_COLOR;
 
-public class MissionButton implements ButtonOption {
+public class MissionButton extends ButtonOption {
 	private final Mission mission;
 
 	public MissionButton(Mission mission) {

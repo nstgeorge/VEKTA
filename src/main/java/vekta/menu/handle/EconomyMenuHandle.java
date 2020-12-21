@@ -56,14 +56,14 @@ public class EconomyMenuHandle extends MenuHandle {
 		return buying ? x : v.width - x;
 	}
 
-	@Override
-	public int getItemY(int i) {
-		return super.getItemY(i - 2);
-	}
+//	@Override
+//	public int getItemY(int i) {
+//		return super.getItemY(i - 2);
+//	}
 
 	@Override
 	public void focus(Menu menu) {
-		super.focus(menu);
+		super.focus(getMenu());
 
 		if(buying && menu.size() == 1) {
 			setBuying(menu, false);
@@ -71,8 +71,10 @@ public class EconomyMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public void render(Menu menu) {
-		super.render(menu);
+	public void render() {
+		super.render();
+
+		Menu menu = getMenu();
 
 		v.textSize(32);
 		v.fill(UI_COLOR);
@@ -161,8 +163,9 @@ public class EconomyMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public void keyPressed(Menu menu, KeyBinding key) {
-		super.keyPressed(menu, key);
+	public void keyPressed(KeyBinding key) {
+		Menu menu = getMenu();
+		super.keyPressed(key);
 
 		if(key == KeyBinding.MENU_LEFT) {
 			setBuying(menu, true);

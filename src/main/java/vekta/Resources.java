@@ -9,7 +9,9 @@ import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
 import processing.core.PShape;
 import processing.sound.SoundFile;
+import processing.sound.Sound;
 import vekta.config.Config;
+import vekta.context.PauseMenuContext;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
@@ -38,7 +40,7 @@ public final class Resources {
 	private static final char REF_BEFORE = '{';
 	private static final char REF_AFTER = '}';
 
-	private static final int MUSIC_FADE_TIME = 100;
+	private static final int MUSIC_FADE_TIME = 500;
 
 	private static SoundFile prevMusic;
 	private static SoundFile currentMusic;
@@ -52,16 +54,20 @@ public final class Resources {
 	public static void init() {
 		adjustFromSettings();
 
-		loadResources(Resources::addStrings, "txt");
 		loadResources(Resources::addConfigs, "json");
 		loadResources(Resources::addShape, "obj", "svg");
 		loadResources(Resources::addSound, "wav", "mp3");
 
+		logo = v.loadShape("vekta_wordmark.svg");
+	}
+
+	public static void initStrings() {
+		adjustFromSettings();
+		loadResources(Resources::addStrings, "txt");
+
 		for(String key : STRINGS.keySet()) {
 			checkStrings(key, STRINGS.get(key));
 		}
-
-		logo = v.loadShape("VEKTA.svg");
 	}
 
 	private static void loadResources(BiConsumer<String, String> load, String... ext) {
@@ -231,10 +237,15 @@ public final class Resources {
 		if(volume > 0) {
 			SoundFile sound = getSound(key);
 			sound.stop();
-			if(sound.channels() > 1) {//TODO refactor
-				println(":: Stereo sound:", key);
+			if(pan != 0) {
+				if(sound.channels() > 1) {//TODO refactor
+					println(":: Stereo sound:", key);
+				}
+				sound.play(freq, pan, volume);
+			} else {
+				sound.play(freq, volume);
 			}
-			sound.play(freq, pan, volume);
+
 		}
 	}
 
@@ -265,18 +276,29 @@ public final class Resources {
 		}
 	}
 
-//	public static void loopSound(String key) {
-//		loopSound(key, false);
-//	}
+	public static void loopSound(String key) {
+		loopSound(key, 1);
+	}
 
-	public static void loopSound(String key/*, boolean randomize*/) {
-		if(soundVolume > 0) {
+	public static void loopSound(String key, float volume) { loopSound(key, volume, 0); }
+
+	public static void loopSound(String key, float volume, float pan) {
+		loopSound(key, volume, pan, 1);
+	}
+  
+	public static void loopSound(String key, float volume, float pan, float freq) {
+		volume *= soundVolume;
+		if(volume > 0) {
 			SoundFile sound = getSound(key);
 			if(!sound.isPlaying()) {
-				sound.loop();
+				sound.loop(freq, pan, volume);
 //				if(randomize) {
 //					randomizeSoundProgress(sound);
 //				}
+			} else {
+				sound.amp(volume);
+				sound.pan(pan);
+				sound.rate(freq);
 			}
 		}
 	}

@@ -16,6 +16,7 @@ import static vekta.Vekta.v;
  */
 public class MissionMenuHandle extends MenuHandle {
 	public MissionMenuHandle() {
+		super(0, v.height / 2 - 200, v.width, v.height / 2 + 200);
 	}
 
 	@Override
@@ -28,10 +29,10 @@ public class MissionMenuHandle extends MenuHandle {
 		return v.width / 6 + getItemWidth() / 2;
 	}
 
-	@Override
-	public int getItemY(int i) {
-		return super.getItemY(i) - 100;
-	}
+//	@Override
+//	public int getItemY(int i) {
+//		return super.getItemY(i) - 100;
+//	}
 
 	@Override
 	public KeyBinding getShortcutKey() {
@@ -39,13 +40,15 @@ public class MissionMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public void render(Menu menu) {
-		super.render(menu);
+	public void render() {
+		super.render();
+
+		Menu menu = getMenu();
 
 		v.textSize(32);
 		v.fill(v.color(100));
 		v.textAlign(v.CENTER);
-		v.text("Mission:", getItemX(), getItemY(-1));
+		v.text("Mission:", getItemX(), getY() - getY() / 2);
 
 		if(!(menu.getCursor() instanceof MissionButton)) {
 			return;

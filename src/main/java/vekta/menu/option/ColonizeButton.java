@@ -8,7 +8,7 @@ import vekta.terrain.LandingSite;
 import vekta.terrain.building.CapitalBuilding;
 import vekta.terrain.settlement.ColonySettlement;
 
-public class ColonizeButton implements ButtonOption {
+public class ColonizeButton extends ButtonOption {
 	private final ColonyItem item;
 	private final LandingSite site;
 
