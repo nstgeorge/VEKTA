@@ -46,7 +46,6 @@ public class SettingsMenuButton extends ButtonOption {
 			}
 		}
 
-
 		sub.add(new InputOption<>("Random events",
 				new BooleanSettingWatcher("randomEvents"),
 				new ChoicesInputController<>(Arrays.asList(true, false), b -> b ? "Yes" : "No")));

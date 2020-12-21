@@ -54,16 +54,20 @@ public final class Resources {
 	public static void init() {
 		adjustFromSettings();
 
-		loadResources(Resources::addStrings, "txt");
 		loadResources(Resources::addConfigs, "json");
 		loadResources(Resources::addShape, "obj", "svg");
 		loadResources(Resources::addSound, "wav", "mp3");
 
+		logo = v.loadShape("vekta_wordmark.svg");
+	}
+
+	public static void initStrings() {
+		adjustFromSettings();
+		loadResources(Resources::addStrings, "txt");
+
 		for(String key : STRINGS.keySet()) {
 			checkStrings(key, STRINGS.get(key));
 		}
-
-		logo = v.loadShape("vekta_wordmark.svg");
 	}
 
 	private static void loadResources(BiConsumer<String, String> load, String... ext) {

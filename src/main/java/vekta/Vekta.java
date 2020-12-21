@@ -98,18 +98,30 @@ public class Vekta extends PApplet {
 
 	@Override
 	public void settings() {
+		v = this;
+
+		Settings.init();
+		Resources.initStrings();
+
 		pixelDensity(displayDensity());
 		System.setProperty("jogl.disable.openglcore", "true");
-		fullScreen(P2D);
-		//size(1920, 1080, P2D);
+		if(Settings.getBoolean("fullscreen")) {
+			fullScreen(P2D);
+		} else {
+			size(Settings.getInt("resolutionWidth"), Settings.getInt("resolutionHeight"), P2D);
+		}
+
+		System.out.println("Starting VEKTA " + (Settings.getBoolean("fullscreen") ? "fullscreen" : "windowed") + " at " + Settings.getInt("resolutionWidth") + "x" + Settings.getInt("resolutionHeight") + " with pixel density " + displayDensity());
+
 		noSmooth();
 	}
 
 	public void setup() {
-		v = this;
 		noCursor();
 		background(0);
-		postFX = new PostFX(this, displayWidth, displayHeight);
+		postFX = new PostFX(this, width, height);
+
+		Resources.init();
 
 		hint(DISABLE_DEPTH_TEST);
 		hint(DISABLE_TEXTURE_MIPMAPS);
@@ -119,9 +131,6 @@ public class Vekta extends PApplet {
 		BUTTON_COLOR = color(8);
 		DANGER_COLOR = color(220, 100, 0);
 		MISSION_COLOR = ItemType.MISSION.getColor();
-
-		Settings.init();
-		Resources.init();
 
 		try {
 			if(OPERATING_SYSTEM.contains("Windows")) {
