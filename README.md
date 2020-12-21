@@ -5,8 +5,6 @@ Vekta is a procedural space exploration game with vector-style graphics. It feat
 **VEKTA is in early development, and a stable, polished experience should not be expected.**
 
 ## Building the Code
-This program is build using the build automation tool Maven. As such, Maven is currently **required** to build and
-play the game. The instructions below will detail installing Maven:
 
 1. If not already installed, [install Maven](https://maven.apache.org/install.html).
 2. Clone the project directory.
