@@ -1,0 +1,1 @@
+{beacon_prefix} {beacon_suffix}

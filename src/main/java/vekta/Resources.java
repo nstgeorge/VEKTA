@@ -1,5 +1,6 @@
 package vekta;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
@@ -9,15 +10,14 @@ import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
 import processing.core.PShape;
 import processing.sound.SoundFile;
-import processing.sound.Sound;
 import vekta.config.Config;
-import vekta.context.PauseMenuContext;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static processing.core.PApplet.println;
 import static vekta.Vekta.v;
@@ -32,7 +32,8 @@ public final class Resources {
 
 	private static final ObjectMapper CONFIG_MAPPER = new ObjectMapper();
 
-	private static final Map<String, Config> CONFIGS = new HashMap<>();
+	private static final List<Config> ALL_CONFIGS = new ArrayList<>();
+	//	private static final Map<String, Config[]> CONFIGS = new HashMap<>();
 	private static final Map<String, String[]> STRINGS = new HashMap<>();
 	private static final Map<String, SoundFile> SOUNDS = new HashMap<>();
 	private static final Map<String, PShape> SHAPES = new HashMap<>();
@@ -96,24 +97,30 @@ public final class Resources {
 	}
 
 	private static void addConfigs(String path, String key) {
-		if(CONFIGS.containsKey(key)) {
-			throw new RuntimeException("Multiple config files for key: `" + key + "`");
-		}
+		//		if(CONFIGS.containsKey(key)) {
+		//			throw new RuntimeException("Multiple config files for key: `" + key + "`");
+		//		}
 		try {
-			Config config = CONFIG_MAPPER.readValue(Objects.requireNonNull(Resources.class.getResourceAsStream("/" + path)), Config.class);
-			CONFIGS.put(key, config);
+			List<? extends Config> configs = CONFIG_MAPPER.readValue(
+					Objects.requireNonNull(Resources.class.getResourceAsStream("/" + path)), new TypeReference<List<? extends Config>>() {});
+			ALL_CONFIGS.addAll(configs);
+			//			CONFIGS.put(key, configs);
 		}
 		catch(Exception e) {
 			throw new RuntimeException("Failed to load config: " + path, e);
 		}
 	}
 
-	public static Config getConfig(String key) {
-		Config config = CONFIGS.get(key);
-		if(config == null) {
-			throw new RuntimeException("No config data found for key: `" + key + "`");
-		}
-		return config;
+	//	public static Config getConfig(String key) {
+	//		Config config = CONFIGS.get(key);
+	//		if(config == null) {
+	//			throw new RuntimeException("No config data found for key: `" + key + "`");
+	//		}
+	//		return config;
+	//	}
+
+	public static <T extends Config> List<T> getConfigs(Class<T> cls) {
+		return ALL_CONFIGS.stream().filter(cls::isInstance).map(cls::cast).collect(Collectors.toList());
 	}
 
 	private static void addStrings(String path, String key) {
@@ -242,7 +249,8 @@ public final class Resources {
 					println(":: Stereo sound:", key);
 				}
 				sound.play(freq, pan, volume);
-			} else {
+			}
+			else {
 				sound.play(freq, volume);
 			}
 
@@ -280,22 +288,25 @@ public final class Resources {
 		loopSound(key, 1);
 	}
 
-	public static void loopSound(String key, float volume) { loopSound(key, volume, 0); }
+	public static void loopSound(String key, float volume) {
+		loopSound(key, volume, 0);
+	}
 
 	public static void loopSound(String key, float volume, float pan) {
 		loopSound(key, volume, pan, 1);
 	}
-  
+
 	public static void loopSound(String key, float volume, float pan, float freq) {
 		volume *= soundVolume;
 		if(volume > 0) {
 			SoundFile sound = getSound(key);
 			if(!sound.isPlaying()) {
 				sound.loop(freq, pan, volume);
-//				if(randomize) {
-//					randomizeSoundProgress(sound);
-//				}
-			} else {
+				//				if(randomize) {
+				//					randomizeSoundProgress(sound);
+				//				}
+			}
+			else {
 				sound.amp(volume);
 				sound.pan(pan);
 				sound.rate(freq);

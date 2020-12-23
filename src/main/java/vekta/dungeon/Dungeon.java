@@ -1,26 +1,27 @@
 package vekta.dungeon;
 
 import vekta.terrain.LandingSite;
+import vekta.terrain.location.Location;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Dungeon implements Serializable {
-	private final LandingSite site;
+	private final Location location;
 	private final String name;
-	private DungeonRoom startRoom;
+	private final DungeonRoom startRoom;
 
-	private List<DungeonRoom> rooms = new ArrayList<>();
+	private final List<DungeonRoom> rooms = new ArrayList<>();
 
-	public Dungeon(LandingSite site, String name, String description) {
-		this.site = site;
+	public Dungeon(Location location, String name, String description) {
+		this.location = location;
 		this.name = name;
 		this.startRoom = new DungeonStartRoom(this, description);
 	}
 
-	public LandingSite getSite() {
-		return site;
+	public Location getLocation() {
+		return location;
 	}
 
 	public String getName() {

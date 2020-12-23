@@ -9,7 +9,6 @@ import vekta.object.planet.TerrestrialPlanet;
 import vekta.spawner.MissionGenerator;
 import vekta.spawner.WorldGenerator;
 import vekta.spawner.world.AsteroidSpawner;
-import vekta.terrain.AsteroidTerrain;
 import vekta.terrain.settlement.Settlement;
 import vekta.world.RenderLevel;
 
@@ -34,7 +33,7 @@ public class DestroyPlanetObjectiveSpawner implements MissionGenerator.Objective
 	public Objective getMainObjective(Mission mission) {
 		List<SpaceObject> candidates = getWorld().findObjects(TerrestrialPlanet.class).stream()
 				.filter(p -> {
-					for(Settlement settlement : p.getTerrain().getSettlements()) {
+					for(Settlement settlement : p.getTerrain().findVisitableSettlements()) {
 						Faction faction = settlement.getFaction();
 						if(faction.isAlly(mission.getPlayer().getFaction()) || faction.isAlly(mission.getIssuer().getFaction())) {
 							return false;
@@ -46,8 +45,7 @@ public class DestroyPlanetObjectiveSpawner implements MissionGenerator.Objective
 
 		SpaceObject obj = !candidates.isEmpty()
 				? v.random(candidates)
-				: AsteroidSpawner.createAsteroid(WorldGenerator.randomSpawnPosition(RenderLevel.PLANET, mission.getPlayer().getShip().getPosition()),
-				new AsteroidTerrain());
+				: AsteroidSpawner.createAsteroid(WorldGenerator.randomSpawnPosition(RenderLevel.PLANET, mission.getPlayer().getShip().getPosition()));
 
 		return new DestroyObjective(obj);
 	}

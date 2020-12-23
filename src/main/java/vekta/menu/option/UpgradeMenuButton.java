@@ -4,7 +4,7 @@ import vekta.player.Player;
 import vekta.Resources;
 import vekta.menu.Menu;
 import vekta.menu.handle.MenuHandle;
-import vekta.terrain.building.upgrade.SettlementUpgrade;
+import vekta.terrain.settlement.building.upgrade.SettlementUpgrade;
 import vekta.terrain.settlement.Settlement;
 
 import java.util.ArrayList;

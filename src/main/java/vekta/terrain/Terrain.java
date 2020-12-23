@@ -1,104 +1,68 @@
 package vekta.terrain;
 
+import vekta.menu.handle.LandingMenuHandle;
+import vekta.menu.handle.MenuHandle;
+import vekta.menu.option.SettlementButton;
+import vekta.menu.option.SurveyButton;
 import vekta.object.SpaceObject;
+import vekta.object.planet.TerrestrialPlanet;
 import vekta.sync.Sync;
-import vekta.sync.Syncable;
 import vekta.ecosystem.Ecosystem;
 import vekta.menu.Menu;
-import vekta.terrain.feature.Feature;
-import vekta.terrain.feature.FeatureManager;
+import vekta.terrain.location.Location;
 import vekta.terrain.settlement.Settlement;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static vekta.Vekta.v;
 
 /**
  * An abstract representation of planetary terrain.
  */
-public abstract class Terrain extends Syncable<Terrain> {
-	private final @Sync List<Feature> features = new ArrayList<>();
+public abstract class Terrain extends Location {
+	//	private final @Sync List<Feature> features = new ArrayList<Feature>();
 	private final @Sync List<Settlement> settlements = new ArrayList<>();
 	private final Ecosystem ecosystem;
 
-	private @Sync LandingSite site;
+	public Terrain(TerrestrialPlanet planet) {
+		super(planet);
 
-	public Terrain() {
-
-		// TODO: change capacity based on planet features
-		ecosystem = new Ecosystem(v.random(1e5F, 1e7F));
+		ecosystem = new Ecosystem(planet.getAtmosphereDensity() * v.random(1e7F, 1e9F));
 	}
 
-	public List<Feature> getFeatures() {
-		return features;
+	@Override
+	public String getName() {
+		return getPlanet().getName();
 	}
 
-	public String[] getFeatureNames() {
-		String[] result = new String[features.size()];
-
-		int i = 0;
-		for(Feature f : features) {
-			result[i] = f.getName();
-			i++;
-		}
-		return result;
-	}
-
-	public boolean hasFeature(String prop) {
-		return getFeatures().contains(prop);
-	}
-
-	public void addFeature(String feature) {
-		Feature newFeature = FeatureManager.searchFor(feature);
-		if(newFeature != null && !getFeatures().contains(newFeature)) {
-			getFeatures().add(newFeature);
-			// Collections.sort(features);
-			syncChanges();
-		}
-	}
-
-	public void addFeature(Feature feature) {
-		if(feature != null && !getFeatures().contains(feature)) {
-			getFeatures().add(feature);
-			// Collections.sort(features);
-			syncChanges();
-		}
-	}
-
-	public void remove(String feature) {
-		if(getFeatures().contains(feature)) {
-			getFeatures().remove(feature);
-			syncChanges();
-		}
-	}
+	public abstract boolean isHabitable();
 
 	public boolean isInhabited() {
-		return !getSettlements().isEmpty();
+		return !findVisitableSettlements().isEmpty();
 	}
 
-	public List<Settlement> getSettlements() {
+	public List<Settlement> findVisitableSettlements() {
+		if(!settlements.isEmpty() && !isHabitable()) {
+			return new ArrayList<>();
+		}
 		return settlements;
 	}
 
-	public void addSettlement(Settlement settlement) {
-		if(!getSettlements().contains(settlement)) {
-			getSettlements().add(settlement);
-			if(site != null) {
-				settlement.setup(site);
-				syncChanges();
-			}
-		}
-	}
+	//	public List<Feature> getFeatures() {
+	//		return features;
+	//	}
+	//
+	//	public void addFeature(Feature feature) {
+	//		if(!features.contains(feature)) {
+	//			features.add(feature);
+	//		}
+	//	}
 
-	public void removeSettlement(Settlement settlement) {
-		if(getSettlements().contains(settlement)) {
-			if(site != null) {
-				settlement.cleanup();
-			}
-			getSettlements().remove(settlement);
-			syncChanges();
+	public void addSettlement(Settlement settlement) {
+		if(!settlements.contains(settlement)) {
+			settlements.add(settlement);
 		}
 	}
 
@@ -108,20 +72,18 @@ public abstract class Terrain extends Syncable<Terrain> {
 
 	public abstract String getOverview();
 
-	public void setup(LandingSite site) {
-		if(this.site != null) {
-			throw new RuntimeException("Terrain was already set up");
+	@Override
+	public void onVisitMenu(Menu menu) {
+		for(Settlement settlement : findVisitableSettlements()) {
+			menu.add(new SettlementButton(settlement));
 		}
-		this.site = site;
-
-		for(Settlement settlement : getSettlements()) {
-			settlement.setup(site);
-		}
-
-		syncChanges();
+		menu.add(new SurveyButton(this));
 	}
 
-	public void setupLandingMenu(LandingSite site, Menu menu) {
+	@Override
+	protected MenuHandle createMenuHandle() {
+		// TODO: convert to `TerrainMenuHandle`
+		return new LandingMenuHandle(getPlanet().getLandingSite());
 	}
 
 	public void onOrbit(SpaceObject orbitObject) {

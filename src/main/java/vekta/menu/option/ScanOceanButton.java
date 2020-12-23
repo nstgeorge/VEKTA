@@ -5,20 +5,20 @@ import vekta.knowledge.OceanKnowledge;
 import vekta.menu.Menu;
 import vekta.menu.handle.OceanMenuHandle;
 import vekta.spawner.ItemGenerator;
+import vekta.spawner.SettlementGenerator;
 import vekta.spawner.WorldGenerator;
-import vekta.terrain.LandingSite;
-import vekta.terrain.Terrain;
+import vekta.terrain.location.OceanLocation;
 import vekta.terrain.settlement.Settlement;
 
 import static vekta.Vekta.setContext;
 import static vekta.Vekta.v;
 
 public class ScanOceanButton extends ButtonOption {
-	private final LandingSite site;
+	private final OceanLocation location;
 	private final float density;
 
-	public ScanOceanButton(LandingSite site, float density) {
-		this.site = site;
+	public ScanOceanButton(OceanLocation location, float density) {
+		this.location = location;
 		this.density = density;
 	}
 
@@ -31,27 +31,27 @@ public class ScanOceanButton extends ButtonOption {
 	public void onSelect(Menu menu) {
 		menu.remove(this);
 
-		Terrain terrain = site.getTerrain();
-		Menu sub = new Menu(menu, new OceanMenuHandle(site));
+		Menu sub = new Menu(menu, new OceanMenuHandle(location));
 
-		OceanKnowledge knowledge = new OceanKnowledge(ObservationLevel.SCANNED, site);
+		OceanKnowledge knowledge = new OceanKnowledge(ObservationLevel.SCANNED, location);
 		menu.getPlayer().addKnowledge(knowledge);
 
-		if(terrain.hasFeature("Shipwrecks") || v.chance(.5F * density)) {
-			terrain.addFeature("Shipwrecks");
-
-			ItemGenerator.addLoot(knowledge.getInventory(), 1);
-			sub.add(new LootMenuButton("Salvage", knowledge.getInventory()));
-		}
-		if(v.chance(.2F * density)) {
-			terrain.addFeature("Habitable");
-
-			Settlement settlement = WorldGenerator.createSettlement();
-			settlement.setOverview("You land in a biodome under the ocean's surface.");
-			terrain.addSettlement(settlement);
-
-			sub.add(new SettlementButton(settlement));
-		}
+//		if(!location.isDepleted()){
+////			location.
+//
+//			if(v.chance(.5F * density)) {
+//				ItemGenerator.addLoot(knowledge.getInventory(), 1);
+//				sub.add(new LootMenuButton("Salvage", knowledge.getInventory()));
+//			}
+//
+//			if(v.chance(.2F * density)) {
+//				Settlement settlement = SettlementGenerator.createSettlement(location);
+//				settlement.setOverview("You land in a biodome under the ocean's surface.");
+//				terrain.addSettlement(settlement);
+//
+//				sub.add(new SettlementButton(settlement));
+//			}
+//		}
 
 		sub.addDefault();
 		setContext(sub);

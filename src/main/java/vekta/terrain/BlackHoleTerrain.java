@@ -6,10 +6,15 @@ import vekta.menu.Menu;
 import vekta.menu.option.FastTravelMenuButton;
 import vekta.menu.option.RenameButton;
 import vekta.object.planet.BlackHole;
+import vekta.object.planet.TerrestrialPlanet;
+import vekta.player.Player;
+
+import java.util.Set;
 
 public class BlackHoleTerrain extends Terrain {
-	public BlackHoleTerrain() {
-		addFeature("Treacherous");
+
+	public BlackHoleTerrain(TerrestrialPlanet planet) {
+		super(planet);
 	}
 
 	@Override
@@ -18,12 +23,22 @@ public class BlackHoleTerrain extends Terrain {
 	}
 
 	@Override
-	public void setupLandingMenu(LandingSite site, Menu menu) {
+	public boolean isHabitable() {
+		return false;
+	}
+
+	@Override
+	public void onSurveyTags(Set<String> tags) {
+		tags.add("Treacherous");
+	}
+
+	@Override
+	public void onVisitMenu(Menu menu) {
 		// TODO convert items to energy by mass (Penrose Process)
 		// TODO timewarp
 
-		if(site.getParent() instanceof BlackHole) {
-			BlackHole hole = (BlackHole)site.getParent();
+		if(getPlanet() instanceof BlackHole) {
+			BlackHole hole = (BlackHole)getPlanet();
 
 			menu.add(new FastTravelMenuButton(hole));
 			if(menu.getPlayer().hasKnowledge(SpaceObjectKnowledge.class, k -> k.getSpaceObject() == hole && k.getLevel() == ObservationLevel.OWNED)) {

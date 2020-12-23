@@ -103,11 +103,11 @@ public class WormholeModule extends ShipModule {
 			return;
 		}
 
-		float temp = ship.getTemperature();
+		float temp = ship.getTemperatureKelvin();
 		if(ship.hasEnergy() && ship.getEnergy() >= getEnergyConsumption()) {
 			Resources.playSound("hyperdriveHit");
 			ship.consumeEnergyImmediate(getEnergyConsumption());
-			ship.setTemperature(temp);
+			ship.setTemperatureKelvin(temp);
 			ship.setVelocity(target.getVelocity());
 			ship.setLanding(true);
 			PVector offset = PVector.random2D().mult((ship.getRadius() + target.getRadius()) * 2);

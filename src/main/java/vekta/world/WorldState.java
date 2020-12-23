@@ -206,14 +206,14 @@ public final class WorldState implements Serializable {
 			if(current.isRemote()) {
 				// Sync remotely owned object
 				current.onSync(object.getSyncData());
-				println("<sync>", object.isRemote(), object.getClass().getSimpleName() + "[" + Long.toHexString(id) + "]");
+//				println("<sync>", object.isRemote(), object.getClass().getSimpleName() + " [" + Long.toHexString(id) + "]");
 			}
 			return current;
 		}
 		else if(!(object instanceof ConditionalRegister) || ((ConditionalRegister)object).shouldRegister()) {
 			add(object);
 			syncMap.put(object.getSyncID(), object);
-			println("<add>", object.isRemote(), object.getClass().getSimpleName() + "[" + Long.toHexString(id) + "]");
+//			println("<add>", object.getClass().getSimpleName() + " [" + Long.toHexString(id) + "]" + (object.isRemote() ? " ** remote" : ""));
 		}
 		return object;
 	}

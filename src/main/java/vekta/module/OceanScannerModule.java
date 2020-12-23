@@ -2,10 +2,11 @@ package vekta.module;
 
 import vekta.knowledge.OceanKnowledge;
 import vekta.menu.Menu;
-import vekta.menu.handle.LandingMenuHandle;
+import vekta.menu.handle.LocationMenuHandle;
 import vekta.menu.option.LootMenuButton;
 import vekta.menu.option.ScanOceanButton;
-import vekta.terrain.LandingSite;
+import vekta.terrain.location.Location;
+import vekta.terrain.location.OceanLocation;
 import vekta.util.InfoGroup;
 
 import java.util.List;
@@ -57,13 +58,15 @@ public class OceanScannerModule extends ShipModule {
 
 	@Override
 	public void onMenu(Menu menu) {
-		if(menu.getHandle() instanceof LandingMenuHandle) {
-			LandingSite site = ((LandingMenuHandle)menu.getHandle()).getSite();
+		if(menu.getHandle() instanceof LocationMenuHandle) {
+			Location location = ((LocationMenuHandle)menu.getHandle()).getLocation();
 
-			if(site.getTerrain().hasFeature("Oceanic")) {
-				List<OceanKnowledge> knowledgeList = menu.getPlayer().findKnowledge(OceanKnowledge.class, o -> o.getSpaceObject() == site.getParent());
+			if(location instanceof OceanLocation) {
+				OceanLocation ocean = (OceanLocation)location;
+
+				List<OceanKnowledge> knowledgeList = menu.getPlayer().findKnowledge(OceanKnowledge.class, o -> o.getSpaceObject() == ocean.getPlanet());
 				if(knowledgeList.isEmpty()) {
-					menu.add(new ScanOceanButton(site, getStrength()));
+					menu.add(new ScanOceanButton((OceanLocation)location, getStrength()));
 				}
 				else {
 					for(OceanKnowledge knowledge : knowledgeList) {

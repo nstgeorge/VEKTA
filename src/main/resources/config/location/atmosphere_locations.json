@@ -1,0 +1,38 @@
+[
+  {
+    "@class": "vekta.config.LocationConfig",
+    "name": {
+      "value": "Clouds"
+    },
+    "overview": {
+      "value": "Layers of clouds billow past your spacecraft."
+    },
+    "tag": {
+      "value": "Clouds",
+      "first": [
+        {
+          "type": "TEMP_CELSIUS",
+          "max": -50,
+          "value": "Icy Clouds"
+        },
+        {
+          "type": "ATMOSPHERE_LOG",
+          "min": 1,
+          "value": "Thick Clouds"
+        },
+        {
+          "type": "ATMOSPHERE_LOG",
+          "max": -1,
+          "value": "Thin Clouds"
+        }
+      ]
+    },
+    "enabled": {
+      "type": "ATMOSPHERE_LOG",
+      "max": -2
+    },
+    "visitable": {
+      "value": false
+    }
+  }
+]

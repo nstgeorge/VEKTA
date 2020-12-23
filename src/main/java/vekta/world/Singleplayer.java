@@ -217,7 +217,7 @@ public class Singleplayer implements World, PlayerListener {
 		playerShip.addModule(new AutopilotModule());
 		playerShip.addModule(new AntennaModule());
 		playerShip.addModule(new TelescopeModule(.5F));
-		playerShip.addModule(new DrillModule(2));
+		playerShip.addModule(new MiningModule(2));
 		playerShip.addModule(new HyperdriveModule());
 		playerShip.addModule(new ActiveTCSModule(2));
 		playerShip.addModule(new CountermeasureModule());
@@ -757,7 +757,7 @@ public class Singleplayer implements World, PlayerListener {
 	public void controlStickMoved(float x, float y, String LR)
 	{
 		if(LR.equals("left")) {
-			System.out.println(Math.sqrt(Math.abs(x) + Math.abs(y)));
+//			System.out.println(Math.sqrt(Math.abs(x) + Math.abs(y)));
 			if(Math.sqrt(Math.abs(x) + Math.abs(y)) > CONTROLLER_DEADZONE * Settings.getInt("deadzone")) {
 				getPlayer().getShip().setHeading(new PVector(x,-y));
 			}
@@ -1036,7 +1036,7 @@ public class Singleplayer implements World, PlayerListener {
 			menu.add(new CustomButton("Give Knowledge", m -> {
 				for(TerrestrialPlanet planet : findObjects(TerrestrialPlanet.class)) {
 					getPlayer().addKnowledge(new TerrestrialKnowledge(ObservationLevel.VISITED, planet));
-					for(Settlement settlement : planet.getTerrain().getSettlements()) {
+					for(Settlement settlement : planet.getTerrain().findVisitableSettlements()) {
 						getPlayer().addKnowledge(new SettlementKnowledge(ObservationLevel.VISITED, settlement));
 					}
 				}

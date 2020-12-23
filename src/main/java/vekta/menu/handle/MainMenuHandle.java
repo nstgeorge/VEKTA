@@ -17,7 +17,6 @@ public class MainMenuHandle extends MenuHandle {
 	@Override
 	public void focus(Menu menu) {
 		super.focus(getMenu());
-		disableBlockingElements();
 
 		Resources.setMusic("intro_and_menu", false);
 	}

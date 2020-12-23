@@ -19,7 +19,7 @@ public class HostileSituation implements Situation {
 		SpaceObject orbit = getWorld().findOrbitObject(player.getShip());
 		if(orbit instanceof TerrestrialPlanet) {
 			LandingSite site = ((TerrestrialPlanet)orbit).getLandingSite();
-			for(Settlement settlement : site.getTerrain().getSettlements()) {
+			for(Settlement settlement : site.getTerrain().findVisitableSettlements()) {
 				if(settlement.getFaction().isEnemy(player.getFaction())) {
 					return true;
 				}

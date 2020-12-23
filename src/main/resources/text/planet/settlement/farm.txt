@@ -1,0 +1,3 @@
+{person} {farm_noun}
+{planet} {farm_noun}
+{item_common} {farm_noun}

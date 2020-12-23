@@ -17,7 +17,7 @@ public class Projectile extends SpaceObject implements Damager {
 
 		this.parent = parent;
 
-		setTemperature(1000);
+		setTemperatureKelvin(1000);
 	}
 
 	public float getDespawnTime() {

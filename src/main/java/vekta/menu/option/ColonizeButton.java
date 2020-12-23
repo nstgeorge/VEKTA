@@ -5,7 +5,7 @@ import vekta.item.ColonyItem;
 import vekta.knowledge.ObservationLevel;
 import vekta.menu.Menu;
 import vekta.terrain.LandingSite;
-import vekta.terrain.building.CapitalBuilding;
+import vekta.terrain.settlement.building.CapitalBuilding;
 import vekta.terrain.settlement.ColonySettlement;
 
 public class ColonizeButton extends ButtonOption {
@@ -40,7 +40,7 @@ public class ColonizeButton extends ButtonOption {
 		Faction faction = item.getFaction() != null ? item.getFaction() : menu.getPlayer().getFaction();
 
 		// Set up colony settlement
-		ColonySettlement settlement = new ColonySettlement(faction);
+		ColonySettlement settlement = new ColonySettlement(site.getTerrain(), faction);
 		settlement.setOverview("You land close to your recently established colony.");
 		settlement.getEconomy().setValue(.1F);
 		settlement.clear();

@@ -10,14 +10,15 @@ import vekta.menu.option.CoinMenuButton;
 import vekta.spawner.FactionGenerator;
 import vekta.spawner.item.ClothingItemSpawner;
 import vekta.spawner.item.WeaponItemSpawner;
-import vekta.terrain.building.MarketBuilding;
+import vekta.terrain.location.Location;
+import vekta.terrain.settlement.building.MarketBuilding;
 
 import static vekta.Vekta.v;
 
 public class HideoutSettlement extends Settlement {
 
-	public HideoutSettlement(Faction faction) {
-		super(faction, "hideout");
+	public HideoutSettlement(Location location, Faction faction) {
+		super(location, faction, "hideout");
 
 		if(v.chance(.25F)) {
 			// Mercenaries
@@ -53,7 +54,7 @@ public class HideoutSettlement extends Settlement {
 	}
 
 	@Override
-	public void setupEconomy(Economy economy) {
+	public void initEconomy(Economy economy) {
 		economy.setValue(v.random(.2F, 1));
 		economy.addModifier(new NoiseModifier(.1F));
 		economy.addModifier(new TemporaryModifier("Criminal Jurisdiction", -.01F, 0));

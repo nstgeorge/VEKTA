@@ -12,8 +12,8 @@ import vekta.player.Player;
 import vekta.spawner.PersonGenerator;
 import vekta.sync.Sync;
 import vekta.sync.Syncable;
-import vekta.terrain.LandingSite;
-import vekta.terrain.building.HouseBuilding;
+import vekta.terrain.location.Location;
+import vekta.terrain.settlement.building.HouseBuilding;
 import vekta.terrain.settlement.Settlement;
 
 import java.util.*;
@@ -81,7 +81,7 @@ public class Person extends Syncable<Person> implements MissionIssuer, Detailed 
 	}
 
 	public boolean hasHome() {
-		return home != null && !home.getSite().getParent().isDestroyed();
+		return home != null && home.isEconomyAlive() && home.getLocation().isEnabled();//TODO: must be habitable
 	}
 
 	public Settlement findHome() {
@@ -91,15 +91,15 @@ public class Person extends Syncable<Person> implements MissionIssuer, Detailed 
 		return home;
 	}
 
-	public LandingSite findHomeSite() {
+	public Location findHomeLocation() {
 		Settlement home = findHome();
-		return home != null ? home.getSite() : null;
+		return home != null ? home.getLocation() : null;
 	}
 
 	@Override
 	public SpaceObject findHomeObject() {
-		LandingSite site = findHomeSite();
-		return site != null ? site.getParent() : null;
+		Location location = findHomeLocation();
+		return location != null ? location.getPlanet() : null;
 	}
 
 	public void setHome(Settlement home) {

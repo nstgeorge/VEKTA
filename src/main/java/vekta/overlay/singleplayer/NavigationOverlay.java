@@ -82,7 +82,8 @@ public class NavigationOverlay implements Overlay {
 				String massString = massString(target.getMass());
 				if(target instanceof TerrestrialPlanet) {
 					TerrestrialPlanet closestPlanet = (TerrestrialPlanet)target;
-					targetString = target.getName() + " - " + distString + " \nAtmosphere: " + closestPlanet.getAtmosphereThickness() + " Earths\nMass: " + massString + "\nTemperature: " + v.roundEpsilon(closestPlanet.getTemperature()) + " K";
+					String atmosphereString = atmosphereString(closestPlanet.getAtmosphereDensity());
+					targetString = target.getName() + " - " + distString + " \nAtmosphere: " + atmosphereString + "\nMass: " + massString + "\nTemperature: " + temperatureStringCelsius(v.roundEpsilon(closestPlanet.getTemperatureCelsius()));
 					SpaceObject orbit = closestPlanet.getOrbitObject();
 					if(orbit != null) {
 						targetString += "\nOrbiting: " + orbit.getName() + " (" + v.roundEpsilon(closestPlanet.relativePosition(orbit).mag() / AU_DISTANCE) + " AU)";

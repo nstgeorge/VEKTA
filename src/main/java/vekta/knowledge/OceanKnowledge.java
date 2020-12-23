@@ -1,32 +1,29 @@
 package vekta.knowledge;
 
+import vekta.object.planet.TerrestrialPlanet;
 import vekta.player.Player;
 import vekta.display.Layout;
 import vekta.display.OceanDisplay;
 import vekta.display.TextDisplay;
 import vekta.item.Inventory;
 import vekta.object.SpaceObject;
-import vekta.terrain.LandingSite;
 import vekta.terrain.Terrain;
+import vekta.terrain.location.OceanLocation;
 
 public class OceanKnowledge extends SpaceObjectKnowledge {
 	private static final float PREVIEW_HEIGHT = 100;
 
-	private final LandingSite site;
+	private final OceanLocation location;
 	private final Inventory inventory = new Inventory();
 
-	public OceanKnowledge(ObservationLevel level, LandingSite site) {
+	public OceanKnowledge(ObservationLevel level, OceanLocation location) {
 		super(level);
 
-		this.site = site;
+		this.location = location;
 	}
 
-	public LandingSite getSite() {
-		return site;
-	}
-
-	public Terrain getTerrain() {
-		return getSite().getTerrain();
+	public OceanLocation getLocation() {
+		return location;
 	}
 
 	public Inventory getInventory() {
@@ -45,7 +42,7 @@ public class OceanKnowledge extends SpaceObjectKnowledge {
 
 	@Override
 	public SpaceObject getSpaceObject() {
-		return getSite().getParent();
+		return getLocation().getPlanet();
 	}
 
 	@Override
@@ -56,9 +53,9 @@ public class OceanKnowledge extends SpaceObjectKnowledge {
 	@Override
 	public void onLayout(Player player, Layout layout) {
 		layout.customize().spacing(layout.getStyle().spacing() * 2);
-		
+
 		layout.add(new OceanDisplay(getColor(player), PREVIEW_HEIGHT));
-		
+
 		layout.add(new TextDisplay("Planet: " + getSpaceObject().getName()));
 	}
 }

@@ -36,7 +36,7 @@ public class SettlementMenuHandle extends MenuHandle {
 	@Override
 	public void init(Menu menu) {
 		super.init(menu);
-		disableBlockingElements();
+
 		onVisit(getMenu());
 	}
 

@@ -23,7 +23,7 @@ public abstract class NearPlanetSpawner implements WorldGenerator.WorldSpawner {
 	@Override
 	public void spawn(SpaceObject center, PVector pos) {
 		SpaceObject orbit = getWorld().findOrbitObject(center);
-		if(orbit instanceof TerrestrialPlanet && ((TerrestrialPlanet)orbit).isHabitable()) {
+		if(orbit instanceof TerrestrialPlanet && ((TerrestrialPlanet)orbit).getTerrain().isInhabited()) {
 			LandingSite site = ((TerrestrialPlanet)orbit).getLandingSite();
 			spawn(center, pos, site);
 		}

@@ -3,8 +3,11 @@ package vekta.menu.handle;
 import vekta.KeyBinding;
 import vekta.knowledge.ObservationLevel;
 import vekta.menu.Menu;
-import vekta.terrain.LandingSite;
-import vekta.terrain.feature.Feature;
+import vekta.terrain.Terrain;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static vekta.Vekta.*;
 
@@ -14,15 +17,15 @@ import static vekta.Vekta.*;
 public class SurveyMenuHandle extends MenuHandle {
 	private static final int PLANET_SIZE = 200;
 
-	private final LandingSite site;
+	private final Terrain terrain;
 
-	public SurveyMenuHandle(LandingSite site) {
+	public SurveyMenuHandle(Terrain terrain) {
 		super(0, PLANET_SIZE, v.width, v.height - PLANET_SIZE);
-		this.site = site;
+		this.terrain = terrain;
 	}
 
-	public LandingSite getSite() {
-		return site;
+	public Terrain getTerrain() {
+		return terrain;
 	}
 
 	@Override
@@ -39,7 +42,7 @@ public class SurveyMenuHandle extends MenuHandle {
 	public void focus(Menu menu) {
 		super.focus(getMenu());
 
-		getSite().getParent().observe(ObservationLevel.SCANNED, menu.getPlayer());
+		getTerrain().getPlanet().observe(ObservationLevel.SCANNED, menu.getPlayer());
 	}
 
 	@Override
@@ -51,16 +54,16 @@ public class SurveyMenuHandle extends MenuHandle {
 
 		v.textAlign(CENTER);
 		v.textSize(36);
-		v.fill(getSite().getParent().getColor());
+		v.fill(getTerrain().getColor());
 
-		v.text(getSite().getParent().getName(), 0, -PLANET_SIZE - 50);
+		v.text(getTerrain().getName(), 0, -PLANET_SIZE - 50);
 
 		v.shapeMode(CENTER);
 		v.strokeWeight(2);
 		v.noFill();
 
 		// Draw planet
-		getSite().getParent().drawPreview(PLANET_SIZE);
+		getTerrain().getPlanet().drawPreview(PLANET_SIZE);
 
 		// TODO: render object info (mass, radius, etc.)
 
@@ -70,9 +73,13 @@ public class SurveyMenuHandle extends MenuHandle {
 		v.fill(100);
 
 		int i = 0;
-		int size = site.getTerrain().getFeatures().size();
-		for(Feature feature : site.getTerrain().getFeatures()) {
-			v.text(feature.getName(), PLANET_SIZE * 1.5F, (i - (size - 1) / 2F) * 50);
+		List<String> tags = getTerrain().findSurveyTags().stream()
+				.sorted()
+				.collect(Collectors.toList());
+
+		int size = tags.size();
+		for(String tag : tags) {
+			v.text(tag, PLANET_SIZE * 1.5F, (i - (size - 1) / 2F) * 50);
 			i++;
 		}
 

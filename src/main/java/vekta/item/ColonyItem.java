@@ -43,7 +43,7 @@ public class ColonyItem extends Item {
 		if(menu.getHandle() instanceof LandingMenuHandle) {
 			LandingSite site = ((LandingMenuHandle)menu.getHandle()).getSite();
 			Terrain terrain = site.getTerrain();
-			if(terrain.hasFeature("Habitable") && !terrain.isInhabited()) {
+			if(terrain.isHabitable() && !terrain.isInhabited()) {
 				if(menu.getOptions().stream().noneMatch(opt -> opt instanceof ColonizeButton && ((ColonizeButton)opt).getItem().getFaction() == getFaction())) {
 					menu.add(new ColonizeButton(this, site));
 				}

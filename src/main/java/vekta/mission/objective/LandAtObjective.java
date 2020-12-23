@@ -2,7 +2,8 @@ package vekta.mission.objective;
 
 import vekta.menu.Menu;
 import vekta.object.SpaceObject;
-import vekta.terrain.LandingSite;
+import vekta.terrain.Terrain;
+import vekta.terrain.location.Location;
 
 public class LandAtObjective extends Objective {
 	private final SpaceObject object;
@@ -33,8 +34,8 @@ public class LandAtObjective extends Objective {
 	}
 
 	@Override
-	public void onLand(LandingSite site) {
-		if(site.getParent() == getSpaceObject()) {
+	public void onVisit(Terrain terrain) {
+		if(terrain.getPlanet() == getSpaceObject()) {
 			complete();
 		}
 	}

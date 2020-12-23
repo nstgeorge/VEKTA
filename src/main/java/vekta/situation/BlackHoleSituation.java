@@ -3,11 +3,7 @@ package vekta.situation;
 import vekta.Resources;
 import vekta.object.SpaceObject;
 import vekta.object.planet.BlackHole;
-import vekta.object.planet.TerrestrialPlanet;
 import vekta.player.Player;
-import vekta.sound.SoundGroup;
-import vekta.terrain.LandingSite;
-import vekta.terrain.settlement.Settlement;
 
 import static vekta.Vekta.*;
 

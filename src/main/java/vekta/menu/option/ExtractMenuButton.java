@@ -4,19 +4,17 @@ import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.menu.handle.LootMenuHandle;
-import vekta.spawner.item.OreItemSpawner;
-import vekta.terrain.LandingSite;
+import vekta.terrain.location.MiningLocation;
 
 import static vekta.Vekta.setContext;
-import static vekta.Vekta.v;
 
 public class ExtractMenuButton extends ButtonOption {
-	private final LandingSite site;
-	private final int amount;
+	private final MiningLocation location;
+	private final float efficiency;
 
-	public ExtractMenuButton(LandingSite site, int amount) {
-		this.site = site;
-		this.amount = amount;
+	public ExtractMenuButton(MiningLocation location, float efficiency) {
+		this.location = location;
+		this.efficiency = efficiency;
 	}
 
 	@Override
@@ -26,18 +24,17 @@ public class ExtractMenuButton extends ButtonOption {
 
 	@Override
 	public void onSelect(Menu menu) {
-		Inventory loot = new Inventory();
+
+		Inventory loot = location.extract(efficiency);
+
 		Menu sub = new Menu(menu, new LootMenuHandle(loot));
-		int ct = (int)v.random(amount) + 1;
-		for(int i = 0; i < ct; i++) {
-			Item item = OreItemSpawner.randomOre(site.getParent().getName());
-			loot.add(item);
+		for(Item item : loot) {
 			sub.add(new ItemTradeButton(true, menu.getPlayer(), loot, item));
 		}
 		sub.addDefault();
 		setContext(sub);
 
-		site.getTerrain().remove("Mineable");
+		//		location.getTerrain().removeFeature("Mineable");
 		menu.remove(this);
 	}
 }

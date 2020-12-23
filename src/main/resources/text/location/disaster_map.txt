@@ -1,0 +1,4 @@
+Ash Clouds : The planet is obscured by a thick layer of supervolcanic ash.
+Acid Rain : The planet is covered in acidic fallout.
+Radioactive Fallout : Your Geiger counter clicks enthusiastically as you travel over the surface.
+Molten Craters : You approach the site of a recent asteroid impact.

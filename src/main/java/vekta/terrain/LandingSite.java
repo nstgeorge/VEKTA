@@ -14,7 +14,7 @@ import static vekta.Vekta.*;
  * A landing site for one spacecraft-like object.
  */
 public class LandingSite extends Syncable<LandingSite> {
-	private static final float LAUNCH_SPEED_SCALE = 2;
+	private static final float LAUNCH_SPEED_SCALE = 1;
 
 	private final SpaceObject parent;
 	private final Terrain terrain;
@@ -27,7 +27,7 @@ public class LandingSite extends Syncable<LandingSite> {
 		this.parent = parent;
 		this.terrain = terrain;
 
-		terrain.setup(this);
+//		terrain.setup(this);
 	}
 
 	public SpaceObject getParent() {
@@ -60,7 +60,7 @@ public class LandingSite extends Syncable<LandingSite> {
 		landed.setVelocity(velocity);
 		//		landed.getPositionReference().add(velocity.mult(getWorld().getTimeScale()));
 
-		ship.setTemperature(ship.getOptimalTemperature()); // TODO: adjust based on planet temperature
+		ship.setTemperatureKelvin(ship.getOptimalTemperature()); // TODO: adjust based on planet temperature
 		ship.doLand(this);
 	}
 
@@ -73,10 +73,6 @@ public class LandingSite extends Syncable<LandingSite> {
 		landed.undock(); // Start landing debounce
 		landed.onDepart(getParent());
 		landed = null;
-	}
-
-	public void observe(ObservationLevel level) {
-
 	}
 
 	/**

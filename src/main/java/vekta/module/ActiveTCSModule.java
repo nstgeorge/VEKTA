@@ -54,7 +54,7 @@ public class ActiveTCSModule extends PassiveTCSModule {
 
 	@Override
 	public void onUpdate() {
-		if(getShip().getTemperature() >= getShip().getCooldownTemperature()) {
+		if(getShip().getTemperatureKelvin() >= getShip().getCooldownTemperature()) {
 			active = true;
 		}
 
@@ -62,7 +62,7 @@ public class ActiveTCSModule extends PassiveTCSModule {
 				? EFFICIENCY_BOOST
 				: 1);
 
-		if(getShip().getTemperature() <= getShip().getOptimalTemperature()) {
+		if(getShip().getTemperatureKelvin() <= getShip().getOptimalTemperature()) {
 			active = false;
 		}
 	}

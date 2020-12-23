@@ -10,17 +10,17 @@ import vekta.knowledge.SettlementKnowledge;
 import vekta.menu.Menu;
 import vekta.object.SpaceObject;
 import vekta.player.Player;
-import vekta.spawner.WorldGenerator;
+import vekta.spawner.SettlementGenerator;
 import vekta.sync.Sync;
 import vekta.sync.Syncable;
-import vekta.terrain.LandingSite;
-import vekta.terrain.Terrain;
-import vekta.terrain.building.BuildingType;
+import vekta.terrain.location.Location;
+import vekta.terrain.settlement.building.BuildingType;
 import vekta.terrain.visual.SettlementVisual;
 import vekta.terrain.visual.Visual;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static processing.core.PApplet.*;
 import static vekta.Vekta.register;
@@ -28,47 +28,43 @@ import static vekta.Vekta.register;
 public abstract class Settlement extends Syncable<Settlement> implements SettlementPart, Economy.Container, ProductivityModifier, Renameable {
 	private static final float POPULATION_SCALE = 1000;
 
+	private final Location location;
 	private final @Sync List<SettlementPart> parts = new ArrayList<>();
 
 	private @Sync String name;
 	private @Sync String overview;
-	private @Sync LandingSite site;
 	private @Sync Faction faction;
 
 	private final Economy economy;
 
 	private final Visual visual;
 
-	public Settlement(Faction faction, String key) {
-		this(faction, Resources.generateString(key), Resources.generateString("overview_" + key));
+	public Settlement(Location location, Faction faction, String key) {
+		this(location, faction, Resources.generateString(key), Resources.generateString("overview_" + key));
 	}
 
-	public Settlement(Faction faction, String name, String overview) {
+	public Settlement(Location location, Faction faction, String name, String overview) {
+		this.location = location;
 		this.name = name;
 		this.overview = overview;
 
 		economy = register(new Economy(this));
-		setupEconomy(economy);
+		initEconomy(economy);
 		economy.fillHistory();
 
 		visual = new SettlementVisual(0, 0, economy.getValue());
 
 		setFaction(faction);
+
+		SettlementGenerator.populateSettlement(this);//////TODO: Check init order
 	}
 
-	public LandingSite getSite() {
-		if(site == null) {
-			throw new RuntimeException("Settlement site was not yet initialized");
-		}
-		return site;
-	}
-
-	public Terrain getTerrain() {
-		return getSite().getTerrain();
+	public Location getLocation() {
+		return location;
 	}
 
 	public SpaceObject getParent() {
-		return getSite().getParent();
+		return getLocation().getPlanet();
 	}
 
 	public Faction getFaction() {
@@ -196,30 +192,38 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 		return ct;
 	}
 
-	@Override
-	public final void setup(LandingSite site) {
-		if(this.site != null) {
-			throw new RuntimeException("Settlement has already been set up");
-		}
-		this.site = site;
-		onSetup();
-		for(SettlementPart part : getParts()) {
-			part.setup(site);
-		}
-		WorldGenerator.populateSettlement(this);
-	}
+	//	//	@Override
+	//	public final void setup(LandingSite site) {
+	////		if(this.site != null) {
+	////			throw new RuntimeException("Settlement has already been set up");
+	////		}
+	////		this.site = site;
+	////		onSetup();
+	////		//		for(SettlementPart part : getParts()) {
+	////		//			part.setup(site);
+	////		//		}
+	////		SettlementGenerator.populateSettlement(this);
+	//	}
+
+	//	@Override
+	//	public void cleanup() {
+	//		for(SettlementPart part : getParts()) {
+	//			part.cleanup();
+	//		}
+	//	}
 
 	@Override
-	public void cleanup() {
+	public final void onSurveyTags(Set<String> tags) {
 		for(SettlementPart part : getParts()) {
-			part.cleanup();
+			part.onSurveyTags(tags);
 		}
+		onSettlementSurveyTags(tags);
 	}
 
-	public void setupEconomy(Economy economy) {
+	protected void onSettlementSurveyTags(Set<String> tags) {
 	}
 
-	public void onSetup() {
+	protected void initEconomy(Economy economy) {
 	}
 
 	@Override
@@ -251,7 +255,7 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 
 	@Override
 	public boolean isEconomyAlive() {
-		return !getSite().getParent().isDestroyed();
+		return !getParent().isDestroyed();
 	}
 
 	@Override

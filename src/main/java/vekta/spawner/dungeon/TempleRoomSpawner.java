@@ -4,7 +4,7 @@ import vekta.dungeon.BuildingRoom;
 import vekta.dungeon.DungeonRoom;
 import vekta.spawner.DeityGenerator;
 import vekta.spawner.DungeonGenerator;
-import vekta.terrain.building.TempleBuilding;
+import vekta.terrain.settlement.building.TempleBuilding;
 
 public class TempleRoomSpawner implements DungeonGenerator.DungeonSpawner {
 	@Override

@@ -97,7 +97,7 @@ public class BatteryModule extends ShipModule implements Rechargeable {
 
 			if(site.getTerrain().isInhabited()) {
 				float price = .5F;
-				for(Settlement settlement : site.getTerrain().getSettlements()) {
+				for(Settlement settlement : site.getTerrain().findVisitableSettlements()) {
 					if(settlement.getFaction().isAlly(menu.getPlayer().getFaction())) {
 						price = .1F;
 						break;

@@ -30,7 +30,7 @@ public class LandingTaskObjectiveSpawner implements MissionGenerator.ObjectiveSp
 	public Objective getMainObjective(Mission mission) {
 		LandingSite site = randomLandingSite();
 		mission.add(new LandAtObjective(site.getParent()));
-		for(Settlement settlement : site.getTerrain().getSettlements()) {
+		for(Settlement settlement : site.getTerrain().findVisitableSettlements()) {
 			Faction faction = settlement.getFaction();
 			if(faction != mission.getIssuer().getFaction()) {
 				boolean playerEnemy = faction.isEnemy(mission.getPlayer().getFaction());
