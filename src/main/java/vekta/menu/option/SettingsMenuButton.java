@@ -50,6 +50,10 @@ public class SettingsMenuButton extends ButtonOption {
 				new BooleanSettingWatcher("randomEvents"),
 				new ChoicesInputController<>(Arrays.asList(true, false), b -> b ? "Yes" : "No")));
 
+		sub.add(new InputOption<>("Zoom near planets",
+				new BooleanSettingWatcher("zoomNearPlanets"),
+				new ChoicesInputController<>(Arrays.asList(true, false), b -> b ? "Yes" : "No")));
+
 		sub.add(new GraphicsMenuButton());
 		sub.add(new KeyBindingMenuButton());
 		sub.addDefault();

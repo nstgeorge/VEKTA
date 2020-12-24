@@ -4,14 +4,15 @@ import vekta.faction.Faction;
 import vekta.player.Player;
 import vekta.economy.Economy;
 import vekta.economy.NoiseModifier;
-import vekta.terrain.building.CapitalBuilding;
+import vekta.terrain.location.Location;
+import vekta.terrain.settlement.building.CapitalBuilding;
 
 import static vekta.Vekta.v;
 
 public class FortSettlement extends Settlement {
 
-	public FortSettlement(Faction faction) {
-		super(faction, "fort");
+	public FortSettlement(Location location, Faction faction) {
+		super(location, faction, "fort");
 
 		add(new CapitalBuilding("Officer", this));
 	}
@@ -32,7 +33,7 @@ public class FortSettlement extends Settlement {
 	}
 
 	@Override
-	public void setupEconomy(Economy economy) {
+	public void initEconomy(Economy economy) {
 		economy.setValue(v.random(.1F, .5F));
 		economy.addModifier(new NoiseModifier(.01F));
 	}

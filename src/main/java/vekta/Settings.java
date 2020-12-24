@@ -23,6 +23,7 @@ public final class Settings {
 				.put("deadzone", 4)
 				.put("zoomSpeed", 1)
 				.put("randomEvents", true)
+				.put("zoomNearPlanets", true)
 				.put("drawTrails", true)
 				.put("bloomIntensity", 6)
 				.put("noiseAmount", 10)

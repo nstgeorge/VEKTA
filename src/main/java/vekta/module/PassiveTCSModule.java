@@ -56,12 +56,12 @@ public class PassiveTCSModule extends ShipModule {
 
 	public void applyCooling(float scale) {
 		float optimal = getShip().getOptimalTemperature();
-		if(getShip().getTemperature() > optimal) {
+		if(getShip().getTemperatureKelvin() > optimal) {
 			getShip().addHeat(-getEfficiency() * scale * EFFICIENCY_SCALE * PER_SECOND);
 
 			// Round to target temperature
-			if(getShip().getTemperature() < optimal) {
-				getShip().setTemperature(optimal);
+			if(getShip().getTemperatureKelvin() < optimal) {
+				getShip().setTemperatureKelvin(optimal);
 			}
 		}
 	}

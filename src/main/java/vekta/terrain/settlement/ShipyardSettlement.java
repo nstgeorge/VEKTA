@@ -9,14 +9,15 @@ import vekta.item.ModuleItem;
 import vekta.market.Market;
 import vekta.module.Module;
 import vekta.spawner.item.ModuleItemSpawner;
-import vekta.terrain.building.*;
+import vekta.terrain.location.Location;
+import vekta.terrain.settlement.building.*;
 
 import static vekta.Vekta.v;
 
 public class ShipyardSettlement extends Settlement implements Market.Stock {
 
-	public ShipyardSettlement(Faction faction) {
-		super(faction, "shipyard");
+	public ShipyardSettlement(Location location, Faction faction) {
+		super(location, faction, "shipyard");
 
 		add(new CapitalBuilding("Overseer", this));
 
@@ -46,12 +47,7 @@ public class ShipyardSettlement extends Settlement implements Market.Stock {
 	}
 
 	@Override
-	public void onSetup() {
-		//		getTerrain().addFeature("");
-	}
-
-	@Override
-	public void setupEconomy(Economy economy) {
+	public void initEconomy(Economy economy) {
 		economy.setValue(v.random(1, 5));
 		economy.addModifier(new NoiseModifier(1));
 	}

@@ -1,19 +1,22 @@
 package vekta.config;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 //@JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
-public class Config {
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, property = "@class")
+public class Config implements Serializable {
 	private static final Random RANDOM = new Random();
 
-//	public String type;
-//	public Object value;
+	//	public String type;
+	//	public Object value;
 
 	private Config[] children = {};
 

@@ -2,12 +2,13 @@ package vekta.spawner.objective;
 
 import vekta.mission.Mission;
 import vekta.mission.objective.Objective;
-import vekta.mission.objective.SurveyFeatureObjective;
+import vekta.mission.objective.SurveyObjective;
 import vekta.spawner.MissionGenerator;
 import vekta.terrain.Terrain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static vekta.Vekta.v;
 
@@ -24,28 +25,29 @@ public class SurveyObjectiveSpawner implements MissionGenerator.ObjectiveSpawner
 
 	@Override
 	public Objective getMainObjective(Mission mission) {
-		List<String> features = new ArrayList<>();
+		List<String> tags = new ArrayList<>();
 		for(int i = 0; i < mission.getTier() + v.random(2); i++) {
-			String feature = randomSurveyFeature();
-			if(!features.contains(feature)) {
-				features.add(feature);
+			String tag = randomSurveyTag();
+			if(!tags.contains(tag)) {
+				tags.add(tag);
 			}
 		}
 
-		for(int i = 1; i < features.size(); i++) {
-			mission.add(new SurveyFeatureObjective(features.get(i)));
+		for(int i = 1; i < tags.size(); i++) {
+			mission.add(new SurveyObjective(tags.get(i)));
 		}
-		return new SurveyFeatureObjective(features.get(0));
+		return new SurveyObjective(tags.get(0));
 	}
 
-	public static String randomSurveyFeature() {
-		Terrain terrain = null;
+	public static String randomSurveyTag() {
+		Set<String> tags = null;
 		int features = 0;
 		while(features == 0) {
-			terrain = MissionGenerator.randomLandingSite().getTerrain();
-			features = terrain.getFeatures().size();
+			Terrain terrain = MissionGenerator.randomLandingSite().getTerrain();
+			tags = terrain.findSurveyTags();
+			features = tags.size();
 		}
 
-		return v.random(terrain.getFeatures()).getName();
+		return v.random(tags);
 	}
 }

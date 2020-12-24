@@ -10,8 +10,7 @@ import vekta.terrain.settlement.Settlement;
 import java.util.stream.Collectors;
 
 import static processing.core.PApplet.round;
-import static vekta.Vekta.distanceString;
-import static vekta.Vekta.massString;
+import static vekta.Vekta.*;
 
 public class TerrestrialKnowledge extends SpaceObjectKnowledge {
 	private final TerrestrialPlanet planet;
@@ -45,17 +44,22 @@ public class TerrestrialKnowledge extends SpaceObjectKnowledge {
 		Layout aware = layout.add(new VerticalLayout());
 		aware.customize().color(100).spacing(layout.getStyle().spacing() / 2);
 
-		aware.add(new TextDisplay("Mass: " + massString(getSpaceObject().getMass())));
-		aware.add(new TextDisplay("Radius: " + distanceString(getSpaceObject().getRadius())));
+		TerrestrialPlanet s = getSpaceObject();
+
+		aware.add(new TextDisplay("Mass: " + massString(s.getMass())));
+		aware.add(new TextDisplay("Radius: " + radiusString(s.getRadius())));
 
 		// Survey info
 		if(ObservationLevel.SCANNED.isAvailableFrom(getLevel())) {
-			aware.add(new TextDisplay("Density: " + round(getSpaceObject().getDensity() * 100) / 100));
+			aware.add(new TextDisplay("Density: " + densityString(s.getDensity())));
+			aware.add(new TextDisplay("Atmosphere: " + atmosphereString(s.getAtmosphereDensity())));
+			aware.add(new TextDisplay("Temperature: " + temperatureStringCelsius(s.getTemperatureCelsius())));
+			aware.add(new TextDisplay("Orbit: " + distanceString(s.relativePosition(s.getOrbitObject()).mag())));
 
 			Layout scanned = layout.add(new VerticalLayout());
 
 			// Terrain features
-			scanned.add(new TextDisplay(String.join(", ", planet.getTerrain().getFeatureNames())));
+			scanned.add(new TextDisplay(String.join(", ", planet.getTerrain().findSurveyTags())));
 		}
 
 		// Landing info
@@ -64,8 +68,10 @@ public class TerrestrialKnowledge extends SpaceObjectKnowledge {
 			landed.customize().spacing(0).color(100);
 
 			// Settlements
-			landed.add(new TextDisplay(planet.isHabitable()
-					? "Settlements: " + planet.getTerrain().getSettlements().stream().map(Settlement::getName).collect(Collectors.joining(", "))
+			landed.add(new TextDisplay(planet.getTerrain().isHabitable()
+					? planet.getTerrain().isInhabited() ?
+					"Settlements: " + planet.getTerrain().findVisitableSettlements().stream().map(Settlement::getName).collect(Collectors.joining(", "))
+					: "Habitable"
 					: "Not Habitable"));
 		}
 	}

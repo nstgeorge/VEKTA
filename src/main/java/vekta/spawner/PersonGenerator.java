@@ -3,6 +3,7 @@ package vekta.spawner;
 import processing.core.PVector;
 import vekta.faction.Faction;
 import vekta.faction.PlayerFaction;
+import vekta.object.planet.Asteroid;
 import vekta.world.RenderLevel;
 import vekta.Resources;
 import vekta.economy.ProductivityModifier;
@@ -10,7 +11,6 @@ import vekta.object.planet.TerrestrialPlanet;
 import vekta.person.Person;
 import vekta.person.personality.Personality;
 import vekta.spawner.world.AsteroidSpawner;
-import vekta.terrain.HabitableTerrain;
 import vekta.terrain.settlement.OutpostSettlement;
 import vekta.terrain.settlement.Settlement;
 
@@ -80,8 +80,8 @@ public class PersonGenerator {
 	public static Settlement randomHome() {
 		// Find suitable existing settlements
 		List<Settlement> settlements = getWorld().findObjects(TerrestrialPlanet.class).stream()
-				.flatMap(p -> p.getLandingSite().getTerrain().getSettlements().stream())
-				.filter(s -> !(s.getFaction() instanceof PlayerFaction))
+				.flatMap(p -> p.getLandingSite().getTerrain().findVisitableSettlements().stream())
+				.filter(s -> !(s.getFaction() instanceof PlayerFaction) && s.isInhabited())
 				.collect(Collectors.toList());
 
 		if(!settlements.isEmpty()) {
@@ -90,8 +90,9 @@ public class PersonGenerator {
 
 		// If no candidate was found, create an asteroid with a new settlement
 		PVector pos = WorldGenerator.randomSpawnPosition(RenderLevel.PLANET, new PVector());
-		Settlement settlement = new OutpostSettlement(FactionGenerator.randomFaction());
-		AsteroidSpawner.createAsteroid(pos, new HabitableTerrain(settlement));
+		Asteroid asteroid = AsteroidSpawner.createAsteroid(pos);
+		Settlement settlement = new OutpostSettlement(asteroid.getTerrain(), FactionGenerator.randomFaction());
+		asteroid.getTerrain().addSettlement(settlement);
 		return settlement;
 	}
 

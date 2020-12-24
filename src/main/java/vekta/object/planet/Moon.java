@@ -1,6 +1,5 @@
 package vekta.object.planet;
 
-import ch.bildspur.postfx.PostFXSupervisor;
 import processing.core.PVector;
 import vekta.object.SpaceObject;
 import vekta.util.Counter;
@@ -20,8 +19,8 @@ public class Moon extends TerrestrialPlanet {
 	//	private final PVector lastParentPosition = new PVector();
 	//	private float lastTimeScale = 1;
 
-	public Moon(Planet parent, String name, float mass, float density, Terrain terrain, PVector position, PVector velocity, int color) {
-		super(name, mass, density, terrain, position, velocity, color);
+	public Moon(Planet parent, String name, float mass, float density, PVector position, PVector velocity, int color) {
+		super(name, mass, density, position, velocity, color);
 
 		//		this.parent = parent;
 		setOrbitObject(parent);
@@ -125,18 +124,18 @@ public class Moon extends TerrestrialPlanet {
 				Planet parentOrbitParent = (Planet)((TerrestrialPlanet) orbitObject).getOrbitObject();
 				if(parentOrbitParent instanceof Star) {
 					Star star = (Star)parentOrbitParent;
-					setTemperature((float)Math.pow((star.getLuminosity() * (1 - .3)) / (16 * Math.PI * Math.pow(super.relativePosition(star).mag(), 2) * v.STEFAN_BOLTZMANN), .25));
+					setTemperatureKelvin((float)Math.pow((star.getLuminosity() * (1 - .3)) / (16 * Math.PI * Math.pow(super.relativePosition(star).mag(), 2) * v.STEFAN_BOLTZMANN), .25));
 				} else {
 					// Temporary temperature value for planets orbiting gas giants and black holes
-					setTemperature(-1);
+					setTemperatureKelvin(-1);
 				}
 			} else {
 				// Temporary temperature value for planets orbiting gas giants and black holes
-				setTemperature(-1);
+				setTemperatureKelvin(-1);
 			}
 		} else {
 			// Temporary temperature value for planets orbiting gas giants and black holes
-			setTemperature(-1);
+			setTemperatureKelvin(-1);
 		}
 	}
 }

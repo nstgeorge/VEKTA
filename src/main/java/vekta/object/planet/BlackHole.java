@@ -1,6 +1,7 @@
 package vekta.object.planet;
 
 import processing.core.PVector;
+import vekta.terrain.Terrain;
 import vekta.world.RenderLevel;
 import vekta.terrain.BlackHoleTerrain;
 
@@ -14,8 +15,13 @@ public class BlackHole extends TerrestrialPlanet {
 	private static final float PREVIEW_PULSE_SPEED = .03F;
 
 	public BlackHole(String name, float mass, PVector position, PVector velocity, int color) {
-		super(name, mass, INTERACT_DENSITY, new BlackHoleTerrain(), position, velocity, color);
+		super(name, mass, INTERACT_DENSITY, position, velocity, color);
 	}
+
+//	@Override
+//	protected Terrain createTerrain() {
+//		return new BlackHoleTerrain(this);
+//	}
 
 	@Override
 	public RenderLevel getRenderLevel() {

@@ -24,7 +24,7 @@ public class PatrolShipSpawner extends NearPlanetSpawner {
 	public void spawn(SpaceObject center, PVector pos, LandingSite site) {
 		if(center instanceof ModularShip && ((ModularShip)center).hasController() && site.getTerrain().isInhabited()) {
 			Player player = ((ModularShip)center).getController();
-			Faction faction = v.random(site.getTerrain().getSettlements()).getFaction();
+			Faction faction = v.random(site.getTerrain().findVisitableSettlements()).getFaction();
 			if(faction.isEnemy(player.getFaction())) {
 				// Spawn if player is enemy
 

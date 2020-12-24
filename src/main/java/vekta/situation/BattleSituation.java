@@ -6,7 +6,7 @@ import vekta.object.ship.FighterShip;
 import vekta.player.Player;
 import vekta.sound.SoundGroup;
 import vekta.spawner.WorldGenerator;
-import vekta.world.AttributeZoomController;
+import vekta.world.AttributeMaxZoomController;
 import vekta.world.RenderLevel;
 
 import static vekta.Vekta.getDistanceUnit;
@@ -33,7 +33,7 @@ public class BattleSituation implements Situation {
 		SoundFile sound = BATTLE_MUSIC.random();
 		Resources.setMusic(sound, true);
 
-		getWorld().addZoomController(new AttributeZoomController(getClass(), getDistanceUnit(RenderLevel.SHIP)));
+		getWorld().addZoomController(new AttributeMaxZoomController(getClass(), getDistanceUnit(RenderLevel.SHIP)));
 	}
 
 	@Override

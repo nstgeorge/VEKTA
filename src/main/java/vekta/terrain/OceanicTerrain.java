@@ -1,28 +1,23 @@
 package vekta.terrain;
 
-import vekta.spawner.EcosystemGenerator;
-
-import static processing.core.PApplet.round;
-import static vekta.Vekta.v;
+import vekta.object.planet.TerrestrialPlanet;
 
 public class OceanicTerrain extends Terrain {
 
-	public OceanicTerrain() {
-		addFeature("Oceanic");
-		
-		if(v.chance(.8F)) {
-			addFeature("Atmosphere");
-		}
-
-		if(v.chance(.2F)) {
-			addFeature("Bioluminescent");
-
-			EcosystemGenerator.populateEcosystem(getEcosystem(), round(v.random(3, 15)));
-		}
+	public OceanicTerrain(TerrestrialPlanet planet) {
+		super(planet);
 	}
 
 	@Override
 	public String getOverview() {
+		if(getPlanet().getTemperatureCelsius() >= 100){
+			return "You can't find anywhere to land; clouds of water vapor obscure this planet's surface.";
+		}
 		return "You can't find anywhere to land; a vast ocean covers this planet.";
+	}
+
+	@Override
+	public boolean isHabitable() {
+		return false;
 	}
 }

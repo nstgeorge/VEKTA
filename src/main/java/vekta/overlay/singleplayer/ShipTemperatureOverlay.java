@@ -19,12 +19,12 @@ public class ShipTemperatureOverlay extends ShipStatOverlay {
 
 	@Override
 	public String getValue() {
-		return (float)Math.round(getShip().getTemperature() * 10) / 10 + " Celsius";
+		return (float)Math.round(getShip().getTemperatureKelvin() * 10) / 10 + " Celsius";
 	}
 
 	@Override
 	public int getColor() {
-		float temp = getShip().getTemperature();
+		float temp = getShip().getTemperatureKelvin();
 		if(temp < 0 || temp > 40) {
 			return v.color(255, 0, 0);
 		}

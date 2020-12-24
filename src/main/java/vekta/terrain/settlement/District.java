@@ -3,11 +3,11 @@ package vekta.terrain.settlement;
 import vekta.menu.Menu;
 import vekta.menu.handle.DistrictMenuHandle;
 import vekta.menu.option.CustomButton;
-import vekta.terrain.LandingSite;
-import vekta.terrain.building.BuildingType;
+import vekta.terrain.settlement.building.BuildingType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static vekta.Vekta.setContext;
 import static vekta.Vekta.v;
@@ -80,18 +80,25 @@ public class District implements SettlementPart {
 	}
 
 	@Override
-	public void setup(LandingSite site) {
+	public void onSurveyTags(Set<String> tags) {
 		for(SettlementPart part : getParts()) {
-			part.setup(site);
+			part.onSurveyTags(tags);
 		}
 	}
 
-	@Override
-	public void cleanup() {
-		for(SettlementPart part : getParts()) {
-			part.cleanup();
-		}
-	}
+	//	@Override
+	//	public void setup(LandingSite site) {
+	//		for(SettlementPart part : getParts()) {
+	//			part.setup(site);
+	//		}
+	//	}
+	//
+	//	@Override
+	//	public void cleanup() {
+	//		for(SettlementPart part : getParts()) {
+	//			part.cleanup();
+	//		}
+	//	}
 
 	@Override
 	public void setupMenu(Menu menu) {

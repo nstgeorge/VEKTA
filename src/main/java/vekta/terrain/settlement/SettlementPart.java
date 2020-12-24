@@ -1,10 +1,10 @@
 package vekta.terrain.settlement;
 
 import vekta.menu.Menu;
-import vekta.terrain.LandingSite;
-import vekta.terrain.building.BuildingType;
+import vekta.terrain.settlement.building.BuildingType;
 
 import java.io.Serializable;
+import java.util.Set;
 
 public interface SettlementPart extends Serializable {
 	String getName();
@@ -17,9 +17,8 @@ public interface SettlementPart extends Serializable {
 		return false;
 	}
 
-	void setup(LandingSite site);
-	
-	void cleanup();
+	default void onSurveyTags(Set<String> tags) {
+	}
 
 	void setupMenu(Menu menu);
 }

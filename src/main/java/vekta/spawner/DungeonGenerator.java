@@ -4,7 +4,7 @@ import vekta.Resources;
 import vekta.dungeon.Dungeon;
 import vekta.dungeon.DungeonRoom;
 import vekta.object.planet.TerrestrialPlanet;
-import vekta.terrain.building.DungeonBuilding;
+import vekta.terrain.settlement.building.DungeonBuilding;
 import vekta.terrain.settlement.Settlement;
 import vekta.terrain.settlement.SettlementPart;
 
@@ -23,7 +23,7 @@ public class DungeonGenerator {
 	public static Dungeon randomDungeon() {
 		List<Dungeon> dungeons = new ArrayList<>();
 		for(TerrestrialPlanet planet : getWorld().findObjects(TerrestrialPlanet.class)) {
-			for(Settlement settlement : planet.getTerrain().getSettlements()) {
+			for(Settlement settlement : planet.getTerrain().findVisitableSettlements()) {
 				for(SettlementPart part : settlement.getParts()) {
 					if(part instanceof DungeonBuilding) {
 						dungeons.add(((DungeonBuilding)part).getDungeon());
@@ -38,7 +38,7 @@ public class DungeonGenerator {
 	}
 
 	public static Dungeon createDungeon(Settlement settlement) {
-		Dungeon dungeon = new Dungeon(settlement.getSite(), Resources.generateString("dungeon"), Resources.generateString("overview_dungeon"));
+		Dungeon dungeon = new Dungeon(settlement.getLocation(), Resources.generateString("dungeon"), Resources.generateString("overview_dungeon"));
 		addRooms(dungeon.getStartRoom(), 0);
 		settlement.add(new DungeonBuilding(dungeon));
 		return dungeon;

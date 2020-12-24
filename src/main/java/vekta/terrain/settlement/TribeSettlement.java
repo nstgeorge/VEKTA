@@ -5,16 +5,17 @@ import vekta.economy.Economy;
 import vekta.economy.NoiseModifier;
 import vekta.spawner.DeityGenerator;
 import vekta.spawner.item.SpeciesItemSpawner;
-import vekta.terrain.building.CapitalBuilding;
-import vekta.terrain.building.MarketBuilding;
-import vekta.terrain.building.TempleBuilding;
+import vekta.terrain.location.Location;
+import vekta.terrain.settlement.building.CapitalBuilding;
+import vekta.terrain.settlement.building.MarketBuilding;
+import vekta.terrain.settlement.building.TempleBuilding;
 
 import static vekta.Vekta.v;
 
 public class TribeSettlement extends Settlement {
 
-	public TribeSettlement(Faction faction) {
-		super(faction, "tribe");
+	public TribeSettlement(Location location, Faction faction) {
+		super(location, faction, "tribe");
 
 		add(new CapitalBuilding("Chieftain", this));
 
@@ -36,7 +37,7 @@ public class TribeSettlement extends Settlement {
 	}
 
 	@Override
-	public void setupEconomy(Economy economy) {
+	public void initEconomy(Economy economy) {
 		economy.setValue(v.random(.02F, .1F));
 		economy.addModifier(new NoiseModifier(.001F));
 	}

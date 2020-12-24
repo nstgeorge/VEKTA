@@ -78,9 +78,11 @@ public class Vekta extends PApplet {
 	// Reference constants
 	public static final float EARTH_MASS = 5.9736e24F;
 	public static final float SUN_MASS = 1.989e30F;
+	public static final float EARTH_RADIUS = 6.3711e6F;
+	public static final float SUN_RADIUS = 6.96340e8F;
 	public static final float AU_DISTANCE = 1.496e11F;
 	public static final float LUNAR_DISTANCE = 3.844e8F;
-	public static final double STEFAN_BOLTZMANN = 5.670373 * (float)Math.pow(10, -8);	// Stefan-Boltzmann constant, used to calculate temperature and luminosity related values
+	public static final double STEFAN_BOLTZMANN = 5.670373e-8;    // Stefan-Boltzmann constant, used to calculate temperature and luminosity related values
 
 	public static int UI_COLOR;
 	public static int BUTTON_COLOR;
@@ -107,7 +109,8 @@ public class Vekta extends PApplet {
 		System.setProperty("jogl.disable.openglcore", "true");
 		if(Settings.getBoolean("fullscreen")) {
 			fullScreen(P2D);
-		} else {
+		}
+		else {
 			size(Settings.getInt("resolutionWidth"), Settings.getInt("resolutionHeight"), P2D);
 		}
 
@@ -205,8 +208,7 @@ public class Vekta extends PApplet {
 		}
 	};
 
-	public void analogTriggerResponse()
-	{
+	public void analogTriggerResponse() {
 		/*
 			Poll analog controls regardless of if they're pressed at all or not.
 		*/
@@ -223,7 +225,6 @@ public class Vekta extends PApplet {
 		context.controlStickMoved(axes.lx, axes.ly, "left");
 		context.controlStickMoved(axes.rx, axes.ry, "right");
 	}
-
 
 	@Override
 	public void keyPressed(KeyEvent event) {
@@ -399,6 +400,19 @@ public class Vekta extends PApplet {
 		return String.format("%.2f", value);
 	}
 
+	public static String quantityString(int quantity) {
+		if(quantity >= 1e9) {
+			return roundString(quantity / 1e9F) + "B";
+		}
+		if(quantity >= 1e6) {
+			return roundString(quantity / 1e6F) + "M";
+		}
+		else if(quantity >= 1e3) {
+			return roundString(quantity / 1e3F) + "k";
+		}
+		return String.valueOf(quantity);
+	}
+
 	public static String moneyString(String text, int money) {
 		return text + (money == 0 ? "" : " [" + money + " G]");
 	}
@@ -417,6 +431,25 @@ public class Vekta extends PApplet {
 			return roundString(dist / 1e3F) + " km";
 		}
 		return roundString(dist) + " m";
+	}
+
+	public static String radiusString(float radius) {
+		if(radius >= SUN_RADIUS * .1F) {
+			return roundString(radius / SUN_RADIUS) + " Suns";
+		}
+		if(radius >= EARTH_RADIUS * .1F) {
+			return roundString(radius / EARTH_RADIUS) + " Earths";
+		}
+		else if(radius >= 1e9F) {
+			return roundString(radius / 1e9F) + " Bm";
+		}
+		else if(radius >= 1e6F) {
+			return roundString(radius / 1e6F) + " Mm";
+		}
+		else if(radius >= 1e3F) {
+			return roundString(radius / 1e3F) + " km";
+		}
+		return roundString(radius) + " m";
 	}
 
 	public static String massString(float mass) {
@@ -438,17 +471,19 @@ public class Vekta extends PApplet {
 		return roundString(mass) + " kg";
 	}
 
-	public static String quantityString(int quantity) {
-		if(quantity >= 1e9) {
-			return roundString(quantity / 1e9F) + "B";
+	public static String densityString(float density) {
+		return roundString(density) + " kg/m^3";
+	}
+
+	public static String atmosphereString(float atmosphereDensity) {
+		if(atmosphereDensity >= .1) {
+			return roundString(atmosphereDensity) + " atm";
 		}
-		if(quantity >= 1e6) {
-			return roundString(quantity / 1e6F) + "M";
-		}
-		else if(quantity >= 1e3) {
-			return roundString(quantity / 1e3F) + "k";
-		}
-		return String.valueOf(quantity);
+		return String.format("%.3f atm", atmosphereDensity);
+	}
+
+	public static String temperatureStringCelsius(float temperature) {
+		return roundString(temperature) + " C";
 	}
 
 	//// Utility methods ////
@@ -467,6 +502,10 @@ public class Vekta extends PApplet {
 
 	public boolean chance(float chance) {
 		return chance > 0 && (chance == 1 || v.random(1) < chance);
+	}
+
+	public float gaussian(float scale){
+		return (float)(RANDOM.nextGaussian() * scale);
 	}
 
 	/**

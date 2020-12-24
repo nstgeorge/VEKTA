@@ -2,6 +2,8 @@ package vekta.object.planet;
 
 import processing.core.PShape;
 import processing.core.PVector;
+import vekta.object.SpaceObject;
+import vekta.object.ship.Ship;
 import vekta.world.RenderLevel;
 
 import static processing.core.PApplet.sq;
@@ -9,7 +11,7 @@ import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.ELLIPSE;
 import static vekta.Vekta.v;
 
-public class GasGiant extends Planet {
+public class GasGiant extends TerrestrialPlanet {
 	private final float ringAngle;
 	private final float ringRatio;
 	private final float[] ringDistances;
@@ -70,5 +72,12 @@ public class GasGiant extends Planet {
 			ring.setStrokeWeight(1 / r);
 			v.shape(ring);
 		}
+	}
+
+	@Override
+	public boolean isSafeToLand(Ship ship) {
+		// TODO: special equipment to fly into gas giants
+//		return false;
+		return true;
 	}
 }

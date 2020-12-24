@@ -9,7 +9,7 @@ public enum PlayerEvent {
 	CHANGE_SHIP(PlayerListener::onChangeShip),
 	DAMAGE_SHIP(PlayerListener::onDamageShip),
 	NOTIFICATION(PlayerListener::onNotification),
-	LAND(PlayerListener::onLand),
+	VISIT(PlayerListener::onVisit),
 	DOCK(PlayerListener::onDock),
 	MISSION_STATUS(PlayerListener::onMissionStatus),
 	GAME_OVER(PlayerListener::onGameOver),

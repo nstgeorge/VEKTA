@@ -5,15 +5,11 @@ import processing.core.PVector;
 import vekta.*;
 import vekta.module.*;
 import vekta.module.Module;
-import vekta.object.planet.Planet;
-import vekta.object.planet.TerrestrialPlanet;
-import vekta.situation.NearPlanetSituation;
 import vekta.world.World;
 import vekta.item.Item;
 import vekta.item.ModuleItem;
 import vekta.knowledge.ObservationLevel;
 import vekta.menu.Menu;
-import vekta.menu.handle.LandingMenuHandle;
 import vekta.menu.handle.SpaceObjectMenuHandle;
 import vekta.menu.option.*;
 import vekta.object.SpaceObject;
@@ -22,7 +18,6 @@ import vekta.player.Player;
 import vekta.player.PlayerEvent;
 import vekta.player.PlayerListener;
 import vekta.terrain.LandingSite;
-import vekta.terrain.settlement.Settlement;
 import vekta.world.RenderLevel;
 
 import java.io.Serializable;
@@ -221,11 +216,11 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	}
 
 	public boolean consumeEnergyImmediate(float amount) {
-		if(getTemperature() >= getOverheatTemperature()) {
+		if(getTemperatureKelvin() >= getOverheatTemperature()) {
 			overheated = true;
 			return false;
 		}
-		else if(overheated && getTemperature() <= getCooldownTemperature()) {
+		else if(overheated && getTemperatureKelvin() <= getCooldownTemperature()) {
 			overheated = false;
 		}
 
@@ -339,11 +334,11 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			v.line(0, 0, (acceleration.x * 100 / t), (acceleration.y * 100 / t));
 		}
 
-//		if(hasController()) {
-//			if(getController().hasAttribute(NearPlanetSituation.class)) {
-//
-//			}
-//		}
+		//		if(hasController()) {
+		//			if(getController().hasAttribute(NearPlanetSituation.class)) {
+		//
+		//			}
+		//		}
 
 		v.stroke(getColor());
 		super.draw(level, r);
@@ -438,18 +433,13 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	public void doLand(LandingSite site) {
 		if(hasController()) {
 			Player player = getController();
-			Menu menu = new Menu(player, new ShipTakeoffButton(site, getWorld()), new LandingMenuHandle(site));
-			for(Settlement settlement : site.getTerrain().getSettlements()) {
-				menu.add(new SettlementButton(settlement));
-			}
-			site.getTerrain().setupLandingMenu(site, menu);
-			menu.add(new SurveyButton(site));
-			menu.addDefault();
+
+			site.getTerrain().openMenu(player, new ShipTakeoffButton(site, getWorld()));
+
 			Resources.playSound("land");
 			this.setLanding(false);
-			setContext(menu);
 
-			player.emit(PlayerEvent.LAND, site);
+			player.emit(PlayerEvent.VISIT, site.getTerrain());
 			site.getParent().observe(ObservationLevel.VISITED, player);
 		}
 	}

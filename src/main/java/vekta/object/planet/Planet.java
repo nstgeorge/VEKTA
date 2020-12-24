@@ -91,6 +91,7 @@ public abstract class Planet extends SpaceObject implements Renameable {
 	@Override
 	public void drawDistant(float r) {
 		super.drawDistant(r);
+
 		drawNearby(r);// Draw both reticle and planet
 	}
 
@@ -128,7 +129,7 @@ public abstract class Planet extends SpaceObject implements Renameable {
 	@Override
 	public void onCollide(SpaceObject s) {
 		if(getMass() * 2 >= s.getMass()) {
-			if(s instanceof Moon && ((Moon)s).getOrbitObject() == this) { // TODO: move to Moon when collision checking is upgraded
+			if(s instanceof Moon && ((Moon)s).getOrbitObject() == this) { // TODO: move to `Moon` when collision checking is upgraded
 				return;
 			}
 			s.destroyBecause(this);

@@ -20,7 +20,6 @@ import static vekta.Vekta.v;
 public class MenuHandle extends ScrollableContainer implements Serializable {
 
 	private Menu menu;
-	private boolean drawBlocks;
 
 	public MenuHandle() {
 		this(0, v.height / 2 - 128, v.width, v.height / 2 + 128);
@@ -28,7 +27,6 @@ public class MenuHandle extends ScrollableContainer implements Serializable {
 
 	public MenuHandle(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		drawBlocks = true;
 	}
 
 	public int getSpacing() {
@@ -75,8 +73,8 @@ public class MenuHandle extends ScrollableContainer implements Serializable {
 		v.clear();
 	}
 
-	public void disableBlockingElements() {
-		drawBlocks = false;
+	protected boolean shouldDrawBlockingElements() {
+		return false;
 	}
 
 	@Override
@@ -94,6 +92,7 @@ public class MenuHandle extends ScrollableContainer implements Serializable {
 			v.textSize(24);
 			v.textAlign(CENTER, CENTER);
 			v.rectMode(CENTER);
+
 			beginScrolledContext();
 
 			for(int i = 0; i < menu.size(); i++) {
@@ -104,7 +103,7 @@ public class MenuHandle extends ScrollableContainer implements Serializable {
 
 			endScrolledContext();
 
-			if(drawBlocks) {
+			if(shouldDrawBlockingElements()) {
 				drawBlockingElements();
 			}
 

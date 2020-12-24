@@ -1,8 +1,7 @@
 package vekta.spawner.world;
 
 import processing.core.PVector;
-import vekta.context.PauseMenuContext;
-import vekta.terrain.feature.Feature;
+import vekta.spawner.TerrainGenerator;
 import vekta.world.RenderLevel;
 import vekta.Resources;
 import vekta.object.SpaceObject;
@@ -39,7 +38,7 @@ public class StarSystemSpawner implements WorldGenerator.WorldSpawner {
 		// Generate terrestrial planets
 		int planetCt = (int)v.random(1, 8);
 		for(int i = 0; i <= planetCt; i++) {
-			float distance = v.random(.5F, 4) * AU_DISTANCE;
+			float distance = v.random(.3F, 4) * AU_DISTANCE;
 			Planet planet = createPlanet(star.getPosition().add(PVector.random2D().mult(distance)));
 			orbit(star, planet, 0);
 		}
@@ -54,41 +53,44 @@ public class StarSystemSpawner implements WorldGenerator.WorldSpawner {
 	}
 
 	public static Star createStar(PVector pos) {
-		float power = pow(10, v.random(29, 31.5F));
-		float mass = v.random(0.8F, 4) * power;
-		float density = v.random(.7F, 2);
+		float temperature = (float)Math.exp(v.random((float)Math.log(2400), (float)Math.log(50000))); //TODO: fiddle
+
+		float power = pow(10, v.random(29f, 31.5f));
+		float mass = v.random(0.8f, 4) * power;
+		//		float radius = pow(10, v.random(.7F, 2));
+//		float radius = pow(10, v.random(-1f, 1f)) * SUN_RADIUS;
+		float density = pow(10, v.random(-.5f, .5f)) * 1408; // Sun's density
 		return register(new Star(
 				Resources.generateString("star"),
 				mass, // Mass
-				density, // Radius
+				density, // Density
+				temperature,
 				pos, // Position
-				new PVector(), // Velocity
-				randomPlanetColor() // TODO: color based on star properties
+				new PVector() // Velocity
 		));
 	}
 
 	public static Planet createPlanet(PVector pos) {
 		float mass = pow(10, v.random(23, 25));
-		float density = v.random(3.5F, 4);
+		float density = v.random(3000, 6000);
 		TerrestrialPlanet planet = register(new TerrestrialPlanet(
 				Resources.generateString("planet"),
 				mass,                    // Mass
 				density,                // Density
-				createPlanetTerrain(),    // Terrain
 				pos,                    // Coords
 				new PVector(),        // Velocity
 				randomPlanetColor()    // Color
 		));
-		for(Feature f : planet.getTerrain().getFeatures()) {
-			f.setPlanet(planet);
-		}
+		//		for(Feature feature : planet.getTerrain().getFeatures()) {
+		//			feature.setPlanet(planet);
+		//		}
 		createMoons(planet, (int)v.random(3), .3F * LUNAR_DISTANCE, 2 * LUNAR_DISTANCE);
 		return planet;
 	}
 
 	public static GasGiant createGasGiant(PVector pos) {
 		float mass = pow(10, v.random(26, 28));
-		float density = v.random(1.3F, 2);
+		float density = v.random(800, 1500);
 		GasGiant planet = register(new GasGiant(
 				Resources.generateString("gas_giant"),
 				mass, // Mass
@@ -119,20 +121,15 @@ public class StarSystemSpawner implements WorldGenerator.WorldSpawner {
 	public static Moon createMoon(Planet planet, float distance) {
 		PVector pos = planet.getPosition().add(PVector.random2D().mult(planet.getRadius() + distance));
 		float mass = pow(10, v.random(18, 23));
-		float density = v.random(3, 4);
-		Moon moon = register(new Moon(
+		float density = v.random(2500, 4000);
+		return register(new Moon(
 				planet,
 				Resources.generateString("moon"),
 				mass, // Mass
 				density,   // Density
-				createPlanetTerrain(), // Terrain
 				pos,  // Coords
 				new PVector(),  // Velocity
 				randomPlanetColor() // Color
 		));
-		for(Feature f : moon.getTerrain().getFeatures()) {
-			f.setPlanet(moon);
-		}
-		return moon;
 	}
 }

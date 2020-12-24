@@ -1,0 +1,11 @@
+Alpha Decay
+Beta Decay
+Gamma
+X-Ray
+Ultraviolet
+Radio
+Quantum
+Electromagnetic
+Gravitational
+Spectral
+Broadband

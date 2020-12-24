@@ -59,7 +59,7 @@ import java.util.List;
 import static vekta.Vekta.*;
 
 public class Singleplayer implements World, PlayerListener {
-	private static final File QUICKSAVE_FILE = new File("quicksave.vekta");
+	private static final File QUICK_FILE = new File("quicksave.vekta");
 	private static final File AUTOSAVE_FILE = new File("autosave.vekta");
 
 	private static Starfield starfield;
@@ -217,7 +217,7 @@ public class Singleplayer implements World, PlayerListener {
 		playerShip.addModule(new AutopilotModule());
 		playerShip.addModule(new AntennaModule());
 		playerShip.addModule(new TelescopeModule(.5F));
-		playerShip.addModule(new DrillModule(2));
+		playerShip.addModule(new MiningModule(2));
 		playerShip.addModule(new HyperdriveModule());
 		playerShip.addModule(new ActiveTCSModule(2));
 		playerShip.addModule(new CountermeasureModule());
@@ -757,7 +757,7 @@ public class Singleplayer implements World, PlayerListener {
 	public void controlStickMoved(float x, float y, String LR)
 	{
 		if(LR.equals("left")) {
-			System.out.println(Math.sqrt(Math.abs(x) + Math.abs(y)));
+//			System.out.println(Math.sqrt(Math.abs(x) + Math.abs(y)));
 			if(Math.sqrt(Math.abs(x) + Math.abs(y)) > CONTROLLER_DEADZONE * Settings.getInt("deadzone")) {
 				getPlayer().getShip().setHeading(new PVector(x,-y));
 			}
@@ -788,7 +788,7 @@ public class Singleplayer implements World, PlayerListener {
 		}
 		else {
 			if(key == KeyBinding.QUICK_SAVE && save(QUICKSAVE_FILE)) {
-				// Moved to save()
+        // Now handled in save() function
 				// getPlayer().send("Progress saved");
 			}
 			else if(key == KeyBinding.MENU_CLOSE) {
@@ -977,8 +977,8 @@ public class Singleplayer implements World, PlayerListener {
 	public boolean save(File file) {
 		try {
 			Format.write(state, new FileOutputStream(file));
-			getPlayer().send("Progress saved");
 			println("Saved to " + file);
+      getPlayer().send("Progress saved");
 			return true;
 		}
 		catch(IOException e) {
@@ -1038,7 +1038,7 @@ public class Singleplayer implements World, PlayerListener {
 			menu.add(new CustomButton("Give Knowledge", m -> {
 				for(TerrestrialPlanet planet : findObjects(TerrestrialPlanet.class)) {
 					getPlayer().addKnowledge(new TerrestrialKnowledge(ObservationLevel.VISITED, planet));
-					for(Settlement settlement : planet.getTerrain().getSettlements()) {
+					for(Settlement settlement : planet.getTerrain().findVisitableSettlements()) {
 						getPlayer().addKnowledge(new SettlementKnowledge(ObservationLevel.VISITED, settlement));
 					}
 				}

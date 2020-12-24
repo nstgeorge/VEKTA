@@ -14,7 +14,7 @@ public enum ModuleType {
 	OCEAN,
 	ECOSYSTEM,
 	TELESCOPE,
-	DRILL,
+	MINING,
 	THERMAL,
 	HYPERDRIVE,
 	UTILITY,

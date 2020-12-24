@@ -5,7 +5,6 @@ import vekta.Renameable;
 import vekta.item.Inventory;
 import vekta.item.InventoryListener;
 import vekta.item.Item;
-import vekta.knowledge.FactionKnowledge;
 import vekta.knowledge.ObservationLevel;
 import vekta.knowledge.ShipKnowledge;
 import vekta.menu.Menu;
@@ -48,7 +47,7 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 		this.speed = speed;
 		this.turnSpeed = turnSpeed;
 
-		setTemperature(getOptimalTemperature());
+		setTemperatureKelvin(getOptimalTemperature());
 	}
 
 	public float getOptimalTemperature() {

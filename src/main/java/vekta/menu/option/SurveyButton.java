@@ -3,18 +3,19 @@ package vekta.menu.option;
 import vekta.menu.Menu;
 import vekta.menu.handle.SurveyMenuHandle;
 import vekta.terrain.LandingSite;
+import vekta.terrain.Terrain;
 
 import static vekta.Vekta.setContext;
 
 public class SurveyButton extends ButtonOption {
-	private final LandingSite site;
+	private final Terrain terrain;
 
-	public SurveyButton(LandingSite site) {
-		this.site = site;
+	public SurveyButton(Terrain terrain) {
+		this.terrain = terrain;
 	}
 
-	public LandingSite getSite() {
-		return site;
+	public Terrain getTerrain() {
+		return terrain;
 	}
 
 	@Override
@@ -24,7 +25,7 @@ public class SurveyButton extends ButtonOption {
 
 	@Override
 	public void onSelect(Menu menu) {
-		Menu sub = new Menu(menu, new SurveyMenuHandle(getSite()));
+		Menu sub = new Menu(menu, new SurveyMenuHandle(getTerrain()));
 		sub.addDefault();
 		setContext(sub);
 	}

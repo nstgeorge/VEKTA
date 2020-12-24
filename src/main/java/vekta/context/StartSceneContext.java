@@ -19,7 +19,7 @@ public class StartSceneContext implements Context {
 	private boolean endFlag;
 
 	public StartSceneContext() {
-		String[] startSceneStrings = Resources.getStrings("startScene");
+		String[] startSceneStrings = Resources.getStrings("start_scene");
 		String startSceneString = String.join("\n", startSceneStrings);
 		writer = new Typewriter(startSceneString, 20, 100);
 	}

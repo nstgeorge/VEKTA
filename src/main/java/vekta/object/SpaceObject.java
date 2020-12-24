@@ -80,21 +80,33 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	public abstract float getSpecificHeat();
 
 	/**
-	 * Get the temperature of the object.
-	 * @return Object temperature
+	 * Get the temperature of the object (degrees Kelvin).
+	 *
+	 * @return Temperature (Kelvin)
 	 */
-	public float getTemperature() {
+	public float getTemperatureKelvin() {
 		return temperature;
 	}
+
 	/**
-	 * Set the temperature to any number.
+	 * Get the temperature in Celsius for convenience.
+	 *
+	 * @return Temperature (Celsius)
 	 */
-	public void setTemperature(float temperature) {
+	public float getTemperatureCelsius() {
+		return getTemperatureKelvin() - 273.15F;
+	}
+
+	/**
+	 * Set the temperature to a positive number (degrees Kelvin).
+	 */
+	public void setTemperatureKelvin(float temperature) {
 		this.temperature = temperature;
 	}
 
 	/**
 	 * Add heat to the object with respect to its mass and specific heat.
+	 *
 	 * @param heat Amount of heat to add
 	 */
 	public void addHeat(float heat) {

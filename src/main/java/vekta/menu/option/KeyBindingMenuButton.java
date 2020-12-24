@@ -1,14 +1,10 @@
 package vekta.menu.option;
 
-import vekta.KeyBinding;
+import vekta.KeyCategory;
 import vekta.menu.Menu;
 import vekta.menu.handle.SettingsMenuHandle;
-import vekta.menu.option.input.InputOption;
-import vekta.menu.option.input.KeyBindingInputController;
-import vekta.menu.option.input.KeySettingWatcher;
 
 import static vekta.Vekta.setContext;
-import static vekta.Vekta.v;
 
 public class KeyBindingMenuButton extends ButtonOption {
 
@@ -20,8 +16,8 @@ public class KeyBindingMenuButton extends ButtonOption {
 	@Override
 	public void onSelect(Menu menu) {
 		Menu sub = new Menu(menu, new SettingsMenuHandle());
-		for(KeyBinding.Section section : KeyBinding.Section.values()) {
-			sub.add(new KeybindMenuSubsectionButton(section.name().replace("_", " ").toLowerCase()));
+		for(KeyCategory category : KeyCategory.values()) {
+			sub.add(new KeyCategoryButton(category));
 		}
 		sub.addDefault();
 		setContext(sub);

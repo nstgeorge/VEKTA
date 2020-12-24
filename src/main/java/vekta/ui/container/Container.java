@@ -8,14 +8,13 @@ public abstract class Container implements Element {
 
 	private float x, y;
 	private int sizeX, sizeY;
-	private ArrayList<ContainerMember> elements;
+	private final ArrayList<ContainerMember> elements = new ArrayList<>();
 
 	public Container(int x, int y, int sizeX, int sizeY) {
 		this.x = x;
 		this.y = y;
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
-		elements = new ArrayList<>();
 	}
 
 	protected float getX() {

@@ -23,7 +23,7 @@ public class DungeonRoomObjective extends Objective {
 
 	@Override
 	public SpaceObject getSpaceObject() {
-		return getRoom().getDungeon().getSite().getParent();
+		return getRoom().getDungeon().getLocation().getPlanet();
 	}
 
 	@Override

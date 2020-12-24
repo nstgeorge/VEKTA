@@ -33,7 +33,7 @@ public class DungeonKnowledge extends SpaceObjectKnowledge {
 
 	@Override
 	public SpaceObject getSpaceObject() {
-		return getDungeon().getSite().getParent();
+		return getDungeon().getLocation().getPlanet();
 	}
 
 	@Override

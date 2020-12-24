@@ -1,7 +1,6 @@
 package vekta.menu.handle;
 
-import vekta.menu.Menu;
-import vekta.terrain.LandingSite;
+import vekta.terrain.location.OceanLocation;
 
 import static processing.core.PApplet.abs;
 import static processing.core.PApplet.sin;
@@ -17,14 +16,14 @@ public class OceanMenuHandle extends MenuHandle {
 			{30, 370, .05F},
 	};
 
-	private final LandingSite site;
+	private final OceanLocation location;
 
-	public OceanMenuHandle(LandingSite site) {
-		this.site = site;
+	public OceanMenuHandle(OceanLocation location) {
+		this.location = location;
 	}
 
-	public LandingSite getSite() {
-		return site;
+	public OceanLocation getLocation() {
+		return location;
 	}
 
 	@Override
@@ -32,7 +31,7 @@ public class OceanMenuHandle extends MenuHandle {
 		super.render();
 
 		float width = v.width * .75F;
-		v.stroke(site.getParent().getColor());
+		v.stroke(location.getColor());
 		drawOcean(getItemX() - width / 2, getItemY(-2) - WAVE_HEIGHT / 2, width, WAVE_HEIGHT);
 	}
 

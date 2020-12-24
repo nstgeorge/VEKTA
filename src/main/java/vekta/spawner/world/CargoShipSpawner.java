@@ -24,7 +24,7 @@ public class CargoShipSpawner extends NearPlanetSpawner {
 	public void spawn(SpaceObject center, PVector pos, LandingSite site) {
 		if(site.getTerrain().isInhabited()) {
 			Faction faction = v.chance(.25F)
-					? v.random(site.getTerrain().getSettlements()).getFaction()
+					? v.random(site.getTerrain().findVisitableSettlements()).getFaction()
 					: FactionGenerator.randomFaction();
 
 			Ship s = register(new CargoShip(faction.getName() + " Cargo Ship", PVector.random2D(), pos, new PVector(), faction));

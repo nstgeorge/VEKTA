@@ -7,12 +7,13 @@ import vekta.item.Inventory;
 import vekta.menu.Menu;
 import vekta.menu.option.LootMenuButton;
 import vekta.spawner.ItemGenerator;
+import vekta.terrain.location.Location;
 
 public class AbandonedSettlement extends Settlement {
 	private final Inventory inventory = new Inventory();
 
-	public AbandonedSettlement(Faction faction, String prevName) {
-		super(faction, prevName + " Ruins", Resources.generateString("overview_ruins"));
+	public AbandonedSettlement(Location location, Faction faction, String prevName) {
+		super(location, faction, prevName + " Ruins", Resources.generateString("overview_ruins"));
 
 		ItemGenerator.addLoot(getInventory(), 2);
 	}

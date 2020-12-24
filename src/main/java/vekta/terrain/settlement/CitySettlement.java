@@ -4,15 +4,18 @@ import vekta.faction.Faction;
 import vekta.economy.Economy;
 import vekta.economy.NoiseModifier;
 import vekta.spawner.PersonGenerator;
-import vekta.spawner.WorldGenerator;
-import vekta.terrain.building.*;
+import vekta.spawner.SettlementGenerator;
+import vekta.terrain.location.Location;
+import vekta.terrain.settlement.building.*;
+
+import java.util.Set;
 
 import static vekta.Vekta.v;
 
 public class CitySettlement extends Settlement {
 
-	public CitySettlement(Faction faction) {
-		super(faction, "city");
+	public CitySettlement(Location location, Faction faction) {
+		super(location, faction, "city");
 
 		add(new District(this, "Trade District", BuildingType.MARKET));
 		add(new District(this, "Industrial District", BuildingType.INDUSTRIAL));
@@ -23,7 +26,7 @@ public class CitySettlement extends Settlement {
 		add(new CapitalBuilding("Governor", this));
 		add(new AcademyBuilding(this));
 
-		for(MarketBuilding building : WorldGenerator.randomMarkets(3, .4F)) {
+		for(MarketBuilding building : SettlementGenerator.randomMarkets(3, .4F)) {
 			add(building);
 		}
 
@@ -37,16 +40,6 @@ public class CitySettlement extends Settlement {
 
 		add(new ForumBuilding(this, (int)(v.random(10, 20))));
 		add(new ExchangeBuilding());
-	}
-
-	@Override
-	public String getGenericName() {
-		return "City";
-	}
-
-	@Override
-	public void onSetup() {
-		getTerrain().addFeature("Urban");
 
 		// Add extra people
 		int personCt = (int)v.random(4) + 1;
@@ -56,7 +49,17 @@ public class CitySettlement extends Settlement {
 	}
 
 	@Override
-	public void setupEconomy(Economy economy) {
+	public String getGenericName() {
+		return "City";
+	}
+
+	@Override
+	public void onSettlementSurveyTags(Set<String> tags) {
+		tags.add("Urban");
+	}
+
+	@Override
+	public void initEconomy(Economy economy) {
 		economy.setValue(v.random(5, 10));
 		economy.addModifier(new NoiseModifier(2));
 	}

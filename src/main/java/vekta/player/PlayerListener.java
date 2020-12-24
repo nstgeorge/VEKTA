@@ -8,7 +8,8 @@ import vekta.module.Module;
 import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
 import vekta.overlay.singleplayer.Notification;
-import vekta.terrain.LandingSite;
+import vekta.terrain.Terrain;
+import vekta.terrain.location.Location;
 
 import java.io.Serializable;
 
@@ -43,7 +44,7 @@ public interface PlayerListener extends Serializable {
 	default void onNotification(Notification notification) {
 	}
 
-	default void onLand(LandingSite site) {
+	default void onVisit(Terrain terrain) {
 	}
 
 	default void onDock(SpaceObject object) {
