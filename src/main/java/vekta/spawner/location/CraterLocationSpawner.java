@@ -1,10 +1,10 @@
-package vekta.spawner.location.feature;
+package vekta.spawner.location;
 
 import vekta.spawner.location.FeatureLocationSpawner;
 import vekta.terrain.Terrain;
 import vekta.terrain.location.ProxyLocation;
 
-public class CratersFeature extends FeatureLocationSpawner<String> {
+public class CraterLocationSpawner extends FeatureLocationSpawner<String> {
 
 	@Override
 	public boolean isValid(Terrain terrain) {

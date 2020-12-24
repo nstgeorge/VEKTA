@@ -2,10 +2,11 @@ package vekta.mission.objective;
 
 import vekta.item.ItemType;
 import vekta.menu.Menu;
-import vekta.menu.handle.LandingMenuHandle;
+import vekta.menu.handle.LocationMenuHandle;
 import vekta.menu.option.CustomButton;
 import vekta.object.SpaceObject;
 import vekta.terrain.LandingSite;
+import vekta.terrain.location.Location;
 
 public class LandingTaskObjective extends Objective {
 	private final String name;
@@ -32,9 +33,10 @@ public class LandingTaskObjective extends Objective {
 
 	@Override
 	public void onMenu(Menu menu) {
-		if(menu.getHandle() instanceof LandingMenuHandle) {
-			LandingSite site = ((LandingMenuHandle)menu.getHandle()).getSite();
-			if(getSpaceObject() == null || site.getParent() == getSpaceObject()) {
+		if(menu.getHandle() instanceof LocationMenuHandle) {
+			Location location = ((LocationMenuHandle)menu.getHandle()).getLocation();
+
+			if(getSpaceObject() == null || location.getPlanet() == getSpaceObject()) {
 				menu.add(new CustomButton(name, m -> complete())
 						.withColor(ItemType.KNOWLEDGE.getColor())
 						.withRemoval());

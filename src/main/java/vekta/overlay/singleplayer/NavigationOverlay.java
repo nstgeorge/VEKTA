@@ -79,19 +79,23 @@ public class NavigationOverlay implements Overlay {
 				targetString = "PLANET [1], ASTEROID [2], SHIP [3]" + (player.getCurrentMission() != null ? ", OBJECTIVE [4]" : "");
 			}
 			else {
-				String massString = massString(target.getMass());
 				if(target instanceof TerrestrialPlanet) {
-					TerrestrialPlanet closestPlanet = (TerrestrialPlanet)target;
-					String atmosphereString = atmosphereString(closestPlanet.getAtmosphereDensity());
-					targetString = target.getName() + " - " + distString + " \nAtmosphere: " + atmosphereString + "\nMass: " + massString + "\nTemperature: " + temperatureStringCelsius(v.roundEpsilon(closestPlanet.getTemperatureCelsius()));
-					SpaceObject orbit = closestPlanet.getOrbitObject();
+					TerrestrialPlanet planet = (TerrestrialPlanet)target;
+					targetString = target.getName() + " - " + distString
+							+ "\nMass: " + massString(target.getMass())
+							+ "\nTemperature: " + temperatureStringCelsius(v.roundEpsilon(planet.getTemperatureCelsius()))
+							+ "\nAtmosphere: " + atmosphereString(planet.getAtmosphereDensity());
+
+					SpaceObject orbit = planet.getOrbitObject();
 					if(orbit != null) {
-						targetString += "\nOrbiting: " + orbit.getName() + " (" + v.roundEpsilon(closestPlanet.relativePosition(orbit).mag() / AU_DISTANCE) + " AU)";
+						targetString += "\nOrbiting: " + orbit.getName() + " (" + distanceString(planet.relativePosition(orbit).mag()) + ")";
 					}
 				}
 				else {
-					targetString = target.getName() + " - " + distString + " \n\nMass: " + massString;
+					targetString = target.getName() + " - " + distString
+							+ " \n\nMass: " + massString(target.getMass());
 				}
+
 				// Closest object arrow
 				drawDial("Direction", target.getPosition().sub(ship.getPosition()), 450, dialHeight, target.getColor());
 				v.fill(target.getColor());
@@ -145,30 +149,31 @@ public class NavigationOverlay implements Overlay {
 	}
 
 	private void drawHeadingIndicator(PVector heading, SpaceObject target) {
-		int resolution = 36;		// Number of bars to draw
-		int top = 40;				// Distance (px) from top of screen
-		int height = 20;			// Height of the largest indicator bars
-		int offset = 10;			// Offset in height of the smaller bars
-		float width = v.width / 2;	// Width of the indicator as a whole
+		int resolution = 36;        // Number of bars to draw
+		int top = 40;                // Distance (px) from top of screen
+		int height = 20;            // Height of the largest indicator bars
+		int offset = 10;            // Offset in height of the smaller bars
+		float width = v.width / 2f;    // Width of the indicator as a whole
 
-		int left = (int) ((v.width - width) / 2);
+		int left = (int)((v.width - width) / 2);
 
 		// Draw arrow
 		v.stroke(0, 255, 0);
-		v.line(v.width / 2 + 10, 75, v.width / 2, 65);
-		v.line(v.width / 2 - 10, 75, v.width / 2, 65);
+		v.line(v.width / 2f + 10, 75, v.width / 2f, 65);
+		v.line(v.width / 2f - 10, 75, v.width / 2f, 65);
 
 		// Write current heading
 		int headingNumber = (int)Math.toDegrees(heading.heading());
-		if(Math.signum(headingNumber) == -1) headingNumber += 360;
+		if(Math.signum(headingNumber) == -1)
+			headingNumber += 360;
 		v.color(0, 255, 0);
 		v.textAlign(CENTER);
-		v.text(headingNumber, v.width / 2, 90);
+		v.text(headingNumber, v.width / 2f, 90);
 
 		// Draw lines
 		for(int i = 0; i < resolution * 3; i++) {
 			int horizontalLocation = (int)(left + ((i - resolution) * (width / resolution)) - ((float)((headingNumber - 180.0) / 360.0) * (width)));
-			float sinModifier = sin((float) (Math.PI * ((horizontalLocation - left - (headingNumber - 180.0) / 360.0) / width)));
+			float sinModifier = sin((float)(Math.PI * ((horizontalLocation - left - (headingNumber - 180.0) / 360.0) / width)));
 
 			v.stroke(0, 255, 0, 255 * sinModifier);
 			v.line(horizontalLocation, top, horizontalLocation, top + height - (i % 4 == 0 ? 0 : offset));

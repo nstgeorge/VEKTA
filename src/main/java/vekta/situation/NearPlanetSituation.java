@@ -7,6 +7,7 @@ import vekta.world.AttributeMaxZoomController;
 import vekta.world.RenderLevel;
 
 import static processing.core.PApplet.max;
+import static processing.core.PApplet.println;
 import static vekta.Vekta.getDistanceUnit;
 import static vekta.Vekta.getWorld;
 

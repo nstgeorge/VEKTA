@@ -1,5 +1,6 @@
 package vekta.person;
 
+import com.sun.istack.internal.Nullable;
 import vekta.Resources;
 import vekta.detail.Detailed;
 import vekta.detail.Details;
@@ -84,11 +85,16 @@ public class Person extends Syncable<Person> implements MissionIssuer, Detailed 
 		return home != null && home.isEconomyAlive() && home.getLocation().isEnabled();//TODO: must be habitable
 	}
 
+	@Nullable
+	public Settlement getCurrentHome() {
+		return home;
+	}
+
 	public Settlement findHome() {
 		if(!hasHome()) {
 			home = PersonGenerator.randomHome(getFaction());
 		}
-		return home;
+		return getCurrentHome();
 	}
 
 	public Location findHomeLocation() {

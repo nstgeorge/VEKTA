@@ -62,7 +62,7 @@ public class MiningModule extends ShipModule {
 		if(menu.getHandle() instanceof LocationMenuHandle) {
 			Location location = ((LocationMenuHandle)menu.getHandle()).getLocation();
 
-			if(location instanceof MiningLocation) {
+			if(location instanceof MiningLocation && !((MiningLocation)location).isDepleted()) {
 				menu.add(new ExtractMenuButton((MiningLocation)location, getEfficiency()));
 			}
 		}

@@ -1,13 +1,13 @@
 package vekta.module;
 
+import vekta.menu.handle.LocationMenuHandle;
+import vekta.terrain.location.Location;
 import vekta.util.InfoGroup;
 import vekta.item.Item;
 import vekta.menu.Menu;
-import vekta.menu.handle.LandingMenuHandle;
 import vekta.menu.option.RechargeButton;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.Rechargeable;
-import vekta.terrain.LandingSite;
 import vekta.terrain.settlement.Settlement;
 
 import java.util.List;
@@ -92,16 +92,13 @@ public class BatteryModule extends ShipModule implements Rechargeable {
 
 	@Override
 	public void onMenu(Menu menu) {
-		if(menu.getHandle() instanceof LandingMenuHandle) {
-			LandingSite site = ((LandingMenuHandle)menu.getHandle()).getSite();
+		if(menu.getHandle() instanceof LocationMenuHandle) {
+			Location location = ((LocationMenuHandle)menu.getHandle()).getLocation();
 
-			if(site.getTerrain().isInhabited()) {
+			if(location.isInhabited()) {
 				float price = .5F;
-				for(Settlement settlement : site.getTerrain().findVisitableSettlements()) {
-					if(settlement.getFaction().isAlly(menu.getPlayer().getFaction())) {
-						price = .1F;
-						break;
-					}
+				if(location.hasSettlement() && location.getSettlement().getFaction().isAlly(menu.getPlayer().getFaction())) {
+					price = .1F;
 				}
 
 				ModularShip ship = menu.getPlayer().getShip();

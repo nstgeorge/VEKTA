@@ -22,7 +22,9 @@ public class AdaptiveTerrainSpawner implements TerrainGenerator.TerrainSpawner {
 
 		AdaptiveTerrain terrain = new AdaptiveTerrain(planet);
 
-		terrain.addSettlement(SettlementGenerator.createSettlement(terrain));/////
+		if(terrain.isHabitable()) {
+			SettlementGenerator.createSettlement(terrain);
+		}
 
 		LocationGenerator.populateLocations(terrain);
 

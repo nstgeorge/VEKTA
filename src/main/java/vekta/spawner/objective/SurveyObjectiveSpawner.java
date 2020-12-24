@@ -5,6 +5,7 @@ import vekta.mission.objective.Objective;
 import vekta.mission.objective.SurveyObjective;
 import vekta.spawner.MissionGenerator;
 import vekta.terrain.Terrain;
+import vekta.terrain.location.Location;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,11 +44,10 @@ public class SurveyObjectiveSpawner implements MissionGenerator.ObjectiveSpawner
 		Set<String> tags = null;
 		int features = 0;
 		while(features == 0) {
-			Terrain terrain = MissionGenerator.randomLandingSite().getTerrain();
-			tags = terrain.findSurveyTags();
+			Location location = MissionGenerator.randomLandingSite().getLocation();
+			tags = location.findSurveyTags();
 			features = tags.size();
 		}
-
 		return v.random(tags);
 	}
 }

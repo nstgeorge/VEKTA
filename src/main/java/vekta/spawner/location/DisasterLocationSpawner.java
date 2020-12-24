@@ -10,7 +10,7 @@ import java.util.Set;
 
 import static java.lang.Math.max;
 
-public class DisasterFeature extends ProxyLocationSpawner<String> {
+public class DisasterLocationSpawner extends ProxyLocationSpawner<String> {
 
 	@Override
 	public boolean isValid(Terrain terrain) {

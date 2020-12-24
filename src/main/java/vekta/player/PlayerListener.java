@@ -44,7 +44,7 @@ public interface PlayerListener extends Serializable {
 	default void onNotification(Notification notification) {
 	}
 
-	default void onVisit(Terrain terrain) {
+	default void onVisit(Location location) {
 	}
 
 	default void onDock(SpaceObject object) {

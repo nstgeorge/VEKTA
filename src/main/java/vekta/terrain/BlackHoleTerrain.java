@@ -33,7 +33,7 @@ public class BlackHoleTerrain extends Terrain {
 	}
 
 	@Override
-	public void onVisitMenu(Menu menu) {
+	public void onVisitTerrainMenu(Menu menu) {
 		// TODO convert items to energy by mass (Penrose Process)
 		// TODO timewarp
 

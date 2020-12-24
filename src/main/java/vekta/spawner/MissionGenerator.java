@@ -65,7 +65,7 @@ public class MissionGenerator {
 		if(planet == null) {
 			planet = AsteroidSpawner.createAsteroid(WorldGenerator.randomSpawnPosition(RenderLevel.PLANET, new PVector()));
 		}
-		return planet.getLandingSite();
+		return v.random(planet.findVisitableLandingSites());
 	}
 
 	public static Person randomMissionPerson() {

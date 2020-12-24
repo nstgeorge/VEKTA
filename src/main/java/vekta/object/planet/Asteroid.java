@@ -20,10 +20,10 @@ public class Asteroid extends TerrestrialPlanet {
 		skew = v.random(.5F, 1);
 	}
 
-//	@Override
-//	protected Terrain createTerrain() {
-//		return new AsteroidTerrain(this);
-//	}
+	@Override
+	protected Terrain chooseTerrain() {
+		return new AsteroidTerrain(this);
+	}
 
 	@Override
 	public float getValueScale() {

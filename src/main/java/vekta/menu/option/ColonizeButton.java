@@ -5,24 +5,26 @@ import vekta.item.ColonyItem;
 import vekta.knowledge.ObservationLevel;
 import vekta.menu.Menu;
 import vekta.terrain.LandingSite;
+import vekta.terrain.Terrain;
+import vekta.terrain.location.Location;
 import vekta.terrain.settlement.building.CapitalBuilding;
 import vekta.terrain.settlement.ColonySettlement;
 
 public class ColonizeButton extends ButtonOption {
 	private final ColonyItem item;
-	private final LandingSite site;
+	private final Location location;
 
-	public ColonizeButton(ColonyItem item, LandingSite site) {
+	public ColonizeButton(ColonyItem item, Location location) {
 		this.item = item;
-		this.site = site;
+		this.location = location;
 	}
 
 	public ColonyItem getItem() {
 		return item;
 	}
 
-	public LandingSite getSite() {
-		return site;
+	public Location getLocation() {
+		return location;
 	}
 
 	@Override
@@ -40,12 +42,11 @@ public class ColonizeButton extends ButtonOption {
 		Faction faction = item.getFaction() != null ? item.getFaction() : menu.getPlayer().getFaction();
 
 		// Set up colony settlement
-		ColonySettlement settlement = new ColonySettlement(site.getTerrain(), faction);
-		settlement.setOverview("You land close to your recently established colony.");
+		ColonySettlement settlement = new ColonySettlement(getLocation(), faction);
+		settlement.setOverview("You arrive at your recently established colony.");
 		settlement.getEconomy().setValue(.1F);
 		settlement.clear();
 		settlement.add(new CapitalBuilding("Governor", settlement));
-		site.getTerrain().addSettlement(settlement);
 
 		// Ensure that the colony object doesn't despawn
 		settlement.observe(ObservationLevel.OWNED, menu.getPlayer());

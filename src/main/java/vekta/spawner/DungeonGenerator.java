@@ -23,7 +23,7 @@ public class DungeonGenerator {
 	public static Dungeon randomDungeon() {
 		List<Dungeon> dungeons = new ArrayList<>();
 		for(TerrestrialPlanet planet : getWorld().findObjects(TerrestrialPlanet.class)) {
-			for(Settlement settlement : planet.getTerrain().findVisitableSettlements()) {
+			for(Settlement settlement : planet.findVisitableSettlements()) {
 				for(SettlementPart part : settlement.getParts()) {
 					if(part instanceof DungeonBuilding) {
 						dungeons.add(((DungeonBuilding)part).getDungeon());

@@ -95,7 +95,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	}
 
 	public float getMaxZoomLevel() {
-		return isHyperdriving() ? INTERSTELLAR_LEVEL : STAR_LEVEL * .99F; // Slightly below STAR_LEVEL to pacify smooth zooming
+		return isHyperdriving() ? INTERSTELLAR_LEVEL : STAR_LEVEL; // Slightly below STAR_LEVEL to pacify smooth zooming
 	}
 
 	public boolean isLanding() {
@@ -435,13 +435,10 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		if(hasController()) {
 			Player player = getController();
 
-			site.getTerrain().openMenu(player, new ShipTakeoffButton(site, getWorld()));
+			site.getLocation().openMenu(player, new ShipTakeoffButton(site, getWorld()));
 
 			Resources.playSound("land");
 			this.setLanding(false);
-
-			player.emit(PlayerEvent.VISIT, site.getTerrain());
-			site.getParent().observe(ObservationLevel.VISITED, player);
 		}
 	}
 

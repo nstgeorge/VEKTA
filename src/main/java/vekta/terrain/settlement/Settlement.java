@@ -56,7 +56,9 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 
 		setFaction(faction);
 
-		SettlementGenerator.populateSettlement(this);//////TODO: Check init order
+		SettlementGenerator.populateSettlement(this);
+
+		location.notifySettlement(this);
 	}
 
 	public Location getLocation() {

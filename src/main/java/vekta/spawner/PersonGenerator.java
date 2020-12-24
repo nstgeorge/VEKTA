@@ -80,7 +80,7 @@ public class PersonGenerator {
 	public static Settlement randomHome() {
 		// Find suitable existing settlements
 		List<Settlement> settlements = getWorld().findObjects(TerrestrialPlanet.class).stream()
-				.flatMap(p -> p.getLandingSite().getTerrain().findVisitableSettlements().stream())
+				.flatMap(planet -> planet.findInhabitedSettlements().stream())
 				.filter(s -> !(s.getFaction() instanceof PlayerFaction) && s.isInhabited())
 				.collect(Collectors.toList());
 
@@ -91,9 +91,9 @@ public class PersonGenerator {
 		// If no candidate was found, create an asteroid with a new settlement
 		PVector pos = WorldGenerator.randomSpawnPosition(RenderLevel.PLANET, new PVector());
 		Asteroid asteroid = AsteroidSpawner.createAsteroid(pos);
-		Settlement settlement = new OutpostSettlement(asteroid.getTerrain(), FactionGenerator.randomFaction());
-		asteroid.getTerrain().addSettlement(settlement);
-		return settlement;
+		return asteroid.getTerrain().hasSettlement()
+				? asteroid.getTerrain().getSettlement()
+				: new OutpostSettlement(asteroid.getTerrain(), FactionGenerator.randomFaction());
 	}
 
 	public static String randomInterest() {

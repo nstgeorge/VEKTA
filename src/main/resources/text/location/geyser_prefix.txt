@@ -3,4 +3,3 @@ CO2
 Nitrogen
 Ammonia
 Silicate
-Crude Oil

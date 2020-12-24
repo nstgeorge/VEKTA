@@ -64,18 +64,6 @@ public class EngineModule extends ShipModule {
 	}
 
 	@Override
-	public void onAnalogKeyPress(float value)
-	{
-		if(OPERATING_SYSTEM.contains("Windows")) {
-			if(device.isConnected()) {
-				getShip().setThrustControl(value);
-			}
-		}
-
-
-	}
-
-	@Override
 	public void onKeyPress(KeyBinding key) {
 		if(key == KeyBinding.SHIP_FORWARD) {
 			getShip().setThrustControl(1);
@@ -89,6 +77,15 @@ public class EngineModule extends ShipModule {
 	public void onKeyRelease(KeyBinding key) {
 		if(key == KeyBinding.SHIP_FORWARD || key == KeyBinding.SHIP_BACKWARD) {
 			getShip().setThrustControl(0);
+		}
+	}
+
+	@Override
+	public void onAnalogKeyPress(float value) {
+		if(OPERATING_SYSTEM.contains("Windows")) {
+			if(device.isConnected()) {
+				getShip().setThrustControl(value);
+			}
 		}
 	}
 

@@ -19,6 +19,11 @@ public class BlackHole extends TerrestrialPlanet {
 	}
 
 	@Override
+	protected Terrain chooseTerrain() {
+		return new BlackHoleTerrain(this);
+	}
+
+	@Override
 	protected float chooseAtmosphereDensity() {
 		return 0;
 	}

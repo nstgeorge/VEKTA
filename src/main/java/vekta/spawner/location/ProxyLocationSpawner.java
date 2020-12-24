@@ -2,8 +2,10 @@ package vekta.spawner.location;
 
 import vekta.menu.Menu;
 import vekta.menu.handle.MenuHandle;
+import vekta.sound.Tune;
 import vekta.spawner.LocationGenerator;
 import vekta.terrain.Terrain;
+import vekta.terrain.location.Location;
 import vekta.terrain.location.ProxyLocation;
 
 import java.io.Serializable;
@@ -15,7 +17,7 @@ public abstract class ProxyLocationSpawner<T extends Serializable> implements Lo
 
 	private static final Map<Class<? extends ProxyLocationSpawner>, ProxyLocationSpawner> PROXY_MAP = new HashMap<>();
 
-	static{
+	static {
 		// Initialize all subclass instances
 		LocationGenerator.ensureLoaded();
 	}
@@ -32,7 +34,12 @@ public abstract class ProxyLocationSpawner<T extends Serializable> implements Lo
 	@Override
 	@SuppressWarnings("unchecked")
 	public void spawn(Terrain terrain) {
-		terrain.addPathway(new ProxyLocation<>(terrain.getPlanet(), (Class<? extends ProxyLocationSpawner<T>>)getClass(), chooseData()));
+		ProxyLocation<T> location = new ProxyLocation<>(terrain.getPlanet(), (Class<? extends ProxyLocationSpawner<T>>)getClass(), chooseData());
+		setup(location);
+		terrain.addPathway(location);
+	}
+
+	public void setup(ProxyLocation<T> location) {
 	}
 
 	public abstract T chooseData();

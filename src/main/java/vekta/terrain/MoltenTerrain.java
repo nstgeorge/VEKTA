@@ -31,7 +31,7 @@ public class MoltenTerrain extends Terrain {
 	}
 
 	@Override
-	public void onOrbit(SpaceObject orbitObject) {
+	protected void onOrbit(SpaceObject orbitObject) {
 		getPlanet().setTemperatureKelvin(temperature);
 	}
 }

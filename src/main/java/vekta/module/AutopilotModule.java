@@ -9,10 +9,10 @@ import vekta.object.ship.ModularShip;
 import static vekta.Vekta.*;
 
 public class AutopilotModule extends TargetingModule {
-	private static final float APPROACH_SCALE = 1F;
-	private static final float SLOWDOWN_FACTOR = 1F;
-	private static final float CORRECT_FACTOR = 4F;
-	private static final float ROTATE_SMOOTH = .1F;
+	private static final float APPROACH_SCALE = 1f;
+	private static final float SLOWDOWN_FACTOR = 1f;
+	private static final float CORRECT_FACTOR = 4f;
+	private static final float ROTATE_SMOOTH = .1f;
 
 	public AutopilotModule() {
 		super();

@@ -2,6 +2,7 @@ package vekta.spawner.world;
 
 import processing.core.PVector;
 import vekta.faction.Faction;
+import vekta.object.planet.TerrestrialPlanet;
 import vekta.player.Player;
 import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
@@ -9,11 +10,14 @@ import vekta.object.ship.PatrolShip;
 import vekta.spawner.ItemGenerator;
 import vekta.spawner.WorldGenerator;
 import vekta.terrain.LandingSite;
+import vekta.terrain.settlement.Settlement;
+
+import java.util.List;
 
 import static vekta.Vekta.register;
 import static vekta.Vekta.v;
 
-public class PatrolShipSpawner extends NearPlanetSpawner {
+public class PatrolShipSpawner extends NearTerrestrialPlanetSpawner {
 
 	@Override
 	public float getWeight() {
@@ -21,18 +25,23 @@ public class PatrolShipSpawner extends NearPlanetSpawner {
 	}
 
 	@Override
-	public void spawn(SpaceObject center, PVector pos, LandingSite site) {
-		if(center instanceof ModularShip && ((ModularShip)center).hasController() && site.getTerrain().isInhabited()) {
+	public void spawn(SpaceObject center, PVector pos, TerrestrialPlanet planet) {
+		if(center instanceof ModularShip && ((ModularShip)center).hasController()) {
 			Player player = ((ModularShip)center).getController();
-			Faction faction = v.random(site.getTerrain().findVisitableSettlements()).getFaction();
-			if(faction.isEnemy(player.getFaction())) {
-				// Spawn if player is enemy
 
-				PatrolShip s = register(new PatrolShip(faction, PVector.random2D(), pos, new PVector()));
-				s.setTarget(player.getShip());
-				WorldGenerator.orbit(site.getParent(), s, .5F);
+			if(planet.isInhabited()) {
+				Settlement settlement = v.random(planet.findInhabitedSettlements());
 
-				ItemGenerator.addLoot(s.getInventory(), (int)v.random(2) + 1);
+				Faction faction = settlement.getFaction();
+				if(faction.isEnemy(player.getFaction())) {
+					// Spawn if player is enemy
+
+					PatrolShip s = register(new PatrolShip(faction, PVector.random2D(), pos, new PVector()));
+					s.setTarget(player.getShip());
+					WorldGenerator.orbit(planet, s, .5F);
+
+					ItemGenerator.addLoot(s.getInventory(), (int)v.random(2) + 1);
+				}
 			}
 		}
 	}

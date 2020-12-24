@@ -24,8 +24,10 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 	private static final float FADE_AMOUNT = 10; // Reticle zoom fading factor
 	private static final float CRATE_SPEED = 10; // Speed of item drops when destroyed
 	private static final int DEPART_FRAMES = 100; // Number of seconds to wait before docking/landing again
-	private static final float BLINK_RATE = 1.5F; // Blink color decay rate
-	private static final float REENTRY_ANIMATION_DIST = 10000000F;	// Distance from the Karman line at which the re-entry effect begins and ends
+	private static final float BLINK_DECAY_RATE = 1.5F; // Blink color decay rate
+	private static final float REENTRY_ANIMATION_DIST = .2f;    // Distance from the atmosphere threshold at which the re-entry effect begins and ends
+	private static final float REENTRY_ANIMATION_MAX = 1;    // Ratio between planet radius / atmosphere altitude with maximum re-entry strength
+	private static final float GLIDE_DAMPEN_RATE = .01f;    // Aerodynamic velocity dampening
 
 	private String name;
 	private final float speed;  // Force induced when engine is on
@@ -35,6 +37,9 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 	private final Inventory inventory = new Inventory(this);
 
 	private int blinkColor;
+
+	private TerrestrialPlanet nearestPlanet;
+	private boolean gliding;
 
 	private transient SpaceObject dock;
 	private transient int departTime; // Dock/land debounce frame
@@ -83,7 +88,11 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 	}
 
 	public PVector getHeading() {
-		return heading.copy();
+		return getHeadingReference().copy();
+	}
+
+	public PVector getHeadingReference() {
+		return heading;
 	}
 
 	public void setHeading(PVector heading) {
@@ -140,6 +149,14 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 		heading.rotate(amount * getTurnSpeed() * DEG_TO_RAD);
 	}
 
+	public TerrestrialPlanet getNearestPlanet() {
+		return nearestPlanet;
+	}
+
+	public boolean isGliding() {
+		return gliding;
+	}
+
 	@Override
 	public boolean collidesWith(RenderLevel level, SpaceObject s) {
 		return super.collidesWith(level, s);
@@ -194,34 +211,102 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 
 	@Override
 	public void draw(RenderLevel level, float r) {
-		blinkColor = v.lerpColor(blinkColor, getColor(), BLINK_RATE / v.frameRate);
+		//		drawReentryEffect(r); // Currently called in `PlayerShip::drawNearby(..)`
+		blinkColor = v.lerpColor(blinkColor, getColor(), BLINK_DECAY_RATE / v.frameRate);
 		v.stroke(blinkColor);
 		drawShipMarker(level, r);
 		super.draw(level, r);
 	}
 
-	public void drawReentryEffect(float r, TerrestrialPlanet planet) {
-		int numberOfArcs = 10;
-		int startColor = v.color(255, 255, 255, 255);
-		int endColor = v.color(252, 86, 3, 255);
+	/**
+	 * Calculates the drag coefficient of the spacecraft for a given angle of attack.
+	 *
+	 * @param angleOfAttack Angle between heading and relative velocity
+	 * @return The corresponding drag coefficient
+	 */
+	public float getDragCoefficient(float angleOfAttack) {
+		// TODO: airbrake module
+		// Increases drag when perpendicular to velocity or flying backwards
+		return .01F * (1 + abs(sin(angleOfAttack) * 2) + abs(sin(angleOfAttack / 2) * 1.5F));
+	}
 
-		float distToKarmanLine = Math.abs(getPosition().dist(planet.getPosition()) - planet.getAtmosphereRadius());
+	@Override
+	public boolean shouldIgnoreGravity(SpaceObject object) {
+		return gliding && object == nearestPlanet;
+	}
 
-		if(distToKarmanLine <= REENTRY_ANIMATION_DIST /*&& getRenderLevel().isVisibleTo(level) */) {
-			float relativeVelocityAngle = getVelocity().sub(planet.getVelocity()).heading();
-			v.rotate(relativeVelocityAngle);
-			for(int i = 1; i <= numberOfArcs; i++) {
-				float strength = v.random(.8f) * ((distToKarmanLine - REENTRY_ANIMATION_DIST) / REENTRY_ANIMATION_DIST);
-				float offset = v.PI * (strength * i) / numberOfArcs;
-
-				v.noFill();
-				v.stroke(v.lerpColor(startColor, endColor, (float)i / numberOfArcs));
-				v.strokeWeight(2);
-				v.arc((numberOfArcs - i) * 2 * v.random(.9f, 1.1f), 0, r * 5, (r * 3 + (Math.abs(getVelocity().heading() % v.PI - getHeading().heading() % v.PI))), offset, -offset, v.OPEN);
+	@Override
+	public void update(RenderLevel level) {
+		nearestPlanet = null;
+		float bestDistSq = Float.MAX_VALUE;
+		for(TerrestrialPlanet planet : getWorld().findObjects(TerrestrialPlanet.class)) {
+			float distSq = relativePosition(planet).magSq();
+			if(distSq < bestDistSq) {
+				bestDistSq = distSq;
+				nearestPlanet = planet;
 			}
-			v.rotate(-relativeVelocityAngle);
+		}
+		if(nearestPlanet != null) {
+			float distSq = relativePosition(nearestPlanet).magSq();
+			gliding = distSq <= sq(nearestPlanet.getAtmosphereRadius());
+			if(gliding) {
+				PVector relVelocity = relativeVelocity(nearestPlanet);
+
+				float dot = relVelocity.dot(getHeading().rotate(HALF_PI));
+				PVector dampen = relVelocity.copy().setMag(abs(dot)); // Dampen perpendicular motion
+				PVector redirect = relVelocity.copy().rotate(90).setMag(dot); // Convert perpendicular to forward
+
+				//				float surfaceProgress = 1 - (sqrt(distSq) / (nearestPlanet.getAtmosphereRadius() - nearestPlanet.getRadius()));
+
+				addVelocity(dampen.sub(redirect).mult(GLIDE_DAMPEN_RATE/* * surfaceProgress*/ * min(10, getWorld().getTimeScale()))); // Apply aerodynamics
+			}
+		}
+		super.update(level);
+	}
+
+	@Override
+	public void drawTrail(float scale) {
+		if(isGliding()) {
+			v.stroke(getColor(), .2f);/////////////////////////
 		}
 
+		super.drawTrail(scale);
+	}
+
+	public void drawReentryEffect(float r) {
+		if(nearestPlanet == null || nearestPlanet.getAtmosphereDensity() == 0) {
+			return;
+		}
+
+		float planetDist = getPosition().dist(nearestPlanet.getPosition());
+		float boundaryAbsDist = Math.abs(planetDist - nearestPlanet.getAtmosphereRadius());
+		float animationDist = nearestPlanet.getRadius() * REENTRY_ANIMATION_DIST;
+
+		if(boundaryAbsDist > animationDist /*|| !getRenderLevel().isVisibleTo(level) */) {
+			return;
+		}
+
+		float relVelocityAngle = nearestPlanet.relativeVelocity(this).heading();
+
+		int numberOfArcs = 10;
+		int startColor = v.color(255, 255, 255);
+		int endColor = v.color(252, 86, 3);
+
+		float strength = ((boundaryAbsDist - animationDist) / animationDist)
+				* min(1, (nearestPlanet.getAtmosphereRadius() / nearestPlanet.getRadius() - 1) / REENTRY_ANIMATION_MAX);
+
+		v.rotate(relVelocityAngle);
+		for(int i = 1; i <= numberOfArcs; i++) {
+			float offset = PI * (v.random(.8f) * strength * i) / numberOfArcs;
+
+			v.noFill();
+			v.stroke(v.lerpColor(startColor, endColor, (float)i / numberOfArcs));
+			v.strokeWeight(2);
+			v.arc((numberOfArcs - i) * 2 * v.random(.9f, 1.1f), 0, r * 5, (r * 3 + (Math.abs(getVelocityReference().heading() % PI - getHeadingReference().heading() % PI))), offset, -offset, OPEN);
+		}
+		v.rotate(-relVelocityAngle);
+
+		v.stroke(v.lerpColor(getColor(), endColor, sqrt(abs(strength))));
 	}
 
 	public void drawShipMarker(RenderLevel level, float r) {
@@ -285,20 +370,6 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 	}
 
 	public void onDepart(SpaceObject obj) {
-	}
-
-	// TODO: convert to `World` function, similar to `findOrbitObject()`
-	@Deprecated
-	public TerrestrialPlanet findNearestPlanet() {
-		float bestDist = Float.MAX_VALUE;
-		TerrestrialPlanet nearest = null;
-		for(TerrestrialPlanet p : getWorld().findObjects(TerrestrialPlanet.class)) {
-			if(getPosition().dist(p.getPosition()) < bestDist) {
-				bestDist = getPosition().dist(p.getPosition());
-				nearest = p;
-			}
-		}
-		return nearest;
 	}
 
 	@Override
