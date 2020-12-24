@@ -1,8 +1,8 @@
 package vekta.menu.option;
 
-import vekta.player.Player;
 import vekta.menu.Menu;
 import vekta.menu.handle.SpaceObjectMenuHandle;
+import vekta.player.Player;
 
 import static vekta.Vekta.setContext;
 

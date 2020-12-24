@@ -1,7 +1,7 @@
 package vekta.spawner.objective;
 
-import vekta.faction.Faction;
 import vekta.Resources;
+import vekta.faction.Faction;
 import vekta.mission.Mission;
 import vekta.mission.objective.LandAtObjective;
 import vekta.mission.objective.LandingTaskObjective;

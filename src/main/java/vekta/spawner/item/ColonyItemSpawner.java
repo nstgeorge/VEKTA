@@ -1,6 +1,5 @@
 package vekta.spawner.item;
 
-import vekta.item.CoinItem;
 import vekta.item.ColonyItem;
 import vekta.item.Item;
 import vekta.spawner.ItemGenerator;

@@ -2,7 +2,6 @@ package vekta.person.personality;
 
 import vekta.Resources;
 import vekta.person.Dialog;
-import vekta.person.Person;
 
 public class AestheticPersonality extends Personality {
 	@Override

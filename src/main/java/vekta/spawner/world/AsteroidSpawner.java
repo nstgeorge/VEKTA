@@ -1,12 +1,11 @@
 package vekta.spawner.world;
 
 import processing.core.PVector;
-import vekta.spawner.TerrainGenerator;
-import vekta.world.RenderLevel;
 import vekta.Resources;
 import vekta.object.SpaceObject;
 import vekta.object.planet.Asteroid;
 import vekta.spawner.WorldGenerator;
+import vekta.world.RenderLevel;
 
 import static processing.core.PApplet.pow;
 import static vekta.Vekta.*;

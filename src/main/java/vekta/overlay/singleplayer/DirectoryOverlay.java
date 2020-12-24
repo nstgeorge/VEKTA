@@ -2,8 +2,8 @@ package vekta.overlay.singleplayer;
 
 import com.google.common.collect.ImmutableMap;
 import vekta.KeyBinding;
-import vekta.player.Player;
 import vekta.overlay.Overlay;
+import vekta.player.Player;
 
 import java.util.Map;
 

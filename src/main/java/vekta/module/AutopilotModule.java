@@ -1,10 +1,10 @@
 package vekta.module;
 
 import processing.core.PVector;
-import vekta.util.InfoGroup;
 import vekta.KeyBinding;
 import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
+import vekta.util.InfoGroup;
 
 import static vekta.Vekta.*;
 

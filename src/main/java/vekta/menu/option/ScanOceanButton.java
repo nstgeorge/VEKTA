@@ -4,14 +4,9 @@ import vekta.knowledge.ObservationLevel;
 import vekta.knowledge.OceanKnowledge;
 import vekta.menu.Menu;
 import vekta.menu.handle.OceanMenuHandle;
-import vekta.spawner.ItemGenerator;
-import vekta.spawner.SettlementGenerator;
-import vekta.spawner.WorldGenerator;
 import vekta.terrain.location.OceanLocation;
-import vekta.terrain.settlement.Settlement;
 
 import static vekta.Vekta.setContext;
-import static vekta.Vekta.v;
 
 public class ScanOceanButton extends ButtonOption {
 	private final OceanLocation location;

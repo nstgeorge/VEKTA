@@ -1,8 +1,8 @@
 package vekta.knowledge;
 
 import vekta.KeyBinding;
-import vekta.player.Player;
 import vekta.display.Layout;
+import vekta.player.Player;
 
 import java.io.Serializable;
 

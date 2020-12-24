@@ -2,12 +2,8 @@ package vekta.terrain.location;
 
 import vekta.item.Inventory;
 import vekta.item.Item;
-import vekta.module.ModuleType;
-import vekta.object.planet.Planet;
 import vekta.object.planet.TerrestrialPlanet;
-import vekta.player.Player;
 import vekta.spawner.item.OreItemSpawner;
-import vekta.sync.Sync;
 
 import static vekta.Vekta.v;
 

@@ -1,8 +1,8 @@
 package vekta.overlay.singleplayer;
 
+import vekta.overlay.Overlay;
 import vekta.profiler.Profiler;
 import vekta.profiler.Timing;
-import vekta.overlay.Overlay;
 
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;

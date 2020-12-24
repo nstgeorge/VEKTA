@@ -10,7 +10,6 @@ import vekta.object.ship.Ship;
 import vekta.spawner.FactionGenerator;
 import vekta.spawner.ItemGenerator;
 import vekta.spawner.WorldGenerator;
-import vekta.terrain.LandingSite;
 
 import static vekta.Vekta.register;
 import static vekta.Vekta.v;

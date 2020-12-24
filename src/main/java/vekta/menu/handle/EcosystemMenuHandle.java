@@ -1,12 +1,6 @@
 package vekta.menu.handle;
 
 import vekta.ecosystem.Ecosystem;
-import vekta.menu.Menu;
-import vekta.menu.option.MenuOption;
-import vekta.menu.option.SpeciesButton;
-
-import static vekta.Vekta.quantityString;
-import static vekta.Vekta.v;
 
 public class EcosystemMenuHandle extends SideLayoutMenuHandle {
 	private final Ecosystem ecosystem;

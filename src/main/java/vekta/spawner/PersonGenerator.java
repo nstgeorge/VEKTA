@@ -1,18 +1,18 @@
 package vekta.spawner;
 
 import processing.core.PVector;
+import vekta.Resources;
+import vekta.economy.ProductivityModifier;
 import vekta.faction.Faction;
 import vekta.faction.PlayerFaction;
 import vekta.object.planet.Asteroid;
-import vekta.world.RenderLevel;
-import vekta.Resources;
-import vekta.economy.ProductivityModifier;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.person.Person;
 import vekta.person.personality.Personality;
 import vekta.spawner.world.AsteroidSpawner;
 import vekta.terrain.settlement.OutpostSettlement;
 import vekta.terrain.settlement.Settlement;
+import vekta.world.RenderLevel;
 
 import java.util.ArrayList;
 import java.util.List;

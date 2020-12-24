@@ -4,9 +4,9 @@ import vekta.Resources;
 import vekta.dungeon.Dungeon;
 import vekta.dungeon.DungeonRoom;
 import vekta.object.planet.TerrestrialPlanet;
-import vekta.terrain.settlement.building.DungeonBuilding;
 import vekta.terrain.settlement.Settlement;
 import vekta.terrain.settlement.SettlementPart;
+import vekta.terrain.settlement.building.DungeonBuilding;
 
 import java.util.ArrayList;
 import java.util.Arrays;

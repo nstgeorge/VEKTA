@@ -1,12 +1,12 @@
 package vekta.spawner.dialog;
 
-import vekta.player.Player;
 import vekta.item.Item;
 import vekta.item.ItemType;
 import vekta.item.TradeItem;
 import vekta.menu.Menu;
 import vekta.menu.option.ItemTradeButton;
 import vekta.person.Dialog;
+import vekta.player.Player;
 import vekta.spawner.DialogGenerator;
 import vekta.spawner.item.TradeItemSpawner;
 

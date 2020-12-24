@@ -2,13 +2,13 @@ package vekta.menu;
 
 import processing.event.KeyEvent;
 import vekta.KeyBinding;
-import vekta.player.Player;
-import vekta.player.PlayerEvent;
 import vekta.context.Context;
 import vekta.menu.handle.MenuHandle;
 import vekta.menu.option.BackButton;
 import vekta.menu.option.ButtonOption;
 import vekta.menu.option.MenuOption;
+import vekta.player.Player;
+import vekta.player.PlayerEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;

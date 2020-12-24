@@ -1,11 +1,11 @@
 package vekta.faction;
 
 import vekta.Renameable;
-import vekta.sync.Sync;
-import vekta.sync.Syncable;
 import vekta.economy.Economy;
 import vekta.economy.NoiseModifier;
 import vekta.economy.ProductivityModifier;
+import vekta.sync.Sync;
+import vekta.sync.Syncable;
 
 import java.util.HashSet;
 import java.util.Set;

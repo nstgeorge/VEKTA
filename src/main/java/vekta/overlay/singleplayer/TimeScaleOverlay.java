@@ -4,7 +4,8 @@ import vekta.overlay.Overlay;
 
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.RIGHT;
-import static vekta.Vekta.*;
+import static vekta.Vekta.getWorld;
+import static vekta.Vekta.v;
 
 public class TimeScaleOverlay implements Overlay {
 	private static final int PADDING = 15;

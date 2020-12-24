@@ -1,13 +1,9 @@
 package vekta.spawner.location;
 
-import vekta.Resources;
 import vekta.spawner.LocationGenerator;
 import vekta.terrain.Terrain;
 import vekta.terrain.location.IslandLocation;
 import vekta.terrain.location.OceanLocation;
-import vekta.terrain.location.ProxyLocation;
-
-import java.util.Set;
 
 import static vekta.Vekta.v;
 

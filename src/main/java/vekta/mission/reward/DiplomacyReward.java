@@ -1,8 +1,8 @@
 package vekta.mission.reward;
 
 import vekta.faction.Faction;
-import vekta.player.Player;
 import vekta.mission.Mission;
+import vekta.player.Player;
 
 public abstract class DiplomacyReward extends Reward {
 	private final Faction a;

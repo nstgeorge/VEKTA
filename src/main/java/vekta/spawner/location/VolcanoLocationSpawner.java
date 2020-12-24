@@ -4,11 +4,7 @@ import vekta.Resources;
 import vekta.terrain.Terrain;
 import vekta.terrain.location.ProxyLocation;
 
-import java.util.Arrays;
-import java.util.ResourceBundle;
 import java.util.Set;
-
-import static vekta.Vekta.v;
 
 public class VolcanoLocationSpawner extends ProxyLocationSpawner<String> {
 

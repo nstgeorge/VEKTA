@@ -1,11 +1,11 @@
 package vekta.module;
 
 import processing.core.PVector;
-import vekta.util.InfoGroup;
 import vekta.object.CargoCrate;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 import vekta.object.ship.ModularShip;
+import vekta.util.InfoGroup;
 
 import static vekta.Vekta.getWorld;
 import static vekta.Vekta.min;

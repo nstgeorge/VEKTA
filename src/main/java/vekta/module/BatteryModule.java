@@ -1,18 +1,17 @@
 package vekta.module;
 
-import vekta.menu.handle.LocationMenuHandle;
-import vekta.terrain.location.Location;
-import vekta.util.InfoGroup;
 import vekta.item.Item;
 import vekta.menu.Menu;
+import vekta.menu.handle.LocationMenuHandle;
 import vekta.menu.option.RechargeButton;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.Rechargeable;
-import vekta.terrain.settlement.Settlement;
+import vekta.terrain.location.Location;
+import vekta.util.InfoGroup;
 
 import java.util.List;
 
-import static processing.core.PApplet.*;
+import static processing.core.PApplet.round;
 
 public class BatteryModule extends ShipModule implements Rechargeable {
 	private static final float CHARGE_THRESHOLD = .9F;

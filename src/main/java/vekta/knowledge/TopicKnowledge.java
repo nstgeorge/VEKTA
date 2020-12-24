@@ -1,8 +1,8 @@
 package vekta.knowledge;
 
-import vekta.player.Player;
 import vekta.display.Layout;
 import vekta.display.TextDisplay;
+import vekta.player.Player;
 
 import static vekta.Vekta.v;
 

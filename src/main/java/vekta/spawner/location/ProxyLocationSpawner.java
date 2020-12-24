@@ -2,10 +2,8 @@ package vekta.spawner.location;
 
 import vekta.menu.Menu;
 import vekta.menu.handle.MenuHandle;
-import vekta.sound.Tune;
 import vekta.spawner.LocationGenerator;
 import vekta.terrain.Terrain;
-import vekta.terrain.location.Location;
 import vekta.terrain.location.ProxyLocation;
 
 import java.io.Serializable;

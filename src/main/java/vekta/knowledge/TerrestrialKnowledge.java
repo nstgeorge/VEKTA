@@ -1,10 +1,10 @@
 package vekta.knowledge;
 
-import vekta.player.Player;
 import vekta.display.Layout;
 import vekta.display.TextDisplay;
 import vekta.display.VerticalLayout;
 import vekta.object.planet.TerrestrialPlanet;
+import vekta.player.Player;
 import vekta.terrain.settlement.Settlement;
 
 import java.util.stream.Collectors;

@@ -2,11 +2,11 @@ package vekta.context;
 
 import processing.event.KeyEvent;
 import vekta.KeyBinding;
-import vekta.player.Player;
 import vekta.Resources;
 import vekta.display.Layout;
 import vekta.display.VerticalLayout;
 import vekta.knowledge.*;
+import vekta.player.Player;
 
 import java.io.Serializable;
 import java.util.*;

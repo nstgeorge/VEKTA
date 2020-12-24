@@ -1,9 +1,9 @@
 package vekta.terrain.settlement;
 
-import vekta.faction.Faction;
-import vekta.player.Player;
 import vekta.economy.Economy;
 import vekta.economy.NoiseModifier;
+import vekta.faction.Faction;
+import vekta.player.Player;
 import vekta.terrain.location.Location;
 import vekta.terrain.settlement.building.CapitalBuilding;
 

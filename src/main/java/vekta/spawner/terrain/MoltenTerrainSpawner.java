@@ -2,7 +2,8 @@ package vekta.spawner.terrain;
 
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.spawner.TerrainGenerator;
-import vekta.terrain.*;
+import vekta.terrain.MoltenTerrain;
+import vekta.terrain.Terrain;
 
 public class MoltenTerrainSpawner implements TerrainGenerator.TerrainSpawner {
 	@Override

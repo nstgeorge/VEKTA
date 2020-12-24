@@ -1,9 +1,9 @@
 package vekta.situation;
 
-import vekta.player.Player;
 import vekta.Resources;
 import vekta.object.SpaceObject;
 import vekta.object.planet.TerrestrialPlanet;
+import vekta.player.Player;
 import vekta.sound.SoundGroup;
 import vekta.terrain.settlement.Settlement;
 

@@ -1,10 +1,8 @@
 package vekta.spawner.terrain;
 
-import vekta.object.planet.Planet;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.spawner.TerrainGenerator;
 import vekta.terrain.BarrenTerrain;
-import vekta.terrain.MiningTerrain;
 import vekta.terrain.Terrain;
 
 public class BarrenTerrainSpawner implements TerrainGenerator.TerrainSpawner {

@@ -1,9 +1,9 @@
 package vekta.object.planet;
 
 import processing.core.PVector;
+import vekta.terrain.BlackHoleTerrain;
 import vekta.terrain.Terrain;
 import vekta.world.RenderLevel;
-import vekta.terrain.BlackHoleTerrain;
 
 import static processing.core.PApplet.sin;
 import static processing.core.PApplet.sq;

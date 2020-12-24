@@ -5,8 +5,8 @@ import vekta.item.ItemType;
 import vekta.menu.option.StoryProgressButton;
 import vekta.person.Dialog;
 import vekta.person.Person;
-import vekta.story.part.Story;
 import vekta.story.StoryPart;
+import vekta.story.part.Story;
 import vekta.story.subject.StorySubject;
 import vekta.story.subject.TextSubject;
 

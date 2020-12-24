@@ -1,8 +1,6 @@
 package vekta.object;
 
 import processing.core.PVector;
-import vekta.player.Player;
-import vekta.world.RenderLevel;
 import vekta.item.Inventory;
 import vekta.menu.Menu;
 import vekta.menu.handle.SpaceObjectMenuHandle;
@@ -11,7 +9,9 @@ import vekta.object.planet.Planet;
 import vekta.object.ship.Damageable;
 import vekta.object.ship.Damager;
 import vekta.object.ship.ModularShip;
+import vekta.player.Player;
 import vekta.spawner.item.OreItemSpawner;
+import vekta.world.RenderLevel;
 
 import static processing.core.PConstants.TWO_PI;
 import static vekta.Vekta.*;

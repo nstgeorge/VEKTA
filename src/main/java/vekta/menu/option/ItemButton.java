@@ -1,11 +1,11 @@
 package vekta.menu.option;
 
-import vekta.util.InfoGroup;
 import vekta.KeyBinding;
 import vekta.Settings;
 import vekta.display.Layout;
 import vekta.display.TextDisplay;
 import vekta.item.Item;
+import vekta.util.InfoGroup;
 
 public abstract class ItemButton extends ButtonOption implements LayoutAware {
 	private final Item item;

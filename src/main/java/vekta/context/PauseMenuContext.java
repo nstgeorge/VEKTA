@@ -1,17 +1,9 @@
 package vekta.context;
 
-import processing.core.PImage;
 import vekta.KeyBinding;
 import vekta.Resources;
 import vekta.Settings;
-import vekta.menu.Menu;
-import vekta.menu.handle.MenuHandle;
-import vekta.menu.option.BackButton;
-import vekta.menu.option.ButtonOption;
-import vekta.menu.option.SettingsMenuButton;
 import vekta.player.Player;
-
-import java.util.stream.IntStream;
 
 import static vekta.Vekta.*;
 

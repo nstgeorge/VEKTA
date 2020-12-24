@@ -1,8 +1,8 @@
 package vekta.module.station;
 
-import vekta.world.RenderLevel;
-import vekta.object.ship.SpaceStation;
 import vekta.module.Module;
+import vekta.object.ship.SpaceStation;
+import vekta.world.RenderLevel;
 
 public interface ComponentModule extends Module {
 	/**

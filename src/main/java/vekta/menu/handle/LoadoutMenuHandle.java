@@ -1,8 +1,6 @@
 package vekta.menu.handle;
 
 import vekta.KeyBinding;
-import vekta.item.ItemType;
-import vekta.menu.Menu;
 import vekta.menu.option.InstallModuleButton;
 import vekta.menu.option.MenuOption;
 import vekta.module.Module;
@@ -10,7 +8,7 @@ import vekta.module.ModuleType;
 
 import java.util.List;
 
-import static vekta.Vekta.*;
+import static vekta.Vekta.v;
 
 /**
  * Module loadout menu renderer

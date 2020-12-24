@@ -2,9 +2,7 @@ package vekta.terrain;
 
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.terrain.condition.PlanetQuantity;
-import vekta.terrain.settlement.Settlement;
 
-import java.util.List;
 import java.util.Set;
 
 public class AdaptiveTerrain extends Terrain {

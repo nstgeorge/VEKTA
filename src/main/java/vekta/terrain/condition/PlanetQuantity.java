@@ -5,8 +5,6 @@ import vekta.object.planet.TerrestrialPlanet;
 
 import java.util.function.Function;
 
-import static vekta.Vekta.v;
-
 public enum PlanetQuantity implements Condition<TerrestrialPlanet> {
 	// Properties
 	TEMP_KELVIN(SpaceObject::getTemperatureKelvin),

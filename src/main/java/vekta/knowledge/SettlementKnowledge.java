@@ -1,11 +1,11 @@
 package vekta.knowledge;
 
-import vekta.player.Player;
 import vekta.display.Layout;
 import vekta.display.TextDisplay;
 import vekta.display.VerticalLayout;
 import vekta.display.VisualDisplay;
 import vekta.object.SpaceObject;
+import vekta.player.Player;
 import vekta.terrain.settlement.Settlement;
 
 import static vekta.Vekta.quantityString;

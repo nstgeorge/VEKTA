@@ -1,6 +1,5 @@
 package vekta.spawner.location;
 
-import vekta.spawner.location.FeatureLocationSpawner;
 import vekta.terrain.Terrain;
 import vekta.terrain.location.ProxyLocation;
 

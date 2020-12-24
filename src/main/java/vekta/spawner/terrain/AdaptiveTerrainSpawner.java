@@ -4,7 +4,8 @@ import vekta.object.planet.TerrestrialPlanet;
 import vekta.spawner.LocationGenerator;
 import vekta.spawner.SettlementGenerator;
 import vekta.spawner.TerrainGenerator;
-import vekta.terrain.*;
+import vekta.terrain.AdaptiveTerrain;
+import vekta.terrain.Terrain;
 
 public class AdaptiveTerrainSpawner implements TerrainGenerator.TerrainSpawner {
 	@Override

@@ -1,8 +1,8 @@
 package vekta.item;
 
-import vekta.util.InfoGroup;
-import vekta.player.Player;
 import vekta.Resources;
+import vekta.player.Player;
+import vekta.util.InfoGroup;
 
 public class TradeItem extends BasicItem {
 	private String description;

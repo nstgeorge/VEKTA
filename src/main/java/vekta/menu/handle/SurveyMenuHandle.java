@@ -6,7 +6,6 @@ import vekta.menu.Menu;
 import vekta.terrain.Terrain;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static vekta.Vekta.*;

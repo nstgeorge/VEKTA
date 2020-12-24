@@ -1,11 +1,11 @@
 package vekta.item;
 
 import vekta.faction.Faction;
+import vekta.menu.Menu;
 import vekta.menu.handle.LocationMenuHandle;
+import vekta.menu.option.ColonizeButton;
 import vekta.terrain.location.Location;
 import vekta.util.InfoGroup;
-import vekta.menu.Menu;
-import vekta.menu.option.ColonizeButton;
 
 public class ColonyItem extends Item {
 	private final Faction faction;

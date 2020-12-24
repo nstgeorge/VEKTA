@@ -4,7 +4,6 @@ import vekta.mission.Mission;
 import vekta.mission.objective.Objective;
 import vekta.mission.objective.SurveyObjective;
 import vekta.spawner.MissionGenerator;
-import vekta.terrain.Terrain;
 import vekta.terrain.location.Location;
 
 import java.util.ArrayList;

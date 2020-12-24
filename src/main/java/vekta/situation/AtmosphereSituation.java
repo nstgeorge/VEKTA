@@ -2,10 +2,8 @@ package vekta.situation;
 
 import vekta.Resources;
 import vekta.Settings;
-import vekta.object.planet.BlackHole;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.player.Player;
-import vekta.world.AttributeMaxZoomController;
 import vekta.world.RenderLevel;
 import vekta.world.Singleplayer;
 

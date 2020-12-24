@@ -1,8 +1,7 @@
 package vekta.menu.handle;
 
-import vekta.faction.Faction;
 import vekta.context.Context;
-import vekta.menu.Menu;
+import vekta.faction.Faction;
 
 import static vekta.Vekta.v;
 

@@ -1,8 +1,8 @@
 package vekta.ecosystem;
 
-import vekta.util.InfoGroup;
-import vekta.sync.Syncable;
 import vekta.spawner.EcosystemGenerator;
+import vekta.sync.Syncable;
+import vekta.util.InfoGroup;
 
 import java.util.*;
 import java.util.stream.Collectors;

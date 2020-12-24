@@ -2,7 +2,6 @@ package vekta.menu.handle;
 
 import vekta.KeyBinding;
 import vekta.knowledge.Knowledge;
-import vekta.menu.Menu;
 
 import static vekta.Vekta.v;
 

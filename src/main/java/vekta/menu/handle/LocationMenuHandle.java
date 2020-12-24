@@ -2,7 +2,6 @@ package vekta.menu.handle;
 
 import vekta.Resources;
 import vekta.menu.Menu;
-import vekta.sound.Tune;
 import vekta.terrain.location.Location;
 
 import static vekta.Vekta.v;

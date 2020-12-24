@@ -11,7 +11,6 @@ import vekta.module.station.StructuralModule;
 import vekta.object.SpaceObject;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.object.ship.SpaceStation;
-import vekta.terrain.LandingSite;
 
 import static vekta.Vekta.register;
 import static vekta.Vekta.v;

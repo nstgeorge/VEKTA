@@ -3,7 +3,6 @@ package vekta.terrain.location;
 import vekta.menu.Menu;
 import vekta.menu.handle.MenuHandle;
 import vekta.object.planet.TerrestrialPlanet;
-import vekta.sound.Tune;
 import vekta.spawner.location.ProxyLocationSpawner;
 
 import java.io.Serializable;

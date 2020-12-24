@@ -1,7 +1,10 @@
 package vekta.spawner.item;
 
 import vekta.Resources;
-import vekta.item.*;
+import vekta.item.BlueprintItem;
+import vekta.item.Item;
+import vekta.item.ItemType;
+import vekta.item.ModuleItem;
 import vekta.item.category.ItemCategory;
 import vekta.item.category.PatternItemCategory;
 import vekta.spawner.ItemGenerator;

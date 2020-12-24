@@ -1,11 +1,10 @@
 package vekta.terrain;
 
+import vekta.ecosystem.Ecosystem;
+import vekta.menu.Menu;
 import vekta.menu.option.SurveyButton;
 import vekta.object.SpaceObject;
 import vekta.object.planet.TerrestrialPlanet;
-import vekta.ecosystem.Ecosystem;
-import vekta.menu.Menu;
-import vekta.sound.Tune;
 import vekta.spawner.TuneGenerator;
 import vekta.terrain.location.Location;
 

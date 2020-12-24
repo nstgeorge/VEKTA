@@ -1,10 +1,10 @@
 package vekta.object;
 
 import processing.core.PVector;
-import vekta.player.Player;
-import vekta.world.RenderLevel;
 import vekta.item.Item;
 import vekta.object.ship.ModularShip;
+import vekta.player.Player;
+import vekta.world.RenderLevel;
 
 import static processing.core.PConstants.TWO_PI;
 import static vekta.Vekta.v;

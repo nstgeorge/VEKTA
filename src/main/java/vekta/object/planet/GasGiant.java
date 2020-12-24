@@ -2,14 +2,11 @@ package vekta.object.planet;
 
 import processing.core.PShape;
 import processing.core.PVector;
-import vekta.object.SpaceObject;
-import vekta.object.ship.Ship;
 import vekta.world.RenderLevel;
 
 import static processing.core.PApplet.sq;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.ELLIPSE;
-import static vekta.Vekta.EARTH_RADIUS;
 import static vekta.Vekta.v;
 
 public class GasGiant extends TerrestrialPlanet {

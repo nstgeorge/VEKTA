@@ -8,8 +8,6 @@ import vekta.terrain.location.ConfigLocation;
 
 import java.util.List;
 
-import static processing.core.PApplet.println;
-
 public class ConfigLocationSpawner implements LocationGenerator.LocationSpawner {
 
 	private static final List<LocationConfig> CONFIGS = Resources.getConfigs(LocationConfig.class);

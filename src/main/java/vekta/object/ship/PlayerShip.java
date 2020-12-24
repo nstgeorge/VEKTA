@@ -1,9 +1,8 @@
 package vekta.object.ship;
 
 import processing.core.PVector;
-import vekta.object.planet.TerrestrialPlanet;
-import vekta.world.RenderLevel;
 import vekta.module.*;
+import vekta.world.RenderLevel;
 
 import static vekta.Vekta.v;
 

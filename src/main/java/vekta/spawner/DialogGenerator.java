@@ -11,7 +11,6 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static processing.core.PApplet.sq;
 import static vekta.Vekta.v;
 
 public final class DialogGenerator {

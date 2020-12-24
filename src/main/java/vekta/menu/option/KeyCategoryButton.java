@@ -8,10 +8,7 @@ import vekta.menu.option.input.InputOption;
 import vekta.menu.option.input.KeyBindingInputController;
 import vekta.menu.option.input.KeySettingWatcher;
 
-import java.util.Locale;
-
 import static vekta.Vekta.setContext;
-import static vekta.Vekta.v;
 
 public class KeyCategoryButton extends ButtonOption {
 

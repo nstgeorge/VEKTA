@@ -1,14 +1,13 @@
 package vekta.module;
 
-import processing.core.PVector;
-import vekta.player.Player;
-import vekta.util.InfoGroup;
 import vekta.KeyBinding;
-import vekta.world.RenderLevel;
 import vekta.Resources;
 import vekta.menu.Menu;
 import vekta.object.HyperdriveShockwave;
 import vekta.object.ship.ModularShip;
+import vekta.player.Player;
+import vekta.util.InfoGroup;
+import vekta.world.RenderLevel;
 import vekta.world.World;
 import vekta.world.ZoomController;
 

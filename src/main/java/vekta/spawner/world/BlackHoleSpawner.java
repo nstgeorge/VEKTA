@@ -1,11 +1,10 @@
 package vekta.spawner.world;
 
 import processing.core.PVector;
-import vekta.spawner.TerrainGenerator;
-import vekta.world.RenderLevel;
 import vekta.Resources;
 import vekta.object.SpaceObject;
 import vekta.object.planet.BlackHole;
+import vekta.world.RenderLevel;
 
 import static vekta.Vekta.*;
 import static vekta.spawner.WorldGenerator.WorldSpawner;

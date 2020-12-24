@@ -1,15 +1,12 @@
 package vekta.menu.option;
 
-import com.google.common.graph.Graph;
 import vekta.menu.Menu;
 import vekta.menu.handle.SettingsMenuHandle;
 import vekta.menu.option.input.*;
 
 import java.util.Arrays;
 
-import static vekta.Vekta.setContext;
-import static vekta.Vekta.device;
-import static vekta.Vekta.OPERATING_SYSTEM;
+import static vekta.Vekta.*;
 
 public class SettingsMenuButton extends ButtonOption {
 

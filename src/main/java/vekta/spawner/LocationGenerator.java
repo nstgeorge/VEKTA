@@ -1,9 +1,7 @@
 package vekta.spawner;
 
 import vekta.Resources;
-import vekta.object.planet.TerrestrialPlanet;
 import vekta.terrain.Terrain;
-import vekta.util.InfoGroup;
 
 import java.util.Arrays;
 

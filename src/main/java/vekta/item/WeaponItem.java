@@ -1,14 +1,11 @@
 package vekta.item;
 
-import vekta.Resources;
 import vekta.menu.Menu;
 import vekta.menu.handle.DialogMenuHandle;
 import vekta.menu.option.MurderButton;
 import vekta.person.Dialog;
 import vekta.spawner.DialogGenerator;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
 
 public class WeaponItem extends Item {

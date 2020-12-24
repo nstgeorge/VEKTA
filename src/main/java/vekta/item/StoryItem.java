@@ -1,11 +1,11 @@
 package vekta.item;
 
-import vekta.player.Player;
 import vekta.knowledge.StoryKnowledge;
 import vekta.menu.option.BackButton;
 import vekta.person.Dialog;
 import vekta.person.Person;
 import vekta.person.TemporaryPerson;
+import vekta.player.Player;
 import vekta.spawner.StoryGenerator;
 import vekta.story.part.Story;
 

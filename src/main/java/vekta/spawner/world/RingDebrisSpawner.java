@@ -1,13 +1,13 @@
 package vekta.spawner.world;
 
 import processing.core.PVector;
-import vekta.object.planet.DebrisPlanet;
-import vekta.world.RenderLevel;
 import vekta.Resources;
 import vekta.object.RingDebris;
 import vekta.object.SpaceObject;
+import vekta.object.planet.DebrisPlanet;
 import vekta.object.planet.GasGiant;
 import vekta.spawner.WorldGenerator;
+import vekta.world.RenderLevel;
 
 import static processing.core.PApplet.pow;
 import static vekta.Vekta.*;

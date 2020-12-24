@@ -62,6 +62,8 @@ public class TerrestrialPlanet extends Planet {
 		terrainSite = new LandingSite(terrain);
 
 		updateOrbitObject();
+
+		// TODO: tidally lock if close to orbited object
 	}
 
 	protected float chooseAtmosphereDensity() {
@@ -75,7 +77,7 @@ public class TerrestrialPlanet extends Planet {
 	}
 
 	protected float chooseRotationHours() {
-		// Randomize based on typical rotations in the Solar System. TODO: tidally locked when close to orbiting object
+		// Randomize based on typical rotations in the Solar System
 		return (24 + v.gaussian(4)) * (v.chance(.2f) ? -1 : 1);
 	}
 

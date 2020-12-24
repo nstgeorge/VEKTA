@@ -1,10 +1,10 @@
 package vekta.item;
 
 import vekta.faction.Faction;
-import vekta.util.InfoGroup;
 import vekta.menu.Menu;
 import vekta.menu.handle.SecurityMenuHandle;
 import vekta.menu.option.CustomButton;
+import vekta.util.InfoGroup;
 
 public class ClothingItem extends BasicItem {
 	private final Faction faction;

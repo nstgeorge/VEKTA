@@ -1,7 +1,7 @@
 package vekta.object;
 
-import vekta.world.RenderLevel;
 import vekta.object.ship.Ship;
+import vekta.world.RenderLevel;
 
 import static processing.core.PApplet.sq;
 import static vekta.Vekta.getWorld;

@@ -15,11 +15,9 @@ import vekta.spawner.WorldGenerator;
 import vekta.util.InfoGroup;
 import vekta.world.RenderLevel;
 
-import static java.lang.Math.pow;
 import static processing.core.PApplet.sq;
 import static processing.core.PApplet.sqrt;
 import static vekta.Vekta.getWorld;
-import static vekta.Vekta.v;
 
 public class TargetingModule extends ShipModule implements Targeter {
 	private static final float AUTO_ZOOM_SCALE = .015f;

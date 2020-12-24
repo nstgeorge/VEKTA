@@ -8,7 +8,6 @@ import vekta.object.ship.PirateShip;
 import vekta.object.ship.Ship;
 import vekta.spawner.ItemGenerator;
 import vekta.spawner.WorldGenerator;
-import vekta.terrain.LandingSite;
 
 import static vekta.Vekta.DANGER_COLOR;
 import static vekta.Vekta.register;

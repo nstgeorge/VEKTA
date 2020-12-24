@@ -2,12 +2,12 @@ package vekta.world;
 
 import processing.core.PVector;
 import processing.event.KeyEvent;
-import vekta.context.Context;
-import vekta.player.Player;
-import vekta.sync.Syncable;
 import vekta.connection.message.Message;
+import vekta.context.Context;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
+import vekta.player.Player;
+import vekta.sync.Syncable;
 
 import java.io.Serializable;
 import java.util.List;

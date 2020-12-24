@@ -3,7 +3,7 @@ package vekta.overlay.singleplayer;
 import vekta.overlay.TextOverlay;
 import vekta.player.Player;
 
-import static vekta.Vekta.*;
+import static vekta.Vekta.UI_COLOR;
 
 public class PlayerScoreOverlay extends TextOverlay {
 	private final Player player;

@@ -1,11 +1,11 @@
 package vekta.person;
 
-import vekta.player.Player;
 import vekta.menu.Menu;
 import vekta.menu.handle.DialogMenuHandle;
 import vekta.menu.option.CustomButton;
 import vekta.menu.option.DialogButton;
 import vekta.menu.option.MenuOption;
+import vekta.player.Player;
 import vekta.spawner.DialogGenerator;
 
 import java.io.Serializable;

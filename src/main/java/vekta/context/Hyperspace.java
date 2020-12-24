@@ -4,7 +4,7 @@ import processing.core.PVector;
 
 import java.io.Serializable;
 
-import static vekta.Vekta.*;
+import static vekta.Vekta.v;
 
 public class Hyperspace implements Serializable {
 	private final PVector origin;

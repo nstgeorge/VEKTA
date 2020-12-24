@@ -7,7 +7,6 @@ import vekta.menu.option.FastTravelMenuButton;
 import vekta.menu.option.RenameButton;
 import vekta.object.planet.BlackHole;
 import vekta.object.planet.TerrestrialPlanet;
-import vekta.player.Player;
 
 import java.util.Set;
 

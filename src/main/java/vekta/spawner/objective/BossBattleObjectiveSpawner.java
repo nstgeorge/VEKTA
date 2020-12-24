@@ -1,7 +1,6 @@
 package vekta.spawner.objective;
 
 import processing.core.PVector;
-import vekta.world.RenderLevel;
 import vekta.mission.Mission;
 import vekta.mission.objective.DefeatObjective;
 import vekta.mission.objective.Objective;
@@ -12,6 +11,7 @@ import vekta.spawner.ItemGenerator;
 import vekta.spawner.MissionGenerator;
 import vekta.spawner.PersonGenerator;
 import vekta.spawner.WorldGenerator;
+import vekta.world.RenderLevel;
 
 import static vekta.Vekta.getWorld;
 import static vekta.Vekta.register;

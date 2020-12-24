@@ -1,12 +1,14 @@
 package vekta.terrain.location;
 
-import com.sun.istack.internal.Nullable;
 import vekta.Resources;
 import vekta.knowledge.ObservationLevel;
 import vekta.menu.Menu;
 import vekta.menu.handle.LocationMenuHandle;
 import vekta.menu.handle.MenuHandle;
-import vekta.menu.option.*;
+import vekta.menu.option.BackButton;
+import vekta.menu.option.MenuOption;
+import vekta.menu.option.PathwayButton;
+import vekta.menu.option.SettlementButton;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.player.Player;
 import vekta.player.PlayerEvent;
@@ -15,7 +17,10 @@ import vekta.spawner.WorldGenerator;
 import vekta.terrain.settlement.Settlement;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static vekta.Vekta.getContext;
@@ -43,7 +48,6 @@ public abstract class Location implements Serializable {
 		return planet;
 	}
 
-	@Nullable
 	public Tune getTune() {
 		return tune;
 	}

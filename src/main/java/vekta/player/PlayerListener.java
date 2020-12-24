@@ -8,7 +8,6 @@ import vekta.module.Module;
 import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
 import vekta.overlay.singleplayer.Notification;
-import vekta.terrain.Terrain;
 import vekta.terrain.location.Location;
 
 import java.io.Serializable;

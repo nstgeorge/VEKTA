@@ -1,11 +1,11 @@
 package vekta.object.ship;
 
 import processing.core.PVector;
-import vekta.util.Counter;
 import vekta.faction.Faction;
-import vekta.world.RenderLevel;
 import vekta.menu.Menu;
 import vekta.menu.option.LootMenuButton;
+import vekta.util.Counter;
+import vekta.world.RenderLevel;
 
 import static vekta.Vekta.getWorld;
 import static vekta.Vekta.v;

@@ -1,7 +1,7 @@
 package vekta.module;
 
-import vekta.util.InfoGroup;
 import vekta.KeyBinding;
+import vekta.util.InfoGroup;
 
 public abstract class WeaponModule extends ShipModule {
 

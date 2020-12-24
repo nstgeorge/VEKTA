@@ -2,7 +2,6 @@ package vekta.mission.objective;
 
 import vekta.menu.Menu;
 import vekta.object.SpaceObject;
-import vekta.terrain.Terrain;
 import vekta.terrain.location.Location;
 
 public class LandAtObjective extends Objective {

@@ -2,9 +2,8 @@ package vekta.object.planet;
 
 import processing.core.PVector;
 import vekta.terrain.AsteroidTerrain;
-import vekta.terrain.BlackHoleTerrain;
-import vekta.world.RenderLevel;
 import vekta.terrain.Terrain;
+import vekta.world.RenderLevel;
 
 import static processing.core.PConstants.TWO_PI;
 import static vekta.Vekta.v;

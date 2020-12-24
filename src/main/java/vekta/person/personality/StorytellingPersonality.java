@@ -1,14 +1,8 @@
 package vekta.person.personality;
 
-import vekta.Resources;
 import vekta.detail.Detail;
 import vekta.person.Dialog;
 import vekta.person.Person;
-
-import java.util.List;
-import java.util.Map;
-
-import static vekta.Vekta.v;
 
 public class StorytellingPersonality extends Personality {
 	@Override

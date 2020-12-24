@@ -3,8 +3,6 @@ package vekta.object.planet;
 import processing.core.PVector;
 import vekta.world.RenderLevel;
 
-import java.util.Random;
-
 import static processing.core.PApplet.println;
 import static vekta.Vekta.v;
 

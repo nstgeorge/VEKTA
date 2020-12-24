@@ -6,7 +6,8 @@ import vekta.object.SpaceObject;
 import java.io.Serializable;
 
 import static processing.core.PConstants.DEG_TO_RAD;
-import static vekta.Vekta.*;
+import static vekta.Vekta.register;
+import static vekta.Vekta.v;
 
 /**
  * Abstraction for regularly emitting a specific particle type.

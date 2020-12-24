@@ -1,17 +1,10 @@
 package vekta.terrain;
 
 import processing.core.PVector;
-import vekta.sync.Syncable;
-import vekta.knowledge.ObservationLevel;
 import vekta.object.SpaceObject;
 import vekta.object.ship.Ship;
-import vekta.sound.Tune;
-import vekta.spawner.TuneGenerator;
+import vekta.sync.Syncable;
 import vekta.terrain.location.Location;
-import vekta.terrain.settlement.Settlement;
-
-import java.util.Collections;
-import java.util.List;
 
 import static vekta.Vekta.*;
 

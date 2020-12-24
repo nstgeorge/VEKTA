@@ -1,8 +1,8 @@
 package vekta.menu.option;
 
-import vekta.world.World;
 import vekta.menu.Menu;
 import vekta.object.ship.Ship;
+import vekta.world.World;
 
 import static vekta.Vekta.setContext;
 

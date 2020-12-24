@@ -1,7 +1,6 @@
 package vekta.module;
 
 import processing.core.PVector;
-import vekta.util.InfoGroup;
 import vekta.KeyBinding;
 import vekta.menu.Menu;
 import vekta.menu.handle.SurveyMenuHandle;
@@ -9,6 +8,7 @@ import vekta.menu.option.BackButton;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 import vekta.object.planet.TerrestrialPlanet;
+import vekta.util.InfoGroup;
 
 import static processing.core.PApplet.round;
 import static vekta.Vekta.*;

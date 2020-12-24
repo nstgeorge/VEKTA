@@ -5,7 +5,6 @@ import vekta.menu.Menu;
 import vekta.menu.handle.LocationMenuHandle;
 import vekta.menu.option.CustomButton;
 import vekta.object.SpaceObject;
-import vekta.terrain.LandingSite;
 import vekta.terrain.location.Location;
 
 public class LandingTaskObjective extends Objective {

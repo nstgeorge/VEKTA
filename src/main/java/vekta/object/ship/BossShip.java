@@ -1,10 +1,10 @@
 package vekta.object.ship;
 
 import processing.core.PVector;
-import vekta.util.RomanNumerals;
-import vekta.world.RenderLevel;
 import vekta.object.Countermeasure;
 import vekta.object.HomingResponder;
+import vekta.util.RomanNumerals;
+import vekta.world.RenderLevel;
 
 import static vekta.Vekta.*;
 

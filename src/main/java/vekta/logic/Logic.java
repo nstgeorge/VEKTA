@@ -1,8 +1,5 @@
 package vekta.logic;
 
-import com.fasterxml.jackson.annotation.JacksonInject;
-import com.fasterxml.jackson.annotation.JsonSetter;
-
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;

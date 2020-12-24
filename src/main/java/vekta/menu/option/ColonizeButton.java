@@ -4,11 +4,9 @@ import vekta.faction.Faction;
 import vekta.item.ColonyItem;
 import vekta.knowledge.ObservationLevel;
 import vekta.menu.Menu;
-import vekta.terrain.LandingSite;
-import vekta.terrain.Terrain;
 import vekta.terrain.location.Location;
-import vekta.terrain.settlement.building.CapitalBuilding;
 import vekta.terrain.settlement.ColonySettlement;
+import vekta.terrain.settlement.building.CapitalBuilding;
 
 public class ColonizeButton extends ButtonOption {
 	private final ColonyItem item;

@@ -1,14 +1,12 @@
 package vekta.spawner;
 
 import vekta.Resources;
-import vekta.object.planet.*;
-import vekta.terrain.*;
+import vekta.object.planet.TerrestrialPlanet;
+import vekta.terrain.Terrain;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static processing.core.PApplet.max;
 
 public class TerrainGenerator {
 	private static final TerrainSpawner[] EXCLUSIVE_SPAWNERS;

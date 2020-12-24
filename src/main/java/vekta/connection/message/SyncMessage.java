@@ -1,8 +1,8 @@
 package vekta.connection.message;
 
-import vekta.sync.Syncable;
 import vekta.connection.MessageListener;
 import vekta.connection.Peer;
+import vekta.sync.Syncable;
 
 import java.io.Serializable;
 

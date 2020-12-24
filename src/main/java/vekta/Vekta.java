@@ -1,7 +1,8 @@
 package vekta;
 
 import ch.bildspur.postfx.builder.PostFX;
-import com.github.strikerx3.jxinput.*;
+import com.github.strikerx3.jxinput.XInputAxes;
+import com.github.strikerx3.jxinput.XInputDevice;
 import com.github.strikerx3.jxinput.enums.XInputButton;
 import com.github.strikerx3.jxinput.exceptions.XInputNotLoadedException;
 import com.github.strikerx3.jxinput.listener.SimpleXInputDeviceListener;

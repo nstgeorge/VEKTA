@@ -1,11 +1,11 @@
 package vekta.knowledge;
 
 import vekta.KeyBinding;
-import vekta.player.Player;
 import vekta.menu.Menu;
 import vekta.menu.option.ShipSwitchButton;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.Ship;
+import vekta.player.Player;
 
 public class ShipKnowledge extends SpaceObjectKnowledge {
 	private final Ship ship;

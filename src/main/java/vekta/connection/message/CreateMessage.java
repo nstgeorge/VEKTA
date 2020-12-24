@@ -1,9 +1,9 @@
 package vekta.connection.message;
 
-import vekta.world.GlobalOffset;
-import vekta.sync.Syncable;
 import vekta.connection.MessageListener;
 import vekta.connection.Peer;
+import vekta.sync.Syncable;
+import vekta.world.GlobalOffset;
 
 public class CreateMessage implements Message {
 	private final Syncable object;

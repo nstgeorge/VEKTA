@@ -2,17 +2,14 @@ package vekta.spawner.world;
 
 import processing.core.PVector;
 import vekta.faction.Faction;
-import vekta.object.planet.TerrestrialPlanet;
-import vekta.player.Player;
 import vekta.object.SpaceObject;
+import vekta.object.planet.TerrestrialPlanet;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.PatrolShip;
+import vekta.player.Player;
 import vekta.spawner.ItemGenerator;
 import vekta.spawner.WorldGenerator;
-import vekta.terrain.LandingSite;
 import vekta.terrain.settlement.Settlement;
-
-import java.util.List;
 
 import static vekta.Vekta.register;
 import static vekta.Vekta.v;

@@ -1,7 +1,6 @@
 package vekta.spawner.world;
 
 import processing.core.PVector;
-import vekta.world.RenderLevel;
 import vekta.Resources;
 import vekta.item.ModuleItem;
 import vekta.object.SpaceObject;
@@ -9,6 +8,7 @@ import vekta.object.ship.LostShip;
 import vekta.spawner.ItemGenerator;
 import vekta.spawner.WorldGenerator;
 import vekta.spawner.item.JunkItemSpawner;
+import vekta.world.RenderLevel;
 
 import static vekta.Vekta.*;
 import static vekta.spawner.WorldGenerator.orbit;

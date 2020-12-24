@@ -2,7 +2,6 @@ package vekta.player;
 
 import vekta.KeyBinding;
 import vekta.Resources;
-import vekta.sync.Syncable;
 import vekta.faction.Faction;
 import vekta.faction.PlayerFaction;
 import vekta.item.Inventory;
@@ -16,6 +15,7 @@ import vekta.object.ship.ModularShip;
 import vekta.overlay.singleplayer.Notification;
 import vekta.spawner.StoryGenerator;
 import vekta.story.part.Story;
+import vekta.sync.Syncable;
 
 import java.util.*;
 import java.util.function.Predicate;
