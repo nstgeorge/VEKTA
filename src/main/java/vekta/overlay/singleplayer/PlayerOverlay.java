@@ -14,6 +14,7 @@ public class PlayerOverlay implements Overlay, PlayerListener {
 
 	private Overlay[] overlays;
 	private NotificationOverlay notifications;
+	private SaveIconOverlay saveOverlay;
 	private DebugOverlay debug;
 
 	public PlayerOverlay(Player player) {
@@ -30,10 +31,11 @@ public class PlayerOverlay implements Overlay, PlayerListener {
 				new ShipMassOverlay(-300, -90, player.getShip()),
 				new ShipEnergyOverlay(-300, -60, player.getShip()),
 				new ShipTemperatureOverlay(-300, -30, player.getShip()),
-				new PlayerScoreOverlay(v.width/2 + 300, -30, player),
+				// new PlayerScoreOverlay(v.width/2 + 300, -30, player),
 				new DirectoryOverlay(player),
 				new TimeScaleOverlay(),
 				notifications = new NotificationOverlay(-20, 80),
+				saveOverlay = new SaveIconOverlay(v.width / 2, -60),
 		};
 	}
 
@@ -56,6 +58,10 @@ public class PlayerOverlay implements Overlay, PlayerListener {
 
 	@Override
 	public void onNotification(Notification notification) {
-		notifications.add(notification);
+		if(notification.getMessage().equals("Progress saved")) {
+			saveOverlay.trigger();
+		} else {
+			notifications.add(notification);
+		}
 	}
 }
