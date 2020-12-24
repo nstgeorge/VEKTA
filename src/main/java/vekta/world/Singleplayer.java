@@ -788,7 +788,8 @@ public class Singleplayer implements World, PlayerListener {
 		}
 		else {
 			if(key == KeyBinding.QUICK_SAVE && save(QUICKSAVE_FILE)) {
-				getPlayer().send("Progress saved");
+				// Moved to save()
+				// getPlayer().send("Progress saved");
 			}
 			else if(key == KeyBinding.MENU_CLOSE) {
 				setContext(new PauseMenuContext(getContext(), getPlayer()));
@@ -976,6 +977,7 @@ public class Singleplayer implements World, PlayerListener {
 	public boolean save(File file) {
 		try {
 			Format.write(state, new FileOutputStream(file));
+			getPlayer().send("Progress saved");
 			println("Saved to " + file);
 			return true;
 		}
