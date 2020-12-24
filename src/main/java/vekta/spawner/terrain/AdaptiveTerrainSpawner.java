@@ -4,7 +4,8 @@ import vekta.object.planet.TerrestrialPlanet;
 import vekta.spawner.LocationGenerator;
 import vekta.spawner.SettlementGenerator;
 import vekta.spawner.TerrainGenerator;
-import vekta.terrain.*;
+import vekta.terrain.AdaptiveTerrain;
+import vekta.terrain.Terrain;
 
 public class AdaptiveTerrainSpawner implements TerrainGenerator.TerrainSpawner {
 	@Override
@@ -22,7 +23,9 @@ public class AdaptiveTerrainSpawner implements TerrainGenerator.TerrainSpawner {
 
 		AdaptiveTerrain terrain = new AdaptiveTerrain(planet);
 
-		terrain.addSettlement(SettlementGenerator.createSettlement(terrain));/////
+		if(terrain.isHabitable()) {
+			SettlementGenerator.createSettlement(terrain);
+		}
 
 		LocationGenerator.populateLocations(terrain);
 

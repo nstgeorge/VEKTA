@@ -1,9 +1,9 @@
 package vekta.menu.option;
 
-import vekta.player.Player;
 import vekta.menu.Menu;
-import vekta.terrain.settlement.building.upgrade.SettlementUpgrade;
+import vekta.player.Player;
 import vekta.terrain.settlement.Settlement;
+import vekta.terrain.settlement.building.upgrade.SettlementUpgrade;
 
 import static vekta.Vekta.moneyString;
 

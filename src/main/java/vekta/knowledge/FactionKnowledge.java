@@ -1,13 +1,9 @@
 package vekta.knowledge;
 
 import vekta.display.Layout;
-import vekta.display.TextDisplay;
 import vekta.faction.Faction;
-import vekta.menu.option.PlayerKnowledgeButton;
 import vekta.player.Player;
 import vekta.util.InfoGroup;
-
-import static vekta.Vekta.v;
 
 public class FactionKnowledge implements Knowledge {
 	private final Faction faction;

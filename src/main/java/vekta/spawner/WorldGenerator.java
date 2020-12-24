@@ -1,13 +1,12 @@
 package vekta.spawner;
 
 import processing.core.PVector;
-import vekta.world.RenderLevel;
 import vekta.Resources;
 import vekta.object.SpaceObject;
+import vekta.world.RenderLevel;
 
 import java.util.Arrays;
 
-import static processing.core.PApplet.max;
 import static processing.core.PApplet.sqrt;
 import static processing.core.PConstants.HALF_PI;
 import static processing.core.PConstants.QUARTER_PI;

@@ -1,11 +1,8 @@
 package vekta.terrain.location;
 
 import vekta.object.planet.TerrestrialPlanet;
-import vekta.player.Player;
 
 import java.util.Set;
-
-import static vekta.Vekta.v;
 
 public class IslandLocation extends Location {
 
@@ -40,7 +37,7 @@ public class IslandLocation extends Location {
 		tags.add("Islands");
 	}
 
-	public boolean isVisitable(Player player) {
+	public boolean isVisitable() {
 		return false;
 	}
 }

@@ -1,11 +1,11 @@
 package vekta.spawner.objective;
 
-import vekta.player.Player;
 import vekta.mission.Mission;
 import vekta.mission.objective.DialogObjective;
 import vekta.mission.objective.Objective;
 import vekta.person.Dialog;
 import vekta.person.Person;
+import vekta.player.Player;
 
 import static vekta.Vekta.v;
 import static vekta.spawner.MissionGenerator.ObjectiveSpawner;

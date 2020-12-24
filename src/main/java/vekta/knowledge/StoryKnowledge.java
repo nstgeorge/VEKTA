@@ -1,12 +1,12 @@
 package vekta.knowledge;
 
 import vekta.KeyBinding;
-import vekta.player.Player;
 import vekta.display.Layout;
 import vekta.display.TextDisplay;
 import vekta.item.ItemType;
-import vekta.story.part.Story;
+import vekta.player.Player;
 import vekta.story.StoryPart;
+import vekta.story.part.Story;
 
 import java.util.HashSet;
 import java.util.Set;

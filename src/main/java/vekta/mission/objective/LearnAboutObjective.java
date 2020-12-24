@@ -1,6 +1,5 @@
 package vekta.mission.objective;
 
-import vekta.Resources;
 import vekta.knowledge.TopicKnowledge;
 import vekta.menu.Menu;
 import vekta.menu.handle.DialogMenuHandle;
@@ -10,7 +9,6 @@ import vekta.person.Dialog;
 import vekta.person.Person;
 import vekta.spawner.DialogGenerator;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 

@@ -2,9 +2,10 @@ package vekta.world;
 
 import processing.core.PVector;
 import processing.event.KeyEvent;
-import vekta.*;
-import vekta.overlay.singleplayer.DebugOverlay;
-import vekta.profiler.Profiler;
+import vekta.Format;
+import vekta.KeyBinding;
+import vekta.Resources;
+import vekta.Settings;
 import vekta.connection.message.Message;
 import vekta.context.KnowledgeContext;
 import vekta.context.PauseMenuContext;
@@ -33,11 +34,13 @@ import vekta.object.planet.TerrestrialPlanet;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.PlayerShip;
 import vekta.object.ship.SpaceStation;
+import vekta.overlay.singleplayer.DebugOverlay;
 import vekta.overlay.singleplayer.PlayerOverlay;
 import vekta.person.Person;
 import vekta.player.Player;
 import vekta.player.PlayerEvent;
 import vekta.player.PlayerListener;
+import vekta.profiler.Profiler;
 import vekta.sound.SoundGroup;
 import vekta.spawner.*;
 import vekta.spawner.item.BlueprintItemSpawner;
@@ -64,12 +67,13 @@ public class Singleplayer implements World, PlayerListener {
 
 	private static Starfield starfield;
 
-	private static final float ZOOM_FACTOR = .3F;
+	private static final float ZOOM_SCROLL_FACTOR = .3F;
+	private static final float ZOOM_BUTTON_SCALE = 5;
 	private static final float ZOOM_SMOOTH = .1F;
 	private static final float ROTATE_SMOOTH = .05F;
-	private static final float TIME_SCALE = .001F;
+	private static final float TIME_SCALE = .002F;
 	private static final float TIME_FALLOFF = .1F;
-	private static final int MAX_OBJECTS_PER_DIST = 5; // TODO: increase as we add more object types
+	private static final int MAX_OBJECTS_PER_DIST = 5;
 
 	private static final float MAX_AUDITORY_DISTANCE = 2000; // Used for calculating volume of sounds. Higher = hear more
 	private static final float MAX_PAN_DISTANCE = 3000; // Distance where sound is panned entirely left/right
@@ -91,8 +95,8 @@ public class Singleplayer implements World, PlayerListener {
 
 	private boolean lastZoomOutward; // Was last user-controlled zoom directed outward?
 	private float smoothZoom = 10; // Time-smoothed zoom factor
-	private float smoothRotateAngle = 0; 	// Time smooth rotation angle
-	private float targetAngle = 0;			// Unsmoothed rotation angle
+	private float smoothRotateAngle = 0;    // Time smooth rotation angle
+	private float targetAngle = 0;            // Unsmoothed rotation angle
 	private float timeScale = 1; // World time scale
 	private RenderLevel prevLevel = RenderLevel.PARTICLE;
 
@@ -278,7 +282,7 @@ public class Singleplayer implements World, PlayerListener {
 		if(zoom != prevZoom) {
 			onZoomChange(zoom);
 		}
-		state.setZoom(max(MIN_ZOOM_LEVEL, min(getPlayer().getShip().getMaxZoomLevel(), zoom)));
+		state.setZoom(max(MIN_ZOOM_LEVEL, min(getPlayer().getShip().getMaxZoomLevel() * .99F /* Appease the smooth zoom */, zoom)));
 		if(zoom > prevZoom) {
 			lastZoomOutward = true;
 		}
@@ -287,10 +291,13 @@ public class Singleplayer implements World, PlayerListener {
 		}
 	}
 
-	public float getAngle() { return smoothRotateAngle; }
+	public float getAngle() {
+		return smoothRotateAngle;
+	}
 
 	/**
 	 * Set the new desired angle
+	 *
 	 * @param newAngle
 	 */
 	public void setAngle(float newAngle) {
@@ -299,6 +306,7 @@ public class Singleplayer implements World, PlayerListener {
 
 	/**
 	 * Override the smooth angle transition
+	 *
 	 * @param newAngle
 	 */
 	public void overrideAngle(float newAngle) {
@@ -645,9 +653,6 @@ public class Singleplayer implements World, PlayerListener {
 		v.noFill();
 		float r = getObjectRadius(s, s.getRadius() / scale, position, cameraPos, curvature);
 		float onScreenRadius = s.getOnScreenRadius(r);
-		if(s instanceof TerrestrialPlanet) {
-			onScreenRadius += ((TerrestrialPlanet)s).getAtmosphereAltitude() / scale;
-		}
 		boolean visible = isVisibleOnScreen(screenX, screenY, onScreenRadius);
 		if(visible) {
 			s.draw(level, r);
@@ -741,7 +746,7 @@ public class Singleplayer implements World, PlayerListener {
 	}
 
 	protected void onZoomChange(float zoom) {
-		// Overridden by Multiplayer
+		// Overridden by `Multiplayer`
 	}
 
 	@Override
@@ -754,29 +759,26 @@ public class Singleplayer implements World, PlayerListener {
 	}
 
 	@Override
-	public void controlStickMoved(float x, float y, String LR)
-	{
-		if(LR.equals("left")) {
-//			System.out.println(Math.sqrt(Math.abs(x) + Math.abs(y)));
-			if(Math.sqrt(Math.abs(x) + Math.abs(y)) > CONTROLLER_DEADZONE * Settings.getInt("deadzone")) {
-				getPlayer().getShip().setHeading(new PVector(x,-y));
-			}
+	public void controlStickMoved(float x, float y, int side) {
+		for(Module module : getPlayer().getShip().getModules()) {
+			module.onControlStickMoved(x, y, side);
 		}
 	}
 
 	@Override
-	public void analogKeyPressed(float value)
-	{
-		getPlayer().getShip().getModule(ModuleType.ENGINE).onAnalogKeyPress(value);
+	public void analogKeyPressed(float value) {
+		for(Module module : getPlayer().getShip().getModules()) {
+			module.onAnalogKeyPress(value);
+		}
 	}
 
 	@Override
 	public void keyPressed(KeyBinding key) {
 		if(key == KeyBinding.ZOOM_IN) {
-			setZoom(getZoom() / 10);
+			setZoom(getZoom() / ZOOM_BUTTON_SCALE);
 		}
 		else if(key == KeyBinding.ZOOM_OUT) {
-			setZoom(getZoom() * 10);
+			setZoom(getZoom() * ZOOM_BUTTON_SCALE);
 		}
 		else if(key == KeyBinding.QUICK_LOAD) {
 			load(QUICKSAVE_FILE);
@@ -805,7 +807,7 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public void mouseWheel(int amount) {
-		setZoom(state.getZoom() * (1 + amount * ZOOM_FACTOR * Settings.getFloat("zoomSpeed")));
+		setZoom(state.getZoom() * (1 + amount * ZOOM_SCROLL_FACTOR * Settings.getFloat("zoomSpeed")));
 	}
 
 	@Override
@@ -1038,7 +1040,7 @@ public class Singleplayer implements World, PlayerListener {
 			menu.add(new CustomButton("Give Knowledge", m -> {
 				for(TerrestrialPlanet planet : findObjects(TerrestrialPlanet.class)) {
 					getPlayer().addKnowledge(new TerrestrialKnowledge(ObservationLevel.VISITED, planet));
-					for(Settlement settlement : planet.getTerrain().findVisitableSettlements()) {
+					for(Settlement settlement : planet.getAllSettlements()) {
 						getPlayer().addKnowledge(new SettlementKnowledge(ObservationLevel.VISITED, settlement));
 					}
 				}

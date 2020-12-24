@@ -1,12 +1,12 @@
 package vekta.module.station;
 
-import vekta.util.InfoGroup;
-import vekta.world.RenderLevel;
 import vekta.module.Module;
 import vekta.module.ModuleType;
 import vekta.module.ShipModule;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.SpaceStation;
+import vekta.util.InfoGroup;
+import vekta.world.RenderLevel;
 
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CORNERS;

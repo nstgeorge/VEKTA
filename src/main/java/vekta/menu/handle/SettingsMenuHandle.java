@@ -1,7 +1,5 @@
 package vekta.menu.handle;
 
-import vekta.menu.Menu;
-
 import static vekta.Vekta.v;
 
 /**

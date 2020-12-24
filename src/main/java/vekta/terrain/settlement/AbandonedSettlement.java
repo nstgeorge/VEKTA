@@ -1,11 +1,11 @@
 package vekta.terrain.settlement;
 
-import vekta.faction.Faction;
-import vekta.player.Player;
 import vekta.Resources;
+import vekta.faction.Faction;
 import vekta.item.Inventory;
 import vekta.menu.Menu;
 import vekta.menu.option.LootMenuButton;
+import vekta.player.Player;
 import vekta.spawner.ItemGenerator;
 import vekta.terrain.location.Location;
 

@@ -1,7 +1,7 @@
 package vekta.spawner;
 
-import vekta.faction.Faction;
 import vekta.Resources;
+import vekta.faction.Faction;
 import vekta.faction.PlayerFaction;
 
 import java.util.List;

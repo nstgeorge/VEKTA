@@ -1,40 +1,41 @@
 package vekta.spawner.location;
 
-import vekta.Resources;
 import vekta.terrain.Terrain;
 import vekta.terrain.location.ProxyLocation;
 
 import java.util.Set;
 
-public class VolcanoLocationSpawner extends ProxyLocationSpawner<String> {
+import static java.lang.Math.max;
+
+public class StormLocationSpawner extends ProxyLocationSpawner<String> {
 
 	@Override
 	public boolean isValid(Terrain terrain) {
-		return true;
+		return terrain.getPlanet().getAtmosphereDensity() >= .1F;
 	}
 
 	@Override
 	public float getChance(Terrain terrain) {
-		return .1F;
+		return max(1, terrain.getPlanet().getAtmosphereDensity()) * max(1, 10 / terrain.getPlanet().getRotationHours());
 	}
 
 	@Override
 	public String chooseData() {
-		return Resources.generateString("volcano");
+		return null;
 	}
 
 	@Override
 	public String getName(ProxyLocation<String> location) {
-		return location.getData();
+		return location.atm() > 100 ? "Superstorm" : location.atm() > .2 ? "Storm" : "Gale";
 	}
 
 	@Override
 	public String getOverview(ProxyLocation<String> location) {
-		return "You fly above the volcano.";
+		return "Turbulence rattles your spacecraft as you venture into the storm.";
 	}
 
 	@Override
 	public void onSurveyTags(ProxyLocation<String> location, Set<String> tags) {
-		tags.add("Volcanoes");
+		tags.add(location.getName() + "s");
 	}
 }

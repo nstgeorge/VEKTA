@@ -153,9 +153,16 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 		this.position.add(velocity.copy().mult(getWorld().getTimeScale()));
 	}
 
+	public boolean shouldIgnoreGravity(SpaceObject object) {
+		return false;
+	}
+
 	public PVector getGravityAcceleration(List<SpaceObject> objects) {
 		PVector influence = new PVector();
 		for(SpaceObject s : objects) {
+			if(shouldIgnoreGravity(s)) {
+				continue;
+			}
 			float distSq = distSq(position, s.getPosition());
 			if(distSq == 0) {
 				continue; // If the planet being checked is itself (or directly on top), don't move
@@ -346,7 +353,7 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	/**
 	 * Perform physics updates for this SpaceObject.
 	 */
-	public final void update(RenderLevel level) {
+	public void update(RenderLevel level) {
 		aliveTime += 1 / v.frameRate;
 		onUpdate(level);
 	}

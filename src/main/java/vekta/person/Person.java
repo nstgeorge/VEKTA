@@ -13,8 +13,8 @@ import vekta.spawner.PersonGenerator;
 import vekta.sync.Sync;
 import vekta.sync.Syncable;
 import vekta.terrain.location.Location;
-import vekta.terrain.settlement.building.HouseBuilding;
 import vekta.terrain.settlement.Settlement;
+import vekta.terrain.settlement.building.HouseBuilding;
 
 import java.util.*;
 
@@ -84,11 +84,15 @@ public class Person extends Syncable<Person> implements MissionIssuer, Detailed 
 		return home != null && home.isEconomyAlive() && home.getLocation().isEnabled();//TODO: must be habitable
 	}
 
+	public Settlement getCurrentHome() {
+		return home;
+	}
+
 	public Settlement findHome() {
 		if(!hasHome()) {
 			home = PersonGenerator.randomHome(getFaction());
 		}
-		return home;
+		return getCurrentHome();
 	}
 
 	public Location findHomeLocation() {

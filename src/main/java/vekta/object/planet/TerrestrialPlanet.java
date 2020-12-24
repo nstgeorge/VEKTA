@@ -13,28 +13,33 @@ import vekta.player.Player;
 import vekta.spawner.TerrainGenerator;
 import vekta.terrain.LandingSite;
 import vekta.terrain.Terrain;
+import vekta.terrain.location.Location;
 import vekta.terrain.settlement.Settlement;
 import vekta.util.Counter;
 import vekta.world.RenderLevel;
 
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import static processing.core.PApplet.print;
 import static vekta.Vekta.*;
 
 /**
  * Terrestrial (landable) planet
  */
 public class TerrestrialPlanet extends Planet {
-	// TODO: gradually move randomization into StarSystemGenerator
+	// TODO: gradually move randomization into `StarSystemGenerator`
 
-	//	private static final float LABEL_THRESHOLD = 5e4F;
+	private static final float LANDING_SITE_ARC = .1f; // Max deviation from the landing site's angle around the planet (radians)
+	private static final float LANDING_SITE_ANIMATION_RATE = .5f; // Number of oscillations per second
 
-	private static final float EARTH_ATMOS_ALTITUDE = 1e8F;
+	private static final float LANDING_SITE_RADIUS = 2 * sin(LANDING_SITE_ARC / 2); // Chord length of landing angle, precomputed
 
-	private LandingSite site;
+	private final Terrain terrain;
+	private final LandingSite terrainSite;
+	private final Map<LandingSite, Float> landingMap = new HashMap<>();
+
+	private final List<Settlement> settlements = new ArrayList<>();
 
 	private SpaceObject orbitObject;
 
@@ -42,61 +47,127 @@ public class TerrestrialPlanet extends Planet {
 
 	private ObservationLevel levelCache;
 
-	private float atmosphereDensity;        // Thickness of the atmosphere relative to Earth's
-	private final float atmosphereAltitude;        // Altitude at which the atmosphere of the planet is completely gone. (Earth: approx 193121280m)
-	private final float magneticFieldStrength;    // Strength of the magnetic field relative to Earth's
-
-	private final float escapeVelocity;            // For reference
+	private float atmosphereDensity;     // Atmospheric density (kg/m^3)
+	private float magneticStrength; // Strength of the magnetic field
+	private float rotationHours;        // Rotation period (hours)
 
 	public TerrestrialPlanet(String name, float mass, float density, PVector position, PVector velocity, int color) {
 		super(name, mass, density, position, velocity, color);
 
-		// Calculate escape velocity from surface of this planet
-		escapeVelocity = (float)Math.sqrt((2 * v.G * mass) / getRadius());
+		atmosphereDensity = chooseAtmosphereDensity();
+		magneticStrength = chooseMagneticStrength();
+		rotationHours = chooseRotationHours();
 
-		// Set atmospheric density slightly influenced by mass
-		atmosphereDensity = Math.abs(v.gaussian(10)) * (mass / v.EARTH_MASS);
-
-		// Set atmospheric altitude distributed normally relative to Earth's atmospheric altitude
-		atmosphereAltitude = (EARTH_ATMOS_ALTITUDE + (v.gaussian(1000))) * (atmosphereDensity * 0.5f);
-
-		// 30% chance to have a magnetic field, then randomly set a normally distributed value
-		magneticFieldStrength = v.chance(.3f) ? 0 : Math.abs((float)(v.gaussian(50)));
-
-		// TODO: ensure the initialization order works properly
-		this.site = new LandingSite(this, createTerrain());
+		terrain = chooseTerrain();
+		terrainSite = new LandingSite(terrain);
 
 		updateOrbitObject();
+
+		// TODO: tidally lock if close to orbited object
 	}
 
-	protected Terrain createTerrain() {
+	protected float chooseAtmosphereDensity() {
+		// Normally distributed and proportional to mass
+		return Math.abs(v.gaussian(1)) * (getMass() / EARTH_MASS);
+	}
+
+	protected float chooseMagneticStrength() {
+		// 30% chance to have a magnetic field, then set a normally distributed value
+		return v.chance(.3f) ? 0 : Math.abs(v.gaussian(50));
+	}
+
+	protected float chooseRotationHours() {
+		// Randomize based on typical rotations in the Solar System
+		return (24 + v.gaussian(4)) * (v.chance(.2f) ? -1 : 1);
+	}
+
+	protected Terrain chooseTerrain() {
 		return TerrainGenerator.createTerrain(this);
 	}
 
-	public LandingSite getLandingSite() {
+	public Terrain getTerrain() {
+		return terrain;
+	}
+
+	public LandingSite getDefaultLandingSite() {
+		return terrainSite;
+	}
+
+	private Stream<LandingSite> streamAllLandingSites() {
+		return Stream.concat(Stream.of(terrainSite), landingMap.keySet().stream());
+	}
+
+	public List<LandingSite> findVisitableLandingSites() {
+		return streamAllLandingSites()
+				.filter(site -> site.getLocation().isEnabled() && site.getLocation().isVisitable())
+				.collect(Collectors.toList());
+	}
+
+	/**
+	 * Find a suitable landing site for a global position in space.
+	 *
+	 * @param position Position in global coordinates
+	 * @return The nearest accessible landing site, otherwise the default terrain
+	 */
+	public LandingSite findLandingSiteGlobal(PVector position) {
+		return findLandingSite(position.copy().sub(getPositionReference()).heading());
+	}
+
+	public LandingSite findLandingSite(float angle) {
+		float bestDist = LANDING_SITE_ARC;
+		LandingSite site = getDefaultLandingSite();
+		for(Map.Entry<LandingSite, Float> entry : landingMap.entrySet()) {
+			Location location = entry.getKey().getLocation();
+			if(location.isEnabled()) {
+				float dist = abs(v.deltaAngle(angle, entry.getValue()));
+				println(dist);
+				if(dist < bestDist) {
+					bestDist = dist;
+					site = entry.getKey();
+				}
+			}
+		}
 		return site;
 	}
 
-	public Terrain getTerrain() {
-		//		if(site == null) {
-		//			throw new RuntimeException("Terrain not initialized for " + getClass().getSimpleName());
-		//		}
-		return site.getTerrain();
+	public void addLandingSite(LandingSite site) {
+		addLandingSite(site, v.random(TWO_PI));
 	}
 
-	public void setTerrain(Terrain terrain) {
-		if(site != null) {
-			throw new RuntimeException(getClass().getSimpleName() + " already has " + site.getTerrain().getClass().getSimpleName());
+	public void addLandingSite(LandingSite site, float angle) {
+		landingMap.put(site, angle);
+	}
+
+	public void removeLandingSite(LandingSite site) {
+		landingMap.remove(site);
+	}
+
+	public boolean isInhabited() {
+		// TODO: optimize if we start using this often
+		return !findInhabitedSettlements().isEmpty();
+	}
+
+	public final List<Settlement> getAllSettlements() {
+		return settlements;
+	}
+
+	public List<Settlement> findVisitableSettlements() {
+		return settlements.stream()
+				.filter(settlement -> settlement.getLocation().isEnabled() && settlement.getLocation().isVisitable() && settlement.getLocation().isHabitable())
+				.collect(Collectors.toList());
+	}
+
+	public List<Settlement> findInhabitedSettlements() {
+		return settlements.stream()
+				.filter(settlement -> settlement.getLocation().isEnabled() && settlement.getLocation().isVisitable() && settlement.getLocation().isInhabited())
+				.collect(Collectors.toList());
+	}
+
+	public void addSettlement(Settlement settlement) {
+		if(!settlements.contains(settlement)) {
+			settlements.add(settlement);
 		}
-		site = new LandingSite(this, terrain);
 	}
-
-	//		public void setTerrain(Terrain terrain) {
-	//			if(this.terrain != null) {
-	//				throw new RuntimeException(getClass().getSimpleName() + " already has " + this.terrain.getClass().getSimpleName());
-	//			}
-	//			this.terrain = terrain;
-	//		}
 
 	public SpaceObject getOrbitObject() {
 		return orbitObject;
@@ -107,25 +178,80 @@ public class TerrestrialPlanet extends Planet {
 		updateCharacteristics();
 	}
 
+	// Squared to avoid computing the square root when possible
+	public float getEscapeVelocitySquared() {
+		return 2 * G * getMass() / getRadius();
+	}
+
 	public float getEscapeVelocity() {
-		return escapeVelocity;
+		return v.sqrt(getEscapeVelocitySquared());
+	}
+
+	@Override
+	public float getOnScreenRadius(float r) {
+		return r * getAtmosphereRadius() / getRadius();
 	}
 
 	/**
-	 * Returns the thickness of the atmosphere relative to Earth.
+	 * Returns the "sea level" density of the atmosphere relative to Earth.
 	 *
-	 * @return Atmosphere thickness (E)
+	 * @return Thickness in atmospheres (1 atm = 101,325 kPa)
 	 */
 	public float getAtmosphereDensity() {
 		return atmosphereDensity;
 	}
 
-	public float getAtmosphereAltitude() {
-		return atmosphereAltitude;
+	/**
+	 * Returns the density of the atmosphere at a given altitude.
+	 *
+	 * @return Thickness in atmospheres (1 atm = 101,325 kPa)
+	 */
+	public float getAtmosphereDensity(float altitude) {
+		if(altitude <= 0) {
+			return atmosphereDensity;
+		}
+		// Equation: https://en.wikipedia.org/wiki/Density_of_air ("Exponential approximation")
+
+		double gravityAccel = G * getMass() / sq(getRadius() + altitude); // Surface gravity
+		double molarMass = .02896f; // Arbitrary molar mass of planet's air
+		double lapseRate = .0065f; // Temperature lapse rate
+		double tempK = getTemperatureKelvin(); // Surface temperature
+		float atmDensity = (float)(atmosphereDensity * Math.exp(-(molarMass * gravityAccel / GAS_CONSTANT - lapseRate) / tempK * altitude));
+		return Float.isFinite(atmDensity) ? atmDensity : atmosphereDensity;
 	}
 
-	public float getMagneticFieldStrength() {
-		return magneticFieldStrength;
+	public void setAtmosphereDensity(float atmosphereDensity) {
+		this.atmosphereDensity = atmosphereDensity;
+	}
+
+	/**
+	 * Returns an arbitrary ceiling of the atmosphere.
+	 * Note that this is relative to the center of the planet instead of the surface.
+	 *
+	 * @return Maximum radius of atmosphere (meters)
+	 */
+	public float getAtmosphereRadius() {
+		return getRadius() * (1 + EARTH_ATMOSPHERE_LIMIT / EARTH_RADIUS * atmosphereDensity);
+	}
+
+	public float getMagneticStrength() {
+		return magneticStrength;
+	}
+
+	public void setMagneticStrength(float magneticStrength) {
+		this.magneticStrength = magneticStrength;
+	}
+
+	public float getRotationSeconds() {
+		return rotationHours * 3600;
+	}
+
+	public float getRotationHours() {
+		return rotationHours;
+	}
+
+	public void setRotationHours(float rotationHours) {
+		this.rotationHours = rotationHours;
 	}
 
 	public float getValueScale() {
@@ -146,28 +272,27 @@ public class TerrestrialPlanet extends Planet {
 
 			if(object != null) {
 				Star star = (Star)object;
-				setTemperatureKelvin((float)Math.pow((star.getLuminosity() * (1 - .3)) / (16 * Math.PI * relativePosition(star).magSq() * v.STEFAN_BOLTZMANN), .25));
+				setTemperatureKelvin((float)Math.pow((star.getLuminosity() * (1 - .3)) / (16 * Math.PI * relativePosition(star).magSq() * STEFAN_BOLTZMANN), .25));
 
-				float temp = getTemperatureKelvin();
+				/// Commenting this out for now because it might affect the new calculations. Feel free to uncomment if everything still makes sense
 
-				// Estimate atmospheric escape
-				if(temp > sq(escapeVelocity)) {
-					atmosphereDensity -= 0.0000001 * (temp - sq(escapeVelocity));
-				}
-				if(magneticFieldStrength < 0.01) {
-					atmosphereDensity -= 0.00000001;
-				}
-				atmosphereDensity = Math.max(0, atmosphereDensity);
+				//				float tempK = getTemperatureKelvin();
+				//				float escapeVelocitySq = getEscapeVelocitySquared();
+				//
+				//				// Estimate atmospheric escape
+				//				if(tempK > escapeVelocitySq) {
+				//					atmosphereDensity -= 1e-7f * (tempK - escapeVelocitySq);
+				//				}
+				//				if(magneticFieldStrength < 0.01) {
+				//					atmosphereDensity -= 1e-7f;
+				//				}
+				//				atmosphereDensity = Math.max(0, atmosphereDensity);
 			}
 			else {
 				// Arbitrary temperature value for planets orbiting gas giants and black holes
 				setTemperatureKelvin(orbitObject.getTemperatureKelvin());
 			}
 		}
-
-		//		for(Feature feature : getTerrain().getFeatures()) {
-		//			feature.updateOrReplace();
-		//		}
 	}
 
 	@Override
@@ -196,67 +321,87 @@ public class TerrestrialPlanet extends Planet {
 			updateOrbitObject();
 		}
 		super.onUpdate(level);
-	}
 
-	@Override
-	public void draw(RenderLevel level, float r) {
-		super.draw(level, r);
-
-		// Draw atmosphere
-		float atmosRadius = (atmosphereAltitude / getRadius()) * r;
-		// Temporary - render only the Karman line in white
-		v.strokeWeight(1);
-		v.stroke(100, 100);
-		v.fill(0, 0);
-		v.ellipse(0, 0, r + atmosRadius, r + atmosRadius);
-
+		// Update rotation (right-hand-rule convention)
+		float deltaAngle = -TWO_PI / getRotationSeconds() * getWorld().getTimeScale();
+		for(Map.Entry<LandingSite, Float> entry : landingMap.entrySet()) {
+			entry.setValue(entry.getValue() + deltaAngle);
+		}
 	}
 
 	protected void updateOrbitObject() {
 		setOrbitObject(getWorld().findOrbitObject(this));
-		getTerrain().onOrbit(orbitObject);
+		getTerrain().updateOrbit(orbitObject);
+	}
+
+	@Override
+	public void drawNearby(float r) {
+		super.drawNearby(r);
+
+		// Draw atmosphere
+		float atmosphereRadius = r * (getAtmosphereRadius() / getRadius());
+		// Temporary((?)) - render only the boundary line
+		v.strokeWeight(1);
+		v.stroke(100, 100);
+		v.noFill();
+		v.ellipse(0, 0, atmosphereRadius, atmosphereRadius);
+
+		float rSite = r * LANDING_SITE_RADIUS; // Chord length
+
+		for(Map.Entry<LandingSite, Float> entry : landingMap.entrySet()) {
+			Location location = entry.getKey().getLocation();
+			float angle = entry.getValue();
+			float offset = location.hashCode() % 100; // Arbitrary time offset
+			float baseFreq = (getAliveTime() + offset) * PI * LANDING_SITE_ANIMATION_RATE;
+
+			float x = r * cos(angle);
+			float y = r * sin(angle);
+			float r1 = rSite * sq(sq(sin(baseFreq)) * .3f + .7f);
+			float r2 = rSite * 1;
+
+			v.stroke(location.getColor());
+			v.ellipse(x, y, r1, r1);
+			v.ellipse(x, y, r2, r2);
+		}
 	}
 
 	@Override
 	public void onCollide(SpaceObject s) {
 		if(s instanceof Ship) {
 			Ship ship = (Ship)s;
-			if(isSafeToLand(ship) && ship.isDockable(this)) {
-				site.land(ship);
+			if(ship.isDockable(this)) {
+				LandingSite site = findLandingSiteGlobal(ship.getPositionReference());
+				if(site != null) {
+					site.land(ship);
+				}
 			}
 			return; // Prevent ship from being destroyed after landing
 		}
 		super.onCollide(s); // Oof
 	}
 
-	public boolean isSafeToLand(Ship ship) {
-		return true;
-	}
-
 	@Override
 	public void onDestroyed(SpaceObject s) {
 		super.onDestroyed(s);
 
-		// If something landed on this planet, destroy it as well
-		SpaceObject landed = site.getLanded();
-		if(landed != null) {
-			landed.onDestroyed(s);
-		}
-
-		//		// Clean up settlements
-		//		for(Settlement settlement : getTerrain().findVisitableSettlements()) {
-		//			settlement.cleanup();
-		//		}
+		streamAllLandingSites().forEach(site -> {
+			// If something landed on this planet, destroy it as well
+			SpaceObject landed = site.getLanded();
+			if(landed != null) {
+				landed.onDestroyed(s);
+			}
+		});
 
 		// If player destroyed planet, immediately set enemy
 		if(s instanceof ModularShip && ((ModularShip)s).hasController()) {
 			for(Person person : getWorld().findObjects(Person.class)) {
-				if(getTerrain().findVisitableSettlements().contains(person.findHome())) {
+				Settlement home = person.getCurrentHome();
+				if(home != null && home.getLocation().getPlanet() == this) {
 					person.die();
 				}
 			}
 
-			Set<Faction> factions = getTerrain().findVisitableSettlements().stream()
+			Set<Faction> factions = settlements.stream()
 					.map(Settlement::getFaction)
 					.collect(Collectors.toSet());
 
@@ -282,7 +427,7 @@ public class TerrestrialPlanet extends Planet {
 		player.addKnowledge(new TerrestrialKnowledge(level, this));
 
 		if(ObservationLevel.SCANNED.isAvailableFrom(level)) {
-			for(Settlement settlement : getTerrain().findVisitableSettlements()) {
+			for(Settlement settlement : findVisitableSettlements()) {
 				// Observe settlements at the next-down observation level
 				settlement.observe(level.decreased(), player);
 			}

@@ -1,10 +1,10 @@
 package vekta.spawner;
 
-import vekta.player.Player;
 import vekta.deity.Deity;
 import vekta.item.ItemType;
 import vekta.item.category.ItemTypeCategory;
 import vekta.knowledge.DeityKnowledge;
+import vekta.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;

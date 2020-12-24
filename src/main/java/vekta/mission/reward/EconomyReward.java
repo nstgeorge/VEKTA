@@ -1,9 +1,9 @@
 package vekta.mission.reward;
 
-import vekta.player.Player;
 import vekta.economy.Economy;
 import vekta.economy.ProductivityModifier;
 import vekta.mission.Mission;
+import vekta.player.Player;
 
 public class EconomyReward extends Reward {
 	private final Economy economy;

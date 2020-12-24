@@ -1,12 +1,12 @@
 package vekta.terrain.settlement;
 
-import vekta.faction.Faction;
-import vekta.player.Player;
 import vekta.economy.Economy;
 import vekta.economy.NoiseModifier;
 import vekta.economy.TemporaryModifier;
+import vekta.faction.Faction;
 import vekta.menu.Menu;
 import vekta.menu.option.CoinMenuButton;
+import vekta.player.Player;
 import vekta.spawner.FactionGenerator;
 import vekta.spawner.item.ClothingItemSpawner;
 import vekta.spawner.item.WeaponItemSpawner;

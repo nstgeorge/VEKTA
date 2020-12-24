@@ -5,7 +5,6 @@ import vekta.economy.Economy;
 import vekta.faction.Faction;
 import vekta.faction.PlayerFaction;
 import vekta.object.SpaceObject;
-import vekta.object.particle.Particle;
 import vekta.person.Person;
 import vekta.player.Player;
 import vekta.sync.ConditionalRegister;
@@ -15,7 +14,6 @@ import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.util.*;
 
-import static processing.core.PApplet.println;
 import static vekta.Vekta.v;
 
 /**

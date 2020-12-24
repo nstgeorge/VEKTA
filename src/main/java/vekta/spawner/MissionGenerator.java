@@ -1,17 +1,17 @@
 package vekta.spawner;
 
 import processing.core.PVector;
-import vekta.player.Player;
-import vekta.faction.PlayerFaction;
-import vekta.world.RenderLevel;
 import vekta.Resources;
+import vekta.faction.PlayerFaction;
 import vekta.mission.Mission;
 import vekta.mission.MissionIssuer;
 import vekta.mission.objective.Objective;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.person.Person;
+import vekta.player.Player;
 import vekta.spawner.world.AsteroidSpawner;
 import vekta.terrain.LandingSite;
+import vekta.world.RenderLevel;
 
 import java.util.Arrays;
 import java.util.List;
@@ -65,7 +65,7 @@ public class MissionGenerator {
 		if(planet == null) {
 			planet = AsteroidSpawner.createAsteroid(WorldGenerator.randomSpawnPosition(RenderLevel.PLANET, new PVector()));
 		}
-		return planet.getLandingSite();
+		return v.random(planet.findVisitableLandingSites());
 	}
 
 	public static Person randomMissionPerson() {

@@ -1,8 +1,8 @@
 package vekta.menu.option;
 
-import vekta.player.Player;
 import vekta.menu.Menu;
 import vekta.object.ship.Rechargeable;
+import vekta.player.Player;
 
 import static processing.core.PApplet.ceil;
 import static processing.core.PApplet.min;

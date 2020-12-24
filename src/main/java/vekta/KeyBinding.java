@@ -1,8 +1,8 @@
 package vekta;
 
-import java.awt.event.KeyEvent;
-
 import com.github.strikerx3.jxinput.enums.XInputButton;
+
+import java.awt.event.KeyEvent;
 
 import static java.awt.event.KeyEvent.VK_NUMPAD5;
 import static java.awt.event.KeyEvent.VK_NUMPAD9;

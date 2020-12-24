@@ -41,13 +41,16 @@ public interface Module extends Serializable {
 	default void onUpdate() {
 	}
 
-	default void onAnalogKeyPress(float value) {
-	}
-
 	default void onKeyPress(KeyBinding key) {
 	}
 
 	default void onKeyRelease(KeyBinding key) {
+	}
+
+	default void onAnalogKeyPress(float value) {
+	}
+
+	default void onControlStickMoved(float x, float y, int side){
 	}
 
 	default void onItemMenu(Item item, Menu menu) {

@@ -1,6 +1,6 @@
 package vekta.ui;
 
-import java.io.Serializable;	// Allows classes that implement Element interface to be serializable
+import java.io.Serializable;
 
 /**
  * A minimal interface that every UI element inherits from.

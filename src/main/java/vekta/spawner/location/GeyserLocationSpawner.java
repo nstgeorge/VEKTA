@@ -3,13 +3,10 @@ package vekta.spawner.location;
 import vekta.Resources;
 import vekta.menu.Menu;
 import vekta.menu.option.RechargeButton;
-import vekta.spawner.location.FeatureLocationSpawner;
 import vekta.terrain.Terrain;
 import vekta.terrain.location.ProxyLocation;
 
 import java.util.Set;
-
-import static vekta.Vekta.v;
 
 public class GeyserLocationSpawner extends ProxyLocationSpawner<String> {
 

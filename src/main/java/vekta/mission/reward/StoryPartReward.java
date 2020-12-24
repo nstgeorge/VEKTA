@@ -1,8 +1,8 @@
 package vekta.mission.reward;
 
-import vekta.player.Player;
 import vekta.knowledge.StoryKnowledge;
 import vekta.mission.Mission;
+import vekta.player.Player;
 import vekta.story.StoryPart;
 
 public class StoryPartReward extends Reward {

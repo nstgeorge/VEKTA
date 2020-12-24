@@ -1,11 +1,11 @@
 package vekta.knowledge;
 
-import vekta.player.Player;
 import vekta.display.Layout;
 import vekta.display.TextDisplay;
 import vekta.display.VerticalLayout;
 import vekta.object.SpaceObject;
 import vekta.person.Person;
+import vekta.player.Player;
 import vekta.terrain.settlement.Settlement;
 
 public class PersonKnowledge extends SpaceObjectKnowledge {

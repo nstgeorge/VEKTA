@@ -1,13 +1,11 @@
 package vekta.knowledge;
 
-import vekta.object.planet.TerrestrialPlanet;
-import vekta.player.Player;
 import vekta.display.Layout;
 import vekta.display.OceanDisplay;
 import vekta.display.TextDisplay;
 import vekta.item.Inventory;
 import vekta.object.SpaceObject;
-import vekta.terrain.Terrain;
+import vekta.player.Player;
 import vekta.terrain.location.OceanLocation;
 
 public class OceanKnowledge extends SpaceObjectKnowledge {

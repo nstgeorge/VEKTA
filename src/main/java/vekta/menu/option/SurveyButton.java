@@ -2,7 +2,6 @@ package vekta.menu.option;
 
 import vekta.menu.Menu;
 import vekta.menu.handle.SurveyMenuHandle;
-import vekta.terrain.LandingSite;
 import vekta.terrain.Terrain;
 
 import static vekta.Vekta.setContext;

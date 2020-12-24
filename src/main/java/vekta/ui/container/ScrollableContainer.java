@@ -1,7 +1,5 @@
 package vekta.ui.container;
 
-import vekta.ui.container.Container;
-
 import static processing.core.PConstants.CORNERS;
 import static vekta.Vekta.v;
 

@@ -1,10 +1,10 @@
 package vekta.menu.option;
 
-import vekta.player.Player;
 import vekta.deity.Deity;
 import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.menu.Menu;
+import vekta.player.Player;
 import vekta.spawner.DeityGenerator;
 
 import static processing.core.PApplet.abs;

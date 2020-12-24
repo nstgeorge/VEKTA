@@ -1,11 +1,11 @@
 package vekta.terrain.settlement.building.upgrade;
 
-import vekta.player.Player;
 import vekta.economy.TemporaryModifier;
+import vekta.player.Player;
 import vekta.spawner.PersonGenerator;
+import vekta.terrain.settlement.Settlement;
 import vekta.terrain.settlement.building.HouseBuilding;
 import vekta.terrain.settlement.building.MarketBuilding;
-import vekta.terrain.settlement.Settlement;
 
 public class HousingUpgrade implements SettlementUpgrade {
 	@Override

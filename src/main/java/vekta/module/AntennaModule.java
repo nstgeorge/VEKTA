@@ -1,11 +1,11 @@
 package vekta.module;
 
-import vekta.util.InfoGroup;
 import vekta.menu.Menu;
 import vekta.menu.handle.SpaceObjectMenuHandle;
 import vekta.menu.option.InternetMenuButton;
 import vekta.object.SpaceObject;
 import vekta.object.planet.TerrestrialPlanet;
+import vekta.util.InfoGroup;
 
 import static processing.core.PApplet.sq;
 import static vekta.Vekta.AU_DISTANCE;

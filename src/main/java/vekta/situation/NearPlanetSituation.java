@@ -3,10 +3,8 @@ package vekta.situation;
 import vekta.Settings;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.player.Player;
-import vekta.world.AttributeMaxZoomController;
 import vekta.world.RenderLevel;
 
-import static processing.core.PApplet.max;
 import static vekta.Vekta.getDistanceUnit;
 import static vekta.Vekta.getWorld;
 

@@ -2,8 +2,6 @@ package vekta.object.planet;
 
 import processing.core.PShape;
 import processing.core.PVector;
-import vekta.object.SpaceObject;
-import vekta.object.ship.Ship;
 import vekta.world.RenderLevel;
 
 import static processing.core.PApplet.sq;
@@ -32,6 +30,12 @@ public class GasGiant extends TerrestrialPlanet {
 			ringColors[i] = v.lerpColor(20, 70, v.random(1));
 		}
 		maxRadius = d;
+	}
+
+	@Override
+	protected float chooseAtmosphereDensity() {
+		// TODO: figure out how this'll work
+		return 0;
 	}
 
 	public boolean isInsideRings(PVector pos) {
@@ -72,12 +76,5 @@ public class GasGiant extends TerrestrialPlanet {
 			ring.setStrokeWeight(1 / r);
 			v.shape(ring);
 		}
-	}
-
-	@Override
-	public boolean isSafeToLand(Ship ship) {
-		// TODO: special equipment to fly into gas giants
-//		return false;
-		return true;
 	}
 }

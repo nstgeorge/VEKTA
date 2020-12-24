@@ -1,7 +1,7 @@
 package vekta.mission.objective;
 
-import vekta.sync.Sync;
 import vekta.object.SpaceObject;
+import vekta.sync.Sync;
 
 import static vekta.Vekta.getWorld;
 

@@ -1,8 +1,6 @@
 package vekta.detail;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 public interface Detailed extends Serializable {
 	Details getDetails();

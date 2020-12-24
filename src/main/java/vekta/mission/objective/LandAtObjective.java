@@ -2,7 +2,6 @@ package vekta.mission.objective;
 
 import vekta.menu.Menu;
 import vekta.object.SpaceObject;
-import vekta.terrain.Terrain;
 import vekta.terrain.location.Location;
 
 public class LandAtObjective extends Objective {
@@ -34,8 +33,8 @@ public class LandAtObjective extends Objective {
 	}
 
 	@Override
-	public void onVisit(Terrain terrain) {
-		if(terrain.getPlanet() == getSpaceObject()) {
+	public void onVisit(Location location) {
+		if(location.getPlanet() == getSpaceObject()) {
 			complete();
 		}
 	}
@@ -43,7 +42,7 @@ public class LandAtObjective extends Objective {
 	@Override
 	public void onSync(Objective data) {
 		super.onSync(data);
-		
+
 		onMenu(null);/////
 	}
 }

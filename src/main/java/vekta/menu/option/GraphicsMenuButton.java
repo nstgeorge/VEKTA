@@ -7,7 +7,6 @@ import vekta.menu.handle.SettingsMenuHandle;
 import vekta.menu.option.input.*;
 
 import java.util.Arrays;
-import java.util.List;
 
 import static vekta.Vekta.setContext;
 

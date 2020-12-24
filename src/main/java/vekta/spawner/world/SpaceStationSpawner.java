@@ -9,8 +9,8 @@ import vekta.module.station.SolarArrayModule;
 import vekta.module.station.StationCoreModule;
 import vekta.module.station.StructuralModule;
 import vekta.object.SpaceObject;
+import vekta.object.planet.TerrestrialPlanet;
 import vekta.object.ship.SpaceStation;
-import vekta.terrain.LandingSite;
 
 import static vekta.Vekta.register;
 import static vekta.Vekta.v;
@@ -18,18 +18,18 @@ import static vekta.spawner.ItemGenerator.addLoot;
 import static vekta.spawner.WorldGenerator.orbit;
 import static vekta.spawner.WorldGenerator.randomPlanetColor;
 
-public class SpaceStationSpawner extends NearPlanetSpawner {
+public class SpaceStationSpawner extends NearTerrestrialPlanetSpawner {
 	@Override
 	public float getWeight() {
 		return .5F;
 	}
 
 	@Override
-	public void spawn(SpaceObject center, PVector pos, LandingSite site) {
-		if(site.getTerrain().isInhabited()) {
-			int color = v.random(1) < .6F ? site.getParent().getColor() : randomPlanetColor();
+	public void spawn(SpaceObject center, PVector pos, TerrestrialPlanet planet) {
+		if(planet.isInhabited()) {
+			int color = v.random(1) < .6F ? planet.getColor() : randomPlanetColor();
 			SpaceStation s = createStation(Resources.generateString("space_station"), pos, color);
-			orbit(site.getParent(), s, .25F);
+			orbit(planet, s, .25F);
 		}
 	}
 

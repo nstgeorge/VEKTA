@@ -1,6 +1,5 @@
 package vekta.dungeon;
 
-import vekta.terrain.LandingSite;
 import vekta.terrain.location.Location;
 
 import java.io.Serializable;

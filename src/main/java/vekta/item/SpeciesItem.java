@@ -1,7 +1,7 @@
 package vekta.item;
 
-import vekta.util.InfoGroup;
 import vekta.ecosystem.Species;
+import vekta.util.InfoGroup;
 
 import static processing.core.PApplet.ceil;
 

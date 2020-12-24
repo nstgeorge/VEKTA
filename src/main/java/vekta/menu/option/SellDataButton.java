@@ -1,10 +1,10 @@
 package vekta.menu.option;
 
-import vekta.player.Player;
 import vekta.display.Layout;
 import vekta.item.Inventory;
 import vekta.knowledge.Knowledge;
 import vekta.menu.Menu;
+import vekta.player.Player;
 
 import static vekta.Vekta.moneyString;
 

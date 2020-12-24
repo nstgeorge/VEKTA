@@ -1,7 +1,8 @@
 package vekta;
 
 import ch.bildspur.postfx.builder.PostFX;
-import com.github.strikerx3.jxinput.*;
+import com.github.strikerx3.jxinput.XInputAxes;
+import com.github.strikerx3.jxinput.XInputDevice;
 import com.github.strikerx3.jxinput.enums.XInputButton;
 import com.github.strikerx3.jxinput.exceptions.XInputNotLoadedException;
 import com.github.strikerx3.jxinput.listener.SimpleXInputDeviceListener;
@@ -60,8 +61,8 @@ public class Vekta extends PApplet {
 	private static Context nextContext;
 
 	// Game-balancing variables and visual settings
-	public static final float G = 6.674e-11F;
 	public static final float MIN_GRAVITY_MASS = 1e23F; // Minimum mass for gravity-imparting planets
+	public static final float EARTH_ATMOSPHERE_LIMIT = 1e8F;
 
 	// Render/spawning distances (we might want to use kilometers due to limited floating-point precision)
 	public static final float DETAIL_LEVEL = 1e1F;
@@ -77,12 +78,15 @@ public class Vekta extends PApplet {
 
 	// Reference constants
 	public static final float EARTH_MASS = 5.9736e24F;
+	public static final float LUNAR_MASS = 7.3476e22F;
 	public static final float SUN_MASS = 1.989e30F;
 	public static final float EARTH_RADIUS = 6.3711e6F;
 	public static final float SUN_RADIUS = 6.96340e8F;
 	public static final float AU_DISTANCE = 1.496e11F;
 	public static final float LUNAR_DISTANCE = 3.844e8F;
-	public static final double STEFAN_BOLTZMANN = 5.670373e-8;    // Stefan-Boltzmann constant, used to calculate temperature and luminosity related values
+	public static final float G = 6.674e-11F;                    // Gravitational constant
+	public static final float GAS_CONSTANT = 8.3143F;            // Universal gas constant
+	public static final double STEFAN_BOLTZMANN = 5.670373e-8;  // Stefan-Boltzmann constant, used to calculate temperature and luminosity related values
 
 	public static int UI_COLOR;
 	public static int BUTTON_COLOR;
@@ -94,7 +98,6 @@ public class Vekta extends PApplet {
 	public static PFont BODY_FONT;
 
 	public static XInputDevice device;
-	public static float accel;
 
 	public static final String OPERATING_SYSTEM = System.getProperty("os.name");
 
@@ -198,32 +201,30 @@ public class Vekta extends PApplet {
 		Resources.updateAudio();
 	}
 
-	XInputDeviceListener listener = new SimpleXInputDeviceListener() {
+	final XInputDeviceListener listener = new SimpleXInputDeviceListener() {
 
-		public void buttonChanged(final XInputButton button, final boolean pressed) {
-			if(pressed == true)
+		public void buttonChanged(XInputButton button, boolean pressed) {
+			if(pressed) {
 				context.buttonPressed(button);
-			else
+			}
+			else {
 				context.buttonReleased(button);
+			}
 		}
 	};
 
 	public void analogTriggerResponse() {
-		/*
-			Poll analog controls regardless of if they're pressed at all or not.
-		*/
+		// Poll analog controls regardless of if they're pressed at all or not.
 		XInputAxes axes = device.getComponents().getAxes();
 
-		/*
-			If you are accelerating you cannot deccelerate at the same time with analog and vice versa.
-		 */
+		// If you are accelerating you cannot deccelerate at the same time with analog and vice versa.
 		if(axes.lt == 0)
 			context.analogKeyPressed(axes.rt);
 		if(axes.rt == 0)
 			context.analogKeyPressed(-axes.lt);
 
-		context.controlStickMoved(axes.lx, axes.ly, "left");
-		context.controlStickMoved(axes.rx, axes.ry, "right");
+		context.controlStickMoved(axes.lx, axes.ly, LEFT);
+		context.controlStickMoved(axes.rx, axes.ry, RIGHT);
 	}
 
 	@Override
@@ -459,6 +460,9 @@ public class Vekta extends PApplet {
 		else if(mass >= EARTH_MASS * .1F) {
 			return roundString(mass / EARTH_MASS) + " Earths";
 		}
+		else if(mass >= LUNAR_MASS * .1F) {
+			return roundString(mass / LUNAR_MASS) + " Lunars";
+		}
 		else if(mass >= 1e5F) {
 			int order = 4;
 			mass /= 1e4;
@@ -476,10 +480,11 @@ public class Vekta extends PApplet {
 	}
 
 	public static String atmosphereString(float atmosphereDensity) {
-		if(atmosphereDensity >= .1) {
-			return roundString(atmosphereDensity) + " atm";
-		}
-		return String.format("%.3f atm", atmosphereDensity);
+		//		if(atmosphereDensity >= .1) {
+		//			return roundString(atmosphereDensity) + " Earths";
+		//		}
+		//		return String.format("%.3f Earths", atmosphereDensity);
+		return densityString(atmosphereDensity);
 	}
 
 	public static String temperatureStringCelsius(float temperature) {
@@ -504,8 +509,18 @@ public class Vekta extends PApplet {
 		return chance > 0 && (chance == 1 || v.random(1) < chance);
 	}
 
-	public float gaussian(float scale){
+	public float gaussian(float scale) {
 		return (float)(RANDOM.nextGaussian() * scale);
+	}
+
+	public float normalizeAngle(float angle) {
+		// Account for negative angles less than 2pi
+		return ((angle % TWO_PI) + TWO_PI) % TWO_PI;
+	}
+
+	public float deltaAngle(float a, float b) {
+		float result = normalizeAngle(b - a);
+		return result > PI ? TWO_PI - result : result;
 	}
 
 	/**

@@ -5,6 +5,8 @@ import vekta.spawner.location.FeatureLocationSpawner;
 import vekta.terrain.Terrain;
 import vekta.terrain.location.ProxyLocation;
 
+import java.util.Set;
+
 public class CloudsFeature extends FeatureLocationSpawner<String> {
 
 	@Override
@@ -35,5 +37,15 @@ public class CloudsFeature extends FeatureLocationSpawner<String> {
 			prefix = "Thin";
 		}
 		return (prefix != null ? prefix + " " : "") + location.getData();
+	}
+
+	@Override
+	public void onSurveyTags(ProxyLocation<String> location, Set<String> tags) {
+		tags.add(location.getName() + "s");
+	}
+
+	@Override
+	public String getOverview(ProxyLocation<String> location) {
+		return "Turbulence rattles your spacecraft as you venture into the storm.";
 	}
 }

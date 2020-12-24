@@ -3,7 +3,7 @@ package vekta.menu.option;
 import vekta.menu.Menu;
 import vekta.menu.handle.InternetMenuHandle;
 
-import static vekta.Vekta.*;
+import static vekta.Vekta.setContext;
 
 public class InternetMenuButton extends ButtonOption {
 	private final boolean connected;

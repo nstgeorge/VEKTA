@@ -1,11 +1,12 @@
 package vekta.module;
 
-import vekta.util.InfoGroup;
 import vekta.ecosystem.Ecosystem;
 import vekta.menu.Menu;
-import vekta.menu.handle.LandingMenuHandle;
+import vekta.menu.handle.LocationMenuHandle;
 import vekta.menu.option.EcosystemButton;
-import vekta.terrain.LandingSite;
+import vekta.terrain.Terrain;
+import vekta.terrain.location.Location;
+import vekta.util.InfoGroup;
 
 public class EcosystemScannerModule extends ShipModule {
 	private final float strength;
@@ -51,7 +52,7 @@ public class EcosystemScannerModule extends ShipModule {
 	//	public Module createVariant() {
 	//		return new EcosystemScannerModule(chooseInclusive(.1F, 2, .1F));
 	//	}
-	
+
 	@Override
 	public Module createVariant() {
 		return new EcosystemScannerModule();
@@ -59,13 +60,17 @@ public class EcosystemScannerModule extends ShipModule {
 
 	@Override
 	public void onMenu(Menu menu) {
-		if(menu.getHandle() instanceof LandingMenuHandle) {
-			LandingSite site = ((LandingMenuHandle)menu.getHandle()).getSite();
+		if(menu.getHandle() instanceof LocationMenuHandle) {
+			Location location = ((LocationMenuHandle)menu.getHandle()).getLocation();
 
-			Ecosystem ecosystem = site.getTerrain().getEcosystem();
+			if(location instanceof Terrain) {
+				Terrain terrain = (Terrain)location;
 
-			if(!ecosystem.getSpecies().isEmpty() || !ecosystem.getExtinctions().isEmpty()) {
-				menu.add(new EcosystemButton(ecosystem));
+				Ecosystem ecosystem = terrain.getEcosystem();
+
+				if(!ecosystem.getSpecies().isEmpty() || !ecosystem.getExtinctions().isEmpty()) {
+					menu.add(new EcosystemButton(ecosystem));
+				}
 			}
 		}
 	}

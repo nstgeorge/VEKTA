@@ -2,9 +2,8 @@ package vekta.object.planet;
 
 import processing.core.PVector;
 import vekta.terrain.AsteroidTerrain;
-import vekta.terrain.BlackHoleTerrain;
-import vekta.world.RenderLevel;
 import vekta.terrain.Terrain;
+import vekta.world.RenderLevel;
 
 import static processing.core.PConstants.TWO_PI;
 import static vekta.Vekta.v;
@@ -20,10 +19,10 @@ public class Asteroid extends TerrestrialPlanet {
 		skew = v.random(.5F, 1);
 	}
 
-//	@Override
-//	protected Terrain createTerrain() {
-//		return new AsteroidTerrain(this);
-//	}
+	@Override
+	protected Terrain chooseTerrain() {
+		return new AsteroidTerrain(this);
+	}
 
 	@Override
 	public float getValueScale() {

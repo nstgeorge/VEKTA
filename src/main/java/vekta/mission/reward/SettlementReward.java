@@ -1,7 +1,7 @@
 package vekta.mission.reward;
 
-import vekta.player.Player;
 import vekta.mission.Mission;
+import vekta.player.Player;
 import vekta.terrain.settlement.Settlement;
 
 public class SettlementReward extends Reward {

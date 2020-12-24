@@ -1,7 +1,7 @@
 package vekta.menu.option;
 
-import vekta.world.World;
 import vekta.menu.Menu;
+import vekta.world.World;
 
 import java.io.Serializable;
 

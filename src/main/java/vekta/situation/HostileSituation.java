@@ -1,11 +1,10 @@
 package vekta.situation;
 
-import vekta.player.Player;
 import vekta.Resources;
 import vekta.object.SpaceObject;
 import vekta.object.planet.TerrestrialPlanet;
+import vekta.player.Player;
 import vekta.sound.SoundGroup;
-import vekta.terrain.LandingSite;
 import vekta.terrain.settlement.Settlement;
 
 import static vekta.Vekta.DANGER_COLOR;
@@ -18,8 +17,7 @@ public class HostileSituation implements Situation {
 	public boolean isHappening(Player player) {
 		SpaceObject orbit = getWorld().findOrbitObject(player.getShip());
 		if(orbit instanceof TerrestrialPlanet) {
-			LandingSite site = ((TerrestrialPlanet)orbit).getLandingSite();
-			for(Settlement settlement : site.getTerrain().findVisitableSettlements()) {
+			for(Settlement settlement : ((TerrestrialPlanet)orbit).findVisitableSettlements()) {
 				if(settlement.getFaction().isEnemy(player.getFaction())) {
 					return true;
 				}

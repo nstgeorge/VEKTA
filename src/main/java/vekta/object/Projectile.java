@@ -5,7 +5,6 @@ import vekta.object.ship.Damageable;
 import vekta.object.ship.Damager;
 import vekta.world.RenderLevel;
 
-import static processing.core.PApplet.println;
 import static vekta.Vekta.getWorld;
 import static vekta.Vekta.v;
 

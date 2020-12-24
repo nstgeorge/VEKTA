@@ -1,10 +1,10 @@
 package vekta.item;
 
-import vekta.util.InfoGroup;
 import vekta.menu.Menu;
 import vekta.menu.handle.DialogMenuHandle;
 import vekta.person.Dialog;
 import vekta.person.Person;
+import vekta.util.InfoGroup;
 
 import java.util.HashSet;
 import java.util.Set;

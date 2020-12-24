@@ -1,8 +1,8 @@
 package vekta.item;
 
-import vekta.util.InfoGroup;
 import vekta.menu.Menu;
 import vekta.module.Module;
+import vekta.util.InfoGroup;
 
 import static processing.core.PApplet.round;
 import static vekta.Vekta.v;

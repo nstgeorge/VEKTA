@@ -1,7 +1,7 @@
 package vekta.deity;
 
-import vekta.sync.Syncable;
 import vekta.item.category.ItemCategory;
+import vekta.sync.Syncable;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,12 +1,13 @@
 package vekta.item;
 
-import vekta.util.InfoGroup;
-import vekta.player.Player;
 import vekta.menu.Menu;
+import vekta.player.Player;
+import vekta.util.InfoGroup;
 
 import java.io.Serializable;
 
-import static processing.core.PApplet.*;
+import static processing.core.PApplet.ceil;
+import static processing.core.PApplet.max;
 import static vekta.Vekta.v;
 
 public abstract class Item implements Serializable, Comparable<Item> {

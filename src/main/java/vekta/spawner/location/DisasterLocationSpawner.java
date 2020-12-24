@@ -1,16 +1,14 @@
 package vekta.spawner.location;
 
 import vekta.Resources;
-import vekta.spawner.location.FeatureLocationSpawner;
 import vekta.terrain.Terrain;
 import vekta.terrain.location.ProxyLocation;
 
-import java.util.Map;
 import java.util.Set;
 
 import static java.lang.Math.max;
 
-public class DisasterFeature extends ProxyLocationSpawner<String> {
+public class DisasterLocationSpawner extends ProxyLocationSpawner<String> {
 
 	@Override
 	public boolean isValid(Terrain terrain) {

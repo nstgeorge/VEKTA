@@ -1,12 +1,10 @@
 package vekta.terrain;
 
 import processing.core.PVector;
-import vekta.sync.Syncable;
-import vekta.knowledge.ObservationLevel;
 import vekta.object.SpaceObject;
 import vekta.object.ship.Ship;
-import vekta.sound.Tune;
-import vekta.spawner.TuneGenerator;
+import vekta.sync.Syncable;
+import vekta.terrain.location.Location;
 
 import static vekta.Vekta.*;
 
@@ -14,36 +12,26 @@ import static vekta.Vekta.*;
  * A landing site for one spacecraft-like object.
  */
 public class LandingSite extends Syncable<LandingSite> {
-	private static final float LAUNCH_SPEED_SCALE = 1;
+	private static final float LAUNCH_SPEED_SCALE = .5F;
 
-	private final SpaceObject parent;
-	private final Terrain terrain;
-
-	private final Tune tune = TuneGenerator.randomTune();
+	private final Location location;
 
 	private Ship landed;
 
-	public LandingSite(SpaceObject parent, Terrain terrain) {
-		this.parent = parent;
-		this.terrain = terrain;
-
-//		terrain.setup(this);
+	public LandingSite(Location location) {
+		this.location = location;
 	}
 
 	public SpaceObject getParent() {
-		return parent;
+		return getLocation().getPlanet();
 	}
 
-	public Terrain getTerrain() {
-		return terrain;
+	public Location getLocation() {
+		return location;
 	}
 
 	public Ship getLanded() {
 		return landed;
-	}
-
-	public Tune getTune() {
-		return tune;
 	}
 
 	public void land(Ship ship) {
@@ -60,7 +48,7 @@ public class LandingSite extends Syncable<LandingSite> {
 		landed.setVelocity(velocity);
 		//		landed.getPositionReference().add(velocity.mult(getWorld().getTimeScale()));
 
-		ship.setTemperatureKelvin(ship.getOptimalTemperature()); // TODO: adjust based on planet temperature
+		ship.setTemperatureKelvin(ship.getOptimalTemperature());
 		ship.doLand(this);
 	}
 
@@ -71,6 +59,7 @@ public class LandingSite extends Syncable<LandingSite> {
 
 		register(landed);
 		landed.undock(); // Start landing debounce
+		landed.setHeading(getParent().relativePosition(landed));
 		landed.onDepart(getParent());
 		landed = null;
 	}
@@ -79,6 +68,6 @@ public class LandingSite extends Syncable<LandingSite> {
 	 * Compute the launch speed
 	 */
 	private float getLaunchSpeed() {
-		return (float)Math.sqrt(2 * G * parent.getMass() / parent.getRadius()) * LAUNCH_SPEED_SCALE;
+		return (float)Math.sqrt(2 * G * getParent().getMass() / getParent().getRadius()) * LAUNCH_SPEED_SCALE;
 	}
 }

@@ -1,11 +1,11 @@
 package vekta.knowledge;
 
-import vekta.player.Player;
 import vekta.display.Layout;
 import vekta.display.TextDisplay;
 import vekta.display.VerticalLayout;
 import vekta.display.VisualDisplay;
 import vekta.object.SpaceObject;
+import vekta.player.Player;
 import vekta.terrain.settlement.Settlement;
 
 import static vekta.Vekta.quantityString;
@@ -65,7 +65,7 @@ public class SettlementKnowledge extends SpaceObjectKnowledge {
 					.customize().color(v.lerpColor(0, getSettlement().getColor(), .5F));
 		}
 
-		layout.add(new TextDisplay("Planet: " + getSpaceObject().getName()))
+		layout.add(new TextDisplay("Location: " + getSettlement().getLocation().getFullName()))
 				.customize().color(getSpaceObject().getColor());
 
 		if(ObservationLevel.SCANNED.isAvailableFrom(getLevel())) {

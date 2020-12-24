@@ -1,8 +1,8 @@
 package vekta.connection.message;
 
-import vekta.player.Player;
 import vekta.connection.MessageListener;
 import vekta.connection.Peer;
+import vekta.player.Player;
 
 public class PlayerJoinMessage implements Message {
 	private final Player player;

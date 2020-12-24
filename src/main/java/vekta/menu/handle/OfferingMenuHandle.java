@@ -1,7 +1,6 @@
 package vekta.menu.handle;
 
 import vekta.deity.Deity;
-import vekta.menu.Menu;
 
 public class OfferingMenuHandle extends SideLayoutMenuHandle {
 	private final Deity deity;

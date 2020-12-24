@@ -1,7 +1,6 @@
 package vekta.knowledge;
 
 import vekta.KeyBinding;
-import vekta.player.Player;
 import vekta.Resources;
 import vekta.Settings;
 import vekta.display.Layout;
@@ -11,6 +10,7 @@ import vekta.menu.handle.KnowledgeMenuHandle;
 import vekta.menu.option.BackButton;
 import vekta.menu.option.TargetButton;
 import vekta.object.SpaceObject;
+import vekta.player.Player;
 
 import static vekta.Vekta.*;
 

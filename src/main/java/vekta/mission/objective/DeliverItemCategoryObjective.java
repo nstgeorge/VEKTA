@@ -1,12 +1,10 @@
 package vekta.mission.objective;
 
-import vekta.item.Inventory;
 import vekta.item.Item;
 import vekta.item.category.ItemCategory;
 import vekta.menu.Menu;
 import vekta.menu.handle.DialogMenuHandle;
 import vekta.menu.option.CustomButton;
-import vekta.mission.Mission;
 import vekta.object.SpaceObject;
 import vekta.person.Dialog;
 import vekta.person.Person;

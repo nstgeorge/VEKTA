@@ -1,9 +1,7 @@
 package vekta.terrain.location;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import vekta.config.LocationConfig;
 import vekta.object.planet.TerrestrialPlanet;
-import vekta.player.Player;
 
 import java.util.Set;
 
@@ -33,7 +31,7 @@ public class ConfigLocation extends Location {
 	}
 
 	@Override
-	public boolean isVisitable(Player player) {
+	public boolean isVisitable() {
 		return config.visitable.asBoolean(this);
 	}
 

@@ -1,11 +1,15 @@
 package vekta.module;
 
+import processing.core.PVector;
 import vekta.KeyBinding;
+import vekta.Settings;
 import vekta.menu.Menu;
 import vekta.object.ship.ModularShip;
 import vekta.util.InfoGroup;
 
 import static java.lang.Math.abs;
+import static processing.core.PConstants.LEFT;
+import static vekta.Vekta.CONTROLLER_DEADZONE;
 import static vekta.Vekta.v;
 
 public class RCSModule extends ShipModule {
@@ -65,7 +69,7 @@ public class RCSModule extends ShipModule {
 		}
 	}
 
-	private void resetTurn(){
+	private void resetTurn() {
 		turnStart = System.currentTimeMillis();
 	}
 
@@ -85,6 +89,15 @@ public class RCSModule extends ShipModule {
 	public void onKeyRelease(KeyBinding key) {
 		if((key == KeyBinding.SHIP_LEFT && getShip().getTurnControl() == -1) || (key == KeyBinding.SHIP_RIGHT && getShip().getTurnControl() == 1)) {
 			getShip().setTurnControl(0);
+		}
+	}
+
+	@Override
+	public void onControlStickMoved(float x, float y, int side) {
+		if(side == LEFT && getShip().hasEnergy()) {
+			if(Math.sqrt(Math.abs(x) + Math.abs(y)) > CONTROLLER_DEADZONE * Settings.getInt("deadzone")) {
+				getShip().setHeading(new PVector(x, -y));
+			}
 		}
 	}
 

@@ -1,12 +1,12 @@
 package vekta.menu.option;
 
-import vekta.util.InfoGroup;
 import vekta.display.Layout;
 import vekta.ecosystem.Ecosystem;
 import vekta.ecosystem.Species;
 import vekta.item.ItemType;
 import vekta.menu.Menu;
 import vekta.menu.handle.MenuHandle;
+import vekta.util.InfoGroup;
 
 import static vekta.Vekta.quantityString;
 import static vekta.Vekta.v;

@@ -1,7 +1,6 @@
 package vekta.menu.handle;
 
 import vekta.KeyBinding;
-import vekta.menu.Menu;
 import vekta.object.SpaceObject;
 
 import static vekta.Vekta.v;

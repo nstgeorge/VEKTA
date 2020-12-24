@@ -1,8 +1,8 @@
 package vekta.mission.reward;
 
-import vekta.player.Player;
 import vekta.item.Item;
 import vekta.mission.Mission;
+import vekta.player.Player;
 
 public class ItemReward extends Reward {
 	private final Item item;

@@ -1,12 +1,11 @@
 package vekta.spawner.world;
 
 import processing.core.PVector;
-import vekta.spawner.TerrainGenerator;
-import vekta.world.RenderLevel;
 import vekta.Resources;
 import vekta.object.SpaceObject;
 import vekta.object.planet.*;
 import vekta.spawner.WorldGenerator;
+import vekta.world.RenderLevel;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -14,7 +13,8 @@ import java.util.List;
 
 import static processing.core.PApplet.pow;
 import static vekta.Vekta.*;
-import static vekta.spawner.WorldGenerator.*;
+import static vekta.spawner.WorldGenerator.orbit;
+import static vekta.spawner.WorldGenerator.randomPlanetColor;
 
 public class StarSystemSpawner implements WorldGenerator.WorldSpawner {
 	@Override

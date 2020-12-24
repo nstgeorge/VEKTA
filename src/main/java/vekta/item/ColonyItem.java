@@ -1,12 +1,11 @@
 package vekta.item;
 
 import vekta.faction.Faction;
-import vekta.util.InfoGroup;
 import vekta.menu.Menu;
-import vekta.menu.handle.LandingMenuHandle;
+import vekta.menu.handle.LocationMenuHandle;
 import vekta.menu.option.ColonizeButton;
-import vekta.terrain.LandingSite;
-import vekta.terrain.Terrain;
+import vekta.terrain.location.Location;
+import vekta.util.InfoGroup;
 
 public class ColonyItem extends Item {
 	private final Faction faction;
@@ -40,12 +39,12 @@ public class ColonyItem extends Item {
 
 	@Override
 	public void onMenu(Menu menu) {
-		if(menu.getHandle() instanceof LandingMenuHandle) {
-			LandingSite site = ((LandingMenuHandle)menu.getHandle()).getSite();
-			Terrain terrain = site.getTerrain();
-			if(terrain.isHabitable() && !terrain.isInhabited()) {
+		if(menu.getHandle() instanceof LocationMenuHandle) {
+			Location location = ((LocationMenuHandle)menu.getHandle()).getLocation();
+
+			if(location.isHabitable() && !location.isInhabited()) {
 				if(menu.getOptions().stream().noneMatch(opt -> opt instanceof ColonizeButton && ((ColonizeButton)opt).getItem().getFaction() == getFaction())) {
-					menu.add(new ColonizeButton(this, site));
+					menu.add(new ColonizeButton(this, location));
 				}
 			}
 		}

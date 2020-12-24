@@ -78,7 +78,7 @@ public class SettlementMenuHandle extends MenuHandle {
 
 		v.textSize(32);
 		v.fill(100);
-		v.text("Welcome to", v.width / 2F, v.height / 4F - 64);
+//		v.text("Welcome to", v.width / 2F, v.height / 4F - 64);
 
 		v.textSize(48);
 		v.fill(settlement.getColor());

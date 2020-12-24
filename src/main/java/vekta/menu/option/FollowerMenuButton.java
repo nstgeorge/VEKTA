@@ -1,10 +1,10 @@
 package vekta.menu.option;
 
-import vekta.player.Player;
 import vekta.menu.Menu;
 import vekta.menu.handle.FollowerMenuHandle;
 import vekta.person.Dialog;
 import vekta.person.Person;
+import vekta.player.Player;
 
 import java.util.List;
 import java.util.stream.Collectors;

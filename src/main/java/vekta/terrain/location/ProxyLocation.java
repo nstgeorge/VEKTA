@@ -3,7 +3,6 @@ package vekta.terrain.location;
 import vekta.menu.Menu;
 import vekta.menu.handle.MenuHandle;
 import vekta.object.planet.TerrestrialPlanet;
-import vekta.player.Player;
 import vekta.spawner.location.ProxyLocationSpawner;
 
 import java.io.Serializable;
@@ -37,11 +36,23 @@ public class ProxyLocation<T extends Serializable> extends Location {
 		if(proxy == null) {
 			proxy = ProxyLocationSpawner.findProxy(cls);
 			if(proxy == null) {
-				throw new RuntimeException("Spawner not found for " + cls.getSimpleName());
+				throw new RuntimeException("Spawner not found for " + cls);
 			}
 		}
 		return proxy;
 	}
+
+//	@Override
+//	protected String chooseWittyText() {
+//		String text = getProxy().chooseWittyText(this);
+//		return text != null ? text : super.chooseWittyText();
+//	}
+//
+//	@Override
+//	protected Tune chooseTune() {
+//		Tune tune = getProxy().chooseTune(this);
+//		return tune != null ? tune : super.chooseTune();
+//	}
 
 	@Override
 	public String getName() {
@@ -65,7 +76,7 @@ public class ProxyLocation<T extends Serializable> extends Location {
 	}
 
 	@Override
-	public boolean isVisitable(Player player) {
+	public boolean isVisitable() {
 		return getProxy().isVisitable(this);
 	}
 
@@ -75,13 +86,13 @@ public class ProxyLocation<T extends Serializable> extends Location {
 	}
 
 	@Override
-	protected MenuHandle createMenuHandle() {
+	protected MenuHandle chooseMenuHandle() {
 		MenuHandle handle = getProxy().overrideMenuHandle(this);
-		return handle != null ? handle : super.createMenuHandle();
+		return handle != null ? handle : super.chooseMenuHandle();
 	}
 
 	@Override
-	public void onVisitMenu(Menu menu) {
+	public void onSetupMenu(Menu menu) {
 		getProxy().onVisitMenu(this, menu);
 	}
 

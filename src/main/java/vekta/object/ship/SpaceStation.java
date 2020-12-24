@@ -1,15 +1,15 @@
 package vekta.object.ship;
 
 import processing.core.PVector;
-import vekta.menu.option.ShipSwitchButton;
-import vekta.world.RenderLevel;
 import vekta.context.StationLayoutContext;
 import vekta.menu.Menu;
 import vekta.menu.option.CustomButton;
+import vekta.menu.option.ShipSwitchButton;
 import vekta.module.Module;
 import vekta.module.ModuleType;
 import vekta.module.station.ComponentModule;
 import vekta.module.station.StationCoreModule;
+import vekta.world.RenderLevel;
 
 import java.awt.*;
 import java.io.Serializable;

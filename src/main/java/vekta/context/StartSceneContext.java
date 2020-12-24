@@ -4,8 +4,6 @@ import vekta.KeyBinding;
 import vekta.Resources;
 import vekta.ui.Typewriter;
 
-import java.util.Arrays;
-
 import static processing.core.PConstants.CORNERS;
 import static vekta.Vekta.v;
 

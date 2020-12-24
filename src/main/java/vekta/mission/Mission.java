@@ -1,12 +1,12 @@
 package vekta.mission;
 
-import vekta.player.Player;
-import vekta.player.PlayerEvent;
 import vekta.Resources;
-import vekta.sync.Syncable;
 import vekta.connection.message.ShareMissionMessage;
 import vekta.mission.objective.Objective;
 import vekta.mission.reward.Reward;
+import vekta.player.Player;
+import vekta.player.PlayerEvent;
+import vekta.sync.Syncable;
 import vekta.util.RomanNumerals;
 
 import java.util.ArrayList;

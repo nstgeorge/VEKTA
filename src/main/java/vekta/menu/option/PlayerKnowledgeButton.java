@@ -1,8 +1,8 @@
 package vekta.menu.option;
 
-import vekta.player.Player;
 import vekta.context.KnowledgeContext;
 import vekta.menu.Menu;
+import vekta.player.Player;
 
 import static vekta.Vekta.getContext;
 import static vekta.Vekta.setContext;

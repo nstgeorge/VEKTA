@@ -7,7 +7,6 @@ import vekta.menu.option.FastTravelMenuButton;
 import vekta.menu.option.RenameButton;
 import vekta.object.planet.BlackHole;
 import vekta.object.planet.TerrestrialPlanet;
-import vekta.player.Player;
 
 import java.util.Set;
 
@@ -33,7 +32,7 @@ public class BlackHoleTerrain extends Terrain {
 	}
 
 	@Override
-	public void onVisitMenu(Menu menu) {
+	public void onVisitTerrainMenu(Menu menu) {
 		// TODO convert items to energy by mass (Penrose Process)
 		// TODO timewarp
 

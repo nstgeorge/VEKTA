@@ -1,6 +1,7 @@
 package vekta.terrain.settlement;
 
-import vekta.*;
+import vekta.Renameable;
+import vekta.Resources;
 import vekta.economy.Economy;
 import vekta.economy.ProductivityModifier;
 import vekta.faction.Faction;
@@ -22,7 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static processing.core.PApplet.*;
+import static processing.core.PApplet.ceil;
+import static processing.core.PApplet.pow;
 import static vekta.Vekta.register;
 
 public abstract class Settlement extends Syncable<Settlement> implements SettlementPart, Economy.Container, ProductivityModifier, Renameable {
@@ -56,7 +58,9 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 
 		setFaction(faction);
 
-		SettlementGenerator.populateSettlement(this);//////TODO: Check init order
+		SettlementGenerator.populateSettlement(this);
+
+		location.notifySettlement(this);
 	}
 
 	public Location getLocation() {

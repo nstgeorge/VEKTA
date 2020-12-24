@@ -1,15 +1,9 @@
 package vekta.terrain.location;
 
-import vekta.module.ModuleType;
 import vekta.object.planet.TerrestrialPlanet;
-import vekta.player.Player;
-import vekta.spawner.EcosystemGenerator;
-import vekta.sync.Sync;
-import vekta.terrain.Terrain;
 
 import java.util.Set;
 
-import static processing.core.PApplet.round;
 import static vekta.Vekta.v;
 
 public class OceanLocation extends Location {
@@ -88,7 +82,7 @@ public class OceanLocation extends Location {
 	//		return loot;
 	//	}
 
-	public boolean isVisitable(Player player) {
+	public boolean isVisitable() {
 		//		return !isDepleted() && player.getShip().getModules().stream()
 		//				.anyMatch(m -> m.getType() == ModuleType.OCEAN);
 		return false;

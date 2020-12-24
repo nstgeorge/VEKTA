@@ -1,16 +1,16 @@
 package vekta.module;
 
-import vekta.menu.handle.LocationMenuHandle;
-import vekta.terrain.location.Location;
-import vekta.terrain.location.MiningLocation;
-import vekta.util.InfoGroup;
 import vekta.item.Inventory;
 import vekta.menu.Menu;
+import vekta.menu.handle.LocationMenuHandle;
 import vekta.menu.handle.SpaceObjectMenuHandle;
 import vekta.menu.option.ExtractMenuButton;
 import vekta.menu.option.LootMenuButton;
 import vekta.object.RingDebris;
 import vekta.object.SpaceObject;
+import vekta.terrain.location.Location;
+import vekta.terrain.location.MiningLocation;
+import vekta.util.InfoGroup;
 
 public class MiningModule extends ShipModule {
 	private final float efficiency;
@@ -62,7 +62,7 @@ public class MiningModule extends ShipModule {
 		if(menu.getHandle() instanceof LocationMenuHandle) {
 			Location location = ((LocationMenuHandle)menu.getHandle()).getLocation();
 
-			if(location instanceof MiningLocation) {
+			if(location instanceof MiningLocation && !((MiningLocation)location).isDepleted()) {
 				menu.add(new ExtractMenuButton((MiningLocation)location, getEfficiency()));
 			}
 		}

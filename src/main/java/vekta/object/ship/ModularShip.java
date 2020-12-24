@@ -2,16 +2,19 @@ package vekta.object.ship;
 
 import com.google.common.collect.ImmutableMap;
 import processing.core.PVector;
-import vekta.*;
-import vekta.module.*;
-import vekta.module.Module;
-import vekta.world.World;
+import vekta.KeyBinding;
+import vekta.Resources;
+import vekta.Settings;
 import vekta.item.Item;
 import vekta.item.ModuleItem;
 import vekta.knowledge.ObservationLevel;
 import vekta.menu.Menu;
 import vekta.menu.handle.SpaceObjectMenuHandle;
 import vekta.menu.option.*;
+import vekta.module.Module;
+import vekta.module.ModuleType;
+import vekta.module.ModuleUpgradeable;
+import vekta.module.TargetingModule;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 import vekta.player.Player;
@@ -19,6 +22,7 @@ import vekta.player.PlayerEvent;
 import vekta.player.PlayerListener;
 import vekta.terrain.LandingSite;
 import vekta.world.RenderLevel;
+import vekta.world.World;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,6 +32,7 @@ import java.util.Map;
 import static vekta.Vekta.*;
 
 public abstract class ModularShip extends Ship implements ModuleUpgradeable, PlayerListener, Rechargeable {
+
 	private static final Map<KeyBinding, Class<? extends MenuOption>> SHORTCUT_MAP = ImmutableMap.<KeyBinding, Class<? extends MenuOption>>builder()
 			.put(KeyBinding.SHIP_KNOWLEDGE, PlayerKnowledgeButton.class)
 			.put(KeyBinding.SHIP_MISSIONS, MissionMenuButton.class)
@@ -94,7 +99,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	}
 
 	public float getMaxZoomLevel() {
-		return isHyperdriving() ? INTERSTELLAR_LEVEL : STAR_LEVEL * .99F; // Slightly below STAR_LEVEL to pacify smooth zooming
+		return isHyperdriving() ? INTERSTELLAR_LEVEL : STAR_LEVEL; // Slightly below STAR_LEVEL to pacify smooth zooming
 	}
 
 	public boolean isLanding() {
@@ -434,13 +439,10 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		if(hasController()) {
 			Player player = getController();
 
-			site.getTerrain().openMenu(player, new ShipTakeoffButton(site, getWorld()));
+			site.getLocation().openMenu(player, new ShipTakeoffButton(site, getWorld()));
 
 			Resources.playSound("land");
 			this.setLanding(false);
-
-			player.emit(PlayerEvent.VISIT, site.getTerrain());
-			site.getParent().observe(ObservationLevel.VISITED, player);
 		}
 	}
 
@@ -490,7 +492,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		updateMass();
 	}
 
-	//// PlayerListener callbacks, active when hasController() == true
+	//// PlayerListener callbacks, active when `hasController() == true`
 
 	@Override
 	public void onMenu(Menu menu) {

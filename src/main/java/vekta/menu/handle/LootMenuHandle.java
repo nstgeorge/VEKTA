@@ -1,7 +1,6 @@
 package vekta.menu.handle;
 
 import vekta.item.Inventory;
-import vekta.menu.Menu;
 
 import static vekta.Vekta.UI_COLOR;
 import static vekta.Vekta.v;

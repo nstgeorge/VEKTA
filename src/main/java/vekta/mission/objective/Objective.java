@@ -1,11 +1,11 @@
 package vekta.mission.objective;
 
-import vekta.player.PlayerListener;
-import vekta.sync.Syncable;
 import vekta.mission.Mission;
 import vekta.mission.MissionListener;
 import vekta.mission.MissionStatus;
 import vekta.object.SpaceObject;
+import vekta.player.PlayerListener;
+import vekta.sync.Syncable;
 
 import java.io.Serializable;
 import java.util.ArrayList;

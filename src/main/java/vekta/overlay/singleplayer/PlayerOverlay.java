@@ -1,9 +1,9 @@
 package vekta.overlay.singleplayer;
 
-import vekta.player.Player;
-import vekta.player.PlayerListener;
 import vekta.object.ship.ModularShip;
 import vekta.overlay.Overlay;
+import vekta.player.Player;
+import vekta.player.PlayerListener;
 
 import static processing.core.PConstants.LEFT;
 import static vekta.Vekta.BODY_FONT;

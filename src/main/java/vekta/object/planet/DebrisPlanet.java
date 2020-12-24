@@ -1,8 +1,8 @@
 package vekta.object.planet;
 
 import processing.core.PVector;
-import vekta.world.RenderLevel;
 import vekta.object.SpaceObject;
+import vekta.world.RenderLevel;
 
 import static vekta.Vekta.getWorld;
 

@@ -1,11 +1,11 @@
 package vekta.menu.option;
 
-import vekta.player.Player;
 import vekta.Resources;
 import vekta.menu.Menu;
 import vekta.menu.handle.MenuHandle;
-import vekta.terrain.settlement.building.upgrade.SettlementUpgrade;
+import vekta.player.Player;
 import vekta.terrain.settlement.Settlement;
+import vekta.terrain.settlement.building.upgrade.SettlementUpgrade;
 
 import java.util.ArrayList;
 import java.util.Arrays;

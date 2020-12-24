@@ -1,10 +1,10 @@
 package vekta.connection.message;
 
 import processing.core.PVector;
-import vekta.world.WorldState;
 import vekta.connection.MessageListener;
 import vekta.connection.Peer;
 import vekta.object.SpaceObject;
+import vekta.world.WorldState;
 
 public class MoveMessage implements Message {
 	private final long id;

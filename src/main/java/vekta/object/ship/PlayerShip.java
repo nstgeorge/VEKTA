@@ -1,9 +1,8 @@
 package vekta.object.ship;
 
 import processing.core.PVector;
-import vekta.object.planet.TerrestrialPlanet;
-import vekta.world.RenderLevel;
 import vekta.module.*;
+import vekta.world.RenderLevel;
 
 import static vekta.Vekta.v;
 
@@ -61,8 +60,7 @@ public class PlayerShip extends ModularShip {
 		if(isRemote() && velocity.magSq() > 1) {
 			setHeading(getVelocity());
 		}
-		TerrestrialPlanet nearest = getNearestPlanet();
-		drawReentryEffect(r, nearest);
+		drawReentryEffect(r);//////
 		drawShip(r, ShipModelType.DEFAULT);
 	}
 

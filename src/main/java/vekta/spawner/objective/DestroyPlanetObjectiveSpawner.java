@@ -32,8 +32,8 @@ public class DestroyPlanetObjectiveSpawner implements MissionGenerator.Objective
 	@Override
 	public Objective getMainObjective(Mission mission) {
 		List<SpaceObject> candidates = getWorld().findObjects(TerrestrialPlanet.class).stream()
-				.filter(p -> {
-					for(Settlement settlement : p.getTerrain().findVisitableSettlements()) {
+				.filter(planet -> {
+					for(Settlement settlement : planet.findVisitableSettlements()) {
 						Faction faction = settlement.getFaction();
 						if(faction.isAlly(mission.getPlayer().getFaction()) || faction.isAlly(mission.getIssuer().getFaction())) {
 							return false;

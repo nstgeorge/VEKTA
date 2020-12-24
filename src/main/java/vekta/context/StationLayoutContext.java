@@ -1,6 +1,8 @@
 package vekta.context;
 
-import vekta.*;
+import vekta.KeyBinding;
+import vekta.Resources;
+import vekta.Settings;
 import vekta.item.Inventory;
 import vekta.menu.Menu;
 import vekta.menu.handle.LoadoutMenuHandle;

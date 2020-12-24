@@ -1,11 +1,11 @@
 package vekta.knowledge;
 
-import vekta.player.Player;
 import vekta.deity.Deity;
 import vekta.display.Layout;
 import vekta.display.TextDisplay;
 import vekta.display.VerticalLayout;
 import vekta.item.ItemType;
+import vekta.player.Player;
 
 import static vekta.Vekta.v;
 

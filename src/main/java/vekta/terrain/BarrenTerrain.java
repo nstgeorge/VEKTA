@@ -1,12 +1,8 @@
 package vekta.terrain;
 
 import vekta.object.planet.TerrestrialPlanet;
-import vekta.spawner.EcosystemGenerator;
 
 import java.util.Set;
-
-import static processing.core.PApplet.round;
-import static vekta.Vekta.v;
 
 public class BarrenTerrain extends Terrain {
 

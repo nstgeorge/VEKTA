@@ -20,7 +20,7 @@ import static processing.core.PApplet.sqrt;
 import static vekta.Vekta.getWorld;
 
 public class TargetingModule extends ShipModule implements Targeter {
-	private static final float AUTO_ZOOM_SCALE = 150;
+	private static final float AUTO_ZOOM_SCALE = .015f;
 
 	private TargetingMode mode;
 	private SpaceObject target;
@@ -128,7 +128,7 @@ public class TargetingModule extends ShipModule implements Targeter {
 		if(target != null) {
 			float distSq = target.relativePosition(getShip()).magSq();
 			if(!RenderLevel.SHIP.isVisibleTo(getWorld().getRenderLevel()) || distSq > sq(WorldGenerator.getRadius(RenderLevel.SHIP))) {
-				return sqrt(sqrt(distSq)) * AUTO_ZOOM_SCALE;
+				return sqrt(distSq) * AUTO_ZOOM_SCALE;
 			}
 		}
 		return getWorld().getZoom();

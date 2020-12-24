@@ -4,7 +4,6 @@ import vekta.menu.Menu;
 import vekta.menu.handle.SurveyMenuHandle;
 import vekta.object.SpaceObject;
 
-import java.util.List;
 import java.util.Set;
 
 public class SurveyObjective extends Objective {

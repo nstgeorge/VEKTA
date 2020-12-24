@@ -1,13 +1,10 @@
 package vekta.context;
 
 import com.github.strikerx3.jxinput.enums.XInputButton;
-import com.github.strikerx3.jxinput.listener.SimpleXInputDeviceListener;
-import com.github.strikerx3.jxinput.listener.XInputDeviceListener;
 import processing.event.KeyEvent;
 import vekta.KeyBinding;
 import vekta.Settings;
 import vekta.overlay.Overlay;
-import com.github.strikerx3.jxinput.XInputDevice14;
 
 public interface Context extends Overlay {
 	/**
@@ -57,7 +54,7 @@ public interface Context extends Overlay {
 	/**
 	 * What to do when the control stick is moved.
 	 */
-	default void controlStickMoved(float x, float y, String LR) {
+	default void controlStickMoved(float x, float y, int side) {
 	}
 
 	/**

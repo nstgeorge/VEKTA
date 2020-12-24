@@ -1,13 +1,13 @@
 package vekta.item;
 
 import vekta.faction.Faction;
-import vekta.player.Player;
 import vekta.mission.Mission;
 import vekta.mission.MissionIssuer;
 import vekta.mission.objective.KeepItemObjective;
 import vekta.mission.objective.Objective;
 import vekta.object.SpaceObject;
 import vekta.object.planet.TerrestrialPlanet;
+import vekta.player.Player;
 import vekta.spawner.FactionGenerator;
 
 import java.io.Serializable;

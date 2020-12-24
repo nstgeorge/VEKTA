@@ -1,8 +1,8 @@
 package vekta.terrain.settlement;
 
-import vekta.faction.Faction;
 import vekta.economy.Economy;
 import vekta.economy.NoiseModifier;
+import vekta.faction.Faction;
 import vekta.item.Item;
 import vekta.item.ItemType;
 import vekta.item.ModuleItem;

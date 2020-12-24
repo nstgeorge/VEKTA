@@ -1,14 +1,14 @@
 package vekta.spawner.event;
 
 import processing.core.PVector;
-import vekta.player.Player;
-import vekta.world.RenderLevel;
 import vekta.object.ship.MessengerShip;
 import vekta.person.Dialog;
+import vekta.player.Player;
 import vekta.spawner.DialogGenerator;
 import vekta.spawner.EventGenerator;
 import vekta.spawner.MissionGenerator;
 import vekta.spawner.WorldGenerator;
+import vekta.world.RenderLevel;
 
 import static vekta.Vekta.register;
 

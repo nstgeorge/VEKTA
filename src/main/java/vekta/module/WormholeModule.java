@@ -1,7 +1,6 @@
 package vekta.module;
 
 import processing.core.PVector;
-import vekta.util.InfoGroup;
 import vekta.KeyBinding;
 import vekta.Resources;
 import vekta.item.Item;
@@ -10,6 +9,7 @@ import vekta.menu.handle.SpaceObjectMenuHandle;
 import vekta.menu.option.CustomButton;
 import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
+import vekta.util.InfoGroup;
 
 import static vekta.Vekta.*;
 

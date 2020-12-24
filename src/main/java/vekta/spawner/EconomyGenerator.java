@@ -1,8 +1,8 @@
 package vekta.spawner;
 
-import vekta.faction.Faction;
 import vekta.Resources;
 import vekta.economy.Economy;
+import vekta.faction.Faction;
 
 public class EconomyGenerator {
 	private static final EconomySpawner[] SPAWNERS = Resources.findSubclassInstances(EconomySpawner.class);

@@ -1,10 +1,10 @@
 package vekta.module;
 
 import processing.core.PVector;
-import vekta.util.Counter;
-import vekta.util.InfoGroup;
 import vekta.object.SpaceObject;
 import vekta.spawner.WorldGenerator;
+import vekta.util.Counter;
+import vekta.util.InfoGroup;
 
 import static vekta.Vekta.getWorld;
 

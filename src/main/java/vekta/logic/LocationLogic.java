@@ -1,7 +1,5 @@
 package vekta.logic;
 
-import com.fasterxml.jackson.annotation.JacksonInject;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import vekta.terrain.condition.PlanetQuantity;
 import vekta.terrain.location.Location;
 

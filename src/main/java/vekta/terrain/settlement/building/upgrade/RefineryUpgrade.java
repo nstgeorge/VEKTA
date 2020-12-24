@@ -1,9 +1,9 @@
 package vekta.terrain.settlement.building.upgrade;
 
-import vekta.player.Player;
 import vekta.economy.TemporaryModifier;
-import vekta.terrain.settlement.building.RefineryBuilding;
+import vekta.player.Player;
 import vekta.terrain.settlement.Settlement;
+import vekta.terrain.settlement.building.RefineryBuilding;
 
 public class RefineryUpgrade implements SettlementUpgrade {
 	@Override
