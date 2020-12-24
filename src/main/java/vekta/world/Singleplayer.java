@@ -59,7 +59,7 @@ import java.util.List;
 import static vekta.Vekta.*;
 
 public class Singleplayer implements World, PlayerListener {
-	private static final File QUICK_FILE = new File("quicksave.vekta");
+	private static final File QUICKSAVE_FILE = new File("quicksave.vekta");
 	private static final File AUTOSAVE_FILE = new File("autosave.vekta");
 
 	private static Starfield starfield;
