@@ -27,30 +27,30 @@ public class Star extends Planet {
 		println("[Star] mass: " + getMass() + ", radius: " + getRadius() + ", temperature: " + getTemperatureKelvin() + ", luminosity: " + getLuminosity());
 	}
 
+	public float getLuminosity() {
+		return luminosity;
+	}
+
 	@Override
 	public RenderLevel getRenderLevel() {
 		return RenderLevel.INTERSTELLAR;
 	}
 
-	@Override
-	public void drawDistant(float r) {
-		super.drawDistant(r);
+	//	@Override
+	//	public void drawNearby(float r) {
+	//		super.drawNearby(r);
+	//
+	//		drawRadialGradient(getColor(), v.color(0), r, r * 1.3f * (1 + (float)(luminosity / 1e36)));
+	//		v.fill(0);
+	//	}
 
-		drawRadialGradient(getColor(), v.color(0), r, r * 1.3f * (1 + (float)(luminosity / 1e36)));
-		v.fill(0);
-	}
-
-	public float getLuminosity() {
-		return luminosity;
-	}
-
-	// Draws radial gradient. This abstraction isn't necessary, but it helps readability
-	private void drawRadialGradient(int colorFrom, int colorTo, float innerRadius, float outerRadius) {
-		for(float i = outerRadius; i >= innerRadius; i -= (outerRadius - innerRadius) / LIGHT_RESOLUTION) {
-			int color = v.lerpColor(colorFrom, colorTo, (i - innerRadius) / (outerRadius - innerRadius));
-			v.stroke(color);
-			v.fill(color);
-			v.ellipse(0, 0, i, i);
-		}
-	}
+	//	// Draws radial gradient. This abstraction isn't necessary, but it helps readability
+	//	private void drawRadialGradient(int colorFrom, int colorTo, float innerRadius, float outerRadius) {
+	//		for(float i = outerRadius; i >= innerRadius; i -= (outerRadius - innerRadius) / LIGHT_RESOLUTION) {
+	//			int color = v.lerpColor(colorFrom, colorTo, (i - innerRadius) / (outerRadius - innerRadius));
+	//			v.stroke(color);
+	//			v.fill(color);
+	//			v.ellipse(0, 0, i, i);
+	//		}
+	//	}
 }
