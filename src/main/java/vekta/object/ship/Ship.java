@@ -200,15 +200,15 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 		super.draw(level, r);
 	}
 
-	public void drawReentryEffect(float r, TerrestrialPlanet nearestPlanet) {
+	public void drawReentryEffect(float r, TerrestrialPlanet planet) {
 		int numberOfArcs = 10;
 		int startColor = v.color(255, 255, 255, 255);
 		int endColor = v.color(252, 86, 3, 255);
 
-		float distToKarmanLine = Math.abs(getPosition().dist(nearestPlanet.getPosition()) - (nearestPlanet.getRadius() + nearestPlanet.getAtmosphereAltitude()));
+		float distToKarmanLine = Math.abs(getPosition().dist(planet.getPosition()) - planet.getAtmosphereRadius());
 
 		if(distToKarmanLine <= REENTRY_ANIMATION_DIST /*&& getRenderLevel().isVisibleTo(level) */) {
-			float relativeVelocityAngle = getVelocity().sub(nearestPlanet.getVelocity()).heading();
+			float relativeVelocityAngle = getVelocity().sub(planet.getVelocity()).heading();
 			v.rotate(relativeVelocityAngle);
 			for(int i = 1; i <= numberOfArcs; i++) {
 				float strength = v.random(.8f) * ((distToKarmanLine - REENTRY_ANIMATION_DIST) / REENTRY_ANIMATION_DIST);
@@ -287,7 +287,9 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 	public void onDepart(SpaceObject obj) {
 	}
 
-	public TerrestrialPlanet getNearestPlanet() {
+	// TODO: convert to `World` function, similar to `findOrbitObject()`
+	@Deprecated
+	public TerrestrialPlanet findNearestPlanet() {
 		float bestDist = Float.MAX_VALUE;
 		TerrestrialPlanet nearest = null;
 		for(TerrestrialPlanet p : getWorld().findObjects(TerrestrialPlanet.class)) {

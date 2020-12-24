@@ -60,7 +60,6 @@ public class Vekta extends PApplet {
 	private static Context nextContext;
 
 	// Game-balancing variables and visual settings
-	public static final float G = 6.674e-11F;
 	public static final float MIN_GRAVITY_MASS = 1e23F; // Minimum mass for gravity-imparting planets
 
 	// Render/spawning distances (we might want to use kilometers due to limited floating-point precision)
@@ -82,7 +81,9 @@ public class Vekta extends PApplet {
 	public static final float SUN_RADIUS = 6.96340e8F;
 	public static final float AU_DISTANCE = 1.496e11F;
 	public static final float LUNAR_DISTANCE = 3.844e8F;
-	public static final double STEFAN_BOLTZMANN = 5.670373e-8;    // Stefan-Boltzmann constant, used to calculate temperature and luminosity related values
+	public static final float G = 6.674e-11F;					// Gravitational constant
+	public static final float GAS_CONSTANT = 8.3143F;			// Universal gas constant
+	public static final double STEFAN_BOLTZMANN = 5.670373e-8;  // Stefan-Boltzmann constant, used to calculate temperature and luminosity related values
 
 	public static int UI_COLOR;
 	public static int BUTTON_COLOR;

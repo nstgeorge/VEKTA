@@ -61,8 +61,10 @@ public class PlayerShip extends ModularShip {
 		if(isRemote() && velocity.magSq() > 1) {
 			setHeading(getVelocity());
 		}
-		TerrestrialPlanet nearest = getNearestPlanet();
-		drawReentryEffect(r, nearest);
+		TerrestrialPlanet nearest = findNearestPlanet();
+		if(nearest != null) {
+			drawReentryEffect(r, nearest);
+		}
 		drawShip(r, ShipModelType.DEFAULT);
 	}
 

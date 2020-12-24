@@ -17,7 +17,6 @@ import vekta.terrain.settlement.Settlement;
 import vekta.util.Counter;
 import vekta.world.RenderLevel;
 
-import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -28,11 +27,11 @@ import static vekta.Vekta.*;
  * Terrestrial (landable) planet
  */
 public class TerrestrialPlanet extends Planet {
-	// TODO: gradually move randomization into StarSystemGenerator
+	// TODO: gradually move randomization into `StarSystemGenerator`
 
 	//	private static final float LABEL_THRESHOLD = 5e4F;
 
-	private static final float EARTH_ATMOS_ALTITUDE = 1e8F;
+	private static final float KARMAN_LINE = 1e5F;
 
 	private LandingSite site;
 
@@ -42,31 +41,25 @@ public class TerrestrialPlanet extends Planet {
 
 	private ObservationLevel levelCache;
 
-	private float atmosphereDensity;        // Thickness of the atmosphere relative to Earth's
-	private final float atmosphereAltitude;        // Altitude at which the atmosphere of the planet is completely gone. (Earth: approx 193121280m)
-	private final float magneticFieldStrength;    // Strength of the magnetic field relative to Earth's
-
-	private final float escapeVelocity;            // For reference
+	private final float atmosphereDensity;               // Atmospheric density (kg/m^3)
+	private final float magneticFieldStrength;     // Strength of the magnetic field
 
 	public TerrestrialPlanet(String name, float mass, float density, PVector position, PVector velocity, int color) {
 		super(name, mass, density, position, velocity, color);
 
-		// Calculate escape velocity from surface of this planet
-		escapeVelocity = (float)Math.sqrt((2 * v.G * mass) / getRadius());
-
-		// Set atmospheric density slightly influenced by mass
-		atmosphereDensity = Math.abs(v.gaussian(10)) * (mass / v.EARTH_MASS);
-
-		// Set atmospheric altitude distributed normally relative to Earth's atmospheric altitude
-		atmosphereAltitude = (EARTH_ATMOS_ALTITUDE + (v.gaussian(1000))) * (atmosphereDensity * 0.5f);
+		// Set atmospheric density at "sea level"
+		atmosphereDensity = chooseAtmosphereDensity();
 
 		// 30% chance to have a magnetic field, then randomly set a normally distributed value
-		magneticFieldStrength = v.chance(.3f) ? 0 : Math.abs((float)(v.gaussian(50)));
+		magneticFieldStrength = v.chance(.3f) ? 0 : Math.abs(v.gaussian(50));
 
-		// TODO: ensure the initialization order works properly
 		this.site = new LandingSite(this, createTerrain());
 
 		updateOrbitObject();
+	}
+
+	protected float chooseAtmosphereDensity() {
+		return Math.abs(1 + v.gaussian(1)) * (getMass() / v.EARTH_MASS);
 	}
 
 	protected Terrain createTerrain() {
@@ -107,21 +100,52 @@ public class TerrestrialPlanet extends Planet {
 		updateCharacteristics();
 	}
 
+	// Squared to avoid computing the square root when possible
+	public float getEscapeVelocitySquared() {
+		return 2 * G * getMass() / getRadius();
+	}
+
 	public float getEscapeVelocity() {
-		return escapeVelocity;
+		return v.sqrt(getEscapeVelocitySquared());
 	}
 
 	/**
-	 * Returns the thickness of the atmosphere relative to Earth.
+	 * Returns the "sea level" density of the atmosphere relative to Earth.
 	 *
-	 * @return Atmosphere thickness (E)
+	 * @return Thickness in atmospheres (1 atm = 101,325 kPa)
 	 */
 	public float getAtmosphereDensity() {
 		return atmosphereDensity;
 	}
 
-	public float getAtmosphereAltitude() {
-		return atmosphereAltitude;
+	/**
+	 * Returns an arbitrary ceiling of the atmosphere similar to Earth's Karman line
+	 *
+	 * @return Maximum radius of atmosphere (meters)
+	 */
+	public float getAtmosphereRadius() {
+		// TODO: compute by solving atmosphere density for a cutoff value, such as 1e-5 kg/m^3
+		return KARMAN_LINE * atmosphereDensity * getRadius() / EARTH_RADIUS;
+	}
+
+	/**
+	 * Returns the density of the atmosphere at a given altitude.
+	 *
+	 * @return Thickness in atmospheres (1 atm = 101,325 kPa)
+	 */
+	public float getAtmosphereDensity(float altitude) {
+		if(altitude == 0) {
+			return getAtmosphereDensity();
+		}
+		// Equation: https://en.wikipedia.org/wiki/Density_of_air ("Exponential approximation")
+
+		float gravityAccel = G * getMass() / sq(getRadius() + altitude);// Surface gravity
+		float molarMass = .02896f;// Arbitrary molar mass of planet's air
+		float lapseRate = .0065f;// Temperature lapse rate
+		float tempK = getTemperatureKelvin();// Surface temperature
+		tempK = 273;/////TEMP
+		gravityAccel = 9.8f;//TEMP
+		return atmosphereDensity * exp(-(molarMass * gravityAccel / GAS_CONSTANT - lapseRate) / tempK * altitude);
 	}
 
 	public float getMagneticFieldStrength() {
@@ -148,26 +172,25 @@ public class TerrestrialPlanet extends Planet {
 				Star star = (Star)object;
 				setTemperatureKelvin((float)Math.pow((star.getLuminosity() * (1 - .3)) / (16 * Math.PI * relativePosition(star).magSq() * v.STEFAN_BOLTZMANN), .25));
 
-				float temp = getTemperatureKelvin();
+				/// Commenting this out for now because it might affect the new calculations. Feel free to uncomment if this is important
 
-				// Estimate atmospheric escape
-				if(temp > sq(escapeVelocity)) {
-					atmosphereDensity -= 0.0000001 * (temp - sq(escapeVelocity));
-				}
-				if(magneticFieldStrength < 0.01) {
-					atmosphereDensity -= 0.00000001;
-				}
-				atmosphereDensity = Math.max(0, atmosphereDensity);
+				//				float tempK = getTemperatureKelvin();
+				//				float escapeVelocitySq = getEscapeVelocitySquared();
+				//
+				//				// Estimate atmospheric escape
+				//				if(tempK > escapeVelocitySq) {
+				//					atmosphereDensity -= 1e-7f * (tempK - escapeVelocitySq);
+				//				}
+				//				if(magneticFieldStrength < 0.01) {
+				//					atmosphereDensity -= 1e-7f;
+				//				}
+				//				atmosphereDensity = Math.max(0, atmosphereDensity);
 			}
 			else {
 				// Arbitrary temperature value for planets orbiting gas giants and black holes
 				setTemperatureKelvin(orbitObject.getTemperatureKelvin());
 			}
 		}
-
-		//		for(Feature feature : getTerrain().getFeatures()) {
-		//			feature.updateOrReplace();
-		//		}
 	}
 
 	@Override
@@ -203,12 +226,12 @@ public class TerrestrialPlanet extends Planet {
 		super.draw(level, r);
 
 		// Draw atmosphere
-		float atmosRadius = (atmosphereAltitude / getRadius()) * r;
-		// Temporary - render only the Karman line in white
+		float atmosphereRadius = (getAtmosphereRadius() / getRadius()) * r;
+		// Temporary - render only the Karman line
 		v.strokeWeight(1);
 		v.stroke(100, 100);
 		v.fill(0, 0);
-		v.ellipse(0, 0, r + atmosRadius, r + atmosRadius);
+		v.ellipse(0, 0, r + atmosphereRadius, r + atmosphereRadius);
 
 	}
 

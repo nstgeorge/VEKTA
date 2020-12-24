@@ -168,7 +168,6 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 		// Prevent insane acceleration
 		return influence/*.limit(MAX_G_FORCE)*/.mult(getWorld().getTimeScale());
 	}
-
 	/**
 	 * Applies and returns the influence vector of another object on this
 	 */

@@ -28,6 +28,7 @@ import java.util.Map;
 import static vekta.Vekta.*;
 
 public abstract class ModularShip extends Ship implements ModuleUpgradeable, PlayerListener, Rechargeable {
+
 	private static final Map<KeyBinding, Class<? extends MenuOption>> SHORTCUT_MAP = ImmutableMap.<KeyBinding, Class<? extends MenuOption>>builder()
 			.put(KeyBinding.SHIP_KNOWLEDGE, PlayerKnowledgeButton.class)
 			.put(KeyBinding.SHIP_MISSIONS, MissionMenuButton.class)
@@ -490,7 +491,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		updateMass();
 	}
 
-	//// PlayerListener callbacks, active when hasController() == true
+	//// PlayerListener callbacks, active when `hasController() == true`
 
 	@Override
 	public void onMenu(Menu menu) {
