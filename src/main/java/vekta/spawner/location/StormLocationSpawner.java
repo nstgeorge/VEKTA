@@ -47,4 +47,9 @@ public class StormLocationSpawner extends ProxyLocationSpawner<String> {
 	public void onSurveyTags(ProxyLocation<String> location, Set<String> tags) {
 		tags.add(location.getName() + "s");
 	}
+
+	@Override
+	public boolean isVisitable(ProxyLocation<String> location) {
+		return false; // Should be intermittent and with different storm names
+	}
 }

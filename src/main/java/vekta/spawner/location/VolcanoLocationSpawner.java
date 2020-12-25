@@ -22,9 +22,6 @@ public class VolcanoLocationSpawner extends ProxyLocationSpawner<String> {
 
 	@Override
 	public String chooseData(Terrain terrain) {
-		if(v.chance(.2f)) {
-			return "Mount " + terrain.getName();
-		}
 		return terrain.getName() + " " + Resources.generateString("volcano_suffix");
 	}
 

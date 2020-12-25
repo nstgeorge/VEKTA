@@ -35,7 +35,12 @@ public class GasGiant extends TerrestrialPlanet {
 	@Override
 	protected float chooseAtmosphereDensity() {
 		// TODO: figure out how this'll work
-		return 0;
+		return 1;
+	}
+
+	@Override
+	protected float chooseRotationHours() {
+		return super.chooseRotationHours() * .5f;
 	}
 
 	public boolean isInsideRings(PVector pos) {

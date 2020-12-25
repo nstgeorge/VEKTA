@@ -6,7 +6,6 @@ import vekta.faction.Faction;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.spawner.DeityGenerator;
 import vekta.spawner.item.SpeciesItemSpawner;
-import vekta.terrain.location.Location;
 import vekta.terrain.settlement.building.CapitalBuilding;
 import vekta.terrain.settlement.building.MarketBuilding;
 import vekta.terrain.settlement.building.TempleBuilding;

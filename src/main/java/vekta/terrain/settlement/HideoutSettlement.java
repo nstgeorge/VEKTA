@@ -11,7 +11,6 @@ import vekta.player.Player;
 import vekta.spawner.FactionGenerator;
 import vekta.spawner.item.ClothingItemSpawner;
 import vekta.spawner.item.WeaponItemSpawner;
-import vekta.terrain.location.Location;
 import vekta.terrain.settlement.building.MarketBuilding;
 
 import static vekta.Vekta.v;

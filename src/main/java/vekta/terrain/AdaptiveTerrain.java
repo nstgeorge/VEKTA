@@ -21,12 +21,12 @@ public class AdaptiveTerrain extends Terrain {
 	@Override
 	public String getOverview() {
 
-//		if(hasSettlement()) {
-//			if(isHabitable()) {
-//				return getSettlement().getOverview();
-//			}
-//			return "This planet carries telltale signs of a recently abandoned civilization.";
-//		}
+		//		if(hasSettlement()) {
+		//			if(isHabitable()) {
+		//				return getSettlement().getOverview();
+		//			}
+		//			return "This planet carries telltale signs of a recently abandoned civilization.";
+		//		}
 
 		if(isHabitable()) {
 			return "You land in a landscape which appears ripe for colonization.";

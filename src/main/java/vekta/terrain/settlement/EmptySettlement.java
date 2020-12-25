@@ -7,7 +7,6 @@ import vekta.menu.option.LootMenuButton;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.player.Player;
 import vekta.spawner.ItemGenerator;
-import vekta.terrain.location.Location;
 
 public class EmptySettlement extends Settlement {
 	private final Inventory inventory = new Inventory();

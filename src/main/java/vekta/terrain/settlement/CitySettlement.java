@@ -6,8 +6,6 @@ import vekta.faction.Faction;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.spawner.PersonGenerator;
 import vekta.spawner.SettlementGenerator;
-import vekta.terrain.location.Location;
-import vekta.terrain.location.SettlementLocation;
 import vekta.terrain.settlement.building.*;
 
 import java.util.Set;

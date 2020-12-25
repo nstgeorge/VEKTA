@@ -1,16 +1,10 @@
 package vekta.menu.option;
 
 import vekta.context.KnowledgeContext;
-import vekta.knowledge.Knowledge;
 import vekta.knowledge.SpaceObjectKnowledge;
-import vekta.knowledge.TerrestrialKnowledge;
 import vekta.menu.Menu;
-import vekta.menu.handle.SurveyMenuHandle;
-import vekta.object.SpaceObject;
 import vekta.object.planet.TerrestrialPlanet;
-import vekta.terrain.Terrain;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static vekta.Vekta.getContext;

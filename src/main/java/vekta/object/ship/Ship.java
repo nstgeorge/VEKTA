@@ -264,19 +264,12 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 		super.update(level);
 	}
 
-//	@Override
-//	public void drawTrail(float scale) {
-//
-//
-//		super.drawTrail(scale);
-//	}
-
+	//// ????
 	@Override
-	public int getTrailColor() {
-		if(isGliding()) {
-			return v.color(getColor(), .2f);/////////////////////////
+	public void drawTrail(float scale) {
+		if(!isGliding()) {
+			super.drawTrail(scale);
 		}
-		return super.getTrailColor();
 	}
 
 	public void drawReentryEffect(float r) {

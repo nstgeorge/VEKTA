@@ -30,6 +30,7 @@ import static vekta.Vekta.*;
 public class TerrestrialPlanet extends Planet {
 	// TODO: gradually move randomization into `StarSystemGenerator`
 
+	private static final float MAX_ATMOSPHERE_RADIUS = 2;
 	private static final float LANDING_SITE_ARC = .1f; // Max deviation from the landing site's angle around the planet (radians)
 	private static final float LANDING_SITE_ANIMATION_RATE = .5f; // Number of oscillations per second
 
@@ -231,7 +232,7 @@ public class TerrestrialPlanet extends Planet {
 	 * @return Maximum radius of atmosphere (meters)
 	 */
 	public float getAtmosphereRadius() {
-		return getRadius() * (1 + EARTH_ATMOSPHERE_LIMIT / EARTH_RADIUS * atmosphereDensity);
+		return getRadius() * min(MAX_ATMOSPHERE_RADIUS, (1 + (EARTH_ATMOSPHERE_LIMIT / EARTH_RADIUS) * atmosphereDensity));
 	}
 
 	public float getMagneticStrength() {
@@ -340,7 +341,6 @@ public class TerrestrialPlanet extends Planet {
 
 		// Draw atmosphere
 		float atmosphereRadius = r * (getAtmosphereRadius() / getRadius());
-		// Temporary((?)) - render only the boundary line
 		v.strokeWeight(1);
 		v.stroke(100, 100);
 		v.noFill();

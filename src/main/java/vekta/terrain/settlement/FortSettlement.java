@@ -5,7 +5,6 @@ import vekta.economy.NoiseModifier;
 import vekta.faction.Faction;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.player.Player;
-import vekta.terrain.location.Location;
 import vekta.terrain.settlement.building.CapitalBuilding;
 
 import static vekta.Vekta.v;

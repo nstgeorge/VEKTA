@@ -72,6 +72,10 @@ public abstract class Location implements Serializable {
 
 	public abstract String getName();
 
+	public String getFullName() {
+		return getName() + " (" + getPlanet() + ")";
+	}
+
 	public abstract String getOverview();
 
 	public int getColor() {

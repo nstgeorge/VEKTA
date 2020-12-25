@@ -7,7 +7,6 @@ import vekta.item.Inventory;
 import vekta.menu.Menu;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.spawner.item.SpeciesItemSpawner;
-import vekta.terrain.location.Location;
 import vekta.terrain.settlement.building.MarketBuilding;
 
 import static vekta.Vekta.v;
