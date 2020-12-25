@@ -38,8 +38,6 @@ public abstract class Location implements Serializable {
 	private String wittyText = Resources.generateString("witty");
 	private int color = WorldGenerator.randomPlanetColor();
 
-	private Settlement settlement;
-
 	public Location(TerrestrialPlanet planet) {
 		this.planet = planet;
 	}
@@ -74,10 +72,6 @@ public abstract class Location implements Serializable {
 
 	public abstract String getName();
 
-	public String getFullName() {
-		return getName() + " (" + getPlanet() + ")";
-	}
-
 	public abstract String getOverview();
 
 	public int getColor() {
@@ -86,21 +80,6 @@ public abstract class Location implements Serializable {
 
 	public void setColor(int color) {
 		this.color = color;
-	}
-
-	public boolean hasSettlement() {
-		return settlement != null;
-	}
-
-	public Settlement getSettlement() {
-		return settlement;
-	}
-
-	public void notifySettlement(Settlement settlement) {
-		if(hasSettlement() && getSettlement() != settlement) {
-			throw new RuntimeException("Location already has a different settlement: " + this.settlement);
-		}
-		this.settlement = settlement;
 	}
 
 	/**
@@ -122,13 +101,6 @@ public abstract class Location implements Serializable {
 	 */
 	public boolean isHabitable() {
 		return false;
-	}
-
-	/**
-	 * @return whether the `Location` currently supports inhabitants.
-	 */
-	public boolean isInhabited() {
-		return hasSettlement() && getSettlement().isInhabited();
 	}
 
 	public List<Pathway> findEnabledPathways() {
@@ -176,18 +148,13 @@ public abstract class Location implements Serializable {
 	}
 
 	public final void openMenu(Player player, MenuOption back) {
-
 		Menu menu = new Menu(player, back, chooseMenuHandle());
-
-		onSetupMenu(menu);
-
-		if(hasSettlement()) {
-			menu.add(new SettlementButton(getSettlement()));
-		}
 
 		for(Pathway pathway : findVisitablePathways()) {
 			menu.add(new PathwayButton(pathway));
 		}
+
+		onSetupMenu(menu);
 
 		menu.addDefault();
 		setContext(menu);

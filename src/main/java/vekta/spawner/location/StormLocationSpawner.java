@@ -20,12 +20,21 @@ public class StormLocationSpawner extends ProxyLocationSpawner<String> {
 	}
 
 	@Override
-	public String chooseData() {
+	public String chooseData(Terrain terrain) {
 		return null;
 	}
 
 	@Override
+	public void setup(ProxyLocation<String> location, Terrain terrain) {
+		location.setWittyText(null);
+	}
+
+	@Override
 	public String getName(ProxyLocation<String> location) {
+		return location.getPlanet().getName() + " " + getTagName(location);
+	}
+
+	public String getTagName(ProxyLocation<String> location) {
 		return location.atm() > 100 ? "Superstorm" : location.atm() > .2 ? "Storm" : "Gale";
 	}
 

@@ -22,7 +22,7 @@ public class BeaconLocationSpawner extends ProxyLocationSpawner<String> {
 	}
 
 	@Override
-	public String chooseData() {
+	public String chooseData(Terrain terrain) {
 		return Resources.generateString("beacon");
 	}
 

@@ -50,7 +50,7 @@ public class OceanLocation extends Location {
 			tags.add("Icebergs");
 		}
 
-		if(bioluminescent) {
+		if(bioluminescent && getPlanet().getTemperatureCelsius() > -20) {
 			tags.add("Bioluminescence");
 		}
 
@@ -85,6 +85,6 @@ public class OceanLocation extends Location {
 	public boolean isVisitable() {
 		//		return !isDepleted() && player.getShip().getModules().stream()
 		//				.anyMatch(m -> m.getType() == ModuleType.OCEAN);
-		return false;
+		return true;
 	}
 }

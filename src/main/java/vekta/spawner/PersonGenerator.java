@@ -91,9 +91,7 @@ public class PersonGenerator {
 		// If no candidate was found, create an asteroid with a new settlement
 		PVector pos = WorldGenerator.randomSpawnPosition(RenderLevel.PLANET, new PVector());
 		Asteroid asteroid = AsteroidSpawner.createAsteroid(pos);
-		return asteroid.getTerrain().hasSettlement()
-				? asteroid.getTerrain().getSettlement()
-				: new OutpostSettlement(asteroid.getTerrain(), FactionGenerator.randomFaction());
+		return new OutpostSettlement(asteroid, FactionGenerator.randomFaction());
 	}
 
 	public static String randomInterest() {

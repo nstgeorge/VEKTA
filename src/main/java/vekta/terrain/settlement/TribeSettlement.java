@@ -3,6 +3,7 @@ package vekta.terrain.settlement;
 import vekta.economy.Economy;
 import vekta.economy.NoiseModifier;
 import vekta.faction.Faction;
+import vekta.object.planet.TerrestrialPlanet;
 import vekta.spawner.DeityGenerator;
 import vekta.spawner.item.SpeciesItemSpawner;
 import vekta.terrain.location.Location;
@@ -14,8 +15,8 @@ import static vekta.Vekta.v;
 
 public class TribeSettlement extends Settlement {
 
-	public TribeSettlement(Location location, Faction faction) {
-		super(location, faction, "tribe");
+	public TribeSettlement(TerrestrialPlanet planet, Faction faction) {
+		super(planet, faction, "tribe");
 
 		add(new CapitalBuilding("Chieftain", this));
 

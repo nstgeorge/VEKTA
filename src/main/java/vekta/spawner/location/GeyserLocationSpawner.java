@@ -21,13 +21,17 @@ public class GeyserLocationSpawner extends ProxyLocationSpawner<String> {
 	}
 
 	@Override
-	public String chooseData() {
+	public String chooseData(Terrain terrain) {
 		return Resources.generateString("geyser_prefix");
 	}
 
 	@Override
 	public String getName(ProxyLocation<String> location) {
-		return location.getData() + " " + (location.tempC() <= -20 ? "Cryogeyser" : "Geyser");
+		return location.getData() + " " + (location.tempC() <= -50 ? "Cryogeyser" : "Geyser");
+	}
+
+	public String getTagName(ProxyLocation<String> location) {
+		return location.getData() + " " + (location.tempC() <= -50 ? "Cryogeyser" : "Geyser");
 	}
 
 	@Override
@@ -42,6 +46,6 @@ public class GeyserLocationSpawner extends ProxyLocationSpawner<String> {
 
 	@Override
 	public void onSurveyTags(ProxyLocation<String> location, Set<String> tags) {
-		tags.add(getName(location) + "s");
+		tags.add(getTagName(location) + "s");
 	}
 }

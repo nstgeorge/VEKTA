@@ -69,7 +69,7 @@ public class TerrestrialKnowledge extends SpaceObjectKnowledge {
 
 			// Settlements
 			landed.add(new TextDisplay(planet.getTerrain().isHabitable()
-					? planet.getTerrain().isInhabited() ?
+					? planet.isInhabited() ?
 					"Settlements: " + planet.findVisitableSettlements().stream().map(Settlement::getName).collect(Collectors.joining(", "))
 					: "Habitable"
 					: "Not Habitable"));

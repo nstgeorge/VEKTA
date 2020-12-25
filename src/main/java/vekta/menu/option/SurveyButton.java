@@ -1,20 +1,26 @@
 package vekta.menu.option;
 
+import vekta.context.KnowledgeContext;
+import vekta.knowledge.Knowledge;
+import vekta.knowledge.SpaceObjectKnowledge;
+import vekta.knowledge.TerrestrialKnowledge;
 import vekta.menu.Menu;
 import vekta.menu.handle.SurveyMenuHandle;
+import vekta.object.SpaceObject;
+import vekta.object.planet.TerrestrialPlanet;
 import vekta.terrain.Terrain;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static vekta.Vekta.getContext;
 import static vekta.Vekta.setContext;
 
 public class SurveyButton extends ButtonOption {
-	private final Terrain terrain;
+	private final TerrestrialPlanet planet;
 
-	public SurveyButton(Terrain terrain) {
-		this.terrain = terrain;
-	}
-
-	public Terrain getTerrain() {
-		return terrain;
+	public SurveyButton(TerrestrialPlanet planet) {
+		this.planet = planet;
 	}
 
 	@Override
@@ -24,8 +30,13 @@ public class SurveyButton extends ButtonOption {
 
 	@Override
 	public void onSelect(Menu menu) {
-		Menu sub = new Menu(menu, new SurveyMenuHandle(getTerrain()));
-		sub.addDefault();
-		setContext(sub);
+		//		Menu sub = new Menu(menu, new SurveyMenuHandle(getTerrain()));
+		//		sub.addDefault();
+		//		setContext(sub);
+
+		List<SpaceObjectKnowledge> items = menu.getPlayer().findKnowledge(SpaceObjectKnowledge.class, k -> k.getSpaceObject() == planet);
+
+		setContext(new KnowledgeContext(getContext(), menu.getPlayer())
+				.withTab(getName(), items));
 	}
 }

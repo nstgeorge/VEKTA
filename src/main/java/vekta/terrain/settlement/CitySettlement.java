@@ -3,9 +3,11 @@ package vekta.terrain.settlement;
 import vekta.economy.Economy;
 import vekta.economy.NoiseModifier;
 import vekta.faction.Faction;
+import vekta.object.planet.TerrestrialPlanet;
 import vekta.spawner.PersonGenerator;
 import vekta.spawner.SettlementGenerator;
 import vekta.terrain.location.Location;
+import vekta.terrain.location.SettlementLocation;
 import vekta.terrain.settlement.building.*;
 
 import java.util.Set;
@@ -14,8 +16,8 @@ import static vekta.Vekta.v;
 
 public class CitySettlement extends Settlement {
 
-	public CitySettlement(Location location, Faction faction) {
-		super(location, faction, "city");
+	public CitySettlement(TerrestrialPlanet planet, Faction faction) {
+		super(planet, faction, "city");
 
 		add(new District(this, "Trade District", BuildingType.MARKET));
 		add(new District(this, "Industrial District", BuildingType.INDUSTRIAL));

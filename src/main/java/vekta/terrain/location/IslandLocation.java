@@ -26,10 +26,12 @@ public class IslandLocation extends Location {
 
 	@Override
 	public String getOverview() {
-		if(getPlanet().getTemperatureCelsius() <= 0) {
-			return "You fly above the vast ice sheets covering this planet.";
-		}
-		return "You fly above the planet's ocean.";
+		return "This planet's ocean is filled with islands.";
+	}
+
+	@Override
+	public boolean isHabitable() {
+		return getPlanet().getTerrain().isHabitable();
 	}
 
 	@Override

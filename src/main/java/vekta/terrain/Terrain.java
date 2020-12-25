@@ -35,11 +35,6 @@ public abstract class Terrain extends Location {
 	}
 
 	@Override
-	public String getFullName() {
-		return getName();
-	}
-
-	@Override
 	protected final void onAddPathway(Location location, String name) {
 		if(location.isVisitable()) {
 			LandingSite site = new LandingSite(location);
@@ -51,7 +46,7 @@ public abstract class Terrain extends Location {
 	protected final void onSetupMenu(Menu menu) {
 		onVisitTerrainMenu(menu);
 
-		menu.add(new SurveyButton(this));
+		menu.add(new SurveyButton(getPlanet()));
 	}
 
 	protected void onVisitTerrainMenu(Menu menu) {

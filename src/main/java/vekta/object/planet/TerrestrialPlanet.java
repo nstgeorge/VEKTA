@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 import static vekta.Vekta.*;
 
 /**
- * Terrestrial (landable) planet
+ * Terrestrial (landable) celestial body
  */
 public class TerrestrialPlanet extends Planet {
 	// TODO: gradually move randomization into `StarSystemGenerator`
@@ -159,11 +159,11 @@ public class TerrestrialPlanet extends Planet {
 
 	public List<Settlement> findInhabitedSettlements() {
 		return settlements.stream()
-				.filter(settlement -> settlement.getLocation().isEnabled() && settlement.getLocation().isVisitable() && settlement.getLocation().isInhabited())
+				.filter(settlement -> settlement.getLocation().isEnabled() && settlement.getLocation().isVisitable() && settlement.isInhabited())
 				.collect(Collectors.toList());
 	}
 
-	public void addSettlement(Settlement settlement) {
+	public void notifySettlement(Settlement settlement) {
 		if(!settlements.contains(settlement)) {
 			settlements.add(settlement);
 		}

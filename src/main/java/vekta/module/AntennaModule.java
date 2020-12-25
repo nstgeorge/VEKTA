@@ -68,7 +68,7 @@ public class AntennaModule extends ShipModule {
 
 	private SpaceObject findRelay() {
 		for(TerrestrialPlanet planet : getWorld().findObjects(TerrestrialPlanet.class)) {
-			if(planet.getTerrain().isInhabited() && getShip().relativePosition(planet).magSq() <= sq(getRange() * AU_DISTANCE)) {
+			if(planet.isInhabited() && getShip().relativePosition(planet).magSq() <= sq(getRange() * AU_DISTANCE)) {
 				return planet;
 			}
 		}

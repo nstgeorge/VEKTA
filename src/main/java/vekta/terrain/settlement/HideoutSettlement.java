@@ -6,6 +6,7 @@ import vekta.economy.TemporaryModifier;
 import vekta.faction.Faction;
 import vekta.menu.Menu;
 import vekta.menu.option.CoinMenuButton;
+import vekta.object.planet.TerrestrialPlanet;
 import vekta.player.Player;
 import vekta.spawner.FactionGenerator;
 import vekta.spawner.item.ClothingItemSpawner;
@@ -17,8 +18,8 @@ import static vekta.Vekta.v;
 
 public class HideoutSettlement extends Settlement {
 
-	public HideoutSettlement(Location location, Faction faction) {
-		super(location, faction, "hideout");
+	public HideoutSettlement(TerrestrialPlanet planet, Faction faction) {
+		super(planet, faction, "hideout");
 
 		if(v.chance(.25F)) {
 			// Mercenaries

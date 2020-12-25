@@ -4,6 +4,7 @@ import vekta.economy.Economy;
 import vekta.economy.NoiseModifier;
 import vekta.faction.Faction;
 import vekta.menu.Menu;
+import vekta.object.planet.TerrestrialPlanet;
 import vekta.spawner.SettlementGenerator;
 import vekta.terrain.location.Location;
 
@@ -11,8 +12,8 @@ import static vekta.Vekta.v;
 
 public class OutpostSettlement extends Settlement {
 	
-	public OutpostSettlement(Location location, Faction faction) {
-		super(location, faction, "outpost");
+	public OutpostSettlement(TerrestrialPlanet planet, Faction faction) {
+		super(planet, faction, "outpost");
 
 		//		if(v.chance(.5F)) {
 		add(SettlementGenerator.createMarket(1));

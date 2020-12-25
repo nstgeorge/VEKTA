@@ -8,7 +8,7 @@ import java.util.Set;
 
 import static vekta.Vekta.v;
 
-public class VolcanoLocationSpawner extends ProxyLocationSpawner<String> {
+public class MountainLocationSpawner extends ProxyLocationSpawner<String> {
 
 	@Override
 	public boolean isValid(Terrain terrain) {
@@ -22,10 +22,11 @@ public class VolcanoLocationSpawner extends ProxyLocationSpawner<String> {
 
 	@Override
 	public String chooseData(Terrain terrain) {
+		String name = v.chance(.3f) ? Resources.generateString("lastname") : terrain.getName();
 		if(v.chance(.2f)) {
-			return "Mount " + terrain.getName();
+			return "Mount " + name;
 		}
-		return terrain.getName() + " " + Resources.generateString("volcano_suffix");
+		return name + " " + Resources.generateString("mountain_suffix");
 	}
 
 	@Override
@@ -35,11 +36,11 @@ public class VolcanoLocationSpawner extends ProxyLocationSpawner<String> {
 
 	@Override
 	public String getOverview(ProxyLocation<String> location) {
-		return "You fly above the volcano.";
+		return "The tallest mountain casts a shadow over your spacecraft.";
 	}
 
 	@Override
 	public void onSurveyTags(ProxyLocation<String> location, Set<String> tags) {
-		tags.add("Volcanoes");
+		tags.add("Mountains");
 	}
 }

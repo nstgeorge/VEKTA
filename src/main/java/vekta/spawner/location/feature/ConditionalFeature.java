@@ -20,7 +20,7 @@ public class ConditionalFeature extends FeatureLocationSpawner<ConditionalFeatur
 	}
 
 	@Override
-	public ConditionalFeatureData chooseData() {
+	public ConditionalFeatureData chooseData(Terrain terrain) {
 		ConditionalFeatureData data = new ConditionalFeatureData();
 		data.warm = Resources.generateString("feature_warm");
 		data.cold = Resources.generateString("feature_cold");

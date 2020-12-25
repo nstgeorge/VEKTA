@@ -3,6 +3,7 @@ package vekta.spawner;
 import com.google.common.collect.ImmutableList;
 import vekta.Resources;
 import vekta.faction.Faction;
+import vekta.object.planet.TerrestrialPlanet;
 import vekta.spawner.item.*;
 import vekta.terrain.location.Location;
 import vekta.terrain.settlement.*;
@@ -17,7 +18,7 @@ import static vekta.Vekta.v;
 
 public class SettlementGenerator {
 
-	private static final List<WeightedOption<BiFunction<Location, Faction, Settlement>>> SETTLEMENTS = ImmutableList.<WeightedOption<BiFunction<Location, Faction, Settlement>>>builder()
+	private static final List<WeightedOption<BiFunction<TerrestrialPlanet, Faction, Settlement>>> SETTLEMENTS = ImmutableList.<WeightedOption<BiFunction<TerrestrialPlanet, Faction, Settlement>>>builder()
 			.add(new WeightedOption<>(2, CitySettlement::new))
 			.add(new WeightedOption<>(2, TownSettlement::new))
 			.add(new WeightedOption<>(1, FarmSettlement::new))
@@ -31,9 +32,9 @@ public class SettlementGenerator {
 			.add(new WeightedOption<>(.5F, TribeSettlement::new))
 			.build();
 
-	public static Settlement createSettlement(Location location) {
+	public static Settlement createSettlement(TerrestrialPlanet planet) {
 		Faction faction = FactionGenerator.randomFaction();
-		return Weighted.random(SETTLEMENTS).getValue().apply(location, faction);
+		return Weighted.random(SETTLEMENTS).getValue().apply(planet, faction);
 	}
 
 	public static void populateSettlement(Settlement settlement) {

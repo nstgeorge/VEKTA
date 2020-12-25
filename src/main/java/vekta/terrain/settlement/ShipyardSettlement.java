@@ -8,6 +8,7 @@ import vekta.item.ItemType;
 import vekta.item.ModuleItem;
 import vekta.market.Market;
 import vekta.module.Module;
+import vekta.object.planet.TerrestrialPlanet;
 import vekta.spawner.item.ModuleItemSpawner;
 import vekta.terrain.location.Location;
 import vekta.terrain.settlement.building.*;
@@ -16,8 +17,8 @@ import static vekta.Vekta.v;
 
 public class ShipyardSettlement extends Settlement implements Market.Stock {
 
-	public ShipyardSettlement(Location location, Faction faction) {
-		super(location, faction, "shipyard");
+	public ShipyardSettlement(TerrestrialPlanet planet, Faction faction) {
+		super(planet, faction, "shipyard");
 
 		add(new CapitalBuilding("Overseer", this));
 
