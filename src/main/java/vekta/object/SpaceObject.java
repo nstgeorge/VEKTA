@@ -217,7 +217,7 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	 * Does this collide with that?
 	 */
 	public boolean collidesWith(RenderLevel level, SpaceObject s) {
-		return distSq(getPosition(), s.getPosition()) < sq(getRadius() + s.getRadius());
+		return distSq(getPositionReference(), s.getPositionReference()) < sq(getRadius() + s.getRadius());
 	}
 
 	/**

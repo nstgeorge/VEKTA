@@ -30,11 +30,12 @@ import static vekta.Vekta.*;
 public class TerrestrialPlanet extends Planet {
 	// TODO: gradually move randomization into `StarSystemGenerator`
 
+	private static final int SURFACE_DETAIL = 100; // Number of lines used to draw a planet's surface
+	private static final float MAX_LOCATION_ICON_SCALE = 40;
 	private static final float MAX_ATMOSPHERE_RADIUS = 2;
-	private static final float LANDING_SITE_ARC = .1f; // Max deviation from the landing site's angle around the planet (radians)
-	private static final float LANDING_SITE_ANIMATION_RATE = .5f; // Number of oscillations per second
+	private static final float LANDING_SITE_ANGLE = .1f; // Max deviation from the landing site's angle around the planet (radians)
 
-	private static final float LANDING_SITE_RADIUS = 2 * sin(LANDING_SITE_ARC / 2); // Chord length of landing angle, precomputed
+	private static final float LANDING_SITE_RADIUS = 2 * sin(LANDING_SITE_ANGLE / 2); // Chord length of landing angle, precomputed
 
 	private final Terrain terrain;
 	private final LandingSite terrainSite;
@@ -48,9 +49,11 @@ public class TerrestrialPlanet extends Planet {
 
 	private ObservationLevel levelCache;
 
-	private float atmosphereDensity;     // Atmospheric density (kg/m^3)
-	private float magneticStrength; // Strength of the magnetic field
+	private float atmosphereDensity;    // Atmospheric density (kg/m^3)
+	private float magneticStrength;    // Strength of the magnetic field
 	private float rotationHours;        // Rotation period (hours)
+
+	private float direction; // Current rotation direction
 
 	public TerrestrialPlanet(String name, float mass, float density, PVector position, PVector velocity, int color) {
 		super(name, mass, density, position, velocity, color);
@@ -115,13 +118,14 @@ public class TerrestrialPlanet extends Planet {
 	}
 
 	public LandingSite findLandingSite(float angle) {
-		float bestDist = LANDING_SITE_ARC;
+		angle -= getDirection();
+
+		float bestDist = LANDING_SITE_ANGLE * 2; // Extra landing space around visual radius
 		LandingSite site = getDefaultLandingSite();
 		for(Map.Entry<LandingSite, Float> entry : landingMap.entrySet()) {
 			Location location = entry.getKey().getLocation();
 			if(location.isEnabled()) {
 				float dist = abs(v.deltaAngle(angle, entry.getValue()));
-				println(dist);
 				if(dist < bestDist) {
 					bestDist = dist;
 					site = entry.getKey();
@@ -136,7 +140,7 @@ public class TerrestrialPlanet extends Planet {
 	}
 
 	public void addLandingSite(LandingSite site, float angle) {
-		landingMap.put(site, angle);
+		landingMap.put(site, v.normalizeAngle(angle - getDirection()));
 	}
 
 	public void removeLandingSite(LandingSite site) {
@@ -194,7 +198,7 @@ public class TerrestrialPlanet extends Planet {
 	}
 
 	/**
-	 * Returns the "sea level" density of the atmosphere relative to Earth.
+	 * Return the "sea level" density of the atmosphere relative to Earth.
 	 *
 	 * @return Thickness in atmospheres (1 atm = 101,325 kPa)
 	 */
@@ -203,7 +207,7 @@ public class TerrestrialPlanet extends Planet {
 	}
 
 	/**
-	 * Returns the density of the atmosphere at a given altitude.
+	 * Return the density of the atmosphere at a given altitude.
 	 *
 	 * @return Thickness in atmospheres (1 atm = 101,325 kPa)
 	 */
@@ -218,7 +222,7 @@ public class TerrestrialPlanet extends Planet {
 		double lapseRate = .0065f; // Temperature lapse rate
 		double tempK = getTemperatureKelvin(); // Surface temperature
 		float atmDensity = (float)(atmosphereDensity * Math.exp(-(molarMass * gravityAccel / GAS_CONSTANT - lapseRate) / tempK * altitude));
-		return Float.isFinite(atmDensity) ? atmDensity : atmosphereDensity;
+		return Float.isNaN(atmDensity) ? 0 : min(atmosphereDensity, atmDensity);
 	}
 
 	public void setAtmosphereDensity(float atmosphereDensity) {
@@ -226,7 +230,7 @@ public class TerrestrialPlanet extends Planet {
 	}
 
 	/**
-	 * Returns an arbitrary ceiling of the atmosphere.
+	 * Return an arbitrary ceiling of the atmosphere used for glide mode.
 	 * Note that this is relative to the center of the planet instead of the surface.
 	 *
 	 * @return Maximum radius of atmosphere (meters)
@@ -260,6 +264,13 @@ public class TerrestrialPlanet extends Planet {
 	}
 
 	/**
+	 * Calculate the current rotational angle of the planet.
+	 */
+	public float getDirection() {
+		return direction;
+	}
+
+	/**
 	 * Update the temperature of the planet based on expected temperature equations, as well as various other characteristics.
 	 * See https://astronomy.stackexchange.com/a/10116
 	 */
@@ -275,7 +286,7 @@ public class TerrestrialPlanet extends Planet {
 				Star star = (Star)object;
 				setTemperatureKelvin((float)Math.pow((star.getLuminosity() * (1 - .3)) / (16 * Math.PI * relativePosition(star).magSq() * STEFAN_BOLTZMANN), .25));
 
-				/// Commenting this out for now because it might affect the new calculations. Feel free to uncomment if everything still makes sense
+				/// Commenting this out for now. Feel free to uncomment if everything still makes sense
 
 				//				float tempK = getTemperatureKelvin();
 				//				float escapeVelocitySq = getEscapeVelocitySquared();
@@ -323,11 +334,8 @@ public class TerrestrialPlanet extends Planet {
 		}
 		super.onUpdate(level);
 
-		// Update rotation (right-hand-rule convention)
-		float deltaAngle = -TWO_PI / getRotationSeconds() * getWorld().getTimeScale();
-		for(Map.Entry<LandingSite, Float> entry : landingMap.entrySet()) {
-			entry.setValue(entry.getValue() + deltaAngle);
-		}
+		// Update rotation (right-hand-rule convention flips the sign)
+		direction -= TWO_PI / getRotationSeconds() * getWorld().getTimeScale() / v.frameRate; // TODO: something like deltaTime()
 	}
 
 	protected void updateOrbitObject() {
@@ -335,9 +343,45 @@ public class TerrestrialPlanet extends Planet {
 		getTerrain().updateOrbit(orbitObject);
 	}
 
+	public float getDisplacementScale() {
+		return min(.2f, 1 / log(getMass()));
+	}
+
+	public float getRadius(float angle) {
+		return getRadius() * (1 + getDisplacementScale() * getTerrain().getDisplacement(angle - getDirection()));
+	}
+
+	@Override
+	public boolean collidesWith(RenderLevel level, SpaceObject s) {
+		if(s instanceof Ship) {
+			PVector offset = s.relativePosition(this);
+			return offset.magSq() < sq(getRadius(offset.heading()) + s.getRadius());
+		}
+		return super.collidesWith(level, s);
+	}
+
 	@Override
 	public void drawNearby(float r) {
-		super.drawNearby(r);
+		float direction = getDirection();
+		float scale = getDisplacementScale();
+		if(r > 10) {
+			Terrain terrain = getTerrain();
+			float x = r * (1 + scale * terrain.getDisplacement(-direction));
+			float y = 0;
+			for(int i = 1; i <= SURFACE_DETAIL; i++) {
+				float angle = TWO_PI * i / SURFACE_DETAIL;
+				float elevation = r * (1 + scale * terrain.getDisplacement(angle - direction));
+				float x1 = cos(angle) * elevation;
+				float y1 = sin(angle) * elevation;
+				v.line(x, y, x1, y1);
+				x = x1;
+				y = y1;
+			}
+			drawLabel(r);
+		}
+		else {
+			super.drawNearby(r);
+		}
 
 		// Draw atmosphere
 		float atmosphereRadius = r * (getAtmosphereRadius() / getRadius());
@@ -346,22 +390,18 @@ public class TerrestrialPlanet extends Planet {
 		v.noFill();
 		v.ellipse(0, 0, atmosphereRadius, atmosphereRadius);
 
-		float rSite = r * LANDING_SITE_RADIUS; // Chord length
-
+		// Draw landing locations
+		float rSite = min(MAX_LOCATION_ICON_SCALE, r * LANDING_SITE_RADIUS); // Chord length
 		for(Map.Entry<LandingSite, Float> entry : landingMap.entrySet()) {
 			Location location = entry.getKey().getLocation();
 			float angle = entry.getValue();
-			float offset = location.hashCode() % 100; // Arbitrary time offset
-			float baseFreq = (getAliveTime() + offset) * PI * LANDING_SITE_ANIMATION_RATE;
 
-			float x = r * cos(angle);
-			float y = r * sin(angle);
-			float r1 = rSite * sq(sq(sin(baseFreq)) * .3f + .7f);
-			float r2 = rSite * 1;
-
+			v.pushMatrix();
+			v.rotate(angle + direction - HALF_PI); // Y axis
+			v.translate(0, r * (1 + scale * getTerrain().getDisplacement(angle)));
 			v.stroke(location.getColor());
-			v.ellipse(x, y, r1, r1);
-			v.ellipse(x, y, r2, r2);
+			location.draw(rSite);
+			v.popMatrix();
 		}
 	}
 
@@ -377,7 +417,7 @@ public class TerrestrialPlanet extends Planet {
 			}
 			return; // Prevent ship from being destroyed after landing
 		}
-		super.onCollide(s); // Oof
+		super.onCollide(s); // Splat
 	}
 
 	@Override
@@ -408,8 +448,8 @@ public class TerrestrialPlanet extends Planet {
 			for(Faction faction : factions) {
 				float value = faction.getEconomy().getValue();
 				faction.setEnemy(((ModularShip)s).getController().getFaction());
-				faction.getEconomy().addModifier(new TemporaryModifier(
-						"Destruction of " + getName(), -value, value / 10));
+				faction.getEconomy().addModifier(
+						new TemporaryModifier("Destruction of " + getName(), -value, value / 10));
 			}
 		}
 	}

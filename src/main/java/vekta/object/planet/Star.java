@@ -36,6 +36,10 @@ public class Star extends Planet {
 		return RenderLevel.INTERSTELLAR;
 	}
 
+	@Override
+	protected boolean shouldDrawPoint(RenderLevel level, float r) {
+		return false;
+	}
 	//	@Override
 	//	public void drawNearby(float r) {
 	//		super.drawNearby(r);

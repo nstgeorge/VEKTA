@@ -67,4 +67,8 @@ public abstract class ProxyLocationSpawner<T extends Serializable> implements Lo
 
 	public void onVisitMenu(ProxyLocation<T> location, Menu menu) {
 	}
+
+	public boolean draw(ProxyLocation<T> location, float r) {
+		return false;
+	}
 }

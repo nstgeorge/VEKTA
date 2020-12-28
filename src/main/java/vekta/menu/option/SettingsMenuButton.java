@@ -31,24 +31,22 @@ public class SettingsMenuButton extends ButtonOption {
 				new FloatSettingWatcher("zoomSpeed"),
 				new FloatRangeInputController(.1F, 10, .1F)));
 
-		if(OPERATING_SYSTEM.contains("Windows")) {
-			if(device.isConnected()) {
-				sub.add(new InputOption<>("Rumble Amount",
-						new FloatSettingWatcher("rumbleAmount"),
-						new FloatRangeInputController(0, 1, .1F)));
+		sub.add(new InputOption<>("Zoom near planets",
+				new BooleanSettingWatcher("zoomNearPlanets"),
+				new ChoicesInputController<>(Arrays.asList(true, false), b -> b ? "Yes" : "No")));
 
-				sub.add(new InputOption<>("Deadzone",
-						new FloatSettingWatcher("deadzone"),
-						new FloatRangeInputController(1, 10, 1F)));
-			}
+		if(DEVICE != null && DEVICE.isConnected()) {
+			sub.add(new InputOption<>("Rumble Amount",
+					new FloatSettingWatcher("rumbleAmount"),
+					new FloatRangeInputController(0, 1, .1F)));
+
+			sub.add(new InputOption<>("Deadzone",
+					new FloatSettingWatcher("deadzone"),
+					new FloatRangeInputController(1, 10, 1F)));
 		}
 
 		sub.add(new InputOption<>("Random events",
 				new BooleanSettingWatcher("randomEvents"),
-				new ChoicesInputController<>(Arrays.asList(true, false), b -> b ? "Yes" : "No")));
-
-		sub.add(new InputOption<>("Zoom near planets",
-				new BooleanSettingWatcher("zoomNearPlanets"),
 				new ChoicesInputController<>(Arrays.asList(true, false), b -> b ? "Yes" : "No")));
 
 		sub.add(new GraphicsMenuButton());
