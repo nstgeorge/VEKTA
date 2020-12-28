@@ -30,7 +30,7 @@ import static vekta.Vekta.*;
 public class TerrestrialPlanet extends Planet {
 	// TODO: gradually move randomization into `StarSystemGenerator`
 
-	private static final int SURFACE_DETAIL = 100; // Number of lines used to draw a planet's surface
+	private static final int SURFACE_DETAIL = 200; // Number of lines used to draw a planet's surface
 	private static final float MAX_LOCATION_ICON_SCALE = 40;
 	private static final float MAX_ATMOSPHERE_RADIUS = 2;
 	private static final float LANDING_SITE_ANGLE = .1f; // Max deviation from the landing site's angle around the planet (radians)
