@@ -8,6 +8,7 @@ import vekta.object.planet.TerrestrialPlanet;
 import vekta.spawner.TuneGenerator;
 import vekta.terrain.location.Location;
 
+import static processing.core.PApplet.sin;
 import static vekta.Vekta.v;
 
 /**
@@ -59,5 +60,10 @@ public abstract class Terrain extends Location {
 	}
 
 	protected void onOrbit(SpaceObject orbitObject) {
+	}
+
+	@Override
+	public float getDisplacement(float angle) {
+		return sin(10 * angle);// * .5f + sin(5 * angle + .2f) * .4f + sin(3 * angle + .5f) * .2f;
 	}
 }
