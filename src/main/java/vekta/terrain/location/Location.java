@@ -8,13 +8,11 @@ import vekta.menu.handle.MenuHandle;
 import vekta.menu.option.BackButton;
 import vekta.menu.option.MenuOption;
 import vekta.menu.option.PathwayButton;
-import vekta.menu.option.SettlementButton;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.player.Player;
 import vekta.player.PlayerEvent;
 import vekta.sound.Tune;
 import vekta.spawner.WorldGenerator;
-import vekta.terrain.settlement.Settlement;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,8 +21,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static vekta.Vekta.getContext;
-import static vekta.Vekta.setContext;
+import static vekta.Vekta.*;
 
 public abstract class Location implements Serializable {
 
@@ -169,6 +166,20 @@ public abstract class Location implements Serializable {
 
 	protected MenuHandle chooseMenuHandle() {
 		return new LocationMenuHandle(this);
+	}
+
+	public float getDisplacement(float angle) {
+		return 0;
+	}
+
+	public void draw(float r) {
+		float offset = hashCode() % 100; // Arbitrary time offset
+		float baseFreq = (getPlanet().getAliveTime() + offset) * 1.5f;
+
+		float r1 = r * sq(sq(sin(baseFreq)) * .2f + .8f);
+
+		v.ellipse(0, 0, r, r);
+		v.ellipse(0, 0, r1, r1);
 	}
 
 	protected void onSetupMenu(Menu menu) {

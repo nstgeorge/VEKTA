@@ -34,18 +34,18 @@ public class StormLocationSpawner extends ProxyLocationSpawner<String> {
 		return location.getPlanet().getName() + " " + getTagName(location);
 	}
 
-	public String getTagName(ProxyLocation<String> location) {
-		return location.atm() > 100 ? "Superstorm" : location.atm() > .2 ? "Storm" : "Gale";
-	}
-
 	@Override
 	public String getOverview(ProxyLocation<String> location) {
 		return "Turbulence rattles your spacecraft as you venture into the storm.";
 	}
 
+	public String getTagName(ProxyLocation<String> location) {
+		return location.atm() > 100 ? "Superstorm" : location.atm() > .2 ? "Storm" : "Gale";
+	}
+
 	@Override
 	public void onSurveyTags(ProxyLocation<String> location, Set<String> tags) {
-		tags.add(location.getName() + "s");
+		tags.add(getTagName(location) + "s");
 	}
 
 	@Override

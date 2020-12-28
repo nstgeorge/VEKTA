@@ -27,6 +27,7 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 	private static final float BLINK_DECAY_RATE = 1.5F; // Blink color decay rate
 	private static final float REENTRY_ANIMATION_DIST = .2f;    // Distance from the atmosphere threshold at which the re-entry effect begins and ends
 	private static final float REENTRY_ANIMATION_MAX = 1;    // Ratio between planet radius / atmosphere altitude with maximum re-entry strength
+	private static final float REENTRY_SPEED_FACTOR = 5000; // Relative speed required for maximum re-entry effect (multiplied by atmosphere density)
 	private static final float GLIDE_DAMPEN_RATE = .01f;    // Aerodynamic velocity dampening
 
 	private String name;
@@ -219,13 +220,12 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 	}
 
 	/**
-	 * Calculates the drag coefficient of the spacecraft for a given angle of attack.
+	 * Calculates the drag coefficient for a given angle of attack (heading relative to velocity).
 	 *
 	 * @param angleOfAttack Angle between heading and relative velocity
 	 * @return The corresponding drag coefficient
 	 */
 	public float getDragCoefficient(float angleOfAttack) {
-		// TODO: airbrake module
 		// Increases drag when perpendicular to velocity or flying backwards
 		return .01F * (1 + abs(sin(angleOfAttack) * 2) + abs(sin(angleOfAttack / 2) * 1.5F));
 	}
@@ -264,12 +264,12 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 		super.update(level);
 	}
 
-	//// ????
 	@Override
 	public void drawTrail(float scale) {
-		if(!isGliding()) {
-			super.drawTrail(scale);
+		if(isGliding()) {
+			return;
 		}
+		super.drawTrail(scale);
 	}
 
 	public void drawReentryEffect(float r) {
@@ -285,14 +285,20 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 			return;
 		}
 
-		float relVelocityAngle = nearestPlanet.relativeVelocity(this).heading();
+		PVector relVelocity = nearestPlanet.relativeVelocity(this);
+		float relSpeed = relVelocity.mag();
+		float relVelocityAngle = relVelocity.heading();
 
 		int numberOfArcs = 10;
 		int startColor = v.color(255, 255, 255);
 		int endColor = v.color(252, 86, 3);
 
 		float strength = ((boundaryAbsDist - animationDist) / animationDist)
+				* min(1, relSpeed / REENTRY_SPEED_FACTOR * nearestPlanet.getAtmosphereDensity())
 				* min(1, (nearestPlanet.getAtmosphereRadius() / nearestPlanet.getRadius() - 1) / REENTRY_ANIMATION_MAX);
+		if(abs(strength) < .1f) {
+			return;
+		}
 
 		v.rotate(relVelocityAngle);
 		for(int i = 1; i <= numberOfArcs; i++) {
