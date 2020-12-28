@@ -5,6 +5,9 @@ import vekta.terrain.condition.PlanetQuantity;
 
 import java.util.Set;
 
+import static processing.core.PApplet.sin;
+import static processing.core.PApplet.sq;
+
 public class AdaptiveTerrain extends Terrain {
 
 	public AdaptiveTerrain(TerrestrialPlanet planet) {
@@ -38,5 +41,11 @@ public class AdaptiveTerrain extends Terrain {
 	@Override
 	public boolean isHabitable() {
 		return PlanetQuantity.HABITABLE.getScore(getPlanet()) >= 1;
+	}
+
+	// TODO: randomize
+	@Override
+	public float getDisplacement(float angle) {
+		return sq(sin(10 * angle)) * .5f + sq(sin(5 * angle + .2f)) * .3f + sq(sin(3 * angle + .5f)) * .1f - .5f;
 	}
 }
