@@ -24,7 +24,7 @@ While the `build.bat` script can fully rebuild upon any code changes, it is reco
 2. Open the root directory as a “File Project” (File -> Open -> *open root directory*).
 3. Select the “Build Configurations bar on top of the IDE, and select “Edit Configurations”.
 4. Select the JAR Application Template.
-    - Set “Path to JAR” to `…\[root-directory]\target\vekta-0.1.0-jar-with-dependencies.jar`.
+    - Set “Path to JAR” to `...\[root-directory]\target\vekta-0.1.0-jar-with-dependencies.jar`.
     - Ensure that a valid runtime environment is selected under “JRE:”.
     - Ensure that the “\<whole project\>” is selected under “Search sources using module’s classpath”
     - Select “Apply” and “OK”
