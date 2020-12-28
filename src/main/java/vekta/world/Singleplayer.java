@@ -26,6 +26,7 @@ import vekta.menu.option.BackButton;
 import vekta.menu.option.CustomButton;
 import vekta.menu.option.DungeonRoomButton;
 import vekta.module.*;
+import vekta.module.Module;
 import vekta.module.station.StationCoreModule;
 import vekta.module.station.StructuralModule;
 import vekta.object.SpaceObject;
@@ -665,23 +666,8 @@ public class Singleplayer implements World, PlayerListener {
 	private void resolveCollisions(List<SpaceObject> objects, RenderLevel level, int i, ModularShip playerShip) {
 		SpaceObject s = objects.get(i);
 
-		// Set up object position
-		// TODO: DRY them sqrts
-		PVector position = s.getPositionReference();
-		PVector cameraPos = playerShip.getPositionReference();
-		float scale = getZoom();
-		float screenX = getScreenX(position, cameraPos);
-		float screenY = getScreenY(position, cameraPos);
-		float curvature = getCurvature(sqrt(screenX * screenX + screenY * screenY));
-		screenX *= curvature;
-		screenY *= curvature;
-
-		float r = getObjectRadius(s, s.getRadius() / scale, position, cameraPos, curvature);
-		float onScreenRadius = s.getOnScreenRadius(r);
-		boolean visible = isVisibleOnScreen(screenX, screenY, onScreenRadius);
-
 		// Check collisions when on screen
-		if(visible) {
+		if(isObjectVisibleToPlayer(s)) {
 			for(int j = i + 1; j < objects.size(); j++) {
 				SpaceObject other = objects.get(j);
 
@@ -719,6 +705,30 @@ public class Singleplayer implements World, PlayerListener {
 
 	private boolean isVisibleOnScreen(float screenX, float screenY, float boundary) {
 		return abs(screenX) - boundary <= v.width / 2F && abs(screenY) - boundary <= v.height / 2F;
+	}
+
+	/**
+	 * Returns true if the provided object is visible on screen to the player.
+	 * Abstracts out some of the logic required -- used primarily by OffScreenIndicator
+	 * @param obj Object to check
+	 * @return True if object is visible, false otherwise
+	 */
+	public boolean isObjectVisibleToPlayer(SpaceObject obj) {
+		PVector position = obj.getPositionReference();
+		PVector cameraPos = getPlayer().getShip().getPositionReference();
+
+		float scale = getZoom();
+		float screenX = getScreenX(position, cameraPos);
+		float screenY = getScreenY(position, cameraPos);
+		float curvature = getCurvature(sqrt(screenX * screenX + screenY * screenY));
+
+		screenX *= curvature;
+		screenY *= curvature;
+
+		float r = getObjectRadius(obj, obj.getRadius() / scale, position, cameraPos, curvature);
+		float onScreenRadius = obj.getOnScreenRadius(r);
+
+		return isVisibleOnScreen(screenX, screenY, onScreenRadius);
 	}
 
 	protected void updateGlobal(RenderLevel level) {
