@@ -9,15 +9,25 @@ import static processing.core.PApplet.*;
 
 public class AdaptiveTerrain extends Terrain {
 
+	private String customOverview;
+
 	public AdaptiveTerrain(TerrestrialPlanet planet) {
 		super(planet);
 	}
 
 	@Override
 	public void onSurveyTags(Set<String> tags) {
-		//		if(getEcosystem().getCapacity() > 0) {
-		//			tags.add("Ecosystem");
-		//		}
+//		if(!getEcosystem().getSpecies().isEmpty()) {
+//			tags.add("Ecosystem");
+//		}
+	}
+
+	public String getCustomOverview() {
+		return customOverview;
+	}
+
+	public void setCustomOverview(String customOverview) {
+		this.customOverview = customOverview;
 	}
 
 	@Override
@@ -30,10 +40,12 @@ public class AdaptiveTerrain extends Terrain {
 		//			return "This planet carries telltale signs of a recently abandoned civilization.";
 		//		}
 
+		if(customOverview != null) {
+			return customOverview;
+		}
 		if(isHabitable()) {
 			return "You land in a landscape which appears ripe for colonization.";
 		}
-
 		return "You land on the planet's surface."; // TODO: flavor text based on features/locations
 	}
 
