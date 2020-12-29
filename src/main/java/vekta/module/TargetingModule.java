@@ -20,7 +20,7 @@ import static vekta.Vekta.getWorld;
 
 public class TargetingModule extends ShipModule implements Targeter {
 	private static final float AUTO_ZOOM_POWER = 3;
-	private static final float AUTO_ZOOM_SCALE = 1;
+	private static final float AUTO_ZOOM_SCALE = 2;
 
 	private TargetingMode mode;
 	private SpaceObject target;

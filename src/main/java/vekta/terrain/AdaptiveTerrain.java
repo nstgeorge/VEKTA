@@ -5,8 +5,7 @@ import vekta.terrain.condition.PlanetQuantity;
 
 import java.util.Set;
 
-import static processing.core.PApplet.sin;
-import static processing.core.PApplet.sq;
+import static processing.core.PApplet.*;
 
 public class AdaptiveTerrain extends Terrain {
 
@@ -46,6 +45,6 @@ public class AdaptiveTerrain extends Terrain {
 	// TODO: randomize
 	@Override
 	public float getDisplacement(float angle) {
-		return sq(sin(10 * angle)) * .5f + sq(sin(5 * angle + .2f)) * .3f + sq(sin(3 * angle + .5f)) * .1f - .5f;
+		return sq(sin(7 * angle)) + abs(sin(5 * angle + .2f)) * .7f + sq(sin(3 * angle + .5f)) * .5f - .5f;
 	}
 }

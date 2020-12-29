@@ -15,18 +15,18 @@ Vekta is a procedural space exploration game with vector-style graphics. It feat
     
 # Running the Game
 
-After building the project, the game’s executable can be launched at “/target/vekta-X.X.X-jar-with-dependencies”. Upon launch, the ‘W’, ‘A’, ‘S’, and ‘D’ keys cane be used to navigate the main menu.
+After building the project, the game’s executable can be launched at `/target/vekta-X.X.X-jar-with-dependencies`. Upon launch, the ‘W’, ‘A’, ‘S’, and ‘D’ keys can be used to navigate the main menu.
 
 # Development Workflow
 
-While the “build.bat” script can fully rebuild upon any code changes, it is recommend that you use an IDE for long-term development. We recommend using the newest version of Intellij IDEA due to its useful project configurations with Maven and Ant. Here are the steps for setting up a development environment using IntelliJ.
-1. Confirm that the project builds successfully using the “build.bat” script. If so, all dependencies should be set up correctly.
+While the `build.bat` script can fully rebuild upon any code changes, it is recommended that you use an IDE for long-term development. We recommend using the newest version of Intellij IDEA due to its useful project configurations with Maven and Ant. Here are the steps for setting up a development environment using IntelliJ.
+1. Confirm that the project builds successfully using the `build.bat` script. If so, all dependencies should be set up correctly.
 2. Open the root directory as a “File Project” (File -> Open -> *open root directory*).
 3. Select the “Build Configurations bar on top of the IDE, and select “Edit Configurations”.
 4. Select the JAR Application Template.
-    - Set “Path to JAR” to “…\[root-directory]\target\vekta-0.1.0-jar-with-dependencies.jar”.
+    - Set “Path to JAR” to `...\[root-directory]\target\vekta-0.1.0-jar-with-dependencies.jar`.
     - Ensure that a valid runtime environment is selected under “JRE:”.
-    - Ensure that the “<whole project>” is selected under “Search sources using module’s classpath”
+    - Ensure that the “\<whole project\>” is selected under “Search sources using module’s classpath”
     - Select “Apply” and “OK”
 5. Selecting “Build Project” will now build the project without requiring a full rebuild.
 6. Selecting “Run” will now build and run the project's output JAR file.
