@@ -5,7 +5,8 @@ import vekta.terrain.condition.PlanetQuantity;
 
 import java.util.Set;
 
-import static processing.core.PApplet.*;
+import static processing.core.PApplet.sin;
+import static processing.core.PApplet.sq;
 
 public class AdaptiveTerrain extends Terrain {
 
