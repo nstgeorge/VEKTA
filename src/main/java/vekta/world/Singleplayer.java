@@ -708,12 +708,11 @@ public class Singleplayer implements World, PlayerListener {
 	}
 
 	/**
-	 * Returns true if the provided object is visible on screen to the player.
-	 * Abstracts out some of the logic required -- used primarily by OffScreenIndicator
+	 * Given an object, return its location on the screen and its radius.
 	 * @param obj Object to check
-	 * @return True if object is visible, false otherwise
+	 * @return A PVector where [x, y] represent the location of the object on screen and [z] is its radius.
 	 */
-	public boolean isObjectVisibleToPlayer(SpaceObject obj) {
+	private PVector getObjectScreenLocation(SpaceObject obj) {
 		PVector position = obj.getPositionReference();
 		PVector cameraPos = getPlayer().getShip().getPositionReference();
 
@@ -728,7 +727,37 @@ public class Singleplayer implements World, PlayerListener {
 		float r = getObjectRadius(obj, obj.getRadius() / scale, position, cameraPos, curvature);
 		float onScreenRadius = obj.getOnScreenRadius(r);
 
-		return isVisibleOnScreen(screenX, screenY, onScreenRadius);
+		return new PVector(screenX, screenY, onScreenRadius);
+	}
+
+	/**
+	 * Returns true if the provided object is visible on screen to the player.
+	 * Abstracts out some of the logic required -- used primarily by OffScreenIndicator
+	 * @param obj Object to check
+	 * @return True if object is visible, false otherwise
+	 */
+	public boolean isObjectVisibleToPlayer(SpaceObject obj) {
+		PVector objectLocation = getObjectScreenLocation(obj);
+		return isVisibleOnScreen(objectLocation.x, objectLocation.y, objectLocation.z);
+	}
+
+	/**
+	 * If an object is outside the screen, this function returns the pixel-based distance from the edge of the screen.
+	 * If the object is on screen, returns 0.
+	 * @param obj Object to check
+	 * @return Distance from edge of screen in pixels if object is off screen, 0 otherwise
+	 */
+	public float getScreenDistanceFromEdge(SpaceObject obj) {
+		if(isObjectVisibleToPlayer(obj)) return 0;
+
+		PVector objectLocation = getObjectScreenLocation(obj);
+
+		// Apply third dimension as radius and remove it from vector
+		objectLocation.x -= objectLocation.z;
+		objectLocation.y -= objectLocation.z;
+		objectLocation.z = 0;
+
+		return sqrt((float)(Math.pow(abs(objectLocation.x) - v.width / 2F, 2) + Math.pow(abs(objectLocation.y) - v.height / 2F, 2)));
 	}
 
 	protected void updateGlobal(RenderLevel level) {
