@@ -40,7 +40,7 @@ public class DistrictMenuHandle extends SettlementMenuHandle {
 	}
 
 	@Override
-	protected void onVisit(Menu menu) {
+	protected void onVisit() {
 		// Override default behavior (observe settlement)
 	}
 
@@ -49,13 +49,11 @@ public class DistrictMenuHandle extends SettlementMenuHandle {
 		return 2;
 	}
 
-	@Override
-	protected float getX() {
+	protected float getDistrictX() {
 		return getDistrict().getX();
 	}
 
-	@Override
-    public float getY() {
+    public float getDistrictY() {
 		return getDistrict().getY();
 	}
 }

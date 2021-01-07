@@ -46,16 +46,16 @@ public class SideLayoutMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public void init(Menu menu) {
-		super.init(menu);
-		menu.addSelectListener(opt -> updateLayout(getMenu()));
+	public void init() {
+		super.init();
+		getMenu().addSelectListener(opt -> updateLayout());
 	}
 
 	@Override
-	public void focus(Menu menu) {
-		super.focus(getMenu());
+	public void focus() {
+		super.focus();
 
-		updateLayout(getMenu());
+		updateLayout();
 	}
 
 	@Override
@@ -74,11 +74,11 @@ public class SideLayoutMenuHandle extends MenuHandle {
 
 	@Override
 	public void onChange() {
-		updateLayout(getMenu());
+		updateLayout();
 	}
 
-	private void updateLayout(Menu menu) {
-		MenuOption cursor = menu.getCursor();
+	private void updateLayout() {
+		MenuOption cursor = getMenu().getCursor();
 		layout.clear();
 		layout.getStyle().color(cursor.getColor());
 		if(cursor instanceof LayoutAware) {

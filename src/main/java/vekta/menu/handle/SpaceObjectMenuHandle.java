@@ -30,7 +30,7 @@ public class SpaceObjectMenuHandle extends MenuHandle {
 
 		v.textSize(48);
 		v.fill(target.getColor());
-		v.text(target.getName(), v.width / 2F, getY() - (getY() / 2));
+		v.text(target.getName(), v.width / 2F, getItemY(-3));
 
 		// Draw object preview
 		v.pushMatrix();

@@ -56,17 +56,17 @@ public class EconomyMenuHandle extends MenuHandle {
 		return buying ? x : v.width - x;
 	}
 
-//	@Override
-//	public int getItemY(int i) {
-//		return super.getItemY(i - 2);
-//	}
+	//	@Override
+	//	public int getItemY(int i) {
+	//		return super.getItemY(i - 2);
+	//	}
 
 	@Override
-	public void focus(Menu menu) {
-		super.focus(getMenu());
+	public void focus() {
+		super.focus();
 
-		if(buying && menu.size() == 1) {
-			setBuying(menu, false);
+		if(buying && getMenu().size() == 1) {
+			setBuying(getMenu(), false);
 		}
 	}
 
@@ -151,7 +151,7 @@ public class EconomyMenuHandle extends MenuHandle {
 
 		if(menu.getCursor() instanceof EconomyItemButton) {
 			int currentCount = ((EconomyItemButton)menu.getCursor()).countItems();
-			
+
 			// Draw left/right key binding text when appropriate
 			if(currentCount > 0 == buying) {
 				String keyText = buying

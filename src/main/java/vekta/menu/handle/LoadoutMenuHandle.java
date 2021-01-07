@@ -18,7 +18,7 @@ public class LoadoutMenuHandle extends MenuHandle {
 	private final boolean replace;
 
 	public LoadoutMenuHandle(List<Module> modules, boolean replace) {
-		super(0, 200, v.width, v.height - 300);
+//		super(0, 200, v.width, v.height - 300);
 		this.modules = modules;
 		this.replace = replace;
 	}

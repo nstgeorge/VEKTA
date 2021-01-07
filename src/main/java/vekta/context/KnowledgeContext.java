@@ -216,8 +216,6 @@ public class KnowledgeContext implements Context, Comparator<Knowledge> {
 
 	@Override
 	public void keyPressed(KeyEvent event) {
-		Context.super.keyPressed(event);
-
 		for(int i = 0; i < 10 && i < tabs.size(); i++) {
 			if(event.getKey() == '0' + (i + 1) % 10) {
 				setTabIndex(i);

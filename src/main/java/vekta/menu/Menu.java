@@ -1,5 +1,6 @@
 package vekta.menu;
 
+import javafx.util.Callback;
 import processing.event.KeyEvent;
 import vekta.KeyBinding;
 import vekta.context.Context;
@@ -10,6 +11,7 @@ import vekta.menu.option.MenuOption;
 import vekta.player.Player;
 import vekta.player.PlayerEvent;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +45,8 @@ public class Menu implements Context {
 		this.handle = handle;
 		this.defaultOption = def;
 
-		handle.init(this);
+		handle.setMenu(this);
+		handle.init();
 
 		if(getPlayer() != null) {
 			getPlayer().emit(PlayerEvent.MENU, this);
@@ -109,13 +112,13 @@ public class Menu implements Context {
 
 	public void add(MenuOption item) {
 		options.add(item);
-		handle.addElement(item);
+		//		handle.addElement(item);
 		item.init(this);
 	}
 
 	public void add(int index, MenuOption item) {
 		options.add(index, item);
-		handle.addElement(item);
+		//		handle.addElement(item);
 		item.init(this);
 	}
 
@@ -125,7 +128,7 @@ public class Menu implements Context {
 
 	public boolean remove(MenuOption item) {
 		if(options.remove(item)) {
-			handle.removeElement(item);
+			//			handle.removeElement(item);
 			if(size() == 0) {
 				close();
 			}
@@ -172,7 +175,7 @@ public class Menu implements Context {
 		}
 	}
 
-	public void addSelectListener(Consumer<MenuOption> callback) {
+	public void addSelectListener(Callback callback) {
 		addListener(new MenuListener() {
 			@Override
 			public void onSelect(MenuOption option) {
@@ -191,7 +194,7 @@ public class Menu implements Context {
 
 	@Override
 	public void focus() {
-		handle.focus(this);
+		handle.focus();
 		if(autoOption != null) {
 			select(autoOption);
 			autoOption = null;
@@ -203,7 +206,7 @@ public class Menu implements Context {
 
 	@Override
 	public void unfocus() {
-		handle.unfocus(this);
+		handle.unfocus();
 	}
 
 	@Override
@@ -213,8 +216,6 @@ public class Menu implements Context {
 
 	@Override
 	public void keyPressed(KeyEvent event) {
-		Context.super.keyPressed(event);
-
 		handle.keyPressed(event);
 	}
 
@@ -236,5 +237,8 @@ public class Menu implements Context {
 		if(getDefault() != null) {
 			select(getDefault());
 		}
+	}
+
+	public interface Callback extends Consumer<MenuOption>, Serializable {
 	}
 }

@@ -2,32 +2,32 @@
 
 ## Objectives and Goals
 
-The Objective of Vekta is simply to explore a proceduraly generated universe!
+The objective of Vekta is to explore a procedurally generated universe!
 
-How specifically you want to go about doing this is entirely up to you, but here's how you should probably start:
+How specifically you want to go about doing this is entirely up to you, but here's how you could start:
 
-1: Start by finding a planet to dock at. Planets are kind of the nexus of activity and you'll be able to
-recieve missions, trade, find context sensitive events, and refuel at them.
+1: Find a planet to dock at. Planets are sometimes populated, and you'll be able to
+receive missions, trade, find context sensitive events, and more.
 
 2: Take on a mission! Missions are randomly generated, so your goal may vary. However, the majority of
 them generally require traveling to a different planet. You can use the mission radar to track down your destination.
 
-3: Start trading cargo between planets! This is pretty self explanatory, but see if you can make a profit by transferring
+3: Start trading cargo between planets! This is pretty self-explanatory, but see if you can make a profit by transferring
 cargo.
 
-4: Encounter a random event. Fly around until you spot an anomoly and try not to get blow up!
+4: Encounter a random event. Fly around until you spot an anomaly and try not to get blown up!
 
 5: Target an asteroid, or perhaps another ship!
 
-6: Buy upgrades for your ship at a planet!
+6: Buy or salvage upgrades for your ship!
 
-7: Fly into a black hole, Self explanatory.
+7: Fly into a black hole. Self-explanatory.
 
 8: And more! As the game gets developed, new random events and features will be added to keep players engaged.
 
 ## Controls
 
-NOTE: Exactly keybindings can be adjusted in the settings. This section is to explain how exactly to use various control 
+NOTE: Keybindings can be adjusted in the settings. This section is to explain how exactly to use various control 
 features with default keybindings.
 
 To start, Vekta tries to conform with actual physics. This means sometimes things in space can be difficult such as stopping.
@@ -39,13 +39,13 @@ based upon proximity as well. Z and X are also hotkeys to zoom in and out respec
 
 If you ever need to quick save before doing something stupid, like passing within 500m of the event horizon of a black hole,
 you can do so with numpad5! The game tends to save at specific points such as landing on a planet, but nothing beats a manual save.
-Also if you ever exit the game it will automatically save your progress. This file can be resummoned with numpad9.
+Also, the game will auto-save whenever you pause or enter a menu. You can also quick-save and quick-load using the F5 and F9 keys, respectively.
 
 This movement style for the ship follows basic tank controls! Hello mid 90s survivial horror! You can use A and D to rotate left and
 right, and W and S to accelerate forward and backward. 
 
-You may find yourself in combat so it's important to remember that this game is physics based. Your projectiles can be fired off with
-Space, and you can defend with Control.
+You may find yourself in combat, so it's important to remember that this game is physics based. Your projectiles can be fired off with
+Space, and you can deploy countermeasures with Ctrl.
 
 Here is a list of the following ship related commands outside of combat:
 

@@ -153,8 +153,6 @@ public class Vekta extends PApplet {
 			e.printStackTrace();
 		}
 
-		//		textMode(SHAPE);
-
 		// Fonts
 		HEADER_FONT = createFont(FONTNAME, 72);
 		BODY_FONT = createFont(FONTNAME, 24);
@@ -207,11 +205,15 @@ public class Vekta extends PApplet {
 		// Poll analog controls regardless of if they're pressed at all or not.
 		XInputAxes axes = DEVICE.getComponents().getAxes();
 
-		// If you are accelerating you cannot deccelerate at the same time with analog and vice versa.
-		if(axes.lt == 0)
-			context.analogKeyPressed(axes.rt);
-		if(axes.rt == 0)
+		// If you are accelerating you cannot decelerate at the same time with analog and vice versa.
+		boolean left = axes.lt != 0;
+		boolean right = axes.rt != 0;
+		if(left && !right) {
 			context.analogKeyPressed(-axes.lt);
+		}
+		if(right && !left) {
+			context.analogKeyPressed(axes.rt);
+		}
 
 		context.controlStickMoved(axes.lx, axes.ly, LEFT);
 		context.controlStickMoved(axes.rx, axes.ry, RIGHT);
@@ -221,6 +223,11 @@ public class Vekta extends PApplet {
 	public void keyPressed(KeyEvent event) {
 		if((world != null && world.globalKeyPressed(event)) || context != null) {
 			context.keyPressed(event);
+			for(KeyBinding key : KeyBinding.values()) {
+				if(Settings.getKeyCode(key) == event.getKeyCode()) {
+					context.keyPressed(key);
+				}
+			}
 			if(key == ESC) {
 				key = 0; // Suppress default behavior (exit)
 			}
@@ -231,6 +238,11 @@ public class Vekta extends PApplet {
 	public void keyReleased(KeyEvent event) {
 		if(context != null) {
 			context.keyReleased(event);
+			for(KeyBinding key : KeyBinding.values()) {
+				if(Settings.getKeyCode(key) == event.getKeyCode()) {
+					context.keyReleased(key);
+				}
+			}
 		}
 	}
 

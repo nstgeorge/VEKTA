@@ -33,7 +33,7 @@ public class SettingsMenuButton extends ButtonOption {
 
 		sub.add(new InputOption<>("Zoom near planets",
 				new BooleanSettingWatcher("zoomNearPlanets"),
-				new ChoicesInputController<>(Arrays.asList(true, false), b -> b ? "Yes" : "No")));
+				new YesNoInputController()));
 
 		if(DEVICE != null && DEVICE.isConnected()) {
 			sub.add(new InputOption<>("Rumble Amount",
@@ -47,7 +47,11 @@ public class SettingsMenuButton extends ButtonOption {
 
 		sub.add(new InputOption<>("Random events",
 				new BooleanSettingWatcher("randomEvents"),
-				new ChoicesInputController<>(Arrays.asList(true, false), b -> b ? "Yes" : "No")));
+				new YesNoInputController()));
+
+		sub.add(new InputOption<>("Developer mode",
+				new BooleanSettingWatcher("debug"),
+				new YesNoInputController()));
 
 		sub.add(new GraphicsMenuButton());
 		sub.add(new KeyBindingMenuButton());
