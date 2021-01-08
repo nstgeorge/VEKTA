@@ -1,6 +1,7 @@
 package vekta.object.planet;
 
 import processing.core.PVector;
+import sun.font.SunFontManager;
 import vekta.economy.TemporaryModifier;
 import vekta.faction.Faction;
 import vekta.knowledge.ObservationLevel;
@@ -30,7 +31,7 @@ import static vekta.Vekta.*;
 public class TerrestrialPlanet extends Planet {
 	// TODO: gradually move randomization into `StarSystemGenerator`
 
-	private static final int SURFACE_DETAIL = 100; // Number of lines used to draw a planet's surface
+	private static final int SURFACE_DETAIL = 200; // Number of lines used to draw a planet's surface
 	private static final float MAX_LOCATION_ICON_SCALE = 40;
 	private static final float MAX_ATMOSPHERE_RADIUS = 2;
 	private static final float LANDING_SITE_ANGLE = .1f; // Max deviation from the landing site's angle around the planet (radians)
@@ -40,13 +41,14 @@ public class TerrestrialPlanet extends Planet {
 	private final Terrain terrain;
 	private final LandingSite terrainSite;
 	private final Map<LandingSite, Float> landingMap = new HashMap<>();
-
 	private final List<Settlement> settlements = new ArrayList<>();
 
-	private SpaceObject orbitObject;
+	private final float[] surfaceCache = new float[SURFACE_DETAIL];
+	private float surfaceAverage;
 
 	private final Counter orbitCt = new Counter(10).randomize();
 
+	private SpaceObject orbitObject;
 	private ObservationLevel levelCache;
 
 	private float atmosphereDensity;    // Atmospheric density (kg/m^3)
@@ -66,6 +68,7 @@ public class TerrestrialPlanet extends Planet {
 		terrainSite = new LandingSite(terrain);
 
 		updateOrbitObject();
+		notifySurfaceChanged();
 
 		// TODO: tidally lock if close to orbited object
 	}
@@ -141,10 +144,12 @@ public class TerrestrialPlanet extends Planet {
 
 	public void addLandingSite(LandingSite site, float angle) {
 		landingMap.put(site, v.normalizeAngle(angle - getDirection()));
+		notifySurfaceChanged();
 	}
 
 	public void removeLandingSite(LandingSite site) {
 		landingMap.remove(site);
+		notifySurfaceChanged();
 	}
 
 	public boolean isInhabited() {
@@ -344,11 +349,18 @@ public class TerrestrialPlanet extends Planet {
 	}
 
 	public float getDisplacementScale() {
-		return min(.2f, 1 / log(getMass()));
+		//		return min(.2f, 1 / log(getMass()));
+		return min(.2f, 5 / log(getMass())); // Exaggerate a bit for now
 	}
 
+	// Accurate but potentially slow
 	public float getRadius(float angle) {
-		return getRadius() * (1 + getDisplacementScale() * getTerrain().getDisplacement(angle - getDirection()));
+		return getRadius() * (1 + (getTerrain().getDisplacement(angle - getDirection()) - surfaceAverage) * getDisplacementScale());
+	}
+
+	// Less accurate but always very efficient
+	public float getApproximateRadius(float angle) {
+		return getRadius() * (1 + surfaceCache[Math.round(v.normalizeAngle(angle - getDirection()) * surfaceCache.length / TWO_PI)]);
 	}
 
 	@Override
@@ -360,17 +372,34 @@ public class TerrestrialPlanet extends Planet {
 		return super.collidesWith(level, s);
 	}
 
+	public void notifySurfaceChanged() {
+		if(terrain == null) {
+			return;
+		}
+		int len = surfaceCache.length;
+		float sum = 0;
+		for(int i = 0; i < len; i++) {
+			float displacement = getTerrain().getDisplacement(TWO_PI * i / len);
+			surfaceCache[i] = displacement;
+			sum += displacement;
+		}
+		surfaceAverage = sum / surfaceCache.length;
+		for(int i = 0; i < len; i++) {
+			// Ensure that average displacement is zero
+			surfaceCache[i] = (surfaceCache[i] - surfaceAverage) * getDisplacementScale();
+		}
+	}
+
 	@Override
 	public void drawNearby(float r) {
 		float direction = getDirection();
-		float scale = getDisplacementScale();
 		if(r > 10) {
-			Terrain terrain = getTerrain();
-			float x = r * (1 + scale * terrain.getDisplacement(-direction));
+			int len = surfaceCache.length;
+			float x = r * (1 + surfaceCache[0]);
 			float y = 0;
-			for(int i = 1; i <= SURFACE_DETAIL; i++) {
-				float angle = TWO_PI * i / SURFACE_DETAIL;
-				float elevation = r * (1 + scale * terrain.getDisplacement(angle - direction));
+			for(int i = 1; i <= len; i++) {
+				float angle = TWO_PI * i / len;
+				float elevation = r * (1 + surfaceCache[i % len]);
 				float x1 = cos(angle) * elevation;
 				float y1 = sin(angle) * elevation;
 				v.line(x, y, x1, y1);
@@ -392,13 +421,14 @@ public class TerrestrialPlanet extends Planet {
 
 		// Draw landing locations
 		float rSite = min(MAX_LOCATION_ICON_SCALE, r * LANDING_SITE_RADIUS); // Chord length
+		float radiusScale = r / getRadius();
 		for(Map.Entry<LandingSite, Float> entry : landingMap.entrySet()) {
 			Location location = entry.getKey().getLocation();
 			float angle = entry.getValue();
 
 			v.pushMatrix();
 			v.rotate(angle + direction - HALF_PI); // Y axis
-			v.translate(0, r * (1 + scale * getTerrain().getDisplacement(angle)));
+			v.translate(0, getRadius(angle) * radiusScale);
 			v.stroke(location.getColor());
 			location.draw(rSite);
 			v.popMatrix();
