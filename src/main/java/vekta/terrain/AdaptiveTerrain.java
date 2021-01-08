@@ -6,20 +6,32 @@ import vekta.terrain.condition.PlanetQuantity;
 import java.util.Set;
 
 import static processing.core.PApplet.*;
+import static processing.core.PConstants.TWO_PI;
+import static vekta.Vekta.v;
 
 public class AdaptiveTerrain extends Terrain {
+	private static final int START_HARMONIC = 1; // Initial radial symmetry (1 corresponding to first harmonic)
+	private static final int NUM_HARMONICS = 30; // Number of harmonics for surface detail
+
+	private final float[] harmonics = new float[NUM_HARMONICS]; // Harmonic amplitudes
+	private final float[] offsets = new float[NUM_HARMONICS]; // Harmonic phase offsets
 
 	private String customOverview;
 
 	public AdaptiveTerrain(TerrestrialPlanet planet) {
 		super(planet);
+
+		for(int i = 0; i < harmonics.length; i++) {
+			harmonics[i] = v.gaussian(1);
+			offsets[i] = v.random(TWO_PI);
+		}
 	}
 
 	@Override
 	public void onSurveyTags(Set<String> tags) {
-//		if(!getEcosystem().getSpecies().isEmpty()) {
-//			tags.add("Ecosystem");
-//		}
+		//		if(!getEcosystem().getSpecies().isEmpty()) {
+		//			tags.add("Ecosystem");
+		//		}
 	}
 
 	public String getCustomOverview() {
@@ -54,9 +66,12 @@ public class AdaptiveTerrain extends Terrain {
 		return PlanetQuantity.HABITABLE.getScore(getPlanet()) >= 1;
 	}
 
-	// TODO: randomize
 	@Override
 	public float getDisplacement(float angle) {
-		return sq(sin(7 * angle)) + abs(sin(5 * angle + .2f)) * .7f + sq(sin(3 * angle + .5f)) * .5f - .5f;
+		float f = 0;
+		for(int i = 0; i < harmonics.length; i++) {
+			f += harmonics[i] * (1 - sq(sin((angle + offsets[i]) / 2 * (i + START_HARMONIC))));
+		}
+		return f / harmonics.length;
 	}
 }
