@@ -90,17 +90,17 @@ public class TextInputContext implements Context {
 	}
 
 	@Override
-	public void keyTyped(char key) {
-		startedTyping = true;
-		if(key != '\b') {
-			setText(getText() + key);
+	public void keyPressed(KeyBinding key) {
+		if(key == KeyBinding.MENU_SELECT) {
+			closeIfValid();
 		}
 	}
 
 	@Override
-	public void keyPressed(KeyBinding key) {
-		if(key == KeyBinding.MENU_SELECT) {
-			closeIfValid();
+	public void keyTyped(char key) {
+		startedTyping = true;
+		if(key != '\b') {
+			setText(getText() + key);
 		}
 	}
 

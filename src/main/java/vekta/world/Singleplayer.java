@@ -1066,7 +1066,6 @@ public class Singleplayer implements World, PlayerListener {
 			menu.addDefault();
 			setContext(menu);
 		}
-		World.super.keyPressed(event);
 	}
 
 	// Player tag for debug mode

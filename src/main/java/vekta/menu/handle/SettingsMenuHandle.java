@@ -1,18 +1,31 @@
 package vekta.menu.handle;
 
+import vekta.KeyCategory;
+
 import static vekta.Vekta.v;
 
 /**
  * Menu renderer for game settings
  */
 public class SettingsMenuHandle extends MenuHandle {
+	private final KeyCategory category;
 
 	public SettingsMenuHandle() {
-		this(0, 300, v.width, v.height - 400);
+		this(null);
 	}
 
-	public SettingsMenuHandle(int x, int y, int width, int height) {
-		super(x, y, width, height);
+	public SettingsMenuHandle(KeyCategory category) {
+		this.category = category;
+	}
+
+	public KeyCategory getCategory() {
+		return category;
+	}
+
+	@Override
+	public int getItemY(int i) {
+		// Move everything upwards a bit
+		return super.getItemY(i - 1);
 	}
 
 	@Override
@@ -22,14 +35,12 @@ public class SettingsMenuHandle extends MenuHandle {
 
 	@Override
 	public int getSpacing() {
-		return 20;
+		return getItemHeight() + 20;
 	}
 
 	@Override
 	public void beforeDraw() {
 		super.beforeDraw();
-
-		//		MainMenuHandle.HYPERSPACE.render();
 	}
 
 	@Override
@@ -38,6 +49,6 @@ public class SettingsMenuHandle extends MenuHandle {
 
 		v.textSize(32);
 		v.fill(255);
-		v.text("Settings", getItemX(), getY() - (getY() / 2));
+		v.text(getCategory() != null ? getCategory().getTitle() : "Settings", getItemX(), getItemY(-2));
 	}
 }

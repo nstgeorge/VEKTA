@@ -37,7 +37,7 @@ public class InputOption<T> extends MenuOption {
 		String name = getName();
 		MenuHandle handle = menu.getHandle();
 		float x = handle.getItemX();
-		float y = handle.getY() + handle.getItemY(index);
+		float y = handle.getItemY(index);
 		float xOffset = handle.getItemWidth() / 2F;
 		boolean selected = menu.getIndex() == index;
 		String valueText = getController().getName(getWatcher().getValue());

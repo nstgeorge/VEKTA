@@ -22,8 +22,8 @@ public class LocationMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public void init(Menu menu) {
-		super.init(menu);
+	public void init() {
+		super.init();
 
 		if(location.getTune() != null) {
 			location.getTune().reset();

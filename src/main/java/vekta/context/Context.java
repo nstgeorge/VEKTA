@@ -6,15 +6,17 @@ import vekta.KeyBinding;
 import vekta.Settings;
 import vekta.overlay.Overlay;
 
+import static processing.core.PApplet.println;
+
 public interface Context extends Overlay {
 	/**
-	 * Called whenever the context is activated
+	 * Called whenever the context is activated.
 	 */
 	default void focus() {
 	}
 
 	/**
-	 * Called whenever the context is replaced
+	 * Called whenever the context is replaced.
 	 */
 	default void unfocus() {
 	}
@@ -46,7 +48,7 @@ public interface Context extends Overlay {
 	}
 
 	/**
-	 * What to do with one of the back controller triggers is pressed
+	 * What to do with one of the back controller triggers is pressed.
 	 */
 	default void analogKeyPressed(float value){
 	}
@@ -58,47 +60,37 @@ public interface Context extends Overlay {
 	}
 
 	/**
-	 * What to do when any key is pressed
+	 * What to do when any key is pressed.
 	 */
 	default void keyPressed(KeyEvent event) {
-		for(KeyBinding key : KeyBinding.values()) {
-			if(Settings.getKeyCode(key) == event.getKeyCode()) {
-				keyPressed(key);
-			}
-		}
 	}
 
 	/**
-	 * What to do when a mapped KeyBinding is pressed
+	 * What to do when a mapped KeyBinding is pressed.
 	 */
 	default void keyPressed(KeyBinding key) {
 	}
 
 	/**
-	 * What to do when any key is released
+	 * What to do when any key is released.
 	 */
 	default void keyReleased(KeyEvent event) {
-		for(KeyBinding ctrl : KeyBinding.values()) {
-			if(Settings.getKeyCode(ctrl) == event.getKeyCode()) {
-				keyReleased(ctrl);
-			}
-		}
 	}
 
 	/**
-	 * What to do when a mapped KeyBinding is released
+	 * What to do when a mapped KeyBinding is released.
 	 */
 	default void keyReleased(KeyBinding key) {
 	}
 
 	/**
-	 * What to do when any key is typed
+	 * What to do when any key is typed.
 	 */
 	default void keyTyped(char key) {
 	}
 
 	/**
-	 * What to do when the mouse wheel is scrolled
+	 * What to do when the mouse wheel is scrolled.
 	 */
 	default void mouseWheel(int amount) {
 	}

@@ -39,12 +39,12 @@ public class DialogMenuHandle extends MenuHandle {
 //	}
 
 	@Override
-	public void focus(Menu menu) {
-		super.focus(getMenu());
+	public void focus() {
+		super.focus();
 
 		if(!(getPerson() instanceof TemporaryPerson)) {
-			menu.getPlayer().addKnowledge(new PersonKnowledge(ObservationLevel.VISITED, getPerson()));
-			menu.getPlayer().addKnowledge(new FactionKnowledge(getPerson().getFaction()));
+			getMenu().getPlayer().addKnowledge(new PersonKnowledge(ObservationLevel.VISITED, getPerson()));
+			getMenu().getPlayer().addKnowledge(new FactionKnowledge(getPerson().getFaction()));
 		}
 	}
 
@@ -54,10 +54,10 @@ public class DialogMenuHandle extends MenuHandle {
 
 		v.textSize(64);
 		v.fill(dialog.getPerson().getColor());
-		v.text(dialog.getPerson().getName(), getItemX(), getY() - (getY() / 2));
+		v.text(dialog.getPerson().getName(), getItemX(), getItemY(-3));
 
 		v.textSize(24);
 		v.fill(dialog.getColor());
-		v.text(dialog.getMessage(), getItemX(), getY() - (getY() / 2) + 100);
+		v.text(dialog.getMessage(), getItemX(), getItemY(-2));
 	}
 }
