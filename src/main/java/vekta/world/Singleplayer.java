@@ -712,7 +712,7 @@ public class Singleplayer implements World, PlayerListener {
 	 * @param obj Object to check
 	 * @return A PVector where [x, y] represent the location of the object on screen and [z] is its radius.
 	 */
-	private PVector getObjectScreenLocation(SpaceObject obj) {
+	public PVector getObjectScreenLocation(SpaceObject obj) {
 		PVector position = obj.getPositionReference();
 		PVector cameraPos = getPlayer().getShip().getPositionReference();
 

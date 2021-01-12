@@ -30,7 +30,6 @@ public class OffScreenIndicator extends Indicator<NullType, SpaceObject> impleme
 
 	private transient PShape arrow;
 	private Ship ship;
-	private float x, y;
 
 	public OffScreenIndicator(Function value, Ship ship) {
 		super("Offscreen Indicator", value, v.width / 2, v.height / 2, v.color(255));
@@ -38,8 +37,7 @@ public class OffScreenIndicator extends Indicator<NullType, SpaceObject> impleme
 	}
 
 	public OffScreenIndicator(SpaceObject target, Ship ship) {
-		super("Offscreen Indicator", t -> target, v.width / 2, v.height / 2, v.color(255));
-		this.ship = ship;
+		this(t -> target, ship);
 	}
 
 	@Override
@@ -76,7 +74,7 @@ public class OffScreenIndicator extends Indicator<NullType, SpaceObject> impleme
 
 					// Draw label offset from arrow
 					position.x -= v.textWidth(target.getName()) * v.cos(position.heading());
-					position.y *= 0.9f;
+					position.y *= 0.9F;
 					v.textAlign(CENTER);
 					v.text(target.getName(), position.x + (v.width) / 2F, position.y + (v.height) / 2F);
 					v.popStyle();
@@ -86,7 +84,7 @@ public class OffScreenIndicator extends Indicator<NullType, SpaceObject> impleme
 	}
 
 	public SpaceObject getTarget() {
-		return value.apply(null);
+		return getValue();
 	}
 
 	private PVector getRelativePosition() {
