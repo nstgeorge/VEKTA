@@ -26,24 +26,26 @@ public class StatusOverlay implements Overlay {
 	private Targeter targeter;
 	private String distString;
 
-	private DialIndicator velocityDial;
-	private DialIndicator objectiveDial;
+	private final DialIndicator velocityDial;
+	private final DialIndicator objectiveDial;
 
-	private StripCompassIndicator compass;
+	private final StripCompassIndicator compass;
 
-	private MeterIndicator temperatureMeter;
-	private MeterIndicator energyMeter;
+	private final MeterIndicator temperatureMeter;
+	private final MeterIndicator energyMeter;
 
 	public StatusOverlay(Player player) {
 		this.player = player;
 		ModularShip ship = player.getShip();
 
-		velocityDial = new DialIndicator("Velocity", t -> ship.getVelocity(), v.width - 370, DIAL_HEIGHT, UI_COLOR);
+		// The locations for each dial are temporary until we get a better UI layout system working.
+
+		velocityDial = new DialIndicator("Velocity", t -> ship.getVelocity(), v.width * (17/20F), DIAL_HEIGHT, UI_COLOR);
 		// ObjectiveDial's value function is temporarily set to return 0 here. It is updated when a player finds an objective.
 		objectiveDial = new DialIndicator("Objective", t -> 0, v.width / 2F, DIAL_HEIGHT, UI_COLOR);
 		compass = new StripCompassIndicator("Compass", t -> ship.getHeading(), v.width / 2F, 40, UI_COLOR);
 		temperatureMeter = new MeterIndicator("Temp", MeterIndicator.TYPE.VERTICAL, t -> ship.getTemperatureKelvin(), MIN_TEMP, MAX_TEMP, v.width * (39/40F), DIAL_HEIGHT, v.height / 20F, v.height / 80F, UI_COLOR);
-		energyMeter = new MeterIndicator("Energy", MeterIndicator.TYPE.RADIAL, t -> ship.getEnergy(), 0, player.getShip().getMaxEnergy(), v.width * (18/20F), DIAL_HEIGHT, v.height / 20F, v.height / 90F, UI_COLOR);
+		energyMeter = new MeterIndicator("Energy", MeterIndicator.TYPE.RADIAL, t -> ship.getEnergy(), 0, player.getShip().getMaxEnergy(), v.width * (37/40F), DIAL_HEIGHT, v.height / 20F, v.height / 90F, UI_COLOR);
 
 		updateUIInformation();
 	}

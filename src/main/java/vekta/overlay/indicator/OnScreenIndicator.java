@@ -19,15 +19,15 @@ public class OnScreenIndicator extends Indicator<NullType, SpaceObject> implemen
 	private static final float NAMELINE_PADDING = 10;	// Extra length on the name line.
 	private static final int INDICATOR_SIZE = 30;		// Size of the box around the target.
 
-	private Ship ship;
+	private final Ship ship;
 
 	public OnScreenIndicator(Function value, Ship ship) {
-		super("On-Screen Indicator", value, v.width / 2, v.height / 2, v.color(255));
+		super("On-Screen Indicator", value, v.width / 2F, v.height / 2F, v.color(255));
 		this.ship = ship;
 	}
 
 	public OnScreenIndicator(SpaceObject target, Ship ship) {
-		this(t -> target,ship);
+		this(t -> target, ship);
 	}
 
 	@Override
@@ -36,10 +36,10 @@ public class OnScreenIndicator extends Indicator<NullType, SpaceObject> implemen
 
 		if(v.getWorld() instanceof Singleplayer) {
 			if(target != null) {
-				PVector oppositeOfShipHeading = target.getPosition().sub(ship.getPosition()).normalize().mult(INDICATOR_SIZE / 2F);
+				PVector oppositeOfShipHeading = target.getPosition().sub(ship.getPosition()).setMag(INDICATOR_SIZE);
 
 				Singleplayer world = ((Singleplayer)v.getWorld());
-				if(world.isObjectVisibleToPlayer(target)) {
+				if(world.isObjectVisibleToPlayer(target) && (target.getRadius() / world.getZoom()) < (INDICATOR_SIZE / 2F)) {
 					PVector screenLocation = world.getObjectScreenLocation(target);
 
 					screenLocation.x += v.width / 2F;
@@ -53,7 +53,16 @@ public class OnScreenIndicator extends Indicator<NullType, SpaceObject> implemen
 					v.ellipse(screenLocation.x, screenLocation.y, INDICATOR_SIZE, INDICATOR_SIZE);
 
 					// Draw the name line
-					v.shape(getNameLine(INDICATOR_SIZE, oppositeOfShipHeading), screenLocation.x, screenLocation.y);
+
+					v.line(screenLocation.x + oppositeOfShipHeading.x, screenLocation.y + oppositeOfShipHeading.y, screenLocation.x + oppositeOfShipHeading.x + (v.cos(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET), screenLocation.y + oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET));
+
+					// Determine which direction the ship is (left/right) from the target, then draw the line extending under the object name
+					// I'm sorry for my sins
+					if(v.cos(oppositeOfShipHeading.heading()) > 0) {
+						v.line(screenLocation.x + oppositeOfShipHeading.x + (v.cos(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET), screenLocation.y + oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET), screenLocation.x + oppositeOfShipHeading.x + (v.cos(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET) + v.textWidth(target.getName()) + NAMELINE_PADDING, screenLocation.y + oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET));
+					} else {
+						v.line( screenLocation.x + oppositeOfShipHeading.x + (v.cos(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET), screenLocation.y + oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET), screenLocation.x + oppositeOfShipHeading.x + (v.cos(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET) - v.textWidth(target.getName()) - NAMELINE_PADDING, screenLocation.y + oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET));
+					}
 
 					// Write the target name
 					v.color(target.getColor());
@@ -62,43 +71,10 @@ public class OnScreenIndicator extends Indicator<NullType, SpaceObject> implemen
 					} else {
 						v.textAlign(RIGHT);
 					}
-					v.text(target.getName(), screenLocation.x + oppositeOfShipHeading.x + (v.cos(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET), screenLocation.y + oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET) + 2);
+					v.text(target.getName(), screenLocation.x + oppositeOfShipHeading.x + (v.cos(oppositeOfShipHeading.heading()) * (NAMELINE_OFFSET + 4)), screenLocation.y + oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET) - 2);
 					v.popStyle();
 				}
 			}
 		}
-	}
-
-	/**
-	 * Draws the line that connects the name to the indicator.
-	 * @param oppositeOfShipHeading PVector containing the inverse of the vector leading from the target to the ship.
-	 * @return PShape of the line from the indicator to the name and the underline.
-	 */
-	private PShape getNameLine(float size, PVector oppositeOfShipHeading) {
-
-		SpaceObject target = getValue();
-
-		// Create the name line
-		PShape nameLine = v.createShape(GROUP);
-
-		// Define the line parts
-		PShape connector = v.createShape(LINE, oppositeOfShipHeading.x, oppositeOfShipHeading.y, oppositeOfShipHeading.x + (v.cos(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET), oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET));
-
-		connector.stroke(target.getColor());
-
-		// Determine which direction the ship is (left/right) from the target, then draw the line extending under the object name
-		PShape underline;
-		if(v.cos(oppositeOfShipHeading.heading()) > 0) {
-			underline = v.createShape(LINE, oppositeOfShipHeading.x + (v.cos(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET), oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET), oppositeOfShipHeading.x + (v.cos(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET) + v.textWidth(target.getName()) + NAMELINE_PADDING, oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET));
-		} else {
-			underline = v.createShape(LINE, oppositeOfShipHeading.x + (v.cos(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET), oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET), oppositeOfShipHeading.x + (v.cos(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET) - v.textWidth(target.getName()) - NAMELINE_PADDING, oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET));
-		}
-
-		underline.stroke(150);
-
-		nameLine.addChild(connector);
-		nameLine.addChild(underline);
-
-		return nameLine;
 	}
 }
