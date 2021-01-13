@@ -2,7 +2,6 @@ package vekta.menu.handle;
 
 import vekta.KeyBinding;
 import vekta.knowledge.ObservationLevel;
-import vekta.menu.Menu;
 import vekta.terrain.Terrain;
 
 import java.util.List;

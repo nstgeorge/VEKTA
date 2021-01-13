@@ -1,6 +1,5 @@
 package vekta.menu.handle;
 
-import vekta.menu.Menu;
 import vekta.terrain.settlement.District;
 import vekta.terrain.settlement.Settlement;
 

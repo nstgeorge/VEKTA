@@ -3,10 +3,7 @@ package vekta.context;
 import com.github.strikerx3.jxinput.enums.XInputButton;
 import processing.event.KeyEvent;
 import vekta.KeyBinding;
-import vekta.Settings;
 import vekta.overlay.Overlay;
-
-import static processing.core.PApplet.println;
 
 public interface Context extends Overlay {
 	/**

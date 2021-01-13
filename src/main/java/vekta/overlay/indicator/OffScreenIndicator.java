@@ -4,49 +4,49 @@ import processing.core.PShape;
 import processing.core.PVector;
 import vekta.object.SpaceObject;
 import vekta.object.ship.Ship;
+import vekta.player.Player;
 import vekta.world.Singleplayer;
 
 import javax.lang.model.type.NullType;
 import java.io.Serializable;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static processing.core.PConstants.*;
-import static vekta.Vekta.UI_COLOR;
+import static vekta.Vekta.getWorld;
 import static vekta.Vekta.v;
 
 /**
  * An indicator that shows an arrow along the edge of the screen where the provided object is.
  * The value function is expected to resolve the object that is being pointed to.
  */
-public class OffScreenIndicator extends Indicator<NullType, SpaceObject> implements Serializable {
+public class OffScreenIndicator extends Indicator<SpaceObject> implements Serializable {
 
 	// Arrow settings
 	private static final float ARROW_WIDTH = 40;
 	private static final float ARROW_HEIGHT = 20;
 
 	// Location settings
-	private static final float PADDING = 200;	// Padding on each side of the screen
-	private static final float DISTANCE_TO_FADE = v.height / 2;	// Distance from screen edge before the arrow starts to fade
+	private static final float PADDING = 200;    // Padding on each side of the screen
+	private static final float DISTANCE_TO_FADE = v.height / 2f;    // Distance from screen edge before the arrow starts to fade
 
 	private transient PShape arrow;
-	private Ship ship;
+	private final Player player;
 
-	public OffScreenIndicator(Function value, Ship ship) {
-		super("Offscreen Indicator", value, v.width / 2, v.height / 2, v.color(255));
-		this.ship = ship;
-	}
+	public OffScreenIndicator(Supplier<SpaceObject> value, Player player) {
+		super("Offscreen Indicator", value, v.width / 2f, v.height / 2f, v.color(255));
 
-	public OffScreenIndicator(SpaceObject target, Ship ship) {
-		this(t -> target, ship);
+		this.player = player;
 	}
 
 	@Override
 	public void draw() {
 		// TODO: Generalize this to any world type
-		if(v.getWorld() instanceof Singleplayer) {
-			if(getTarget() != null) {
-				Singleplayer world = ((Singleplayer)v.getWorld());
-				SpaceObject target = getTarget();
+		if(getTarget() != null) {
+			SpaceObject target = getTarget();
+
+			if(getWorld() instanceof Singleplayer) {
+				Singleplayer world = ((Singleplayer)getWorld());
 				if(!world.isObjectVisibleToPlayer(target)) {
 
 					if(arrow == null) {
@@ -88,7 +88,7 @@ public class OffScreenIndicator extends Indicator<NullType, SpaceObject> impleme
 	}
 
 	private PVector getRelativePosition() {
-		return getTarget().getPosition().sub(ship.getPosition());
+		return getTarget().getPosition().sub(player.getShip().getPosition());
 	}
 
 	private static PShape getArrow(float width, float height) {

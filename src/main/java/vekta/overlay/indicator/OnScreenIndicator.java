@@ -1,44 +1,48 @@
 package vekta.overlay.indicator;
 
-import processing.core.PShape;
 import processing.core.PVector;
 import vekta.object.SpaceObject;
 import vekta.object.ship.Ship;
+import vekta.player.Player;
 import vekta.world.Singleplayer;
 
 import javax.lang.model.type.NullType;
 import java.io.Serializable;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static processing.core.PConstants.*;
+import static vekta.Vekta.getWorld;
 import static vekta.Vekta.v;
 
-public class OnScreenIndicator extends Indicator<NullType, SpaceObject> implements Serializable {
+public class OnScreenIndicator extends Indicator<SpaceObject> implements Serializable {
 
-	private static final int NAMELINE_OFFSET = 50; 		// Offset (px) of the name line from the box.
-	private static final float NAMELINE_PADDING = 10;	// Extra length on the name line.
-	private static final int INDICATOR_SIZE = 30;		// Size of the box around the target.
+	private static final int NAMELINE_OFFSET = 50;        // Offset (px) of the name line from the box.
+	private static final float NAMELINE_PADDING = 10;    // Extra length on the name line.
+	private static final int INDICATOR_SIZE = 30;        // Size of the box around the target.
 
-	private final Ship ship;
+	private final Player player;
 
-	public OnScreenIndicator(Function value, Ship ship) {
+	public OnScreenIndicator(Supplier<SpaceObject> value, Player player) {
 		super("On-Screen Indicator", value, v.width / 2F, v.height / 2F, v.color(255));
-		this.ship = ship;
+
+		this.player = player;
 	}
 
-	public OnScreenIndicator(SpaceObject target, Ship ship) {
-		this(t -> target, ship);
+	public OnScreenIndicator(SpaceObject target, Player player) {
+		this(() -> target, player);
 	}
 
 	@Override
 	public void draw() {
 		SpaceObject target = getValue();
+		if(target != null) {
 
-		if(v.getWorld() instanceof Singleplayer) {
-			if(target != null) {
-				PVector oppositeOfShipHeading = target.getPosition().sub(ship.getPosition()).setMag(INDICATOR_SIZE);
+			if(getWorld() instanceof Singleplayer) {
+				Singleplayer world = ((Singleplayer)getWorld());
 
-				Singleplayer world = ((Singleplayer)v.getWorld());
+				PVector oppositeOfShipHeading = target.getPosition().sub(player.getShip().getPosition()).setMag(INDICATOR_SIZE);
+
 				if(world.isObjectVisibleToPlayer(target) && (target.getRadius() / world.getZoom()) < (INDICATOR_SIZE / 2F)) {
 					PVector screenLocation = world.getObjectScreenLocation(target);
 
@@ -60,15 +64,17 @@ public class OnScreenIndicator extends Indicator<NullType, SpaceObject> implemen
 					// I'm sorry for my sins
 					if(v.cos(oppositeOfShipHeading.heading()) > 0) {
 						v.line(screenLocation.x + oppositeOfShipHeading.x + (v.cos(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET), screenLocation.y + oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET), screenLocation.x + oppositeOfShipHeading.x + (v.cos(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET) + v.textWidth(target.getName()) + NAMELINE_PADDING, screenLocation.y + oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET));
-					} else {
-						v.line( screenLocation.x + oppositeOfShipHeading.x + (v.cos(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET), screenLocation.y + oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET), screenLocation.x + oppositeOfShipHeading.x + (v.cos(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET) - v.textWidth(target.getName()) - NAMELINE_PADDING, screenLocation.y + oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET));
+					}
+					else {
+						v.line(screenLocation.x + oppositeOfShipHeading.x + (v.cos(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET), screenLocation.y + oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET), screenLocation.x + oppositeOfShipHeading.x + (v.cos(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET) - v.textWidth(target.getName()) - NAMELINE_PADDING, screenLocation.y + oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET));
 					}
 
 					// Write the target name
 					v.color(target.getColor());
 					if(v.cos(oppositeOfShipHeading.heading()) > 0) {
 						v.textAlign(LEFT);
-					} else {
+					}
+					else {
 						v.textAlign(RIGHT);
 					}
 					v.text(target.getName(), screenLocation.x + oppositeOfShipHeading.x + (v.cos(oppositeOfShipHeading.heading()) * (NAMELINE_OFFSET + 4)), screenLocation.y + oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET) - 2);

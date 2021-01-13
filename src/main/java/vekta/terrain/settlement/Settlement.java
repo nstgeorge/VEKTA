@@ -15,7 +15,6 @@ import vekta.player.Player;
 import vekta.spawner.SettlementGenerator;
 import vekta.sync.Sync;
 import vekta.sync.Syncable;
-import vekta.terrain.location.Location;
 import vekta.terrain.location.SettlementLocation;
 import vekta.terrain.settlement.building.BuildingType;
 import vekta.terrain.visual.SettlementVisual;

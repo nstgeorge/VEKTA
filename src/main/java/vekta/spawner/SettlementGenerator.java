@@ -5,7 +5,6 @@ import vekta.Resources;
 import vekta.faction.Faction;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.spawner.item.*;
-import vekta.terrain.location.Location;
 import vekta.terrain.settlement.*;
 import vekta.terrain.settlement.building.MarketBuilding;
 
