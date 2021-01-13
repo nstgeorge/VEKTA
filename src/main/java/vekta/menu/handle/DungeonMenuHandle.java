@@ -1,7 +1,6 @@
 package vekta.menu.handle;
 
 import vekta.dungeon.DungeonRoom;
-import vekta.menu.Menu;
 
 import static vekta.Vekta.v;
 

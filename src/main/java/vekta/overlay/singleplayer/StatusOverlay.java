@@ -9,14 +9,16 @@ import vekta.object.Targeter;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.object.ship.ModularShip;
 import vekta.overlay.Overlay;
-import vekta.overlay.indicator.*;
+import vekta.overlay.indicator.DialIndicator;
+import vekta.overlay.indicator.MeterIndicator;
+import vekta.overlay.indicator.StripCompassIndicator;
 import vekta.player.Player;
 
 import static vekta.Vekta.*;
 
 public class StatusOverlay implements Overlay {
 
-	private static final float DIAL_HEIGHT = v.height * (14/15F);
+	private static final float DIAL_HEIGHT = v.height * (14 / 15F);
 
 	private static final int MIN_TEMP = 0;
 	private static final int MAX_TEMP = 40;
@@ -36,18 +38,31 @@ public class StatusOverlay implements Overlay {
 
 	public StatusOverlay(Player player) {
 		this.player = player;
-		ModularShip ship = player.getShip();
 
 		// The locations for each dial are temporary until we get a better UI layout system working.
 
-		velocityDial = new DialIndicator("Velocity", t -> ship.getVelocity(), v.width * (17/20F), DIAL_HEIGHT, UI_COLOR);
+		velocityDial = new DialIndicator("Velocity", () -> player.getShip().getVelocity(), v.width * (17 / 20F), DIAL_HEIGHT, UI_COLOR);
 		// ObjectiveDial's value function is temporarily set to return 0 here. It is updated when a player finds an objective.
-		objectiveDial = new DialIndicator("Objective", t -> 0, v.width / 2F, DIAL_HEIGHT, UI_COLOR);
-		compass = new StripCompassIndicator("Compass", t -> ship.getHeading(), v.width / 2F, 40, UI_COLOR);
-		temperatureMeter = new MeterIndicator("Temp", MeterIndicator.TYPE.VERTICAL, t -> ship.getTemperatureKelvin(), MIN_TEMP, MAX_TEMP, v.width * (39/40F), DIAL_HEIGHT, v.height / 20F, v.height / 80F, UI_COLOR);
-		energyMeter = new MeterIndicator("Energy", MeterIndicator.TYPE.RADIAL, t -> ship.getEnergy(), 0, player.getShip().getMaxEnergy(), v.width * (37/40F), DIAL_HEIGHT, v.height / 20F, v.height / 90F, UI_COLOR);
+		objectiveDial = new DialIndicator("Objective", this::getPlayerObjectiveVector, v.width / 2F, DIAL_HEIGHT, UI_COLOR);
+		compass = new StripCompassIndicator("Compass", () -> player.getShip().getHeading(), v.width / 2F, 40, UI_COLOR);
+		temperatureMeter = new MeterIndicator("Temp", MeterIndicator.IndicatorType.VERTICAL, () -> player.getShip().getTemperatureKelvin(), MIN_TEMP, MAX_TEMP, v.width * (39 / 40F), DIAL_HEIGHT, v.height / 20F, v.height / 80F, UI_COLOR);
+		energyMeter = new MeterIndicator("Energy", MeterIndicator.IndicatorType.RADIAL, () -> player.getShip().getEnergy(), 0, player.getShip().getMaxEnergy(), v.width * (37 / 40F), DIAL_HEIGHT, v.height / 20F, v.height / 90F, UI_COLOR);
 
 		updateUIInformation();
+	}
+
+	// TODO: return some sort of tuple-like object with direction and color
+	private PVector getPlayerObjectiveVector() {
+		Mission mission = player.getCurrentMission();
+		if(mission != null) {
+			Objective current = mission.getCurrentObjective();
+			SpaceObject objTarget = current.getSpaceObject();
+			// Draw objective direction dial
+			if(objTarget != null && objTarget != targeter.getTarget()) {
+				return player.getShip().relativePosition(objTarget);
+			}
+		}
+		return new PVector();
 	}
 
 	private void updateUIInformation() {
@@ -128,7 +143,7 @@ public class StatusOverlay implements Overlay {
 				SpaceObject objTarget = current.getSpaceObject();
 				// Draw objective direction dial
 				if(objTarget != null && objTarget != targeter.getTarget()) {
-					objectiveDial.setValue(t -> objTarget.getPosition().sub(ship.getPosition()));
+					// TODO: define functionally similar to `value`
 					objectiveDial.setColor(objTarget.getColor());
 					objectiveDial.draw();
 				}

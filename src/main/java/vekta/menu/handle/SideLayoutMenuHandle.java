@@ -2,7 +2,6 @@ package vekta.menu.handle;
 
 import vekta.display.Layout;
 import vekta.display.VerticalLayout;
-import vekta.menu.Menu;
 import vekta.menu.option.LayoutAware;
 import vekta.menu.option.MenuOption;
 

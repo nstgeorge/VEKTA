@@ -26,7 +26,6 @@ import vekta.menu.option.BackButton;
 import vekta.menu.option.CustomButton;
 import vekta.menu.option.DungeonRoomButton;
 import vekta.module.*;
-import vekta.module.Module;
 import vekta.module.station.StationCoreModule;
 import vekta.module.station.StructuralModule;
 import vekta.object.SpaceObject;
@@ -82,8 +81,8 @@ public class Singleplayer implements World, PlayerListener {
 	private static final float MIN_PLANET_TIME_SCALE = 10; // Make traveling between ship-level objects much faster
 
 	private static final float HYPERDRIVE_TRANSITION_RATE = .01F; // Smoothly adjust hyperdrive curvature
-    
-    private static final float CAMERA_SHAKE_SCALE = 50; // Amount of camera shake per `cameraImpact` unit
+
+	private static final float CAMERA_SHAKE_SCALE = 50; // Amount of camera shake per `cameraImpact` unit
 
 	private static final SoundGroup MUSIC = new SoundGroup("atmosphere");
 
@@ -395,7 +394,7 @@ public class Singleplayer implements World, PlayerListener {
 
 		v.pushMatrix();
 		v.translate(v.width / 2F, v.height / 2F);
-        if(cameraImpact > 1e-3F) {
+		if(cameraImpact > 1e-3F) {
 			v.fill(v.lerpColor(0, 255, min(1, cameraImpact)));
 			v.rect(0, 0, v.width + 2, v.height + 2);
 			cameraImpact *= .95F;
@@ -519,7 +518,7 @@ public class Singleplayer implements World, PlayerListener {
 				if(state.isRemoving(objects.get(i))) {
 					continue;
 				}
-				resolveCollisions(objects, level, i, playerShip);
+				resolveCollisions(objects, level, i);
 			}
 			profiler.addTimeStamp("Resolve collisions");
 		}
@@ -532,7 +531,7 @@ public class Singleplayer implements World, PlayerListener {
 				}
 				updateGravity(objects, level, i);
 				drawObject(objects, level, i, playerShip, drawTrails);
-				resolveCollisions(objects, level, i, playerShip);
+				resolveCollisions(objects, level, i);
 			}
 		}
 
@@ -655,7 +654,7 @@ public class Singleplayer implements World, PlayerListener {
 		// Draw object
 		v.stroke(s.getColor());
 		v.noFill();
-		float r = getObjectRadius(s, s.getRadius() / scale, position, cameraPos, curvature);
+		float r = getScreenRadius(s, s.getRadius() / scale, position, cameraPos, curvature);
 		float onScreenRadius = s.getOnScreenRadius(r);
 		boolean visible = isVisibleOnScreen(screenX, screenY, onScreenRadius);
 		if(visible) {
@@ -666,11 +665,11 @@ public class Singleplayer implements World, PlayerListener {
 		v.popMatrix();
 	}
 
-	private void resolveCollisions(List<SpaceObject> objects, RenderLevel level, int i, ModularShip playerShip) {
+	private void resolveCollisions(List<SpaceObject> objects, RenderLevel level, int i) {
 		SpaceObject s = objects.get(i);
 
 		// Check collisions when on screen
-		if(isObjectVisibleToPlayer(s)) {
+		if(isVisibleOnScreen(s)) {
 			for(int j = i + 1; j < objects.size(); j++) {
 				SpaceObject other = objects.get(j);
 
@@ -701,21 +700,21 @@ public class Singleplayer implements World, PlayerListener {
 		return (position.y - cameraPos.y) / getZoom();
 	}
 
-	private float getObjectRadius(SpaceObject s, float r, PVector position, PVector cameraPos, float curvature) {
+	private float getScreenRadius(SpaceObject s, float r, PVector position, PVector cameraPos, float curvature) {
 		return r * curvature;
-		//		return v.log(s.getRadius());
 	}
 
-	private boolean isVisibleOnScreen(float screenX, float screenY, float boundary) {
-		return abs(screenX) - boundary <= v.width / 2F && abs(screenY) - boundary <= v.height / 2F;
+	private boolean isVisibleOnScreen(float screenX, float screenY, float screenRadius) {
+		return abs(screenX) - screenRadius <= v.width / 2F && abs(screenY) - screenRadius <= v.height / 2F;
 	}
 
 	/**
 	 * Given an object, return its location on the screen and its radius.
+	 *
 	 * @param obj Object to check
-	 * @return A PVector where [x, y] represent the location of the object on screen and [z] is its radius.
+	 * @return A PVector where `x` and `y` represent the location of the object on screen and `z` is its on-screen radius.
 	 */
-	public PVector getObjectScreenLocation(SpaceObject obj) {
+	public PVector getScreenLocationWithRadius(SpaceObject obj) {
 		PVector position = obj.getPositionReference();
 		PVector cameraPos = getPlayer().getShip().getPositionReference();
 
@@ -727,7 +726,7 @@ public class Singleplayer implements World, PlayerListener {
 		screenX *= curvature;
 		screenY *= curvature;
 
-		float r = getObjectRadius(obj, obj.getRadius() / scale, position, cameraPos, curvature);
+		float r = getScreenRadius(obj, obj.getRadius() / scale, position, cameraPos, curvature);
 		float onScreenRadius = obj.getOnScreenRadius(r);
 
 		return new PVector(screenX, screenY, onScreenRadius);
@@ -736,31 +735,38 @@ public class Singleplayer implements World, PlayerListener {
 	/**
 	 * Returns true if the provided object is visible on screen to the player.
 	 * Abstracts out some of the logic required -- used primarily by OffScreenIndicator
+	 *
 	 * @param obj Object to check
 	 * @return True if object is visible, false otherwise
 	 */
-	public boolean isObjectVisibleToPlayer(SpaceObject obj) {
-		PVector objectLocation = getObjectScreenLocation(obj);
-		return isVisibleOnScreen(objectLocation.x, objectLocation.y, objectLocation.z);
+	public boolean isVisibleOnScreen(SpaceObject obj) {
+		PVector locationWithRadius = getScreenLocationWithRadius(obj);
+		return isVisibleOnScreen(locationWithRadius.x, locationWithRadius.y, locationWithRadius.z);
 	}
 
 	/**
 	 * If an object is outside the screen, this function returns the pixel-based distance from the edge of the screen.
 	 * If the object is on screen, returns 0.
+	 *
 	 * @param obj Object to check
 	 * @return Distance from edge of screen in pixels if object is off screen, 0 otherwise
 	 */
 	public float getScreenDistanceFromEdge(SpaceObject obj) {
-		if(isObjectVisibleToPlayer(obj)) return 0;
+		//		if(isObjectVisibleToPlayer(obj)) {
+		//			return 0;
+		//		}
 
-		PVector objectLocation = getObjectScreenLocation(obj);
+		PVector locationWithRadius = getScreenLocationWithRadius(obj);
+		if(isVisibleOnScreen(locationWithRadius.x, locationWithRadius.y, locationWithRadius.z)) {
+			return 0;
+		}
 
 		// Apply third dimension as radius and remove it from vector
-		objectLocation.x -= objectLocation.z;
-		objectLocation.y -= objectLocation.z;
-		objectLocation.z = 0;
+		locationWithRadius.x -= locationWithRadius.z;
+		locationWithRadius.y -= locationWithRadius.z;
+		locationWithRadius.z = 0;
 
-		return sqrt((float)(Math.pow(abs(objectLocation.x) - v.width / 2F, 2) + Math.pow(abs(objectLocation.y) - v.height / 2F, 2)));
+		return sqrt(sq(abs(locationWithRadius.x) - v.width / 2F) + abs(locationWithRadius.y) - v.height / 2F);
 	}
 
 	protected void updateGlobal(RenderLevel level) {
@@ -832,7 +838,7 @@ public class Singleplayer implements World, PlayerListener {
 		}
 		else {
 			if(key == KeyBinding.QUICK_SAVE && save(QUICKSAVE_FILE)) {
-                // Now handled in save() function
+				// Now handled in save() function
 				// getPlayer().send("Progress saved");
 			}
 			else if(key == KeyBinding.MENU_CLOSE) {
@@ -1022,7 +1028,7 @@ public class Singleplayer implements World, PlayerListener {
 		try {
 			Format.write(state, new FileOutputStream(file));
 			println("Saved to " + file);
-            getPlayer().send("Progress saved");
+			getPlayer().send("Progress saved");
 			return true;
 		}
 		catch(IOException e) {

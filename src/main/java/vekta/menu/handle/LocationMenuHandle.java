@@ -1,7 +1,6 @@
 package vekta.menu.handle;
 
 import vekta.Resources;
-import vekta.menu.Menu;
 import vekta.terrain.location.Location;
 
 import static vekta.Vekta.v;

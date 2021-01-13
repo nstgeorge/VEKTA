@@ -3,7 +3,6 @@ package vekta.menu.handle;
 import processing.core.PVector;
 import vekta.Resources;
 import vekta.context.Hyperspace;
-import vekta.menu.Menu;
 
 import static processing.core.PConstants.CENTER;
 import static vekta.Vekta.v;

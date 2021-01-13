@@ -1,7 +1,6 @@
 package vekta.overlay.singleplayer;
 
 import vekta.object.ship.ModularShip;
-import vekta.object.ship.PlayerShip;
 import vekta.overlay.Overlay;
 import vekta.player.Player;
 import vekta.player.PlayerListener;
@@ -33,7 +32,7 @@ public class PlayerOverlay implements Overlay, PlayerListener {
 				// new ShipEnergyOverlay(-300, -60, player.getShip()),
 				// new ShipTemperatureOverlay(-300, -30, player.getShip()),
 				// new PlayerScoreOverlay(v.width/2 + 300, -30, player),
-				new ObjectIndicatorOverlay((PlayerShip)player.getShip()),
+				new IndicatorOverlay(player),
 				new DirectoryOverlay(player),
 				new TimeScaleOverlay(),
 				notifications = new NotificationOverlay(-20, 80),
