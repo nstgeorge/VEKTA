@@ -1,6 +1,5 @@
 package vekta.menu;
 
-import javafx.util.Callback;
 import processing.event.KeyEvent;
 import vekta.KeyBinding;
 import vekta.context.Context;
