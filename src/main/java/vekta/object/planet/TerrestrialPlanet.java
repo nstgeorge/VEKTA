@@ -1,7 +1,6 @@
 package vekta.object.planet;
 
 import processing.core.PVector;
-import sun.font.SunFontManager;
 import vekta.economy.TemporaryModifier;
 import vekta.faction.Faction;
 import vekta.knowledge.ObservationLevel;

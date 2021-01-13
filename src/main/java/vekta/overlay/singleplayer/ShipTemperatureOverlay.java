@@ -18,16 +18,29 @@ public class ShipTemperatureOverlay extends ShipStatOverlay {
 	}
 
 	@Override
+	public String getText() {
+		return getValue();
+	}
+
+	@Override
 	public String getValue() {
-		return (float)Math.round(getShip().getTemperatureKelvin() * 10) / 10 + " Celsius";
+		if(isInDanger()) {
+			return "DANGER: " + (float)Math.round(getShip().getTemperatureKelvin() * 10) / 10 + " K";
+		}
+		return "";
 	}
 
 	@Override
 	public int getColor() {
-		float temp = getShip().getTemperatureKelvin();
-		if(temp < 0 || temp > 40) {
-			return v.color(255, 0, 0);
+		float flash = (float)((.1 * Math.sin((v.millis()) / 100F)) + 0.9);
+		if(isInDanger()) {
+			return v.color(255, 0, 0, 255 * flash);
 		}
 		return super.getColor();
+	}
+
+	public boolean isInDanger() {
+		float temp = getShip().getTemperatureKelvin();
+		return temp < 0 || temp > 40;
 	}
 }
