@@ -3,13 +3,10 @@ package vekta.overlay.indicator;
 import processing.core.PShape;
 import processing.core.PVector;
 import vekta.object.SpaceObject;
-import vekta.object.ship.Ship;
 import vekta.player.Player;
 import vekta.world.Singleplayer;
 
-import javax.lang.model.type.NullType;
 import java.io.Serializable;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static processing.core.PConstants.*;
@@ -47,7 +44,7 @@ public class OffScreenIndicator extends Indicator<SpaceObject> implements Serial
 
 			if(getWorld() instanceof Singleplayer) {
 				Singleplayer world = ((Singleplayer)getWorld());
-				if(!world.isObjectVisibleToPlayer(target)) {
+				if(!world.isVisibleOnScreen(target)) {
 
 					if(arrow == null) {
 						arrow = getArrow(ARROW_WIDTH, ARROW_HEIGHT);

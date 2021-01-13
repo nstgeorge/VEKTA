@@ -2,13 +2,10 @@ package vekta.overlay.indicator;
 
 import processing.core.PVector;
 import vekta.object.SpaceObject;
-import vekta.object.ship.Ship;
 import vekta.player.Player;
 import vekta.world.Singleplayer;
 
-import javax.lang.model.type.NullType;
 import java.io.Serializable;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static processing.core.PConstants.*;
@@ -43,8 +40,8 @@ public class OnScreenIndicator extends Indicator<SpaceObject> implements Seriali
 
 				PVector oppositeOfShipHeading = target.getPosition().sub(player.getShip().getPosition()).setMag(INDICATOR_SIZE);
 
-				if(world.isObjectVisibleToPlayer(target) && (target.getRadius() / world.getZoom()) < (INDICATOR_SIZE / 2F)) {
-					PVector screenLocation = world.getObjectScreenLocation(target);
+				if(world.isVisibleOnScreen(target) && (target.getRadius() / world.getZoom()) < (INDICATOR_SIZE / 2F)) {
+					PVector screenLocation = world.getScreenLocationWithRadius(target);
 
 					screenLocation.x += v.width / 2F;
 					screenLocation.y += v.height / 2F;
