@@ -3,16 +3,16 @@ package vekta.terrain.settlement;
 import vekta.economy.Economy;
 import vekta.economy.NoiseModifier;
 import vekta.faction.Faction;
+import vekta.object.planet.TerrestrialPlanet;
 import vekta.player.Player;
-import vekta.terrain.location.Location;
 import vekta.terrain.settlement.building.CapitalBuilding;
 
 import static vekta.Vekta.v;
 
 public class FortSettlement extends Settlement {
 
-	public FortSettlement(Location location, Faction faction) {
-		super(location, faction, "fort");
+	public FortSettlement(TerrestrialPlanet planet, Faction faction) {
+		super(planet, faction, "fort");
 
 		add(new CapitalBuilding("Officer", this));
 	}

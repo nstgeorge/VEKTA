@@ -39,12 +39,14 @@ public class ColonizeButton extends ButtonOption {
 	public void onSelect(Menu menu) {
 		Faction faction = item.getFaction() != null ? item.getFaction() : menu.getPlayer().getFaction();
 
-		// Set up colony settlement
-		ColonySettlement settlement = new ColonySettlement(getLocation(), faction);
+		// Set up colony
+		ColonySettlement settlement = new ColonySettlement(getLocation().getPlanet(), faction);
 		settlement.setOverview("You arrive at your recently established colony.");
 		settlement.getEconomy().setValue(.1F);
 		settlement.clear();
 		settlement.add(new CapitalBuilding("Governor", settlement));
+
+		getLocation().addPathway( settlement.getLocation());
 
 		// Ensure that the colony object doesn't despawn
 		settlement.observe(ObservationLevel.OWNED, menu.getPlayer());
@@ -62,6 +64,7 @@ public class ColonizeButton extends ButtonOption {
 		menu.add(0, option);
 		menu.select(option);
 
+		// Clean up item
 		menu.getPlayer().getInventory().remove(item);
 		menu.remove(this);
 	}

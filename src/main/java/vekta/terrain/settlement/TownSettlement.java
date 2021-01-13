@@ -4,9 +4,9 @@ import vekta.Resources;
 import vekta.economy.Economy;
 import vekta.economy.NoiseModifier;
 import vekta.faction.Faction;
+import vekta.object.planet.TerrestrialPlanet;
 import vekta.spawner.PersonGenerator;
 import vekta.spawner.SettlementGenerator;
-import vekta.terrain.location.Location;
 import vekta.terrain.settlement.building.*;
 
 import java.util.List;
@@ -16,8 +16,8 @@ import static vekta.Vekta.v;
 
 public class TownSettlement extends Settlement {
 
-	public TownSettlement(Location location, Faction faction) {
-		super(location, faction, "town");
+	public TownSettlement(TerrestrialPlanet planet, Faction faction) {
+		super(planet, faction, "town");
 
 		add(new District(this, "Marketplace", BuildingType.MARKET));
 		if(v.chance(.75F)) {

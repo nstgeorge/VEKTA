@@ -1,5 +1,6 @@
 package vekta.spawner.location;
 
+import vekta.Resources;
 import vekta.spawner.LocationGenerator;
 import vekta.terrain.Terrain;
 import vekta.terrain.location.IslandLocation;
@@ -21,10 +22,12 @@ public class OceanLocationSpawner implements LocationGenerator.LocationSpawner {
 
 	@Override
 	public void spawn(Terrain terrain) {
-		terrain.addPathway(new OceanLocation(terrain.getPlanet(), "Ocean"));
+
+		String name = terrain.getName();
+		terrain.addPathway(new OceanLocation(terrain.getPlanet(), name + " " + Resources.generateString("ocean_suffix")));
 
 		if(v.chance(.5F)) {
-			terrain.addPathway(new IslandLocation(terrain.getPlanet(), "Island"));
+			terrain.addPathway(new IslandLocation(terrain.getPlanet(), name + " Island"));
 		}
 	}
 }

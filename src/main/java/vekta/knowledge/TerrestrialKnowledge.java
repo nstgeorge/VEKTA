@@ -53,7 +53,7 @@ public class TerrestrialKnowledge extends SpaceObjectKnowledge {
 			aware.add(new TextDisplay("Density: " + densityString(s.getDensity())));
 			aware.add(new TextDisplay("Atmosphere: " + atmosphereString(s.getAtmosphereDensity())));
 			aware.add(new TextDisplay("Temperature: " + temperatureStringCelsius(s.getTemperatureCelsius())));
-			aware.add(new TextDisplay("Rotation: " + round(s.getRotationHours()) + " h"));
+			aware.add(new TextDisplay("Rotation: " + round(abs(s.getRotationHours())) + " h"));
 			aware.add(new TextDisplay("Orbit: " + distanceString(s.relativePosition(s.getOrbitObject()).mag())));
 
 			Layout scanned = layout.add(new VerticalLayout());
@@ -69,7 +69,7 @@ public class TerrestrialKnowledge extends SpaceObjectKnowledge {
 
 			// Settlements
 			landed.add(new TextDisplay(planet.getTerrain().isHabitable()
-					? planet.getTerrain().isInhabited() ?
+					? planet.isInhabited() ?
 					"Settlements: " + planet.findVisitableSettlements().stream().map(Settlement::getName).collect(Collectors.joining(", "))
 					: "Habitable"
 					: "Not Habitable"));

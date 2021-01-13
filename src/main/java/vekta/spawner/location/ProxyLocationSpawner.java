@@ -32,15 +32,15 @@ public abstract class ProxyLocationSpawner<T extends Serializable> implements Lo
 	@Override
 	@SuppressWarnings("unchecked")
 	public void spawn(Terrain terrain) {
-		ProxyLocation<T> location = new ProxyLocation<>(terrain.getPlanet(), (Class<? extends ProxyLocationSpawner<T>>)getClass(), chooseData());
-		setup(location);
+		ProxyLocation<T> location = new ProxyLocation<>(terrain.getPlanet(), (Class<? extends ProxyLocationSpawner<T>>)getClass(), chooseData(terrain));
+		setup(location, terrain);
 		terrain.addPathway(location);
 	}
 
-	public void setup(ProxyLocation<T> location) {
+	public void setup(ProxyLocation<T> location, Terrain terrain) {
 	}
 
-	public abstract T chooseData();
+	public abstract T chooseData(Terrain terrain);
 
 	public abstract String getName(ProxyLocation<T> location);
 
@@ -66,5 +66,9 @@ public abstract class ProxyLocationSpawner<T extends Serializable> implements Lo
 	}
 
 	public void onVisitMenu(ProxyLocation<T> location, Menu menu) {
+	}
+
+	public boolean draw(ProxyLocation<T> location, float r) {
+		return false;
 	}
 }

@@ -5,8 +5,8 @@ import vekta.economy.NoiseModifier;
 import vekta.faction.Faction;
 import vekta.item.Inventory;
 import vekta.menu.Menu;
+import vekta.object.planet.TerrestrialPlanet;
 import vekta.spawner.item.SpeciesItemSpawner;
-import vekta.terrain.location.Location;
 import vekta.terrain.settlement.building.MarketBuilding;
 
 import static vekta.Vekta.v;
@@ -14,8 +14,8 @@ import static vekta.Vekta.v;
 public class FarmSettlement extends Settlement {
 	private final Inventory inventory = new Inventory();
 
-	public FarmSettlement(Location location, Faction faction) {
-		super(location, faction, "farm");
+	public FarmSettlement(TerrestrialPlanet planet, Faction faction) {
+		super(planet, faction, "farm");
 
 		add(new MarketBuilding(1, "Livestock", SpeciesItemSpawner.class));
 	}

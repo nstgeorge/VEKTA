@@ -42,7 +42,7 @@ public class ColonyItem extends Item {
 		if(menu.getHandle() instanceof LocationMenuHandle) {
 			Location location = ((LocationMenuHandle)menu.getHandle()).getLocation();
 
-			if(location.isHabitable() && !location.isInhabited()) {
+			if(location.isHabitable() && !location.getPlanet().isInhabited()) {
 				if(menu.getOptions().stream().noneMatch(opt -> opt instanceof ColonizeButton && ((ColonizeButton)opt).getItem().getFaction() == getFaction())) {
 					menu.add(new ColonizeButton(this, location));
 				}

@@ -82,6 +82,8 @@ public class Singleplayer implements World, PlayerListener {
 	private static final float MIN_PLANET_TIME_SCALE = 10; // Make traveling between ship-level objects much faster
 
 	private static final float HYPERDRIVE_TRANSITION_RATE = .01F; // Smoothly adjust hyperdrive curvature
+    
+    private static final float CAMERA_SHAKE_SCALE = 50; // Amount of camera shake per `cameraImpact` unit
 
 	private static final SoundGroup MUSIC = new SoundGroup("atmosphere");
 
@@ -393,6 +395,13 @@ public class Singleplayer implements World, PlayerListener {
 
 		v.pushMatrix();
 		v.translate(v.width / 2F, v.height / 2F);
+        if(cameraImpact > 1e-3F) {
+			v.fill(v.lerpColor(0, 255, min(1, cameraImpact)));
+			v.rect(0, 0, v.width + 2, v.height + 2);
+			cameraImpact *= .95F;
+
+			v.translate(v.gaussian(cameraImpact) * CAMERA_SHAKE_SCALE, v.gaussian(cameraImpact) * CAMERA_SHAKE_SCALE);
+		}
 
 		float zoom = state.getZoom();
 		float zoomRatio = zoom / smoothZoom;
@@ -422,12 +431,6 @@ public class Singleplayer implements World, PlayerListener {
 			if(zoomControllers.get(i).shouldCancelZoomControl(player)) {
 				zoomControllers.remove(i);
 			}
-		}
-
-		if(cameraImpact > 1e-3F) {
-			v.fill(v.lerpColor(0, 255, min(1, cameraImpact)));
-			v.rect(0, 0, v.width + 2, v.height + 2);
-			cameraImpact *= .95F;
 		}
 
 		if(getPlayer().getShip().isHyperdriving()) {
@@ -829,7 +832,7 @@ public class Singleplayer implements World, PlayerListener {
 		}
 		else {
 			if(key == KeyBinding.QUICK_SAVE && save(QUICKSAVE_FILE)) {
-        // Now handled in save() function
+                // Now handled in save() function
 				// getPlayer().send("Progress saved");
 			}
 			else if(key == KeyBinding.MENU_CLOSE) {
@@ -1019,7 +1022,7 @@ public class Singleplayer implements World, PlayerListener {
 		try {
 			Format.write(state, new FileOutputStream(file));
 			println("Saved to " + file);
-      getPlayer().send("Progress saved");
+            getPlayer().send("Progress saved");
 			return true;
 		}
 		catch(IOException e) {
@@ -1102,7 +1105,7 @@ public class Singleplayer implements World, PlayerListener {
 			menu.addDefault();
 			setContext(menu);
 		}
-		World.super.keyPressed(event);
+		// World.super.keyPressed(event);
 	}
 
 	// Player tag for debug mode

@@ -58,8 +58,9 @@ public class KnowledgeContext implements Context, Comparator<Knowledge> {
 		return withTab(title, Collections.singletonList(knowledge));
 	}
 
-	public KnowledgeContext withTab(String title, List<Knowledge> knowledgeList) {
-		return withTab(new KnowledgeTab(title, knowledgeList));
+	@SuppressWarnings("unchecked")
+	public KnowledgeContext withTab(String title, List<? extends Knowledge> knowledgeList) {
+		return withTab(new KnowledgeTab(title, (List<Knowledge>)knowledgeList));
 	}
 
 	public KnowledgeContext withTab(KnowledgeTab tab) {
@@ -215,8 +216,6 @@ public class KnowledgeContext implements Context, Comparator<Knowledge> {
 
 	@Override
 	public void keyPressed(KeyEvent event) {
-		Context.super.keyPressed(event);
-
 		for(int i = 0; i < 10 && i < tabs.size(); i++) {
 			if(event.getKey() == '0' + (i + 1) % 10) {
 				setTabIndex(i);

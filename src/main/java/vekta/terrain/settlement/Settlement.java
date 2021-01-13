@@ -10,11 +10,13 @@ import vekta.knowledge.ObservationLevel;
 import vekta.knowledge.SettlementKnowledge;
 import vekta.menu.Menu;
 import vekta.object.SpaceObject;
+import vekta.object.planet.TerrestrialPlanet;
 import vekta.player.Player;
 import vekta.spawner.SettlementGenerator;
 import vekta.sync.Sync;
 import vekta.sync.Syncable;
 import vekta.terrain.location.Location;
+import vekta.terrain.location.SettlementLocation;
 import vekta.terrain.settlement.building.BuildingType;
 import vekta.terrain.visual.SettlementVisual;
 import vekta.terrain.visual.Visual;
@@ -30,7 +32,7 @@ import static vekta.Vekta.register;
 public abstract class Settlement extends Syncable<Settlement> implements SettlementPart, Economy.Container, ProductivityModifier, Renameable {
 	private static final float POPULATION_SCALE = 1000;
 
-	private final Location location;
+	private final SettlementLocation location;
 	private final @Sync List<SettlementPart> parts = new ArrayList<>();
 
 	private @Sync String name;
@@ -41,14 +43,18 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 
 	private final Visual visual;
 
-	public Settlement(Location location, Faction faction, String key) {
-		this(location, faction, Resources.generateString(key), Resources.generateString("overview_" + key));
+	public Settlement(TerrestrialPlanet planet, Faction faction, String key) {
+		this(planet, faction, Resources.generateString(key), Resources.generateString("overview_" + key));
 	}
 
-	public Settlement(Location location, Faction faction, String name, String overview) {
-		this.location = location;
+	public Settlement(TerrestrialPlanet planet, Faction faction, String name, String overview) {
+//		this.planet = planet;
 		this.name = name;
 		this.overview = overview;
+
+		// TEMP
+		location = new SettlementLocation(planet);
+		location.notifySettlement(this);
 
 		economy = register(new Economy(this));
 		initEconomy(economy);
@@ -59,11 +65,9 @@ public abstract class Settlement extends Syncable<Settlement> implements Settlem
 		setFaction(faction);
 
 		SettlementGenerator.populateSettlement(this);
-
-		location.notifySettlement(this);
 	}
 
-	public Location getLocation() {
+	public SettlementLocation getLocation() {
 		return location;
 	}
 

@@ -41,7 +41,7 @@ public class InventoryMenuHandle extends SideLayoutMenuHandle {
         if(getTitle() != null) {
             v.textSize(24);
             v.fill(200);
-            v.text(getTitle(), getItemX(), getY() - (getY() / 2));
+            v.text(getTitle(), getItemX(), getItemY(-3));
         }
 
         v.textSize(32);

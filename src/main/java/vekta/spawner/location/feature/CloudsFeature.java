@@ -20,7 +20,7 @@ public class CloudsFeature extends FeatureLocationSpawner<String> {
 	}
 
 	@Override
-	public String chooseData() {
+	public String chooseData(Terrain terrain) {
 		return Resources.generateString("cloud");
 	}
 

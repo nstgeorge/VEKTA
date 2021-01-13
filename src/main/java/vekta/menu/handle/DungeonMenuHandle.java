@@ -17,15 +17,15 @@ public class DungeonMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public void focus(Menu menu) {
-		super.focus(getMenu());
+	public void focus() {
+		super.focus();
 
 		getRoom().onEnter(getMenu());
 	}
 
 	@Override
-	public void unfocus(Menu menu) {
-		super.unfocus(getMenu());
+	public void unfocus() {
+		super.unfocus();
 
 		getRoom().onLeave(getMenu());
 	}

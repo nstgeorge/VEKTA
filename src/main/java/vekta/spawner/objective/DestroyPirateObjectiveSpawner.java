@@ -17,7 +17,7 @@ import static vekta.Vekta.v;
 public class DestroyPirateObjectiveSpawner implements MissionGenerator.ObjectiveSpawner {
 	@Override
 	public float getWeight() {
-//		return 1;
+		//		return 1;
 		return 0; // Disabled for the time being
 	}
 
@@ -30,10 +30,10 @@ public class DestroyPirateObjectiveSpawner implements MissionGenerator.Objective
 	public Objective getMainObjective(Mission mission) {
 		// Find an inhabited planet with a sphere of influence
 		List<SpaceObject> candidates = getWorld().findObjects(TerrestrialPlanet.class).stream()
-				.filter(p -> p.impartsGravity() && p.getTerrain().isInhabited())
+				.filter(p -> p.impartsGravity() && p.isInhabited())
 				.collect(Collectors.toList());
 		SpaceObject obj = !candidates.isEmpty() ? v.random(candidates) : null;
-		
+
 		return new DestroyAroundObjective("Fend off Pirates", PirateShip.class, obj);
 	}
 }

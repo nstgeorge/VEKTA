@@ -6,9 +6,7 @@ import vekta.terrain.location.ProxyLocation;
 
 import java.util.Set;
 
-import static vekta.Vekta.v;
-
-public class VolcanoLocationSpawner extends ProxyLocationSpawner<String> {
+public class ShrineLocationSpawner extends ProxyLocationSpawner<String> {
 
 	@Override
 	public boolean isValid(Terrain terrain) {
@@ -17,26 +15,26 @@ public class VolcanoLocationSpawner extends ProxyLocationSpawner<String> {
 
 	@Override
 	public float getChance(Terrain terrain) {
-		return .1F;
+		return .02F;
 	}
 
 	@Override
 	public String chooseData(Terrain terrain) {
-		return terrain.getName() + " " + Resources.generateString("volcano_suffix");
+		return Resources.generateString("shrine_map");
 	}
 
 	@Override
 	public String getName(ProxyLocation<String> location) {
-		return location.getData();
+		return location.getPlanet().getName() + " " + location.getData().split(":")[0].trim();
 	}
 
 	@Override
 	public String getOverview(ProxyLocation<String> location) {
-		return "You fly above the volcano.";
+		return location.getData().split(":")[1].trim();
 	}
 
 	@Override
 	public void onSurveyTags(ProxyLocation<String> location, Set<String> tags) {
-		tags.add("Volcanoes");
+		tags.add("Relics");
 	}
 }

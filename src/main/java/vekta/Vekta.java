@@ -6,7 +6,6 @@ import com.github.strikerx3.jxinput.XInputDevice;
 import com.github.strikerx3.jxinput.enums.XInputButton;
 import com.github.strikerx3.jxinput.exceptions.XInputNotLoadedException;
 import com.github.strikerx3.jxinput.listener.SimpleXInputDeviceListener;
-import com.github.strikerx3.jxinput.listener.XInputDeviceListener;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PVector;
@@ -48,8 +47,6 @@ public class Vekta extends PApplet {
 
 	public static Vekta v; // Global access to Vekta instance
 
-	public static final String FONTNAME = "font/undefined-medium.ttf";
-
 	private static final Random RANDOM = new Random();
 
 	private static PostFX postFX;
@@ -57,8 +54,8 @@ public class Vekta extends PApplet {
 	public static Menu mainMenu;
 
 	private static Context context;
+	private static Context nextContext; // Context to become active next frame
 	private static World world; // Most recent world context
-	private static Context nextContext;
 
 	// Game-balancing variables and visual settings
 	public static final float MIN_GRAVITY_MASS = 1e23F; // Minimum mass for gravity-imparting planets
@@ -93,13 +90,11 @@ public class Vekta extends PApplet {
 	public static int DANGER_COLOR;
 	public static int MISSION_COLOR;
 
-	// Fonts
+	public static final String FONTNAME = "font/undefined-medium.ttf";
 	public static PFont HEADER_FONT;
 	public static PFont BODY_FONT;
 
-	public static XInputDevice device;
-
-	public static final String OPERATING_SYSTEM = System.getProperty("os.name");
+	public static XInputDevice DEVICE;
 
 	@Override
 	public void settings() {
@@ -117,7 +112,7 @@ public class Vekta extends PApplet {
 			size(Settings.getInt("resolutionWidth"), Settings.getInt("resolutionHeight"), P2D);
 		}
 
-		System.out.println("Starting VEKTA " + (Settings.getBoolean("fullscreen") ? "fullscreen" : "windowed") + " at " + Settings.getInt("resolutionWidth") + "x" + Settings.getInt("resolutionHeight") + " with pixel density " + displayDensity());
+		println("Starting VEKTA " + (Settings.getBoolean("fullscreen") ? "fullscreen" : "windowed") + " at " + Settings.getInt("resolutionWidth") + "x" + Settings.getInt("resolutionHeight") + " with pixel density " + displayDensity());
 
 		noSmooth();
 	}
@@ -139,19 +134,24 @@ public class Vekta extends PApplet {
 		MISSION_COLOR = ItemType.MISSION.getColor();
 
 		try {
-			if(OPERATING_SYSTEM.contains("Windows")) {
-				XInputDevice[] devices = XInputDevice.getAllDevices();
-				// Retrieve the device for player 1
-				device = XInputDevice.getDeviceFor(0);
-				device.addListener(listener);
+			if(System.getProperty("os.name").contains("Windows")) {
+				// Retrieve the controller device
+				DEVICE = XInputDevice.getDeviceFor(0);
+				DEVICE.addListener(new SimpleXInputDeviceListener() {
+					public void buttonChanged(XInputButton button, boolean pressed) {
+						if(pressed) {
+							context.buttonPressed(button);
+						}
+						else {
+							context.buttonReleased(button);
+						}
+					}
+				});
 			}
-
 		}
 		catch(XInputNotLoadedException e) {
 			e.printStackTrace();
 		}
-
-		//		textMode(SHAPE);
 
 		// Fonts
 		HEADER_FONT = createFont(FONTNAME, 72);
@@ -178,8 +178,8 @@ public class Vekta extends PApplet {
 
 	@Override
 	public void draw() {
-		if(OPERATING_SYSTEM.contains("Windows")) {
-			device.poll(); //Xbox action listener
+		if(DEVICE != null) {
+			DEVICE.poll(); //Xbox action listener
 			analogTriggerResponse();
 		}
 
@@ -201,27 +201,19 @@ public class Vekta extends PApplet {
 		Resources.updateAudio();
 	}
 
-	final XInputDeviceListener listener = new SimpleXInputDeviceListener() {
-
-		public void buttonChanged(XInputButton button, boolean pressed) {
-			if(pressed) {
-				context.buttonPressed(button);
-			}
-			else {
-				context.buttonReleased(button);
-			}
-		}
-	};
-
 	public void analogTriggerResponse() {
 		// Poll analog controls regardless of if they're pressed at all or not.
-		XInputAxes axes = device.getComponents().getAxes();
+		XInputAxes axes = DEVICE.getComponents().getAxes();
 
-		// If you are accelerating you cannot deccelerate at the same time with analog and vice versa.
-		if(axes.lt == 0)
-			context.analogKeyPressed(axes.rt);
-		if(axes.rt == 0)
+		// If you are accelerating you cannot decelerate at the same time with analog and vice versa.
+		boolean left = axes.lt != 0;
+		boolean right = axes.rt != 0;
+		if(left && !right) {
 			context.analogKeyPressed(-axes.lt);
+		}
+		if(right && !left) {
+			context.analogKeyPressed(axes.rt);
+		}
 
 		context.controlStickMoved(axes.lx, axes.ly, LEFT);
 		context.controlStickMoved(axes.rx, axes.ry, RIGHT);
@@ -231,6 +223,11 @@ public class Vekta extends PApplet {
 	public void keyPressed(KeyEvent event) {
 		if((world != null && world.globalKeyPressed(event)) || context != null) {
 			context.keyPressed(event);
+			for(KeyBinding key : KeyBinding.values()) {
+				if(Settings.getKeyCode(key) == event.getKeyCode()) {
+					context.keyPressed(key);
+				}
+			}
 			if(key == ESC) {
 				key = 0; // Suppress default behavior (exit)
 			}
@@ -241,6 +238,11 @@ public class Vekta extends PApplet {
 	public void keyReleased(KeyEvent event) {
 		if(context != null) {
 			context.keyReleased(event);
+			for(KeyBinding key : KeyBinding.values()) {
+				if(Settings.getKeyCode(key) == event.getKeyCode()) {
+					context.keyReleased(key);
+				}
+			}
 		}
 	}
 

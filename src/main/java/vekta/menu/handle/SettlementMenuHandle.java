@@ -20,7 +20,6 @@ public class SettlementMenuHandle extends MenuHandle {
 	private float smoothY;
 
 	public SettlementMenuHandle(Settlement settlement) {
-		//super(0, v.height / 4 + 120, v.width, v.height - (v.height / 4 + 240));
 		this.settlement = settlement;
 	}
 
@@ -34,15 +33,15 @@ public class SettlementMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public void init(Menu menu) {
-		super.init(menu);
+	public void init() {
+		super.init();
 
-		onVisit(getMenu());
+		onVisit();
 	}
 
 	@Override
-	public void unfocus(Menu menu) {
-		super.unfocus(getMenu());
+	public void unfocus() {
+		super.unfocus();
 
 		// Transition zoom between menus
 		if(getNextContext() instanceof Menu && ((Menu)getNextContext()).getHandle() instanceof SettlementMenuHandle) {
@@ -78,24 +77,24 @@ public class SettlementMenuHandle extends MenuHandle {
 
 		v.textSize(32);
 		v.fill(100);
-//		v.text("Welcome to", v.width / 2F, v.height / 4F - 64);
+		v.text("Welcome to", v.width / 2F, getItemY(-2) - 64);
 
 		v.textSize(48);
 		v.fill(settlement.getColor());
 
 		v.fill(200);
-		v.text(settlement.getName(), v.width / 2F, v.height / 4F);
+		v.text(settlement.getName(), v.width / 2F, getItemY(-2));
 
 		v.textSize(20);
 		v.fill(100);
-		v.text(getSubtext(), v.width / 2F, v.height / 4F + 100);
+		v.text(getSubtext(), v.width / 2F, getItemY(-2) + 50);
 	}
 
 	protected String getSubtext() {
 		return settlement.getGenericName() + ", " + settlement.getFaction().getName();
 	}
 
-	protected void onVisit(Menu menu) {
+	protected void onVisit() {
 		getSettlement().observe(ObservationLevel.VISITED, getMenu().getPlayer());
 	}
 
@@ -103,11 +102,11 @@ public class SettlementMenuHandle extends MenuHandle {
 		return 1;
 	}
 
-//	protected float getX() {
-//		return smoothX;
-//	}
-//
-//	public float getY() {
-//		return smoothY;
-//	}
+	protected float getX() {
+		return smoothX;
+	}
+
+	protected float getY() {
+		return smoothY;
+	}
 }

@@ -20,13 +20,18 @@ public class StormLocationSpawner extends ProxyLocationSpawner<String> {
 	}
 
 	@Override
-	public String chooseData() {
+	public String chooseData(Terrain terrain) {
 		return null;
 	}
 
 	@Override
+	public void setup(ProxyLocation<String> location, Terrain terrain) {
+		location.setWittyText(null);
+	}
+
+	@Override
 	public String getName(ProxyLocation<String> location) {
-		return location.atm() > 100 ? "Superstorm" : location.atm() > .2 ? "Storm" : "Gale";
+		return location.getPlanet().getName() + " " + getTagName(location);
 	}
 
 	@Override
@@ -34,8 +39,17 @@ public class StormLocationSpawner extends ProxyLocationSpawner<String> {
 		return "Turbulence rattles your spacecraft as you venture into the storm.";
 	}
 
+	public String getTagName(ProxyLocation<String> location) {
+		return location.atm() > 100 ? "Superstorm" : location.atm() > .2 ? "Storm" : "Gale";
+	}
+
 	@Override
 	public void onSurveyTags(ProxyLocation<String> location, Set<String> tags) {
-		tags.add(location.getName() + "s");
+		tags.add(getTagName(location) + "s");
+	}
+
+	@Override
+	public boolean isVisitable(ProxyLocation<String> location) {
+		return false; // Should be intermittent and with different storm names
 	}
 }

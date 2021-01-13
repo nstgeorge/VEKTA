@@ -13,7 +13,7 @@ public abstract class ButtonOption extends MenuOption {
 		String name = getName();
 		MenuHandle handle = menu.getHandle();
 		float x = handle.getItemX();
-		float y = handle.getY() + handle.getItemY(index);
+		float y = handle.getItemY(index);
 		boolean selected = menu.getIndex() == index;
 
 		// Draw border

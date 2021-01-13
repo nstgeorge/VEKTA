@@ -15,12 +15,12 @@ import vekta.spawner.WorldGenerator;
 import vekta.util.InfoGroup;
 import vekta.world.RenderLevel;
 
-import static processing.core.PApplet.sq;
-import static processing.core.PApplet.sqrt;
+import static processing.core.PApplet.*;
 import static vekta.Vekta.getWorld;
 
 public class TargetingModule extends ShipModule implements Targeter {
-	private static final float AUTO_ZOOM_SCALE = .015f;
+	private static final float AUTO_ZOOM_POWER = 3;
+	private static final float AUTO_ZOOM_SCALE = 2;
 
 	private TargetingMode mode;
 	private SpaceObject target;
@@ -128,7 +128,7 @@ public class TargetingModule extends ShipModule implements Targeter {
 		if(target != null) {
 			float distSq = target.relativePosition(getShip()).magSq();
 			if(!RenderLevel.SHIP.isVisibleTo(getWorld().getRenderLevel()) || distSq > sq(WorldGenerator.getRadius(RenderLevel.SHIP))) {
-				return sqrt(distSq) * AUTO_ZOOM_SCALE;
+				return pow(distSq, 1 / AUTO_ZOOM_POWER) * AUTO_ZOOM_SCALE;
 			}
 		}
 		return getWorld().getZoom();

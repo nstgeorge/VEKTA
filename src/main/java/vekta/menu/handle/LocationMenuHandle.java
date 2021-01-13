@@ -22,8 +22,8 @@ public class LocationMenuHandle extends MenuHandle {
 	}
 
 	@Override
-	public void init(Menu menu) {
-		super.init(menu);
+	public void init() {
+		super.init();
 
 		if(location.getTune() != null) {
 			location.getTune().reset();
@@ -54,11 +54,9 @@ public class LocationMenuHandle extends MenuHandle {
 			v.text(location.getWittyText(), v.width / 2F, v.height / 4F - 64);
 		}
 
-		v.textSize(48);
-		v.fill(location.getColor());
-
 		if(location.getName() != null) {
-			v.fill(200);
+			v.textSize(48);
+			v.fill(location.getColor());
 			v.text(location.getName(), v.width / 2F, v.height / 4F);
 		}
 

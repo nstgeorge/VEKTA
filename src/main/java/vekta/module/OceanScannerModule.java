@@ -3,6 +3,7 @@ package vekta.module;
 import vekta.knowledge.OceanKnowledge;
 import vekta.menu.Menu;
 import vekta.menu.handle.LocationMenuHandle;
+import vekta.menu.handle.OceanMenuHandle;
 import vekta.menu.option.LootMenuButton;
 import vekta.menu.option.ScanOceanButton;
 import vekta.terrain.location.Location;
@@ -58,7 +59,7 @@ public class OceanScannerModule extends ShipModule {
 
 	@Override
 	public void onMenu(Menu menu) {
-		if(menu.getHandle() instanceof LocationMenuHandle) {
+		if(menu.getHandle() instanceof OceanMenuHandle) {
 			Location location = ((LocationMenuHandle)menu.getHandle()).getLocation();
 
 			if(location instanceof OceanLocation) {

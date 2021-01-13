@@ -24,7 +24,7 @@ public class TopographyFeature extends FeatureLocationSpawner<String[]> {
 	}
 
 	@Override
-	public String[] chooseData() {
+	public String[] chooseData(Terrain terrain) {
 		Set<String> tags = new HashSet<>();
 		int ct = (int)v.random(3) + 1;
 		for(int i = 0; i < ct; i++) {

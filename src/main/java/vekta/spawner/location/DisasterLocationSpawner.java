@@ -21,7 +21,7 @@ public class DisasterLocationSpawner extends ProxyLocationSpawner<String> {
 	}
 
 	@Override
-	public String chooseData() {
+	public String chooseData(Terrain terrain) {
 		return Resources.generateString("disaster_map");
 	}
 

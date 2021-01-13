@@ -42,17 +42,17 @@ public class ProxyLocation<T extends Serializable> extends Location {
 		return proxy;
 	}
 
-//	@Override
-//	protected String chooseWittyText() {
-//		String text = getProxy().chooseWittyText(this);
-//		return text != null ? text : super.chooseWittyText();
-//	}
-//
-//	@Override
-//	protected Tune chooseTune() {
-//		Tune tune = getProxy().chooseTune(this);
-//		return tune != null ? tune : super.chooseTune();
-//	}
+	//	@Override
+	//	protected String chooseWittyText() {
+	//		String text = getProxy().chooseWittyText(this);
+	//		return text != null ? text : super.chooseWittyText();
+	//	}
+	//
+	//	@Override
+	//	protected Tune chooseTune() {
+	//		Tune tune = getProxy().chooseTune(this);
+	//		return tune != null ? tune : super.chooseTune();
+	//	}
 
 	@Override
 	public String getName() {
@@ -94,6 +94,13 @@ public class ProxyLocation<T extends Serializable> extends Location {
 	@Override
 	public void onSetupMenu(Menu menu) {
 		getProxy().onVisitMenu(this, menu);
+	}
+
+	@Override
+	public void draw(float r) {
+		if(!getProxy().draw(this, r)) {
+			super.draw(r);
+		}
 	}
 
 	/// Shorthand methods

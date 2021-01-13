@@ -5,6 +5,7 @@ import vekta.economy.NoiseModifier;
 import vekta.faction.Faction;
 import vekta.item.Inventory;
 import vekta.menu.Menu;
+import vekta.object.planet.TerrestrialPlanet;
 import vekta.spawner.SettlementGenerator;
 import vekta.terrain.location.Location;
 import vekta.terrain.settlement.building.CapitalBuilding;
@@ -15,8 +16,8 @@ import static vekta.Vekta.v;
 public class ColonySettlement extends Settlement {
 	private final Inventory inventory = new Inventory();
 
-	public ColonySettlement(Location location, Faction faction) {
-		super(location, faction, "colony");
+	public ColonySettlement(TerrestrialPlanet planet, Faction faction) {
+		super(planet, faction, "colony");
 
 		add(new CapitalBuilding("Leader", this));
 		add(SettlementGenerator.createMarket(1));

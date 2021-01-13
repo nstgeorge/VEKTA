@@ -56,18 +56,13 @@ public abstract class Planet extends SpaceObject implements Renameable {
 		return super.getTrailLength() * 4;
 	}
 
+	protected boolean shouldDrawPoint(RenderLevel level, float r) {
+		return r < .5F && level.isVisibleTo(RenderLevel.INTERSTELLAR);
+	}
+
 	@Override
 	public void draw(RenderLevel level, float r) {
-		// Temp: fade out planet if zoomed in too much to render
-		float maxRadius = 10000;
-//		if(r > maxRadius) {
-//			return;
-//		}
-
-		if(r > maxRadius * .9F) {
-//			v.fill(v.lerpColor(0, getColor(), (maxRadius - r) / maxRadius));
-		}
-		else if(r < .5F && level.isVisibleTo(RenderLevel.INTERSTELLAR) /* TODO refactor optimization */) {
+		if(shouldDrawPoint(level, r)) {
 			v.point(0, 0);
 		}
 		else {
@@ -77,15 +72,20 @@ public abstract class Planet extends SpaceObject implements Renameable {
 		}
 	}
 
+	public void drawLabel(float r) {
+		String label = getLabel();
+		if(label != null) {
+			v.fill(getLabelColor());
+      // v.textMode(LEFT);
+			// v.text(label, r * 1.1F + 10, 5);
+		}
+	}
+
 	@Override
 	public void drawNearby(float r) {
 		v.ellipse(0, 0, r, r);
 
-		String label = getLabel();
-		if(label != null) {
-			v.fill(getLabelColor());
-			// v.text(label, r * 1.1F + 10, 5);
-		}
+		drawLabel(r);
 	}
 
 	@Override

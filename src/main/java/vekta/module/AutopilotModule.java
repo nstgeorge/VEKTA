@@ -70,7 +70,7 @@ public class AutopilotModule extends TargetingModule {
 			PVector relative = target.getVelocity().sub(velocity);
 
 			// Compute desired velocity
-			float dist = offset.mag();
+			float dist = offset.mag() - target.getRadius();
 			float dot = offset.copy().normalize().dot(relative);
 
 			float stoppingSpeed = sqrt(2 * ship.getSpeed() * dist);

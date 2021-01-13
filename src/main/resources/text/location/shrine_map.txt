@@ -1,0 +1,10 @@
+Totem : You encounter an ancient totem hidden in the folds of the planet's harsh landscape.
+Shrine : It's unclear why this shrine exists or who built it.
+Footprints : As you fly over the surface, you notice what could only be explained as footprints created by some ancient beast.
+Fossils : Between layers of sedimentary rock, you can see the unmistakable signs of fossilized life forms.
+Mirror : You land next to the planet's gigantic mirror which can be seen from space.
+Monolith : You notice a rectangular slab of metal protruding from the surface.
+Statue : A lone statue quietly watches over the landscape.
+Archway : You find a primordial arch spanning between two cliff faces.
+Henge : You find a circular ditch and bank surrounding a pile of rectangular stones.
+Trench : You find the remains of an ancient trench dug deep into the bedrock.

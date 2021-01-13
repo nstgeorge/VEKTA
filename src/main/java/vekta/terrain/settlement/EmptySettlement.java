@@ -4,15 +4,15 @@ import vekta.faction.Faction;
 import vekta.item.Inventory;
 import vekta.menu.Menu;
 import vekta.menu.option.LootMenuButton;
+import vekta.object.planet.TerrestrialPlanet;
 import vekta.player.Player;
 import vekta.spawner.ItemGenerator;
-import vekta.terrain.location.Location;
 
 public class EmptySettlement extends Settlement {
 	private final Inventory inventory = new Inventory();
 
-	public EmptySettlement(Location location, Faction faction) {
-		super(location, faction, "empty");
+	public EmptySettlement(TerrestrialPlanet planet, Faction faction) {
+		super(planet, faction, "empty");
 
 		ItemGenerator.addLoot(getInventory(), 1);
 	}
