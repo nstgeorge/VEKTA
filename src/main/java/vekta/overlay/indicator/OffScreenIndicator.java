@@ -30,7 +30,7 @@ public class OffScreenIndicator extends Indicator<SpaceObject> implements Serial
 	private transient PShape arrow;
 	private final Player player;
 
-	public OffScreenIndicator(Supplier<SpaceObject> value, Player player) {
+	public OffScreenIndicator(DynamicValue<SpaceObject> value, Player player) {
 		super("Offscreen Indicator", value, v.width / 2f, v.height / 2f, v.color(255));
 
 		this.player = player;

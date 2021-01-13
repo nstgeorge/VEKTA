@@ -22,7 +22,7 @@ public class StripCompassIndicator extends Indicator<PVector> implements Seriali
 	private static final int OFFSET = 10;            // Offset in height of the smaller bars
 	private static final float WIDTH = v.width / 2f;    // Width of the indicator as a whole
 
-	public StripCompassIndicator(String name, Supplier<PVector> value, float x, float y, int color) {
+	public StripCompassIndicator(String name, DynamicValue<PVector> value, float x, float y, int color) {
 		super(name, value, x, y, color);
 	}
 

@@ -20,7 +20,7 @@ public class DialIndicator extends Indicator<PVector> implements Serializable {
 	// TODO: Add a RADIUS parameter
 	private static final int RADIUS = 50;
 
-	public DialIndicator(String name, Supplier<PVector> value, float x, float y, int color) {
+	public DialIndicator(String name, DynamicValue<PVector> value, float x, float y, int color) {
 		super(name, value, x, y, color);
 	}
 

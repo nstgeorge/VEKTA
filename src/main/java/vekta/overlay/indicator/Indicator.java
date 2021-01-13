@@ -1,5 +1,6 @@
 package vekta.overlay.indicator;
 
+import java.io.Serializable;
 import java.util.function.Supplier;
 
 /**
@@ -10,13 +11,13 @@ import java.util.function.Supplier;
  */
 public abstract class Indicator<T> {
 	private final String name;
-	private final Supplier<T> value;
+	private final DynamicValue<T> value;
 
 	private final float x;
 	private final float y;
 	private int color;
 
-	public Indicator(String name, Supplier<T> value, float x, float y, int color) {
+	public Indicator(String name, DynamicValue<T> value, float x, float y, int color) {
 		this.name = name;
 		this.value = value;
 		this.x = x;
@@ -50,4 +51,7 @@ public abstract class Indicator<T> {
 	}
 
 	public abstract void draw();
+
+	public interface DynamicValue<T> extends Supplier<T>, Serializable {
+	}
 }

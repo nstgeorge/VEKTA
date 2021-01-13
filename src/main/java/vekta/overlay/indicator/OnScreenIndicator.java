@@ -20,7 +20,7 @@ public class OnScreenIndicator extends Indicator<SpaceObject> implements Seriali
 
 	private final Player player;
 
-	public OnScreenIndicator(Supplier<SpaceObject> value, Player player) {
+	public OnScreenIndicator(DynamicValue<SpaceObject> value, Player player) {
 		super("On-Screen Indicator", value, v.width / 2F, v.height / 2F, v.color(255));
 
 		this.player = player;

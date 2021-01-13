@@ -19,7 +19,7 @@ public class MeterIndicator extends Indicator<Float> implements Serializable {
 	private final float size;
 	private final float thickness;
 
-	public MeterIndicator(String name, IndicatorType type, Supplier<Float> value, float min, float max, float x, float y, float size, float thickness, int color) {
+	public MeterIndicator(String name, IndicatorType type, DynamicValue<Float> value, float min, float max, float x, float y, float size, float thickness, int color) {
 		super(name, value, x, y, color);
 		this.min = min;
 		this.max = max;
