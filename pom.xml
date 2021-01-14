@@ -59,8 +59,8 @@
             <groupId>javamp3</groupId>
             <artifactId>javamp3</artifactId>
             <version>0.0.0</version>
-<!--            <scope>system</scope>-->
-<!--            <systemPath>${processing.lib}/processing/sound/library/javamp3-1.0.3.jar</systemPath>-->
+            <!--            <scope>system</scope>-->
+            <!--            <systemPath>${processing.lib}/processing/sound/library/javamp3-1.0.3.jar</systemPath>-->
         </dependency>
 
         <!-- JSON configuration -->
@@ -79,6 +79,18 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.12.0</version>
         </dependency>
+
+        <!-- XML configuration -->
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>com.fasterxml.jackson.dataformat</groupId>-->
+        <!--            <artifactId>jackson-dataformat-xml</artifactId>-->
+        <!--            <version>2.12.1</version>-->
+        <!--        </dependency>-->
 
         <!-- Reflections / IoC -->
         <dependency>
@@ -101,20 +113,20 @@
             <version>4.13.1</version>
             <scope>test</scope>
         </dependency>
-		
-		<!-- Xinput -->
-		<dependency>
-			<groupId>com.github.strikerx3</groupId>
-			<artifactId>jxinput</artifactId>
-			<version>1.0.0</version>
-		</dependency>
+
+        <!-- Xinput -->
+        <dependency>
+            <groupId>com.github.strikerx3</groupId>
+            <artifactId>jxinput</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.xenoamess/JXInput -->
-<!--        <dependency>-->
-<!--            <groupId>com.xenoamess</groupId>-->
-<!--            <artifactId>JXInput</artifactId>-->
-<!--            <version>1.0.1</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.xenoamess</groupId>-->
+        <!--            <artifactId>JXInput</artifactId>-->
+        <!--            <version>1.0.1</version>-->
+        <!--        </dependency>-->
 
 
     </dependencies>

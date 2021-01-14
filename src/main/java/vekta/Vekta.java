@@ -14,6 +14,7 @@ import processing.event.MouseEvent;
 import processing.opengl.PGraphicsOpenGL;
 import processing.opengl.PShader;
 import vekta.context.Context;
+import vekta.context.DisplayContext;
 import vekta.context.PauseMenuContext;
 import vekta.context.StartSceneContext;
 import vekta.item.ItemType;
@@ -168,6 +169,9 @@ public class Vekta extends PApplet {
 		// Start opening scene
 		StartSceneContext startScene = new StartSceneContext();
 		setContext(startScene);
+		applyContext();
+
+		setContext(new DisplayContext(Resources.createUI("Main")));////////////
 		applyContext();
 
 		frame.toFront();

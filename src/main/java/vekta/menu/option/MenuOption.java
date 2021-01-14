@@ -3,28 +3,16 @@ package vekta.menu.option;
 import processing.event.KeyEvent;
 import vekta.KeyBinding;
 import vekta.menu.Menu;
-import vekta.ui.container.ContainerMember;
 
 import java.io.Serializable;
 
 import static vekta.Vekta.UI_COLOR;
 
-public abstract class MenuOption implements Serializable, ContainerMember {
-
-	private Menu menu;
-
-	public final void init(Menu menu) {
-		this.menu = menu;
-	}
+public abstract class MenuOption implements Serializable {
 
 	public abstract String getName();
 
 	public abstract void render(Menu menu, int index);
-
-	@Override
-	public void render() {
-		render(menu, menu.getOptions().indexOf(this));
-	}
 
 	public int getColor() {
 		return UI_COLOR;
@@ -50,14 +38,8 @@ public abstract class MenuOption implements Serializable, ContainerMember {
 	public void keyPressed(Menu menu, KeyEvent event) {
 	}
 
-	@Override
-	public float getSizeY() {
+	public float getHeight() {
 		//return menu.getHandle().getItemY(menu.getOptions().indexOf(this));
 		return 50;
-	}
-
-	@Override
-	public float getYPadding() {
-		return menu.getHandle().getSpacing();
 	}
 }

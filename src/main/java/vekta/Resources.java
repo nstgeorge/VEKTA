@@ -2,6 +2,11 @@ package vekta;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.dom4j.Attribute;
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.Text;
+import org.dom4j.io.SAXReader;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 import org.reflections.scanners.SubTypesScanner;
@@ -11,6 +16,10 @@ import org.reflections.util.FilterBuilder;
 import processing.core.PShape;
 import processing.sound.SoundFile;
 import vekta.config.Config;
+import vekta.display.Display;
+import vekta.tag.Tag;
+import vekta.tag.TextTag;
+import vekta.tag.resolver.TagResolver;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
@@ -31,9 +40,11 @@ public final class Resources {
 					new ResourcesScanner()));
 
 	private static final ObjectMapper CONFIG_MAPPER = new ObjectMapper();
+	private static final SAXReader TAG_READER = new SAXReader();
 
 	private static final List<Config> ALL_CONFIGS = new ArrayList<>();
-	//	private static final Map<String, Config[]> CONFIGS = new HashMap<>();
+	private static final Map<String, TagResolver> TAG_RESOLVERS = new HashMap<>();
+	private static final Map<String, Tag> TAGS = new HashMap<>();
 	private static final Map<String, String[]> STRINGS = new HashMap<>();
 	private static final Map<String, SoundFile> SOUNDS = new HashMap<>();
 	private static final Map<String, PShape> SHAPES = new HashMap<>();
@@ -50,21 +61,22 @@ public final class Resources {
 	private static float soundVolume;
 	private static float musicVolume;
 
-	public static PShape logo; // TODO: generalize SVG file loading
-
 	public static void init() {
 		adjustFromSettings();
 
-		loadResources(Resources::addConfigs, "json");
-		loadResources(Resources::addShape, "obj", "svg");
-		loadResources(Resources::addSound, "wav", "mp3");
+		for(TagResolver resolver : findSubclassInstances(TagResolver.class)) {
+			TAG_RESOLVERS.put(resolver.getClass().getSimpleName().replaceAll(TagResolver.class.getSimpleName() + "$", ""), resolver);
+		}
 
-		logo = v.loadShape("vekta_wordmark.svg");
+		loadResources(Resources::loadConfigs, "json");
+		loadResources(Resources::loadTag, "xml");
+		loadResources(Resources::loadShape, "svg");
+		loadResources(Resources::loadSound, "wav", "mp3");
 	}
 
 	public static void initStrings() {
 		adjustFromSettings();
-		loadResources(Resources::addStrings, "txt");
+		loadResources(Resources::loadStrings, "txt");
 
 		for(String key : STRINGS.keySet()) {
 			checkStrings(key, STRINGS.get(key));
@@ -96,13 +108,14 @@ public final class Resources {
 				.toArray(i -> (T[])Array.newInstance(type, i));
 	}
 
-	private static void addConfigs(String path, String key) {
+	private static void loadConfigs(String path, String key) {
 		//		if(CONFIGS.containsKey(key)) {
 		//			throw new RuntimeException("Multiple config files for key: `" + key + "`");
 		//		}
 		try {
 			List<? extends Config> configs = CONFIG_MAPPER.readValue(
-					Objects.requireNonNull(Resources.class.getResourceAsStream("/" + path)), new TypeReference<List<? extends Config>>() {});
+					Objects.requireNonNull(Resources.class.getResourceAsStream("/" + path)), new TypeReference<List<? extends Config>>() {
+					});
 			ALL_CONFIGS.addAll(configs);
 			//			CONFIGS.put(key, configs);
 		}
@@ -123,7 +136,57 @@ public final class Resources {
 		return ALL_CONFIGS.stream().filter(cls::isInstance).map(cls::cast).collect(Collectors.toList());
 	}
 
-	private static void addStrings(String path, String key) {
+	private static void loadTag(String path, String key) {
+		if(TAGS.containsKey(key)) {
+			throw new RuntimeException("Multiple XML definitions for tag: `" + key + "`");
+		}
+		try {
+			Document doc = TAG_READER.read(Objects.requireNonNull(Resources.class.getResourceAsStream("/" + path)));
+			TAGS.put(key, createTag(doc.getRootElement()));
+		}
+		catch(Exception e) {
+			throw new RuntimeException("Failed to load XML definition from path: " + path, e);
+		}
+	}
+
+	private static Tag createTag(Element el) {
+		Tag tag = new Tag(el.getName());
+		for(Object item : el.content()) {
+			if(item instanceof Attribute) {
+				tag.setAttribute(((Attribute)item).getName(), ((Attribute)item).getValue());
+			}
+			else if(item instanceof Element) {
+				tag.append(createTag((Element)item));
+			}
+			else if(item instanceof Text) {
+				String text = ((Text)item).getText().trim();
+				if(!text.isEmpty()) {
+					tag.append(new TextTag(text));
+				}
+			}
+		}
+		println(tag);
+		return tag;
+	}
+
+	public static Display createUI(Tag tag) {
+		TagResolver resolver = TAG_RESOLVERS.get(tag.getName());
+		if(resolver != null) {
+			return resolver.compile(tag);
+		}
+		Tag template = TAGS.get(tag.getName());
+		if(template == null) {
+			throw new RuntimeException("Unknown tag: <" + tag.getName() + " />");
+		}
+		// TODO: scopes
+		return createUI(template);
+	}
+
+	public static Display createUI(String name) {
+		return createUI(new Tag(name));
+	}
+
+	private static void loadStrings(String path, String key) {
 		String[] strings = Arrays.stream(v.loadStrings(path))
 				.map(String::trim)
 				.filter(s -> !s.isEmpty() && !s.startsWith("#"))
@@ -189,7 +252,7 @@ public final class Resources {
 		}
 	}
 
-	private static void addSound(String path, String key) {
+	private static void loadSound(String path, String key) {
 		SoundFile sound = new SoundFile(v, path);
 		if(STRINGS.containsKey(key)) {
 			throw new RuntimeException("Conflicting sounds for key: `" + key + "`");
@@ -209,7 +272,7 @@ public final class Resources {
 		return sound;
 	}
 
-	private static void addShape(String path, String key) {
+	private static void loadShape(String path, String key) {
 		PShape shape = v.loadShape(path);
 		if(SHAPES.containsKey(key)) {
 			throw new RuntimeException("Conflicting shapes for key: `" + key + "`");

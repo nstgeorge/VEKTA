@@ -112,13 +112,13 @@ public class Menu implements Context {
 	public void add(MenuOption item) {
 		options.add(item);
 		//		handle.addElement(item);
-		item.init(this);
+		//		item.init(this);
 	}
 
 	public void add(int index, MenuOption item) {
 		options.add(index, item);
 		//		handle.addElement(item);
-		item.init(this);
+		//		item.init(this);
 	}
 
 	public void addDefault() {
