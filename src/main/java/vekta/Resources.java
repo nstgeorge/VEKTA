@@ -19,6 +19,8 @@ import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.fmod.FMODLoader;
+
 import static processing.core.PApplet.println;
 import static vekta.Vekta.v;
 
@@ -60,6 +62,12 @@ public final class Resources {
 		loadResources(Resources::addSound, "wav", "mp3");
 
 		logo = v.loadShape("vekta_wordmark.svg");
+
+		if(FMODLoader.loadNatives()) {
+			System.out.println("FMOD natives loaded.");
+		} else {
+			System.out.println("Failed to load FMOD natives.");
+		}
 	}
 
 	public static void initStrings() {

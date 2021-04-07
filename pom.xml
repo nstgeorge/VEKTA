@@ -109,6 +109,13 @@
 			<version>1.0.0</version>
 		</dependency>
 
+        <!-- FMOD JNI Bindings -->
+        <dependency>
+            <groupId>org.fmod</groupId>
+            <artifactId>fmod-jni</artifactId>
+            <version>0.0.0</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.xenoamess/JXInput -->
 <!--        <dependency>-->
 <!--            <groupId>com.xenoamess</groupId>-->
