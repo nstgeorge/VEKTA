@@ -159,10 +159,15 @@ public final class Resources {
 				tag.append(createTag((Element)item));
 			}
 			else if(item instanceof Text) {
-				String text = ((Text)item).getText().trim();
-				if(!text.isEmpty()) {
-					tag.append(new TextTag(text));
+				String[] lines = ((Text)item).getText().trim().split("\n");
+				StringBuilder builder = new StringBuilder();
+				for(int i = 0; i < lines.length; i++) {
+					if(i != 0) {
+						builder.append("\n");
+					}
+					builder.append(lines[i].trim());
 				}
+				tag.append(new TextTag(builder.toString()));
 			}
 		}
 		println(tag);

@@ -150,7 +150,7 @@ public class Vekta extends PApplet {
 				});
 			}
 		}
-		catch(XInputNotLoadedException e) {
+		catch(Exception e) {
 			e.printStackTrace();
 		}
 
@@ -171,8 +171,8 @@ public class Vekta extends PApplet {
 		setContext(startScene);
 		applyContext();
 
-		setContext(new DisplayContext(Resources.createUI("Main")));////////////
-		applyContext();
+//		setContext(new DisplayContext(Resources.createUI("Main")));////////////
+//		applyContext();
 
 		frame.toFront();
 		frame.requestFocus();
