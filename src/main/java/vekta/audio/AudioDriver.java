@@ -1,15 +1,13 @@
 package vekta.audio;
 
 import org.fmod.FMODLoader;
-import org.fmod.jni.FMOD_STUDIO_STOP_MODE;
-import org.fmod.studio.Bank;
 import org.fmod.studio.FmodStudioSystem;
 import org.fmod.studio.EventDescription;
 import org.fmod.studio.EventInstance;
 import vekta.Resources;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.logging.Logger;
 
 import static org.fmod.jni.FMODConstants.*;
 
@@ -19,36 +17,43 @@ import static org.fmod.jni.FMODConstants.*;
  */
 public final class AudioDriver {
 
-	private static FmodStudioSystem studio;
-	private static ArrayList<Bank> banks = new ArrayList<>();
+	private static final Logger LOG = Logger.getLogger(AudioDriver.class.getSimpleName());
 
-	// This is likely a temporary fix until we have a better method for accessing this data.
+	// This is a very, very temporary fix until we have a better method for accessing this data.
 	private static final String RESOURCES_PATH = "src/main/resources/";
+
+	//	private static final List<Bank> BANKS = new ArrayList<>();
+
+	private static FmodStudioSystem studio;
 
 	/**
 	 * Load the FMOD natives and initialize the studio system with banks
 	 */
 	public static void init() {
 		if(FMODLoader.loadNatives()) {
-			System.out.println("FMOD natives loaded.");
-		} else {
-			System.out.println("Failed to load FMOD natives.");
+			LOG.info("FMOD natives loaded.");
 		}
-
-		List<String> banks = Resources.getLocatedAudioBanks()
-				.stream()
-				.map((String e) -> RESOURCES_PATH + e)
-				.collect(Collectors.toList());
+		else {
+			LOG.warning("Failed to load FMOD natives.");
+		}
 
 		studio = FmodStudioSystem.create();
 		studio.initialize(32, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, null);
 
-		System.out.println("Found banks: " + banks);
-		loadBanks(studio, banks.toArray(new String[] {}));
+		String[] paths = Resources.getLocatedAudioBanks()
+				.stream()
+				.map(e -> RESOURCES_PATH + e)
+				.toArray(String[]::new);
+
+		LOG.info("Found banks: " + Arrays.asList(paths));
+		for(String path : paths) {
+			loadBank(path);
+		}
 	}
 
 	/**
 	 * Get the FModStudioSystem currently in use. This can be used to access more advanced audio features outside of the AudioDriver.
+	 *
 	 * @return FModStudioSystem
 	 */
 	public static FmodStudioSystem getStudio() {
@@ -56,45 +61,37 @@ public final class AudioDriver {
 	}
 
 	/**
-	 * Load one or more audio banks into the studio.
-	 * @param studio FmodStudioSystem to load into
-	 * @param paths Paths to each bank to load. Resources.getLocatedAudioBanks() can be helpful here.
+	 * Load an audio bank into the studio.
+	 *
+	 * @param path Path to load. `Resources.getLocatedAudioBanks()` can be helpful here.
 	 */
-	private static void loadBanks(FmodStudioSystem studio, String... paths) {
-		Objects.requireNonNull(paths, "AudioDriver.loadBanks() was provided no banks to load.");
-		for(String path : paths) {
-			System.out.println("Loading " + path + " into studio...");
-			banks.add(studio.loadBankFile(path, FMOD_STUDIO_LOAD_BANK_NORMAL));
-			System.out.println("Loaded " + path + " into studio.");
-		}
+	private static void loadBank(String path) {
+		LOG.info("Loading " + path + " into studio...");
+		/*BANKS.add(*/
+		studio.loadBankFile(path, FMOD_STUDIO_LOAD_BANK_NORMAL);
+		LOG.info("Loaded " + path + " into studio.");
 	}
 
 	/**
 	 * Play an event once.
+	 *
 	 * @param path Path to the event to play
 	 */
 	public static void playOneShot(String path) {
-		EventInstance inst = studio.getEvent(path).createInstance();
+		EventInstance inst = createSoundInstance(path);
 		inst.start();
 		inst.release();
 	}
 
 	/**
-	 * Get a sound from the referenced path.
+	 * Create an `EventInstance` from the referenced path.
+	 *
 	 * @param path Path to event to get. This is not a directory, it is an FMod event path.
 	 * @return EventInstance that references the sound.
 	 */
-	public static EventInstance getSound(String path) {
+	public static EventInstance createSoundInstance(String path) {
 		EventDescription desc = studio.getEvent(path);
 		desc.loadSampleData();
 		return desc.createInstance();
-	}
-
-	/**
-	 * Stop the sound referenced and allow it to fade out naturally if that behavior is defined.
-	 * @param inst EventInstance to stop
-	 */
-	public static void stopSound(EventInstance inst) {
-		inst.stop(FMOD_STUDIO_STOP_MODE.FMOD_STUDIO_STOP_ALLOWFADEOUT);
 	}
 }
