@@ -76,8 +76,9 @@ public final class Resources {
 
 	/**
 	 * Locate and process files of the provided extension(s).
+	 *
 	 * @param load Function reference to process files
-	 * @param ext File extension(s) to accept
+	 * @param ext  File extension(s) to accept
 	 */
 	private static void loadResources(BiConsumer<String, String> load, String... ext) {
 		for(String path : REFLECTIONS.getResources(Pattern.compile(".+\\.(" + String.join("|", ext) + ")$"))) {
@@ -110,7 +111,8 @@ public final class Resources {
 		//		}
 		try {
 			List<? extends Config> configs = CONFIG_MAPPER.readValue(
-					Objects.requireNonNull(Resources.class.getResourceAsStream("/" + path)), new TypeReference<List<? extends Config>>() {});
+					Objects.requireNonNull(Resources.class.getResourceAsStream("/" + path)), new TypeReference<List<? extends Config>>() {
+					});
 			ALL_CONFIGS.addAll(configs);
 			//			CONFIGS.put(key, configs);
 		}
@@ -198,7 +200,10 @@ public final class Resources {
 	}
 
 	private static void addAudioBank(String path, String key) {
-		if(!AUDIO_BANKS.containsKey(key)) AUDIO_BANKS.put(key, path);
+		if(AUDIO_BANKS.containsKey(key)) {
+			throw new RuntimeException("Conflicting audio banks for key: " + key);
+		}
+		AUDIO_BANKS.put(key, path);
 	}
 
 	public static Collection<String> getLocatedAudioBanks() {

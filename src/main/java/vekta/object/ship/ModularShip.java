@@ -103,7 +103,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	}
 
 	public float getMaxZoomLevel() {
-		return isHyperdriving() ? INTERSTELLAR_LEVEL : STAR_LEVEL; // Slightly below STAR_LEVEL to pacify smooth zooming
+		return isHyperdriving() ? INTERSTELLAR_LEVEL : STAR_LEVEL;
 	}
 
 	public boolean isLanding() {

@@ -17,6 +17,10 @@ public class Sound implements Serializable {
 		getInstance();
 	}
 
+	/**
+	 * Access the underlying `EventInstance`.
+	 * Only call this directly if you're doing something hacky or unusual; otherwise, just add a corresponding method in this file.
+	 */
 	public EventInstance getInstance() {
 		if(instance == null) {
 			instance = AudioDriver.getSound("event:" + key);
