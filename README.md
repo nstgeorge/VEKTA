@@ -13,11 +13,11 @@ Vekta is a procedural space exploration game with vector-style graphics. It feat
     which you can then run the jar "with-dependencies" to run the program. 
     - If you are using an IDE and have Maven properly configured you can also use that to build and run the project.
     
-# Running the Game
+## Running the Game
 
 After building the project, the game’s executable can be launched at `/target/vekta-X.X.X-jar-with-dependencies`. Upon launch, the ‘W’, ‘A’, ‘S’, and ‘D’ keys can be used to navigate the main menu.
 
-# Development Workflow
+## Development Workflow
 
 While the `build.bat` script can fully rebuild upon any code changes, it is recommended that you use an IDE for long-term development. We recommend using the newest version of Intellij IDEA due to its useful project configurations with Maven and Ant. Here are the steps for setting up a development environment using IntelliJ.
 1. Confirm that the project builds successfully using the `build.bat` script. If so, all dependencies should be set up correctly.
