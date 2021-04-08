@@ -5,6 +5,7 @@ import java.util.function.Function;
 /**
  * Represents a value graphically to the user.
  * The value function is called on every draw.
+ *
  * @param <T> Type that the value function requires (Float is used a placeholder if none is required)
  * @param <R> Type that the value function returns
  */
@@ -16,7 +17,7 @@ public abstract class Indicator<T, R> {
 	float locY;
 	int color;
 
-	public Indicator(String name, Function value, float locX, float locY, int color) {
+	public Indicator(String name, Function<T, R> value, float locX, float locY, int color) {
 		this.name = name;
 		this.value = value;
 		this.locX = locX;

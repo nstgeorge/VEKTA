@@ -1,15 +1,12 @@
 package vekta.object.ship;
 
 import com.google.common.collect.ImmutableMap;
-import org.fmod.jni.FMOD_STUDIO_PLAYBACK_STATE;
-import org.fmod.jni.FMOD_STUDIO_STOP_MODE;
-import org.fmod.studio.EventInstance;
 import processing.core.PVector;
 import vekta.KeyBinding;
 import vekta.Resources;
 import vekta.Settings;
-import vekta.audio.AudioDriver;
 
+import vekta.audio.Sound;
 import vekta.item.Item;
 import vekta.item.ModuleItem;
 import vekta.knowledge.ObservationLevel;
@@ -64,7 +61,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	private float energy;
 	private float maxEnergy;
 
-	private final EventInstance engineAudioInstance = AudioDriver.getSound("event:/Player/Engine");
+	private final Sound engineSound = new Sound("/Player/Engine");
 
 	private final PVector acceleration = new PVector();
 
@@ -125,18 +122,16 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		this.thrust = thrust;
 		if(!isHyperdriving() && hasController()) {
 			if(thrust != 0 && hasEnergy()) {
-				// TODO: Transition to newer audio management system once it exists
 				//Resources.loopSound("engine", abs(thrust));
-				if(engineAudioInstance.getPlaybackState() != FMOD_STUDIO_PLAYBACK_STATE.FMOD_STUDIO_PLAYBACK_PLAYING) {
-					engineAudioInstance.start();
+				if(!engineSound.isPlaying()) {
+					engineSound.start();
 				}
-				// Could probably do some nice functional stuff to connect parameters to function outputs
-				// See Indicator.getValue() if it's not clear what I mean
-				engineAudioInstance.setParameterValue("power", abs(thrust));
+				engineSound.setValue("power", abs(thrust));
 			}
 			else {
 				//Resources.stopSound("engine");
-				engineAudioInstance.stop(FMOD_STUDIO_STOP_MODE.FMOD_STUDIO_STOP_ALLOWFADEOUT);
+				engineSound.setValue("power", 0);
+//				engineSound.stop();
 			}
 		}
 		if(DEVICE != null) {
@@ -423,6 +418,8 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	@Override
 	public void onDestroyed(SpaceObject s) {
+		engineSound.release();
+
 		if(hasController()) {
 			getController().emit(PlayerEvent.GAME_OVER, this);
 		}
