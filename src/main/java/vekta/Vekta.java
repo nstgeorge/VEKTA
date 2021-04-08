@@ -13,6 +13,7 @@ import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 import processing.opengl.PGraphicsOpenGL;
 import processing.opengl.PShader;
+import vekta.audio.AudioDriver;
 import vekta.context.Context;
 import vekta.context.PauseMenuContext;
 import vekta.context.StartSceneContext;
@@ -123,6 +124,7 @@ public class Vekta extends PApplet {
 		postFX = new PostFX(this, width, height);
 
 		Resources.init();
+		AudioDriver.init();
 
 		hint(DISABLE_DEPTH_TEST);
 		hint(DISABLE_TEXTURE_MIPMAPS);
@@ -182,6 +184,9 @@ public class Vekta extends PApplet {
 			DEVICE.poll(); //Xbox action listener
 			analogTriggerResponse();
 		}
+
+		// Update sound state
+		AudioDriver.getStudio().update();
 
 		applyContext();
 		if(context != null) {

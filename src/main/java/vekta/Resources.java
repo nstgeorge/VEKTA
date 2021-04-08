@@ -2,6 +2,7 @@ package vekta;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.fmod.studio.FmodStudioSystem;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 import org.reflections.scanners.SubTypesScanner;
@@ -18,8 +19,6 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import org.fmod.FMODLoader;
 
 import static processing.core.PApplet.println;
 import static vekta.Vekta.v;
@@ -39,6 +38,7 @@ public final class Resources {
 	private static final Map<String, String[]> STRINGS = new HashMap<>();
 	private static final Map<String, SoundFile> SOUNDS = new HashMap<>();
 	private static final Map<String, PShape> SHAPES = new HashMap<>();
+	private static final Map<String, String> AUDIO_BANKS = new HashMap<>();
 
 	private static final char REF_BEFORE = '{';
 	private static final char REF_AFTER = '}';
@@ -60,14 +60,9 @@ public final class Resources {
 		loadResources(Resources::addConfigs, "json");
 		loadResources(Resources::addShape, "obj", "svg");
 		loadResources(Resources::addSound, "wav", "mp3");
+		loadResources(Resources::addAudioBank, "bank");
 
 		logo = v.loadShape("vekta_wordmark.svg");
-
-		if(FMODLoader.loadNatives()) {
-			System.out.println("FMOD natives loaded.");
-		} else {
-			System.out.println("Failed to load FMOD natives.");
-		}
 	}
 
 	public static void initStrings() {
@@ -79,6 +74,11 @@ public final class Resources {
 		}
 	}
 
+	/**
+	 * Locate and process files of the provided extension(s).
+	 * @param load Function reference to process files
+	 * @param ext File extension(s) to accept
+	 */
 	private static void loadResources(BiConsumer<String, String> load, String... ext) {
 		for(String path : REFLECTIONS.getResources(Pattern.compile(".+\\.(" + String.join("|", ext) + ")$"))) {
 			load.accept(path, getResourceName(path));
@@ -195,6 +195,14 @@ public final class Resources {
 				string = string.substring(0, openIndex) + string.substring(closeIndex + 1);
 			}
 		}
+	}
+
+	private static void addAudioBank(String path, String key) {
+		if(!AUDIO_BANKS.containsKey(key)) AUDIO_BANKS.put(key, path);
+	}
+
+	public static Collection<String> getLocatedAudioBanks() {
+		return AUDIO_BANKS.values();
 	}
 
 	private static void addSound(String path, String key) {
