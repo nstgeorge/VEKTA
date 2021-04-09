@@ -2,7 +2,6 @@ package vekta;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.fmod.studio.FmodStudioSystem;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 import org.reflections.scanners.SubTypesScanner;
@@ -38,7 +37,7 @@ public final class Resources {
 	private static final Map<String, String[]> STRINGS = new HashMap<>();
 	private static final Map<String, SoundFile> SOUNDS = new HashMap<>();
 	private static final Map<String, PShape> SHAPES = new HashMap<>();
-	private static final Map<String, String> AUDIO_BANKS = new HashMap<>();
+	private static final List<String> AUDIO_BANK_PATHS = new ArrayList<>();
 
 	private static final char REF_BEFORE = '{';
 	private static final char REF_AFTER = '}';
@@ -52,8 +51,6 @@ public final class Resources {
 	private static float soundVolume;
 	private static float musicVolume;
 
-	public static PShape logo; // TODO: generalize SVG file loading
-
 	public static void init() {
 		adjustFromSettings();
 
@@ -61,8 +58,6 @@ public final class Resources {
 		loadResources(Resources::addShape, "obj", "svg");
 		loadResources(Resources::addSound, "wav", "mp3");
 		loadResources(Resources::addAudioBank, "bank");
-
-		logo = v.loadShape("vekta_wordmark.svg");
 	}
 
 	public static void initStrings() {
@@ -200,14 +195,11 @@ public final class Resources {
 	}
 
 	private static void addAudioBank(String path, String key) {
-		if(AUDIO_BANKS.containsKey(key)) {
-			throw new RuntimeException("Conflicting audio banks for key: " + key);
-		}
-		AUDIO_BANKS.put(key, path);
+		AUDIO_BANK_PATHS.add(path);
 	}
 
-	public static Collection<String> getLocatedAudioBanks() {
-		return AUDIO_BANKS.values();
+	public static Collection<String> getAudioBankPaths() {
+		return AUDIO_BANK_PATHS;
 	}
 
 	private static void addSound(String path, String key) {

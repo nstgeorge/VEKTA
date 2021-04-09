@@ -4,10 +4,13 @@ import processing.data.JSONObject;
 
 import javax.swing.*;
 
+import java.io.File;
+
+import static vekta.Vekta.createGameDirectory;
 import static vekta.Vekta.v;
 
 public final class Settings {
-	private static final String PATH = System.getProperty("user.dir") + "/settings.json";
+	private static final File FILE = new File(createGameDirectory(), "settings.json");
 
 	private static JSONObject defaults;
 	private static JSONObject settings;
@@ -38,12 +41,12 @@ public final class Settings {
 
 		// Settings
 		try {
-			settings = v.loadJSONObject(PATH);
+			settings = v.loadJSONObject(FILE);
 		}
 		catch(NullPointerException e) {
 			System.out.println("settings.json not found. Using default settings.");
 			settings = defaults;
-			v.saveJSONObject(settings, PATH);
+			save();
 		}
 	}
 
@@ -155,6 +158,6 @@ public final class Settings {
 	}
 
 	private static void save() {
-		v.saveJSONObject(settings, PATH);
+		v.saveJSONObject(settings, FILE.getPath());
 	}
 }

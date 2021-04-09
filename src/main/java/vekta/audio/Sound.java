@@ -23,7 +23,7 @@ public class Sound implements Serializable {
 	 */
 	public EventInstance getInstance() {
 		if(instance == null) {
-			instance = AudioDriver.createSoundInstance("event:" + key);
+			instance = AudioDriver.createEventInstance("event:" + key);
 		}
 		return instance;
 	}

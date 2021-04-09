@@ -12,18 +12,13 @@ import static vekta.Vekta.v;
  */
 public class SaveIconOverlay extends PositionOverlay {
 
-	private static final int SHOW_TIME = 8000;	// Time (ms) to show the icon (including fades)
-	private static final int FADE_SPEED = 1000;	// Time (ms) to fade in and out
+	private static final int SHOW_TIME = 8000;    // Time (ms) to show the icon (including fades)
+	private static final int FADE_SPEED = 1000;    // Time (ms) to fade in and out
 	private static final PShape logo = Resources.getShape("vekta_logo");
 
 	private boolean showNextFrame = false;
 	private boolean showing = false;
 	private long startTime = 0;
-	private float opacity = 0;
-
-	private double flash;
-	private double fadeIn;
-	private double fadeOut;
 
 	public SaveIconOverlay(int x, int y) {
 		super(x, y);
@@ -44,13 +39,14 @@ public class SaveIconOverlay extends PositionOverlay {
 			showing = true;
 			showNextFrame = false;
 			startTime = v.millis();
-		} else if(showing) {
+		}
+		else if(showing) {
 			// Calculate opacity for this frame
 			// flash, fadeIn, and fadeOut are all [0-1], then multiplied by 255.
-			flash = (.07 * Math.sin((v.millis() - startTime) / 250F)) + 0.8;
-			fadeIn = Math.min(1, Math.max(0, (v.millis() - startTime) / (float)FADE_SPEED));
-			fadeOut = Math.min(1, Math.max(0, ((startTime + SHOW_TIME - FADE_SPEED) - v.millis()) / (float)FADE_SPEED));
-			opacity = 255 * (float)(Math.min(fadeIn, fadeOut) * flash);
+			float flash = (.07f * (float)Math.sin((v.millis() - startTime) / 250f)) + 0.8f;
+			float fadeIn = Math.min(1, Math.max(0, (v.millis() - startTime) / (float)FADE_SPEED));
+			float fadeOut = Math.min(1, Math.max(0, ((startTime + SHOW_TIME - FADE_SPEED) - v.millis()) / (float)FADE_SPEED));
+			float opacity = 255 * Math.min(fadeIn, fadeOut) * flash;
 
 			// Set opacity and draw logo
 			v.pushStyle();

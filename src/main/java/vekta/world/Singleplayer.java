@@ -2,10 +2,7 @@ package vekta.world;
 
 import processing.core.PVector;
 import processing.event.KeyEvent;
-import vekta.Format;
-import vekta.KeyBinding;
-import vekta.Resources;
-import vekta.Settings;
+import vekta.*;
 import vekta.connection.message.Message;
 import vekta.context.KnowledgeContext;
 import vekta.context.PauseMenuContext;
@@ -63,8 +60,9 @@ import java.util.List;
 import static vekta.Vekta.*;
 
 public class Singleplayer implements World, PlayerListener {
-	private static final File QUICKSAVE_FILE = new File("quicksave.vekta");
-	private static final File AUTOSAVE_FILE = new File("autosave.vekta");
+	private static final File SAVE_DIRECTORY = Vekta.createGameDirectory("saves");
+	private static final File QUICKSAVE_FILE = new File(SAVE_DIRECTORY, "quicksave.vekta");
+	private static final File AUTOSAVE_FILE = new File(SAVE_DIRECTORY, "autosave.vekta");
 
 	private static Starfield starfield;
 
@@ -82,8 +80,8 @@ public class Singleplayer implements World, PlayerListener {
 	private static final float MIN_PLANET_TIME_SCALE = 10; // Make traveling between ship-level objects much faster
 
 	private static final float HYPERDRIVE_TRANSITION_RATE = .01F; // Smoothly adjust hyperdrive curvature
-    
-    private static final float CAMERA_SHAKE_SCALE = 50; // Amount of camera shake per `cameraImpact` unit
+
+	private static final float CAMERA_SHAKE_SCALE = 50; // Amount of camera shake per `cameraImpact` unit
 
 	private static final SoundGroup MUSIC = new SoundGroup("atmosphere");
 
@@ -395,7 +393,7 @@ public class Singleplayer implements World, PlayerListener {
 
 		v.pushMatrix();
 		v.translate(v.width / 2F, v.height / 2F);
-        if(cameraImpact > 1e-3F) {
+		if(cameraImpact > 1e-3F) {
 			v.fill(v.lerpColor(0, 255, min(1, cameraImpact)));
 			v.rect(0, 0, v.width + 2, v.height + 2);
 			cameraImpact *= .95F;
@@ -712,6 +710,7 @@ public class Singleplayer implements World, PlayerListener {
 
 	/**
 	 * Given an object, return its location on the screen and its radius.
+	 *
 	 * @param obj Object to check
 	 * @return A PVector where [x, y] represent the location of the object on screen and [z] is its radius.
 	 */
@@ -736,6 +735,7 @@ public class Singleplayer implements World, PlayerListener {
 	/**
 	 * Returns true if the provided object is visible on screen to the player.
 	 * Abstracts out some of the logic required -- used primarily by OffScreenIndicator
+	 *
 	 * @param obj Object to check
 	 * @return True if object is visible, false otherwise
 	 */
@@ -747,11 +747,13 @@ public class Singleplayer implements World, PlayerListener {
 	/**
 	 * If an object is outside the screen, this function returns the pixel-based distance from the edge of the screen.
 	 * If the object is on screen, returns 0.
+	 *
 	 * @param obj Object to check
 	 * @return Distance from edge of screen in pixels if object is off screen, 0 otherwise
 	 */
 	public float getScreenDistanceFromEdge(SpaceObject obj) {
-		if(isObjectVisibleToPlayer(obj)) return 0;
+		if(isObjectVisibleToPlayer(obj))
+			return 0;
 
 		PVector objectLocation = getObjectScreenLocation(obj);
 
@@ -832,7 +834,7 @@ public class Singleplayer implements World, PlayerListener {
 		}
 		else {
 			if(key == KeyBinding.QUICK_SAVE && save(QUICKSAVE_FILE)) {
-                // Now handled in save() function
+				// Now handled in save() function
 				// getPlayer().send("Progress saved");
 			}
 			else if(key == KeyBinding.MENU_CLOSE) {
@@ -1022,7 +1024,7 @@ public class Singleplayer implements World, PlayerListener {
 		try {
 			Format.write(state, new FileOutputStream(file));
 			println("Saved to " + file);
-            getPlayer().send("Progress saved");
+			getPlayer().send("Progress saved");
 			return true;
 		}
 		catch(IOException e) {

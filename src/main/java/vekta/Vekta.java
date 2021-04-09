@@ -31,22 +31,24 @@ import vekta.world.Singleplayer;
 import vekta.world.World;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 /**
  * Core class for all of Vekta.
  */
 public class Vekta extends PApplet {
-	static {
-		// Prevent library startup messages
-		LogManager.getLogManager().reset();
-	}
+	private static final Logger LOG = Logger.getLogger(Vekta.class.getName());
+
+	//	static {
+	//		// Prevent library startup messages
+	//		LogManager.getLogManager().reset();
+	//	}
 
 	public static Vekta v; // Global access to Vekta instance
+
+	private static final File DIRECTORY = new File("vekta_data");
 
 	private static final Random RANDOM = new Random();
 
@@ -377,6 +379,21 @@ public class Vekta extends PApplet {
 			return null;
 		}
 		return getWorld().register(object);
+	}
+
+	public static File createGameDirectory() {
+		if(DIRECTORY.mkdirs()) {
+			LOG.info("Created directory: " + DIRECTORY.getPath());
+		}
+		return DIRECTORY;
+	}
+
+	public static File createGameDirectory(String path) {
+		File file = new File(DIRECTORY, path);
+		if(file.mkdirs()) {
+			LOG.info("Created directory: " + file.getPath());
+		}
+		return file;
 	}
 
 	//	/**

@@ -1,5 +1,6 @@
 /target
-/settings.json
 /.idea/workspace.xml
+/vekta_data/settings.json
 /quicksave.vekta
 /autosave.vekta
+/vekta_data

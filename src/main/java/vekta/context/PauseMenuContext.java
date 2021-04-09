@@ -1,5 +1,6 @@
 package vekta.context;
 
+import processing.core.PShape;
 import vekta.KeyBinding;
 import vekta.Resources;
 import vekta.Settings;
@@ -13,6 +14,8 @@ import static vekta.Vekta.*;
 // TODO: convert to PauseMenuHandle
 public class PauseMenuContext implements Context {
 	private static final String[] OPTIONS = {"Continue", "Restart"/*, "Settings"*/, "Quit to Menu"};
+
+	private static final PShape LOGO = v.loadShape("vekta_wordmark.svg");
 
 	private final Context parent;
 	//	private final Player player;
@@ -38,7 +41,7 @@ public class PauseMenuContext implements Context {
 
 		// Logo
 		v.shapeMode(CENTER);
-		v.shape(Resources.logo, v.width / 8F, 100, 484.6125F, 75);
+		v.shape(LOGO, v.width / 8F, 100, 484.6125F, 75);
 
 		// Options
 		for(int i = 0; i < OPTIONS.length; i++) {

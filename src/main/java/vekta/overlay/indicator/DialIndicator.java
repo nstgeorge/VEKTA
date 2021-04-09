@@ -15,11 +15,11 @@ import static vekta.Vekta.v;
  * Represents an unbounded vector value to the player. Best used to represent a heading.
  */
 public class DialIndicator extends Indicator<NullType, PVector> implements Serializable {
-	
+
 	// TODO: Add a RADIUS parameter
 	private static final int RADIUS = 50;
 
-	public DialIndicator(String name, Function value, float locX, float locY, int color) {
+	public DialIndicator(String name, Function<NullType, PVector> value, float locX, float locY, int color) {
 		super(name, value, locX, locY, color);
 	}
 
@@ -33,7 +33,7 @@ public class DialIndicator extends Indicator<NullType, PVector> implements Seria
 		v.fill(100, 100, 100);
 		v.textAlign(CENTER);
 		v.textSize(14);
-		v.text(name, locX, locY + RADIUS / 2);
+		v.text(name, locX, locY + RADIUS / 2f);
 		v.textAlign(LEFT);
 		v.textSize(16);
 		v.stroke(getColor());
@@ -43,10 +43,11 @@ public class DialIndicator extends Indicator<NullType, PVector> implements Seria
 
 	/**
 	 * Draw the arrow of the dial.
+	 *
 	 * @param heading heading which the arrow points to
-	 * @param length length of the arrow
-	 * @param locX Center point (x) of the arrow -- where it's "pinned"
-	 * @param locY Center point (y) of the arrow -- where it's "pinned"
+	 * @param length  length of the arrow
+	 * @param locX    Center point (x) of the arrow -- where it's "pinned"
+	 * @param locY    Center point (y) of the arrow -- where it's "pinned"
 	 */
 	private void drawArrow(PVector heading, float length, float locX, float locY) {
 		heading.setMag(length);
