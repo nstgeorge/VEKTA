@@ -564,7 +564,7 @@ public class Vekta extends PApplet {
 	}
 
 	/**
-	 * Capitalize the first letter of the given string.
+	 * Capitalize the first letter of the given string
 	 */
 	public static String capitalize(String text) {
 		return Character.toUpperCase(text.charAt(0)) + text.substring(1);
@@ -573,7 +573,7 @@ public class Vekta extends PApplet {
 	//// Patches to existing Processing methods ////
 
 	/**
-	 * Redirect ch.bildspur.postfx.pass.BasePass shaders to classpath
+	 * Redirect `ch.bildspur.postfx.pass.BasePass` shaders to classpath
 	 */
 	@Override
 	public PShader loadShader(String fragFilename) {
