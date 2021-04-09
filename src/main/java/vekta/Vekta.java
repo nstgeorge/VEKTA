@@ -4,7 +4,6 @@ import ch.bildspur.postfx.builder.PostFX;
 import com.github.strikerx3.jxinput.XInputAxes;
 import com.github.strikerx3.jxinput.XInputDevice;
 import com.github.strikerx3.jxinput.enums.XInputButton;
-import com.github.strikerx3.jxinput.exceptions.XInputNotLoadedException;
 import com.github.strikerx3.jxinput.listener.SimpleXInputDeviceListener;
 import processing.core.PApplet;
 import processing.core.PFont;
@@ -15,7 +14,6 @@ import processing.opengl.PGraphicsOpenGL;
 import processing.opengl.PShader;
 import vekta.audio.AudioDriver;
 import vekta.context.Context;
-import vekta.context.DisplayContext;
 import vekta.context.PauseMenuContext;
 import vekta.context.StartSceneContext;
 import vekta.item.ItemType;
@@ -32,8 +30,10 @@ import vekta.world.Singleplayer;
 import vekta.world.World;
 
 import java.io.File;
-import java.util.*;
-import java.util.logging.LogManager;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
 import java.util.logging.Logger;
 
 /**

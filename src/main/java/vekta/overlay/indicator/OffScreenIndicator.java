@@ -7,7 +7,6 @@ import vekta.player.Player;
 import vekta.world.Singleplayer;
 
 import java.io.Serializable;
-import java.util.function.Supplier;
 
 import static processing.core.PConstants.*;
 import static vekta.Vekta.getWorld;

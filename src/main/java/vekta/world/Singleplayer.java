@@ -26,7 +26,6 @@ import vekta.menu.option.BackButton;
 import vekta.menu.option.CustomButton;
 import vekta.menu.option.DungeonRoomButton;
 import vekta.module.*;
-import vekta.module.Module;
 import vekta.module.station.StationCoreModule;
 import vekta.module.station.StructuralModule;
 import vekta.object.SpaceObject;

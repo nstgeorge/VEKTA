@@ -1,7 +1,6 @@
 package vekta.overlay.indicator;
 
 import java.io.Serializable;
-import java.util.function.Supplier;
 
 import static processing.core.PConstants.*;
 import static vekta.Vekta.UI_COLOR;

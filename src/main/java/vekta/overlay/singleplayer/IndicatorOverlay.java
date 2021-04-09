@@ -1,7 +1,5 @@
 package vekta.overlay.singleplayer;
 
-import vekta.object.SpaceObject;
-import vekta.object.ship.PlayerShip;
 import vekta.overlay.Overlay;
 import vekta.overlay.indicator.Indicator;
 import vekta.overlay.indicator.OffScreenIndicator;

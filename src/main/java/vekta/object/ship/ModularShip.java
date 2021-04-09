@@ -5,7 +5,6 @@ import processing.core.PVector;
 import vekta.KeyBinding;
 import vekta.Resources;
 import vekta.Settings;
-
 import vekta.audio.Sound;
 import vekta.item.Item;
 import vekta.item.ModuleItem;

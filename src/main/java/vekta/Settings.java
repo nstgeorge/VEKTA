@@ -3,7 +3,6 @@ package vekta;
 import processing.data.JSONObject;
 
 import javax.swing.*;
-
 import java.io.File;
 
 import static vekta.Vekta.createGameDirectory;

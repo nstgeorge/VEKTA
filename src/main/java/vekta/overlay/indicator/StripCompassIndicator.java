@@ -2,10 +2,7 @@ package vekta.overlay.indicator;
 
 import processing.core.PVector;
 
-import javax.lang.model.type.NullType;
 import java.io.Serializable;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 import static processing.core.PApplet.sin;
 import static processing.core.PConstants.CENTER;

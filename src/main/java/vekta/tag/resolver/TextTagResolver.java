@@ -6,8 +6,6 @@ import vekta.display.TextDisplay;
 import vekta.tag.Tag;
 import vekta.tag.TextTag;
 
-import static processing.core.PApplet.println;
-
 public class TextTagResolver extends TagResolver {
 
 	@Override
