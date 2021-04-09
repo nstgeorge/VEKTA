@@ -34,7 +34,7 @@ public class SerializationTest {
 			current.addAll(next);
 			next.clear();
 			for(Class<?> type : current) {
-				println(type);////
+				println(type);//
 				boolean isExternalizable = Externalizable.class.isAssignableFrom(type);
 				if(!isExternalizable && !Serializable.class.isAssignableFrom(type) && !type.isEnum() && !type.isPrimitive()) {
 					Set<Class<?>> references = new HashSet<>();
@@ -67,8 +67,8 @@ public class SerializationTest {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private Stream<Class<?>> getFieldTypes(Class<?> type) {
+		//noinspection unchecked
 		return ReflectionUtils.getAllFields(type).stream() // Check fields
 				.filter(f -> !Modifier.isTransient(f.getModifiers()) && !Modifier.isStatic(f.getModifiers()))
 				.map(Field::getType);

@@ -54,7 +54,7 @@ public class OceanScannerModule extends ShipModule {
 
 	@Override
 	public Module createVariant() {
-		return new OceanScannerModule(chooseInclusive(.1F, 2, .1F));
+		return new OceanScannerModule(chooseInclusive(.5F, 3, .5F));
 	}
 
 	@Override
@@ -65,17 +65,7 @@ public class OceanScannerModule extends ShipModule {
 			if(location instanceof OceanLocation) {
 				OceanLocation ocean = (OceanLocation)location;
 
-				List<OceanKnowledge> knowledgeList = menu.getPlayer().findKnowledge(OceanKnowledge.class, o -> o.getSpaceObject() == ocean.getPlanet());
-				if(knowledgeList.isEmpty()) {
-					menu.add(new ScanOceanButton((OceanLocation)location, getStrength()));
-				}
-				else {
-					for(OceanKnowledge knowledge : knowledgeList) {
-						if(knowledge.getInventory().itemCount() > 0) {
-							menu.add(new LootMenuButton("Salvage", knowledge.getInventory()));
-						}
-					}
-				}
+				menu.add(new ScanOceanButton(ocean, getStrength()));
 			}
 		}
 	}

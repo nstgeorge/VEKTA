@@ -4,6 +4,7 @@ import vekta.object.ship.ModularShip;
 import vekta.overlay.Overlay;
 import vekta.player.Player;
 import vekta.player.PlayerListener;
+import vekta.world.World;
 
 import static processing.core.PConstants.LEFT;
 import static vekta.Vekta.BODY_FONT;
@@ -58,11 +59,12 @@ public class PlayerOverlay implements Overlay, PlayerListener {
 	}
 
 	@Override
+	public void onSave(World world) {
+		saveOverlay.trigger();
+	}
+
+	@Override
 	public void onNotification(Notification notification) {
-		if(notification.getMessage().equals("Progress saved")) {
-			saveOverlay.trigger();
-		} else {
-			notifications.add(notification);
-		}
+		notifications.add(notification);
 	}
 }

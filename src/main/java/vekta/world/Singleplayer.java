@@ -823,30 +823,31 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public void keyPressed(KeyBinding key) {
-		if(key == KeyBinding.ZOOM_IN) {
+		if(getPlayer().getShip().isDestroyed()) {
+			if(key == KeyBinding.MENU_SELECT) {
+				reload();
+			}
+			return;
+		}
+
+		if(key == KeyBinding.MENU_CLOSE) {
+			setContext(new PauseMenuContext(getContext(), getPlayer()));
+		}
+		else if(key == KeyBinding.ZOOM_IN) {
 			setZoom(getZoom() / ZOOM_BUTTON_SCALE);
 		}
 		else if(key == KeyBinding.ZOOM_OUT) {
 			setZoom(getZoom() * ZOOM_BUTTON_SCALE);
 		}
+		else if(key == KeyBinding.QUICK_SAVE) {
+			if(save(QUICKSAVE_FILE)) {
+				getPlayer().send("Progress saved");
+			}
+		}
 		else if(key == KeyBinding.QUICK_LOAD) {
 			load(QUICKSAVE_FILE);
 		}
-		else if(getPlayer().getShip().isDestroyed()) {
-			if(key == KeyBinding.MENU_SELECT) {
-				reload();
-			}
-		}
-		else {
-			if(key == KeyBinding.QUICK_SAVE && save(QUICKSAVE_FILE)) {
-				// Now handled in save() function
-				// getPlayer().send("Progress saved");
-			}
-			else if(key == KeyBinding.MENU_CLOSE) {
-				setContext(new PauseMenuContext(getContext(), getPlayer()));
-			}
-			getPlayer().emit(PlayerEvent.KEY_PRESS, key);
-		}
+		getPlayer().emit(PlayerEvent.KEY_PRESS, key);
 	}
 
 	@Override
@@ -1011,11 +1012,12 @@ public class Singleplayer implements World, PlayerListener {
 			Singleplayer world = new Singleplayer(Format.read(new FileInputStream(file)));
 			setContext(world);
 			applyContext();
-
+			getPlayer().emit(PlayerEvent.LOAD, this);
 			println("Loaded from " + file);
 			return true;
 		}
 		catch(InvalidClassException | ClassNotFoundException e) {
+			e.printStackTrace();
 			println("Outdated file format: " + file);
 			return false;
 		}
@@ -1026,10 +1028,10 @@ public class Singleplayer implements World, PlayerListener {
 	}
 
 	public boolean save(File file) {
-		try {
-			Format.write(state, new FileOutputStream(file));
+		try(FileOutputStream stream = new FileOutputStream(file)) {
+			Format.write(state, stream);
+			getPlayer().emit(PlayerEvent.SAVE, this);
 			println("Saved to " + file);
-			getPlayer().send("Progress saved");
 			return true;
 		}
 		catch(IOException e) {

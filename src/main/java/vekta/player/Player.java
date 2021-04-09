@@ -200,9 +200,9 @@ public final class Player extends Syncable<Player> {
 		return getKnowledge().stream().anyMatch(t -> type.isInstance(t) && filter.test((T)t));
 	}
 
-	public void addKnowledge(Knowledge knowledge) {
+	public boolean addKnowledge(Knowledge knowledge) {
 		if(!knowledge.isValid(this)) {
-			return;
+			return false;
 		}
 		boolean added = false;
 		int value = knowledge.getArchiveValue();
@@ -211,7 +211,7 @@ public final class Player extends Syncable<Player> {
 			switch(knowledge.getDelta(prev)) {
 			case SAME:
 			case WORSE:
-				return; // Don't add if equivalent or better knowledge exists
+				return false; // Don't add if equivalent or better knowledge exists
 			case BETTER:
 				this.knowledge.set(i, knowledge);
 				added = true;
@@ -230,6 +230,7 @@ public final class Player extends Syncable<Player> {
 		if(value > 0) {
 			knowledgePrices.put(knowledge, value);
 		}
+		return added;
 	}
 
 	public void cleanupKnowledge() {
@@ -325,14 +326,18 @@ public final class Player extends Syncable<Player> {
 
 	// Player score API
 
-	public long getScore() { return playerScore; }
+	public long getScore() {
+		return playerScore;
+	}
 
-	public void setScore(long newScore) { playerScore = newScore; }
+	public void setScore(long newScore) {
+		playerScore = newScore;
+	}
 
 	public void changeScore(long scoreDelta) {
 		setScore(getScore() + scoreDelta);
 
-		if (getScore() < 0)
+		if(getScore() < 0)
 			setScore(0);
 	}
 

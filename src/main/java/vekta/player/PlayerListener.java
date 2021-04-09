@@ -9,6 +9,7 @@ import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
 import vekta.overlay.singleplayer.Notification;
 import vekta.terrain.location.Location;
+import vekta.world.World;
 
 import java.io.Serializable;
 
@@ -29,6 +30,12 @@ public interface PlayerListener extends Serializable {
 	}
 
 	default void onMenu(Menu menu) {
+	}
+
+	default void onSave(World world) {
+	}
+
+	default void onLoad(World world) {
 	}
 
 	default void onEvent(PlayerEvent event) {

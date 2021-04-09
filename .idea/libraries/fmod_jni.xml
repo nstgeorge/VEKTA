@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="fmod-jni">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/fmod-jni.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

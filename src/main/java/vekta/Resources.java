@@ -47,7 +47,7 @@ public final class Resources {
 	private static final Map<String, Tag> TAGS = new HashMap<>();
 	private static final Map<String, String[]> STRINGS = new HashMap<>();
 	private static final Map<String, SoundFile> SOUNDS = new HashMap<>();
-	private static final Map<String, PShape> SHAPES = new HashMap<>();
+	private static final Map<String, String> SHAPE_PATHS = new HashMap<>();
 	private static final List<String> AUDIO_BANK_PATHS = new ArrayList<>();
 
 	private static final char REF_BEFORE = '{';
@@ -289,19 +289,19 @@ public final class Resources {
 	}
 
 	private static void loadShape(String path, String key) {
-		PShape shape = v.loadShape(path);
-		if(SHAPES.containsKey(key)) {
+//		PShape shape = v.loadShape(path);
+		if(SHAPE_PATHS.containsKey(key)) {
 			throw new RuntimeException("Conflicting shapes for key: `" + key + "`");
 		}
-		SHAPES.put(key, shape);
+		SHAPE_PATHS.put(key, path);
 	}
 
 	public static PShape getShape(String key) {
-		PShape shape = SHAPES.get(key);
-		if(shape == null) {
+		String path = SHAPE_PATHS.get(key);
+		if(path == null) {
 			throw new RuntimeException("No shape exists with key: " + key);
 		}
-		return shape;
+		return v.loadShape(path);
 	}
 
 	// TODO: DRY up these sound methods a bit

@@ -6,6 +6,8 @@ public enum PlayerEvent {
 	KEY_PRESS(PlayerListener::onKeyPress),
 	KEY_RELEASE(PlayerListener::onKeyRelease),
 	MENU(PlayerListener::onMenu),
+	SAVE(PlayerListener::onSave),
+	LOAD(PlayerListener::onLoad),
 	CHANGE_SHIP(PlayerListener::onChangeShip),
 	DAMAGE_SHIP(PlayerListener::onDamageShip),
 	NOTIFICATION(PlayerListener::onNotification),
