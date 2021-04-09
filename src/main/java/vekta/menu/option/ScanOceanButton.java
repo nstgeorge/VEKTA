@@ -30,7 +30,7 @@ public class ScanOceanButton extends ButtonOption {
 
 	@Override
 	public void onSelect(Menu menu) {
-		menu.remove(this);
+//		menu.remove(this);
 
 		Menu sub = new Menu(menu, new OceanMenuHandle(location));
 

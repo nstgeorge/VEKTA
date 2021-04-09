@@ -59,8 +59,10 @@ public class OceanScannerModule extends ShipModule {
 
 	@Override
 	public void onMenu(Menu menu) {
-		if(menu.getHandle() instanceof OceanMenuHandle) {
+		if(menu.getHandle() instanceof LocationMenuHandle) {
 			Location location = ((LocationMenuHandle)menu.getHandle()).getLocation();
+
+			System.out.println(location);
 
 			if(location instanceof OceanLocation) {
 				OceanLocation ocean = (OceanLocation)location;

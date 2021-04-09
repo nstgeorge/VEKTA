@@ -2,13 +2,17 @@
   <dictionary name="Ryan">
     <words>
       <w>bildspur</w>
+      <w>biodome</w>
       <w>deadzone</w>
+      <w>despawn</w>
+      <w>dockable</w>
       <w>externalizable</w>
       <w>fontname</w>
       <w>nameline</w>
       <w>openglcore</w>
       <w>postfx</w>
       <w>singleplayer</w>
+      <w>subatmosphere</w>
       <w>vekta</w>
     </words>
   </dictionary>

@@ -41,7 +41,7 @@ import vekta.player.Player;
 import vekta.player.PlayerEvent;
 import vekta.player.PlayerListener;
 import vekta.profiler.Profiler;
-import vekta.sound.SoundGroup;
+import vekta.audio.SoundGroup;
 import vekta.spawner.*;
 import vekta.spawner.item.BlueprintItemSpawner;
 import vekta.spawner.item.ClothingItemSpawner;
@@ -1017,7 +1017,6 @@ public class Singleplayer implements World, PlayerListener {
 			return true;
 		}
 		catch(InvalidClassException | ClassNotFoundException e) {
-			e.printStackTrace();//////
 			println("Outdated file format: " + file);
 			return false;
 		}

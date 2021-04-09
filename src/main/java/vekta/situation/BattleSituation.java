@@ -4,7 +4,7 @@ import processing.sound.SoundFile;
 import vekta.Resources;
 import vekta.object.ship.FighterShip;
 import vekta.player.Player;
-import vekta.sound.SoundGroup;
+import vekta.audio.SoundGroup;
 import vekta.spawner.WorldGenerator;
 import vekta.world.AttributeMaxZoomController;
 import vekta.world.RenderLevel;

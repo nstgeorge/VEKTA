@@ -42,7 +42,7 @@ public class TerrestrialPlanet extends Planet {
 	private final Map<LandingSite, Float> landingMap = new HashMap<>();
 	private final List<Settlement> settlements = new ArrayList<>();
 
-	private final float[] surfaceCache = new float[SURFACE_DETAIL];
+	private transient float[] surfaceCache;
 	private float surfaceAverage;
 
 	private final Counter orbitCt = new Counter(10).randomize();
@@ -193,7 +193,7 @@ public class TerrestrialPlanet extends Planet {
 	}
 
 	public float getEscapeVelocity() {
-		return v.sqrt(getEscapeVelocitySquared());
+		return sqrt(getEscapeVelocitySquared());
 	}
 
 	@Override
@@ -333,6 +333,10 @@ public class TerrestrialPlanet extends Planet {
 
 	@Override
 	public void onUpdate(RenderLevel level) {
+		if(surfaceCache == null) {
+			notifySurfaceChanged();
+		}
+
 		if(orbitCt.cycle()) {
 			updateOrbitObject();
 		}
@@ -365,7 +369,8 @@ public class TerrestrialPlanet extends Planet {
 	@Override
 	public boolean collidesWith(RenderLevel level, SpaceObject s) {
 		if(s instanceof Ship) {
-			PVector offset = s.relativePosition(this);
+			direction = 1;/////////
+			PVector offset = relativePosition(s);
 			return offset.magSq() < sq(getRadius(offset.heading()) + s.getRadius());
 		}
 		return super.collidesWith(level, s);
@@ -375,6 +380,7 @@ public class TerrestrialPlanet extends Planet {
 		if(terrain == null) {
 			return;
 		}
+		surfaceCache = new float[SURFACE_DETAIL];
 		int len = surfaceCache.length;
 		float sum = 0;
 		for(int i = 0; i < len; i++) {
@@ -394,14 +400,16 @@ public class TerrestrialPlanet extends Planet {
 		float direction = getDirection();
 		if(r > 10) {
 			int len = surfaceCache.length;
-			float x = r * (1 + surfaceCache[0]);
+			float x = 0;
 			float y = 0;
-			for(int i = 1; i <= len; i++) {
-				float angle = TWO_PI * i / len;
+			for(int i = 0; i <= len; i++) {
+				float angle = TWO_PI * i / len + direction;
 				float elevation = r * (1 + surfaceCache[i % len]);
 				float x1 = cos(angle) * elevation;
 				float y1 = sin(angle) * elevation;
-				v.line(x, y, x1, y1);
+				if(i != 0) {
+					v.line(x, y, x1, y1);
+				}
 				x = x1;
 				y = y1;
 			}

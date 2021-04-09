@@ -18,7 +18,7 @@ public class SurveyMenuHandle extends MenuHandle {
 	private final Terrain terrain;
 
 	public SurveyMenuHandle(Terrain terrain) {
-//		super(0, PLANET_SIZE, v.width, v.height - PLANET_SIZE);
+		//		super(0, PLANET_SIZE, v.width, v.height - PLANET_SIZE);
 		this.terrain = terrain;
 	}
 
@@ -28,7 +28,7 @@ public class SurveyMenuHandle extends MenuHandle {
 
 	@Override
 	public int getItemY(int i) {
-		return super.getItemY(i) + PLANET_SIZE * 2;
+		return super.getItemY(i - 1) + PLANET_SIZE * 2;
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class SurveyMenuHandle extends MenuHandle {
 		super.render();
 
 		v.pushMatrix();
-		v.translate(getItemX(), getItemY(-1) + PLANET_SIZE);
+		v.translate(getItemX(), getItemY(-1) - PLANET_SIZE);
 
 		v.textAlign(CENTER);
 		v.textSize(36);

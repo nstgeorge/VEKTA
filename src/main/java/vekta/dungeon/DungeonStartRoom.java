@@ -6,7 +6,7 @@ import vekta.knowledge.DungeonKnowledge;
 import vekta.knowledge.ObservationLevel;
 import vekta.menu.Menu;
 import vekta.menu.handle.DungeonMenuHandle;
-import vekta.sound.SoundGroup;
+import vekta.audio.SoundGroup;
 
 import static vekta.Vekta.getNextContext;
 import static vekta.Vekta.v;

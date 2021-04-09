@@ -76,7 +76,7 @@ public abstract class Planet extends SpaceObject implements Renameable {
 		String label = getLabel();
 		if(label != null) {
 			v.fill(getLabelColor());
-      // v.textMode(LEFT);
+			// v.textMode(LEFT);
 			// v.text(label, r * 1.1F + 10, 5);
 		}
 	}

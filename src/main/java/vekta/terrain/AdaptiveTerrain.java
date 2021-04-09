@@ -7,6 +7,7 @@ import java.util.Set;
 
 import static processing.core.PApplet.sin;
 import static processing.core.PApplet.sq;
+import static processing.core.PConstants.DEG_TO_RAD;
 import static processing.core.PConstants.TWO_PI;
 import static vekta.Vekta.v;
 
@@ -74,5 +75,9 @@ public class AdaptiveTerrain extends Terrain {
 			f += harmonics[i] * (1 - sq(sin((angle + offsets[i]) / 2 * (i + START_HARMONIC))));
 		}
 		return f / harmonics.length;
+
+		// For debugging:
+		//		angle = v.normalizeAngle(angle);
+		//		return angle>100*DEG_TO_RAD&&angle<110*DEG_TO_RAD?10:0;
 	}
 }

@@ -119,7 +119,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	}
 
 	public void setThrustControl(float thrust) {
-		this.thrust = thrust;
+		this.thrust = Float.isFinite(thrust) ? max(-1, min(1, thrust)) : 0;
 		if(!isHyperdriving() && hasController()) {
 			if(thrust != 0 && hasEnergy()) {
 				//Resources.loopSound("engine", abs(thrust));

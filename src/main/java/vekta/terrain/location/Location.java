@@ -11,7 +11,7 @@ import vekta.menu.option.PathwayButton;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.player.Player;
 import vekta.player.PlayerEvent;
-import vekta.sound.Tune;
+import vekta.audio.Tune;
 import vekta.spawner.WorldGenerator;
 
 import java.io.Serializable;

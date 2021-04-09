@@ -11,6 +11,7 @@ import vekta.menu.Menu;
 import vekta.object.CargoCrate;
 import vekta.object.Shockwave;
 import vekta.object.SpaceObject;
+import vekta.object.planet.Planet;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.player.Player;
 import vekta.terrain.LandingSite;
@@ -160,7 +161,8 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 
 	@Override
 	public boolean collidesWith(RenderLevel level, SpaceObject s) {
-		return super.collidesWith(level, s);
+		// TEMP ::::::::::::: deferring to planet's collision detection
+		return s instanceof Planet || super.collidesWith(level, s);
 	}
 
 	@Override

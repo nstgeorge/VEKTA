@@ -1,4 +1,4 @@
-package vekta.sound;
+package vekta.audio;
 
 import processing.sound.SoundFile;
 import vekta.Resources;

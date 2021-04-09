@@ -4,7 +4,7 @@ import vekta.Resources;
 import vekta.object.SpaceObject;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.player.Player;
-import vekta.sound.SoundGroup;
+import vekta.audio.SoundGroup;
 import vekta.terrain.settlement.Settlement;
 
 import static vekta.Vekta.DANGER_COLOR;

@@ -34,7 +34,7 @@ public class AtmosphereSituation implements Situation {
 				getWorld().setZoom(maxZoom);
 			}
 		}
-		Resources.setMusic("subatmosphere_0", true);
+		Resources.setMusic("subatmosphere_0", true);// TODO convert to a sound group
 	}
 
 	@Override

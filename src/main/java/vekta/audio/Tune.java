@@ -1,4 +1,4 @@
-package vekta.sound;
+package vekta.audio;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -9,6 +9,7 @@ import vekta.world.Singleplayer;
 import java.io.Serializable;
 
 import static processing.core.PApplet.cos;
+import static processing.core.PApplet.min;
 import static processing.core.PConstants.*;
 import static vekta.Vekta.getWorld;
 import static vekta.Vekta.v;
@@ -25,13 +26,13 @@ public class OffScreenIndicator extends Indicator<SpaceObject> {
 
 	// Location settings
 	private static final float PADDING = 200;    // Padding on each side of the screen
-	private static final float DISTANCE_TO_FADE = v.height / 2f;    // Distance from screen edge before the arrow starts to fade
+	private static final float DISTANCE_TO_FADE = 500;    // Distance from screen edge before the arrow starts to fade
 
 	private transient PShape arrow;
 	private final Player player;
 
 	public OffScreenIndicator(DynamicValue<SpaceObject> value, Player player) {
-		super("Offscreen Indicator", value, v.width / 2f, v.height / 2f, v.color(255));
+		super("Off-Screen Indicator", value, v.width / 2f, v.height / 2f, v.color(255));
 
 		this.player = player;
 	}
@@ -46,6 +47,18 @@ public class OffScreenIndicator extends Indicator<SpaceObject> {
 				Singleplayer world = ((Singleplayer)getWorld());
 				if(!world.isVisibleOnScreen(target)) {
 
+					// Calculate fade, if applicable
+					float dist = world.getScreenDistanceFromEdge(target);
+					float opacity = min(1, dist / DISTANCE_TO_FADE) * 255;
+
+					// Begin style
+					v.pushStyle();
+					v.strokeWeight(2);
+					int color = getTarget().getColor();
+					// v.stroke(color, opacity);
+					v.noStroke();
+					v.fill(color, opacity);
+
 					if(arrow == null) {
 						arrow = getArrow(ARROW_WIDTH, ARROW_HEIGHT);
 					}
@@ -56,16 +69,7 @@ public class OffScreenIndicator extends Indicator<SpaceObject> {
 					position.normalize();
 					position.mult((Math.min(v.height, v.width) - PADDING) / 2);
 
-					// Calculate fade, if applicable
-					float dist = world.getScreenDistanceFromEdge(target);
-					float opacity = dist < DISTANCE_TO_FADE ? dist / DISTANCE_TO_FADE : 1;
-
 					// Draw arrow
-					v.pushStyle();
-					v.strokeWeight(2);
-					v.stroke(getTarget().getColor(), opacity);
-					//v.fill(0, opacity);
-					v.noFill();
 					v.shape(arrow, position.x + (v.width) / 2F, position.y + (v.height) / 2F);
 					arrow.rotate(-position.heading() - PI / 2);
 
@@ -73,6 +77,7 @@ public class OffScreenIndicator extends Indicator<SpaceObject> {
 					position.x -= v.textWidth(target.getName()) * cos(position.heading());
 					position.y *= 0.9F;
 					v.textAlign(CENTER);
+					v.stroke(color, opacity); // Re-apply the stroke because something is greening it
 					v.text(target.getName(), position.x + (v.width) / 2F, position.y + (v.height) / 2F);
 					v.popStyle();
 				}
@@ -90,6 +95,7 @@ public class OffScreenIndicator extends Indicator<SpaceObject> {
 
 	private static PShape getArrow(float width, float height) {
 		PShape shape = v.createShape();
+		shape.disableStyle();
 		shape.beginShape();
 		shape.vertex(0, height);
 		shape.vertex(width / 2, 0);

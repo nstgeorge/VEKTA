@@ -6,6 +6,8 @@ import vekta.object.ship.ModularShip;
 import vekta.util.InfoGroup;
 
 import static com.jogamp.opengl.math.FloatUtil.abs;
+import static processing.core.PApplet.max;
+import static processing.core.PApplet.min;
 import static vekta.Vekta.DEVICE;
 
 public class EngineModule extends ShipModule {

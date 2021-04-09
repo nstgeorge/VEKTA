@@ -1,8 +1,8 @@
 package vekta.spawner;
 
 import vekta.Resources;
-import vekta.sound.SoundGroup;
-import vekta.sound.Tune;
+import vekta.audio.SoundGroup;
+import vekta.audio.Tune;
 
 import java.util.Arrays;
 import java.util.List;
