@@ -102,7 +102,8 @@ public final class AudioDriver {
 	 */
 	@SuppressWarnings({"UnusedReturnValue", "SameParameterValue"})
 	private static Bank _loadBankMemory(byte[] buffer, long studioLoadBankFlags) throws ReflectiveOperationException {
-		// This is almost working; we need to figure out how to pass a `String` so that JNI properly converts it to a `char*` buffer
+		// TODO
+		// >> This is almost working; we need to figure out how to pass a `String` so that JNI properly converts it to a `char*` buffer
 
 		//		String bufferString = StandardCharsets.US_ASCII.decode(ByteBuffer.wrap(buffer)).toString();
 		String bufferString = new String(buffer);
@@ -127,14 +128,12 @@ public final class AudioDriver {
 	}
 
 	/**
-	 * Create an `EventInstance` from the referenced path.
+	 * Create a `Sound` instance from the given event path (remember to eventually `release()` the instance).
 	 *
-	 * @param path Path to event to get. This is not a directory, it is an FMod event path.
-	 * @return EventInstance that references the sound.
+	 * @param path FMOD event path (e.g. `/Some/Event`)
+	 * @return New `Sound` instance
 	 */
-	public static EventInstance createEventInstance(String path) {
-		EventDescription desc = studio.getEvent(path);
-		desc.loadSampleData();
-		return desc.createInstance();
+	public static Sound createSound(String path) {
+		return new Sound(path);
 	}
 }

@@ -5,6 +5,7 @@ import processing.core.PVector;
 import vekta.KeyBinding;
 import vekta.Resources;
 import vekta.Settings;
+import vekta.audio.AudioDriver;
 import vekta.audio.Sound;
 import vekta.item.Item;
 import vekta.item.ModuleItem;
@@ -60,7 +61,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	private float energy;
 	private float maxEnergy;
 
-	private final Sound engineSound = new Sound("/Player/Engine");
+	private final Sound engineSound = AudioDriver.createSound("/Player/Engine");
 
 	private final PVector acceleration = new PVector();
 
@@ -130,7 +131,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 			else {
 				//Resources.stopSound("engine");
 				engineSound.setValue("power", 0);
-//				engineSound.stop();
+				//				engineSound.stop();
 			}
 		}
 		if(DEVICE != null) {

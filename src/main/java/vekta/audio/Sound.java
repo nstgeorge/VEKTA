@@ -2,6 +2,7 @@ package vekta.audio;
 
 import org.fmod.jni.FMOD_STUDIO_PLAYBACK_STATE;
 import org.fmod.jni.FMOD_STUDIO_STOP_MODE;
+import org.fmod.studio.EventDescription;
 import org.fmod.studio.EventInstance;
 
 import java.io.Serializable;
@@ -10,20 +11,22 @@ public class Sound implements Serializable {
 	private final String key;
 	private transient EventInstance instance;
 
-	public Sound(String key) {
+	// Use `AudioDriver.createSound(path)`
+	protected Sound(String key) {
 		this.key = key;
 
-		// Eagerly load instance
-		getInstance();
+		//		getInstance();
 	}
 
 	/**
-	 * Access the underlying `EventInstance`.
+	 * Lazy-load the underlying `EventInstance`.
 	 * Only call this directly if you're doing something hacky or unusual; otherwise, just add a corresponding method in this file.
 	 */
 	public EventInstance getInstance() {
 		if(instance == null) {
-			instance = AudioDriver.createEventInstance("event:" + key);
+			EventDescription desc = AudioDriver.getStudio().getEvent("event:" + key);
+			desc.loadSampleData();
+			instance = desc.createInstance();
 		}
 		return instance;
 	}
@@ -78,6 +81,10 @@ public class Sound implements Serializable {
 
 	public void release() {
 		// TODO: track unreleased sounds to help find memory leaks
-		getInstance().release();
+
+		// Only release if instance was already created
+		if(instance != null) {
+			instance.release();
+		}
 	}
 }
