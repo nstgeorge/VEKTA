@@ -8,7 +8,6 @@ import vekta.object.planet.TerrestrialPlanet;
 import vekta.spawner.TuneGenerator;
 import vekta.terrain.location.Location;
 
-import static processing.core.PApplet.sin;
 import static vekta.Vekta.v;
 
 /**

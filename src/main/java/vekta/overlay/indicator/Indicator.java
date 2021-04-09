@@ -1,44 +1,37 @@
 package vekta.overlay.indicator;
 
-import java.util.function.Function;
+import java.io.Serializable;
+import java.util.function.Supplier;
 
 /**
  * Represents a value graphically to the user.
  * The value function is called on every draw.
  *
- * @param <T> Type that the value function requires (Float is used a placeholder if none is required)
- * @param <R> Type that the value function returns
+ * @param <T> Type that the value function returns
  */
-public abstract class Indicator<T, R> {
-	String name;
-	Function<T, R> value;
+public abstract class Indicator<T> {
+	private final String name;
+	private final DynamicValue<T> value;
 
-	float locX;
-	float locY;
-	int color;
+	private final float x;
+	private final float y;
+	private int color;
 
-	public Indicator(String name, Function<T, R> value, float locX, float locY, int color) {
+	public Indicator(String name, DynamicValue<T> value, float x, float y, int color) {
 		this.name = name;
 		this.value = value;
-		this.locX = locX;
-		this.locY = locY;
+		this.x = x;
+		this.y = y;
 		this.color = color;
 	}
 
-	String getName() {
+	public String getName() {
 		return name;
 	}
 
-	public R getValue(T arg) {
-		return value.apply(arg);
-	}
-
-	public R getValue() {
-		return getValue(null);
-	}
-
-	public void setValue(Function<T, R> value) {
-		this.value = value;
+	// Protected because this should probably be split into subclass-specific accessors
+	protected T getValue() {
+		return value.get();
 	}
 
 	public int getColor() {
@@ -49,13 +42,16 @@ public abstract class Indicator<T, R> {
 		color = c;
 	}
 
-	public float getLocX() {
-		return locX;
+	public float getX() {
+		return x;
 	}
 
-	public float getLocY() {
-		return locY;
+	public float getY() {
+		return y;
 	}
 
 	public abstract void draw();
+
+	public interface DynamicValue<T> extends Supplier<T>, Serializable {
+	}
 }

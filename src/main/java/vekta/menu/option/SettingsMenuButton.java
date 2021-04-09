@@ -4,9 +4,8 @@ import vekta.menu.Menu;
 import vekta.menu.handle.SettingsMenuHandle;
 import vekta.menu.option.input.*;
 
-import java.util.Arrays;
-
-import static vekta.Vekta.*;
+import static vekta.Vekta.DEVICE;
+import static vekta.Vekta.setContext;
 
 public class SettingsMenuButton extends ButtonOption {
 

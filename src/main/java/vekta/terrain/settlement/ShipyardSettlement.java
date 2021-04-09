@@ -10,7 +10,6 @@ import vekta.market.Market;
 import vekta.module.Module;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.spawner.item.ModuleItemSpawner;
-import vekta.terrain.location.Location;
 import vekta.terrain.settlement.building.*;
 
 import static vekta.Vekta.v;

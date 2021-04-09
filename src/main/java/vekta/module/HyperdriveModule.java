@@ -100,7 +100,7 @@ public class HyperdriveModule extends ShipModule implements ZoomController {
 
 				// Create shockwave effect
 				float speed = (RenderLevel.SHIP.isVisibleTo(world.getRenderLevel()) ? zoom : timeScale * 5e-5F) * effectiveBoost;
-				register(new HyperdriveShockwave(ship, speed, (int)v.random(20, 25), ship.getColor()));
+				register(new HyperdriveShockwave(ship, speed, (int)v.random(30, 40), ship.getColor()));
 			}
 		}
 	}

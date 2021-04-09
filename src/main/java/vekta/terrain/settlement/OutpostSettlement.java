@@ -6,7 +6,6 @@ import vekta.faction.Faction;
 import vekta.menu.Menu;
 import vekta.object.planet.TerrestrialPlanet;
 import vekta.spawner.SettlementGenerator;
-import vekta.terrain.location.Location;
 
 import static vekta.Vekta.v;
 

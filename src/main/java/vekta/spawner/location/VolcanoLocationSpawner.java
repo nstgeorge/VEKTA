@@ -6,8 +6,6 @@ import vekta.terrain.location.ProxyLocation;
 
 import java.util.Set;
 
-import static vekta.Vekta.v;
-
 public class VolcanoLocationSpawner extends ProxyLocationSpawner<String> {
 
 	@Override

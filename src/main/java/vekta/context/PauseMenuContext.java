@@ -15,7 +15,7 @@ import static vekta.Vekta.*;
 public class PauseMenuContext implements Context {
 	private static final String[] OPTIONS = {"Continue", "Restart"/*, "Settings"*/, "Quit to Menu"};
 
-	private static final PShape LOGO = v.loadShape("vekta_wordmark.svg");
+	private static final PShape LOGO = Resources.getShape("vekta_wordmark");
 
 	private final Context parent;
 	//	private final Player player;

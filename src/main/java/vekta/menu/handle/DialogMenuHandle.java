@@ -3,7 +3,6 @@ package vekta.menu.handle;
 import vekta.knowledge.FactionKnowledge;
 import vekta.knowledge.ObservationLevel;
 import vekta.knowledge.PersonKnowledge;
-import vekta.menu.Menu;
 import vekta.person.Dialog;
 import vekta.person.Person;
 import vekta.person.TemporaryPerson;

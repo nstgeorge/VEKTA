@@ -4,7 +4,6 @@ import processing.core.PShape;
 import processing.core.PVector;
 import vekta.Resources;
 import vekta.context.Hyperspace;
-import vekta.menu.Menu;
 
 import static processing.core.PConstants.CENTER;
 import static vekta.Vekta.v;
@@ -15,7 +14,7 @@ public class MainMenuHandle extends MenuHandle {
 			0.1F,
 			170);
 
-	private static final PShape LOGO = v.loadShape("vekta_wordmark.svg");
+	private static final PShape LOGO = Resources.getShape("vekta_wordmark");
 
 	@Override
 	public void focus() {

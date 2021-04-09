@@ -15,6 +15,7 @@ import processing.opengl.PGraphicsOpenGL;
 import processing.opengl.PShader;
 import vekta.audio.AudioDriver;
 import vekta.context.Context;
+import vekta.context.DisplayContext;
 import vekta.context.PauseMenuContext;
 import vekta.context.StartSceneContext;
 import vekta.item.ItemType;
@@ -153,7 +154,7 @@ public class Vekta extends PApplet {
 				});
 			}
 		}
-		catch(XInputNotLoadedException e) {
+		catch(Exception e) {
 			e.printStackTrace();
 		}
 
@@ -173,6 +174,9 @@ public class Vekta extends PApplet {
 		StartSceneContext startScene = new StartSceneContext();
 		setContext(startScene);
 		applyContext();
+
+//		setContext(new DisplayContext(Resources.createUI("Main")));////////////
+//		applyContext();
 
 		frame.toFront();
 		frame.requestFocus();

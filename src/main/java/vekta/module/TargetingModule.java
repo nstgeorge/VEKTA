@@ -15,7 +15,8 @@ import vekta.spawner.WorldGenerator;
 import vekta.util.InfoGroup;
 import vekta.world.RenderLevel;
 
-import static processing.core.PApplet.*;
+import static processing.core.PApplet.pow;
+import static processing.core.PApplet.sq;
 import static vekta.Vekta.getWorld;
 
 public class TargetingModule extends ShipModule implements Targeter {
