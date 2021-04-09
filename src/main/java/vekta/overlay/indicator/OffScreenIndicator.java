@@ -8,6 +8,7 @@ import vekta.world.Singleplayer;
 
 import java.io.Serializable;
 
+import static processing.core.PApplet.cos;
 import static processing.core.PConstants.*;
 import static vekta.Vekta.getWorld;
 import static vekta.Vekta.v;
@@ -16,7 +17,7 @@ import static vekta.Vekta.v;
  * An indicator that shows an arrow along the edge of the screen where the provided object is.
  * The value function is expected to resolve the object that is being pointed to.
  */
-public class OffScreenIndicator extends Indicator<SpaceObject> implements Serializable {
+public class OffScreenIndicator extends Indicator<SpaceObject> {
 
 	// Arrow settings
 	private static final float ARROW_WIDTH = 40;
@@ -69,7 +70,7 @@ public class OffScreenIndicator extends Indicator<SpaceObject> implements Serial
 					arrow.rotate(-position.heading() - PI / 2);
 
 					// Draw label offset from arrow
-					position.x -= v.textWidth(target.getName()) * v.cos(position.heading());
+					position.x -= v.textWidth(target.getName()) * cos(position.heading());
 					position.y *= 0.9F;
 					v.textAlign(CENTER);
 					v.text(target.getName(), position.x + (v.width) / 2F, position.y + (v.height) / 2F);

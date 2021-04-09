@@ -9,7 +9,7 @@ import java.util.function.Supplier;
  *
  * @param <T> Type that the value function returns
  */
-public abstract class Indicator<T> {
+public abstract class Indicator<T> implements Serializable {
 	private final String name;
 	private final DynamicValue<T> value;
 

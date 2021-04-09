@@ -7,11 +7,12 @@ import vekta.world.Singleplayer;
 
 import java.io.Serializable;
 
+import static processing.core.PApplet.cos;
 import static processing.core.PConstants.*;
 import static vekta.Vekta.getWorld;
 import static vekta.Vekta.v;
 
-public class OnScreenIndicator extends Indicator<SpaceObject> implements Serializable {
+public class OnScreenIndicator extends Indicator<SpaceObject> {
 
 	private static final int NAMELINE_OFFSET = 50;        // Offset (px) of the name line from the box.
 	private static final float NAMELINE_PADDING = 10;    // Extra length on the name line.
@@ -54,26 +55,26 @@ public class OnScreenIndicator extends Indicator<SpaceObject> implements Seriali
 
 					// Draw the name line
 
-					v.line(screenLocation.x + oppositeOfShipHeading.x, screenLocation.y + oppositeOfShipHeading.y, screenLocation.x + oppositeOfShipHeading.x + (v.cos(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET), screenLocation.y + oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET));
+					v.line(screenLocation.x + oppositeOfShipHeading.x, screenLocation.y + oppositeOfShipHeading.y, screenLocation.x + oppositeOfShipHeading.x + (cos(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET), screenLocation.y + oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET));
 
 					// Determine which direction the ship is (left/right) from the target, then draw the line extending under the object name
 					// I'm sorry for my sins
-					if(v.cos(oppositeOfShipHeading.heading()) > 0) {
-						v.line(screenLocation.x + oppositeOfShipHeading.x + (v.cos(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET), screenLocation.y + oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET), screenLocation.x + oppositeOfShipHeading.x + (v.cos(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET) + v.textWidth(target.getName()) + NAMELINE_PADDING, screenLocation.y + oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET));
+					if(cos(oppositeOfShipHeading.heading()) > 0) {
+						v.line(screenLocation.x + oppositeOfShipHeading.x + (cos(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET), screenLocation.y + oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET), screenLocation.x + oppositeOfShipHeading.x + (cos(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET) + v.textWidth(target.getName()) + NAMELINE_PADDING, screenLocation.y + oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET));
 					}
 					else {
-						v.line(screenLocation.x + oppositeOfShipHeading.x + (v.cos(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET), screenLocation.y + oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET), screenLocation.x + oppositeOfShipHeading.x + (v.cos(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET) - v.textWidth(target.getName()) - NAMELINE_PADDING, screenLocation.y + oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET));
+						v.line(screenLocation.x + oppositeOfShipHeading.x + (cos(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET), screenLocation.y + oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET), screenLocation.x + oppositeOfShipHeading.x + (cos(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET) - v.textWidth(target.getName()) - NAMELINE_PADDING, screenLocation.y + oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET));
 					}
 
 					// Write the target name
 					v.color(target.getColor());
-					if(v.cos(oppositeOfShipHeading.heading()) > 0) {
+					if(cos(oppositeOfShipHeading.heading()) > 0) {
 						v.textAlign(LEFT);
 					}
 					else {
 						v.textAlign(RIGHT);
 					}
-					v.text(target.getName(), screenLocation.x + oppositeOfShipHeading.x + (v.cos(oppositeOfShipHeading.heading()) * (NAMELINE_OFFSET + 4)), screenLocation.y + oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET) - 2);
+					v.text(target.getName(), screenLocation.x + oppositeOfShipHeading.x + (cos(oppositeOfShipHeading.heading()) * (NAMELINE_OFFSET + 4)), screenLocation.y + oppositeOfShipHeading.y + (v.sin(oppositeOfShipHeading.heading()) * NAMELINE_OFFSET) - 2);
 					v.popStyle();
 				}
 			}

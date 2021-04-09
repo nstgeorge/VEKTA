@@ -12,7 +12,7 @@ import static vekta.Vekta.v;
 /**
  * Represents an unbounded vector value to the player. Best used to represent a heading.
  */
-public class DialIndicator extends Indicator<PVector> implements Serializable {
+public class DialIndicator extends Indicator<PVector> {
 
 	// TODO: Add a RADIUS parameter
 	private static final int RADIUS = 50;

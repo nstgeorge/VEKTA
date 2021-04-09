@@ -1012,12 +1012,12 @@ public class Singleplayer implements World, PlayerListener {
 			Singleplayer world = new Singleplayer(Format.read(new FileInputStream(file)));
 			setContext(world);
 			applyContext();
-			getPlayer().emit(PlayerEvent.LOAD, this);
+			world.getPlayer().emit(PlayerEvent.LOAD, world);
 			println("Loaded from " + file);
 			return true;
 		}
 		catch(InvalidClassException | ClassNotFoundException e) {
-			e.printStackTrace();
+			e.printStackTrace();//////
 			println("Outdated file format: " + file);
 			return false;
 		}

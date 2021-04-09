@@ -12,7 +12,7 @@ import static vekta.Vekta.v;
 /**
  * Displays the heading of the player.
  */
-public class StripCompassIndicator extends Indicator<PVector> implements Serializable {
+public class StripCompassIndicator extends Indicator<PVector> {
 
 	private static final int RESOLUTION = 36;        // Number of bars to draw
 	private static final int HEIGHT = 20;            // Height of the largest indicator bars

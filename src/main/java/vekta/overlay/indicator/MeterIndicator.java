@@ -10,7 +10,7 @@ import static vekta.Vekta.v;
  * A collection of meter indicators, best used to show a float that should be contained within provided bounds.
  * If the value leaves the bounds, the meter flashes red.
  */
-public class MeterIndicator extends Indicator<Float> implements Serializable {
+public class MeterIndicator extends Indicator<Float> {
 
 	private final IndicatorType type;
 	private final float min;
