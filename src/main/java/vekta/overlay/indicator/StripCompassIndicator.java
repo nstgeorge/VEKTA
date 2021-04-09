@@ -31,6 +31,7 @@ public class StripCompassIndicator extends Indicator<PVector> implements Seriali
 		int left = (int)((v.width - WIDTH) / 2);
 
 		// Draw arrow
+		v.strokeWeight(2);
 		v.stroke(0, 255, 0);
 		v.line(v.width / 2f + 10, 75, v.width / 2f, 65);
 		v.line(v.width / 2f - 10, 75, v.width / 2f, 65);
@@ -56,5 +57,6 @@ public class StripCompassIndicator extends Indicator<PVector> implements Seriali
 			}
 		}
 		v.textAlign(LEFT);
+		v.strokeWeight(1);
 	}
 }

@@ -301,15 +301,16 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 		}
 
 		v.rotate(relVelocityAngle);
+		v.strokeWeight(2);
 		for(int i = 1; i <= numberOfArcs; i++) {
 			float offset = PI * (v.random(.8f) * strength * i) / numberOfArcs;
 
 			v.noFill();
 			v.stroke(v.lerpColor(startColor, endColor, (float)i / numberOfArcs));
-			v.strokeWeight(2);
 			v.arc((numberOfArcs - i) * 2 * v.random(.9f, 1.1f), 0, r * 5, (r * 3 + (Math.abs(getVelocityReference().heading() % PI - getHeadingReference().heading() % PI))), offset, -offset, OPEN);
 		}
 		v.rotate(-relVelocityAngle);
+		v.strokeWeight(1);
 
 		v.stroke(v.lerpColor(getColor(), endColor, sqrt(abs(strength))));
 	}
