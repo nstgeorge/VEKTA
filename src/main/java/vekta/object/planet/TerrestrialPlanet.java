@@ -358,7 +358,7 @@ public class TerrestrialPlanet extends Planet {
 
 	// Accurate but potentially slow
 	public float getRadius(float angle) {
-		return getRadius() * (1 + (getTerrain().getDisplacement(angle - getDirection()) - surfaceAverage) * getDisplacementScale());
+		return getRadius() * (1 + (getTerrain().getDisplacement(v.normalizeAngle(angle - getDirection())) - surfaceAverage) * getDisplacementScale());
 	}
 
 	// Less accurate but always very efficient

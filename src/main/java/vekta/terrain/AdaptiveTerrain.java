@@ -77,7 +77,6 @@ public class AdaptiveTerrain extends Terrain {
 		return f / harmonics.length;
 
 		// For debugging:
-		//		angle = v.normalizeAngle(angle);
 		//		return angle>100*DEG_TO_RAD&&angle<110*DEG_TO_RAD?10:0;
 	}
 }
