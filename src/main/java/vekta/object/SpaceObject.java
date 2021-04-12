@@ -3,6 +3,7 @@ package vekta.object;
 import processing.core.PVector;
 import vekta.action.Action;
 import vekta.action.BasicAction;
+import vekta.action.EmptyAction;
 import vekta.action.SoundAction;
 import vekta.action.runner.Runner;
 import vekta.action.runner.RunnerState;
@@ -89,8 +90,7 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 
 	// Syntactic sugar for multi-line `.then()` chains
 	public Runner async() {
-		return async(new BasicAction(() -> {
-		}));
+		return async(EmptyAction.INSTANCE);
 	}
 
 	public Sound playSound(Sound sound) {
