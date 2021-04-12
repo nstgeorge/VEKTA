@@ -6,6 +6,7 @@ import vekta.action.BasicAction;
 import vekta.action.SoundAction;
 import vekta.action.runner.Runner;
 import vekta.action.runner.RunnerState;
+import vekta.audio.AudioDriver;
 import vekta.audio.Sound;
 import vekta.knowledge.ObservationLevel;
 import vekta.object.ship.ModularShip;
@@ -92,9 +93,14 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 		}));
 	}
 
-	public Runner playSound(Sound sound) {
+	public Sound playSound(Sound sound) {
 		// TODO: pass relative position/velocity info to sound
-		return async(new SoundAction(sound));
+		async(new SoundAction(sound));
+		return sound;
+	}
+
+	public Sound playSound(String path) {
+		return playSound(AudioDriver.createSound(path));
 	}
 
 	public final void notifyRunner(Runner runner) {
