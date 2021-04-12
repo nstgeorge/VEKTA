@@ -47,6 +47,10 @@ public class Sound implements Serializable {
 		return getInstance().getPlaybackState() == FMOD_STUDIO_PLAYBACK_STATE.FMOD_STUDIO_PLAYBACK_PLAYING;
 	}
 
+	public boolean isStopped() {
+		return getInstance().getPlaybackState() == FMOD_STUDIO_PLAYBACK_STATE.FMOD_STUDIO_PLAYBACK_STOPPED;
+	}
+
 	public boolean isPaused() {
 		return getInstance().getPaused();
 	}

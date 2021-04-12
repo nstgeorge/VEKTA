@@ -1,6 +1,9 @@
 package vekta.object;
 
 import processing.core.PVector;
+import vekta.action.Action;
+import vekta.action.runner.Runner;
+import vekta.action.runner.RunnerState;
 import vekta.knowledge.ObservationLevel;
 import vekta.object.ship.ModularShip;
 import vekta.player.Player;
@@ -9,6 +12,7 @@ import vekta.sync.Syncable;
 import vekta.world.RenderLevel;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import static vekta.Vekta.*;
@@ -17,9 +21,11 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	private static final float PREVIEW_ROTATE_SPEED = 5e-3F;
 	private static final float MARKER_SIZE = 40;
 	private static final int DEFAULT_TRAIL_LENGTH = 50;
-	private static final float MOTION_SYNC_FACTOR = .2F; // How much to over/undercorrect object motion
+	private static final float MOTION_SYNC_FACTOR = .2F; // How much to over/under-correct object motion
 
 	protected final float[][] trail;
+
+	private final List<Runner> startedRunners = new ArrayList<>();
 
 	private boolean persistent;
 	private boolean destroyed;
@@ -53,23 +59,50 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 		this.color = color;
 	}
 
-	//	// Returns whether or not the object is affected by spacetime curvature
-	//	public boolean isCurvable() {
-	//		return true;
-	//	}
-
 	public abstract RenderLevel getRenderLevel();
 
 	public RenderLevel getDespawnLevel() {
 		return getRenderLevel();
 	}
 
-	public void despawn() {
+	public final void despawn() {
 		destroyed = true;
+		for(Runner runner : new ArrayList<>(getStartedRunners())) {
+			runner.cancel();
+		}
 		getWorld().remove(this);
 	}
 
-	public float getAliveTime() {
+	public final List<Runner> getStartedRunners() {
+		return startedRunners;
+	}
+
+	public Runner start(Action action) {
+		Runner runner = new Runner(this, action);
+		runner.start();
+		return runner;
+	}
+
+	public final void notifyRunner(Runner runner) {
+		if(runner.getObject() != this) {
+			return;
+		}
+		boolean hasThisRunner = false;
+		for(int i = startedRunners.size() - 1; i >= 0; i--) {
+			Runner a = startedRunners.get(i);
+			if(a == runner) {
+				hasThisRunner = true;
+			}
+			else if(a.getState() != RunnerState.STARTED) {
+				startedRunners.remove(i);
+			}
+		}
+		if(!hasThisRunner) {
+			startedRunners.add(runner);
+		}
+	}
+
+	public final float getAliveTime() {
 		return aliveTime;
 	}
 
@@ -84,7 +117,7 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	 *
 	 * @return Temperature (Kelvin)
 	 */
-	public float getTemperatureKelvin() {
+	public final float getTemperatureKelvin() {
 		return temperature;
 	}
 
@@ -93,7 +126,7 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	 *
 	 * @return Temperature (Celsius)
 	 */
-	public float getTemperatureCelsius() {
+	public final float getTemperatureCelsius() {
 		return getTemperatureKelvin() - 273.15F;
 	}
 
@@ -113,13 +146,13 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 		this.temperature += heat / getMass() / getSpecificHeat();
 	}
 
-	/**
-	 * Exposes the object to a temperature over a specified period of time
-	 */
-	public void transferTemperature(float other, float duration) {
-		// TODO implement
-		throw new RuntimeException("NYI");
-	}
+	//	/**
+	//	 * Exposes the object to a temperature over a specified period of time
+	//	 */
+	//	public void transferTemperature(float other, float duration) {
+	//		// TODO implement
+	//		throw new RuntimeException("NYI");
+	//	}
 
 	public final PVector getPosition() {
 		return position.copy();
@@ -353,7 +386,7 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	/**
 	 * Perform physics updates for this SpaceObject.
 	 */
-	public void update(RenderLevel level) {
+	public final void update(RenderLevel level) {
 		aliveTime += 1 / v.frameRate;
 		onUpdate(level);
 	}

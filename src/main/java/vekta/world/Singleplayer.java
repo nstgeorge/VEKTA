@@ -6,6 +6,9 @@ import vekta.Format;
 import vekta.KeyBinding;
 import vekta.Resources;
 import vekta.Settings;
+import vekta.action.DelayAction;
+import vekta.action.ThenAction;
+import vekta.action.runner.Runner;
 import vekta.connection.message.Message;
 import vekta.context.KnowledgeContext;
 import vekta.context.PauseMenuContext;
@@ -494,22 +497,22 @@ public class Singleplayer implements World, PlayerListener {
 		// TODO: Make this neater
 		if(debugOverlay != null) {
 			// Gravity loop
-			for(int i = 0, size = objects.size(); i < size; i++) {
+			for(SpaceObject s : objects) {
 				// Skip despawned/destroyed objects
-				if(state.isRemoving(objects.get(i))) {
+				if(state.isRemoving(s)) {
 					continue;
 				}
-				updateGravity(objects, level, i);
+				updateObject(s, level);
 			}
 			profiler.addTimeStamp("Apply gravity");
 
 			// Drawing loop
-			for(int i = 0, size = objects.size(); i < size; i++) {
+			for(SpaceObject s : objects) {
 				// Skip despawned/destroyed objects
-				if(state.isRemoving(objects.get(i))) {
+				if(state.isRemoving(s)) {
 					continue;
 				}
-				drawObject(objects, level, i, playerShip, drawTrails);
+				drawObject(s, level, playerShip, drawTrails);
 			}
 			profiler.addTimeStamp("Draw objects");
 
@@ -530,8 +533,8 @@ public class Singleplayer implements World, PlayerListener {
 				if(state.isRemoving(s)) {
 					continue;
 				}
-				updateGravity(objects, level, i);
-				drawObject(objects, level, i, playerShip, drawTrails);
+				updateObject(s, level);
+				drawObject(s, level, playerShip, drawTrails);
 				resolveCollisions(objects, level, i);
 			}
 		}
@@ -617,24 +620,25 @@ public class Singleplayer implements World, PlayerListener {
 		//		}
 	}
 
-	private void updateGravity(List<SpaceObject> objects, RenderLevel level, int i) {
-		SpaceObject s = objects.get(i);
+	private void updateObject(SpaceObject s, RenderLevel level) {
 
 		// Move towards gravitational objects
 		s.applyGravity(state.getGravityObjects());
 
 		// Update object
 		s.update(level);
+
+		// Update relevant actions
+		for(Runner runner : s.getStartedRunners()) {
+			runner.getAction().onUpdate(runner);
+		}
 	}
 
-	private void drawObject(List<SpaceObject> objects, RenderLevel level, int i, ModularShip playerShip, boolean drawTrails) {
-		SpaceObject s = objects.get(i);
-
+	private void drawObject(SpaceObject s, RenderLevel level, ModularShip playerShip, boolean drawTrails) {
 		// Start drawing object
 		v.pushMatrix();
 
 		// Set up object position
-		// TODO: DRY them sqrts
 		PVector position = s.getPositionReference();
 		PVector cameraPos = playerShip.getPositionReference();
 		float scale = getZoom();
@@ -652,13 +656,17 @@ public class Singleplayer implements World, PlayerListener {
 			s.drawTrail(scale);
 		}
 
-		// Draw object
-		v.stroke(s.getColor());
-		v.noFill();
+		// Check if visible
 		float r = getScreenRadius(s, s.getRadius() / scale, position, cameraPos, curvature);
 		float onScreenRadius = s.getOnScreenRadius(r);
 		boolean visible = isVisibleOnScreen(screenX, screenY, onScreenRadius);
 		if(visible) {
+			// Draw object
+			v.stroke(s.getColor());
+			v.noFill();
+			for(Runner runner : s.getStartedRunners()) {
+				runner.getAction().onDraw(runner, level, r);
+			}
 			s.draw(level, r);
 		}
 
@@ -1109,6 +1117,14 @@ public class Singleplayer implements World, PlayerListener {
 			menu.add(new CustomButton("Enter Dungeon", m -> {
 				Dungeon dungeon = DungeonGenerator.createDungeon(PersonGenerator.randomHome());
 				new DungeonRoomButton(dungeon.getName(), dungeon.getStartRoom()).onSelect(m);
+			}));
+			menu.add(new CustomButton("Test Actions", m -> {
+				getPlayer().getShip()
+						.start(new DelayAction(.5f))
+						.then(() -> getPlayer().send("TEST 01"))
+						.then(new DelayAction(.5f))
+						.then(() -> getPlayer().send("TEST 02"));
+				m.close();
 			}));
 			menu.addDefault();
 			setContext(menu);

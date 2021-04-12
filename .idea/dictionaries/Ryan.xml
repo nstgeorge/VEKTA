@@ -3,8 +3,10 @@
     <words>
       <w>bildspur</w>
       <w>biodome</w>
+      <w>coords</w>
       <w>deadzone</w>
       <w>despawn</w>
+      <w>despawned</w>
       <w>dockable</w>
       <w>externalizable</w>
       <w>fontname</w>
@@ -12,7 +14,9 @@
       <w>openglcore</w>
       <w>postfx</w>
       <w>singleplayer</w>
+      <w>sqrts</w>
       <w>subatmosphere</w>
+      <w>syncables</w>
       <w>vekta</w>
     </words>
   </dictionary>

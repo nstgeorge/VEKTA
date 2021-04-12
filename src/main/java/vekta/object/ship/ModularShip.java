@@ -363,7 +363,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	}
 
 	@Override
-	public void onUpdate(RenderLevel level) {
+	public void onUpdateShip() {
 		for(Module module : getModules()) {
 			module.onUpdate();
 		}

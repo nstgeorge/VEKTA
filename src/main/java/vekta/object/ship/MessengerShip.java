@@ -58,7 +58,7 @@ public class MessengerShip extends Ship {
 	}
 
 	@Override
-	public void onUpdate(RenderLevel level) {
+	public void onUpdateShip() {
 		PVector offset = getTargetShip().getPosition().sub(getPosition());
 
 		if(!delivered) {

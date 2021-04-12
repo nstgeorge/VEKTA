@@ -31,8 +31,8 @@ public class PlayerShip extends ModularShip {
 	}
 
 	@Override
-	public void onUpdate(RenderLevel level) {
-		super.onUpdate(level);
+	public void onUpdateShip() {
+		super.onUpdateShip();
 
 		//				// Test particle system
 		//				if(getRenderLevel().isVisibleTo(level)) {

@@ -35,6 +35,7 @@ public final class WorldState implements Serializable {
 	private final Set<SpaceObject> objectsToAdd = new HashSet<>();
 	private final Set<SpaceObject> objectsToRemove = new HashSet<>();
 
+	//	private final List<Runner> runners = new ArrayList<>();
 	private final List<Person> people = new ArrayList<>();
 	private final List<Faction> factions = new ArrayList<>();
 	private final List<Economy> economies = new ArrayList<>();
@@ -99,6 +100,20 @@ public final class WorldState implements Serializable {
 	public List<SpaceObject> getGravityObjects() {
 		return gravityObjects;
 	}
+
+	//	public List<Runner> getRunners() {
+	//		return runners;
+	//	}
+	//
+	//	public List<Runner> getStartedRunners() {
+	//		List<Runner> list = new ArrayList<>();
+	//		for(Runner runner : getRunners()) {
+	//			if(runner.getState() == RunnerState.STARTED) {
+	//				list.add(runner);
+	//			}
+	//		}
+	//		return list;
+	//	}
 
 	public List<Person> getPeople() {
 		return people;
@@ -204,14 +219,14 @@ public final class WorldState implements Serializable {
 			if(current.isRemote()) {
 				// Sync remotely owned object
 				current.onSync(object.getSyncData());
-//				println("<sync>", object.isRemote(), object.getClass().getSimpleName() + " [" + Long.toHexString(id) + "]");
+				//				println("<sync>", object.isRemote(), object.getClass().getSimpleName() + " [" + Long.toHexString(id) + "]");
 			}
 			return current;
 		}
 		else if(!(object instanceof ConditionalRegister) || ((ConditionalRegister)object).shouldRegister()) {
 			add(object);
 			syncMap.put(object.getSyncID(), object);
-//			println("<add>", object.getClass().getSimpleName() + " [" + Long.toHexString(id) + "]" + (object.isRemote() ? " ** remote" : ""));
+			//			println("<add>", object.getClass().getSimpleName() + " [" + Long.toHexString(id) + "]" + (object.isRemote() ? " ** remote" : ""));
 		}
 		return object;
 	}
@@ -231,6 +246,9 @@ public final class WorldState implements Serializable {
 				addImmediately(s);
 			}
 		}
+		//		else if(object instanceof Runner && !runners.contains(object)) {
+		//			runners.add((Runner)object);
+		//		}
 		else if(object instanceof Person && !people.contains(object)) {
 			people.add((Person)object);
 		}
@@ -256,7 +274,18 @@ public final class WorldState implements Serializable {
 
 		if(object instanceof SpaceObject) {
 			objectsToRemove.add((SpaceObject)object);
+			//			for(Runner runner : getRunners()) {
+			//				if(runner.getObject() == object) {
+			//					if(runner.getState() == RunnerState.STARTED) {
+			//						runner.cancel();
+			//					}
+			//					runners.remove(runner);
+			//				}
+			//			}
 		}
+		//		else if(object instanceof Runner) {
+		//			runners.remove(object);
+		//		}
 		else if(object instanceof Person) {
 			people.remove(object);
 		}
@@ -273,13 +302,7 @@ public final class WorldState implements Serializable {
 
 	@SuppressWarnings("unchecked")
 	public <T extends Syncable> Syncable<T> find(long id) {
-		Syncable<T> sync = syncMap.get(id);
-		if(sync != null) {
-			return sync;
-		}
-		else {
-			return null;
-		}
+		return syncMap.get(id);
 	}
 
 	private static class ScheduledCallback implements Serializable {

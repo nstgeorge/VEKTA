@@ -44,7 +44,7 @@ public class CargoShip extends Ship {
 	}
 
 	@Override
-	public void onUpdate(RenderLevel level) {
+	public void onUpdateShip() {
 		if(steerCt.cycle()) {
 			steerCt.delay((int)v.random(10, 500));
 			thrust = v.random(-1, 1);

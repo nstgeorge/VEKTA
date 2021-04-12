@@ -14,7 +14,7 @@ import static vekta.Vekta.v;
 
 public class SoundGroup implements Externalizable {
 	private String key;
-	private SoundFile[] sounds;
+	private SoundFile[] sounds; // TODO: convert to use `Sound` system
 
 	public SoundGroup() {
 	}

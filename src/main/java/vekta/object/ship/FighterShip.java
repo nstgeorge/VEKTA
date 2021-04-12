@@ -87,7 +87,7 @@ public abstract class FighterShip extends Ship implements Targeter {
 	}
 
 	@Override
-	public void onUpdate(RenderLevel level) {
+	public void onUpdateShip() {
 		if(target != null) {
 			PVector pos = target.getPosition().add(relativeVelocity(target).div(PROJECTILE_SPEED));
 			PVector offset = pos.sub(position);
@@ -101,7 +101,7 @@ public abstract class FighterShip extends Ship implements Targeter {
 			if(target.getColor() != getColor() && attackCt.cycle()) {
 				attackCt.delay(chooseAttackTime());
 
-				if(RenderLevel.SHIP.isVisibleTo(level)) {
+				if(RenderLevel.SHIP.isVisibleTo(getWorld().getRenderLevel())) {
 					interceptDebounce.reset();
 					if(rangeFactor >= 0) {
 						fireProjectile();
@@ -123,7 +123,7 @@ public abstract class FighterShip extends Ship implements Targeter {
 							getWorld().setZoom(zoom);
 						}
 						setVelocity(target.getVelocityReference());
-//						applyVelocity(getVelocity());////
+						//						applyVelocity(getVelocity());////
 
 						ship.getController().send("Intercepted!").withColor(getColor());
 						EventGenerator.updateSituations(ship.getController());

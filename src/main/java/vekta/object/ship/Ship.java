@@ -238,7 +238,7 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 	}
 
 	@Override
-	public void update(RenderLevel level) {
+	public final void onUpdate(RenderLevel level) {
 		nearestPlanet = null;
 		float bestDistSq = Float.MAX_VALUE;
 		for(TerrestrialPlanet planet : getWorld().findObjects(TerrestrialPlanet.class)) {
@@ -263,7 +263,11 @@ public abstract class Ship extends SpaceObject implements Renameable, InventoryL
 				addVelocity(dampen.sub(redirect).mult(GLIDE_DAMPEN_RATE/* * surfaceProgress*/ * min(10, getWorld().getTimeScale()))); // Apply aerodynamics
 			}
 		}
-		super.update(level);
+		onUpdateShip();
+		super.onUpdate(level);
+	}
+
+	protected void onUpdateShip() {
 	}
 
 	@Override
