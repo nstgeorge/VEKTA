@@ -3,8 +3,10 @@ package vekta.object;
 import processing.core.PVector;
 import vekta.action.Action;
 import vekta.action.BasicAction;
+import vekta.action.SoundAction;
 import vekta.action.runner.Runner;
 import vekta.action.runner.RunnerState;
+import vekta.audio.Sound;
 import vekta.knowledge.ObservationLevel;
 import vekta.object.ship.ModularShip;
 import vekta.player.Player;
@@ -88,6 +90,11 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 	public Runner async() {
 		return async(new BasicAction(() -> {
 		}));
+	}
+
+	public Runner playSound(Sound sound) {
+		// TODO: pass relative position/velocity info to sound
+		return async(new SoundAction(sound));
 	}
 
 	public final void notifyRunner(Runner runner) {
