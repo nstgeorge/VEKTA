@@ -1119,8 +1119,8 @@ public class Singleplayer implements World, PlayerListener {
 				new DungeonRoomButton(dungeon.getName(), dungeon.getStartRoom()).onSelect(m);
 			}));
 			menu.add(new CustomButton("Test Actions", m -> {
-				getPlayer().getShip()
-						.start(new DelayAction(.5f))
+				getPlayer().getShip().async()
+						.then(new DelayAction(.5f))
 						.then(() -> getPlayer().send("TEST 01"))
 						.then(new DelayAction(.5f))
 						.then(() -> getPlayer().send("TEST 02"));

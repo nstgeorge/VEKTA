@@ -2,6 +2,7 @@ package vekta.object;
 
 import processing.core.PVector;
 import vekta.action.Action;
+import vekta.action.BasicAction;
 import vekta.action.runner.Runner;
 import vekta.action.runner.RunnerState;
 import vekta.knowledge.ObservationLevel;
@@ -77,10 +78,16 @@ public abstract class SpaceObject extends Syncable<SpaceObject> implements Seria
 		return startedRunners;
 	}
 
-	public Runner start(Action action) {
+	public Runner async(Action action) {
 		Runner runner = new Runner(this, action);
 		runner.start();
 		return runner;
+	}
+
+	// Syntactic sugar for multi-line `.then()` chains
+	public Runner async() {
+		return async(new BasicAction(() -> {
+		}));
 	}
 
 	public final void notifyRunner(Runner runner) {

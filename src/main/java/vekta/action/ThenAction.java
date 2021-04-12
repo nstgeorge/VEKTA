@@ -19,14 +19,14 @@ public class ThenAction implements Action {
 	@Override
 	public void onComplete(Runner runner) {
 		if(complete != null) {
-			runner.getObject().start(complete);
+			runner.async(complete);
 		}
 	}
 
 	@Override
 	public void onCancel(Runner runner) {
 		if(cancel != null) {
-			runner.getObject().start(cancel);
+			runner.async(cancel);
 		}
 	}
 }

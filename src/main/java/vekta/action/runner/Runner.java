@@ -5,13 +5,14 @@ import vekta.action.BasicAction;
 import vekta.object.SpaceObject;
 import vekta.world.World;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 import static vekta.Vekta.v;
 
-public class Runner {
+public class Runner implements Serializable {
 	private static final Logger LOG = Logger.getLogger(Runner.class.getName());
 
 	private final SpaceObject object;
@@ -148,12 +149,12 @@ public class Runner {
 		return then(new BasicAction(complete));
 	}
 
-	//	/**
-	//	 * Run another action in parallel (equivalent to `getObject().start(action)`)
-	//	 *
-	//	 * @param action The action to run
-	//	 */
-	//	public Runner startParallel(Action action) {
-	//		return getObject().start(action);
-	//	}
+	/**
+	 * Run another action in parallel (equivalent to `getObject().async(action)`)
+	 *
+	 * @param action The action to run
+	 */
+	public Runner async(Action action) {
+		return getObject().async(action);
+	}
 }
