@@ -8,7 +8,7 @@ import vekta.util.InfoGroup;
 
 import java.io.Serializable;
 
-public interface Module extends Serializable {
+public interface BaseModule extends Serializable {
 	// Define per-second energy consumption rate
 	float PER_SECOND = 1 / 60F;
 	float PER_MINUTE = PER_SECOND / 60F;
@@ -21,11 +21,11 @@ public interface Module extends Serializable {
 
 	float getValueScale();
 
-	default boolean isBetter(Module other) {
+	default boolean isBetter(BaseModule other) {
 		return getValueScale() > other.getValueScale();
 	}
 
-	Module createVariant();
+	BaseModule createVariant();
 
 	boolean isApplicable(ModularShip ship);
 
@@ -50,7 +50,7 @@ public interface Module extends Serializable {
 	default void onAnalogKeyPress(float value) {
 	}
 
-	default void onControlStickMoved(float x, float y, int side){
+	default void onControlStickMoved(float x, float y, int side) {
 	}
 
 	default void onItemMenu(Item item, Menu menu) {

@@ -3,7 +3,7 @@ package vekta.menu.option;
 import vekta.context.StationLayoutContext;
 import vekta.menu.Menu;
 import vekta.menu.handle.LoadoutMenuHandle;
-import vekta.module.Module;
+import vekta.module.BaseModule;
 import vekta.module.ModuleUpgradeable;
 import vekta.module.ModuleUpgrader;
 import vekta.object.ship.SpaceStation;
@@ -30,8 +30,8 @@ public class LoadoutMenuButton extends ButtonOption implements ModuleUpgrader {
 	@Override
 	public void onSelect(Menu menu) {
 		// TEMP
-		if(upgradeable instanceof SpaceStation) {
-			setContext(new StationLayoutContext(getWorld(), (SpaceStation)upgradeable, menu.getPlayer()));
+		if (upgradeable instanceof SpaceStation) {
+			setContext(new StationLayoutContext(getWorld(), (SpaceStation) upgradeable, menu.getPlayer()));
 			return;
 		}
 
@@ -42,23 +42,23 @@ public class LoadoutMenuButton extends ButtonOption implements ModuleUpgrader {
 	}
 
 	@Override
-	public Module getRelevantModule(Module module) {
+	public BaseModule getRelevantModule(BaseModule module) {
 		return getUpgradeable().getModule(module.getType());
 	}
 
 	@Override
-	public void installModule(Module module) {
+	public void installModule(BaseModule module) {
 		getUpgradeable().addModule(module);
 	}
 
 	@Override
-	public void uninstallModule(Module module) {
+	public void uninstallModule(BaseModule module) {
 		getUpgradeable().removeModule(module);
 	}
 
 	private void updateMenu(Menu sub) {
 		sub.clear();
-		for(Module module : upgradeable.findUpgrades()) {
+		for (BaseModule module : upgradeable.findUpgrades()) {
 			sub.add(new InstallModuleButton(this, module));
 		}
 		sub.addDefault();

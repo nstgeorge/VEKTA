@@ -27,7 +27,7 @@ public class PlanetBusterModule extends WeaponModule {
 	}
 
 	@Override
-	public Module createVariant() {
+	public BaseModule createVariant() {
 		return new PlanetBusterModule();
 	}
 
@@ -37,31 +37,29 @@ public class PlanetBusterModule extends WeaponModule {
 	}
 
 	@Override
-	public boolean isBetter(Module other) {
+	public boolean isBetter(BaseModule other) {
 		return false;
 	}
 
 	@Override
 	public void fireWeapon() {
-		if(used) {
+		if (used) {
 			return;
 		}
 
 		ModularShip ship = getShip();
-		Module m = ship.getModule(ModuleType.NAVIGATION);
-		if(m instanceof Targeter) {
-			SpaceObject target = ((Targeter)m).getTarget();
-			if(target instanceof Planet) {
-				if(ship.consumeEnergyImmediate(20)) {
+		BaseModule m = ship.getModule(ModuleType.NAVIGATION);
+		if (m instanceof Targeter) {
+			SpaceObject target = ((Targeter) m).getTarget();
+			if (target instanceof Planet) {
+				if (ship.consumeEnergyImmediate(20)) {
 					used = true;
 					getWorld().playSound("laser", ship.getPosition());
 					register(new PlanetBusterProjectile(ship, target, ship.getPosition(), ship.getVelocity(), ship.getColor()));
-				}
-				else if(ship.hasController()) {
+				} else if (ship.hasController()) {
 					ship.getController().send(getName() + " requires more energy");
 				}
-			}
-			else if(ship.hasController()) {
+			} else if (ship.hasController()) {
 				ship.getController().send(getName() + " requires a planetary target");
 			}
 		}
@@ -69,7 +67,8 @@ public class PlanetBusterModule extends WeaponModule {
 
 	@Override
 	public void onInfo(InfoGroup info) {
-		info.addDescription("The latest innovations in planet-destroying technology have become so devastating that even carrying this around will cause alarm and suspicion.");
+		info.addDescription(
+				"The latest innovations in planet-destroying technology have become so devastating that even carrying this around will cause alarm and suspicion.");
 
 		super.onInfo(info);
 	}

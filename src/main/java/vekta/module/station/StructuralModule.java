@@ -1,16 +1,16 @@
 package vekta.module.station;
 
-import vekta.module.Module;
+import static processing.core.PConstants.CENTER;
+import static processing.core.PConstants.CORNERS;
+import static vekta.Vekta.v;
+
+import vekta.module.BaseModule;
 import vekta.module.ModuleType;
 import vekta.module.ShipModule;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.SpaceStation;
 import vekta.util.InfoGroup;
 import vekta.world.RenderLevel;
-
-import static processing.core.PConstants.CENTER;
-import static processing.core.PConstants.CORNERS;
-import static vekta.Vekta.v;
 
 public class StructuralModule extends ShipModule {
 	private final int width, height;
@@ -45,12 +45,12 @@ public class StructuralModule extends ShipModule {
 	}
 
 	@Override
-	public boolean isBetter(Module other) {
+	public boolean isBetter(BaseModule other) {
 		return false;
 	}
 
 	@Override
-	public Module createVariant() {
+	public BaseModule createVariant() {
 		return new StructuralModule(chooseInclusive(1, 3), chooseInclusive(3, 10));
 	}
 
@@ -77,7 +77,7 @@ public class StructuralModule extends ShipModule {
 		v.translate(-(getWidth() / 2F) * tileSize, -(getHeight() / 2F) * tileSize);
 
 		// Cross supports
-		for(int i = 0; i < getWidth(); i++) {
+		for (int i = 0; i < getWidth(); i++) {
 			v.line(i * tileSize, 2, (i + 1) * tileSize, getHeight() * tileSize - 2);
 			v.line(i * tileSize, getHeight() * tileSize - 2, (i + 1) * tileSize, 2);
 		}

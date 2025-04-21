@@ -1,5 +1,9 @@
 package vekta.module;
 
+import static vekta.Vekta.AU_DISTANCE;
+import static vekta.Vekta.getWorld;
+import static vekta.Vekta.v;
+
 import processing.core.PVector;
 import vekta.KeyBinding;
 import vekta.Resources;
@@ -10,8 +14,6 @@ import vekta.menu.option.CustomButton;
 import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
 import vekta.util.InfoGroup;
-
-import static vekta.Vekta.*;
 
 public class WormholeModule extends ShipModule {
 	private static final float MIN_DISTANCE = AU_DISTANCE; // Min teleport distance (prevents accidental teleportation)
@@ -31,7 +33,7 @@ public class WormholeModule extends ShipModule {
 	}
 
 	public SpaceObject getTarget() {
-		if(!hasTarget()) {
+		if (!hasTarget()) {
 			target = null;
 		}
 		return target;
@@ -66,45 +68,44 @@ public class WormholeModule extends ShipModule {
 	}
 
 	@Override
-	public boolean isBetter(Module other) {
+	public boolean isBetter(BaseModule other) {
 		return false;
 	}
 
 	@Override
-	public Module createVariant() {
+	public BaseModule createVariant() {
 		SpaceObject target = v.chance(.5F) ? getWorld().findRandomObject(SpaceObject.class) : null;
 		return new WormholeModule(target);
 	}
 
 	@Override
 	public void onKeyPress(KeyBinding key) {
-		if(key == KeyBinding.SHIP_SCAN) {
+		if (key == KeyBinding.SHIP_SCAN) {
 			setTarget(getShip().findNavigationTarget());
-			if(getShip().hasController()) {
+			if (getShip().hasController()) {
 				getShip().getController().send("Wormhole target "
 						+ (hasTarget() ? "updated to " + getTarget().getName() : "cleared"));
 			}
-		}
-		else if(key == KeyBinding.SHIP_HYPERDRIVE) {
+		} else if (key == KeyBinding.SHIP_HYPERDRIVE) {
 			teleport(getShip());
 		}
 	}
 
 	private void teleport(ModularShip ship) {
 		SpaceObject target = hasTarget() ? getTarget() : ship.findNavigationTarget();
-		if(target == null) {
+		if (target == null) {
 			return;
 		}
 
-		if(ship.relativePosition(target).magSq() < MIN_DISTANCE * MIN_DISTANCE) {
-			if(ship.hasController()) {
+		if (ship.relativePosition(target).magSq() < MIN_DISTANCE * MIN_DISTANCE) {
+			if (ship.hasController()) {
 				ship.getController().send("Wormhole Drive target is too close!");
 			}
 			return;
 		}
 
 		float temp = ship.getTemperatureKelvin();
-		if(ship.hasEnergy() && ship.getEnergy() >= getEnergyConsumption()) {
+		if (ship.hasEnergy() && ship.getEnergy() >= getEnergyConsumption()) {
 			Resources.playSound("hyperdriveHit");
 			ship.consumeEnergyImmediate(getEnergyConsumption());
 			ship.setTemperatureKelvin(temp);
@@ -115,9 +116,9 @@ public class WormholeModule extends ShipModule {
 
 			// Update ship targeter
 			ship.setNavigationTarget(target);
-		}
-		else if(ship.hasController()) {
-			ship.getController().send("Not enough energy! (" + (int)ship.getEnergy() + " / " + (int)getEnergyConsumption() + ")");
+		} else if (ship.hasController()) {
+			ship.getController()
+					.send("Not enough energy! (" + (int) ship.getEnergy() + " / " + (int) getEnergyConsumption() + ")");
 		}
 	}
 
@@ -128,11 +129,12 @@ public class WormholeModule extends ShipModule {
 
 	@Override
 	public void onMenu(Menu menu) {
-		if(!hasTarget()) {
+		if (!hasTarget()) {
 			return;
 		}
 
-		if(menu.getHandle() instanceof SpaceObjectMenuHandle && ((SpaceObjectMenuHandle)menu.getHandle()).getSpaceObject() == menu.getPlayer().getShip()) {
+		if (menu.getHandle() instanceof SpaceObjectMenuHandle
+				&& ((SpaceObjectMenuHandle) menu.getHandle()).getSpaceObject() == menu.getPlayer().getShip()) {
 			menu.add(new CustomButton("Teleport (" + getTarget().getName() + ")", m -> {
 				m.close();
 				teleport(m.getPlayer().getShip());
@@ -142,7 +144,8 @@ public class WormholeModule extends ShipModule {
 
 	@Override
 	public void onInfo(InfoGroup info) {
-		info.addDescription("We can't find the scientists who invented them, but it's become the latest trend in instant transportation.");
+		info.addDescription(
+				"We can't find the scientists who invented them, but it's become the latest trend in instant transportation.");
 
 		info.addDescription("Store a target in your inventory for easy access, or equip to teleport on-the-fly.");
 

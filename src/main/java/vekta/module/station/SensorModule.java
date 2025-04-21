@@ -1,14 +1,16 @@
 package vekta.module.station;
 
-import vekta.module.Module;
+import static processing.core.PConstants.CENTER;
+import static processing.core.PConstants.CLOSE;
+import static processing.core.PConstants.CORNERS;
+import static vekta.Vekta.v;
+
+import vekta.module.BaseModule;
 import vekta.module.ModuleType;
 import vekta.object.ship.ModularShip;
 import vekta.object.ship.SpaceStation;
 import vekta.util.InfoGroup;
 import vekta.world.RenderLevel;
-
-import static processing.core.PConstants.*;
-import static vekta.Vekta.v;
 
 public class SensorModule implements ComponentModule {
 	@Override
@@ -32,7 +34,7 @@ public class SensorModule implements ComponentModule {
 	}
 
 	@Override
-	public boolean isBetter(Module other) {
+	public boolean isBetter(BaseModule other) {
 		return false;
 	}
 
@@ -42,7 +44,7 @@ public class SensorModule implements ComponentModule {
 	}
 
 	@Override
-	public Module createVariant() {
+	public BaseModule createVariant() {
 		return new SensorModule();
 	}
 
@@ -58,7 +60,7 @@ public class SensorModule implements ComponentModule {
 
 	@Override
 	public boolean hasAttachmentPoint(SpaceStation.Direction direction) {
-		//		return direction == SpaceStation.Direction.LEFT;
+		// return direction == SpaceStation.Direction.LEFT;
 		return false;
 	}
 
@@ -108,6 +110,6 @@ public class SensorModule implements ComponentModule {
 	@Override
 	public void onInfo(InfoGroup info) {
 		// TODO: perhaps add some sort of data collection functionality to SensorModule
-		//		info.addDescription("");
+		// info.addDescription("");
 	}
 }

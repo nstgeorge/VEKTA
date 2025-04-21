@@ -1,5 +1,12 @@
 package vekta.context;
 
+import static processing.core.PConstants.CENTER;
+import static vekta.Vekta.UI_COLOR;
+import static vekta.Vekta.setContext;
+import static vekta.Vekta.v;
+
+import java.util.Collections;
+
 import vekta.KeyBinding;
 import vekta.Resources;
 import vekta.Settings;
@@ -8,7 +15,7 @@ import vekta.menu.Menu;
 import vekta.menu.handle.LoadoutMenuHandle;
 import vekta.menu.option.BackButton;
 import vekta.menu.option.InstallModuleButton;
-import vekta.module.Module;
+import vekta.module.BaseModule;
 import vekta.module.ModuleType;
 import vekta.module.ModuleUpgrader;
 import vekta.module.station.ComponentModule;
@@ -17,10 +24,6 @@ import vekta.object.ship.ModularShip;
 import vekta.object.ship.SpaceStation;
 import vekta.player.Player;
 import vekta.world.RenderLevel;
-
-import java.util.Collections;
-
-import static vekta.Vekta.*;
 
 /**
  * Context for modifying space stations.
@@ -56,15 +59,15 @@ public class StationLayoutContext implements Context, ModuleUpgrader {
 	@Override
 	public void render() {
 		v.clear();
-		//		v.camera();
-		//		v.noLights();
-		//		v.hint(DISABLE_DEPTH_TEST);
+		// v.camera();
+		// v.noLights();
+		// v.hint(DISABLE_DEPTH_TEST);
 		v.strokeWeight(.5F);
 
 		RenderLevel level = RenderLevel.PARTICLE;
 
 		SpaceStation.Component core = station.getCore();
-		if(cursor == null) {
+		if (cursor == null) {
 			cursor = core;
 		}
 
@@ -120,8 +123,9 @@ public class StationLayoutContext implements Context, ModuleUpgrader {
 		// Draw helper text
 		v.textSize(24);
 		v.fill(255);
-		if(!cursor.hasChildren()) {
-			v.text(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to " + (isPlacing() ? "INSTALL" : "REMOVE"), v.width / 2F, v.height - 32);
+		if (!cursor.hasChildren()) {
+			v.text(Settings.getKeyText(KeyBinding.MENU_SELECT) + " to " + (isPlacing() ? "INSTALL" : "REMOVE"), v.width / 2F,
+					v.height - 32);
 		}
 		v.strokeWeight(1);
 	}
@@ -129,43 +133,40 @@ public class StationLayoutContext implements Context, ModuleUpgrader {
 	public void moveCursor(SpaceStation.Direction dir) {
 		SpaceStation.Component prevCursor = cursor;
 		SpaceStation.Component component = cursor.getAttached(dir);
-		if(component != null) {
+		if (component != null) {
 			cursor = component;
-		}
-		else {
+		} else {
 			SpaceStation.Component hypothetical = station.new Component(cursor, dir, placementModule);
-			if(!isPlacing() && cursor.isAttachable(hypothetical)) {
+			if (!isPlacing() && cursor.isAttachable(hypothetical)) {
 				cursor = hypothetical;
-			}
-			else {
+			} else {
 				cursor = hypothetical.getNearest(dir);
 			}
 		}
 
-		if(cursor != prevCursor) {
+		if (cursor != prevCursor) {
 			Resources.playSound("change");
 		}
 	}
 
 	public void selectCursor() {
-		if(isCursorRemovable()) {
+		if (isCursorRemovable()) {
 			// Uninstall cursor
 			uninstallModule(cursor.getModule());
-		}
-		else if(isPlacing()) {
-			Menu menu = new Menu(getPlayer(), new BackButton(this), new LoadoutMenuHandle(Collections.singletonList(cursor.getModule()), false));
-			for(Module module : getPlayer().getShip().findUpgrades()) {
-				if(module instanceof ComponentModule) {
-					ComponentModule m = (ComponentModule)module;
-					if((isPlacing() ? cursor.isAttachable(cursor) : cursor.isReplaceable(m)) && station.canEquip(m)) {
+		} else if (isPlacing()) {
+			Menu menu = new Menu(getPlayer(), new BackButton(this),
+					new LoadoutMenuHandle(Collections.singletonList(cursor.getModule()), false));
+			for (BaseModule module : getPlayer().getShip().findUpgrades()) {
+				if (module instanceof ComponentModule) {
+					ComponentModule m = (ComponentModule) module;
+					if ((isPlacing() ? cursor.isAttachable(cursor) : cursor.isReplaceable(m)) && station.canEquip(m)) {
 						menu.add(new InstallModuleButton(this, m));
 					}
 				}
 			}
 			menu.addDefault();
 			setContext(menu);
-		}
-		else {
+		} else {
 			return;
 		}
 		Resources.playSound("select");
@@ -173,25 +174,25 @@ public class StationLayoutContext implements Context, ModuleUpgrader {
 
 	@Override
 	public void keyPressed(KeyBinding key) {
-		switch(key) {
-		case MENU_CLOSE:
-			setContext(parent);
-			break;
-		case MENU_UP:
-			moveCursor(SpaceStation.Direction.UP);
-			break;
-		case MENU_DOWN:
-			moveCursor(SpaceStation.Direction.DOWN);
-			break;
-		case MENU_LEFT:
-			moveCursor(SpaceStation.Direction.LEFT);
-			break;
-		case MENU_RIGHT:
-			moveCursor(SpaceStation.Direction.RIGHT);
-			break;
-		case MENU_SELECT:
-			selectCursor();
-			break;
+		switch (key) {
+			case MENU_CLOSE:
+				setContext(parent);
+				break;
+			case MENU_UP:
+				moveCursor(SpaceStation.Direction.UP);
+				break;
+			case MENU_DOWN:
+				moveCursor(SpaceStation.Direction.DOWN);
+				break;
+			case MENU_LEFT:
+				moveCursor(SpaceStation.Direction.LEFT);
+				break;
+			case MENU_RIGHT:
+				moveCursor(SpaceStation.Direction.RIGHT);
+				break;
+			case MENU_SELECT:
+				selectCursor();
+				break;
 		}
 	}
 
@@ -204,23 +205,22 @@ public class StationLayoutContext implements Context, ModuleUpgrader {
 	}
 
 	@Override
-	public Module getRelevantModule(Module module) {
+	public BaseModule getRelevantModule(BaseModule module) {
 		return isPlacing() ? null : cursor.getModule();
 	}
 
 	@Override
-	public void installModule(Module module) {
-		if(!(module instanceof ComponentModule)) {
+	public void installModule(BaseModule module) {
+		if (!(module instanceof ComponentModule)) {
 			return;
 		}
 
 		getPlayerInventory().moveTo(station.getInventory()); // Transfer ship items to station
 
-		if(isPlacing()) {
-			cursor = cursor.getParent().attach(cursor.getDirection(), (ComponentModule)module);
-		}
-		else {
-			cursor.replaceModule((ComponentModule)module);
+		if (isPlacing()) {
+			cursor = cursor.getParent().attach(cursor.getDirection(), (ComponentModule) module);
+		} else {
+			cursor.replaceModule((ComponentModule) module);
 		}
 
 		station.getInventory().moveTo(getPlayerInventory()); // Return items to ship
@@ -229,8 +229,8 @@ public class StationLayoutContext implements Context, ModuleUpgrader {
 	}
 
 	@Override
-	public void uninstallModule(Module module) {
-		if(cursor.getModule() != module) {
+	public void uninstallModule(BaseModule module) {
+		if (cursor.getModule() != module) {
 			return;
 		}
 
@@ -291,12 +291,12 @@ public class StationLayoutContext implements Context, ModuleUpgrader {
 		}
 
 		@Override
-		public boolean isBetter(Module other) {
+		public boolean isBetter(BaseModule other) {
 			return false;
 		}
 
 		@Override
-		public Module createVariant() {
+		public BaseModule createVariant() {
 			return null;
 		}
 

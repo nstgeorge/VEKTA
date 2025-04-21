@@ -1,14 +1,14 @@
 package vekta.module;
 
+import static vekta.Vekta.getWorld;
+import static vekta.Vekta.register;
+
 import processing.core.PVector;
 import vekta.object.HomingProjectile;
 import vekta.object.SpaceObject;
 import vekta.object.Targeter;
 import vekta.object.ship.ModularShip;
 import vekta.util.InfoGroup;
-
-import static vekta.Vekta.getWorld;
-import static vekta.Vekta.register;
 
 public class TorpedoModule extends WeaponModule {
 	private final float speed;
@@ -31,7 +31,7 @@ public class TorpedoModule extends WeaponModule {
 	}
 
 	@Override
-	public Module createVariant() {
+	public BaseModule createVariant() {
 		return new TorpedoModule(chooseInclusive(1, 4));
 	}
 
@@ -46,17 +46,17 @@ public class TorpedoModule extends WeaponModule {
 	}
 
 	@Override
-	public boolean isBetter(Module other) {
-		return other instanceof TorpedoModule && getSpeed() > ((TorpedoModule)other).getSpeed();
+	public boolean isBetter(BaseModule other) {
+		return other instanceof TorpedoModule && getSpeed() > ((TorpedoModule) other).getSpeed();
 	}
 
 	@Override
 	public void fireWeapon() {
 		ModularShip ship = getShip();
-		Module m = ship.getModule(ModuleType.NAVIGATION);
-		if(m instanceof Targeter) {
-			SpaceObject target = ((Targeter)m).getTarget();
-			if(target != null && ship.consumeEnergyImmediate(1 * getSpeed())) {
+		BaseModule m = ship.getModule(ModuleType.NAVIGATION);
+		if (m instanceof Targeter) {
+			SpaceObject target = ((Targeter) m).getTarget();
+			if (target != null && ship.consumeEnergyImmediate(1 * getSpeed())) {
 				getWorld().playSound("laser", ship.getPosition());
 				PVector velocity = ship.getHeading().add(PVector.random2D()).add(ship.getVelocity());
 				register(new HomingProjectile(ship, target, getSpeed(), ship.getPosition(), velocity, ship.getColor()));

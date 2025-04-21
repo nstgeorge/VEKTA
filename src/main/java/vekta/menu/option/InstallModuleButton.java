@@ -1,35 +1,33 @@
 package vekta.menu.option;
 
 import vekta.menu.Menu;
-import vekta.module.Module;
+import vekta.module.BaseModule;
 import vekta.module.ModuleUpgrader;
 
 import static vekta.Vekta.v;
 
 public class InstallModuleButton extends ButtonOption {
 	private final ModuleUpgrader upgrader;
-	private final Module module;
+	private final BaseModule module;
 	private final ModuleStatus status;
 
-	public InstallModuleButton(ModuleUpgrader upgrader, Module module) {
+	public InstallModuleButton(ModuleUpgrader upgrader, BaseModule module) {
 		this.upgrader = upgrader;
 		this.module = module;
 
 		this.status = getModuleStatus(upgrader.getRelevantModule(module));
 	}
 
-	public Module getModule() {
+	public BaseModule getModule() {
 		return module;
 	}
 
-	public ModuleStatus getModuleStatus(Module module) {
-		if(module == null || getModule().isBetter(module)) {
+	public ModuleStatus getModuleStatus(BaseModule module) {
+		if (module == null || getModule().isBetter(module)) {
 			return ModuleStatus.BETTER;
-		}
-		else if(module.isBetter(getModule())) {
+		} else if (module.isBetter(getModule())) {
 			return ModuleStatus.WORSE;
-		}
-		else {
+		} else {
 			return ModuleStatus.DIFFERENT;
 		}
 	}

@@ -1,6 +1,21 @@
 package vekta.object.ship;
 
+import static processing.core.PApplet.abs;
+import static processing.core.PApplet.min;
+import static vekta.Vekta.DEVICE;
+import static vekta.Vekta.INTERSTELLAR_LEVEL;
+import static vekta.Vekta.STAR_LEVEL;
+import static vekta.Vekta.getWorld;
+import static vekta.Vekta.setContext;
+import static vekta.Vekta.v;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import com.google.common.collect.ImmutableMap;
+
 import processing.core.PVector;
 import vekta.KeyBinding;
 import vekta.Resources;
@@ -10,8 +25,18 @@ import vekta.item.ModuleItem;
 import vekta.knowledge.ObservationLevel;
 import vekta.menu.Menu;
 import vekta.menu.handle.SpaceObjectMenuHandle;
-import vekta.menu.option.*;
-import vekta.module.Module;
+import vekta.menu.option.BackButton;
+import vekta.menu.option.FollowerMenuButton;
+import vekta.menu.option.InternetMenuButton;
+import vekta.menu.option.InventoryButton;
+import vekta.menu.option.LoadoutMenuButton;
+import vekta.menu.option.MenuOption;
+import vekta.menu.option.MissionMenuButton;
+import vekta.menu.option.PlayerKnowledgeButton;
+import vekta.menu.option.RenameButton;
+import vekta.menu.option.ShipTakeoffButton;
+import vekta.menu.option.ShipUndockButton;
+import vekta.module.BaseModule;
 import vekta.module.ModuleType;
 import vekta.module.ModuleUpgradeable;
 import vekta.module.TargetingModule;
@@ -24,16 +49,10 @@ import vekta.terrain.LandingSite;
 import vekta.world.RenderLevel;
 import vekta.world.World;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import static vekta.Vekta.*;
-
 public abstract class ModularShip extends Ship implements ModuleUpgradeable, PlayerListener, Rechargeable {
 
-	private static final Map<KeyBinding, Class<? extends MenuOption>> SHORTCUT_MAP = ImmutableMap.<KeyBinding, Class<? extends MenuOption>>builder()
+	private static final Map<KeyBinding, Class<? extends MenuOption>> SHORTCUT_MAP = ImmutableMap
+			.<KeyBinding, Class<? extends MenuOption>>builder()
 			.put(KeyBinding.SHIP_KNOWLEDGE, PlayerKnowledgeButton.class)
 			.put(KeyBinding.SHIP_MISSIONS, MissionMenuButton.class)
 			.put(KeyBinding.SHIP_LOADOUT, LoadoutMenuButton.class)
@@ -61,9 +80,10 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	private final PVector acceleration = new PVector();
 
-	private final List<Module> modules = new ArrayList<>();
+	private final List<BaseModule> modules = new ArrayList<>();
 
-	public ModularShip(String name, PVector heading, PVector position, PVector velocity, int color, float speed, float turnSpeed) {
+	public ModularShip(String name, PVector heading, PVector position, PVector velocity, int color, float speed,
+			float turnSpeed) {
 		super(name, heading, position, velocity, color, speed, turnSpeed);
 	}
 
@@ -85,14 +105,14 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	}
 
 	public final void setController(Player player) {
-		if(player == getController()) {
+		if (player == getController()) {
 			return;
 		}
-		if(hasController()) {
+		if (hasController()) {
 			getController().removeListener(this);
 		}
 		this.controller = player;
-		if(hasController()) {
+		if (hasController()) {
 			getController().addListener(this);
 			getController().emit(PlayerEvent.CHANGE_SHIP, this);
 		}
@@ -116,16 +136,15 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	public void setThrustControl(float thrust) {
 		this.thrust = thrust;
-		if(!isHyperdriving() && hasController()) {
-			if(thrust != 0 && hasEnergy()) {
+		if (!isHyperdriving() && hasController()) {
+			if (thrust != 0 && hasEnergy()) {
 				Resources.loopSound("engine", abs(thrust));
-			}
-			else {
+			} else {
 				Resources.stopSound("engine");
 			}
 		}
-		if(DEVICE != null) {
-			int amount = (int)(abs(thrust) * 65535 * Settings.getFloat("rumbleAmount"));
+		if (DEVICE != null) {
+			int amount = (int) (abs(thrust) * 65535 * Settings.getFloat("rumbleAmount"));
 			DEVICE.setVibration(amount, amount);
 		}
 	}
@@ -167,11 +186,11 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	}
 
 	public void addBattery(Battery battery) {
-		if(!hasBattery(battery)) {
+		if (!hasBattery(battery)) {
 			batteries.add(battery);
 			maxEnergy += battery.getCapacity();
 			energy += battery.getCharge();
-			if(energy > maxEnergy) {
+			if (energy > maxEnergy) {
 				energy = maxEnergy;
 			}
 			battery.setCharge(0);
@@ -179,7 +198,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	}
 
 	public void removeBattery(Battery battery) {
-		if(hasBattery(battery)) {
+		if (hasBattery(battery)) {
 			batteries.remove(battery);
 			maxEnergy -= battery.getCapacity();
 			float chargeTransfer = min(energy, battery.getCapacity());
@@ -212,7 +231,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	@Override
 	public void recharge(float amount) {
 		energy += amount;
-		if(energy > maxEnergy) {
+		if (energy > maxEnergy) {
 			energy = maxEnergy;
 		}
 	}
@@ -222,17 +241,16 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	}
 
 	public boolean consumeEnergyImmediate(float amount) {
-		if(getTemperatureKelvin() >= getOverheatTemperature()) {
+		if (getTemperatureKelvin() >= getOverheatTemperature()) {
 			overheated = true;
 			return false;
-		}
-		else if(overheated && getTemperatureKelvin() <= getCooldownTemperature()) {
+		} else if (overheated && getTemperatureKelvin() <= getCooldownTemperature()) {
 			overheated = false;
 		}
 
 		addHeat(amount * ENERGY_HEAT_SCALE / ENERGY_TIME_SCALE);
 		energy -= amount;
-		if(energy <= 0) {
+		if (energy <= 0) {
 			energy = 0;
 			landing = true;
 			return false;
@@ -241,14 +259,14 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	}
 
 	@Override
-	public List<Module> getModules() {
+	public List<BaseModule> getModules() {
 		return modules;
 	}
 
 	@Override
-	public Module getModule(ModuleType type) {
-		for(Module m : getModules()) {
-			if(m.getType() == type) {
+	public BaseModule getModule(ModuleType type) {
+		for (BaseModule m : getModules()) {
+			if (m.getType() == type) {
 				return m;
 			}
 		}
@@ -256,12 +274,12 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	}
 
 	@Override
-	public List<Module> findUpgrades() {
-		List<Module> list = new ArrayList<>();
-		for(Item item : getInventory()) {
-			if(item instanceof ModuleItem) {
-				Module module = ((ModuleItem)item).getModule();
-				if(module.isApplicable(this)) {
+	public List<BaseModule> findUpgrades() {
+		List<BaseModule> list = new ArrayList<>();
+		for (Item item : getInventory()) {
+			if (item instanceof ModuleItem) {
+				BaseModule module = ((ModuleItem) item).getModule();
+				if (module.isApplicable(this)) {
 					list.add(module);
 				}
 			}
@@ -274,37 +292,37 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	}
 
 	@Override
-	public void addModule(Module module) {
+	public void addModule(BaseModule module) {
 		boolean exclusive = isModuleTypeExclusive(module.getType());
-		for(Module m : new ArrayList<>(modules)) {
-			if(module == m) {
+		for (BaseModule m : new ArrayList<>(modules)) {
+			if (module == m) {
 				return;
 			}
-			if(exclusive && m.getType() == module.getType()) {
+			if (exclusive && m.getType() == module.getType()) {
 				removeModule(m);
 			}
 		}
 		// Remove corresponding item if found in inventory
-		for(Item item : getInventory()) {
-			if(item instanceof ModuleItem && ((ModuleItem)item).getModule() == module) {
+		for (Item item : getInventory()) {
+			if (item instanceof ModuleItem && ((ModuleItem) item).getModule() == module) {
 				getInventory().remove(item);
 				break;
 			}
 		}
 		modules.add(module);
 		module.onInstall(this);
-		if(hasController()) {
+		if (hasController()) {
 			getController().emit(PlayerEvent.INSTALL_MODULE, module);
 		}
 		updateMass();
 	}
 
 	@Override
-	public void removeModule(Module module) {
-		if(modules.remove(module)) {
+	public void removeModule(BaseModule module) {
+		if (modules.remove(module)) {
 			getInventory().add(new ModuleItem(module));
 			module.onUninstall(this);
-			if(hasController()) {
+			if (hasController()) {
 				getController().emit(PlayerEvent.UNINSTALL_MODULE, module);
 			}
 		}
@@ -313,10 +331,10 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	private void updateMass() {
 		mass = getBaseMass();
-		for(Module module : getModules()) {
+		for (BaseModule module : getModules()) {
 			mass += module.getMass();
 		}
-		for(Item item : getInventory().getItems()) {
+		for (Item item : getInventory().getItems()) {
 			mass += item.getMass();
 		}
 	}
@@ -334,7 +352,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	@Override
 	public void draw(RenderLevel level, float r) {
 		float t = getWorld().getTimeScale();
-		if(!getRenderLevel().isVisibleTo(level) && hasController()) {
+		if (!getRenderLevel().isVisibleTo(level) && hasController()) {
 			// Draw acceleration vector
 			v.stroke(255, 0, 0);
 			v.line(0, 0, (acceleration.x * 100 / t), (acceleration.y * 100 / t));
@@ -346,7 +364,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	@Override
 	public void drawShipMarker(RenderLevel level, float r) {
-		if(getController() != null) {
+		if (getController() != null) {
 			return;
 		}
 		super.drawShipMarker(level, r);
@@ -354,7 +372,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	@Override
 	public void onUpdate(RenderLevel level) {
-		for(Module module : getModules()) {
+		for (BaseModule module : getModules()) {
 			module.onUpdate();
 		}
 	}
@@ -362,19 +380,19 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	@Override
 	public void updateTargets() {
 		World world = getWorld();
-		for(Module m : getModules()) {
-			if(m instanceof Targeter) {
-				world.updateTargeter((Targeter)m);
+		for (BaseModule m : getModules()) {
+			if (m instanceof Targeter) {
+				world.updateTargeter((Targeter) m);
 			}
 		}
 	}
 
 	@Override
 	public boolean damage(float amount, Damager damager) {
-		if(hasController()) {
+		if (hasController()) {
 			DamageAttempt attempt = new DamageAttempt(amount, damager);
 			getController().emit(PlayerEvent.DAMAGE_SHIP, attempt);
-			for(Module m : getModules()) {
+			for (BaseModule m : getModules()) {
 				m.onDamageShip(attempt);
 			}
 			amount = attempt.getAmount();
@@ -384,22 +402,22 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	}
 
 	public SpaceObject findNavigationTarget() {
-		for(Module m : getModules()) {
-			if(m.getType() == ModuleType.NAVIGATION && m instanceof Targeter) {
-				return ((Targeter)m).getTarget();
+		for (BaseModule m : getModules()) {
+			if (m.getType() == ModuleType.NAVIGATION && m instanceof Targeter) {
+				return ((Targeter) m).getTarget();
 			}
 		}
 		return null;
 	}
 
 	public void setNavigationTarget(SpaceObject target) {
-		for(Module m : getModules()) {
-			if(m.getType() == ModuleType.NAVIGATION) {
-				if(m instanceof TargetingModule) { // Reset targeting mode if using a TargetingModule
-					((TargetingModule)m).setMode(null);
+		for (BaseModule m : getModules()) {
+			if (m.getType() == ModuleType.NAVIGATION) {
+				if (m instanceof TargetingModule) { // Reset targeting mode if using a TargetingModule
+					((TargetingModule) m).setMode(null);
 				}
-				if(m instanceof Targeter) {
-					((Targeter)m).setTarget(target);
+				if (m instanceof Targeter) {
+					((Targeter) m).setTarget(target);
 				}
 				return; // Only adjust first navigation module
 			}
@@ -408,7 +426,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	@Override
 	public void onDestroyed(SpaceObject s) {
-		if(hasController()) {
+		if (hasController()) {
 			getController().emit(PlayerEvent.GAME_OVER, this);
 		}
 	}
@@ -419,7 +437,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		menu.add(new MissionMenuButton());
 		menu.add(new LoadoutMenuButton(this));
 		menu.add(new InventoryButton(getInventory()));
-		if(hasController()) {
+		if (hasController()) {
 			FollowerMenuButton followerButton = new FollowerMenuButton(getController());
 			menu.add(followerButton);
 		}
@@ -430,7 +448,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	@Override
 	public void doLand(LandingSite site) {
-		if(hasController()) {
+		if (hasController()) {
 			Player player = getController();
 
 			site.getLocation().openMenu(player, new ShipTakeoffButton(site, getWorld()));
@@ -442,12 +460,12 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	@Override
 	public void doDock(SpaceObject s) {
-		if(hasController()) {
+		if (hasController()) {
 			Player player = getController();
-			if(s instanceof Ship) {
+			if (s instanceof Ship) {
 				this.setLanding(false);
 				Menu menu = new Menu(player, new ShipUndockButton(this, getWorld()), new SpaceObjectMenuHandle(s));
-				((Ship)s).setupDockingMenu(menu);
+				((Ship) s).setupDockingMenu(menu);
 				menu.addDefault();
 				setContext(menu);
 			}
@@ -472,7 +490,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	@Override
 	public void onItemAdd(Item item) {
-		if(hasController()) {
+		if (hasController()) {
 			getController().emit(PlayerEvent.ADD_ITEM, item);
 		}
 		updateMass();
@@ -480,7 +498,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	@Override
 	public void onItemRemove(Item item) {
-		if(hasController()) {
+		if (hasController()) {
 			getController().emit(PlayerEvent.REMOVE_ITEM, item);
 		}
 		updateMass();
@@ -490,29 +508,28 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	@Override
 	public void onMenu(Menu menu) {
-		for(Item item : getInventory()) {
+		for (Item item : getInventory()) {
 			item.onMenu(menu);
 		}
-		for(Module module : getModules()) {
+		for (BaseModule module : getModules()) {
 			module.onMenu(menu);
 		}
 	}
 
 	@Override
 	public void onKeyPress(KeyBinding key) {
-		for(Module module : getModules()) {
+		for (BaseModule module : getModules()) {
 			module.onKeyPress(key);
 		}
 
-		if(key == KeyBinding.SHIP_MENU) {
+		if (key == KeyBinding.SHIP_MENU) {
 			setContext(createShipMenu());
-		}
-		else {
+		} else {
 			Class<? extends MenuOption> type = SHORTCUT_MAP.get(key);
-			if(type != null) {
+			if (type != null) {
 				Menu menu = createShipMenu();
-				for(MenuOption opt : menu.getOptions()) {
-					if(type.isInstance(opt)) {
+				for (MenuOption opt : menu.getOptions()) {
+					if (type.isInstance(opt)) {
 						menu.select(opt);
 						break;
 					}
@@ -523,7 +540,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 	@Override
 	public void onKeyRelease(KeyBinding key) {
-		for(Module module : getModules()) {
+		for (BaseModule module : getModules()) {
 			module.onKeyRelease(key);
 		}
 	}
@@ -532,7 +549,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	public void onSync(SpaceObject data) {
 		super.onSync(data);
 
-		if(isRemote()) {
+		if (isRemote()) {
 			controller = null;
 		}
 	}
@@ -552,7 +569,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 		public Battery(int capacity, boolean charged) {
 			this(capacity);
 
-			if(charged) {
+			if (charged) {
 				setCharge(capacity);
 			}
 		}
@@ -571,7 +588,7 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 
 		public void addCharge(float amount) {
 			charge += amount;
-			if(charge > capacity) {
+			if (charge > capacity) {
 				charge = capacity;
 			}
 		}
@@ -610,4 +627,4 @@ public abstract class ModularShip extends Ship implements ModuleUpgradeable, Pla
 	private interface ShortcutProvider extends Serializable {
 		MenuOption provide(ModularShip ship, Menu menu);
 	}
-}  
+}

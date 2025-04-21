@@ -36,14 +36,14 @@ public class ActiveTCSModule extends PassiveTCSModule {
 	}
 
 	@Override
-	public boolean isBetter(Module other) {
+	public boolean isBetter(BaseModule other) {
 		return other instanceof ActiveTCSModule
-				? getEfficiency() > ((ActiveTCSModule)other).getEfficiency()
+				? getEfficiency() > ((ActiveTCSModule) other).getEfficiency()
 				: other instanceof PassiveTCSModule;
 	}
 
 	@Override
-	public Module createVariant() {
+	public BaseModule createVariant() {
 		return new ActiveTCSModule(chooseInclusive(.5F, 3, .5F));
 	}
 
@@ -54,7 +54,7 @@ public class ActiveTCSModule extends PassiveTCSModule {
 
 	@Override
 	public void onUpdate() {
-		if(getShip().getTemperatureKelvin() >= getShip().getCooldownTemperature()) {
+		if (getShip().getTemperatureKelvin() >= getShip().getCooldownTemperature()) {
 			active = true;
 		}
 
@@ -62,13 +62,14 @@ public class ActiveTCSModule extends PassiveTCSModule {
 				? EFFICIENCY_BOOST
 				: 1);
 
-		if(getShip().getTemperatureKelvin() <= getShip().getOptimalTemperature()) {
+		if (getShip().getTemperatureKelvin() <= getShip().getOptimalTemperature()) {
 			active = false;
 		}
 	}
 
 	@Override
 	public void onInfo(InfoGroup info) {
-		info.addDescription("The Active Thermal Control System (TCS) works similarly to Passive TCS, with the addition of using electricity to cool down the spacecraft when at high temperatures.");
+		info.addDescription(
+				"The Active Thermal Control System (TCS) works similarly to Passive TCS, with the addition of using electricity to cool down the spacecraft when at high temperatures.");
 	}
 }

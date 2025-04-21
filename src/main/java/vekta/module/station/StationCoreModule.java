@@ -1,11 +1,13 @@
 package vekta.module.station;
 
+import static vekta.Vekta.v;
+
 import processing.core.PVector;
 import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.menu.handle.SpaceObjectMenuHandle;
 import vekta.menu.option.DeployButton;
-import vekta.module.Module;
+import vekta.module.BaseModule;
 import vekta.module.ModuleType;
 import vekta.module.ShipModule;
 import vekta.object.ship.ModularShip;
@@ -13,8 +15,6 @@ import vekta.object.ship.Ship;
 import vekta.object.ship.SpaceStation;
 import vekta.util.InfoGroup;
 import vekta.world.RenderLevel;
-
-import static vekta.Vekta.v;
 
 public class StationCoreModule extends ShipModule {
 	private final int tier;
@@ -60,12 +60,12 @@ public class StationCoreModule extends ShipModule {
 	}
 
 	@Override
-	public boolean isBetter(Module other) {
-		return other instanceof StationCoreModule && getTier() > ((StationCoreModule)other).getTier();
+	public boolean isBetter(BaseModule other) {
+		return other instanceof StationCoreModule && getTier() > ((StationCoreModule) other).getTier();
 	}
 
 	@Override
-	public Module createVariant() {
+	public BaseModule createVariant() {
 		return new StationCoreModule(chooseInclusive(1, 3));
 	}
 
@@ -82,7 +82,8 @@ public class StationCoreModule extends ShipModule {
 	@Override
 	public void onItemMenu(Item item, Menu menu) {
 		Ship ship = menu.getPlayer().getShip();
-		if(menu.getHandle() instanceof SpaceObjectMenuHandle && ((SpaceObjectMenuHandle)menu.getHandle()).getSpaceObject() == ship) {
+		if (menu.getHandle() instanceof SpaceObjectMenuHandle
+				&& ((SpaceObjectMenuHandle) menu.getHandle()).getSpaceObject() == ship) {
 			menu.add(new DeployButton("New Station [v" + getTier() + "]", item, () -> new SpaceStation(
 					ship.getName() + " Station",
 					this,

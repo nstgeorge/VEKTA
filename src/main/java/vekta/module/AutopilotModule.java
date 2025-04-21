@@ -46,12 +46,12 @@ public class AutopilotModule extends TargetingModule {
 	}
 
 	@Override
-	public boolean isBetter(Module other) {
+	public boolean isBetter(BaseModule other) {
 		return other instanceof TargetingModule && !(other instanceof AutopilotModule);
 	}
 
 	@Override
-	public Module createVariant() {
+	public BaseModule createVariant() {
 		return new AutopilotModule();
 	}
 
@@ -61,7 +61,7 @@ public class AutopilotModule extends TargetingModule {
 
 		ModularShip ship = getShip();
 		SpaceObject target = getTarget();
-		if(isActive() && target != null && ship.consumeEnergyOverTime(.1F * PER_SECOND)) {
+		if (isActive() && target != null && ship.consumeEnergyOverTime(.1F * PER_SECOND)) {
 			// Grab telemetry vectors
 			PVector position = ship.getPosition();
 			PVector velocity = ship.getVelocity();
@@ -99,10 +99,10 @@ public class AutopilotModule extends TargetingModule {
 	public void onKeyPress(KeyBinding key) {
 		super.onKeyPress(key);
 
-		if(key == KeyBinding.SHIP_LAND) {
+		if (key == KeyBinding.SHIP_LAND) {
 			setActive(true);
-		}
-		else if(key == KeyBinding.SHIP_FORWARD || key == KeyBinding.SHIP_BACKWARD || key == KeyBinding.SHIP_LEFT || key == KeyBinding.SHIP_RIGHT) {
+		} else if (key == KeyBinding.SHIP_FORWARD || key == KeyBinding.SHIP_BACKWARD || key == KeyBinding.SHIP_LEFT
+				|| key == KeyBinding.SHIP_RIGHT) {
 			setActive(false);
 		}
 	}

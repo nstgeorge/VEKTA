@@ -1,10 +1,10 @@
 package vekta.module.station;
 
-import vekta.module.Module;
+import vekta.module.BaseModule;
 import vekta.object.ship.SpaceStation;
 import vekta.world.RenderLevel;
 
-public interface ComponentModule extends Module {
+public interface ComponentModule extends BaseModule {
 	/**
 	 * Get the component width (in tiles)
 	 */

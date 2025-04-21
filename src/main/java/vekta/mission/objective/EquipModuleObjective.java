@@ -1,22 +1,22 @@
 package vekta.mission.objective;
 
-import vekta.module.Module;
+import vekta.module.BaseModule;
 import vekta.object.SpaceObject;
 
 public class EquipModuleObjective extends Objective {
-	private final Module module;
+	private final BaseModule module;
 	private final boolean exact;
 
-	public EquipModuleObjective(Module module) {
+	public EquipModuleObjective(BaseModule module) {
 		this(module, false);
 	}
 
-	public EquipModuleObjective(Module module, boolean exact) {
+	public EquipModuleObjective(BaseModule module, boolean exact) {
 		this.module = module;
 		this.exact = exact;
 	}
 
-	public Module getModule() {
+	public BaseModule getModule() {
 		return module;
 	}
 
@@ -35,8 +35,8 @@ public class EquipModuleObjective extends Objective {
 	}
 
 	@Override
-	public void onInstallModule(Module module) {
-		if(isExact() ? module == getModule() : getModule().getClass().isInstance(module)) {
+	public void onInstallModule(BaseModule module) {
+		if (isExact() ? module == getModule() : getModule().getClass().isInstance(module)) {
 			complete();
 		}
 	}

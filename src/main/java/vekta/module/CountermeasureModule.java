@@ -47,13 +47,13 @@ public class CountermeasureModule extends WeaponModule {
 	}
 
 	@Override
-	public Module createVariant() {
+	public BaseModule createVariant() {
 		return new CountermeasureModule(chooseInclusive(1, 3));
 	}
 
 	@Override
-	public boolean isBetter(Module other) {
-		return other instanceof CountermeasureModule && getEfficiency() > ((CountermeasureModule)other).getEfficiency();
+	public boolean isBetter(BaseModule other) {
+		return other instanceof CountermeasureModule && getEfficiency() > ((CountermeasureModule) other).getEfficiency();
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class CountermeasureModule extends WeaponModule {
 	public void fireWeapon() {
 		ModularShip ship = getShip();
 
-		if(ship.consumeEnergyImmediate(1 / getEfficiency())) {
+		if (ship.consumeEnergyImmediate(1 / getEfficiency())) {
 			getWorld().playSound("countermeasure", ship.getPosition());
 			register(new Countermeasure(
 					ship,

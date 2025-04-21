@@ -39,7 +39,7 @@ public class MiningModule extends ShipModule {
 
 	@Override
 	public int getMass() {
-		return (int)((getEfficiency() + 2) * 500);
+		return (int) ((getEfficiency() + 2) * 500);
 	}
 
 	@Override
@@ -48,30 +48,29 @@ public class MiningModule extends ShipModule {
 	}
 
 	@Override
-	public boolean isBetter(Module other) {
-		return other instanceof MiningModule && getEfficiency() > ((MiningModule)other).getEfficiency();
+	public boolean isBetter(BaseModule other) {
+		return other instanceof MiningModule && getEfficiency() > ((MiningModule) other).getEfficiency();
 	}
 
 	@Override
-	public Module createVariant() {
+	public BaseModule createVariant() {
 		return new MiningModule(chooseInclusive(.5F, 3, .5F));
 	}
 
 	@Override
 	public void onMenu(Menu menu) {
-		if(menu.getHandle() instanceof LocationMenuHandle) {
-			Location location = ((LocationMenuHandle)menu.getHandle()).getLocation();
+		if (menu.getHandle() instanceof LocationMenuHandle) {
+			Location location = ((LocationMenuHandle) menu.getHandle()).getLocation();
 
-			if(location instanceof MiningLocation && !((MiningLocation)location).isDepleted()) {
-				menu.add(new ExtractMenuButton((MiningLocation)location, getEfficiency()));
+			if (location instanceof MiningLocation && !((MiningLocation) location).isDepleted()) {
+				menu.add(new ExtractMenuButton((MiningLocation) location, getEfficiency()));
 			}
-		}
-		else if(menu.getHandle() instanceof SpaceObjectMenuHandle) {
-			SpaceObject s = ((SpaceObjectMenuHandle)menu.getHandle()).getSpaceObject();
+		} else if (menu.getHandle() instanceof SpaceObjectMenuHandle) {
+			SpaceObject s = ((SpaceObjectMenuHandle) menu.getHandle()).getSpaceObject();
 
-			if(s instanceof RingDebris) {
-				Inventory inv = ((RingDebris)s).getInventory();
-				if(inv.itemCount() > 0) {
+			if (s instanceof RingDebris) {
+				Inventory inv = ((RingDebris) s).getInventory();
+				if (inv.itemCount() > 0) {
 					// TODO: merge logic with ExtractMenuButton
 					menu.add(new LootMenuButton("Extract", inv));
 				}

@@ -44,31 +44,31 @@ public class EcosystemScannerModule extends ShipModule {
 	}
 
 	@Override
-	public boolean isBetter(Module other) {
-		return other instanceof EcosystemScannerModule && getStrength() > ((EcosystemScannerModule)other).getStrength();
+	public boolean isBetter(BaseModule other) {
+		return other instanceof EcosystemScannerModule && getStrength() > ((EcosystemScannerModule) other).getStrength();
 	}
 
-	//	@Override
-	//	public Module createVariant() {
-	//		return new EcosystemScannerModule(chooseInclusive(.1F, 2, .1F));
-	//	}
+	// @Override
+	// public Module createVariant() {
+	// return new EcosystemScannerModule(chooseInclusive(.1F, 2, .1F));
+	// }
 
 	@Override
-	public Module createVariant() {
+	public BaseModule createVariant() {
 		return new EcosystemScannerModule();
 	}
 
 	@Override
 	public void onMenu(Menu menu) {
-		if(menu.getHandle() instanceof LocationMenuHandle) {
-			Location location = ((LocationMenuHandle)menu.getHandle()).getLocation();
+		if (menu.getHandle() instanceof LocationMenuHandle) {
+			Location location = ((LocationMenuHandle) menu.getHandle()).getLocation();
 
-			if(location instanceof Terrain) {
-				Terrain terrain = (Terrain)location;
+			if (location instanceof Terrain) {
+				Terrain terrain = (Terrain) location;
 
 				Ecosystem ecosystem = terrain.getEcosystem();
 
-				if(!ecosystem.getSpecies().isEmpty() || !ecosystem.getExtinctions().isEmpty()) {
+				if (!ecosystem.getSpecies().isEmpty() || !ecosystem.getExtinctions().isEmpty()) {
 					menu.add(new EcosystemButton(ecosystem));
 				}
 			}

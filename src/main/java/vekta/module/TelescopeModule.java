@@ -42,7 +42,7 @@ public class TelescopeModule extends ShipModule {
 
 	@Override
 	public int getMass() {
-		return (int)((getResolution() + 5) * 200);
+		return (int) ((getResolution() + 5) * 200);
 	}
 
 	@Override
@@ -51,30 +51,30 @@ public class TelescopeModule extends ShipModule {
 	}
 
 	@Override
-	public boolean isBetter(Module other) {
-		return other instanceof TelescopeModule && getResolution() > ((TelescopeModule)other).getResolution();
+	public boolean isBetter(BaseModule other) {
+		return other instanceof TelescopeModule && getResolution() > ((TelescopeModule) other).getResolution();
 	}
 
 	@Override
-	public Module createVariant() {
+	public BaseModule createVariant() {
 		return new TelescopeModule(chooseInclusive(.1F, 3, .1F));
 	}
 
 	@Override
 	public void onKeyPress(KeyBinding key) {
-		if(key == KeyBinding.SHIP_SCAN) {
-			Targeter t = (Targeter)getShip().getModule(ModuleType.NAVIGATION);
+		if (key == KeyBinding.SHIP_SCAN) {
+			Targeter t = (Targeter) getShip().getModule(ModuleType.NAVIGATION);
 			SpaceObject target = t != null ? t.getTarget() : getWorld().findOrbitObject(getShip());
-			if(target instanceof TerrestrialPlanet) {
-				TerrestrialPlanet planet = (TerrestrialPlanet)target;
+			if (target instanceof TerrestrialPlanet) {
+				TerrestrialPlanet planet = (TerrestrialPlanet) target;
 				float dist = PVector.dist(getShip().getPosition(), planet.getPosition());
 				float maxDist = getResolution() * RANGE_SCALE;
-				if(dist <= maxDist) {
-					Menu menu = new Menu(getShip().getController(), new BackButton(getWorld()), new SurveyMenuHandle(planet.getTerrain()));
+				if (dist <= maxDist) {
+					Menu menu = new Menu(getShip().getController(), new BackButton(getWorld()),
+							new SurveyMenuHandle(planet.getTerrain()));
 					menu.addDefault();
 					setContext(menu);
-				}
-				else if(getShip().hasController()) {
+				} else if (getShip().hasController()) {
 					getShip().getController().send("Out of range! (" + round(maxDist / dist * 100) + "% resolution)")
 							.withTime(.5F);
 				}

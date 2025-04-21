@@ -1,10 +1,10 @@
 package vekta.module;
 
+import static vekta.Vekta.getWorld;
+
 import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
 import vekta.util.InfoGroup;
-
-import static vekta.Vekta.getWorld;
 
 public class ShieldModule extends ShipModule {
 	private static final float BASE_DAMAGE_ENERGY = 30;
@@ -44,19 +44,19 @@ public class ShieldModule extends ShipModule {
 	}
 
 	@Override
-	public boolean isBetter(Module other) {
-		return other instanceof ShieldModule && getEfficiency() > ((ShieldModule)other).getEfficiency();
+	public boolean isBetter(BaseModule other) {
+		return other instanceof ShieldModule && getEfficiency() > ((ShieldModule) other).getEfficiency();
 	}
 
 	@Override
-	public Module createVariant() {
+	public BaseModule createVariant() {
 		return new ShieldModule(chooseInclusive(1, 3, .1F));
 	}
 
 	@Override
 	public void onDamageShip(ModularShip.DamageAttempt attempt) {
 		ModularShip ship = getShip();
-		if(ship.consumeEnergyImmediate(BASE_DAMAGE_ENERGY / getEfficiency())) {
+		if (ship.consumeEnergyImmediate(BASE_DAMAGE_ENERGY / getEfficiency())) {
 			getWorld().addCameraImpact(.1F);
 			getWorld().playSound("deflection", ship.getPosition());
 			attempt.setAmount(0);

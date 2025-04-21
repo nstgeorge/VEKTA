@@ -52,15 +52,15 @@ public class TargetingModule extends ShipModule implements Targeter {
 
 	@Override
 	public void setTarget(SpaceObject target) {
-		if(this.target != null) {
+		if (this.target != null) {
 			prevTarget = this.target;
 		}
 		this.target = target;
 
-		if(target != null && target != prevTarget) {
+		if (target != null && target != prevTarget) {
 			Resources.playSound("targetChange");
 
-			if(getShip().hasController()) {
+			if (getShip().hasController()) {
 				target.observe(ObservationLevel.AWARE, getShip().getController());
 			}
 		}
@@ -68,18 +68,18 @@ public class TargetingModule extends ShipModule implements Targeter {
 
 	@Override
 	public boolean isValidTarget(SpaceObject obj) {
-		if(mode == null) {
+		if (mode == null) {
 			return obj == getTarget() && !obj.isDestroyed(); // Don't set targeter unless destroyed
 		}
-		switch(mode) {
-		case PLANET:
-			return obj instanceof TerrestrialPlanet && !(obj instanceof Asteroid);
-		case ASTEROID:
-			return obj instanceof Asteroid || obj instanceof RingDebris;
-		case SHIP:
-			return obj instanceof Ship || obj instanceof CargoCrate;
-		default:
-			return false;
+		switch (mode) {
+			case PLANET:
+				return obj instanceof TerrestrialPlanet && !(obj instanceof Asteroid);
+			case ASTEROID:
+				return obj instanceof Asteroid || obj instanceof RingDebris;
+			case SHIP:
+				return obj instanceof Ship || obj instanceof CargoCrate;
+			default:
+				return false;
 		}
 	}
 
@@ -104,12 +104,12 @@ public class TargetingModule extends ShipModule implements Targeter {
 	}
 
 	@Override
-	public boolean isBetter(Module other) {
+	public boolean isBetter(BaseModule other) {
 		return false;
 	}
 
 	@Override
-	public Module createVariant() {
+	public BaseModule createVariant() {
 		return new TargetingModule();
 	}
 
@@ -120,15 +120,16 @@ public class TargetingModule extends ShipModule implements Targeter {
 
 	@Override
 	public void onUpdate() {
-		if(target != null && getShip().isLanding()) {
+		if (target != null && getShip().isLanding()) {
 			getWorld().setAutoZoom(getTargetZoom());
 		}
 	}
 
 	public float getTargetZoom() {
-		if(target != null) {
+		if (target != null) {
 			float distSq = target.relativePosition(getShip()).magSq();
-			if(!RenderLevel.SHIP.isVisibleTo(getWorld().getRenderLevel()) || distSq > sq(WorldGenerator.getRadius(RenderLevel.SHIP))) {
+			if (!RenderLevel.SHIP.isVisibleTo(getWorld().getRenderLevel())
+					|| distSq > sq(WorldGenerator.getRadius(RenderLevel.SHIP))) {
 				return pow(distSq, 1 / AUTO_ZOOM_POWER) * AUTO_ZOOM_SCALE;
 			}
 		}
@@ -137,31 +138,31 @@ public class TargetingModule extends ShipModule implements Targeter {
 
 	@Override
 	public void onKeyPress(KeyBinding key) {
-		switch(key) {
-		case SHIP_LAND:
-			getWorld().setZoom(getTargetZoom());
-			break;
-		case SHIP_TARGET:
-			setMode(null);
-			break;
-		case SHIP_TARGET_PLANET:
-			setMode(TargetingModule.TargetingMode.PLANET);
-			break;
-		case SHIP_TARGET_ASTEROID:
-			setMode(TargetingModule.TargetingMode.ASTEROID);
-			break;
-		case SHIP_TARGET_SHIP:
-			setMode(TargetingModule.TargetingMode.SHIP);
-			break;
-		case SHIP_TARGET_OBJECTIVE:
-			setMode(null);
-			if(getShip().hasController()) {
-				Mission mission = getShip().getController().getCurrentMission();
-				if(mission != null) {
-					setTarget(mission.getCurrentObjective().getSpaceObject());
+		switch (key) {
+			case SHIP_LAND:
+				getWorld().setZoom(getTargetZoom());
+				break;
+			case SHIP_TARGET:
+				setMode(null);
+				break;
+			case SHIP_TARGET_PLANET:
+				setMode(TargetingModule.TargetingMode.PLANET);
+				break;
+			case SHIP_TARGET_ASTEROID:
+				setMode(TargetingModule.TargetingMode.ASTEROID);
+				break;
+			case SHIP_TARGET_SHIP:
+				setMode(TargetingModule.TargetingMode.SHIP);
+				break;
+			case SHIP_TARGET_OBJECTIVE:
+				setMode(null);
+				if (getShip().hasController()) {
+					Mission mission = getShip().getController().getCurrentMission();
+					if (mission != null) {
+						setTarget(mission.getCurrentObjective().getSpaceObject());
+					}
 				}
-			}
-			break;
+				break;
 		}
 	}
 

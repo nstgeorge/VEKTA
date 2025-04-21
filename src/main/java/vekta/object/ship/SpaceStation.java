@@ -1,24 +1,34 @@
 package vekta.object.ship;
 
+import static processing.core.PApplet.abs;
+import static processing.core.PApplet.println;
+import static processing.core.PApplet.sqrt;
+import static processing.core.PConstants.HALF_PI;
+import static vekta.Vekta.distSq;
+import static vekta.Vekta.getWorld;
+import static vekta.Vekta.setContext;
+import static vekta.Vekta.v;
+
+import java.awt.Rectangle;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import processing.core.PVector;
 import vekta.context.StationLayoutContext;
 import vekta.menu.Menu;
 import vekta.menu.option.CustomButton;
 import vekta.menu.option.ShipSwitchButton;
-import vekta.module.Module;
+import vekta.module.BaseModule;
 import vekta.module.ModuleType;
 import vekta.module.station.ComponentModule;
 import vekta.module.station.StationCoreModule;
 import vekta.world.RenderLevel;
-
-import java.awt.*;
-import java.io.Serializable;
-import java.util.List;
-import java.util.*;
-
-import static processing.core.PApplet.HALF_PI;
-import static processing.core.PApplet.sqrt;
-import static vekta.Vekta.*;
 
 public class SpaceStation extends ModularShip {
 	private static final float DEF_SPEED = .02F; // Base engine speed (much slower than player)
@@ -30,7 +40,8 @@ public class SpaceStation extends ModularShip {
 
 	private final List<Component> components = new ArrayList<>();
 
-	public SpaceStation(String name, StationCoreModule coreModule, PVector heading, PVector position, PVector velocity, int color) {
+	public SpaceStation(String name, StationCoreModule coreModule, PVector heading, PVector position, PVector velocity,
+			int color) {
 		super(name, heading, position, velocity, color, DEF_SPEED, DEF_TURN);
 
 		this.core = new Component(null, Direction.RIGHT, coreModule);
@@ -56,7 +67,7 @@ public class SpaceStation extends ModularShip {
 	}
 
 	public StationCoreModule getCoreModule() {
-		return (StationCoreModule)core.getModule();
+		return (StationCoreModule) core.getModule();
 	}
 
 	@Override
@@ -66,8 +77,8 @@ public class SpaceStation extends ModularShip {
 
 	public int countModules(ModuleType type) {
 		int ct = 0;
-		for(Module m : getModules()) {
-			if(m.getType() == type) {
+		for (BaseModule m : getModules()) {
+			if (m.getType() == type) {
 				ct++;
 			}
 		}
@@ -98,28 +109,28 @@ public class SpaceStation extends ModularShip {
 
 	public void drawRelative(RenderLevel dist, float r) {
 		float ratio = r / getRadius();
-		for(Component component : components) {
+		for (Component component : components) {
 			v.pushMatrix();
 			v.translate(component.getX() * ratio, component.getY() * ratio);
-			v.rotate(component.getDirection()/*.rotate(component.getRotation())*/.getAngle());
+			v.rotate(component.getDirection()/* .rotate(component.getRotation()) */.getAngle());
 			component.getModule().draw(dist, TILE_SIZE * ratio);
 			v.popMatrix();
 
 			v.noFill(); // Display models assume no fill by default
 
-			//			// DEBUG: render bounding boxes
-			//			v.stroke(100);
-			//			Rectangle b = component.getBounds();
-			//			v.rectMode(CORNER);
-			//			v.rect(b.x, b.y, b.width, b.height);
-			//			v.rectMode(CENTER);
-			//			v.stroke(getColor());
+			// // DEBUG: render bounding boxes
+			// v.stroke(100);
+			// Rectangle b = component.getBounds();
+			// v.rectMode(CORNER);
+			// v.rect(b.x, b.y, b.width, b.height);
+			// v.rectMode(CENTER);
+			// v.stroke(getColor());
 		}
 	}
 
 	@Override
 	public void setupDockingMenu(Menu menu) {
-		if(menu.getPlayer().getColor() == getColor()) {
+		if (menu.getPlayer().getColor() == getColor()) {
 			menu.add(new CustomButton("Customize", m -> setContext(new StationLayoutContext(m, this, m.getPlayer()))));
 			menu.add(new ShipSwitchButton(this));
 		}
@@ -130,22 +141,21 @@ public class SpaceStation extends ModularShip {
 		private final Direction direction;
 
 		private ComponentModule module;
-		//		private Direction rotation;
+		// private Direction rotation;
 		private float x, y;
 
 		private final Map<Direction, Component> attached = new HashMap<>();
 
 		public Component(Component parent, Direction dir, ComponentModule module) {
 			this.parent = parent;
-			//			this.rotation = Direction.RIGHT;
+			// this.rotation = Direction.RIGHT;
 			this.module = module;
 			this.direction = dir;
 
-			if(parent == null) {
+			if (parent == null) {
 				x = 0;
 				y = 0;
-			}
-			else {
+			} else {
 				x = parent.getX() + getOffsetX();
 				y = parent.getY() + getOffsetY();
 
@@ -157,23 +167,23 @@ public class SpaceStation extends ModularShip {
 			return parent;
 		}
 
-		//		public Direction getRotation() {
-		//			return rotation;
-		//		}
+		// public Direction getRotation() {
+		// return rotation;
+		// }
 		//
-		//		public void setRotation(Direction rotation) {
-		//			attached.put(rotation.back(), attached.remove(this.rotation.back()));
-		//			this.rotation = rotation;
-		//			// TODO setValue x, y, direction
-		//		}
+		// public void setRotation(Direction rotation) {
+		// attached.put(rotation.back(), attached.remove(this.rotation.back()));
+		// this.rotation = rotation;
+		// // TODO setValue x, y, direction
+		// }
 
 		public ComponentModule getModule() {
 			return module;
 		}
 
 		public boolean isReplaceable(ComponentModule module) {
-			for(Direction dir : attached.keySet()) {
-				if(!module.hasAttachmentPoint(dir)) {
+			for (Direction dir : attached.keySet()) {
+				if (!module.hasAttachmentPoint(dir)) {
 					return false;
 				}
 			}
@@ -199,14 +209,14 @@ public class SpaceStation extends ModularShip {
 		}
 
 		public float getOffsetX() {
-			if(parent == null) {
+			if (parent == null) {
 				return 0;
 			}
 			return parent.getBorderX(getDirection()) - getBorderX(getDirection().back());
 		}
 
 		public float getOffsetY() {
-			if(parent == null) {
+			if (parent == null) {
 				return 0;
 			}
 			return parent.getBorderY(getDirection()) - getBorderY(getDirection().back());
@@ -220,10 +230,10 @@ public class SpaceStation extends ModularShip {
 			PVector point = new PVector(getX() + offsetX, getY() + offsetY);
 			Component nearest = this;
 			float minSq = Float.POSITIVE_INFINITY;
-			for(Component other : components) {
-				if(other != this) {
+			for (Component other : components) {
+				if (other != this) {
 					float distSq = distSq(point, new PVector(other.getX(), other.getY()));
-					if(distSq < minSq) {
+					if (distSq < minSq) {
 						minSq = distSq;
 						nearest = other;
 					}
@@ -246,19 +256,20 @@ public class SpaceStation extends ModularShip {
 		}
 
 		public boolean hasAttachmentPoint(Direction dir) {
-			return !attached.containsKey(dir) && getModule().hasAttachmentPoint(dir/*.rotate(getRotation())*/.relativeTo(getDirection()));
+			return !attached.containsKey(dir)
+					&& getModule().hasAttachmentPoint(dir/* .rotate(getRotation()) */.relativeTo(getDirection()));
 		}
 
 		public boolean isAttachable(Component hypothetical) {
 			ModuleType type = getModule().getType();
-			if(isModuleTypeExclusive(type) && SpaceStation.this.getModule(type) != null) {
+			if (isModuleTypeExclusive(type) && SpaceStation.this.getModule(type) != null) {
 				return false; // Already has an exclusive module
 			}
-			if(!hasAttachmentPoint(hypothetical.getDirection())) {
+			if (!hasAttachmentPoint(hypothetical.getDirection())) {
 				return false; // Invalid attachment direction
 			}
-			for(Component component : components) {
-				if(component.collidesWith(hypothetical)) {
+			for (Component component : components) {
+				if (component.collidesWith(hypothetical)) {
 					return false; // Module overlaps with an existing component
 				}
 			}
@@ -267,8 +278,8 @@ public class SpaceStation extends ModularShip {
 
 		public Collection<Direction> getVacantDirections() {
 			Set<Direction> set = new HashSet<>();
-			for(Direction dir : Direction.values()) {
-				if(hasAttachmentPoint(dir)) {
+			for (Direction dir : Direction.values()) {
+				if (hasAttachmentPoint(dir)) {
 					set.add(dir);
 				}
 			}
@@ -277,7 +288,7 @@ public class SpaceStation extends ModularShip {
 
 		public Component attach(Direction dir, ComponentModule module) {
 			Component prev = getAttached(dir);
-			if(prev != null) {
+			if (prev != null) {
 				prev.detach();
 			}
 			Component component = new Component(this, dir, module);
@@ -287,12 +298,11 @@ public class SpaceStation extends ModularShip {
 		}
 
 		public void detach() {
-			for(Direction dir : new ArrayList<>(attached.keySet())) {
+			for (Direction dir : new ArrayList<>(attached.keySet())) {
 				Component component = attached.get(dir);
-				if(component != parent) {
+				if (component != parent) {
 					component.detach();
-				}
-				else {
+				} else {
 					parent.attached.remove(dir.back());
 				}
 				attached.remove(dir);
@@ -318,10 +328,10 @@ public class SpaceStation extends ModularShip {
 			float width = getBorderX(Direction.RIGHT) - getBorderX(Direction.LEFT);
 			float height = getBorderY(Direction.DOWN) - getBorderY(Direction.UP);
 			return new Rectangle(
-					(int)(x - width / 2 + 1),
-					(int)(y - height / 2 + 1),
-					(int)(width - 2),
-					(int)(height - 2));
+					(int) (x - width / 2 + 1),
+					(int) (y - height / 2 + 1),
+					(int) (width - 2),
+					(int) (height - 2));
 		}
 	}
 
@@ -335,7 +345,7 @@ public class SpaceStation extends ModularShip {
 		DOWN;
 
 		public static Direction random() {
-			return Direction.values()[(int)v.random(4)];
+			return Direction.values()[(int) v.random(4)];
 		}
 
 		public float getAngle() {
@@ -351,17 +361,17 @@ public class SpaceStation extends ModularShip {
 		}
 
 		public float getX(float x, float y) {
-			switch(this) {
-			case RIGHT:
-				return +x;
-			case UP:
-				return -y;
-			case LEFT:
-				return -x;
-			case DOWN:
-				return +y;
-			default:
-				return 0;
+			switch (this) {
+				case RIGHT:
+					return +x;
+				case UP:
+					return -y;
+				case LEFT:
+					return -x;
+				case DOWN:
+					return +y;
+				default:
+					return 0;
 			}
 		}
 
@@ -398,4 +408,4 @@ public class SpaceStation extends ModularShip {
 			return rotate(2);
 		}
 	}
-}  
+}

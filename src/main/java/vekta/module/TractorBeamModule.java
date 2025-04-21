@@ -52,12 +52,12 @@ public class TractorBeamModule extends ShipModule implements Targeter {
 	}
 
 	@Override
-	public boolean isBetter(Module other) {
-		return other instanceof TractorBeamModule && getForce() > ((TractorBeamModule)other).getForce();
+	public boolean isBetter(BaseModule other) {
+		return other instanceof TractorBeamModule && getForce() > ((TractorBeamModule) other).getForce();
 	}
 
 	@Override
-	public Module createVariant() {
+	public BaseModule createVariant() {
 		return new TractorBeamModule(chooseInclusive(1, 2));
 	}
 
@@ -90,7 +90,7 @@ public class TractorBeamModule extends ShipModule implements Targeter {
 	public void onUpdate() {
 		ModularShip ship = getShip();
 		SpaceObject target = getTarget();
-		if(target != null && ship.consumeEnergyOverTime(.2F * PER_SECOND)) {
+		if (target != null && ship.consumeEnergyOverTime(.2F * PER_SECOND)) {
 			float force = getForce() * BASE_STRENGTH;
 			PVector dir = target.relativePosition(ship);
 			PVector vel = dir.mult(min(MAX_FORCE, force / dir.mag()));

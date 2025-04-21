@@ -31,7 +31,7 @@ public class GeneratorModule extends ShipModule {
 
 	@Override
 	public int getMass() {
-		return (int)((getRate() + 2) * 1000);
+		return (int) ((getRate() + 2) * 1000);
 	}
 
 	@Override
@@ -40,19 +40,19 @@ public class GeneratorModule extends ShipModule {
 	}
 
 	@Override
-	public boolean isBetter(Module other) {
-		return other instanceof GeneratorModule && getRate() > ((GeneratorModule)other).getRate();
+	public boolean isBetter(BaseModule other) {
+		return other instanceof GeneratorModule && getRate() > ((GeneratorModule) other).getRate();
 	}
 
 	@Override
-	public Module createVariant() {
+	public BaseModule createVariant() {
 		return new GeneratorModule(chooseInclusive(.5F, 2, .5F));
 	}
 
 	@Override
 	public void onUpdate() {
 		float amount = 10 * getRate() * PER_MINUTE;
-		if(getShip().getEnergy() < getShip().getMaxEnergy() && !getShip().isOverheated()) {
+		if (getShip().getEnergy() < getShip().getMaxEnergy() && !getShip().isOverheated()) {
 			getShip().recharge(amount);
 			getShip().addHeat(amount * GENERATOR_HEAT);
 		}
@@ -60,6 +60,7 @@ public class GeneratorModule extends ShipModule {
 
 	@Override
 	public void onInfo(InfoGroup info) {
-		info.addDescription("Turn those radioactive fuel byproducts into some extra energy. Make sure your thermal control system can handle it, though.");
+		info.addDescription(
+				"Turn those radioactive fuel byproducts into some extra energy. Make sure your thermal control system can handle it, though.");
 	}
 }

@@ -1,18 +1,18 @@
 package vekta.spawner.item;
 
+import static vekta.Vekta.v;
+
+import java.util.Arrays;
+
 import vekta.Resources;
 import vekta.item.Item;
 import vekta.item.ItemType;
 import vekta.item.ModuleItem;
-import vekta.module.Module;
+import vekta.module.BaseModule;
 import vekta.spawner.ItemGenerator;
 
-import java.util.Arrays;
-
-import static vekta.Vekta.v;
-
 public class ModuleItemSpawner implements ItemGenerator.ItemSpawner {
-	private static final Module[] MODULES = Resources.findSubclassInstances(Module.class);
+	private static final BaseModule[] MODULES = Resources.findSubclassInstances(BaseModule.class);
 
 	@Override
 	public float getWeight() {
@@ -29,15 +29,15 @@ public class ModuleItemSpawner implements ItemGenerator.ItemSpawner {
 		return new ModuleItem(randomModule());
 	}
 
-	public static Module[] getModulePrototypes() {
+	public static BaseModule[] getModulePrototypes() {
 		return MODULES;
 	}
 
-	public static Module randomModule() {
+	public static BaseModule randomModule() {
 		return v.random(MODULES).createVariant();
 	}
 
-	public static Module findModule(String name) {
+	public static BaseModule findModule(String name) {
 		return Arrays.stream(MODULES)
 				.filter(m -> m.getName().contains(name)).findFirst().orElse(null);
 	}

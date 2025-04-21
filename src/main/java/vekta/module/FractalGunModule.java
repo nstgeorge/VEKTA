@@ -30,7 +30,7 @@ public class FractalGunModule extends WeaponModule {
 	}
 
 	@Override
-	public Module createVariant() {
+	public BaseModule createVariant() {
 		return new FractalGunModule(chooseInclusive(1, 3));
 	}
 
@@ -45,14 +45,14 @@ public class FractalGunModule extends WeaponModule {
 	}
 
 	@Override
-	public boolean isBetter(Module other) {
-		return other instanceof FractalGunModule && getSpeed() > ((FractalGunModule)other).getSpeed();
+	public boolean isBetter(BaseModule other) {
+		return other instanceof FractalGunModule && getSpeed() > ((FractalGunModule) other).getSpeed();
 	}
 
 	@Override
 	public void fireWeapon() {
 		ModularShip ship = getShip();
-		if(ship.consumeEnergyImmediate(4)) {
+		if (ship.consumeEnergyImmediate(4)) {
 			getWorld().playSound("laser", ship.getPosition());
 			PVector velocity = ship.getVelocity().add(ship.getHeading().setMag(PROJECTILE_SPEED)).mult(v.random(.9F, 1.1F));
 			register(new FractalProjectile(ship, ship.getPosition(), velocity, ship.getColor(), 3));

@@ -33,7 +33,8 @@ public class BatteryModule extends ShipModule implements Rechargeable {
 
 	@Override
 	public String getName() {
-		return "Battery v" + ((float)getBattery().getCapacity() / 100) + (getBattery().getCharge() > 0 ? " (" + round(getBattery().getRatio() * 100) + "%)" : "");
+		return "Battery v" + ((float) getBattery().getCapacity() / 100)
+				+ (getBattery().getCharge() > 0 ? " (" + round(getBattery().getRatio() * 100) + "%)" : "");
 	}
 
 	@Override
@@ -43,7 +44,7 @@ public class BatteryModule extends ShipModule implements Rechargeable {
 
 	@Override
 	public void recharge(float amount) {
-		if(getShip() != null) {
+		if (getShip() != null) {
 			throw new RuntimeException("Cannot recharge mounted battery");
 		}
 		getBattery().addCharge(amount);
@@ -65,8 +66,8 @@ public class BatteryModule extends ShipModule implements Rechargeable {
 	}
 
 	@Override
-	public boolean isBetter(Module other) {
-		return other instanceof BatteryModule && getRating() > ((BatteryModule)other).getRating();
+	public boolean isBetter(BaseModule other) {
+		return other instanceof BatteryModule && getRating() > ((BatteryModule) other).getRating();
 	}
 
 	private float getRating() {
@@ -74,9 +75,9 @@ public class BatteryModule extends ShipModule implements Rechargeable {
 	}
 
 	@Override
-	public Module createVariant() {
+	public BaseModule createVariant() {
 		ModularShip.Battery battery = new ModularShip.Battery(chooseInclusive(1, 40) * 10);
-		//		battery.setCharge(sq(v.random(1)) * battery.getCapacity());
+		// battery.setCharge(sq(v.random(1)) * battery.getCapacity());
 		return new BatteryModule(battery);
 	}
 
@@ -92,24 +93,23 @@ public class BatteryModule extends ShipModule implements Rechargeable {
 
 	@Override
 	public void onMenu(Menu menu) {
-		if(menu.getHandle() instanceof LocationMenuHandle) {
-			Location location = ((LocationMenuHandle)menu.getHandle()).getLocation();
+		if (menu.getHandle() instanceof LocationMenuHandle) {
+			Location location = ((LocationMenuHandle) menu.getHandle()).getLocation();
 
-			if(location instanceof SettlementLocation) {
+			if (location instanceof SettlementLocation) {
 				float price = .5F;
-				if(((SettlementLocation)location).getSettlement().getFaction().isAlly(menu.getPlayer().getFaction())) {
+				if (((SettlementLocation) location).getSettlement().getFaction().isAlly(menu.getPlayer().getFaction())) {
 					price = .1F;
 				}
 
 				ModularShip ship = menu.getPlayer().getShip();
 				List<ModularShip.Battery> shipBatteries = ship.getBatteries();
-				if(shipBatteries.contains(getBattery()) && shipBatteries.get(0) == getBattery()) {
+				if (shipBatteries.contains(getBattery()) && shipBatteries.get(0) == getBattery()) {
 					// Add recharge option for ship rather than mounted battery
-					if(ship.getEnergy() <= ship.getMaxEnergy() * CHARGE_THRESHOLD) {
+					if (ship.getEnergy() <= ship.getMaxEnergy() * CHARGE_THRESHOLD) {
 						menu.add(new RechargeButton(menu.getPlayer(), price));
 					}
-				}
-				else if(getBattery().getCharge() <= getBattery().getCapacity() * CHARGE_THRESHOLD) {
+				} else if (getBattery().getCharge() <= getBattery().getCapacity() * CHARGE_THRESHOLD) {
 					menu.add(new RechargeButton(menu.getPlayer(), this, price));
 				}
 			}

@@ -1,16 +1,16 @@
 package vekta.player;
 
+import java.io.Serializable;
+
 import vekta.KeyBinding;
 import vekta.item.Item;
 import vekta.menu.Menu;
 import vekta.mission.Mission;
-import vekta.module.Module;
+import vekta.module.BaseModule;
 import vekta.object.SpaceObject;
 import vekta.object.ship.ModularShip;
 import vekta.overlay.singleplayer.Notification;
 import vekta.terrain.location.Location;
-
-import java.io.Serializable;
 
 /**
  * Player-related event listener
@@ -21,10 +21,10 @@ public interface PlayerListener extends Serializable {
 
 	default void onKeyRelease(KeyBinding key) {
 	}
-	
+
 	default void onControllerPress(KeyBinding key) {
 	}
-	
+
 	default void onControllerRelease(KeyBinding key) {
 	}
 
@@ -55,10 +55,10 @@ public interface PlayerListener extends Serializable {
 	default void onGameOver(ModularShip ship) {
 	}
 
-	default void onInstallModule(Module module) {
+	default void onInstallModule(BaseModule module) {
 	}
 
-	default void onUninstallModule(Module module) {
+	default void onUninstallModule(BaseModule module) {
 	}
 
 	default void onAddItem(Item item) {

@@ -4,13 +4,13 @@ import java.io.Serializable;
 import java.util.List;
 
 public interface ModuleUpgradeable extends Serializable {
-	List<Module> getModules();
+	List<BaseModule> getModules();
 
-	Module getModule(ModuleType type);
+	BaseModule getModule(ModuleType type);
 
-	List<Module> findUpgrades();
+	List<BaseModule> findUpgrades();
 
-	void addModule(Module module);
+	void addModule(BaseModule module);
 
-	void removeModule(Module module);
+	void removeModule(BaseModule module);
 }

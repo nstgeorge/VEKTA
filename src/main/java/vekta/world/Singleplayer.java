@@ -91,14 +91,14 @@ public class Singleplayer implements World, PlayerListener {
 	private boolean started;
 
 	// Low pass filter
-	//    private final transient LowPass lowPass = new LowPass(v);
+	// private final transient LowPass lowPass = new LowPass(v);
 
 	protected WorldState state;
 
 	private boolean lastZoomOutward; // Was last user-controlled zoom directed outward?
 	private float smoothZoom = 10; // Time-smoothed zoom factor
-	private float smoothRotateAngle = 0;    // Time smooth rotation angle
-	private float targetAngle = 0;            // Unsmoothed rotation angle
+	private float smoothRotateAngle = 0; // Time smooth rotation angle
+	private float targetAngle = 0; // Unsmoothed rotation angle
 	private float timeScale = 1; // World time scale
 	private RenderLevel prevLevel = RenderLevel.PARTICLE;
 
@@ -130,16 +130,14 @@ public class Singleplayer implements World, PlayerListener {
 		v.frameCount = 0;
 		Resources.stopMusic();
 
-		if(state == null) {
-			if(load(AUTOSAVE_FILE)) {
+		if (state == null) {
+			if (load(AUTOSAVE_FILE)) {
 				return;
-			}
-			else {
+			} else {
 				// Run initial setup if no autosave
 				setup();
 			}
-		}
-		else if(state.getPlayer() == null) {
+		} else if (state.getPlayer() == null) {
 			setup();////
 		}
 
@@ -167,8 +165,7 @@ public class Singleplayer implements World, PlayerListener {
 				PVector.fromAngle(0), // Heading
 				new PVector(), // Position
 				new PVector(), // Velocity
-				v.color(0, 255, 0)
-		));
+				v.color(0, 255, 0)));
 		playerShip.observe(ObservationLevel.OWNED, getPlayer());
 		playerShip.getInventory().add(50); // Starting money
 		playerShip.setController(player);
@@ -179,25 +176,27 @@ public class Singleplayer implements World, PlayerListener {
 	public void cleanup() {
 		// Cleanup behavior on exiting/restarting the world
 		getPlayer().removeListener(this);
-		//        lowPass.stop();
+		// lowPass.stop();
 	}
 
 	public void populateWorld() {
 		StarSystemSpawner.createSystem(PVector.random2D().mult(2 * AU_DISTANCE));
 
-		setContext(new TextInputContext(mainMenu, "Choose a Name:", Settings.getString("singleplayer.name", Resources.generateString("person")), name -> {
-			getPlayer().getFaction().setName(name);
-			getPlayer().getFaction().setColor(0xFF000000 | Integer.parseInt(Settings.getString("singleplayer.color", String.valueOf(UI_COLOR))));
-			getPlayer().getShip().setColor(getPlayer().getFaction().getColor());
+		setContext(new TextInputContext(mainMenu, "Choose a Name:",
+				Settings.getString("singleplayer.name", Resources.generateString("person")), name -> {
+					getPlayer().getFaction().setName(name);
+					getPlayer().getFaction().setColor(
+							0xFF000000 | Integer.parseInt(Settings.getString("singleplayer.color", String.valueOf(UI_COLOR))));
+					getPlayer().getShip().setColor(getPlayer().getFaction().getColor());
 
-			setContext(this);
-			applyContext();
+					setContext(this);
+					applyContext();
 
-			if(Settings.getBoolean("debug", false)) {
-				setupDebugMode();
-				save(AUTOSAVE_FILE);
-			}
-		}));
+					if (Settings.getBoolean("debug", false)) {
+						setupDebugMode();
+						save(AUTOSAVE_FILE);
+					}
+				}));
 	}
 
 	private void setupDebugMode() {
@@ -205,15 +204,16 @@ public class Singleplayer implements World, PlayerListener {
 		ModularShip playerShip = player.getShip();
 
 		// Add extra objects to singleplayer world
-		if(getClass() == Singleplayer.class) {
-			SpaceStation station = SpaceStationSpawner.createStation("OUTPOST 1", PVector.random2D().mult(1000), getPlayer().getColor());
+		if (getClass() == Singleplayer.class) {
+			SpaceStation station = SpaceStationSpawner.createStation("OUTPOST 1", PVector.random2D().mult(1000),
+					getPlayer().getColor());
 			station.observe(ObservationLevel.OWNED, getPlayer());
 
 			BlackHoleSpawner.createBlackHole(PVector.random2D().mult(v.random(300, 400) * AU_DISTANCE))
 					.observe(ObservationLevel.OWNED, getPlayer());
 		}
 
-		for(int i = 0; i < 3; i++) {
+		for (int i = 0; i < 3; i++) {
 			PersonGenerator.createPerson().setFaction(getPlayer().getFaction());
 		}
 
@@ -274,21 +274,21 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public void setZoom(float zoom) {
-		if(!Float.isFinite(zoom)) {
+		if (!Float.isFinite(zoom)) {
 			zoom = 1;
 		}
 		float prevZoom = state.getZoom();
-		for(ZoomController controller : state.getZoomControllers()) {
+		for (ZoomController controller : state.getZoomControllers()) {
 			zoom = controller.controlZoom(getPlayer(), zoom);
 		}
-		if(zoom != prevZoom) {
+		if (zoom != prevZoom) {
 			onZoomChange(zoom);
 		}
-		state.setZoom(max(MIN_ZOOM_LEVEL, min(getPlayer().getShip().getMaxZoomLevel() * .99F /* Appease the smooth zoom */, zoom)));
-		if(zoom > prevZoom) {
+		state.setZoom(
+				max(MIN_ZOOM_LEVEL, min(getPlayer().getShip().getMaxZoomLevel() * .99F /* Appease the smooth zoom */, zoom)));
+		if (zoom > prevZoom) {
 			lastZoomOutward = true;
-		}
-		else if(zoom < prevZoom) {
+		} else if (zoom < prevZoom) {
 			lastZoomOutward = false;
 		}
 	}
@@ -319,7 +319,7 @@ public class Singleplayer implements World, PlayerListener {
 	@Override
 	public void setAutoZoom(float zoom) {
 		// Only zoom if player was zooming in the same direction
-		if(lastZoomOutward ? zoom > state.getZoom() : zoom < state.getZoom()) {
+		if (lastZoomOutward ? zoom > state.getZoom() : zoom < state.getZoom()) {
 			setZoom(zoom);
 		}
 	}
@@ -347,11 +347,10 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public void focus() {
-		if(!started) {
+		if (!started) {
 			started = true;
 			start();
-		}
-		else {
+		} else {
 			autosave();
 		}
 	}
@@ -366,7 +365,7 @@ public class Singleplayer implements World, PlayerListener {
 		ModularShip playerShip = player.getShip();
 
 		// Cycle background music
-		if(Resources.getMusic() == null && Settings.getFloat("music") > 0) {
+		if (Resources.getMusic() == null && Settings.getFloat("music") > 0) {
 			Resources.setMusic(MUSIC.random(), false);
 		}
 
@@ -381,7 +380,7 @@ public class Singleplayer implements World, PlayerListener {
 		RenderLevel level = getRenderLevel();
 
 		// Speed up ship-to-ship movement
-		if(level == RenderLevel.PLANET && timeScale < MIN_PLANET_TIME_SCALE) {
+		if (level == RenderLevel.PLANET && timeScale < MIN_PLANET_TIME_SCALE) {
 			timeScale = MIN_PLANET_TIME_SCALE;
 		}
 
@@ -394,7 +393,7 @@ public class Singleplayer implements World, PlayerListener {
 
 		v.pushMatrix();
 		v.translate(v.width / 2F, v.height / 2F);
-		if(cameraImpact > 1e-3F) {
+		if (cameraImpact > 1e-3F) {
 			v.fill(v.lerpColor(0, 255, min(1, cameraImpact)));
 			v.rect(0, 0, v.width + 2, v.height + 2);
 			cameraImpact *= .95F;
@@ -404,19 +403,19 @@ public class Singleplayer implements World, PlayerListener {
 
 		float zoom = state.getZoom();
 		float zoomRatio = zoom / smoothZoom;
-		if(zoomRatio > 1) {
+		if (zoomRatio > 1) {
 			zoomRatio = 1 / zoomRatio;
 		}
 		float zoomStrength = 1 - zoomRatio;
-		if(zoomStrength > 1e-5F) {
+		if (zoomStrength > 1e-5F) {
 			v.noFill();
 			float minZoom = 1 / smoothZoom;
 			float maxZoom = playerShip.getMaxZoomLevel() / smoothZoom;
-			for(float r = minZoom; r < maxZoom; r *= 10) {
-				if(r >= 1) {
+			for (float r = minZoom; r < maxZoom; r *= 10) {
+				if (r >= 1) {
 					break;
 				}
-				if(r >= 1e-3F) {
+				if (r >= 1e-3F) {
 					v.stroke(v.lerpColor(0, 50, zoomStrength * r));
 					v.rect(0, 0, r * v.width, r * v.height);
 				}
@@ -426,16 +425,15 @@ public class Singleplayer implements World, PlayerListener {
 		profiler.addTimeStamp("Zoom box drawing");
 
 		List<ZoomController> zoomControllers = state.getZoomControllers();
-		for(int i = zoomControllers.size() - 1; i >= 0; i--) {
-			if(zoomControllers.get(i).shouldCancelZoomControl(player)) {
+		for (int i = zoomControllers.size() - 1; i >= 0; i--) {
+			if (zoomControllers.get(i).shouldCancelZoomControl(player)) {
 				zoomControllers.remove(i);
 			}
 		}
 
-		if(getPlayer().getShip().isHyperdriving()) {
+		if (getPlayer().getShip().isHyperdriving()) {
 			hyperdriveStrength += (1 - hyperdriveStrength) * HYPERDRIVE_TRANSITION_RATE;
-		}
-		else {
+		} else {
 			hyperdriveStrength *= 1 - HYPERDRIVE_TRANSITION_RATE;
 		}
 
@@ -453,15 +451,15 @@ public class Singleplayer implements World, PlayerListener {
 
 		// Pre-update loop
 		List<SpaceObject> objects = state.getObjects();
-		for(SpaceObject s : objects) {
-			if(!s.isPersistent()) {
+		for (SpaceObject s : objects) {
+			if (!s.isPersistent()) {
 				// Increment count for object's render level
 				objectCounts[s.getDespawnLevel().ordinal()]++;
 
 				// Occasionally clean up distant objects
-				if(cleanup) {
+				if (cleanup) {
 					float despawnRadius = WorldGenerator.getRadius(s.getDespawnLevel());
-					if(playerShip.getPosition().sub(s.getPosition()).magSq() >= sq(despawnRadius)) {
+					if (playerShip.getPosition().sub(s.getPosition()).magSq() >= sq(despawnRadius)) {
 						s.despawn();
 						continue;
 					}
@@ -469,7 +467,7 @@ public class Singleplayer implements World, PlayerListener {
 			}
 
 			// Occasionally update targets
-			if(targeting) {
+			if (targeting) {
 				s.updateTargets();
 			}
 
@@ -488,14 +486,16 @@ public class Singleplayer implements World, PlayerListener {
 		profiler.addTimeStamp("Starfield drawing");
 
 		// Custom behavior loop
-		// If the debug overlay is enabled, separate the loop in several independent ones to determine performance
-		// This is obviously way worse for performance, but I don't think there's any way around it right now
+		// If the debug overlay is enabled, separate the loop in several independent
+		// ones to determine performance
+		// This is obviously way worse for performance, but I don't think there's any
+		// way around it right now
 		// TODO: Make this neater
-		if(debugOverlay != null) {
+		if (debugOverlay != null) {
 			// Gravity loop
-			for(int i = 0, size = objects.size(); i < size; i++) {
+			for (int i = 0, size = objects.size(); i < size; i++) {
 				// Skip despawned/destroyed objects
-				if(state.isRemoving(objects.get(i))) {
+				if (state.isRemoving(objects.get(i))) {
 					continue;
 				}
 				updateGravity(objects, level, i);
@@ -503,9 +503,9 @@ public class Singleplayer implements World, PlayerListener {
 			profiler.addTimeStamp("Apply gravity");
 
 			// Drawing loop
-			for(int i = 0, size = objects.size(); i < size; i++) {
+			for (int i = 0, size = objects.size(); i < size; i++) {
 				// Skip despawned/destroyed objects
-				if(state.isRemoving(objects.get(i))) {
+				if (state.isRemoving(objects.get(i))) {
 					continue;
 				}
 				drawObject(objects, level, i, playerShip, drawTrails);
@@ -513,20 +513,19 @@ public class Singleplayer implements World, PlayerListener {
 			profiler.addTimeStamp("Draw objects");
 
 			// Collision loop
-			for(int i = 0, size = objects.size(); i < size; i++) {
+			for (int i = 0, size = objects.size(); i < size; i++) {
 				// Skip despawned/destroyed objects
-				if(state.isRemoving(objects.get(i))) {
+				if (state.isRemoving(objects.get(i))) {
 					continue;
 				}
 				resolveCollisions(objects, level, i);
 			}
 			profiler.addTimeStamp("Resolve collisions");
-		}
-		else {
-			for(int i = 0, size = objects.size(); i < size; i++) {
+		} else {
+			for (int i = 0, size = objects.size(); i < size; i++) {
 				SpaceObject s = objects.get(i);
 				// Skip despawned/destroyed objects
-				if(state.isRemoving(s)) {
+				if (state.isRemoving(s)) {
 					continue;
 				}
 				updateGravity(objects, level, i);
@@ -537,42 +536,41 @@ public class Singleplayer implements World, PlayerListener {
 
 		state.endUpdate();
 
-		if(spawnCt.cycle()) {
+		if (spawnCt.cycle()) {
 			RenderLevel spawnLevel = level;
-			while(spawnLevel.ordinal() > 0 && v.chance(.05F)) {
+			while (spawnLevel.ordinal() > 0 && v.chance(.05F)) {
 				spawnLevel = RenderLevel.values()[spawnLevel.ordinal() - 1];
 			}
-			if(objectCounts[spawnLevel.ordinal()] < MAX_OBJECTS_PER_DIST) {
+			if (objectCounts[spawnLevel.ordinal()] < MAX_OBJECTS_PER_DIST) {
 				WorldGenerator.spawnOccasional(spawnLevel, playerShip);
 			}
 		}
 
-		if(eventCt.cycle() && Settings.getBoolean("randomEvents", true)) {
+		if (eventCt.cycle() && Settings.getBoolean("randomEvents", true)) {
 			eventCt.randomize();
 			EventGenerator.spawnEvent(player);
 		}
 
-		if(situationCt.cycle()) {
+		if (situationCt.cycle()) {
 			EventGenerator.updateSituations(player);
 		}
 
-		if(economyCt.cycle()) {
+		if (economyCt.cycle()) {
 			List<Economy> economiesToRemove = new ArrayList<>(1);
-			for(Economy economy : state.getEconomies()) {
-				if(economy.isAlive()) {
+			for (Economy economy : state.getEconomies()) {
+				if (economy.isAlive()) {
 					economy.update();
-				}
-				else {
+				} else {
 					economiesToRemove.add(economy);
 				}
 			}
 			state.getEconomies().removeAll(economiesToRemove);
 		}
 
-		if(ecosystemCt.cycle()) {
-			for(SpaceObject s : state.getObjects()) {
-				if(s instanceof TerrestrialPlanet) {
-					Ecosystem ecosystem = ((TerrestrialPlanet)s).getTerrain().getEcosystem();
+		if (ecosystemCt.cycle()) {
+			for (SpaceObject s : state.getObjects()) {
+				if (s instanceof TerrestrialPlanet) {
+					Ecosystem ecosystem = ((TerrestrialPlanet) s).getTerrain().getEcosystem();
 					ecosystem.update();
 				}
 			}
@@ -584,13 +582,12 @@ public class Singleplayer implements World, PlayerListener {
 		v.popMatrix();
 
 		// GUI setup
-		if(!playerShip.isDestroyed()) {
+		if (!playerShip.isDestroyed()) {
 			overlay.render();
-			if(debugOverlay != null) {
+			if (debugOverlay != null) {
 				debugOverlay.render();
 			}
-		}
-		else {
+		} else {
 			v.textFont(HEADER_FONT);
 			v.textAlign(CENTER, CENTER);
 
@@ -608,12 +605,12 @@ public class Singleplayer implements World, PlayerListener {
 
 		profiler.addTimeStamp("Overlay");
 
-		//		if(cameraImpact > 1) {
-		//			v.fill(v.lerpColor(255, 100, 1 / cameraImpact));
-		//			v.rectMode(CORNERS);
-		//			v.rect(0, 0, v.width, v.height);
-		//			v.rectMode(CENTER);
-		//		}
+		// if(cameraImpact > 1) {
+		// v.fill(v.lerpColor(255, 100, 1 / cameraImpact));
+		// v.rectMode(CORNERS);
+		// v.rect(0, 0, v.width, v.height);
+		// v.rectMode(CENTER);
+		// }
 	}
 
 	private void updateGravity(List<SpaceObject> objects, RenderLevel level, int i) {
@@ -626,7 +623,8 @@ public class Singleplayer implements World, PlayerListener {
 		s.update(level);
 	}
 
-	private void drawObject(List<SpaceObject> objects, RenderLevel level, int i, ModularShip playerShip, boolean drawTrails) {
+	private void drawObject(List<SpaceObject> objects, RenderLevel level, int i, ModularShip playerShip,
+			boolean drawTrails) {
 		SpaceObject s = objects.get(i);
 
 		// Start drawing object
@@ -647,7 +645,7 @@ public class Singleplayer implements World, PlayerListener {
 
 		// Update trail and render if necessary
 		s.updateTrail();
-		if(drawTrails && (s == playerShip || s.getRenderLevel().isVisibleTo(level))) {
+		if (drawTrails && (s == playerShip || s.getRenderLevel().isVisibleTo(level))) {
 			s.drawTrail(scale);
 		}
 
@@ -657,7 +655,7 @@ public class Singleplayer implements World, PlayerListener {
 		float r = getScreenRadius(s, s.getRadius() / scale, position, cameraPos, curvature);
 		float onScreenRadius = s.getOnScreenRadius(r);
 		boolean visible = isVisibleOnScreen(screenX, screenY, onScreenRadius);
-		if(visible) {
+		if (visible) {
 			s.draw(level, r);
 		}
 
@@ -669,14 +667,14 @@ public class Singleplayer implements World, PlayerListener {
 		SpaceObject s = objects.get(i);
 
 		// Check collisions when on screen
-		if(isVisibleOnScreen(s)) {
-			for(int j = i + 1; j < objects.size(); j++) {
+		if (isVisibleOnScreen(s)) {
+			for (int j = i + 1; j < objects.size(); j++) {
 				SpaceObject other = objects.get(j);
 
 				// Ensure collision is reasonable
-				if(s.getRenderLevel().isVisibleTo(level) || other.getRenderLevel().isVisibleTo(level)) {
+				if (s.getRenderLevel().isVisibleTo(level) || other.getRenderLevel().isVisibleTo(level)) {
 					// Check both collision conditions before interacting
-					if(s.collidesWith(level, other) && other.collidesWith(level, s)) {
+					if (s.collidesWith(level, other) && other.collidesWith(level, s)) {
 						s.onCollide(other);
 						other.onCollide(s);
 					}
@@ -686,9 +684,9 @@ public class Singleplayer implements World, PlayerListener {
 	}
 
 	private float getCurvature(float dist) {
-		//		if(dist > v.width + v.height) {
-		//			return 1;
-		//		}
+		// if(dist > v.width + v.height) {
+		// return 1;
+		// }
 		return hyperdriveStrength > 0 ? 1 / (1 + sqrt(hyperdriveStrength * dist / 1000)) : 1;
 	}
 
@@ -712,7 +710,8 @@ public class Singleplayer implements World, PlayerListener {
 	 * Given an object, return its location on the screen and its radius.
 	 *
 	 * @param obj Object to check
-	 * @return A PVector where `x` and `y` represent the location of the object on screen and `z` is its on-screen radius.
+	 * @return A PVector where `x` and `y` represent the location of the object on
+	 *         screen and `z` is its on-screen radius.
 	 */
 	public PVector getScreenLocationWithRadius(SpaceObject obj) {
 		PVector position = obj.getPositionReference();
@@ -734,7 +733,8 @@ public class Singleplayer implements World, PlayerListener {
 
 	/**
 	 * Returns true if the provided object is visible on screen to the player.
-	 * Abstracts out some of the logic required -- used primarily by OffScreenIndicator
+	 * Abstracts out some of the logic required -- used primarily by
+	 * OffScreenIndicator
 	 *
 	 * @param obj Object to check
 	 * @return True if object is visible, false otherwise
@@ -745,19 +745,21 @@ public class Singleplayer implements World, PlayerListener {
 	}
 
 	/**
-	 * If an object is outside the screen, this function returns the pixel-based distance from the edge of the screen.
+	 * If an object is outside the screen, this function returns the pixel-based
+	 * distance from the edge of the screen.
 	 * If the object is on screen, returns 0.
 	 *
 	 * @param obj Object to check
-	 * @return Distance from edge of screen in pixels if object is off screen, 0 otherwise
+	 * @return Distance from edge of screen in pixels if object is off screen, 0
+	 *         otherwise
 	 */
 	public float getScreenDistanceFromEdge(SpaceObject obj) {
-		//		if(isObjectVisibleToPlayer(obj)) {
-		//			return 0;
-		//		}
+		// if(isObjectVisibleToPlayer(obj)) {
+		// return 0;
+		// }
 
 		PVector locationWithRadius = getScreenLocationWithRadius(obj);
-		if(isVisibleOnScreen(locationWithRadius.x, locationWithRadius.y, locationWithRadius.z)) {
+		if (isVisibleOnScreen(locationWithRadius.x, locationWithRadius.y, locationWithRadius.z)) {
 			return 0;
 		}
 
@@ -773,22 +775,21 @@ public class Singleplayer implements World, PlayerListener {
 		ModularShip playerShip = getPlayer().getShip();
 
 		// Set global velocity relative to player ship when zoomed in
-		if(RenderLevel.SHIP.isVisibleTo(level)/* || Resources.getSound("hyperdriveLoop").isPlaying()*/) {
+		if (RenderLevel.SHIP.isVisibleTo(level)/* || Resources.getSound("hyperdriveLoop").isPlaying() */) {
 			state.addRelativeVelocity(playerShip.getVelocity());
-		}
-		else if(level.ordinal() == prevLevel.ordinal() + 1) {
+		} else if (level.ordinal() == prevLevel.ordinal() + 1) {
 			state.resetRelativeVelocity();
 			state.addRelativeVelocity(findLargestObject().getVelocity());
 		}
 		state.updateGlobalCoords(getTimeScale());
 
-		//		if(level.ordinal() == prevLevel.ordinal() - 1 && !playerShip.isDestroyed()) {
-		//			// Center around zero for improved floating-point precision
-		//			state.addRelativePosition(playerShip.getPosition());
-		//		}
-		if(!playerShip.isDestroyed()) {
+		// if(level.ordinal() == prevLevel.ordinal() - 1 && !playerShip.isDestroyed()) {
+		// // Center around zero for improved floating-point precision
+		// state.addRelativePosition(playerShip.getPosition());
+		// }
+		if (!playerShip.isDestroyed()) {
 			// Center around zero for improved floating-point precision
-			//			state.addRelativePosition(playerShip.getPosition().mult(.1F));
+			// state.addRelativePosition(playerShip.getPosition().mult(.1F));
 			state.addRelativePosition(playerShip.getPosition());
 		}
 	}
@@ -799,7 +800,8 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public boolean globalKeyPressed(KeyEvent event) {
-		if(event.getKeyCode() == Settings.getKeyCode(KeyBinding.SHIP_KNOWLEDGE) && !(getContext() instanceof KnowledgeContext)) {
+		if (event.getKeyCode() == Settings.getKeyCode(KeyBinding.SHIP_KNOWLEDGE)
+				&& !(getContext() instanceof KnowledgeContext)) {
 			setContext(new KnowledgeContext(getContext(), getPlayer()));
 			return true;
 		}
@@ -808,40 +810,35 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public void controlStickMoved(float x, float y, int side) {
-		for(Module module : getPlayer().getShip().getModules()) {
+		for (BaseModule module : getPlayer().getShip().getModules()) {
 			module.onControlStickMoved(x, y, side);
 		}
 	}
 
 	@Override
 	public void analogKeyPressed(float value) {
-		for(Module module : getPlayer().getShip().getModules()) {
+		for (BaseModule module : getPlayer().getShip().getModules()) {
 			module.onAnalogKeyPress(value);
 		}
 	}
 
 	@Override
 	public void keyPressed(KeyBinding key) {
-		if(key == KeyBinding.ZOOM_IN) {
+		if (key == KeyBinding.ZOOM_IN) {
 			setZoom(getZoom() / ZOOM_BUTTON_SCALE);
-		}
-		else if(key == KeyBinding.ZOOM_OUT) {
+		} else if (key == KeyBinding.ZOOM_OUT) {
 			setZoom(getZoom() * ZOOM_BUTTON_SCALE);
-		}
-		else if(key == KeyBinding.QUICK_LOAD) {
+		} else if (key == KeyBinding.QUICK_LOAD) {
 			load(QUICKSAVE_FILE);
-		}
-		else if(getPlayer().getShip().isDestroyed()) {
-			if(key == KeyBinding.MENU_SELECT) {
+		} else if (getPlayer().getShip().isDestroyed()) {
+			if (key == KeyBinding.MENU_SELECT) {
 				reload();
 			}
-		}
-		else {
-			if(key == KeyBinding.QUICK_SAVE && save(QUICKSAVE_FILE)) {
+		} else {
+			if (key == KeyBinding.QUICK_SAVE && save(QUICKSAVE_FILE)) {
 				// Now handled in save() function
 				// getPlayer().send("Progress saved");
-			}
-			else if(key == KeyBinding.MENU_CLOSE) {
+			} else if (key == KeyBinding.MENU_CLOSE) {
 				setContext(new PauseMenuContext(getContext(), getPlayer()));
 			}
 			getPlayer().emit(PlayerEvent.KEY_PRESS, key);
@@ -880,7 +877,7 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public void reload() {
-		if(!load(AUTOSAVE_FILE)) {
+		if (!load(AUTOSAVE_FILE)) {
 			restart();
 		}
 	}
@@ -895,12 +892,12 @@ public class Singleplayer implements World, PlayerListener {
 		float maxMass = 0;
 		SpaceObject max = null;
 		List<SpaceObject> objects = state.getGravityObjects();
-		if(objects.isEmpty()) {
+		if (objects.isEmpty()) {
 			objects = state.getObjects();
 		}
-		for(SpaceObject s : objects) {
+		for (SpaceObject s : objects) {
 			float mass = s.getMass();
-			if(mass > maxMass) {
+			if (mass > maxMass) {
 				maxMass = mass;
 				max = s;
 			}
@@ -912,29 +909,24 @@ public class Singleplayer implements World, PlayerListener {
 	@SuppressWarnings("unchecked")
 	public <T extends Syncable> List<T> findObjects(Class<T> type) {
 		List candidates;
-		if(SpaceObject.class.isAssignableFrom(type)) {
+		if (SpaceObject.class.isAssignableFrom(type)) {
 			candidates = state.getObjects();
-		}
-		else if(Person.class.isAssignableFrom(type)) {
+		} else if (Person.class.isAssignableFrom(type)) {
 			candidates = state.getPeople();
-		}
-		else if(Faction.class.isAssignableFrom(type)) {
+		} else if (Faction.class.isAssignableFrom(type)) {
 			candidates = state.getFactions();
-		}
-		else if(Economy.class.isAssignableFrom(type)) {
+		} else if (Economy.class.isAssignableFrom(type)) {
 			candidates = state.getEconomies();
-		}
-		else if(Player.class.isAssignableFrom(type)) {
+		} else if (Player.class.isAssignableFrom(type)) {
 			candidates = Collections.singletonList(getPlayer());
-		}
-		else {
+		} else {
 			throw new RuntimeException("Unrecognized object type: " + type.getName());
 		}
 
 		List<T> list = new ArrayList<>();
-		for(Object obj : candidates) {
-			if(type.isInstance(obj)) {
-				list.add((T)obj);
+		for (Object obj : candidates) {
+			if (type.isInstance(obj)) {
+				list.add((T) obj);
 			}
 		}
 		return list;
@@ -950,10 +942,10 @@ public class Singleplayer implements World, PlayerListener {
 	public SpaceObject findOrbitObject(SpaceObject object) {
 		float maxSq = 0;
 		SpaceObject bestOrbit = null;
-		for(SpaceObject s : state.getGravityObjects()) {
-			if(s != object) {
+		for (SpaceObject s : state.getGravityObjects()) {
+			if (s != object) {
 				float relSq = s.getMass() / distSq(object.getPositionReference(), s.getPositionReference());
-				if(relSq > maxSq) {
+				if (relSq > maxSq) {
 					maxSq = relSq;
 					bestOrbit = s;
 				}
@@ -964,15 +956,15 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public void updateTargeter(Targeter t) {
-		if(t.shouldUpdateTarget()) {
+		if (t.shouldUpdateTarget()) {
 			SpaceObject s = t.getSpaceObject();
 			SpaceObject target = t.getTarget();
 			float minDistSq = Float.POSITIVE_INFINITY;
 			// Search for new targets
-			for(SpaceObject other : state.getObjects()) {
-				if(s != other && t.isValidTarget(other)) {
+			for (SpaceObject other : state.getObjects()) {
+				if (s != other && t.isValidTarget(other)) {
 					float distSq = s.getPosition().sub(other.getPosition()).magSq();
-					if(distSq < minDistSq) {
+					if (distSq < minDistSq) {
 						minDistSq = distSq;
 						target = other;
 					}
@@ -1002,7 +994,7 @@ public class Singleplayer implements World, PlayerListener {
 	}
 
 	public boolean load(File file) {
-		if(!file.exists()) {
+		if (!file.exists()) {
 			return false;
 		}
 
@@ -1013,12 +1005,10 @@ public class Singleplayer implements World, PlayerListener {
 
 			println("Loaded from " + file);
 			return true;
-		}
-		catch(InvalidClassException | ClassNotFoundException e) {
+		} catch (InvalidClassException | ClassNotFoundException e) {
 			println("Outdated file format: " + file);
 			return false;
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -1030,8 +1020,7 @@ public class Singleplayer implements World, PlayerListener {
 			println("Saved to " + file);
 			getPlayer().send("Progress saved");
 			return true;
-		}
-		catch(IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 			getPlayer().send("Failed to save progress: " + e.getMessage())
 					.withColor(v.color(255, 0, 0));
@@ -1048,7 +1037,7 @@ public class Singleplayer implements World, PlayerListener {
 
 	@Override
 	public void onMenu(Menu menu) {
-		if(menu.getHandle() instanceof MainMenuHandle) {
+		if (menu.getHandle() instanceof MainMenuHandle) {
 			cleanup();
 		}
 	}
@@ -1056,49 +1045,49 @@ public class Singleplayer implements World, PlayerListener {
 	@Override
 	public void onGameOver(ModularShip ship) {
 		// TODO: custom death soundtrack instead of low pass filter?
-		//        if (Resources.getMusic() != null) {
-		//            lowPass.process(Resources.getMusic(), 800);
-		//        }
+		// if (Resources.getMusic() != null) {
+		// lowPass.process(Resources.getMusic(), 800);
+		// }
 		Resources.stopAllSoundsExceptMusic();
 		Resources.playSound("death");
 	}
 
 	@Override
 	public void keyPressed(KeyEvent event) {
-		if(event.getKey() == '`' && Settings.getBoolean("debug")) {
-			if(!getPlayer().hasAttribute(DebugAttribute.class)) {
+		if (event.getKey() == '`' && Settings.getBoolean("debug")) {
+			if (!getPlayer().hasAttribute(DebugAttribute.class)) {
 				setupDebugMode();
 			}
 			Menu menu = new Menu(getPlayer(), new BackButton(this), new DebugMenuHandle());
 			menu.add(new CustomButton("Toggle Overlay", m -> {
-				if(debugOverlay == null) {
+				if (debugOverlay == null) {
 					debugOverlay = new DebugOverlay(profiler);
-				}
-				else {
+				} else {
 					debugOverlay = null;
 				}
 				m.close();
 			}));
 			menu.add(new CustomButton("Give Missions", m -> {
-				for(int i = 0; i < 10; i++) {
-					MissionGenerator.createMission(getPlayer(), MissionGenerator.randomMissionPerson(), (int)v.random(5) + 1).start();
+				for (int i = 0; i < 10; i++) {
+					MissionGenerator.createMission(getPlayer(), MissionGenerator.randomMissionPerson(), (int) v.random(5) + 1)
+							.start();
 				}
 				m.close();
 			}));
 			menu.add(new CustomButton("Give Knowledge", m -> {
-				for(TerrestrialPlanet planet : findObjects(TerrestrialPlanet.class)) {
+				for (TerrestrialPlanet planet : findObjects(TerrestrialPlanet.class)) {
 					getPlayer().addKnowledge(new TerrestrialKnowledge(ObservationLevel.VISITED, planet));
-					for(Settlement settlement : planet.getAllSettlements()) {
+					for (Settlement settlement : planet.getAllSettlements()) {
 						getPlayer().addKnowledge(new SettlementKnowledge(ObservationLevel.VISITED, settlement));
 					}
 				}
-				for(Person person : findObjects(Person.class)) {
+				for (Person person : findObjects(Person.class)) {
 					getPlayer().addKnowledge(new PersonKnowledge(ObservationLevel.VISITED, person));
 				}
 				setContext(new KnowledgeContext(this, getPlayer()));
 			}));
 			menu.add(new CustomButton("Enemy Factions & Give Disguise", m -> {
-				for(Faction faction : state.getFactions()) {
+				for (Faction faction : state.getFactions()) {
 					faction.setEnemy(getPlayer().getFaction());
 					getPlayer().getInventory().add(ClothingItemSpawner.createDisguiseItem(faction));
 				}

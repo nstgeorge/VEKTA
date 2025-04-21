@@ -1,7 +1,6 @@
 package vekta.sound;
 
-import processing.sound.SoundFile;
-import vekta.Resources;
+import static vekta.Vekta.v;
 
 import java.io.Externalizable;
 import java.io.IOException;
@@ -10,7 +9,8 @@ import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.List;
 
-import static vekta.Vekta.v;
+import processing.sound.SoundFile;
+import vekta.Resources;
 
 public class SoundGroup implements Externalizable {
 	private String key;
@@ -31,10 +31,10 @@ public class SoundGroup implements Externalizable {
 		this.key = key;
 		List<SoundFile> sounds = new ArrayList<>();
 		String sub;
-		while(Resources.hasSound(sub = key + "_" + sounds.size())) {
+		while (Resources.hasSound(sub = key + "_" + sounds.size())) {
 			sounds.add(Resources.getSound(sub));
 		}
-		if(sounds.isEmpty()) {
+		if (sounds.isEmpty()) {
 			throw new RuntimeException("No sounds found for group: `" + key + "`");
 		}
 		this.sounds = sounds.toArray(new SoundFile[0]);
@@ -59,7 +59,7 @@ public class SoundGroup implements Externalizable {
 
 	@Override
 	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-		setKey((String)in.readObject());
+		setKey((String) in.readObject());
 	}
 
 	@Override

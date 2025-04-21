@@ -21,12 +21,12 @@ public class CannonModule extends WeaponModule {
 	}
 
 	@Override
-	public Module createVariant() {
+	public BaseModule createVariant() {
 		return new CannonModule();
 	}
 
 	@Override
-	public boolean isBetter(Module other) {
+	public boolean isBetter(BaseModule other) {
 		return false;
 	}
 
@@ -38,7 +38,7 @@ public class CannonModule extends WeaponModule {
 	@Override
 	public void fireWeapon() {
 		ModularShip ship = getShip();
-		if(ship.consumeEnergyImmediate(.25F)) {
+		if (ship.consumeEnergyImmediate(.25F)) {
 			getWorld().playSound("laser", ship.getPosition());
 			PVector velocity = ship.getVelocity().add(ship.getHeading().setMag(PROJECTILE_SPEED)).mult(v.random(.9F, 1.1F));
 			register(new Projectile(ship, ship.getPosition(), velocity, ship.getColor()));

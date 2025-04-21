@@ -1,20 +1,20 @@
 package vekta.item;
 
-import vekta.menu.Menu;
-import vekta.module.Module;
-import vekta.util.InfoGroup;
-
 import static processing.core.PApplet.round;
 import static vekta.Vekta.v;
 
-public class ModuleItem extends Item {
-	private final Module module;
+import vekta.menu.Menu;
+import vekta.module.BaseModule;
+import vekta.util.InfoGroup;
 
-	public ModuleItem(Module module) {
+public class ModuleItem extends Item {
+	private final BaseModule module;
+
+	public ModuleItem(BaseModule module) {
 		this.module = module;
 	}
 
-	public Module getModule() {
+	public BaseModule getModule() {
 		return module;
 	}
 

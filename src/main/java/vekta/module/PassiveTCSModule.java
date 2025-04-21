@@ -31,7 +31,7 @@ public class PassiveTCSModule extends ShipModule {
 
 	@Override
 	public int getMass() {
-		return (int)((getEfficiency() + 5) * 100);
+		return (int) ((getEfficiency() + 5) * 100);
 	}
 
 	@Override
@@ -40,12 +40,12 @@ public class PassiveTCSModule extends ShipModule {
 	}
 
 	@Override
-	public boolean isBetter(Module other) {
-		return other instanceof PassiveTCSModule && getEfficiency() > ((PassiveTCSModule)other).getEfficiency();
+	public boolean isBetter(BaseModule other) {
+		return other instanceof PassiveTCSModule && getEfficiency() > ((PassiveTCSModule) other).getEfficiency();
 	}
 
 	@Override
-	public Module createVariant() {
+	public BaseModule createVariant() {
 		return new PassiveTCSModule(chooseInclusive(.5F, 10, .5F));
 	}
 
@@ -56,11 +56,11 @@ public class PassiveTCSModule extends ShipModule {
 
 	public void applyCooling(float scale) {
 		float optimal = getShip().getOptimalTemperature();
-		if(getShip().getTemperatureKelvin() > optimal) {
+		if (getShip().getTemperatureKelvin() > optimal) {
 			getShip().addHeat(-getEfficiency() * scale * EFFICIENCY_SCALE * PER_SECOND);
 
 			// Round to target temperature
-			if(getShip().getTemperatureKelvin() < optimal) {
+			if (getShip().getTemperatureKelvin() < optimal) {
 				getShip().setTemperatureKelvin(optimal);
 			}
 		}
@@ -68,6 +68,7 @@ public class PassiveTCSModule extends ShipModule {
 
 	@Override
 	public void onInfo(InfoGroup info) {
-		info.addDescription("The Passive Thermal Control System (TCS) slowly radiates excess heat away from the spacecraft.");
+		info.addDescription(
+				"The Passive Thermal Control System (TCS) slowly radiates excess heat away from the spacecraft.");
 	}
 }

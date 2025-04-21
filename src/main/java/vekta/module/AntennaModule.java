@@ -49,26 +49,27 @@ public class AntennaModule extends ShipModule {
 	}
 
 	@Override
-	public boolean isBetter(Module other) {
-		return other instanceof AntennaModule && getRange() > ((AntennaModule)other).getRange();
+	public boolean isBetter(BaseModule other) {
+		return other instanceof AntennaModule && getRange() > ((AntennaModule) other).getRange();
 	}
 
 	@Override
-	public Module createVariant() {
+	public BaseModule createVariant() {
 		return new AntennaModule(chooseInclusive(.5F, 10, .5F));
 	}
 
 	@Override
 	public void onMenu(Menu menu) {
-		if(menu.getHandle() instanceof SpaceObjectMenuHandle && ((SpaceObjectMenuHandle)menu.getHandle()).getSpaceObject() == getShip()) {
+		if (menu.getHandle() instanceof SpaceObjectMenuHandle
+				&& ((SpaceObjectMenuHandle) menu.getHandle()).getSpaceObject() == getShip()) {
 			boolean connected = findRelay() != null;
 			menu.add(new InternetMenuButton(connected));
 		}
 	}
 
 	private SpaceObject findRelay() {
-		for(TerrestrialPlanet planet : getWorld().findObjects(TerrestrialPlanet.class)) {
-			if(planet.isInhabited() && getShip().relativePosition(planet).magSq() <= sq(getRange() * AU_DISTANCE)) {
+		for (TerrestrialPlanet planet : getWorld().findObjects(TerrestrialPlanet.class)) {
+			if (planet.isInhabited() && getShip().relativePosition(planet).magSq() <= sq(getRange() * AU_DISTANCE)) {
 				return planet;
 			}
 		}
