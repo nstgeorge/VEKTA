@@ -33,7 +33,7 @@ public class ScanLinePass implements Pass {
 		// Scan-line uniforms
 		shader.set("count", 50.0f);
 		shader.set("resolution", (float)v.width, (float)v.height);
-		shader.set("brightnessBoost", 0.001f * Settings.getFloat("scanLineIntensity"));
+		shader.set("brightnessBoost", 0.005f * Settings.getFloat("scanLineIntensity"));
 		shader.set("time", (float)v.millis() / 1000.0f);
 
 		// Vignette uniforms

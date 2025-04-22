@@ -13,54 +13,59 @@
         <processing.lib>${project.basedir}/lib</processing.lib>
         <argLine>-Djava.library.path=${java.library.path}</argLine>
     </properties>
+    <repositories>
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
+        <repository>
+            <id>jogamp</id>
+            <url>https://jogamp.org/deployment/maven/</url>
+        </repository>
+	</repositories>
     <dependencies>
         <!-- Processing dependencies -->
         <dependency>
             <groupId>org.jogamp.jogl</groupId>
             <artifactId>jogl-all-main</artifactId>
-            <version>2.3.2</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.jogamp.gluegen</groupId>
             <artifactId>gluegen-rt-main</artifactId>
-            <version>2.3.2</version>
+            <version>2.5.0</version>
         </dependency>
 
         <!-- Processing dependencies from `lib` folder -->
         <dependency>
             <groupId>org.processing</groupId>
             <artifactId>core</artifactId>
-            <version>0.0.0</version>
+            <version>4.4.1</version>
             <!--            <scope>system</scope>-->
             <!--            <systemPath>${processing.lib}/processing/core.jar</systemPath>-->
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.github.processing/processing-sound -->
+        <!-- <dependency>
+            <groupId>com.github.processing</groupId>
+            <artifactId>processing-sound</artifactId>
+            <version>v2.4.0</version>
+        </dependency> -->
+
         <dependency>
-            <groupId>org.cansik</groupId>
+            <groupId>ch.bildspur</groupId>
             <artifactId>postfx</artifactId>
             <version>0.0.0</version>
-            <!--            <scope>system</scope>-->
-            <!--            <systemPath>${processing.lib}/processing/postfx/PostFX.jar</systemPath>-->
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/processing/postfx/PostFX.jar</systemPath>
         </dependency>
+
         <dependency>
-            <groupId>org.processing</groupId>
-            <artifactId>sound</artifactId>
+            <groupId>com.github</groupId>
+            <artifactId>processing-sound</artifactId>
             <version>0.0.0</version>
-            <!--            <scope>system</scope>-->
-            <!--            <systemPath>${processing.lib}/processing/sound/library/sound.jar</systemPath>-->
-        </dependency>
-        <dependency>
-            <groupId>jsyn</groupId>
-            <artifactId>jsyn</artifactId>
-            <version>0.0.0</version>
-            <!--            <scope>system</scope>-->
-            <!--            <systemPath>${processing.lib}/processing/sound/library/jsyn-20171016.jar</systemPath>-->
-        </dependency>
-        <dependency>
-            <groupId>javamp3</groupId>
-            <artifactId>javamp3</artifactId>
-            <version>0.0.0</version>
-<!--            <scope>system</scope>-->
-<!--            <systemPath>${processing.lib}/processing/sound/library/javamp3-1.0.3.jar</systemPath>-->
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/processing/sound/library_old/sound.jar</systemPath>
         </dependency>
 
         <!-- JSON configuration -->

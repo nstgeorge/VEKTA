@@ -37,6 +37,10 @@ public class GraphicsMenuButton extends ButtonOption {
 					new resolutionChoicesController<>(Arrays.asList(Resources.getStrings("resolutions_16x9")), Arrays.asList(Resources.getStrings("resolutions_21x9")), Arrays.asList(Resources.getStrings("resolutions_3x4")), aspectRatio)));
 		}
 
+		sub.add(new InputOption<>("Postprocessing",
+				new BooleanSettingWatcher("postprocessing"),
+				new ChoicesInputController<>(Arrays.asList(true, false), b -> b ? "Enabled" : "Disabled")));
+
         sub.add(new InputOption<>("Noise Amount",
                 new FloatSettingWatcher("noiseAmount"),
                 new FloatRangeInputController(0, 10, 1)));

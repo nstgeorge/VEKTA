@@ -9,7 +9,7 @@ import static vekta.Vekta.*;
 
 public class StartSceneContext implements Context {
 
-	private static final float FADE_SPEED = 3000;        // Milliseconds which the end fade takes to complete
+	private static final float FADE_SPEED = 2000;        // Milliseconds which the end fade takes to complete
 	private static final int FADE_DELAY = 2000;            // Milliseconds between end of the output and beginning of the fade
 
 	private final Typewriter writer;

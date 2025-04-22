@@ -40,6 +40,7 @@ public class Hyperspace implements Serializable {
 
 	public void render() {
 		//		v.hint(ENABLE_DEPTH_TEST);
+		v.background(0);
 		update();
 		for(HyperspaceParticle p : particles) {
 			p.render();

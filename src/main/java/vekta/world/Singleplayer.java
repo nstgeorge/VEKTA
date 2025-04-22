@@ -387,7 +387,7 @@ public class Singleplayer implements World, PlayerListener {
 		// Take timestamp: Setup
 		profiler.addTimeStamp("Setup and Zoom");
 
-		v.clear();
+		v.background(0);;
 		v.rectMode(CENTER);
 		v.ellipseMode(RADIUS);
 

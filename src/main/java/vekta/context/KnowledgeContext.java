@@ -112,7 +112,7 @@ public class KnowledgeContext implements Context, Comparator<Knowledge> {
 
 	@Override
 	public void render() {
-		v.clear();
+		v.background(0);
 
 		v.textAlign(CENTER);
 		v.textSize(24);

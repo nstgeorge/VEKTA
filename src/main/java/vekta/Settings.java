@@ -1,10 +1,10 @@
 package vekta;
 
-import processing.data.JSONObject;
-
-import javax.swing.*;
-
 import static vekta.Vekta.v;
+
+import javax.swing.KeyStroke;
+
+import processing.data.JSONObject;
 
 public final class Settings {
 	private static final String PATH = System.getProperty("user.dir") + "/settings.json";
@@ -25,6 +25,7 @@ public final class Settings {
 				.put("randomEvents", true)
 				.put("zoomNearPlanets", true)
 				.put("drawTrails", true)
+				.put("postprocessing", true)
 				.put("bloomIntensity", 6)
 				.put("noiseAmount", 10)
 				.put("scanLineIntensity", 5)
@@ -32,15 +33,14 @@ public final class Settings {
 				.put("resolutionWidth", v.displayWidth)
 				.put("resolutionHeight", v.displayHeight)
 				.put("debug", false);
-		for(KeyBinding key : KeyBinding.values()) {
+		for (KeyBinding key : KeyBinding.values()) {
 			defaults.put(getKeyProp(key), serializeKeyCode(key.getDefaultKeyCode()));
 		}
 
 		// Settings
 		try {
 			settings = v.loadJSONObject(PATH);
-		}
-		catch(NullPointerException e) {
+		} catch (NullPointerException e) {
 			System.out.println("settings.json not found. Using default settings.");
 			settings = defaults;
 			v.saveJSONObject(settings, PATH);
@@ -60,55 +60,49 @@ public final class Settings {
 	}
 
 	public static int getInt(String key) {
-		if(!settings.isNull(key)) {
+		if (!settings.isNull(key)) {
 			return settings.getInt(key);
-		}
-		else {
+		} else {
 			return defaults.getInt(key);
 		}
 	}
 
 	public static float getFloat(String key) {
-		if(!settings.isNull(key)) {
+		if (!settings.isNull(key)) {
 			return settings.getFloat(key);
-		}
-		else {
+		} else {
 			return defaults.getFloat(key);
 		}
 	}
 
 	public static boolean getBoolean(String key) {
-		if(!settings.isNull(key)) {
+		if (!settings.isNull(key)) {
 			return settings.getBoolean(key);
-		}
-		else {
+		} else {
 			return defaults.getBoolean(key);
 		}
 	}
 
 	public static boolean getBoolean(String key, boolean def) {
-		if(!settings.isNull(key)) {
+		if (!settings.isNull(key)) {
 			return settings.getBoolean(key);
-		}
-		else {
+		} else {
 			return defaults.getBoolean(key, def);
 		}
 	}
 
 	public static String getString(String key) {
-		if(!settings.isNull(key)) {
+		if (!settings.isNull(key)) {
 			return settings.getString(key);
-		}
-		else {
+		} else {
 			return defaults.getString(key);
 		}
 	}
 
 	public static String getString(String key, String def) {
-		if(!settings.isNull(key)) {
+		if (!settings.isNull(key)) {
 			return settings.getString(key);
-		}
-		else {
+		} else {
 			return defaults.getString(key, def);
 		}
 	}
@@ -116,10 +110,9 @@ public final class Settings {
 	public static int getKeyCode(KeyBinding key) {
 		String prop = getKeyProp(key);
 		String result;
-		if(!settings.isNull(prop)) {
+		if (!settings.isNull(prop)) {
 			result = settings.getString(prop);
-		}
-		else {
+		} else {
 			result = defaults.getString(prop, "");
 		}
 		return deserializeKeyCode(result);
