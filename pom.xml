@@ -65,7 +65,7 @@
             <artifactId>processing-sound</artifactId>
             <version>0.0.0</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/processing/sound/library_old/sound.jar</systemPath>
+            <systemPath>${basedir}/lib/processing/sound/library/sound.jar</systemPath>
         </dependency>
 
         <!-- JSON configuration -->
