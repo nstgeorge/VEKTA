@@ -14,12 +14,14 @@ import com.github.strikerx3.jxinput.exceptions.XInputNotLoadedException;
 import com.github.strikerx3.jxinput.listener.SimpleXInputDeviceListener;
 
 import ch.bildspur.postfx.builder.PostFX;
+import processing.awt.PSurfaceAWT;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PVector;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 import processing.opengl.PGraphicsOpenGL;
+import processing.opengl.PJOGL;
 import processing.opengl.PShader;
 import vekta.context.Context;
 import vekta.context.PauseMenuContext;
@@ -36,6 +38,8 @@ import vekta.world.Multiplayer;
 import vekta.world.RenderLevel;
 import vekta.world.Singleplayer;
 import vekta.world.World;
+
+import javax.imageio.ImageIO;
 
 /**
  * Core class for all of Vekta.
@@ -119,6 +123,8 @@ public class Vekta extends PApplet {
 				+ displayDensity());
 
 		noSmooth();
+
+		PJOGL.setIcon("images/vekta-icon.png");
 	}
 
 	public void setup() {
@@ -176,6 +182,7 @@ public class Vekta extends PApplet {
 		// frame.requestFocus();
 
 		frameRate(60);
+		surface.setTitle("VEKTA");
 	}
 
 	@Override

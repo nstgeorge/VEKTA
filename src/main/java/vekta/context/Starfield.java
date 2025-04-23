@@ -131,7 +131,7 @@ public class Starfield implements Serializable {
 			int color = hyperdriving ? v.lerpColor(v.color(150), dot > 0 ? v.color(150, 150, 255) : v.color(255, 50, 50), (dot + 1) / 2) : v.color(100);
 
 			//			v.stroke(v.lerpColor(0, 100, closeness));
-			v.stroke(v.lerpColor(v.color(0), color, closeness * .5F));
+			v.stroke(v.lerpColor(v.color(0), color, closeness * .7F));
 			v.line(x1 * c1, y1 * c1, x2 * c2, y2 * c2);
 		}
 

@@ -3,6 +3,9 @@ package vekta;
 import static processing.core.PApplet.println;
 import static vekta.Vekta.v;
 
+import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -25,9 +28,12 @@ import org.reflections.util.FilterBuilder;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import processing.core.PImage;
 import processing.core.PShape;
 import processing.sound.SoundFile;
 import vekta.config.Config;
+
+import javax.imageio.ImageIO;
 
 public final class Resources {
 	private static final String PACKAGE = "vekta";
@@ -44,6 +50,7 @@ public final class Resources {
 	private static final Map<String, String[]> STRINGS = new HashMap<>();
 	private static final Map<String, SoundFile> SOUNDS = new HashMap<>();
 	private static final Map<String, PShape> SHAPES = new HashMap<>();
+	private static final Map<String, PImage> IMAGES = new HashMap<>();
 
 	private static final char REF_BEFORE = '{';
 	private static final char REF_AFTER = '}';
@@ -65,6 +72,7 @@ public final class Resources {
 		loadResources(Resources::addConfigs, "json");
 		loadResources(Resources::addShape, "obj", "svg");
 		loadResources(Resources::addSound, "wav", "mp3");
+		loadResources(Resources::addImage, "png", "jpg");
 
 		logo = v.loadShape("vekta_wordmark.svg");
 	}
@@ -222,6 +230,22 @@ public final class Resources {
 			throw new RuntimeException("Conflicting shapes for key: `" + key + "`");
 		}
 		SHAPES.put(key, shape);
+	}
+
+	private static void addImage(String path, String key) {
+		PImage image = v.loadImage(path);
+		if (IMAGES.containsKey(key)) {
+			throw new RuntimeException("Conflicting images for key: `" + key + "`");
+		}
+		IMAGES.put(key, image);
+	}
+
+	public static PImage getImage(String key) {
+		PImage image = IMAGES.get(key);
+		if (image == null) {
+			throw new RuntimeException("No image exists with key: " + key);
+		}
+		return image;
 	}
 
 	public static PShape getShape(String key) {
