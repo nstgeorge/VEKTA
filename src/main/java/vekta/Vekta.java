@@ -1,26 +1,18 @@
 package vekta;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
-import java.util.logging.LogManager;
-
+import ch.bildspur.postfx.builder.PostFX;
 import com.github.strikerx3.jxinput.XInputAxes;
 import com.github.strikerx3.jxinput.XInputDevice;
 import com.github.strikerx3.jxinput.enums.XInputButton;
 import com.github.strikerx3.jxinput.exceptions.XInputNotLoadedException;
 import com.github.strikerx3.jxinput.listener.SimpleXInputDeviceListener;
-
-import ch.bildspur.postfx.builder.PostFX;
-import processing.awt.PSurfaceAWT;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PVector;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 import processing.opengl.PGraphicsOpenGL;
+import processing.opengl.PJOGL;
 import processing.opengl.PShader;
 import vekta.context.Context;
 import vekta.context.PauseMenuContext;
@@ -37,8 +29,13 @@ import vekta.world.Multiplayer;
 import vekta.world.RenderLevel;
 import vekta.world.Singleplayer;
 import vekta.world.World;
-import processing.awt.PSurfaceAWT;
-import processing.awt.PSurfaceAWT.SmoothCanvas;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
+import java.util.logging.LogManager;
 
 /**
  * Core class for all of Vekta.
@@ -123,6 +120,8 @@ public class Vekta extends PApplet {
 				+ displayDensity());
 
 		noSmooth();
+
+		PJOGL.setIcon("images/vekta-icon.png");
 	}
 
 	public void setup() {
@@ -131,8 +130,6 @@ public class Vekta extends PApplet {
 		postFX = new PostFX(this, width, height);
 
 		Resources.init();
-
-		((SmoothCanvas)surface.getNative()).getFrame().setIconImage();
 
 		hint(DISABLE_DEPTH_TEST);
 		hint(DISABLE_TEXTURE_MIPMAPS);
@@ -184,6 +181,7 @@ public class Vekta extends PApplet {
 		// frame.requestFocus();
 
 		frameRate(60);
+		surface.setTitle("VEKTA");
 	}
 
 	@Override
