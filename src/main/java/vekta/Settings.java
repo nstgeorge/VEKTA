@@ -6,8 +6,10 @@ import javax.swing.KeyStroke;
 
 import processing.data.JSONObject;
 
+import java.nio.file.Paths;
+
 public final class Settings {
-	private static final String PATH = System.getProperty("user.dir") + "/settings.json";
+	private static final String PATH = Paths.get(System.getProperty("user.dir"), "settings.json").toString();
 
 	private static JSONObject defaults;
 	private static JSONObject settings;
@@ -15,9 +17,9 @@ public final class Settings {
 	public static void init() {
 		// Default settings
 		defaults = new JSONObject();
-		defaults.put("sound", 1)
+		defaults.put("sound", .5)
 				.put("muteSound", false)
-				.put("music", 1)
+				.put("music", .5)
 				.put("muteMusic", false)
 				.put("rumbleAmount", .7)
 				.put("deadzone", 4)
@@ -33,14 +35,18 @@ public final class Settings {
 				.put("resolutionWidth", v.displayWidth)
 				.put("resolutionHeight", v.displayHeight)
 				.put("debug", false);
-		for (KeyBinding key : KeyBinding.values()) {
+		for(KeyBinding key : KeyBinding.values()) {
 			defaults.put(getKeyProp(key), serializeKeyCode(key.getDefaultKeyCode()));
 		}
 
 		// Settings
 		try {
 			settings = v.loadJSONObject(PATH);
-		} catch (NullPointerException e) {
+			if(settings == null) {
+				settings = new JSONObject();
+			}
+		}
+		catch(NullPointerException e) {
 			System.out.println("settings.json not found. Using default settings.");
 			settings = defaults;
 			v.saveJSONObject(settings, PATH);
@@ -60,49 +66,55 @@ public final class Settings {
 	}
 
 	public static int getInt(String key) {
-		if (!settings.isNull(key)) {
+		if(!settings.isNull(key)) {
 			return settings.getInt(key);
-		} else {
+		}
+		else {
 			return defaults.getInt(key);
 		}
 	}
 
 	public static float getFloat(String key) {
-		if (!settings.isNull(key)) {
+		if(!settings.isNull(key)) {
 			return settings.getFloat(key);
-		} else {
+		}
+		else {
 			return defaults.getFloat(key);
 		}
 	}
 
 	public static boolean getBoolean(String key) {
-		if (!settings.isNull(key)) {
+		if(!settings.isNull(key)) {
 			return settings.getBoolean(key);
-		} else {
+		}
+		else {
 			return defaults.getBoolean(key);
 		}
 	}
 
 	public static boolean getBoolean(String key, boolean def) {
-		if (!settings.isNull(key)) {
+		if(!settings.isNull(key)) {
 			return settings.getBoolean(key);
-		} else {
+		}
+		else {
 			return defaults.getBoolean(key, def);
 		}
 	}
 
 	public static String getString(String key) {
-		if (!settings.isNull(key)) {
+		if(!settings.isNull(key)) {
 			return settings.getString(key);
-		} else {
+		}
+		else {
 			return defaults.getString(key);
 		}
 	}
 
 	public static String getString(String key, String def) {
-		if (!settings.isNull(key)) {
+		if(!settings.isNull(key)) {
 			return settings.getString(key);
-		} else {
+		}
+		else {
 			return defaults.getString(key, def);
 		}
 	}
@@ -110,9 +122,10 @@ public final class Settings {
 	public static int getKeyCode(KeyBinding key) {
 		String prop = getKeyProp(key);
 		String result;
-		if (!settings.isNull(prop)) {
+		if(!settings.isNull(prop)) {
 			result = settings.getString(prop);
-		} else {
+		}
+		else {
 			result = defaults.getString(prop, "");
 		}
 		return deserializeKeyCode(result);

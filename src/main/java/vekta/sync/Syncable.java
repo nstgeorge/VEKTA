@@ -12,19 +12,19 @@ import static vekta.Vekta.getWorld;
 import static vekta.Vekta.randomID;
 
 public abstract class Syncable<T extends Serializable> implements Serializable {
-	private static final Field MODIFIER_FIELD;
-	private static final Field ID_FIELD;
-	private static final Field REMOTE_FIELD;
+	//	private static final Field MODIFIER_FIELD;
+	//	private static final Field ID_FIELD;
+	//	private static final Field REMOTE_FIELD;
 
 	static {
 		try {
 			// Provide access to updating field modifiers (to remove `final`)
-			MODIFIER_FIELD = Field.class.getDeclaredField("modifiers");
-			MODIFIER_FIELD.setAccessible(true);
+			//			MODIFIER_FIELD = Field.class.getDeclaredField("modifiers");
+			//			MODIFIER_FIELD.setAccessible(true);
 
 			// Define fields to ignore during sync
-			ID_FIELD = Syncable.class.getDeclaredField("id");
-			REMOTE_FIELD = Syncable.class.getDeclaredField("remote");
+			//			ID_FIELD = Syncable.class.getDeclaredField("id");
+			//			REMOTE_FIELD = Syncable.class.getDeclaredField("remote");
 		}
 		catch(Exception e) {
 			throw new RuntimeException(e);
@@ -90,12 +90,12 @@ public abstract class Syncable<T extends Serializable> implements Serializable {
 				}
 
 				field.setAccessible(true);
-				Object object = field.get(data);
+				//				Object object = field.get(data);
 
-				////
-				MODIFIER_FIELD.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-				field.set(this, object);
-				////
+				////// This was uncommented :)
+				//				MODIFIER_FIELD.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+				//				field.set(this, object);
+				//////
 
 				//				// Recursively replace Syncable object references
 				//				if(object instanceof Syncable) {

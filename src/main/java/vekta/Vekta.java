@@ -14,6 +14,7 @@ import com.github.strikerx3.jxinput.exceptions.XInputNotLoadedException;
 import com.github.strikerx3.jxinput.listener.SimpleXInputDeviceListener;
 
 import ch.bildspur.postfx.builder.PostFX;
+import processing.awt.PSurfaceAWT;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PVector;
@@ -36,6 +37,8 @@ import vekta.world.Multiplayer;
 import vekta.world.RenderLevel;
 import vekta.world.Singleplayer;
 import vekta.world.World;
+import processing.awt.PSurfaceAWT;
+import processing.awt.PSurfaceAWT.SmoothCanvas;
 
 /**
  * Core class for all of Vekta.
@@ -86,7 +89,7 @@ public class Vekta extends PApplet {
 	public static final float G = 6.674e-11F; // Gravitational constant
 	public static final float GAS_CONSTANT = 8.3143F; // Universal gas constant
 	public static final double STEFAN_BOLTZMANN = 5.670373e-8; // Stefan-Boltzmann constant, used to calculate temperature
-																															// and luminosity related values
+	// and luminosity related values
 
 	public static int UI_COLOR;
 	public static int BUTTON_COLOR;
@@ -108,9 +111,10 @@ public class Vekta extends PApplet {
 
 		pixelDensity(1);
 		System.setProperty("jogl.disable.openglcore", "true");
-		if (Settings.getBoolean("fullscreen")) {
+		if(Settings.getBoolean("fullscreen")) {
 			fullScreen(P2D);
-		} else {
+		}
+		else {
 			size(Settings.getInt("resolutionWidth"), Settings.getInt("resolutionHeight"), P2D);
 		}
 
@@ -128,9 +132,11 @@ public class Vekta extends PApplet {
 
 		Resources.init();
 
+		((SmoothCanvas)surface.getNative()).getFrame().setIconImage();
+
 		hint(DISABLE_DEPTH_TEST);
 		hint(DISABLE_TEXTURE_MIPMAPS);
-		((PGraphicsOpenGL) g).textureSampling(2);
+		((PGraphicsOpenGL)g).textureSampling(2);
 
 		UI_COLOR = color(0, 255, 0);
 		BUTTON_COLOR = color(8);
@@ -138,20 +144,22 @@ public class Vekta extends PApplet {
 		MISSION_COLOR = ItemType.MISSION.getColor();
 
 		try {
-			if (System.getProperty("os.name").contains("Windows")) {
+			if(System.getProperty("os.name").contains("Windows")) {
 				// Retrieve the controller device
 				DEVICE = XInputDevice.getDeviceFor(0);
 				DEVICE.addListener(new SimpleXInputDeviceListener() {
 					public void buttonChanged(XInputButton button, boolean pressed) {
-						if (pressed) {
+						if(pressed) {
 							context.buttonPressed(button);
-						} else {
+						}
+						else {
 							context.buttonReleased(button);
 						}
 					}
 				});
 			}
-		} catch (XInputNotLoadedException e) {
+		}
+		catch(XInputNotLoadedException e) {
 			e.printStackTrace();
 		}
 
@@ -180,21 +188,21 @@ public class Vekta extends PApplet {
 
 	@Override
 	public void draw() {
-		if (DEVICE != null) {
+		if(DEVICE != null) {
 			DEVICE.poll(); // Xbox action listener
 			analogTriggerResponse();
 		}
 		v.background(0);
 
 		applyContext();
-		if (context != null) {
+		if(context != null) {
 			context.render();
 
-			if (!(context instanceof PauseMenuContext) && Settings.getBoolean("postprocessing")) {
+			if(!(context instanceof PauseMenuContext) && Settings.getBoolean("postprocessing")) {
 				// TODO: fix the pause menu
 
 				postFX.render()
-						.bloom(0.0f, (int) Settings.getFloat("bloomIntensity"), 50)
+						.bloom(0.0f, (int)Settings.getFloat("bloomIntensity"), 50)
 						.noise(0.02f * Settings.getFloat("noiseAmount"), 0.7f)
 						.custom(new ScanLinePass())
 						.compose();
@@ -212,10 +220,10 @@ public class Vekta extends PApplet {
 		// and vice versa.
 		boolean left = axes.lt != 0;
 		boolean right = axes.rt != 0;
-		if (left && !right) {
+		if(left && !right) {
 			context.analogKeyPressed(-axes.lt);
 		}
-		if (right && !left) {
+		if(right && !left) {
 			context.analogKeyPressed(axes.rt);
 		}
 
@@ -225,14 +233,14 @@ public class Vekta extends PApplet {
 
 	@Override
 	public void keyPressed(KeyEvent event) {
-		if ((world != null && world.globalKeyPressed(event)) || context != null) {
+		if((world != null && world.globalKeyPressed(event)) || context != null) {
 			context.keyPressed(event);
-			for (KeyBinding key : KeyBinding.values()) {
-				if (Settings.getKeyCode(key) == event.getKeyCode()) {
+			for(KeyBinding key : KeyBinding.values()) {
+				if(Settings.getKeyCode(key) == event.getKeyCode()) {
 					context.keyPressed(key);
 				}
 			}
-			if (key == ESC) {
+			if(key == ESC) {
 				key = 0; // Suppress default behavior (exit)
 			}
 		}
@@ -240,10 +248,10 @@ public class Vekta extends PApplet {
 
 	@Override
 	public void keyReleased(KeyEvent event) {
-		if (context != null) {
+		if(context != null) {
 			context.keyReleased(event);
-			for (KeyBinding key : KeyBinding.values()) {
-				if (Settings.getKeyCode(key) == event.getKeyCode()) {
+			for(KeyBinding key : KeyBinding.values()) {
+				if(Settings.getKeyCode(key) == event.getKeyCode()) {
 					context.keyReleased(key);
 				}
 			}
@@ -252,32 +260,32 @@ public class Vekta extends PApplet {
 
 	@Override
 	public void keyTyped(KeyEvent event) {
-		if (context != null) {
+		if(context != null) {
 			context.keyTyped(event.getKey());
 		}
 	}
 
 	@Override
 	public void mousePressed() {
-		if (context != null) {
-			switch (v.mouseButton) {
-				case LEFT:
-					context.keyPressed(KeyBinding.SHIP_ATTACK);
-					context.keyPressed(KeyBinding.MENU_SELECT);
-					break;
-				case RIGHT:
-					context.keyPressed(KeyBinding.SHIP_DEFEND);
-					break;
-				case CENTER:
-					context.keyPressed(KeyBinding.SHIP_KNOWLEDGE);
-					break;
+		if(context != null) {
+			switch(v.mouseButton) {
+			case LEFT:
+				context.keyPressed(KeyBinding.SHIP_ATTACK);
+				context.keyPressed(KeyBinding.MENU_SELECT);
+				break;
+			case RIGHT:
+				context.keyPressed(KeyBinding.SHIP_DEFEND);
+				break;
+			case CENTER:
+				context.keyPressed(KeyBinding.SHIP_KNOWLEDGE);
+				break;
 			}
 		}
 	}
 
 	@Override
 	public void mouseReleased() {
-		if (context != null) {
+		if(context != null) {
 			context.keyReleased(KeyBinding.SHIP_ATTACK);
 			context.keyReleased(KeyBinding.MENU_SELECT);
 		}
@@ -285,7 +293,7 @@ public class Vekta extends PApplet {
 
 	@Override
 	public void mouseWheel(MouseEvent event) {
-		if (context != null) {
+		if(context != null) {
 			context.mouseWheel(event.getCount());
 		}
 	}
@@ -299,60 +307,61 @@ public class Vekta extends PApplet {
 	}
 
 	public static World getWorld() {
-		if (world == null) {
+		if(world == null) {
 			throw new RuntimeException("No world was loaded");
 		}
 		return world;
 	}
 
 	public static void setContext(Context context) {
-		if (context == null) {
+		if(context == null) {
 			throw new RuntimeException("Context cannot be set to null");
 		}
 		nextContext = context;
 	}
 
 	public static void applyContext() {
-		if (nextContext == context) {
+		if(nextContext == context) {
 			nextContext = null;
-		} else if (nextContext != null) {
-			if (context != null) {
+		}
+		else if(nextContext != null) {
+			if(context != null) {
 				context.unfocus();
 			}
 			context = nextContext;
 			nextContext = null;
-			if (context instanceof World) {
-				world = (World) context;
+			if(context instanceof World) {
+				world = (World)context;
 			}
 			context.focus();
 		}
 	}
 
 	public static float getDistanceUnit(RenderLevel distance) {
-		switch (distance) {
-			case PARTICLE:
-				return DETAIL_LEVEL;
-			case SHIP:
-				return SHIP_LEVEL;
-			case ATMOSPHERE:
-				return ATMOSPHERE_LEVEL;
-			case PLANET:
-				return PLANET_LEVEL;
-			case STAR:
-				return STAR_LEVEL;
-			case INTERSTELLAR:
-				return INTERSTELLAR_LEVEL;
-			default:
-				throw new RuntimeException("Unknown distance unit: " + distance);
+		switch(distance) {
+		case PARTICLE:
+			return DETAIL_LEVEL;
+		case SHIP:
+			return SHIP_LEVEL;
+		case ATMOSPHERE:
+			return ATMOSPHERE_LEVEL;
+		case PLANET:
+			return PLANET_LEVEL;
+		case STAR:
+			return STAR_LEVEL;
+		case INTERSTELLAR:
+			return INTERSTELLAR_LEVEL;
+		default:
+			throw new RuntimeException("Unknown distance unit: " + distance);
 		}
 	}
 
 	public static RenderLevel getRenderDistance(float unit) {
 		return unit <= DETAIL_LEVEL ? RenderLevel.PARTICLE
 				: unit <= SHIP_LEVEL ? RenderLevel.SHIP
-						: unit <= ATMOSPHERE_LEVEL ? RenderLevel.ATMOSPHERE
-								: unit <= PLANET_LEVEL ? RenderLevel.PLANET
-										: unit <= STAR_LEVEL ? RenderLevel.STAR : RenderLevel.INTERSTELLAR;
+				: unit <= ATMOSPHERE_LEVEL ? RenderLevel.ATMOSPHERE
+				: unit <= PLANET_LEVEL ? RenderLevel.PLANET
+				: unit <= STAR_LEVEL ? RenderLevel.STAR : RenderLevel.INTERSTELLAR;
 	}
 
 	//// Static world-related methods ////
@@ -365,7 +374,7 @@ public class Vekta extends PApplet {
 	 * Convenience method: register object for the current world.
 	 */
 	public static <T extends Syncable> T register(T object) {
-		if (object == null) {
+		if(object == null) {
 			return null;
 		}
 		return getWorld().register(object);
@@ -392,21 +401,23 @@ public class Vekta extends PApplet {
 	//// Misc. UI methods ////
 
 	public static String roundString(float value) {
-		if (value >= 100) {
+		if(value >= 100) {
 			return String.valueOf(round(value));
-		} else if (value >= 10) {
+		}
+		else if(value >= 10) {
 			return String.format("%.1f", value);
 		}
 		return String.format("%.2f", value);
 	}
 
 	public static String quantityString(int quantity) {
-		if (quantity >= 1e9) {
+		if(quantity >= 1e9) {
 			return roundString(quantity / 1e9F) + "B";
 		}
-		if (quantity >= 1e6) {
+		if(quantity >= 1e6) {
 			return roundString(quantity / 1e6F) + "M";
-		} else if (quantity >= 1e3) {
+		}
+		else if(quantity >= 1e3) {
 			return roundString(quantity / 1e3F) + "k";
 		}
 		return String.valueOf(quantity);
@@ -417,45 +428,54 @@ public class Vekta extends PApplet {
 	}
 
 	public static String distanceString(float dist) {
-		if (dist >= AU_DISTANCE) {
+		if(dist >= AU_DISTANCE) {
 			return roundString(dist / AU_DISTANCE) + " AU";
-		} else if (dist >= 1e9F) {
+		}
+		else if(dist >= 1e9F) {
 			return roundString(dist / 1e9F) + " Bm";
-		} else if (dist >= 1e6F) {
+		}
+		else if(dist >= 1e6F) {
 			return roundString(dist / 1e6F) + " Mm";
-		} else if (dist >= 1e3F) {
+		}
+		else if(dist >= 1e3F) {
 			return roundString(dist / 1e3F) + " km";
 		}
 		return roundString(dist) + " m";
 	}
 
 	public static String radiusString(float radius) {
-		if (radius >= SUN_RADIUS * .1F) {
+		if(radius >= SUN_RADIUS * .1F) {
 			return roundString(radius / SUN_RADIUS) + " Suns";
 		}
-		if (radius >= EARTH_RADIUS * .1F) {
+		if(radius >= EARTH_RADIUS * .1F) {
 			return roundString(radius / EARTH_RADIUS) + " Earths";
-		} else if (radius >= 1e9F) {
+		}
+		else if(radius >= 1e9F) {
 			return roundString(radius / 1e9F) + " Bm";
-		} else if (radius >= 1e6F) {
+		}
+		else if(radius >= 1e6F) {
 			return roundString(radius / 1e6F) + " Mm";
-		} else if (radius >= 1e3F) {
+		}
+		else if(radius >= 1e3F) {
 			return roundString(radius / 1e3F) + " km";
 		}
 		return roundString(radius) + " m";
 	}
 
 	public static String massString(float mass) {
-		if (mass >= SUN_MASS * .1F) {
+		if(mass >= SUN_MASS * .1F) {
 			return roundString(mass / SUN_MASS) + " Suns";
-		} else if (mass >= EARTH_MASS * .1F) {
+		}
+		else if(mass >= EARTH_MASS * .1F) {
 			return roundString(mass / EARTH_MASS) + " Earths";
-		} else if (mass >= LUNAR_MASS * .1F) {
+		}
+		else if(mass >= LUNAR_MASS * .1F) {
 			return roundString(mass / LUNAR_MASS) + " Lunars";
-		} else if (mass >= 1e5F) {
+		}
+		else if(mass >= 1e5F) {
 			int order = 4;
 			mass /= 1e4;
-			while (mass >= 10) {
+			while(mass >= 10) {
 				mass /= 10;
 				order++;
 			}
@@ -483,11 +503,11 @@ public class Vekta extends PApplet {
 	//// Utility methods ////
 
 	public <T> T random(T[] array) {
-		return array[(int) random(array.length)];
+		return array[(int)random(array.length)];
 	}
 
 	public <T> T random(List<T> list) {
-		return list.get((int) random(list.size()));
+		return list.get((int)random(list.size()));
 	}
 
 	public <T> T random(Collection<T> collection) {
@@ -499,7 +519,7 @@ public class Vekta extends PApplet {
 	}
 
 	public float gaussian(float scale) {
-		return (float) (RANDOM.nextGaussian() * scale);
+		return (float)(RANDOM.nextGaussian() * scale);
 	}
 
 	public float normalizeAngle(float angle) {
@@ -525,7 +545,7 @@ public class Vekta extends PApplet {
 	 * Round with low precision to avoid binary/decimal conversion artifacts
 	 */
 	public static float roundEpsilon(float f) {
-		return (float) (Math.round(f * 1E5F) * 1E-5);
+		return (float)(Math.round(f * 1E5F) * 1E-5);
 	}
 
 	/**
@@ -542,9 +562,9 @@ public class Vekta extends PApplet {
 	 */
 	@Override
 	public PShader loadShader(String fragFilename) {
-		if (fragFilename.endsWith(".glsl")) {
+		if(fragFilename.endsWith(".glsl")) {
 			File file = new File(fragFilename);
-			if (file.isAbsolute()) {
+			if(file.isAbsolute()) {
 				fragFilename = "shader/external/" + file.getName();
 				println("Redirecting shader (" + file.getPath() + ") to classpath (" + fragFilename + ")");
 			}
