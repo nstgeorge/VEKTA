@@ -31,14 +31,6 @@ public class PersonRoom extends DungeonRoom {
 	public void onMenu(Menu menu) {
 		visitDebounce.reset();
 
-		String type = "unknown";
-		if(menu.getPlayer().hasKnowledge(PersonKnowledge.class, k -> k.getPerson() == getPerson())) {
-			type = "greeting";
-		}
-		if(!person.getOpinion(menu.getPlayer().getFaction()).isPositive()) {
-			type = "acting_suspicious";
-		}
-		
-		menu.add(new DialogButton("Talk to Person", getPerson().createDialog(type)));
+		menu.add(new DialogButton("Talk to Person", getPerson().createDialog(getPerson().getPersonality().getDialogType(getPerson(), menu.getPlayer()))));
 	}
 }

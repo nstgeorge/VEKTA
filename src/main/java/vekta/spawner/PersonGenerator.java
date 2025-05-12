@@ -15,13 +15,14 @@ import vekta.terrain.settlement.Settlement;
 import vekta.world.RenderLevel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static vekta.Vekta.*;
 
 public class PersonGenerator {
-	private static final Personality[] PERSONALITIES = Resources.findSubclassInstances(Personality.class);
+	private static final Personality[] PERSONALITIES = Arrays.stream(Resources.findSubclassInstances(Personality.class)).filter(Personality::isRandomlyAssignable).toArray(Personality[]::new);
 	private static final float PERSONALITY_CHANCE = .1F;
 	private static final float MAX_INTERESTS = 2;
 
@@ -35,12 +36,13 @@ public class PersonGenerator {
 		if(v.random(1) < .5F) {
 			person.setTitle(randomPersonTitle(person));
 		}
-		if(v.chance(PERSONALITY_CHANCE)) {
-			person.setPersonality(v.random(PERSONALITIES));
-		}
 		int interestCt = (int)v.random(MAX_INTERESTS) + 1;
 		for(int i = 0; i < interestCt; i++) {
 			person.addInterest(randomInterest());
+		}
+		if(v.chance(PERSONALITY_CHANCE)) {
+			Personality personality = v.random(PERSONALITIES);
+			person.setPersonality(personality);
 		}
 		return person;
 	}

@@ -1,0 +1,4 @@
+| Marcus speaks incoherently for a while, gesturing as if the whole world can hear him. *What?
+We need to find him, Robert. Jimbo James. *:marcus_leave Sorry, can't help. *:marcus_jimbo What do you mean?
+| Marcus says some things that don't make a lot of sense to you. *:dialog_marcus_random What? *Understood.
+{species}. {item_common}. *...
