@@ -77,7 +77,11 @@ public class Person extends Syncable<Person> implements MissionIssuer, Detailed 
 	}
 
 	public void setPersonality(Personality personality) {
+		if(this.personality != null) {
+			throw new RuntimeException(this.getFullName() + " already has a personality: " + this.personality);
+		}
 		this.personality = personality;
+		personality.preparePerson(this);
 	}
 
 	public boolean hasHome() {
